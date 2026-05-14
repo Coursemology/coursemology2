@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
   resendFailure: {
     id: 'course.userInvitations.InvitationActionButtons.resendFailure',
-    defaultMessage: 'Failed to resend invitation - {error}',
+    defaultMessage: 'Failed to resend invitation.',
   },
   deletionTooltip: {
     id: 'course.userInvitations.InvitationActionButtons.deletionTooltip',
@@ -45,6 +45,10 @@ const translations = defineMessages({
   deletionFailure: {
     id: 'course.userInvitations.InvitationActionButtons.deletionFailure',
     defaultMessage: 'Failed to delete user - {error}',
+  },
+  deletionFailureGeneric: {
+    id: 'course.userInvitations.InvitationActionButtons.deletionFailureGeneric',
+    defaultMessage: 'Failed to delete user.',
   },
 });
 
@@ -65,15 +69,9 @@ const InvitationActionButtons: FC<Props> = (props) => {
           }),
         );
       })
-      .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
-        toast.error(
-          t(translations.resendFailure, {
-            error: errorMessage,
-          }),
-        );
+      .catch(() => {
+        // resend failure endpoints return head :bad_request with no body
+        toast.error(t(translations.resendFailure));
       })
       .finally(() => setIsResending(false));
   };
@@ -90,14 +88,16 @@ const InvitationActionButtons: FC<Props> = (props) => {
       })
       .catch((error) => {
         setIsDeleting(false);
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
-        toast.error(
-          t(translations.deletionFailure, {
-            error: errorMessage,
-          }),
-        );
+        const rawErrors = error.response?.data?.errors;
+        let errorList: string[];
+        if (Array.isArray(rawErrors)) errorList = rawErrors;
+        else if (typeof rawErrors === 'string') errorList = [rawErrors];
+        else errorList = [];
+        if (errorList[0]) {
+          toast.error(t(translations.deletionFailure, { error: errorList[0] }));
+        } else {
+          toast.error(t(translations.deletionFailureGeneric));
+        }
         throw error;
       });
   };

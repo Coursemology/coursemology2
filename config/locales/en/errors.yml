@@ -15,8 +15,11 @@ en:
           owner: 'Owner'
           phantom: 'Phantom'
       user_invitations:
-        duplicate_user: '%{user} appears more than once in the submission.'
-        invalid_email: '%{email} is invalid: %{message}.'
+        already_enrolled: '%{email} could not be processed: already enrolled in this course.'
+        duplicate_invitation: '%{email} could not be processed: already has a pending invitation.'
+        invalid_email: '%{email} could not be processed: invalid email: %{message}.'
+        duplicate_external_id: '%{email} could not be processed: external ID "%{external_id}" is already taken.'
+        other_error: '%{email} could not be processed: %{message}.'
       user_registrations:
         invalid_code: 'You have entered an invalid invitation code.'
         code_taken: >

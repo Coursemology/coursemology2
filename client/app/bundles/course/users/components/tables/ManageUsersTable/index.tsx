@@ -15,6 +15,7 @@ import translations from '../../../translations';
 
 import ActiveTableToolbar from './ActiveTableToolbar';
 import AlgorithmMenu from './AlgorithmMenu';
+import ExternalIdField from './ExternalIdField';
 import PhantomSwitch from './PhantomSwitch';
 import RoleMenu from './RoleMenu';
 import TimelineMenu from './TimelineMenu';
@@ -56,6 +57,14 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       sortable: true,
       searchable: true,
       cell: (user) => <UserNameField for={user} />,
+      csvDownloadable: true,
+    },
+    {
+      of: 'externalId',
+      title: t(tableTranslations.externalId),
+      sortable: false,
+      searchable: true,
+      cell: (user) => <ExternalIdField for={user} />,
       csvDownloadable: true,
     },
     {

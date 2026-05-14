@@ -1,17 +1,30 @@
 import { FC, memo } from 'react';
+import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { CourseUserData } from 'types/course/courseUsers';
+import { CourseUserListData } from 'types/course/courseUsers';
+import { DuplicateReason } from 'types/course/userInvitations';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import useTranslation from 'lib/hooks/useTranslation';
 import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
+const translations = defineMessages({
+  duplicateEmail: {
+    id: 'course.userInvitations.InvitationResultUsersTable.duplicateEmail',
+    defaultMessage: 'Duplicate email',
+  },
+  duplicateExternalId: {
+    id: 'course.userInvitations.InvitationResultUsersTable.duplicateExternalId',
+    defaultMessage: 'Duplicate external ID',
+  },
+});
+
 interface Props {
   title: JSX.Element;
-  users: CourseUserData[];
+  users: Array<CourseUserListData & { reason?: DuplicateReason }>;
 }
 
 const InvitationResultUsersTable: FC<Props> = (props) => {
@@ -19,6 +32,9 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   const { t } = useTranslation();
 
   if (users && users.length === 0) return null;
+
+  const showExternalId = users.some((u) => u.externalId != null);
+  const showReason = users.some((u) => u.reason != null);
 
   const options: TableOptions = {
     download: true,
@@ -66,6 +82,44 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
         sort: false,
       },
     },
+    ...(showExternalId
+      ? [
+          {
+            name: 'externalId',
+            label: t(tableTranslations.externalId),
+            options: {
+              alignCenter: true,
+              sort: false,
+            },
+          },
+        ]
+      : []),
+    ...(showReason
+      ? [
+          {
+            name: 'reason',
+            label: t(tableTranslations.reason),
+            options: {
+              alignCenter: false,
+              sort: false,
+              customBodyRenderLite: (dataIndex: number): JSX.Element => {
+                const user = users[dataIndex];
+                return (
+                  <Typography
+                    key={`reason-${user.id}`}
+                    className="invitation_result_user_reason"
+                    variant="body2"
+                  >
+                    {user.reason === 'duplicate_external_id'
+                      ? t(translations.duplicateExternalId)
+                      : t(translations.duplicateEmail)}
+                  </Typography>
+                );
+              },
+            },
+          },
+        ]
+      : []),
     {
       name: 'phantom',
       label: t(tableTranslations.phantom),

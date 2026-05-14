@@ -6870,10 +6870,10 @@
     "defaultMessage": "关闭"
   },
   "course.userInvitations.InvitationResultDialog.duplicateInfo": {
-    "defaultMessage": "在邀请中发现重复用户。只邀请该用户第一个账号。"
+    "defaultMessage": "在邀请中发现重复用户。只邀请每个用户的第一个实例。"
   },
   "course.userInvitations.InvitationResultDialog.duplicateUsers": {
-    "defaultMessage": "具有重复电子邮件的用户（{count}）"
+    "defaultMessage": "重复用户（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsers": {
     "defaultMessage": "现有课程用户（{count}）"
@@ -6895,6 +6895,12 @@
   },
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "新邀请（{count}）"
+  },
+  "course.userInvitations.InvitationResultUsersTable.duplicateEmail": {
+    "defaultMessage": "重复电子邮件"
+  },
+  "course.userInvitations.InvitationResultUsersTable.duplicateExternalId": {
+    "defaultMessage": "重复外部 ID"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "已接受邀请"
@@ -6929,11 +6935,20 @@
   "course.userInvitations.InviteUsersFileUpload.failure": {
     "defaultMessage": "邀请用户失败。请确保你的数据格式正确 - {error}"
   },
+  "course.userInvitations.InviteUsersFileUpload.failureGeneric": {
+    "defaultMessage": "邀请用户失败。请确保你的数据格式正确。"
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "姓名，电子邮件,Role,Phantom,外部编号{br}John,test1@example.org,student,y,A0123456{br}Mary,test2@example.org,teaching_assistant,n,A0123457"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "姓名，电子邮件,Role,Phantom,PersonalTimeline,外部编号{br}John,test1@example.org,student,y,otot,A0123456{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
+    "defaultMessage": "每个邀请必须使用课程内唯一的电子邮件地址。重复的电子邮件将被跳过。"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
+    "defaultMessage": "外部编号是将用户与外部系统关联的可选字段。若提供，则必须在课程内唯一——重复的外部编号将被跳过。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "上传具有以下格式的 .csv 文件："
@@ -6972,7 +6987,7 @@
     "defaultMessage": "删除邀请"
   },
   "course.userInvitations.InvitationActionButtons.resendFailure": {
-    "defaultMessage": "无法重新发送邀请 - {error}"
+    "defaultMessage": "无法重新发送邀请。"
   },
   "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "向 {email} 重新发送电子邮件邀请！"
@@ -7099,6 +7114,24 @@
   },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {现在是旁听用户} other {现在是普通用户} }。"
+  },
+  "course.users.ManageUsersTable.addIdFailure": {
+    "defaultMessage": "无法将外部编号设置为 {newId}"
+  },
+  "course.users.ManageUsersTable.addIdSuccess": {
+    "defaultMessage": "外部编号已设置为 {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdFailure": {
+    "defaultMessage": "无法将编号从 {oldId} 更改为 {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdSuccess": {
+    "defaultMessage": "编号已从 {oldId} 更改为 {newId}"
+  },
+  "course.users.ManageUsersTable.deleteIdFailure": {
+    "defaultMessage": "无法删除外部编号"
+  },
+  "course.users.ManageUsersTable.deleteIdSuccess": {
+    "defaultMessage": "外部编号已删除"
   },
   "course.users.ManageUsersTable.renameFailure": {
     "defaultMessage": "无法将 {oldName} 重命名为 {newName}"
@@ -8048,6 +8081,9 @@
   "lib.translations.table.column.email": {
     "defaultMessage": "电子邮件"
   },
+  "lib.translations.table.column.externalId": {
+    "defaultMessage": "外部编号"
+  },
   "lib.translations.table.column.endAt": {
     "defaultMessage": "结束于"
   },
@@ -8098,6 +8134,9 @@
   },
   "lib.translations.table.column.name": {
     "defaultMessage": "姓名"
+  },
+  "lib.translations.table.column.optional": {
+    "defaultMessage": "选填"
   },
   "lib.translations.table.column.organization": {
     "defaultMessage": "组织"

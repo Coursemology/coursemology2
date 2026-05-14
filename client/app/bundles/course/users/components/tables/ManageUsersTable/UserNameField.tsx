@@ -46,6 +46,7 @@ const UserNameField = (props: UserNameFieldProps): JSX.Element => {
   return (
     <InlineEditTextField
       key={user.id}
+      allowEmpty={false}
       className={`course_user_name ${user.isSuspended ? 'text-neutral-400' : ''}`}
       onUpdate={(newName): Promise<void> => handleNameUpdate(newName)}
       updateValue={(): void => {}}
