@@ -123,7 +123,7 @@
     "@swc/core": "^1.11.21",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.7",
-    "@testing-library/user-event": "^14.5.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/enzyme": "^3.10.18",
     "@types/jest": "^30.0.0",
     "@types/jquery": "^3.5.29",
