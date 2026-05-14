@@ -20,11 +20,13 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return
   #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
   #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
+  #   Conflicts are accumulated into +@duplicate_users+ as a side effect.
   def process_invitations(users)
+    @taken_external_ids = load_existing_external_ids
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
-
-    [*invite_new_users(new_users), *add_existing_users(existing_users)]
+    [*invite_new_users(new_users),
+     *add_existing_users(existing_users)]
   end
 
   # Given an array of hashes containing the email address and name of a user to invite, finds the
@@ -60,25 +62,35 @@ module Course::UserInvitationService::ProcessInvitationConcern
   #   and already enrolled.
   def add_existing_users(users)
     ensure_instance_users(users.map { |u| u[:user] })
-
     all_course_users = @current_course.course_users.to_h { |cu| [cu.user_id, cu] }
     existing_course_users = []
     new_course_users = []
     users.each do |user|
-      course_user = all_course_users[user[:user].id]
-      if course_user
+      if (course_user = all_course_users[user[:user].id])
         existing_course_users << course_user
       else
-        new_course_users <<
-          @current_course.course_users.build(user: user[:user], name: user[:name],
-                                             role: user[:role], phantom: user[:phantom],
-                                             timeline_algorithm: @current_course.default_timeline_algorithm,
-                                             creator: @current_user, updater: @current_user)
-        @current_course.enrol_requests.pending.find_by(user: user[:user].id)&.destroy!
+        enroll_new_user(user, user[:external_id].presence, new_course_users)
       end
     end
-
     [new_course_users, existing_course_users]
+  end
+
+  def enroll_new_user(user, ext_id, new_course_users)
+    if ext_id && @taken_external_ids.include?(ext_id)
+      @duplicate_users.push(user.merge(reason: :external_id_taken))
+    else
+      @taken_external_ids.add(ext_id) if ext_id
+      new_course_users << build_course_user(user)
+      @current_course.enrol_requests.pending.find_by(user: user[:user].id)&.destroy!
+    end
+  end
+
+  def build_course_user(user)
+    @current_course.course_users.build(user: user[:user], name: user[:name],
+                                       role: user[:role], phantom: user[:phantom],
+                                       timeline_algorithm: @current_course.default_timeline_algorithm,
+                                       external_id: user[:external_id],
+                                       creator: @current_user, updater: @current_user)
   end
 
   # Ensures that all users have instance user records for the current instance.
@@ -96,6 +108,15 @@ module Course::UserInvitationService::ProcessInvitationConcern
     InstanceUser.insert_all(missing_instance_users)
   end
 
+  def load_existing_external_ids
+    course_ext_ids = CourseUser.where(course: @current_course).
+                     where.not(external_id: nil).pluck(:external_id)
+    invitation_ext_ids = Course::UserInvitation.unconfirmed.
+                         where(course: @current_course).
+                         where.not(external_id: nil).pluck(:external_id)
+    Set.new(course_ext_ids + invitation_ext_ids)
+  end
+
   # Generates invitations for users to the course.
   #
   # @param [Array<Hash>] users The user descriptions to invite.
@@ -110,13 +131,25 @@ module Course::UserInvitationService::ProcessInvitationConcern
       if invitation
         existing_invitations << invitation
       else
-        new_invitations <<
-          @current_course.invitations.build(name: user[:name], email: user[:email],
-                                            role: user[:role], phantom: user[:phantom],
-                                            timeline_algorithm: user[:timeline_algorithm])
+        add_to_new_invitations(user, user[:external_id].presence, new_invitations)
       end
     end
-
     [new_invitations, existing_invitations]
+  end
+
+  def add_to_new_invitations(user, ext_id, new_invitations)
+    if ext_id && @taken_external_ids.include?(ext_id)
+      @duplicate_users.push(user.merge(reason: :external_id_taken))
+    else
+      @taken_external_ids.add(ext_id) if ext_id
+      new_invitations << build_invitation(user)
+    end
+  end
+
+  def build_invitation(user)
+    @current_course.invitations.build(name: user[:name], email: user[:email],
+                                      role: user[:role], phantom: user[:phantom],
+                                      timeline_algorithm: user[:timeline_algorithm],
+                                      external_id: user[:external_id])
   end
 end

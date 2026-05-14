@@ -13,6 +13,7 @@ export interface Student {
   name: string;
   nameLink: string;
   email: string;
+  externalId?: string | null;
   studentType: 'Phantom' | 'Normal';
   isMyStudent: boolean;
   groupManagers?: GroupManager[];
@@ -50,6 +51,7 @@ export interface Metadata {
   courseVideoCount: number;
   hasGroupManagers: boolean;
   hasMyStudents: boolean;
+  hasExternalIds: boolean;
   showRedirectToMissionControl: boolean;
 }
 

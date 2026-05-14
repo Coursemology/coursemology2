@@ -47,16 +47,23 @@ module Course::UserInvitationService::ParseInvitationConcern
   # ]
   def partition_unique_users(users)
     users.each { |user| user[:email] = user[:email].downcase }
-    unique_users = {}
+    seen_emails = Set.new
+    seen_external_ids = Set.new
+    unique_users = []
     duplicate_users = []
     users.each do |user|
-      if unique_users.key?(user[:email])
-        duplicate_users.push(user)
+      ext_id = user[:external_id].presence
+      if seen_emails.include?(user[:email])
+        duplicate_users.push(user.merge(reason: :duplicate_email_in_file))
+      elsif ext_id && seen_external_ids.include?(ext_id)
+        duplicate_users.push(user.merge(reason: :duplicate_external_id_in_file))
       else
-        unique_users[user[:email]] = user
+        seen_emails.add(user[:email])
+        seen_external_ids.add(ext_id) if ext_id
+        unique_users << user
       end
     end
-    [unique_users.values, duplicate_users]
+    [unique_users, duplicate_users]
   end
 
   # Change all invitees' roles to :student if inviter is a teaching_assistant.
@@ -86,7 +93,8 @@ module Course::UserInvitationService::ParseInvitationConcern
         email: value[:email],
         role: value[:role],
         phantom: phantom,
-        timeline_algorithm: value[:timeline_algorithm] }
+        timeline_algorithm: value[:timeline_algorithm],
+        external_id: value[:external_id] }
     end
   end
 
@@ -144,11 +152,17 @@ module Course::UserInvitationService::ParseInvitationConcern
     return nil if row[1].blank?
 
     row[0] = row[1] if row[0].blank?
-
     role = parse_file_role(row[2])
     phantom = parse_file_phantom(row[3])
-    timeline_algorithm = parse_file_timeline_algorithm(row[4])
-    { name: row[0], email: row[1], role: role, phantom: phantom, timeline_algorithm: timeline_algorithm }
+    if @current_course.show_personalized_timeline_features?
+      timeline_algorithm = parse_file_timeline_algorithm(row[4])
+      external_id = parse_file_external_id(row[5])
+    else
+      external_id = parse_file_external_id(row[4])
+      timeline_algorithm = parse_file_timeline_algorithm(nil)
+    end
+    { name: row[0], email: row[1], role: role, phantom: phantom,
+      timeline_algorithm: timeline_algorithm, external_id: external_id }
   end
 
   # Parses the role column from the CSV file.
@@ -186,6 +200,17 @@ module Course::UserInvitationService::ParseInvitationConcern
 
     symbol = timeline_algorithm.parameterize(separator: '_').to_sym
     symbol || @current_course.default_timeline_algorithm
+  end
+
+  # Parses file value for an invitation's external ID.
+  # Returns nil if value is not specified.
+  #
+  # @param [String|nil] external_id External ID as specified in the CSV file.
+  # @return [String|nil] The external ID string, or nil if blank.
+  def parse_file_external_id(external_id)
+    return nil if external_id.blank?
+
+    external_id
   end
 
   # Removes the UTF-8 byte order mark (BOM) from the string.

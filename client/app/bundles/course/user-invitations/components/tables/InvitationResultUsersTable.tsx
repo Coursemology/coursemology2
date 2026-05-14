@@ -1,17 +1,34 @@
 import { FC, memo } from 'react';
+import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { CourseUserData } from 'types/course/courseUsers';
+import { CourseUserListData } from 'types/course/courseUsers';
+import { DuplicateReason } from 'types/course/userInvitations';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import useTranslation from 'lib/hooks/useTranslation';
 import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
+const translations = defineMessages({
+  duplicateEmailInFile: {
+    id: 'course.userInvitations.InvitationResultUsersTable.duplicateEmailInFile',
+    defaultMessage: 'Duplicate email in upload',
+  },
+  duplicateExternalIdInFile: {
+    id: 'course.userInvitations.InvitationResultUsersTable.duplicateExternalIdInFile',
+    defaultMessage: 'Duplicate external ID in upload',
+  },
+  externalIdTaken: {
+    id: 'course.userInvitations.InvitationResultUsersTable.externalIdTaken',
+    defaultMessage: 'External ID is already assigned to another course member',
+  },
+});
+
 interface Props {
   title: JSX.Element;
-  users: CourseUserData[];
+  users: Array<CourseUserListData & { reason?: DuplicateReason }>;
 }
 
 const InvitationResultUsersTable: FC<Props> = (props) => {
@@ -19,6 +36,9 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   const { t } = useTranslation();
 
   if (users && users.length === 0) return null;
+
+  const showExternalId = users.some((u) => u.externalId != null);
+  const showReason = users.some((u) => u.reason != null);
 
   const options: TableOptions = {
     download: true,
@@ -66,6 +86,52 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
         sort: false,
       },
     },
+    ...(showExternalId
+      ? [
+          {
+            name: 'externalId',
+            label: t(tableTranslations.externalId),
+            options: {
+              alignCenter: true,
+              sort: false,
+            },
+          },
+        ]
+      : []),
+    ...(showReason
+      ? [
+          {
+            name: 'reason',
+            label: t(tableTranslations.reason),
+            options: {
+              alignCenter: false,
+              sort: false,
+              customBodyRenderLite: (dataIndex: number): JSX.Element => {
+                const user = users[dataIndex];
+                const reasonText =
+                  {
+                    duplicate_email_in_file: t(
+                      translations.duplicateEmailInFile,
+                    ),
+                    duplicate_external_id_in_file: t(
+                      translations.duplicateExternalIdInFile,
+                    ),
+                    external_id_taken: t(translations.externalIdTaken),
+                  }[user.reason ?? ''] ?? '';
+                return (
+                  <Typography
+                    key={`reason-${user.id}`}
+                    className="invitation_result_user_reason"
+                    variant="body2"
+                  >
+                    {reasonText}
+                  </Typography>
+                );
+              },
+            },
+          },
+        ]
+      : []),
     {
       name: 'phantom',
       label: t(tableTranslations.phantom),

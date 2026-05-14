@@ -21,6 +21,8 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
 
   if (invitations && invitations.length === 0) return null;
 
+  const showExternalId = invitations.some((i) => i.externalId != null);
+
   const options: TableOptions = {
     download: true,
     filter: false,
@@ -69,6 +71,18 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
         sort: false,
       },
     },
+    ...(showExternalId
+      ? [
+          {
+            name: 'externalId',
+            label: t(tableTranslations.externalId),
+            options: {
+              alignCenter: true,
+              sort: false,
+            },
+          },
+        ]
+      : []),
     {
       name: 'phantom',
       label: t(tableTranslations.phantom),

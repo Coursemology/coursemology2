@@ -52,11 +52,11 @@ const translations = defineMessages({
   duplicateInfo: {
     id: 'course.userInvitations.InvitationResultDialog.duplicateInfo',
     defaultMessage:
-      'Duplicate users were found in the invitation. Only the first instance of this user will be invited.',
+      'Duplicate users were found in the invitation. Only the first instance of each user will be invited.',
   },
   duplicateUsers: {
     id: 'course.userInvitations.InvitationResultDialog.duplicateUsers',
-    defaultMessage: 'Users with Duplicate Emails ({count})',
+    defaultMessage: 'Duplicate Users ({count})',
   },
   existingCourseUsersInfo: {
     id: 'course.userInvitations.InvitationResultDialog.existingCourseUsersInfo',

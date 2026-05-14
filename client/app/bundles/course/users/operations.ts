@@ -40,6 +40,7 @@ const formatUpdateUser = (
       role: data.role,
       reference_timeline_id: data.referenceTimelineId,
       timeline_algorithm: data.timelineAlgorithm,
+      external_id: data.externalId,
     },
   };
 };

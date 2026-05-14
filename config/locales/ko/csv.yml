@@ -62,3 +62,4 @@ ko:
         name: '이름'
         type: '학생 유형'
         email: '이메일'
+        external_id: '외부 ID'

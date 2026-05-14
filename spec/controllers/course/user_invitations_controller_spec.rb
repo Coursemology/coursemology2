@@ -65,7 +65,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           it 'sets the course errors property' do
             subject
             expect(controller.current_course.errors.count).not_to eq(0)
-            expect(controller.current_course.errors[:invitations_file].length).not_to eq(0)
+            expect(controller.current_course.errors[:base].length).not_to eq(0)
           end
         end
       end
@@ -94,7 +94,20 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           replace_with_erroneous_course
           subject
           current_course = controller.current_course
-          expect(current_course.errors[:invitations_file]).not_to be_empty
+          expect(current_course.errors[:base]).not_to be_empty
+        end
+      end
+
+      context 'when a form invite has errors' do
+        subject do
+          controller.send(:propagate_errors)
+          controller
+        end
+
+        it 'propagates each error individually to :base' do
+          replace_with_erroneous_course
+          subject
+          expect(controller.current_course.errors[:base]).not_to be_empty
         end
       end
     end
@@ -114,6 +127,75 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           subject
           # Expect 2 errors from user invitations
           expect(controller.send(:aggregate_errors).count).to eq(2)
+        end
+      end
+
+      context 'when the CSV has an external ID already taken by an existing course user' do
+        let!(:existing_user) { create(:course_student, course: course, external_id: 'EXT_DUPE') }
+        let(:invite_params) do
+          { invitations_file: fixture_file_upload('course/invitation_duplicate_external_id.csv') }
+        end
+        subject { post :create, params: { course_id: course, course: invite_params }, format: :json }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'does not surface the conflict in aggregate_errors' do
+          subject
+          errors = controller.send(:aggregate_errors)
+          expect(errors.none? { |e| e.include?('EXT_DUPE') }).to be(true)
+        end
+      end
+
+      context 'when a CourseUser has an already-enrolled error' do
+        before { replace_with_erroneous_course }
+
+        it 'surfaces an already enrolled error message' do
+          errors = controller.send(:aggregate_errors)
+          expect(errors.any? { |e| e.include?('already enrolled') }).to be(true)
+        end
+      end
+
+      context 'when an invitation has a pending invitation for the same email' do
+        let(:course_with_dup_invitation) do
+          create(:course, :enrollable).tap do |c|
+            c.invitations.create!(name: 'Alice', email: 'pending@example.com')
+            c.invitations.build(name: 'Alice 2', email: 'pending@example.com')
+          end
+        end
+
+        before do
+          dup_course = course_with_dup_invitation
+          controller.define_singleton_method(:current_course) { dup_course }
+        end
+
+        it 'surfaces a duplicate invitation error message' do
+          errors = controller.send(:aggregate_errors)
+          expect(errors.any? { |e| e.include?('pending invitation') }).to be(true)
+        end
+      end
+
+      context 'when a form invite has a duplicate external ID' do
+        let!(:existing_user) { create(:course_student, course: course, external_id: 'FORM_DUPE') }
+        let(:invite_params) do
+          invitations = { generate(:nested_attribute_new_id) =>
+                          { name: generate(:name), email: generate(:email),
+                            role: :student, phantom: false, external_id: 'FORM_DUPE' } }
+          { invitations_attributes: invitations }
+        end
+        subject { post :create, params: { course_id: course, course: invite_params }, format: :json }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'does not surface the conflict in aggregate_errors' do
+          subject
+          errors = controller.send(:aggregate_errors)
+          expect(errors.none? { |e| e.include?('FORM_DUPE') }).to be(true)
         end
       end
     end

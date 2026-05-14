@@ -48,14 +48,25 @@ class Course::UserRegistrationService
   # @param [Course::UserInvitation] invitation The invitation from which we are creating a course user from.
   # @return [CourseUser] The Course User object which was found or created.
   def find_or_create_course_user!(registration, invitation = nil)
-    name = invitation.try(:name) || registration.user.name
-    role = invitation.try(:role) || :student
-    phantom = invitation.try(:phantom) || false
-    timeline_algorithm = invitation.try(:timeline_algorithm) || registration.course.default_timeline_algorithm
+    attrs = {
+      name: invitation.try(:name) || registration.user.name,
+      role: invitation.try(:role) || :student,
+      phantom: invitation.try(:phantom) || false,
+      timeline_algorithm: invitation.try(:timeline_algorithm) || registration.course.default_timeline_algorithm,
+      external_id: invitation.try(:external_id).presence
+    }
+    registration.course_user = create_course_user_record!(registration, attrs)
+    registration.course_user
+  end
 
-    registration.course_user =
-      CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
-                                    name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm)
+  def create_course_user_record!(registration, attrs)
+    CourseUser.find_or_create_by!(course: registration.course, user: registration.user) do |cu|
+      cu.name = attrs[:name]
+      cu.role = attrs[:role]
+      cu.phantom = attrs[:phantom]
+      cu.timeline_algorithm = attrs[:timeline_algorithm]
+      cu.external_id = attrs[:external_id]
+    end
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and

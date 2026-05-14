@@ -196,6 +196,9 @@ en:
               not_in_course: 'Selected user is not in specified course'
         course/user_invitation:
           existing_invitation: 'an open invitation exists for this email address'
+          attributes:
+            external_id:
+              taken: 'has already been taken by another user or pending invitation in this course'
         course/video:
           attributes:
             url:
@@ -213,6 +216,8 @@ en:
           deletion: 'The last tab cannot be deleted'
         course_user:
           attributes:
+            external_id:
+              taken: 'has already been taken by another user or pending invitation in this course'
             reference_timeline:
               belongs_to_course: 'must belong to course'
         duplication_traceable:

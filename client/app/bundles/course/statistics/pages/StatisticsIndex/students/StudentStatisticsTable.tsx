@@ -15,6 +15,7 @@ import {
   NUM_CELL_CLASS_NAME,
 } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
 
 const translations = defineMessages({
   name: {
@@ -76,6 +77,7 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       showVideo,
       courseVideoCount,
       hasGroupManagers,
+      hasExternalIds,
       showRedirectToMissionControl,
     },
     students,
@@ -134,6 +136,17 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
   ];
+
+  if (hasExternalIds) {
+    columns.push({
+      of: 'externalId',
+      title: t(tableTranslations.externalId),
+      sortable: true,
+      searchable: true,
+      cell: (student) => student.externalId ?? '',
+      csvDownloadable: true,
+    });
+  }
 
   if (hasGroupManagers) {
     columns.push({

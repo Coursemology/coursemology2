@@ -15,8 +15,11 @@ zh:
           owner: '拥有者'
           phantom: '虚拟用户'
       user_invitations:
-        duplicate_user: '%{user}在提交中出现了多次。'
-        invalid_email: '%{email}无效：%{message}。'
+        already_enrolled: '%{email}无法处理：已加入该课程。'
+        duplicate_invitation: '%{email}无法处理：已有待处理的邀请。'
+        invalid_email: '%{email}无法处理：邮箱无效：%{message}。'
+        duplicate_external_id: '%{email}无法处理：外部编号"%{external_id}"已被使用。'
+        other_error: '%{email}无法处理：%{message}。'
       user_registrations:
         invalid_code: '你输入了一个无效的邀请码。'
         code_taken: >

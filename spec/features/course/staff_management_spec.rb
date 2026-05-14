@@ -65,9 +65,11 @@ RSpec.feature 'Courses: Staff Management', js: true do
 
         # change name
         within find("tr.course_user_#{staff_to_change.id}") do
-          find('button.inline-edit-button', visible: false).click
-          find('input').set(new_name)
-          find('button.confirm-btn').click
+          within('.course_user_name') do
+            find('button.inline-edit-button', visible: :all).click
+            find('input').set(new_name)
+            find('button.confirm-btn').click
+          end
         end
         expect_toastify("#{staff_to_change.name} was renamed to #{new_name}")
 

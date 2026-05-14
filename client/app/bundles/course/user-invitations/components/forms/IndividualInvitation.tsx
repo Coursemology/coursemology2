@@ -136,6 +136,20 @@ const IndividualInvitation: FC<Props> = (props) => {
       )}
       <Controller
         control={fieldsConfig.control}
+        name={`invitations.${index}.externalId`}
+        render={({ field, fieldState }): JSX.Element => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            id={`externalId-${index}`}
+            label={`${t(tableTranslations.externalId)} (${t(tableTranslations.optional)})`}
+            sx={styles.textInput}
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        control={fieldsConfig.control}
         name={`invitations.${index}.phantom`}
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField

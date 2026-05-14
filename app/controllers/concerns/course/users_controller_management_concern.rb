@@ -123,7 +123,7 @@ module Course::UsersControllerManagementConcern
 
   def course_user_params
     @course_user_params ||= params.require(:course_user).permit(
-      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id
+      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id, :external_id
     )
   end
 
