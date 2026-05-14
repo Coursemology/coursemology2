@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   IndividualInvites,
@@ -12,8 +12,8 @@ import * as yup from 'yup';
 import ErrorText from 'lib/components/core/ErrorText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import messagesTranslations from 'lib/translations/messages';
 
 import { inviteUsersFromForm } from '../../operations';
 import {
@@ -23,7 +23,18 @@ import {
 
 import IndividualInvitations from './IndividualInvitations';
 
-interface Props extends WrappedComponentProps {
+const translations = defineMessages({
+  failure: {
+    id: 'course.userInvitations.IndividualInviteForm.failure',
+    defaultMessage: 'Failed to invite users. {error}',
+  },
+  failureGeneric: {
+    id: 'course.userInvitations.IndividualInviteForm.failureGeneric',
+    defaultMessage: 'Failed to invite users. You may reload and try again.',
+  },
+});
+
+interface Props {
   openResultDialog: (invitationResult: InvitationResult) => void;
 }
 
@@ -46,7 +57,8 @@ const validationSchema = yup.object({
 });
 
 const IndividualInviteForm: FC<Props> = (props) => {
-  const { openResultDialog, intl } = props;
+  const { openResultDialog } = props;
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
@@ -109,8 +121,22 @@ const IndividualInviteForm: FC<Props> = (props) => {
         reset(initialValues);
         openResultDialog(response);
       })
-      .catch(() => {
-        toast.error(intl.formatMessage(messagesTranslations.formUpdateError));
+      .catch((error) => {
+        const rawErrors = error.response?.data?.errors;
+        let errorList: string[];
+        if (Array.isArray(rawErrors)) errorList = rawErrors;
+        else if (typeof rawErrors === 'string') errorList = [rawErrors];
+        else errorList = [];
+        const first = errorList[0];
+        const overflow =
+          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+        if (first) {
+          toast.error(t(translations.failure, { error: first + overflow }), {
+            autoClose: false,
+          });
+        } else {
+          toast.error(t(translations.failureGeneric), { autoClose: false });
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -139,4 +165,4 @@ const IndividualInviteForm: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(IndividualInviteForm);
+export default IndividualInviteForm;

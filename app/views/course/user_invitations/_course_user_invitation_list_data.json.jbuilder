@@ -3,6 +3,7 @@
 json.id invitation.id
 json.name invitation.name
 json.email invitation.email
+json.externalId invitation.external_id
 json.role invitation.role
 json.phantom invitation.phantom
 json.timelineAlgorithm invitation.timeline_algorithm

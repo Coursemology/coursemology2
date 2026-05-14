@@ -21,24 +21,32 @@ const formatInvitations = (invitations: InvitationPostData[]): FormData => {
   const payload = new FormData();
 
   invitations.forEach((invite, index) => {
-    ['name', 'email', 'role', 'phantom', 'timelineAlgorithm'].forEach(
-      (field) => {
-        if (invite[field] !== undefined && invite[field] !== null) {
-          let fieldName = field;
-          let value = invite[field];
-          if (field === 'timelineAlgorithm') {
-            fieldName = 'timeline_algorithm';
-          }
-          if (field === 'phantom') {
-            value = value ? 1 : 0;
-          }
-          payload.append(
-            `course[invitations_attributes][${index}][${fieldName}]`,
-            value,
-          );
+    [
+      'name',
+      'email',
+      'role',
+      'phantom',
+      'timelineAlgorithm',
+      'externalId',
+    ].forEach((field) => {
+      if (invite[field] !== undefined && invite[field] !== null) {
+        let fieldName = field;
+        let value = invite[field];
+        if (field === 'timelineAlgorithm') {
+          fieldName = 'timeline_algorithm';
         }
-      },
-    );
+        if (field === 'externalId') {
+          fieldName = 'external_id';
+        }
+        if (field === 'phantom') {
+          value = value ? 1 : 0;
+        }
+        payload.append(
+          `course[invitations_attributes][${index}][${fieldName}]`,
+          value,
+        );
+      }
+    });
   });
   return payload;
 };

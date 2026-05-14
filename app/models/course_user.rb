@@ -3,6 +3,7 @@ class CourseUser < ApplicationRecord
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern
+  include Course::UniqueExternalIdConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?

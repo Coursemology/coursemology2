@@ -16,3 +16,4 @@ json.timelineAlgorithm course_user.timeline_algorithm if should_show_timeline
 
 json.role course_user.role
 json.phantom course_user.phantom? if should_show_phantom
+json.externalId course_user.external_id

@@ -19,6 +19,7 @@ interface Props {
   link?: string;
   onUpdate?: (newValue: string) => Promise<void>;
   alwaysEditable?: boolean;
+  allowEmpty?: boolean;
 }
 
 const styles = {
@@ -52,6 +53,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
     link,
     onUpdate,
     alwaysEditable = false,
+    allowEmpty = false,
     ...custom
   } = props;
   const [controlledVal, setControlledVal] = useState(value);
@@ -68,7 +70,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const handleSave = (): void => {
     setIsSaving(true);
-    if (controlledVal.trim() === '') {
+    if (!allowEmpty && controlledVal.trim() === '') {
       setHelperText('Cannot be empty.');
       setIsSaving(false);
       return;

@@ -35,8 +35,14 @@ class User::Email < ApplicationRecord
           unconfirmed_invitation.confirm!(confirmer: user)
           next
         end
-        user.build_course_user_from_invitation(unconfirmed_invitation)
-        unconfirmed_invitation.confirm!(confirmer: user) if user.save && user.persisted?
+        # Confirm the invitation before saving the CourseUser so that the
+        # UniqueExternalIdConcern validation doesn't reject the new CourseUser
+        # for sharing an external_id with what is now a confirmed invitation.
+        CourseUser.transaction(requires_new: true) do
+          unconfirmed_invitation.confirm!(confirmer: user)
+          user.build_course_user_from_invitation(unconfirmed_invitation)
+          raise ActiveRecord::Rollback unless user.save && user.persisted?
+        end
       end
     end
   end

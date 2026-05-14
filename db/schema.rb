@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_23_065615) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1345,9 +1345,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_065615) do
     t.boolean "phantom", default: false, null: false
     t.integer "timeline_algorithm"
     t.boolean "is_retryable", default: true, null: false
+    t.string "external_id"
     t.index "lower((email)::text)", name: "index_course_user_invitations_on_email"
     t.index ["confirmer_id"], name: "fk__course_user_invitations_confirmer_id"
     t.index ["course_id", "email"], name: "index_course_user_invitations_on_course_id_and_email", unique: true
+    t.index ["course_id", "external_id"], name: "index_course_user_invitations_on_course_id_and_external_id", unique: true, where: "((external_id IS NOT NULL) AND (confirmed_at IS NULL))"
     t.index ["course_id"], name: "fk__course_user_invitations_course_id"
     t.index ["creator_id"], name: "fk__course_user_invitations_creator_id"
     t.index ["invitation_key"], name: "index_course_user_invitations_on_invitation_key", unique: true
@@ -1369,6 +1371,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_065615) do
     t.integer "timeline_algorithm", default: 0, null: false
     t.datetime "deleted_at"
     t.boolean "is_suspended", default: false, null: false
+    t.string "external_id"
+    t.index ["course_id", "external_id"], name: "index_course_users_on_course_id_and_external_id", unique: true, where: "(external_id IS NOT NULL)"
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"
