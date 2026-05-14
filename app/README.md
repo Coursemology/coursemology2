@@ -25,7 +25,13 @@ These commands should be run with the repository root directory (one level up fr
    bundle exec rake db:setup
    ```
 
-4. Initialize .env file
+4. Seed the prefilled courses and assessments
+
+   ```sh
+   bundle exec rake coursemology:seed
+   ```
+
+5. Initialize .env file
 
    ```sh
    cp env .env
@@ -33,7 +39,7 @@ These commands should be run with the repository root directory (one level up fr
 
    You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
 
-5. To start the app server, run
+6. To start the app server, run
 
    ```
    bundle exec rails s -p 3000

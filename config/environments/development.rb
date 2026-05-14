@@ -72,6 +72,7 @@ Rails.application.configure do
 
   config.x.default_app_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080').gsub(/:\d+/, '')
   config.x.default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
+  config.x.default_user_password = 'Coursemology!'
 
   config.action_mailer.default_url_options = { host: config.x.default_app_host }
 
