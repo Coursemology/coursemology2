@@ -1,7 +1,8 @@
-import { Component } from 'react';
+import { Component, useEffect, useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Stack } from '@mui/material';
 import PropTypes from 'prop-types';
+import ResizeObserver from 'utilities/ResizeObserver';
 
 import FormEditorField from 'lib/components/form/fields/EditorField';
 
@@ -17,6 +18,20 @@ const Editor = (props) => {
     editorRef,
   } = props;
   const { control } = useFormContext();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return undefined;
+
+    const observer = new ResizeObserver(() => {
+      editorRef?.current?.editor?.resize();
+    });
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Stack spacing={0.5}>
@@ -24,23 +39,27 @@ const Editor = (props) => {
         control={control}
         name={fieldName}
         render={({ field }) => (
-          <FormEditorField
-            ref={editorRef}
-            field={{
-              ...field,
-              onChange: (event) => {
-                field.onChange(event);
-                onChangeCallback();
-              },
-            }}
-            filename={file.filename}
-            language={language}
-            maxLines={25}
-            minLines={25}
-            onCursorChange={onCursorChange ?? (() => {})}
-            readOnly={false}
-            style={{ marginBottom: 10 }}
-          />
+          <div
+            ref={containerRef}
+            className="resize-y overflow-hidden"
+            style={{ minHeight: 200, height: 400 }}
+          >
+            <FormEditorField
+              ref={editorRef}
+              field={{
+                ...field,
+                onChange: (event) => {
+                  field.onChange(event);
+                  onChangeCallback();
+                },
+              }}
+              filename={file.filename}
+              height="100%"
+              language={language}
+              onCursorChange={onCursorChange ?? (() => {})}
+              readOnly={false}
+            />
+          </div>
         )}
       />
     </Stack>
