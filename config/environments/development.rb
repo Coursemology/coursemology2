@@ -70,7 +70,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.x.default_app_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080').gsub(/:\d+/, '')
+  config.x.default_app_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080').gsub(/:\d+$/, '')
   config.x.default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
   config.x.default_user_password = 'Coursemology!'
 

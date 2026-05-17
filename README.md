@@ -46,11 +46,13 @@ password: `Coursemology!`
 
 ### Running using HTTPS locally
 
+If you followed the above instructions, then Coursemology should be running on HTTP. This is sufficient for most development work, but it can be helpful to run on HTTPS locally in some cases. To do so, follow these instructions:
+
 These commands should be run from the repository root directory, unless otherwise noted.
 
-`lvh.me` is a public domain that resolves to `127.0.0.1`. It is used instead of `localhost` because browsers enforce stricter security policies on `localhost` that can break the OAuth redirect flow over HTTPS.
+`lvh.me` is a public domain that resolves to `127.0.0.1`. It is used instead of `localhost` because it supports subdomains (which simulate our multitenancy setup) while being compatible with our Keycloak integration.
 
-1. Generate a self-signed certificate and key for `lvh.me`:
+1. Generate a self-signed certificate and key for `*.lvh.me`:
 
    ```sh
    openssl req -x509 -newkey rsa:4096 -sha256 -days 365 -nodes \
@@ -90,7 +92,7 @@ Access the app at `https://lvh.me:8080`. Your browser will show a certificate wa
    rm config/credentials/server.crt config/credentials/server.key
    ```
 
-2. Restore the Keycloak redirect URIs:
+2. Restore the default Keycloak uri configuration:
 
    ```sh
    bundle exec rake "keycloak:push_redirect_uris"

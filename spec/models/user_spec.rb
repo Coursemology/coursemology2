@@ -202,6 +202,20 @@ RSpec.describe User do
             have_enqueued_job.on_queue('highest')
         end
       end
+
+      context 'with a non-default instance tenant' do
+        let(:instance) { create(:instance) }
+
+        with_tenant(:instance) do
+          before { ActionMailer::Base.deliveries.clear }
+
+          it 'uses the current tenant host in the reset password URL' do
+            subject.send_reset_password_instructions
+            email = ActionMailer::Base.deliveries.last
+            expect(email.body.encoded).to include(instance.host)
+          end
+        end
+      end
     end
   end
 end

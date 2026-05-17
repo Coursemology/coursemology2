@@ -44,7 +44,7 @@ class Instance < ApplicationRecord
     end
   end
 
-  after_commit :push_redirect_uris_to_keycloak, unless: -> { Rails.env.test? }
+  after_commit -> { KeycloakAdminService.push_redirect_uris }, unless: -> { Rails.env.test? }
 
   validates :host, hostname: true, if: :should_validate_host?
   validates :name, length: { maximum: 255 }, presence: true
@@ -133,56 +133,23 @@ class Instance < ApplicationRecord
 
   # Replace the hostname of the default instance.
   def host
-    return Application::Application.config.x.default_host if default?
+    default_host = Application::Application.config.x.default_host || ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
+    return default_host if default?
 
-    super
+    read_attribute(:host).gsub('coursemology.org', default_host)
   end
 
   def redirect_uri
-    default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
-
-    redirect_host = if read_attribute(:host) == '*'
-                      default_host
-                    else
-                      host.gsub('coursemology.org', default_host)
-                    end
-
     protocol = if Rails.env.development? && ENV['RAILS_USE_HTTP']
                  'http'
                else
                  'https'
                end
 
-    "#{protocol}://#{redirect_host}"
-  end
-
-  def push_redirect_uris_to_keycloak
-    access_token = token_from_client_credentials
-    frontend_client_uuid = keycloak_frontend_client_uuid(access_token)
-    raise "Keycloak frontend client not found for client_id: #{frontend_client_id}" if frontend_client_uuid.blank?
-
-    service = "clients/#{frontend_client_uuid}"
-    redirect_uris = Instance.all.map(&:redirect_uri).map { |uri| "#{uri}/*" }
-    Keycloak::Admin.generic_put(service, nil, { redirectUris: redirect_uris }, access_token)
+    "#{protocol}://#{host}"
   end
 
   private
-
-  def frontend_client_id
-    Rails.application.credentials.dig(:keycloak, :frontend, :client_id)
-  end
-
-  def token_from_client_credentials
-    client_id = Rails.application.credentials.dig(:keycloak, :backend, :client_id)
-    client_secret = Rails.application.credentials.dig(:keycloak, :backend, :client_secret)
-    credentials = Keycloak::Client.get_token_by_client_credentials(client_id, client_secret)
-    JSON.parse(credentials)['access_token']
-  end
-
-  def keycloak_frontend_client_uuid(access_token)
-    clients = Keycloak::Admin.get_clients({ clientId: frontend_client_id }, access_token)
-    JSON.parse(clients).dig(0, 'id')
-  end
 
   def should_validate_host?
     new_record? || changed_attributes.keys.include?('host')

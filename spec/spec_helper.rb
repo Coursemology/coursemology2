@@ -124,6 +124,8 @@ Capybara.configure do |config|
   config.server = :puma, { Silent: true }
   config.default_max_wait_time = 10
   config.enable_aria_label = true
-  config.server_host = Application::Application.config.x.default_host
-  config.server_port = Application::Application.config.x.server_port
+  server_host, server_port = Application::Application.config.x.default_host.split(':', 2)
+  config.server_host = server_host
+  config.server_port = server_port.to_i
+  p("Using server host #{config.server_host} and port #{config.server_port}")
 end
