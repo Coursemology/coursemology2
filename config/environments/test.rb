@@ -60,7 +60,7 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  config.x.default_host = 'localhost'
+  config.x.default_host = 'localhost:7979'
   config.x.client_port = 3200
   config.x.server_port = 7979
   config.x.default_user_password = 'lolololol'

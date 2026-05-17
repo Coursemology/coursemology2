@@ -1,7 +1,8 @@
 import { expect, expectLastSentEmail, manufacture, test } from 'helpers';
+import { servers } from '../../package.json';
 
 const getHrefURLFromString = (string: string): string | undefined =>
-  string.match(/href="(.*(?="))/)?.[1];
+  string.match(/href="(.*(?="))/)?.[1].replace(servers.serverURL, servers.clientURL);
 
 test.describe('unregistered user', () => {
   test('can sign up', async ({ signUpPage: page }) => {
@@ -27,6 +28,7 @@ test.describe('unregistered user', () => {
     const confirmationURL = getHrefURLFromString(confirmationEmail.body);
     expect(confirmationURL).toBeTruthy();
 
+    console.log('Confirmation URL:', confirmationURL);
     await page.goto(confirmationURL!);
 
     await expect.soft(page.getByText(email)).toBeVisible();
