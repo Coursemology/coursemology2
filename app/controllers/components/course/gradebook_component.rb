@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+class Course::GradebookComponent < SimpleDelegator
+  include Course::ControllerComponentHost::Component
+
+  def self.display_name
+    'Gradebook'
+  end
+
+  def sidebar_items
+    return [] unless can?(:read_gradebook, current_course)
+
+    [
+      {
+        key: :gradebook,
+        icon: :gradebook,
+        weight: 9,
+        path: course_gradebook_path(current_course)
+      }
+    ]
+  end
+end
