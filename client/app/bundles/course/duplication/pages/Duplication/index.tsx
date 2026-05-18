@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 
 import { fetchObjectsList } from 'course/duplication/operations';
-import { selectDuplicationStore } from 'course/duplication/selectors/destinationInstance';
+import { selectDuplicationStore } from 'course/duplication/selectors';
 import { actions } from 'course/duplication/store';
 import { DuplicationMode } from 'course/duplication/types';
 import Page from 'lib/components/core/layouts/Page';
@@ -85,7 +85,7 @@ const DuplicationModeSelector: FC<{
     if (singleValidMode) {
       dispatch(actions.setDuplicationMode(singleValidMode));
     }
-  }, [singleValidMode]);
+  }, [dispatch, singleValidMode]);
 
   return (
     <>
