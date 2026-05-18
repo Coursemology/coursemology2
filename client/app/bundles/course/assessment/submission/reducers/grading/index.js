@@ -39,58 +39,89 @@ const extractGrades = (answers) =>
     return draft;
   }, {});
 
-const isSpecificAnswerGradePrefillableMap = {
-  [questionTypes.MultipleChoice]: () => true,
-  [questionTypes.MultipleResponse]: () => true,
-  [questionTypes.Programming]: (answer) => {
-    const { testCases } = answer;
-    const isPublicTestCasesExist = testCases?.public_test?.length > 0;
-    const isPrivateTestCasesExist = testCases?.private_test?.length > 0;
-    const isEvaluationTestCasesExist = testCases?.evaluation_test?.length > 0;
-    return (
-      isPublicTestCasesExist ||
-      isPrivateTestCasesExist ||
-      isEvaluationTestCasesExist
-    );
-  },
-  [questionTypes.RubricBasedResponse]: () => false,
-  [questionTypes.TextResponse]: () => false,
-  [questionTypes.Comprehension]: () => false,
-  [questionTypes.FileUpload]: () => false,
-  [questionTypes.Scribing]: () => false,
-  [questionTypes.VoiceResponse]: () => false,
-  [questionTypes.ForumPostResponse]: () => false,
+const NEVER_PREFILL_POLICY = {
+  canPrefillFullCredit: () => false,
+  canPrefillZeroCredit: false,
 };
 
-const isAnswerGradePrefillable = (answer, questionType) => {
-  const isAnswerPrefillable =
-    answer.grading.grade === null && answer.explanation?.correct;
-  const isSpecificAnswerPrefillable =
-    isSpecificAnswerGradePrefillableMap[questionType](answer);
-  return isAnswerPrefillable && isSpecificAnswerPrefillable;
+const ALWAYS_PREFILL_POLICY = {
+  canPrefillFullCredit: () => true,
+  canPrefillZeroCredit: true,
+};
+
+const ONLY_PREFILL_FULL_POLICY = {
+  canPrefillFullCredit: () => true,
+  canPrefillZeroCredit: false,
+};
+
+const PROGRAMMING_PREFILL_POLICY = {
+  canPrefillFullCredit: ({ testCases }) =>
+    (testCases?.public_test?.length ?? 0) > 0 ||
+    (testCases?.private_test?.length ?? 0) > 0 ||
+    (testCases?.evaluation_test?.length ?? 0) > 0,
+
+  // Partial grading is possible
+  canPrefillZeroCredit: false,
+};
+
+const prefillPolicies = {
+  [questionTypes.MultipleChoice]: ALWAYS_PREFILL_POLICY,
+  [questionTypes.MultipleResponse]: ALWAYS_PREFILL_POLICY,
+
+  [questionTypes.Programming]: PROGRAMMING_PREFILL_POLICY,
+
+  [questionTypes.TextResponse]: ONLY_PREFILL_FULL_POLICY,
+  [questionTypes.Comprehension]: ONLY_PREFILL_FULL_POLICY,
+
+  [questionTypes.RubricBasedResponse]: NEVER_PREFILL_POLICY,
+  [questionTypes.FileUpload]: NEVER_PREFILL_POLICY,
+  [questionTypes.Scribing]: NEVER_PREFILL_POLICY,
+  [questionTypes.VoiceResponse]: NEVER_PREFILL_POLICY,
+  [questionTypes.ForumPostResponse]: NEVER_PREFILL_POLICY,
+};
+
+const getPrefilledGrade = (answer, questionType, maxGrade) => {
+  const existingGrade = answer?.grading?.grade;
+  if (existingGrade != null) return existingGrade;
+
+  const policy = prefillPolicies[questionType];
+
+  if (
+    answer?.explanation?.correct === true &&
+    policy?.canPrefillFullCredit(answer)
+  ) {
+    return maxGrade;
+  }
+
+  if (answer?.explanation?.correct === false && policy?.canPrefillZeroCredit) {
+    return 0;
+  }
+
+  return null;
 };
 
 /**
- * Extracts grades from `payload.answer`, and pre-fills the maximum grade for correct
- * answers that have not been graded. "Correct" follows the definition of
- * `explanation.correct` from the server.
+ * Extracts grades from `payload.answer` and pre-fills:
+ * - maximum grade for correct answers
+ * - 0 for incorrect answers
+ * when they have not already been graded.
+ * "Correct" and "incorrect" follows the definition of `explanation.correct` from the server.
  */
 const extractPrefillableGrades = (payload) => {
   const mapQuestionIdToQuestion = arrayToObjectWithKey(payload.questions, 'id');
 
   return payload.answers.reduce((draft, answer) => {
     const { questionId, grading } = answer;
-    const prefillable = isAnswerGradePrefillable(
+    const prefilledGrade = getPrefilledGrade(
       answer,
       mapQuestionIdToQuestion[questionId].type,
+      mapQuestionIdToQuestion[questionId].maximumGrade,
     );
     draft[questionId] = {
       ...grading,
       originalGrade: grading.grade,
-      grade: prefillable
-        ? mapQuestionIdToQuestion[questionId].maximumGrade
-        : grading.grade,
-      prefilled: prefillable,
+      grade: prefilledGrade,
+      prefilled: grading.grade == null && prefilledGrade !== null,
     };
 
     return draft;

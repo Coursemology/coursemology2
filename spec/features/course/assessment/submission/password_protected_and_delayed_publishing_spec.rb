@@ -81,15 +81,13 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
 
         visit current_path
 
-        # Grade the submission with empty answer grade
-        expect(page).to have_button('Submit for Publishing', disabled: true)
-        find_field(class: 'grade').set(0)
-        wait_for_autosave
+        # Wrong MRQ answers are prefilled to 0 automatically, so the button is
+        # already enabled without staff needing to manually enter a grade.
+        expect(page).to have_button('Submit for Publishing', disabled: false)
 
         find_field(class: 'exp').set(50)
 
         click_button('Save')
-        expect(page).to have_button('Submit for Publishing', disabled: false)
         click_button('Submit for Publishing')
 
         expect(current_path).
