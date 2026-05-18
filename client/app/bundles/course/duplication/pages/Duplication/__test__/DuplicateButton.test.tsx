@@ -2,7 +2,6 @@ import { store } from 'store';
 import { fireEvent, render, screen, within } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import { duplicableItemTypes } from 'course/duplication/constants';
 import { loadObjectsList } from 'course/duplication/store';
 
 import DuplicateButton from '../DuplicateButton';

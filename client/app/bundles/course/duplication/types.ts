@@ -124,7 +124,7 @@ export interface DuplicationData extends CourseDuplicationData {
 
 export interface DuplicationState
   extends Omit<DuplicationData, 'destinationInstances'> {
-  confirmationOpen: false;
+  confirmationOpen: boolean;
   selectedItems: Record<DuplicableItemType, Record<number, boolean>>;
   destinationCourseId: number | null;
   destinationInstances: Record<
@@ -134,6 +134,7 @@ export interface DuplicationState
   duplicationMode: DuplicationMode;
   currentHost: string;
   currentCourseId: number | null;
+  currentItemSelectorPanel: ItemSelectorPanel | null;
   isLoading: boolean;
   isChangingCourse: boolean;
   isDuplicating: boolean;

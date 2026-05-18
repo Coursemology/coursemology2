@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { AppState } from 'store';
 
-import { DuplicationInstanceListData, DuplicationState } from '../types';
+import { DuplicationInstanceListData, DuplicationState } from './types';
 
 export const selectDuplicationStore = (state: AppState): DuplicationState =>
   state.duplication as DuplicationState;
@@ -15,7 +15,15 @@ export const selectDestinationInstances = createSelector(
     >,
 );
 
-export const selectMetadata = createSelector(
+export const selectDestinationCourse = createSelector(
   selectDuplicationStore,
-  (duplicationStore) => duplicationStore.metadata,
+  (duplicationStore) => {
+    const { destinationCourseId, destinationCourses } = duplicationStore;
+    if (destinationCourseId === null || !destinationCourses) {
+      return null;
+    }
+    return destinationCourses.find(
+      (course) => course.id === destinationCourseId,
+    );
+  },
 );

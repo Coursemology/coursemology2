@@ -1,29 +1,5 @@
 import mirrorCreator from 'mirror-creator';
 
-// These are mirrored in app/helpers/course/object_duplications_helper.rb
-export const duplicableItemTypes = mirrorCreator([
-  'ASSESSMENT',
-  'TAB',
-  'CATEGORY',
-  'SURVEY',
-  'ACHIEVEMENT',
-  'FOLDER',
-  'MATERIAL',
-  'VIDEO',
-  'VIDEO_TAB',
-]);
-
-// These are mirrored in app/helpers/course/object_duplications_helper.rb
-export const itemSelectorPanels = mirrorCreator([
-  'ASSESSMENTS',
-  'SURVEYS',
-  'ACHIEVEMENTS',
-  'MATERIALS',
-  'VIDEOS',
-]);
-
-export const formNames = mirrorCreator(['NEW_COURSE']);
-
 const actionTypes = mirrorCreator([
   'LOAD_OBJECTS_LIST_REQUEST',
   'LOAD_OBJECTS_LIST_SUCCESS',
