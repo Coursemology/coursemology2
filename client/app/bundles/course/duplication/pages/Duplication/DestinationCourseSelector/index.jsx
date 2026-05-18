@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
-import { duplicationModes } from 'course/duplication/constants';
 import { duplicateCourse } from 'course/duplication/operations';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
@@ -116,7 +115,7 @@ class DestinationCourseSelector extends Component {
   render() {
     const { duplicationMode } = this.props;
 
-    return duplicationMode === duplicationModes.COURSE
+    return duplicationMode === 'COURSE'
       ? this.renderNewCourseForm()
       : this.renderExistingCourseForm();
   }
@@ -144,7 +143,9 @@ export default connect(({ duplication }) => ({
   destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
   sourceCourse: duplication.sourceCourse,
-  currentInstanceId: duplication.metadata.currentInstanceId,
+  currentInstanceId:
+    duplication.destinationInstances[duplication.metadata.currentInstanceId]
+      ?.id,
   destinationInstances: duplication.destinationInstances,
   isDuplicating: duplication.isDuplicating,
 }))(injectIntl(DestinationCourseSelector));

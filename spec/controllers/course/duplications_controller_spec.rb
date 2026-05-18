@@ -35,6 +35,36 @@ RSpec.describe Course::DuplicationsController, type: :controller do
           expect(response).to be_successful
         end
       end
+
+      context 'when a course manager (without instance instructor role) duplicates to the same instance' do
+        let(:course_manager_user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, course_manager_user) }
+
+        subject do
+          post :create, format: :json, params: {
+            course_id: course.id, duplication: {
+              destination_instance_id: instance.id, new_title: 'Copy', new_start_at: Time.now
+            }
+          }
+        end
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a user is instructor in the destination instance but not the source instance' do
+        let(:dest_instructor_user) do
+          user = create(:user)
+          create(:course_manager, course: course, user: user)
+          ActsAsTenant.with_tenant(destination_instance) { create(:instance_user, :instructor, user: user) }
+          user
+        end
+        before { controller_sign_in(controller, dest_instructor_user) }
+
+        it 'allows duplication to the destination instance' do
+          subject
+          expect(response).to be_successful
+        end
+      end
     end
   end
 end

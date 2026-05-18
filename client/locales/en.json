@@ -4530,6 +4530,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "Select Current Course"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.currentInstance": {
+    "defaultMessage": "Select current instance"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
     "defaultMessage": "Destination Instance"
   },
@@ -4629,6 +4632,9 @@
   "course.duplication.Duplication.ItemsSelector.pleaseSelectItems": {
     "defaultMessage": "Please select items to duplicate via the sidebar."
   },
+  "course.duplication.Duplication.cannotDuplicateToNewCourseInThisInstance": {
+    "defaultMessage": "You cannot duplicate to a new course in {instanceHost} because you are not an instructor here. {duplicationLink}"
+  },
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "Duplicate Data"
   },
@@ -4649,6 +4655,9 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "All components with duplicable items are disabled. You may enable them under course settings."
+  },
+  "course.duplication.Duplication.requestInstanceInstructorRole": {
+    "defaultMessage": "Request to be an instructor"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "To"

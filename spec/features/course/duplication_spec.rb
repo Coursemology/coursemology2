@@ -73,6 +73,26 @@ RSpec.feature 'Course: Duplication', js: true do
           wait_for_job
           expect(course.assessments.where(title: assessment_title1).count).to be(1)
         end
+      end
+
+      context 'As a Course Administrator and Instance Instructor' do
+        let(:user) do
+          user = create(:instance_user, :instructor).user
+          create(:course_manager, course: course, user: user).user
+        end
+        let(:source_course) { create(:course) }
+        let!(:course_user) { create(:course_manager, course: source_course, user: user) }
+        let(:assessment_title1) { SecureRandom.hex }
+        let(:assessment_title2) { SecureRandom.hex }
+        let(:new_course_title) { SecureRandom.hex }
+        let!(:assessment1) { create(:assessment, title: assessment_title1, tab: source_course.assessment_tabs.first) }
+
+        let!(:assessment2) do
+          create(:assessment,
+                 title: assessment_title2,
+                 tab: source_course.assessment_tabs.first,
+                 end_at: 2.days.from_now)
+        end
 
         scenario 'I can duplicate the whole course' do
           visit course_duplication_path(source_course)

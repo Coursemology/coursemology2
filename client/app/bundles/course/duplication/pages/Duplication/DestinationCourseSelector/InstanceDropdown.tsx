@@ -9,10 +9,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import MyLocation from '@mui/icons-material/MyLocation';
 import { Autocomplete, Box, IconButton, Tooltip } from '@mui/material';
 
-import {
-  selectDestinationInstances,
-  selectMetadata,
-} from 'course/duplication/selectors/destinationInstance';
+import { selectDestinationInstances } from 'course/duplication/selectors';
 import TextField from 'lib/components/core/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import { useAppSelector } from 'lib/hooks/store';
@@ -40,7 +37,6 @@ const translations = defineMessages({
 const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
   const { currentInstanceId, disabled, field, fieldState, setValue } = props;
   const instances = useAppSelector(selectDestinationInstances);
-  const metadata = useAppSelector(selectMetadata);
   const instanceIds = useMemo(
     () =>
       Object.keys(instances).toSorted(
@@ -54,7 +50,7 @@ const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
     <div className="flex">
       <Autocomplete
         {...field}
-        disabled={disabled || !metadata.canDuplicateToAnotherInstance}
+        disabled={disabled || !instanceIds.length}
         fullWidth
         getOptionLabel={(instanceId): string =>
           instances[instanceId]?.name ?? ''
@@ -85,7 +81,7 @@ const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
       <div className="flex items-end">
         <Tooltip title={t(translations.currentInstance)}>
           <IconButton
-            disabled={disabled}
+            disabled={disabled || !(currentInstanceId in instances)}
             onClick={() =>
               setValue('destination_instance_id', currentInstanceId)
             }

@@ -4505,6 +4505,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "选择当前课程"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.currentInstance": {
+    "defaultMessage": "选择当前实例"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
     "defaultMessage": "目标实例"
   },
@@ -4604,6 +4607,9 @@
   "course.duplication.Duplication.ItemsSelector.pleaseSelectItems": {
     "defaultMessage": "请通过边栏选择要复制的项目。"
   },
+  "course.duplication.Duplication.cannotDuplicateToNewCourseInThisInstance": {
+    "defaultMessage": "您无法在 {instanceHost} 中复制到新课程，因为您不是该实例的讲师。{duplicationLink}"
+  },
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "复制数据"
   },
@@ -4624,6 +4630,9 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "所有包含重复项目的组件都被禁用。你可以在课程设置下启用它们。"
+  },
+  "course.duplication.Duplication.requestInstanceInstructorRole": {
+    "defaultMessage": "申请讲师角色"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "到"

@@ -49,7 +49,6 @@ const CoursesIndex: FC = () => {
   const [params] = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(false);
   const courses = useAppSelector(getAllCourseMiniEntities);
 
   const coursesPermissions = useAppSelector(getCoursePermissions);
@@ -67,6 +66,13 @@ const CoursesIndex: FC = () => {
     shouldOpenNewCourseDialog,
   );
 
+  const shouldOpenRoleRequestDialog =
+    Boolean(params.get('request_instructor')) && !coursesPermissions?.canCreate;
+
+  const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(
+    shouldOpenRoleRequestDialog,
+  );
+
   useEffect(() => {
     dispatch(fetchCourses())
       .finally(() => setIsLoading(false))
@@ -76,6 +82,10 @@ const CoursesIndex: FC = () => {
   useEffect(() => {
     setIsNewCourseDialogOpen(shouldOpenNewCourseDialog);
   }, [shouldOpenNewCourseDialog]);
+
+  useEffect(() => {
+    setRoleRequestDialogOpen(shouldOpenRoleRequestDialog);
+  }, [shouldOpenRoleRequestDialog]);
 
   // Adding appropriate button to the header
   const headerToolbars: ReactElement[] = [];
