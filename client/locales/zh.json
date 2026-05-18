@@ -4085,6 +4085,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "论坛"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "成绩册"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "组"
   },
@@ -5488,6 +5491,24 @@
   },
   "course.group.NameDescriptionForm.name": {
     "defaultMessage": "姓名"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "无法加载成绩册。"
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "成绩册"
+  },
+  "course.gradebook.GradebookIndex.searchPlaceholder": {
+    "defaultMessage": "按学生姓名搜索"
+  },
+  "course.gradebook.GradebookIndex.showRawScore": {
+    "defaultMessage": "显示原始分数"
+  },
+  "course.gradebook.GradebookTable.studentName": {
+    "defaultMessage": "学生姓名"
+  },
+  "course.gradebook.GradebookTable.total": {
+    "defaultMessage": "总分"
   },
   "course.group.NameDescriptionForm.nameLength": {
     "defaultMessage": "名字太长了！"

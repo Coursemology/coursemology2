@@ -12,6 +12,7 @@ import DuplicationAPI from './Duplication';
 import EnrolRequestsAPI from './EnrolRequests';
 import ExperiencePointsRecordAPI from './ExperiencePointsRecord';
 import ForumAPI from './Forum';
+import GradebookAPI from './Gradebook';
 import GroupsAPI from './Groups';
 import LeaderboardAPI from './Leaderboard';
 import LearningMapAPI from './LearningMap';
@@ -48,6 +49,7 @@ const CourseAPI = {
   experiencePointsRecord: new ExperiencePointsRecordAPI(),
   folders: new FoldersAPI(),
   forum: ForumAPI,
+  gradebook: new GradebookAPI(),
   groups: new GroupsAPI(),
   leaderboard: new LeaderboardAPI(),
   learningMap: new LearningMapAPI(),
