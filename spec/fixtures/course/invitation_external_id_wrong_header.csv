@@ -1,0 +1,3 @@
+name,email,role,phantom,timeline_algorithm,ext_id
+Alice,alice@example.com,student,false,fixed,EXT001
+Bob,bob@example.com,teaching_assistant,false,fomo,EXT002

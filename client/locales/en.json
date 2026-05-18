@@ -6889,10 +6889,10 @@
     "defaultMessage": "Close"
   },
   "course.userInvitations.InvitationResultDialog.duplicateInfo": {
-    "defaultMessage": "Duplicate users were found in the invitation. Only the first instance of this user will be invited."
+    "defaultMessage": "Duplicate users were found in the invitation. Only the first instance of each user will be invited."
   },
   "course.userInvitations.InvitationResultDialog.duplicateUsers": {
-    "defaultMessage": "Users with Duplicate Emails ({count})"
+    "defaultMessage": "Duplicate Users ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsers": {
     "defaultMessage": "Existing Course Users ({count})"
@@ -6914,6 +6914,12 @@
   },
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "New Invitations ({count})"
+  },
+  "course.userInvitations.InvitationResultUsersTable.duplicateEmail": {
+    "defaultMessage": "Duplicate email"
+  },
+  "course.userInvitations.InvitationResultUsersTable.duplicateExternalId": {
+    "defaultMessage": "Duplicate external ID"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "Accepted Invitations"
@@ -6945,11 +6951,20 @@
   "course.userInvitations.InviteUsersFileUpload.failure": {
     "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly - {error}"
   },
+  "course.userInvitations.InviteUsersFileUpload.failureGeneric": {
+    "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly."
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "Name,Email[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "Name,Email,Role,Phantom,ExternalId{br}John,test1@example.org,student,y,A0123456{br}Mary,test2@example.org,teaching_assistant,n,A0123457"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "Name,Email[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "Name,Email,Role,Phantom,PersonalTimeline,ExternalId{br}John,test1@example.org,student,y,otot,A0123456{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
+    "defaultMessage": "Each invitation must use a unique email address within the course. Duplicate emails will be skipped."
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
+    "defaultMessage": "External ID is an optional field for linking a user to an external system. If provided, it must be unique within the course — duplicate external IDs will be skipped."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "Upload a .csv file with the following format:"
@@ -6981,6 +6996,9 @@
   "course.userInvitations.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
   },
+  "course.userInvitations.InvitationActionButtons.deletionFailureGeneric": {
+    "defaultMessage": "Failed to delete user."
+  },
   "course.userInvitations.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "Invitation for {name} was deleted."
   },
@@ -6988,7 +7006,7 @@
     "defaultMessage": "Delete Invitation"
   },
   "course.userInvitations.InvitationActionButtons.resendFailure": {
-    "defaultMessage": "Failed to resend invitation - {error}"
+    "defaultMessage": "Failed to resend invitation."
   },
   "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "Resent email invitation to {email}!"
@@ -7115,6 +7133,24 @@
   },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {is now a phantom user} other {is now a normal user} }."
+  },
+  "course.users.ManageUsersTable.addIdFailure": {
+    "defaultMessage": "Failed to set External ID to {newId}"
+  },
+  "course.users.ManageUsersTable.addIdSuccess": {
+    "defaultMessage": "External ID set to {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdFailure": {
+    "defaultMessage": "Failed to change ID from {oldId} to {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdSuccess": {
+    "defaultMessage": "ID was changed from {oldId} to {newId}"
+  },
+  "course.users.ManageUsersTable.deleteIdFailure": {
+    "defaultMessage": "Failed to delete External ID"
+  },
+  "course.users.ManageUsersTable.deleteIdSuccess": {
+    "defaultMessage": "External ID deleted"
   },
   "course.users.ManageUsersTable.renameFailure": {
     "defaultMessage": "Failed to rename {oldName} to {newName}"
@@ -8055,6 +8091,9 @@
   "lib.translations.table.column.email": {
     "defaultMessage": "Email"
   },
+  "lib.translations.table.column.externalId": {
+    "defaultMessage": "External ID"
+  },
   "lib.translations.table.column.endAt": {
     "defaultMessage": "End At"
   },
@@ -8105,6 +8144,9 @@
   },
   "lib.translations.table.column.name": {
     "defaultMessage": "Name"
+  },
+  "lib.translations.table.column.optional": {
+    "defaultMessage": "Optional"
   },
   "lib.translations.table.column.organization": {
     "defaultMessage": "Organization"

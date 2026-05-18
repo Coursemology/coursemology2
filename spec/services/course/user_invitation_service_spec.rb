@@ -38,7 +38,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:existing_user_attributes) do
       existing_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: existing_roles[id], timeline_algorithm: existing_timeline_algorithms[id] }
+          role: existing_roles[id], timeline_algorithm: existing_timeline_algorithms[id], external_id: nil }
       end
     end
     let(:new_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
@@ -51,7 +51,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:new_user_attributes) do
       new_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: new_roles[id], timeline_algorithm: new_timeline_algorithms[id] }
+          role: new_roles[id], timeline_algorithm: new_timeline_algorithms[id], external_id: nil }
       end
     end
     let(:invalid_user_attributes) do
@@ -153,10 +153,189 @@ RSpec.describe Course::UserInvitationService, type: :service do
           expect(invite.map(&:size)).to eq([new_user_attributes.size - 1, 0, existing_user_attributes.size, 0, 1])
         end
 
+        it 'tags the duplicate user with a duplicate_email reason' do
+          _new_invitations, _existing_invitations, _new_course_users, _existing_course_users, duplicate_users = invite
+          expect(duplicate_users.first[:reason]).to eq(:duplicate_email)
+        end
+
         with_active_job_queue_adapter(:test) do
           it 'sends only one invitation to duplicate users', type: :mailer do
             expect { invite }.to change { ActionMailer::Base.deliveries.count }.
               by(new_user_attributes.size - 1 + existing_user_attributes.size)
+          end
+        end
+      end
+
+      context 'when two invitations in the same batch share the same external_id' do
+        let(:form_attributes) do
+          { generate(:nested_attribute_new_id) => { name: 'User A', email: generate(:email),
+                                                    role: :student, phantom: false,
+                                                    external_id: 'shared-id' },
+            generate(:nested_attribute_new_id) => { name: 'User B', email: generate(:email),
+                                                    role: :student, phantom: false,
+                                                    external_id: 'shared-id' } }
+        end
+
+        it 'processes only the first and treats the second as a duplicate' do
+          result = subject.invite(form_attributes)
+          expect(result).not_to be_nil
+          new_invitations, _existing_invitations, _new_course_users, _existing_course_users, duplicate_users = result
+          expect(new_invitations.size).to eq(1)
+          expect(duplicate_users.size).to eq(1)
+          expect(duplicate_users.first[:external_id]).to eq('shared-id')
+        end
+
+        it 'tags the duplicate user with a duplicate_external_id reason' do
+          result = subject.invite(form_attributes)
+          _new_invitations, _existing_invitations, _new_course_users, _existing_course_users, duplicate_users = result
+          expect(duplicate_users.first[:reason]).to eq(:duplicate_external_id)
+        end
+      end
+
+      context 'when an invitation has a duplicate external_id matching an existing course user' do
+        let!(:existing_course_user) { create(:course_student, course: course, external_id: 'taken-id') }
+        let(:form_attributes) do
+          { generate(:nested_attribute_new_id) => { name: 'New User', email: generate(:email),
+                                                    role: :student, phantom: false,
+                                                    external_id: 'taken-id' } }
+        end
+
+        it 'returns nil' do
+          expect(subject.invite(form_attributes)).to be_nil
+        end
+      end
+
+      context 'when an invitation has a duplicate external_id matching a pending invitation' do
+        let!(:pending_invitation) { create(:course_user_invitation, course: course, external_id: 'taken-id') }
+        let(:form_attributes) do
+          { generate(:nested_attribute_new_id) => { name: 'New User', email: generate(:email),
+                                                    role: :student, phantom: false,
+                                                    external_id: 'taken-id' } }
+        end
+
+        it 'returns nil' do
+          expect(subject.invite(form_attributes)).to be_nil
+        end
+      end
+
+      context 'when a CSV (with personalized timelines) has a duplicate external_id for an existing course user' do
+        let!(:existing_course_user) { create(:course_student, course: course, external_id: 'taken-id') }
+
+        def csv_with_external_id_and_timeline(entries)
+          Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
+            file.write(CSV.generate do |csv|
+              entries.each do |entry|
+                csv << [entry[:name], entry[:email], 'student', 'false', 'fixed', entry[:external_id]]
+              end
+            end)
+            file.rewind
+          end
+        end
+
+        it 'returns nil' do
+          csv = csv_with_external_id_and_timeline(
+            [{ name: 'New User', email: generate(:email), external_id: 'taken-id' }]
+          )
+          expect(subject.invite(csv)).to be_nil
+          csv.close!
+        end
+      end
+
+      context 'when a CSV (without personalized timelines) has a duplicate external_id for an existing course user' do
+        before { course.update!(show_personalized_timeline_features: false) }
+        let!(:existing_course_user) { create(:course_student, course: course, external_id: 'taken-id') }
+
+        def csv_with_external_id_no_timeline(entries)
+          Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
+            file.write(CSV.generate do |csv|
+              entries.each do |entry|
+                csv << [entry[:name], entry[:email], 'student', 'false', entry[:external_id]]
+              end
+            end)
+            file.rewind
+          end
+        end
+
+        it 'returns nil' do
+          csv = csv_with_external_id_no_timeline(
+            [{ name: 'New User', email: generate(:email), external_id: 'taken-id' }]
+          )
+          expect(subject.invite(csv)).to be_nil
+          csv.close!
+        end
+      end
+
+      context 'CSV batch duplicate scenarios' do
+        def csv_with_timeline(entries)
+          Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
+            file.write(CSV.generate do |csv|
+              csv << ['Name', 'Email', 'Role', 'Phantom', 'Timeline', 'ExternalId']
+              entries.each do |e|
+                csv << [e[:name], e[:email], e.fetch(:role, 'student'),
+                        e.fetch(:phantom, 'false'), e.fetch(:timeline, 'fixed'), e[:external_id]]
+              end
+            end)
+            file.rewind
+          end
+        end
+
+        context 'when a CSV has two rows with the same email' do
+          it 'puts the second in duplicateUsers with reason duplicate_email' do
+            csv = csv_with_timeline([
+                                      { name: 'User A', email: 'a@example.com', external_id: 'id-1' },
+                                      { name: 'User B', email: 'a@example.com', external_id: 'id-2' }
+                                    ])
+            result = subject.invite(csv)
+            _new_invitations, _existing, _new_cu, _existing_cu, duplicate_users = result
+            expect(duplicate_users.size).to eq(1)
+            expect(duplicate_users.first[:reason]).to eq(:duplicate_email)
+            csv.close!
+          end
+        end
+
+        context 'when a CSV has two rows with the same external_id' do
+          it 'puts the second in duplicateUsers with reason duplicate_external_id' do
+            csv = csv_with_timeline([
+                                      { name: 'User A', email: 'a@example.com', external_id: 'shared-id' },
+                                      { name: 'User B', email: 'b@example.com', external_id: 'shared-id' }
+                                    ])
+            result = subject.invite(csv)
+            _new_invitations, _existing, _new_cu, _existing_cu, duplicate_users = result
+            expect(duplicate_users.size).to eq(1)
+            expect(duplicate_users.first[:reason]).to eq(:duplicate_external_id)
+            csv.close!
+          end
+        end
+
+        context 'when a CSV row has a course-duplicate email AND a batch-duplicate external_id' do
+          let(:enrolled_user) { create(:instance_user).user }
+          let!(:course_student) { create(:course_student, course: course, user: enrolled_user) }
+
+          it 'is caught as a batch external_id duplicate and does not fail the batch' do
+            csv = csv_with_timeline([
+                                      { name: 'User A', email: 'a@example.com', external_id: 'shared-id' },
+                                      { name: 'Enrolled', email: enrolled_user.email, external_id: 'shared-id' }
+                                    ])
+            result = subject.invite(csv)
+            expect(result).not_to be_nil
+            _new_invitations, _existing, _new_cu, _existing_cu, duplicate_users = result
+            expect(duplicate_users.size).to eq(1)
+            expect(duplicate_users.first[:reason]).to eq(:duplicate_external_id)
+            csv.close!
+          end
+        end
+
+        context 'when a CSV row duplicates both email and external_id within the batch' do
+          it 'is caught as a duplicate_email (email is checked first)' do
+            csv = csv_with_timeline([
+                                      { name: 'User A', email: 'a@example.com', external_id: 'id-1' },
+                                      { name: 'User B', email: 'a@example.com', external_id: 'id-1' }
+                                    ])
+            result = subject.invite(csv)
+            _new_invitations, _existing, _new_cu, _existing_cu, duplicate_users = result
+            expect(duplicate_users.size).to eq(1)
+            expect(duplicate_users.first[:reason]).to eq(:duplicate_email)
+            csv.close!
           end
         end
       end
@@ -214,15 +393,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       let(:temp_csv) { temp_csv_from_attributes(users, roles, timeline_algorithms) }
       after { temp_csv.close! }
 
-      it 'accepts a file with name/header' do
-        result = subject.send(:parse_from_file, temp_csv)
-        expect(result.length).to eq(users.length)
-      end
-
-      it 'calls #invite_users with appropriate user attributes' do
-        result = subject.send(:parse_from_file, temp_csv)
-        expect(result).to eq(user_attributes)
-      end
+      # --- file format edge cases (mode-agnostic) ---
 
       context 'when the provided file is invalid' do
         it 'raises an exception' do
@@ -243,66 +414,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
-      context 'when the provided file has no roles' do
-        let(:temp_csv_without_role) { temp_csv_from_attributes(users) }
-        after { temp_csv_without_role.close! }
-
-        it 'defaults the role to student' do
-          result = subject.send(:parse_from_file, temp_csv_without_role)
-          result.each do |attr|
-            expect(attr[:role]).to eq(:student)
-          end
-        end
-      end
-
-      context 'when the provided file has no timeline algorithm and \
-      default course timeline setting is fomo' do
-        before do
-          course.update!(default_timeline_algorithm: 'fomo')
-        end
-        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
-        after { temp_csv_without_timeline.close! }
-
-        it 'defaults the timeline algorithm to fomo' do
-          result = subject.send(:parse_from_file, temp_csv_without_timeline)
-          result.each do |attr|
-            expect(attr[:timeline_algorithm]).to eq('fomo')
-          end
-        end
-      end
-
-      context 'when the provided file has no timeline algorithm and \
-      default course timeline setting is stragglers' do
-        before do
-          course.update!(default_timeline_algorithm: 'stragglers')
-        end
-        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
-        after { temp_csv_without_timeline.close! }
-
-        it 'defaults the timeline algorithm to stragglers' do
-          result = subject.send(:parse_from_file, temp_csv_without_timeline)
-          result.each do |attr|
-            expect(attr[:timeline_algorithm]).to eq('stragglers')
-          end
-        end
-      end
-
-      context 'when the provided file has no timeline algorithm and \
-      default course timeline setting is otot' do
-        before do
-          course.update!(default_timeline_algorithm: 'otot')
-        end
-        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
-        after { temp_csv_without_timeline.close! }
-
-        it 'defaults the timeline algorithm to otot' do
-          result = subject.send(:parse_from_file, temp_csv_without_timeline)
-          result.each do |attr|
-            expect(attr[:timeline_algorithm]).to eq('otot')
-          end
-        end
-      end
-
       context 'when the provided file has whitespace in the fields' do
         let(:csv_file) { file_fixture('course/invitation_whitespace.csv') }
 
@@ -312,48 +423,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
             expect(attr[:name]).to eq(attr[:name].strip)
             expect(attr[:email]).to eq(attr[:email].strip)
           end
-        end
-      end
-
-      context 'when the csv file has slightly invalid role and/or phantom and/or \
-      timeline algorithm specifications' do
-        subject do
-          stubbed_user_invitation_service.
-            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles_phantom_timeline.csv'))
-        end
-
-        it 'defaults blank role column to student' do
-          expect(subject[0][:role]).to eq(:student)
-        end
-
-        it 'defaults blank phantom to false' do
-          expect(subject[0][:phantom]).to be_falsey
-        end
-
-        it 'defaults blank timeline algorithm to course default (fixed)' do
-          expect(subject[0][:timeline_algorithm]).to eq('fixed')
-        end
-
-        it 'parses roles correctly anyway' do
-          expect(subject[1][:role]).to eq(:teaching_assistant)
-          expect(subject[2][:role]).to eq(:manager)
-          expect(subject[3][:role]).to eq(:owner)
-          expect(subject[4][:role]).to eq(:observer)
-          expect(subject[5][:role]).to eq(:teaching_assistant)
-        end
-
-        it 'parses phantom columns correctly anyway' do
-          expect(subject[1][:phantom]).to be_falsey
-          (6..8).each do |i|
-            expect(subject[i][:phantom]).to be_truthy
-          end
-        end
-
-        it 'parses roles correctly anyway' do
-          expect(subject[1][:timeline_algorithm]).to eq(:stragglers)
-          expect(subject[2][:timeline_algorithm]).to eq(:otot)
-          expect(subject[3][:timeline_algorithm]).to eq(:fomo)
-          expect(subject[4][:timeline_algorithm]).to eq(:fixed)
         end
       end
 
@@ -386,6 +455,199 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'invites all users including the first row' do
           # No header CSV has 2 entries
           expect(subject.flatten.count).to eq(2)
+        end
+      end
+
+      # --- timeline-aware parsing ---
+
+      context 'when personal timelines are enabled' do
+        before { course.update!(show_personalized_timeline_features: true) }
+
+        it 'accepts a file with name/header' do
+          result = subject.send(:parse_from_file, temp_csv)
+          expect(result.length).to eq(users.length)
+        end
+
+        it 'calls #invite_users with appropriate user attributes' do
+          result = subject.send(:parse_from_file, temp_csv)
+          expect(result).to eq(user_attributes)
+        end
+
+        context 'when the provided file has no roles' do
+          let(:temp_csv_without_role) { temp_csv_from_attributes(users) }
+          after { temp_csv_without_role.close! }
+
+          it 'defaults the role to student' do
+            result = subject.send(:parse_from_file, temp_csv_without_role)
+            result.each do |attr|
+              expect(attr[:role]).to eq(:student)
+            end
+          end
+        end
+
+        context 'when the csv file has slightly invalid role/phantom/timeline algorithm specifications' do
+          subject do
+            stubbed_user_invitation_service.
+              send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles_phantom_timeline.csv'))
+          end
+
+          it 'defaults blank role column to student' do
+            expect(subject[0][:role]).to eq(:student)
+          end
+
+          it 'defaults blank phantom to false' do
+            expect(subject[0][:phantom]).to be_falsey
+          end
+
+          it 'defaults blank timeline algorithm to course default (fixed)' do
+            expect(subject[0][:timeline_algorithm]).to eq('fixed')
+          end
+
+          it 'parses roles correctly anyway' do
+            expect(subject[1][:role]).to eq(:teaching_assistant)
+            expect(subject[2][:role]).to eq(:manager)
+            expect(subject[3][:role]).to eq(:owner)
+            expect(subject[4][:role]).to eq(:observer)
+            expect(subject[5][:role]).to eq(:teaching_assistant)
+          end
+
+          it 'parses phantom columns correctly anyway' do
+            expect(subject[1][:phantom]).to be_falsey
+            (6..8).each do |i|
+              expect(subject[i][:phantom]).to be_truthy
+            end
+          end
+
+          it 'parses timeline algorithms correctly anyway' do
+            expect(subject[1][:timeline_algorithm]).to eq(:stragglers)
+            expect(subject[2][:timeline_algorithm]).to eq(:otot)
+            expect(subject[3][:timeline_algorithm]).to eq(:fomo)
+            expect(subject[4][:timeline_algorithm]).to eq(:fixed)
+          end
+        end
+
+        context 'when no timeline algorithm column is present' do
+          let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
+          after { temp_csv_without_timeline.close! }
+
+          context 'when the course default is fomo' do
+            before { course.update!(default_timeline_algorithm: 'fomo') }
+
+            it 'defaults the timeline algorithm to fomo' do
+              result = subject.send(:parse_from_file, temp_csv_without_timeline)
+              result.each do |attr|
+                expect(attr[:timeline_algorithm]).to eq('fomo')
+              end
+            end
+          end
+
+          context 'when the course default is stragglers' do
+            before { course.update!(default_timeline_algorithm: 'stragglers') }
+
+            it 'defaults the timeline algorithm to stragglers' do
+              result = subject.send(:parse_from_file, temp_csv_without_timeline)
+              result.each do |attr|
+                expect(attr[:timeline_algorithm]).to eq('stragglers')
+              end
+            end
+          end
+
+          context 'when the course default is otot' do
+            before { course.update!(default_timeline_algorithm: 'otot') }
+
+            it 'defaults the timeline algorithm to otot' do
+              result = subject.send(:parse_from_file, temp_csv_without_timeline)
+              result.each do |attr|
+                expect(attr[:timeline_algorithm]).to eq('otot')
+              end
+            end
+          end
+        end
+
+        context 'when the csv has an external_id column' do
+          subject do
+            stubbed_user_invitation_service.
+              send(:parse_from_file, file_fixture('course/invitation_with_external_id.csv'))
+          end
+
+          it 'parses external_id from col 6 correctly' do
+            expect(subject[0][:external_id]).to eq('EXT001')
+            expect(subject[1][:external_id]).to eq('EXT002')
+          end
+
+          it 'sets external_id to nil when blank' do
+            expect(subject[2][:external_id]).to be_nil
+          end
+        end
+
+        context 'when the csv has no external_id column' do
+          let(:csv_without_external_id) { file_fixture('course/invitation_fuzzy_roles_phantom_timeline.csv') }
+
+          it 'sets external_id to nil for all rows' do
+            result = stubbed_user_invitation_service.send(:parse_from_file, csv_without_external_id)
+            result.each do |attr|
+              expect(attr[:external_id]).to be_nil
+            end
+          end
+        end
+
+        context 'when the csv header uses a slightly wrong external_id column name' do
+          subject do
+            stubbed_user_invitation_service.
+              send(:parse_from_file, file_fixture('course/invitation_external_id_wrong_header.csv'))
+          end
+
+          it 'still detects and skips the header row' do
+            expect(subject.length).to eq(2)
+          end
+
+          it 'still parses external_id from col 6 correctly' do
+            expect(subject[0][:external_id]).to eq('EXT001')
+            expect(subject[1][:external_id]).to eq('EXT002')
+          end
+        end
+      end
+
+      context 'when personal timelines are disabled' do
+        before { course.update!(show_personalized_timeline_features: false) }
+
+        context 'when the csv has an external_id column' do
+          subject do
+            stubbed_user_invitation_service.
+              send(:parse_from_file, file_fixture('course/invitation_with_external_id_no_timeline.csv'))
+          end
+
+          it 'parses external_id from col 5 correctly' do
+            expect(subject[0][:external_id]).to eq('EXT001')
+            expect(subject[1][:external_id]).to eq('EXT002')
+          end
+
+          it 'sets external_id to nil when blank' do
+            expect(subject[2][:external_id]).to be_nil
+          end
+
+          it 'auto-fills timeline_algorithm with course default' do
+            result = stubbed_user_invitation_service.send(
+              :parse_from_file,
+              file_fixture('course/invitation_with_external_id_no_timeline.csv')
+            )
+            result.each do |attr|
+              expect(attr[:timeline_algorithm]).to eq(course.default_timeline_algorithm)
+            end
+          end
+        end
+
+        context 'when the csv has no external_id column' do
+          subject do
+            stubbed_user_invitation_service.
+              send(:parse_from_file, file_fixture('course/invitation_no_external_id_no_timeline.csv'))
+          end
+
+          it 'sets external_id to nil for all rows' do
+            subject.each do |attr|
+              expect(attr[:external_id]).to be_nil
+            end
+          end
         end
       end
     end

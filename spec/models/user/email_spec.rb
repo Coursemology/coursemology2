@@ -129,6 +129,19 @@ RSpec.describe User::Email, type: :model do
         end
       end
 
+      context 'when the invitation has an external_id' do
+        let!(:course) { create(:course) }
+        let!(:pending_invitation) do
+          create(:course_user_invitation, course: course, email: email_address, external_id: 'EXT-123')
+        end
+
+        it 'transfers external_id to the created CourseUser' do
+          email_record = sign_up_on(instance)
+          course_user = email_record.user.course_users.find_by(course: course)
+          expect(course_user.external_id).to eq('EXT-123')
+        end
+      end
+
       context 'when the user is already enrolled in the invited course' do
         let(:course) { create(:course) }
         let(:user) { create(:user) }

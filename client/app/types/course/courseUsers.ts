@@ -52,6 +52,7 @@ export interface CourseUserListData extends CourseUserBasicListData {
   phantom?: boolean;
   isSuspended?: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
+  externalId?: string | null;
 }
 
 export interface CourseUserBasicMiniEntity {
@@ -69,6 +70,7 @@ export interface CourseUserMiniEntity extends CourseUserBasicMiniEntity {
   email: CourseUserListData['email'];
   role: CourseUserListData['role'];
   timelineAlgorithm?: CourseUserListData['timelineAlgorithm'];
+  externalId?: CourseUserListData['externalId'];
   referenceTimelineId?: number | null;
   groups?: string[];
 }
@@ -118,6 +120,7 @@ export interface UpdateCourseUserPatchData {
     timeline_algorithm?: TimelineAlgorithm;
     reference_timeline_id?: number | null;
     role?: CourseUserRole;
+    external_id?: string | null;
   };
 }
 

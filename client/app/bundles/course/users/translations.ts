@@ -17,6 +17,30 @@ const translations = defineMessages({
     id: 'course.users.ManageUsersTable.renameFailure',
     defaultMessage: 'Failed to rename {oldName} to {newName}',
   },
+  changeIdSuccess: {
+    id: 'course.users.ManageUsersTable.changeIdSuccess',
+    defaultMessage: 'ID was changed from {oldId} to {newId}',
+  },
+  addIdSuccess: {
+    id: 'course.users.ManageUsersTable.addIdSuccess',
+    defaultMessage: 'External ID set to {newId}',
+  },
+  deleteIdSuccess: {
+    id: 'course.users.ManageUsersTable.deleteIdSuccess',
+    defaultMessage: 'External ID deleted',
+  },
+  addIdFailure: {
+    id: 'course.users.ManageUsersTable.addIdFailure',
+    defaultMessage: 'Failed to set External ID to {newId}',
+  },
+  deleteIdFailure: {
+    id: 'course.users.ManageUsersTable.deleteIdFailure',
+    defaultMessage: 'Failed to delete External ID',
+  },
+  changeIdFailure: {
+    id: 'course.users.ManageUsersTable.changeIdFailure',
+    defaultMessage: 'Failed to change ID from {oldId} to {newId}',
+  },
   phantomSuccess: {
     id: 'course.users.ManageUsersTable.phantomSuccess',
     defaultMessage:

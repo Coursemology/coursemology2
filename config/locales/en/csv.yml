@@ -62,3 +62,4 @@ en:
         name: 'Name'
         type: 'Student Type'
         email: 'Email'
+        external_id: 'External ID'

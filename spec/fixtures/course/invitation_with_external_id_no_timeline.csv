@@ -1,0 +1,4 @@
+name,email,role,phantom,external_id
+Alice,alice@example.com,student,false,EXT001
+Bob,bob@example.com,teaching_assistant,false,EXT002
+Charlie,charlie@example.com,,,

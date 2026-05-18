@@ -52,10 +52,12 @@ class Course::UserRegistrationService
     role = invitation.try(:role) || :student
     phantom = invitation.try(:phantom) || false
     timeline_algorithm = invitation.try(:timeline_algorithm) || registration.course.default_timeline_algorithm
+    external_id = invitation.try(:external_id) || nil
 
     registration.course_user =
       CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
-                                    name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm)
+                                    name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm,
+                                    external_id: external_id)
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and

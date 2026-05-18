@@ -194,6 +194,9 @@ zh:
               not_in_course: '选中的用户不在指定课程中'
         course/user_invitation:
           existing_invitation: '此电子邮件地址已存在一个未完成的邀请'
+          attributes:
+            external_id:
+              taken: '该外部编号已被此课程中的其他用户或待处理邀请使用'
         course/video:
           attributes:
             url:
@@ -211,6 +214,8 @@ zh:
           deletion: '最后一项无法被删除'
         course_user:
           attributes:
+            external_id:
+              taken: '该外部编号已被此课程中的其他用户或待处理邀请使用'
             reference_timeline:
               belongs_to_course: '必须隶属于课程'
         duplication_traceable:

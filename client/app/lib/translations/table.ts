@@ -37,6 +37,10 @@ const translations = defineMessages({
     id: 'lib.translations.table.column.timelineAlgorithm',
     defaultMessage: 'Algorithm',
   },
+  externalId: {
+    id: 'lib.translations.table.column.externalId',
+    defaultMessage: 'External ID',
+  },
   invitationSentAt: {
     id: 'lib.translations.table.column.invitationSentAt',
     defaultMessage: 'Invitation Sent At',
@@ -212,6 +216,10 @@ const translations = defineMessages({
   groups: {
     id: 'lib.translations.table.column.groups',
     defaultMessage: 'Group(s)',
+  },
+  optional: {
+    id: 'lib.translations.table.column.optional',
+    defaultMessage: 'Optional',
   },
 });
 

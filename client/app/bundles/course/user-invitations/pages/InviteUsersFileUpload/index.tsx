@@ -52,6 +52,16 @@ const translations = defineMessages({
       'Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>,\
       with course default: {defaultTimelineAlgorithm} if omitted.',
   },
+  fileUploadInfoEmail: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail',
+    defaultMessage:
+      'Each invitation must use a unique email address within the course. Duplicate emails will be skipped.',
+  },
+  fileUploadInfoExternalId: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
+    defaultMessage:
+      'External ID is an optional field for linking a user to an external system. If provided, it must be unique within the course — duplicate external IDs will be skipped.',
+  },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
     defaultMessage: 'Example ',
@@ -63,21 +73,26 @@ const translations = defineMessages({
   fileUploadExample: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExample',
     defaultMessage:
-      'Name,Email[,Role,Phantom]' +
-      '{br}John,test1@example.org[,student,y]' +
-      '{br}Mary,test2@example.org[,teaching_assistant,n]',
+      'Name,Email,Role,Phantom,ExternalId' +
+      '{br}John,test1@example.org[,student,y,A0123456' +
+      '{br}Mary,test2@example.org[,teaching_assistant,n,A0123457',
   },
   fileUploadExamplePersonalTimeline: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline',
     defaultMessage:
-      'Name,Email[,Role,Phantom,PersonalTimeline]' +
-      '{br}John,test1@example.org[,student,y,otot]' +
-      '{br}Mary,test2@example.org[,teaching_assistant,n,fixed]',
+      'Name,Email,Role,Phantom,PersonalTimeline,ExternalId' +
+      '{br}John,test1@example.org,student,y,otot,A0123456' +
+      '{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457',
   },
   failure: {
     id: 'course.userInvitations.InviteUsersFileUpload.failure',
     defaultMessage:
       'Failed to invite users. Please ensure your data is formatted correctly - {error}',
+  },
+  failureGeneric: {
+    id: 'course.userInvitations.InviteUsersFileUpload.failureGeneric',
+    defaultMessage:
+      'Failed to invite users. Please ensure your data is formatted correctly.',
   },
 });
 
@@ -102,15 +117,21 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         openResultDialog(response);
       })
       .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
-        toast.error(
-          t(translations.failure, {
-            error: errorMessage,
-          }),
-          { autoClose: false },
-        );
+        const rawErrors = error.response?.data?.errors;
+        let errorList: string[];
+        if (Array.isArray(rawErrors)) errorList = rawErrors;
+        else if (typeof rawErrors === 'string') errorList = [rawErrors];
+        else errorList = [];
+        const first = errorList[0];
+        const overflow =
+          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+        if (first) {
+          toast.error(t(translations.failure, { error: first + overflow }), {
+            autoClose: false,
+          });
+        } else {
+          toast.error(t(translations.failureGeneric), { autoClose: false });
+        }
       });
   };
 
@@ -118,6 +139,11 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     <>
       <Typography variant="body2">{t(translations.fileUploadInfo)}</Typography>
       <ul>
+        <li>
+          <Typography variant="body2">
+            {t(translations.fileUploadInfoEmail)}
+          </Typography>
+        </li>
         <li>
           <Typography variant="body2">
             <FormattedMessage {...translations.fileUploadInfoRole} />
@@ -141,12 +167,19 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
             </Typography>
           </li>
         )}
+        <li>
+          <Typography variant="body2">
+            <FormattedMessage {...translations.fileUploadInfoExternalId} />
+          </Typography>
+        </li>
       </ul>
       <Typography variant="body2">
         <strong>{t(translations.exampleHeader)}</strong>
         <Link
           download="template.csv"
-          href={getCourseUserInviteTemplatePath()}
+          href={getCourseUserInviteTemplatePath(
+            permissions.canManagePersonalTimes,
+          )}
           opensInNewTab
           style={{ textDecoration: 'none', cursor: 'pointer' }}
         >

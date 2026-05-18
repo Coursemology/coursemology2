@@ -55,6 +55,67 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe 'external_id uniqueness' do
+      let(:other_course) { create(:course, creator: owner, updater: owner) }
+
+      it 'allows multiple course users with nil external_id in the same course' do
+        create(:course_student, course: course, external_id: nil)
+        new_student = build(:course_student, course: course, external_id: nil)
+        expect(new_student).to be_valid
+      end
+
+      it 'normalizes blank external_id to nil' do
+        student = create(:course_student, course: course, external_id: '')
+        expect(student.reload.external_id).to be_nil
+      end
+
+      it 'is valid when external_id is unique in the course' do
+        student = build(:course_student, course: course, external_id: 'unique-id')
+        expect(student).to be_valid
+      end
+
+      context 'when another course user in the same course has the same external_id' do
+        let!(:existing) { create(:course_student, course: course, external_id: 'dup-id') }
+
+        it 'is invalid' do
+          student = build(:course_student, course: course, external_id: 'dup-id')
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+      end
+
+      context 'when a course user in a different course has the same external_id' do
+        let!(:existing) { create(:course_student, course: other_course, external_id: 'some-id') }
+
+        it 'is valid' do
+          student = build(:course_student, course: course, external_id: 'some-id')
+          expect(student).to be_valid
+        end
+      end
+
+      context 'when a pending invitation in the same course has the same external_id' do
+        let!(:invitation) { create(:course_user_invitation, course: course, external_id: 'pending-id') }
+
+        it 'is invalid' do
+          student = build(:course_student, course: course, external_id: 'pending-id')
+          expect(student).not_to be_valid
+        end
+      end
+
+      context 'when only a confirmed invitation in the same course has the same external_id' do
+        let!(:invitation) { create(:course_user_invitation, :confirmed, course: course, external_id: 'confirmed-id') }
+
+        # The uniqueness check (UniqueExternalIdConcern) only queries unconfirmed invitations.
+        # A confirmed invitation means the user has already joined the course, so their external_id
+        # is now on the CourseUser record. The invitation row is no longer an active claim on the id.
+        it 'is valid' do
+          student = build(:course_student, course: course, external_id: 'confirmed-id')
+          expect(student).to be_valid
+        end
+      end
+    end
+
     describe '.staff' do
       it 'returns teaching assistant, manager and owner' do
         expect(course.course_users.staff).to contain_exactly(teaching_assistant, manager,

@@ -135,6 +135,10 @@ const FailedChip: FC<{ sentAt: string }> = ({ sentAt }) => {
 const UserInvitationsTable: FC<Props> = (props) => {
   const { invitations } = props;
 
+  const showExternalId = invitations.some(
+    (invitation) => invitation.externalId != null,
+  );
+
   const { t } = useTranslation();
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
@@ -158,6 +162,17 @@ const UserInvitationsTable: FC<Props> = (props) => {
       searchable: true,
       cell: (datum) => datum.email,
     },
+    ...(showExternalId
+      ? [
+          {
+            of: 'externalId',
+            title: t(tableTranslations.externalId ?? null),
+            sortable: false,
+            searchable: false,
+            cell: (datum) => datum.externalId ?? null,
+          } satisfies ColumnTemplate<InvitationRowData>,
+        ]
+      : []),
     {
       of: 'role',
       title: t(tableTranslations.role),

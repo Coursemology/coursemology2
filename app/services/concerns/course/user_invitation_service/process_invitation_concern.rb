@@ -73,6 +73,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
           @current_course.course_users.build(user: user[:user], name: user[:name],
                                              role: user[:role], phantom: user[:phantom],
                                              timeline_algorithm: @current_course.default_timeline_algorithm,
+                                             external_id: user[:external_id],
                                              creator: @current_user, updater: @current_user)
         @current_course.enrol_requests.pending.find_by(user: user[:user].id)&.destroy!
       end
@@ -113,7 +114,8 @@ module Course::UserInvitationService::ProcessInvitationConcern
         new_invitations <<
           @current_course.invitations.build(name: user[:name], email: user[:email],
                                             role: user[:role], phantom: user[:phantom],
-                                            timeline_algorithm: user[:timeline_algorithm])
+                                            timeline_algorithm: user[:timeline_algorithm],
+                                            external_id: user[:external_id])
       end
     end
 

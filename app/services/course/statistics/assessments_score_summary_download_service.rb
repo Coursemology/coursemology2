@@ -46,6 +46,7 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadService
 
     @submission_grade_hash = submission_grade_hash
     @all_students = @course.course_users.students.order_alphabetically.preload(user: :emails)
+    @include_external_id = @all_students.any? { |s| s.external_id.present? }
   end
 
   def submission_grade_hash
@@ -67,15 +68,15 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadService
       I18n.t('csv.score_summary.headers.name'),
       I18n.t('csv.score_summary.headers.email'),
       I18n.t('csv.score_summary.headers.type'),
-      *@assessments.map(&:title)
+      *@assessments.map(&:title),
+      *(@include_external_id ? [I18n.t('csv.score_summary.headers.external_id')] : [])
     ]
 
     # content
     @all_students.each do |student|
       csv << [student.name, student.user.email, student.phantom? ? 'phantom' : 'normal',
-              *@assessments.flat_map do |assessment|
-                @submission_grade_hash[[student.id, assessment.id]] || ''
-              end]
+              *@assessments.flat_map { |a| @submission_grade_hash[[student.id, a.id]] || '' },
+              *(@include_external_id ? [student.external_id || ''] : [])]
     end
   end
 end

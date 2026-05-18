@@ -129,6 +129,7 @@ class User < ApplicationRecord
                        phantom: invitation.phantom,
                        timeline_algorithm: invitation.timeline_algorithm ||
                           invitation.course&.default_timeline_algorithm,
+                       external_id: invitation.external_id,
                        creator: self,
                        updater: self)
   end

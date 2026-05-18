@@ -194,6 +194,9 @@ ko:
               not_in_course: '선택한 사용자가 지정된 코스에 없습니다'
         course/user_invitation:
           existing_invitation: '이 이메일 주소에는 아직 완료되지 않은 초대장이 있습니다'
+          attributes:
+            external_id:
+              taken: '이 코스에서 다른 사용자 또는 대기 중인 초대에 의해 이미 사용 중입니다'
         course/video:
           attributes:
             url:
@@ -211,6 +214,8 @@ ko:
           deletion: '마지막 탭은 삭제할 수 없습니다'
         course_user:
           attributes:
+            external_id:
+              taken: '이 코스에서 다른 사용자 또는 대기 중인 초대에 의해 이미 사용 중입니다'
             reference_timeline:
               belongs_to_course: '코스에 속해야 합니다'
         duplication_traceable:
