@@ -323,6 +323,26 @@ class Course::Assessment::Submission < ApplicationRecord
     answer.submission.last_graded_time = Time.now
   end
 
+  # Returns a hash of [creator_id, assessment_id] => grade for the given students and assessments.
+  # Only graded/published submissions are counted; submitted-but-ungraded contribute 0.
+  def self.grade_summary(student_ids:, assessment_ids:)
+    return {} if student_ids.empty? || assessment_ids.empty?
+
+    rows = find_by_sql(
+      sanitize_sql_array([<<-SQL.squish, student_ids, assessment_ids])
+        SELECT cas.creator_id, cas.assessment_id, COALESCE(SUM(caa.grade), 0) AS grade
+        FROM course_assessment_submissions cas
+        JOIN course_assessment_answers caa ON caa.submission_id = cas.id
+        WHERE cas.creator_id IN (?)
+          AND cas.assessment_id IN (?)
+          AND cas.workflow_state IN ('graded', 'published')
+          AND caa.current_answer = TRUE
+        GROUP BY cas.creator_id, cas.assessment_id
+      SQL
+    )
+    rows.to_h { |row| [[row.creator_id, row.assessment_id], row.grade.to_f] }
+  end
+
   private
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.

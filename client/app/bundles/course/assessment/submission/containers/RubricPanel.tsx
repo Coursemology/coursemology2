@@ -96,6 +96,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
               categoryGrades={categoryGrades}
               question={question}
               readOnly={readOnly}
+              setIsFirstRendering={setIsFirstRendering}
             />
           ))}
         </TableBody>

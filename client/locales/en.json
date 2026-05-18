@@ -4110,6 +4110,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "Forums"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "Gradebook"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "Groups"
   },
@@ -5522,6 +5525,24 @@
   },
   "course.group.NameDescriptionForm.name": {
     "defaultMessage": "Name"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "Failed to retrieve Gradebook."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "Gradebook"
+  },
+  "course.gradebook.GradebookIndex.searchPlaceholder": {
+    "defaultMessage": "Search by student name"
+  },
+  "course.gradebook.GradebookIndex.showPercentage": {
+    "defaultMessage": "Show percentage"
+  },
+  "course.gradebook.GradebookTable.studentName": {
+    "defaultMessage": "Student Name"
+  },
+  "course.gradebook.GradebookTable.total": {
+    "defaultMessage": "Total"
   },
   "course.group.NameDescriptionForm.nameLength": {
     "defaultMessage": "The name is too long!"

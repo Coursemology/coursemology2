@@ -191,6 +191,26 @@ const courseRouter: Translated<RouteObject> = (t) => ({
       },
     },
     {
+      path: 'gradebook',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
+        const [gradebookHandle, GradebookIndex] = await Promise.all([
+          import(
+            /* webpackChunkName: 'gradebookHandle' */
+            'course/gradebook/handles'
+          ).then((module) => module.gradebookHandle),
+          import(
+            /* webpackChunkName: 'GradebookIndex' */
+            'course/gradebook/pages/GradebookIndex'
+          ).then((module) => module.default),
+        ]);
+
+        return {
+          Component: GradebookIndex,
+          handle: gradebookHandle,
+        };
+      },
+    },
+    {
       path: 'learning_map',
       lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
