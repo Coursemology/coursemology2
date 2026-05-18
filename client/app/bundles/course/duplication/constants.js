@@ -1,7 +1,5 @@
 import mirrorCreator from 'mirror-creator';
 
-export const duplicationModes = mirrorCreator(['OBJECT', 'COURSE']);
-
 // These are mirrored in app/helpers/course/object_duplications_helper.rb
 export const duplicableItemTypes = mirrorCreator([
   'ASSESSMENT',

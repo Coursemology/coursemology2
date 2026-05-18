@@ -8,11 +8,13 @@ import {
 
 import { actions } from 'bundles/course/courses/store';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { createRoleRequest, updateRoleRequest } from '../../operations';
@@ -106,15 +108,16 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
             control={control}
             name="role"
             render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
+              <FormSelectField
                 disabled
                 field={field}
                 fieldState={fieldState}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 label={t(tableTranslations.requestToBe)}
+                options={['instructor'].map((option) => ({
+                  label: t(instanceRoleTranslations[option]),
+                  value: option,
+                }))}
+                shrink
                 variant="standard"
               />
             )}

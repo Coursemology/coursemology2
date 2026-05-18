@@ -4511,6 +4511,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "현재 과정 선택"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.currentInstance": {
+    "defaultMessage": "현재 인스턴스 선택"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
     "defaultMessage": "대상 인스턴스"
   },
@@ -4610,6 +4613,9 @@
   "course.duplication.Duplication.ItemsSelector.pleaseSelectItems": {
     "defaultMessage": "사이드바를 통해 복사할 항목을 선택하세요."
   },
+  "course.duplication.Duplication.cannotDuplicateToNewCourseInThisInstance": {
+    "defaultMessage": "{instanceHost}에서 강사가 아니므로 새 과정으로 복사할 수 없습니다. {duplicationLink}"
+  },
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "데이터 복사"
   },
@@ -4630,6 +4636,9 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "복사 가능한 항목이 있는 모든 구성 요소가 비활성화되었습니다. 과정 설정에서 활성화할 수 있습니다."
+  },
+  "course.duplication.Duplication.requestInstanceInstructorRole": {
+    "defaultMessage": "강사 역할 요청"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "대상"
