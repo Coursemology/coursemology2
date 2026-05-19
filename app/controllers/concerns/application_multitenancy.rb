@@ -25,18 +25,13 @@ module ApplicationMultitenancy
   # Deduces the current host. We strip any leading www from the host.
   # @return [String] The host, with www removed.
   def deduce_tenant_host
-    if Rails.env.development?
-      default_app_host = Application::Application.config.x.default_app_host
+    stripped_host = request.host.downcase.start_with?('www.') ? request.host[4..] : request.host
+    default_host = Application::Application.config.x.default_host&.gsub(/:\d+$/, '')
 
-      if request.host.downcase.ends_with?(default_app_host)
-        request.host.sub(default_app_host, 'coursemology.org')
-      else
-        'coursemology.org'
-      end
-    elsif request.host.downcase.start_with?('www.')
-      request.host[4..]
+    if default_host && stripped_host.downcase.ends_with?(default_host)
+      stripped_host.sub(default_host, 'coursemology.org')
     else
-      request.host
+      stripped_host
     end
   end
 
