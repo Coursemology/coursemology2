@@ -19,6 +19,8 @@ export interface CellRender {
   className?: string;
   colSpan?: number;
   shouldNotRender?: boolean;
+  pin?: 'left' | 'right';
+  widthPx?: number;
 }
 
 interface BodyProps<B, C> {

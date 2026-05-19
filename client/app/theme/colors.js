@@ -43,3 +43,6 @@ export const BLUE_CHART_BACKGROUND = 'rgba(54, 162, 235, 0.2)';
 export const BLUE_CHART_BORDER = 'rgba(54, 162, 235, 1)';
 
 export const INVISIBLE_CHART_COLOR = 'rgba(255, 255, 255, 0)';
+
+export const TABLE_BORDER = grey[200];
+export const TABLE_BORDER_STRONG = grey[400];

@@ -4,6 +4,8 @@ import { RowSelector } from '../adapters';
 import { buildColumns, BuiltColumns, ColumnTemplate, Data } from '../builder';
 
 export const ROW_SELECTOR_ID = 'rowSelector';
+export const INDEX_COL_WIDTH_PX = 48;
+export const ROW_SELECTOR_WIDTH_PX = 48;
 
 const buildTanStackColumns = <D extends Data>(
   columns: ColumnTemplate<D>[],

@@ -4,13 +4,14 @@ import HeaderProps from './Header';
 import PaginationProps from './Pagination';
 import ToolbarProps from './Toolbar';
 
-interface TableProps<H, B, C> {
+interface TableProps<B, C> {
   body: BodyProps<B, C>;
   className?: string;
   pagination?: PaginationProps;
-  header?: HeaderProps<H>;
+  header?: HeaderProps;
   toolbar?: ToolbarProps;
   handles: HandlersProps;
+  maxHeight?: number | string;
 }
 
 export default TableProps;
