@@ -1,7 +1,14 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
 
 import Table from '../Table';
 import type { TableTemplate } from '../builder';
+
+const Wrapper = ({ children }: { children: React.ReactNode }): JSX.Element => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+);
+
+const renderTable = (ui: JSX.Element) => render(ui, { wrapper: Wrapper });
 
 type Row = { id: string; name: string; score: number };
 
@@ -11,13 +18,13 @@ const rows: Row[] = [
 ];
 
 const flatColumns: TableTemplate<Row>['columns'] = [
-  { id: 'name', title: 'Name', cell: (r) => r.name, sortable: true },
-  { id: 'score', title: 'Score', cell: (r) => r.score },
+  { id: 'name', of: 'name', title: 'Name', cell: (r) => r.name, sortable: true },
+  { id: 'score', of: 'score', title: 'Score', cell: (r) => r.score },
 ];
 
 describe('<Table /> — flat consumer regression', () => {
   it('renders one thead tr with no data-table-pin attributes', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={flatColumns}
         data={rows}
@@ -35,18 +42,18 @@ describe('<Table /> — flat consumer regression', () => {
   });
 
   it('renders a sort handle on sortable columns', () => {
-    render(
+    const { container } = renderTable(
       <Table
         columns={flatColumns}
         data={rows}
         getRowId={(r) => r.id}
       />,
     );
-    expect(screen.getByRole('button', { name: /Name/i })).toBeTruthy();
+    expect(container.querySelector('.MuiTableSortLabel-root')).toBeTruthy();
   });
 
   it('container has no maxHeight style when maxHeight not provided', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={flatColumns}
         data={rows}
@@ -86,7 +93,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   ];
 
   it('renders 3 thead tr elements for depth-2 groupPath', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -99,7 +106,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   });
 
   it('pinned th has correct data-table-pin attributes', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -114,7 +121,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   });
 
   it('left pin has offset 0, right pin has offset 0', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -129,7 +136,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   });
 
   it('pinned cells have data-table-cell-kind="leaf", group cells have "group"', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -144,7 +151,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   });
 
   it('container has maxHeight style when maxHeight is provided', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -157,7 +164,7 @@ describe('<Table /> — grouped + pinned + scroll-contained', () => {
   });
 
   it('colSpan/rowSpan HTML attributes are set correctly on header cells', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table
         columns={groupedColumns}
         data={rows}
@@ -194,14 +201,14 @@ describe('<Table /> — flat with one pin, no maxHeight', () => {
   ];
 
   it('renders one thead tr', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table columns={flatWithPin} data={rows} getRowId={(r) => r.id} />,
     );
     expect(container.querySelectorAll('thead tr')).toHaveLength(1);
   });
 
   it('container has no maxHeight style', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table columns={flatWithPin} data={rows} getRowId={(r) => r.id} />,
     );
     const tableContainer = container.querySelector('.MuiTableContainer-root') as HTMLElement | null;
@@ -209,7 +216,7 @@ describe('<Table /> — flat with one pin, no maxHeight', () => {
   });
 
   it('body td for pinned column has data-table-pin="left"', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table columns={flatWithPin} data={rows} getRowId={(r) => r.id} />,
     );
     const pinnedBodyCells = container.querySelectorAll('td[data-table-pin="left"]');
@@ -221,6 +228,7 @@ describe('<Table /> — sort UI on leaf cells only', () => {
   const depthOneWithSort: TableTemplate<Row>['columns'] = [
     {
       id: 'pinnedName',
+      of: 'name',
       title: 'Student',
       cell: (r) => r.name,
       pin: 'left',
@@ -229,6 +237,7 @@ describe('<Table /> — sort UI on leaf cells only', () => {
     },
     {
       id: 'score',
+      of: 'score',
       title: 'Score',
       cell: (r) => r.score,
       groupPath: [{ id: 'g', title: 'Scores' }],
@@ -237,7 +246,7 @@ describe('<Table /> — sort UI on leaf cells only', () => {
   ];
 
   it('sort handle appears on pinned (leaf) cell and leaf-row cell, not on group cell', () => {
-    const { container } = render(
+    const { container } = renderTable(
       <Table columns={depthOneWithSort} data={rows} getRowId={(r) => r.id} />,
     );
     const headerRows = container.querySelectorAll('thead tr');
@@ -248,17 +257,19 @@ describe('<Table /> — sort UI on leaf cells only', () => {
     const pinnedCell = Array.from(row0Cells).find(
       (c) => c.getAttribute('data-table-pin') === 'left',
     );
-    expect(pinnedCell?.querySelector('[role="button"]')).toBeTruthy();
+    expect(pinnedCell?.querySelector('.MuiTableSortLabel-root')).toBeTruthy();
 
     const groupCell = Array.from(row0Cells).find(
       (c) => c.getAttribute('data-table-cell-kind') === 'group',
     );
-    expect(groupCell?.querySelector('[role="button"]')).toBeNull();
+    expect(groupCell?.querySelector('.MuiTableSortLabel-root')).toBeNull();
 
     // Row 1 (leaf row) — sort handle on the score column
     const row1Cells = headerRows[1].querySelectorAll('th');
     expect(
-      Array.from(row1Cells).some((c) => c.querySelector('[role="button"]')),
+      Array.from(row1Cells).some((c) =>
+        c.querySelector('.MuiTableSortLabel-root'),
+      ),
     ).toBe(true);
   });
 });
