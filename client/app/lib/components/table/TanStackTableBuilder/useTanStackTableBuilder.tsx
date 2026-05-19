@@ -14,7 +14,9 @@ import {
 import isEmpty from 'lodash-es/isEmpty';
 
 import { RowEqualityData, TableProps } from '../adapters';
-import { TableTemplate } from '../builder';
+import { HeaderRender } from '../adapters/Header';
+import { buildHeaderRows, TableTemplate } from '../builder';
+import { ColumnTemplate } from '../builder';
 import { downloadCsv } from '../utils';
 
 import buildTanStackColumns from './columnsBuilder';
@@ -115,6 +117,76 @@ const useTanStackTableBuilder = <D extends object>(
     downloadCsv(csvData, props.csvDownload?.filename);
   };
 
+  if (process.env.NODE_ENV !== 'production') {
+    const hasPin = props.columns.some((c) => c.pin);
+    if (hasPin && (props.indexing?.rowSelectable || props.indexing?.indices)) {
+      console.warn(
+        'lib/components/table: combining `pin` with `indexing` is not supported in v1.',
+      );
+    }
+  }
+
+  const tsHeaders = table.getHeaderGroups()[0]?.headers ?? [];
+  const tsOffset =
+    (props.indexing?.indices ? 1 : 0) +
+    (props.indexing?.rowSelectable ? 1 : 0);
+
+  const activeColumns = props.columns.filter((c) => !c.unless);
+
+  const leafForEach = (
+    _column: ColumnTemplate<D>,
+    originalIndex: number,
+  ): HeaderRender => {
+    const tsHeader = tsHeaders[originalIndex + tsOffset];
+    return {
+      id: tsHeader.id,
+      render: customHeaderRender(tsHeader),
+      className: getRealColumn(originalIndex + tsOffset)?.className,
+      sorting: tsHeader.column.getCanSort()
+        ? {
+            sorted: Boolean(tsHeader.column.getIsSorted()),
+            direction: tsHeader.column.getIsSorted() || undefined,
+            onClickSort: tsHeader.column.getToggleSortingHandler(),
+          }
+        : undefined,
+      filtering: tsHeader.column.getCanFilter()
+        ? {
+            filters: tsHeader.column.getFilterValue() as unknown[],
+            uniqueFilterValues: Array.from(
+              tsHeader.column.getFacetedUniqueValues().keys(),
+            ).sort(),
+            getFilterLabel: getRealColumn(originalIndex + tsOffset)
+              ?.filterProps?.getLabel,
+            onAddFilter: (value): void => {
+              resetPagination();
+              tsHeader.column.setFilterValue(
+                (currentFilters?: unknown[]) =>
+                  currentFilters?.filter((filter) => filter !== value),
+              );
+            },
+            onClearFilters: (): void => {
+              resetPagination();
+              tsHeader.column.setFilterValue(undefined);
+            },
+            onRemoveFilter: (value): void => {
+              resetPagination();
+              tsHeader.column.setFilterValue(
+                (currentFilters?: unknown[]) =>
+                  currentFilters ? [...currentFilters, value] : [value],
+              );
+            },
+            tooltipLabel: props.filter?.tooltipLabel,
+            clearFiltersLabel: props.filter?.clearFilterTooltipLabel,
+          }
+        : undefined,
+    };
+  };
+
+  const headerRows = buildHeaderRows<D, HeaderRender>(
+    activeColumns,
+    leafForEach,
+  );
+
   return {
     header: {
       headers: table.getHeaderGroups()[0]?.headers,
@@ -157,6 +229,7 @@ const useTanStackTableBuilder = <D extends object>(
             }
           : undefined,
       }),
+      rows: headerRows,
     },
     body: {
       rows: table.getRowModel().rows,
@@ -167,6 +240,8 @@ const useTanStackTableBuilder = <D extends object>(
         className: getRealColumn(index)?.className,
         colSpan: getRealColumn(index)?.colSpan?.(row.original),
         shouldNotRender: getRealColumn(index)?.cellUnless?.(row.original),
+        pin: getRealColumn(index)?.pin,
+        widthPx: getRealColumn(index)?.widthPx,
       }),
       forEachRow: (row) => ({
         id: row.id,
@@ -213,6 +288,7 @@ const useTanStackTableBuilder = <D extends object>(
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
     },
+    maxHeight: props.maxHeight,
   };
 };
 

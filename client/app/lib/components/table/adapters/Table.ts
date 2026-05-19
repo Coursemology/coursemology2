@@ -11,6 +11,7 @@ interface TableProps<H, B, C> {
   header?: HeaderProps<H>;
   toolbar?: ToolbarProps;
   handles: HandlersProps;
+  maxHeight?: number | string;
 }
 
 export default TableProps;

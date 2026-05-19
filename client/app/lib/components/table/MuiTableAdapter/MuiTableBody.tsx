@@ -5,7 +5,11 @@ import { CellRender } from '../adapters/Body';
 
 import MuiTableRow from './MuiTableRow';
 
-const MuiTableBody = <B, C>(props: BodyProps<B, C>): JSX.Element => (
+interface MuiTableBodyProps<B, C> extends BodyProps<B, C> {
+  hasPinnedColumns?: boolean;
+}
+
+const MuiTableBody = <B, C>(props: MuiTableBodyProps<B, C>): JSX.Element => (
   <TableBody>
     {props.rows.map((row, index) => {
       const rowProps = props.forEachRow(row, index);
@@ -19,6 +23,7 @@ const MuiTableBody = <B, C>(props: BodyProps<B, C>): JSX.Element => (
           }
           getCells={(): C[] => props.getCells(row)}
           getEqualityData={rowProps.getEqualityData}
+          hasPinnedColumns={props.hasPinnedColumns}
           id={rowProps.id}
         />
       );
