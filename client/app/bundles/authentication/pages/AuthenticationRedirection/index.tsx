@@ -11,7 +11,7 @@ const AuthenticationRedirection = (): JSX.Element | null => {
     ? `${window.origin}${nextURL}`
     : oidcConfig.redirect_uri;
 
-  if (auth.isAuthenticated) <Redirectable />;
+  if (auth.isAuthenticated) return <Redirectable />;
 
   auth.signinRedirect({ redirect_uri: redirectUri });
 

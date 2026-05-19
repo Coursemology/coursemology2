@@ -65,6 +65,45 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
+  describe 'ApplicationControllerMultitenancyConcern#deduce_tenant_host' do
+    subject { controller.send(:deduce_tenant_host) }
+
+    before do
+      allow(Application::Application.config.x).to receive(:default_host).
+        and_return('staging.coursemology.org')
+    end
+
+    context 'when the host has a www prefix' do
+      before { @request.host = 'www.example.com' }
+
+      it { is_expected.to eq('example.com') }
+    end
+
+    context 'when the host matches the default host' do
+      before { @request.host = 'staging.coursemology.org' }
+
+      it { is_expected.to eq('coursemology.org') }
+    end
+
+    context 'when the host is a subdomain of the default host' do
+      before { @request.host = 'tenant.staging.coursemology.org' }
+
+      it { is_expected.to eq('tenant.coursemology.org') }
+    end
+
+    context 'when the host has a www prefix and is a subdomain of the default host' do
+      before { @request.host = 'www.tenant.staging.coursemology.org' }
+
+      it { is_expected.to eq('tenant.coursemology.org') }
+    end
+
+    context 'when the host is unrelated to the default host' do
+      before { @request.host = 'tenant.example.com' }
+
+      it { is_expected.to eq('tenant.example.com') }
+    end
+  end
+
   describe ApplicationInternationalizationConcern do
     before { @old_i18n_locale = I18n.locale }
     after { I18n.locale = @old_i18n_locale }
