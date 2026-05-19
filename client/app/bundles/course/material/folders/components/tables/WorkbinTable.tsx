@@ -61,7 +61,6 @@ const WorkbinTable: FC<Props> = (props) => {
     subfolders,
     materials,
     isCurrentCourseStudent,
-    canManageKnowledgeBase,
     isConcrete,
   } = props;
 

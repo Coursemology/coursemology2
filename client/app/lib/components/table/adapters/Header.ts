@@ -1,10 +1,12 @@
 import { ReactNode } from 'react';
 
+import { HeaderRow } from '../builder/buildHeaderRows';
+
 import FilterProps from './Filter';
 import RowSelector from './RowSelector';
 import SortProps from './Sort';
 
-interface HeaderRender {
+export interface HeaderRender {
   id: string;
   render: ReactNode | RowSelector;
   className?: string;
@@ -12,9 +14,8 @@ interface HeaderRender {
   filtering?: FilterProps;
 }
 
-interface HeaderProps<H> {
-  headers: H[];
-  forEach: (header: H, index: number) => HeaderRender;
+interface HeaderProps {
+  rows: HeaderRow<HeaderRender>[];
 }
 
 export default HeaderProps;

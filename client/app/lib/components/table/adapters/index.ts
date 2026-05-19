@@ -1,6 +1,6 @@
 export type { default as BodyProps, RowEqualityData } from './Body';
 export type { default as FilterProps } from './Filter';
-export type { default as HeaderProps } from './Header';
+export type { default as HeaderProps, HeaderRender } from './Header';
 export type { default as PaginationProps } from './Pagination';
 export type { default as RowSelector } from './RowSelector';
 export { isRowSelector } from './RowSelector';

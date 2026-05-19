@@ -23,6 +23,12 @@ interface TableTemplate<D extends Data> {
   filter?: FilterTemplate;
   toolbar?: ToolbarTemplate<D>;
   sort?: SortTemplate;
+  /**
+   * Constrains the table container height and enables a scroll container.
+   * A sticky header is automatically enabled when this is set or when grouped
+   * headers are active.
+   */
+  maxHeight?: number | string;
 }
 
 export default TableTemplate;
