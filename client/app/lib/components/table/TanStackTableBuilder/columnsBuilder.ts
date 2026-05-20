@@ -45,8 +45,12 @@ const buildTanStackColumns = <D extends Data>(
     (column) =>
       ({
         id: column.id,
-        accessorKey: column.of,
-        accessorFn: column.searchProps?.getValue,
+        ...(column.accessorFn !== undefined
+          ? { accessorFn: column.accessorFn }
+          : {
+              accessorKey: column.of,
+              accessorFn: column.searchProps?.getValue,
+            }),
         header: column.title,
         cell: ({ row: { original: datum } }) => column.cell(datum),
         enableSorting: Boolean(column.sortable),

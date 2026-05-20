@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Cell,
   ColumnFiltersState,
@@ -9,12 +9,14 @@ import {
   getSortedRowModel,
   Header,
   Row,
+  Updater,
   useReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 import isEmpty from 'lodash-es/isEmpty';
 
 import { RowEqualityData, TableProps } from '../adapters';
-import { TableTemplate } from '../builder';
+import { ColumnTemplate, TableTemplate } from '../builder';
 import { downloadCsv } from '../utils';
 
 import buildTanStackColumns from './columnsBuilder';
@@ -46,6 +48,90 @@ const useTanStackTableBuilder = <D extends object>(
       10,
     pageIndex: props.pagination?.initialPageIndex ?? 0,
   });
+
+  const initialVisibility = useMemo<VisibilityState>(() => {
+    const storageKey = props.columnPicker?.storageKey;
+    let stored: VisibilityState | null = null;
+    if (storageKey) {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        stored = raw ? (JSON.parse(raw) as VisibilityState) : null;
+      } catch {
+        stored = null;
+      }
+    }
+    return Object.fromEntries(
+      props.columns.map((c) => {
+        const id = c.id ?? (c.of as string);
+        const storedValue = stored?.[id];
+        return [
+          id,
+          storedValue !== undefined ? storedValue : c.defaultVisible ?? true,
+        ];
+      }),
+    );
+  }, []);
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialVisibility);
+
+  // Ref-based so enforceLocked is stable and never a changing useEffect dep.
+  const lockedRef = useRef(props.columnPicker?.locked);
+  lockedRef.current = props.columnPicker?.locked;
+
+  const enforceLocked = useCallback(
+    (next: VisibilityState): VisibilityState => {
+      const locked = lockedRef.current;
+      if (!locked || locked.length === 0) return next;
+      const enforced = { ...next };
+      locked.forEach((id) => {
+        enforced[id] = true;
+      });
+      return enforced;
+    },
+    [],
+  );
+
+  const safeSetVisibility = (updater: Updater<VisibilityState>): void => {
+    setColumnVisibility((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      return enforceLocked(next);
+    });
+  };
+
+  useEffect(() => {
+    const key = props.columnPicker?.storageKey;
+    if (!key) return;
+    try {
+      localStorage.setItem(key, JSON.stringify(columnVisibility));
+    } catch {
+      // setItem throws QuotaExceededError (storage full) or SecurityError (private
+      // browsing on some browsers). Persistence is best-effort; the current session
+      // is unaffected if it fails.
+    }
+  }, [columnVisibility, props.columnPicker?.storageKey]);
+
+  // Reconcile when columns change (e.g. async-loaded gradebook assessments).
+  useEffect(() => {
+    setColumnVisibility((prev) => {
+      const currentIds = props.columns.map((c) => c.id ?? (c.of as string));
+      const colMap = new Map(
+        props.columns.map((c) => [c.id ?? (c.of as string), c]),
+      );
+      const next: VisibilityState = {};
+      currentIds.forEach((id) => {
+        next[id] = Object.hasOwn(prev, id)
+          ? prev[id]
+          : colMap.get(id)?.defaultVisible ?? true;
+      });
+      const enforced = enforceLocked(next);
+      // Return prev reference when nothing changed — prevents infinite re-render
+      // loop when columns/locked arrays are new references on every render.
+      const changed =
+        Object.keys(enforced).length !== Object.keys(prev).length ||
+        Object.keys(enforced).some((k) => enforced[k] !== prev[k]);
+      return changed ? enforced : prev;
+    });
+  }, [props.columns, enforceLocked]);
 
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
@@ -83,7 +169,9 @@ const useTanStackTableBuilder = <D extends object>(
       columnFilters,
       globalFilter: searchKeyword.trim(),
       pagination,
+      columnVisibility,
     },
+    onColumnVisibilityChange: safeSetVisibility,
     initialState: {
       sorting: props.sort?.initially && [
         {
@@ -94,24 +182,39 @@ const useTanStackTableBuilder = <D extends object>(
     },
   });
 
-  const generateAndDownloadCsv = async (): Promise<void> => {
-    const headers = table.options.columns.reduce<string[]>(
-      (acc, column, index) => {
-        const header = column.header || column.id;
-        if (header && (getRealColumn(index)?.csvDownloadable ?? false)) {
-          acc.push(header as string);
-        }
-        return acc;
-      },
-      [],
-    );
+  const getRealColumnById = (id: string): ColumnTemplate<D> | undefined => {
+    // Use the position within getAllLeafColumns() as the index into getRealColumn.
+    // We cannot search table.options.columns by c.id (undefined for accessorKey-based columns),
+    // and we cannot use col.columnDef reference equality because TanStack's createColumn spreads
+    // the def ({ ...defaultColumn, ...columnDef }), so col.columnDef is never === the original.
+    //
+    // Why getAllLeafColumns() index === getRealColumn() index:
+    //   table.options.columns (ColumnDef[])
+    //     → _getColumnDefs() returns it directly
+    //     → getAllColumns() maps each def → Column, preserving order
+    //     → getAllLeafColumns() flatMaps + applies _getOrderColumnsFn
+    //        (identity when columnOrder state is empty — we never set it)
+    //        NOTE: if user-reorderable columns are added, columnOrder state will be set and
+    //        getAllLeafColumns() will no longer match getRealColumn() by position. At that point
+    //        getRealColumnById must be rewritten to look up by id rather than position.
+    //   getRealColumn is built by buildColumns, which maps built-array position → ColumnTemplate
+    //   using the same table.options.columns as input in the same order.
+    //   Both arrays share the same positional index, so getRealColumn(i) matches getAllLeafColumns()[i].
+    const index = table.getAllLeafColumns().findIndex((c) => c.id === id);
+    if (index === -1) return undefined;
+    return getRealColumn(index);
+  };
 
+  const generateAndDownloadCsv = async (
+    visibilityOverride?: Record<string, boolean>,
+  ): Promise<void> => {
     const csvData = await generateCsv({
-      headers,
-      rows: () => table.getCoreRowModel().rows,
-      getRealColumn,
+      table,
+      getRealColumn: getRealColumnById,
+      visibilityOverride,
+      getExtraHeaderRows: props.columnPicker?.getExtraHeaderRows,
+      onlySelected: !isEmpty(rowSelection),
     });
-
     downloadCsv(csvData, props.csvDownload?.filename);
   };
 
@@ -178,6 +281,18 @@ const useTanStackTableBuilder = <D extends object>(
             selected: rowSelection[row.id],
           })),
       }),
+      selectedCount: table.getSelectedRowModel().rows.length,
+      allFilteredSelected:
+        table.getFilteredRowModel().rows.length > 0 &&
+        table.getFilteredRowModel().rows.every((r) => r.getIsSelected()),
+      someFilteredSelected: table
+        .getFilteredRowModel()
+        .rows.some((r) => r.getIsSelected()),
+      toggleAllFiltered: (): void => {
+        const filteredRows = table.getFilteredRowModel().rows;
+        const allSelected = filteredRows.every((r) => r.getIsSelected());
+        filteredRows.forEach((r) => r.toggleSelected(!allSelected));
+      },
     },
     handles: {
       getPaginationState: () => pagination,
@@ -212,6 +327,16 @@ const useTanStackTableBuilder = <D extends object>(
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
+      columnPicker: props.columnPicker,
+      getColumnVisibility: () => columnVisibility,
+      commitColumnVisibility: (next) => safeSetVisibility(() => next),
+      onExportFromPicker:
+        props.columnPicker &&
+        ((visibility: Record<string, boolean>): Promise<void> =>
+          generateAndDownloadCsv(visibility)),
+      onDirectExport: props.columnPicker
+        ? (): Promise<void> => generateAndDownloadCsv()
+        : undefined,
     },
   };
 };
