@@ -267,7 +267,6 @@ const GradebookTable = ({
     [students],
   );
 
-
   const columns = useMemo<ColumnTemplate<GradebookRow>[]>(() => {
     const cols: ColumnTemplate<GradebookRow>[] = [
       {
@@ -300,7 +299,6 @@ const GradebookTable = ({
       searchable: true,
       defaultVisible: hasExternalIds,
     });
-
 
     if (gamificationEnabled) {
       cols.push({
