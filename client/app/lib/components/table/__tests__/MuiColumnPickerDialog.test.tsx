@@ -1,6 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
 
 import MuiColumnPickerDialog from '../MuiTableAdapter/MuiColumnPickerDialog';
+
+const wrap = (node: JSX.Element): JSX.Element => (
+  <IntlProvider locale="en" defaultLocale="en">
+    {node}
+  </IntlProvider>
+);
 
 const setup = (overrides: Partial<React.ComponentProps<typeof MuiColumnPickerDialog>> = {}) => {
   const commitColumnVisibility = jest.fn();
@@ -41,7 +48,7 @@ const setup = (overrides: Partial<React.ComponentProps<typeof MuiColumnPickerDia
     onExportFromPicker,
     ...overrides,
   };
-  return { ...render(<MuiColumnPickerDialog {...props} />), commitColumnVisibility, onExportFromPicker, renderTree, props };
+  return { ...render(wrap(<MuiColumnPickerDialog {...props} />)), commitColumnVisibility, onExportFromPicker, renderTree, props };
 };
 
 describe('MuiColumnPickerDialog', () => {

@@ -56,7 +56,7 @@ describe('csvGenerator', () => {
       getRealColumn,
     });
 
-    const lines = csv.trim().split('\n');
+    const lines = csv.trim().split(/\r?\n/);
     expect(lines[0]).toBe('Name,Email');           // score has csvDownloadable: false
     expect(lines[1]).toBe('Alice,alice@example.com');
     expect(lines[2]).toBe('Bob,bob@example.com');
@@ -70,7 +70,7 @@ describe('csvGenerator', () => {
       getRealColumn,
     });
 
-    const lines = csv.trim().split('\n');
+    const lines = csv.trim().split(/\r?\n/);
     expect(lines[0]).toBe('Name');
     expect(lines[1]).toBe('Alice');
     expect(lines[2]).toBe('Bob');
@@ -81,7 +81,7 @@ describe('csvGenerator', () => {
 
     const csv = await generateCsv({ table, getRealColumn });
 
-    const lines = csv.trim().split('\n');
+    const lines = csv.trim().split(/\r?\n/);
     const headerCount = lines[0].split(',').length;
     lines.slice(1).forEach((row) => expect(row.split(',').length).toBe(headerCount));
   });
