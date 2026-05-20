@@ -5271,6 +5271,42 @@
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "Failed to mark all topics in this forum as read. Please try again later."
   },
+  "course.gradebook.GradebookColumnTree.assessments": {
+    "defaultMessage": "Assessments"
+  },
+  "course.gradebook.GradebookColumnTree.email": {
+    "defaultMessage": "Email"
+  },
+  "course.gradebook.GradebookColumnTree.externalId": {
+    "defaultMessage": "External ID"
+  },
+  "course.gradebook.GradebookColumnTree.level": {
+    "defaultMessage": "Level"
+  },
+  "course.gradebook.GradebookColumnTree.name": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "Student info"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "Select columns to export"
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "Export…"
+  },
+  "course.gradebook.GradebookIndex.exportCsv": {
+    "defaultMessage": "Export CSV"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "Failed to retrieve Gradebook."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "Gradebook"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "Search by student name"
+  },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "Description (Optional)"
   },

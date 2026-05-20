@@ -5246,6 +5246,42 @@
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "未能将此论坛中的所有主题标记为已读。请稍后再试。"
   },
+  "course.gradebook.GradebookColumnTree.assessments": {
+    "defaultMessage": "Assessments"
+  },
+  "course.gradebook.GradebookColumnTree.email": {
+    "defaultMessage": "Email"
+  },
+  "course.gradebook.GradebookColumnTree.externalId": {
+    "defaultMessage": "External ID"
+  },
+  "course.gradebook.GradebookColumnTree.level": {
+    "defaultMessage": "Level"
+  },
+  "course.gradebook.GradebookColumnTree.name": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "Student info"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "Select columns to export"
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "Export…"
+  },
+  "course.gradebook.GradebookIndex.exportCsv": {
+    "defaultMessage": "Export CSV"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "Failed to retrieve Gradebook."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "Gradebook"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "Search by student name"
+  },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "说明（可选）"
   },
