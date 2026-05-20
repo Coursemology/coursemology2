@@ -14,7 +14,7 @@ import {
 import isEmpty from 'lodash-es/isEmpty';
 
 import { RowEqualityData, TableProps } from '../adapters';
-import { TableTemplate } from '../builder';
+import { ColumnTemplate, TableTemplate } from '../builder';
 import { downloadCsv } from '../utils';
 
 import buildTanStackColumns from './columnsBuilder';
@@ -94,24 +94,17 @@ const useTanStackTableBuilder = <D extends object>(
     },
   });
 
+  const getRealColumnById = (id: string): ColumnTemplate<D> | undefined => {
+    const index = table.options.columns.findIndex((c) => c.id === id);
+    if (index === -1) return undefined;
+    return getRealColumn(index);
+  };
+
   const generateAndDownloadCsv = async (): Promise<void> => {
-    const headers = table.options.columns.reduce<string[]>(
-      (acc, column, index) => {
-        const header = column.header || column.id;
-        if (header && (getRealColumn(index)?.csvDownloadable ?? false)) {
-          acc.push(header as string);
-        }
-        return acc;
-      },
-      [],
-    );
-
     const csvData = await generateCsv({
-      headers,
-      rows: () => table.getCoreRowModel().rows,
-      getRealColumn,
+      table,
+      getRealColumn: getRealColumnById,
     });
-
     downloadCsv(csvData, props.csvDownload?.filename);
   };
 
