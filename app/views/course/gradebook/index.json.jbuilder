@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-json.weightedViewEnabled @weighted_view_enabled
-json.canManageWeights can?(:manage_gradebook_weights, current_course)
-
 json.categories @categories do |cat|
   json.id cat.id
   json.title cat.title
@@ -11,7 +8,6 @@ json.tabs @tabs do |tab|
   json.id tab.id
   json.title tab.title
   json.categoryId tab.category_id
-  json.gradebookWeight tab.gradebook_weight if @weighted_view_enabled
 end
 
 json.assessments @published_assessments do |assessment|

@@ -5,7 +5,6 @@ class Course::GradebookController < Course::ComponentController
   def index
     respond_to do |format|
       format.json do
-        @weighted_view_enabled = @settings.weighted_view_enabled
         @published_assessments = fetch_published_assessments
         @categories, @tabs = fetch_categories_and_tabs
         @students = fetch_students
@@ -19,25 +18,10 @@ class Course::GradebookController < Course::ComponentController
     end
   end
 
-  def update_weights
-    authorize! :manage_gradebook_weights, current_course
-    updates = update_weights_params[:weights].map do |entry|
-      { tab_id: entry[:tabId].to_i, weight: entry[:weight].to_i }
-    end
-    Course::Assessment::Tab.update_gradebook_weights(course: current_course, updates: updates)
-    render json: { weights: updates.map { |u| { tabId: u[:tab_id], weight: u[:weight] } } }
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-    render json: { errors: { base: e.message } }, status: :unprocessable_entity
-  end
-
   private
 
   def authorize_read_gradebook!
     authorize! :read_gradebook, current_course
-  end
-
-  def update_weights_params
-    params.permit(weights: [:tabId, :weight])
   end
 
   def component
@@ -50,7 +34,7 @@ class Course::GradebookController < Course::ComponentController
   end
 
   def fetch_students
-    current_course.levels.to_a # Warms the AR association cache to prevent N+1 in level_number
+    current_course.levels.to_a
     current_course.course_users.students.without_phantom_users.
       calculated(:experience_points).includes(:user).to_a
   end
