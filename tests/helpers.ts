@@ -88,7 +88,7 @@ export const test = base.extend<TestFixtures>({
         await page.getByRole('button', { name: 'Sign in' }).click();
         try {
           await page.waitForURL(/\?from=auth/, { timeout: 1000 });
-          await page.waitForURL(/^(?!.*\?from=auth)/);
+          await page.waitForURL(/^(?!.*\?from=auth)/, { timeout: 1000 });
         } catch {}
       },
     } satisfies Omit<Page, keyof BasePage>);

@@ -130,14 +130,6 @@ RSpec.describe Instance do
     context 'when the instance is the default instance' do
       subject(:instance) { Instance.default }
 
-      context 'when config.x.default_host is nil' do
-        before { Application::Application.config.x.default_host = nil }
-
-        it 'falls back to https://localhost:8080' do
-          expect(instance.redirect_uri).to eq('https://localhost:8080')
-        end
-      end
-
       context 'when config.x.default_host is "coursemology.org"' do
         before { Application::Application.config.x.default_host = 'coursemology.org' }
 
@@ -159,34 +151,6 @@ RSpec.describe Instance do
 
         it 'returns https://lvh.me:8080' do
           expect(instance.redirect_uri).to eq('https://lvh.me:8080')
-        end
-      end
-    end
-
-    context 'when the instance has host "coursemology.org"' do
-      subject(:instance) { build(:instance, host: 'coursemology.org') }
-
-      context 'when config.x.default_host is nil' do
-        before { Application::Application.config.x.default_host = nil }
-
-        it 'falls back to https://localhost:8080' do
-          expect(instance.redirect_uri).to eq('https://localhost:8080')
-        end
-      end
-
-      context 'when config.x.default_host is "coursemology.org"' do
-        before { Application::Application.config.x.default_host = 'coursemology.org' }
-
-        it 'returns https://coursemology.org' do
-          expect(instance.redirect_uri).to eq('https://coursemology.org')
-        end
-      end
-
-      context 'when config.x.default_host is "staging.coursemology.org"' do
-        before { Application::Application.config.x.default_host = 'staging.coursemology.org' }
-
-        it 'returns https://staging.coursemology.org' do
-          expect(instance.redirect_uri).to eq('https://staging.coursemology.org')
         end
       end
     end

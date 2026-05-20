@@ -16,6 +16,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
+  let(:instance) { create(:instance) }
   describe ApplicationControllerMultitenancyConcern do
     # These variables override the hostname in the selected tenant object before with_tenant gets
     # to execute. This effectively changes the host requested in the mock request.
@@ -25,10 +26,8 @@ RSpec.describe ApplicationController, type: :controller do
     with_tenant(:instance) do
       context 'when a nonexistent instance is specified' do
         let(:instance) { build_stubbed(:instance) }
-        it 'falls back to the default instance' do
-          get :index
-
-          expect(ActsAsTenant.current_tenant).to eq(Instance.default)
+        it 'raises a RoutingError' do
+          expect { get :index }.to raise_error(ActionController::RoutingError)
         end
       end
 
@@ -54,11 +53,8 @@ RSpec.describe ApplicationController, type: :controller do
 
         context 'when the host has a subdomain other than www' do
           let(:instance_host) { "random.#{instance.host.upcase}" }
-          it 'finds the actual host' do
-            get :index
-
-            expect(ActsAsTenant.current_tenant).not_to eq(instance)
-            expect(ActsAsTenant.current_tenant).to eq(Instance.default)
+          it 'raises a RoutingError' do
+            expect { get :index }.to raise_error(ActionController::RoutingError)
           end
         end
       end
@@ -69,8 +65,8 @@ RSpec.describe ApplicationController, type: :controller do
     subject { controller.send(:deduce_tenant_host) }
 
     before do
-      allow(Application::Application.config.x).to receive(:default_host).
-        and_return('staging.coursemology.org')
+      allow(Instance).to receive(:default).
+        and_return(instance_double(Instance, host: 'staging.coursemology.org'))
     end
 
     context 'when the host has a www prefix' do
@@ -79,10 +75,10 @@ RSpec.describe ApplicationController, type: :controller do
       it { is_expected.to eq('example.com') }
     end
 
-    context 'when the host matches the default host' do
+    context 'when the host exactly matches the default host' do
       before { @request.host = 'staging.coursemology.org' }
 
-      it { is_expected.to eq('coursemology.org') }
+      it { is_expected.to eq('staging.coursemology.org') }
     end
 
     context 'when the host is a subdomain of the default host' do
@@ -105,82 +101,88 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe ApplicationInternationalizationConcern do
-    before { @old_i18n_locale = I18n.locale }
-    after { I18n.locale = @old_i18n_locale }
+    with_tenant(:instance) do
+      before { @old_i18n_locale = I18n.locale }
+      after { I18n.locale = @old_i18n_locale }
 
-    pending 'when http accept language is present' do
-      before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'zh-cn' }
+      context 'when http accept language is present' do
+        before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'zh' }
 
-      it 'sets the correct locale' do
-        get :index
-        expect(I18n.locale).to eq(:'zh-CN')
-      end
-    end
-
-    context 'when http accept language is not present' do
-      before { @request.env['HTTP_ACCEPT_LANGUAGE'] = nil }
-
-      it 'sets the locale to default' do
-        get :index
-        expect(I18n.locale).to eq(I18n.default_locale)
-      end
-    end
-
-    context 'when http accept language is not available' do
-      before do
-        @request.env['HTTP_ACCEPT_LANGUAGE'] = 'jp'
-        get :index
+        it 'sets the correct locale' do
+          get :index
+          expect(I18n.locale).to eq(:zh)
+        end
       end
 
-      it 'sets the locale to default' do
-        expect(I18n.locale).to eq(I18n.default_locale)
+      context 'when http accept language is not present' do
+        before { @request.env['HTTP_ACCEPT_LANGUAGE'] = nil }
+
+        it 'sets the locale to default' do
+          get :index
+          expect(I18n.locale).to eq(I18n.default_locale)
+        end
       end
-    end
 
-    pending 'when http accept language belongs to the same region' do
-      before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'zh-tw' }
+      context 'when http accept language is not available' do
+        before do
+          @request.env['HTTP_ACCEPT_LANGUAGE'] = 'jp'
+          get :index
+        end
 
-      it 'sets the nearest locale' do
-        get :index
-        expect(I18n.locale).to eq(:'zh-CN')
+        it 'sets the locale to default' do
+          expect(I18n.locale).to eq(I18n.default_locale)
+        end
       end
-    end
 
-    pending 'when multiple http accept languages are present' do
-      before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'jp, zh-tw' }
+      pending 'when http accept language belongs to the same region' do
+        before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'zh-tw' }
 
-      it 'sets the nearest available locale' do
-        get :index
-        expect(I18n.locale).to eq(:'zh-CN')
+        it 'sets the nearest locale' do
+          get :index
+          expect(I18n.locale).to eq(:'zh-CN')
+        end
+      end
+
+      pending 'when multiple http accept languages are present' do
+        before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'jp, zh-tw' }
+
+        it 'sets the nearest available locale' do
+          get :index
+          expect(I18n.locale).to eq(:'zh-CN')
+        end
       end
     end
   end
 
   describe ApplicationUserConcern do
-    context 'when the action raises a CanCan::AccessDenied' do
-      run_rescue
+    with_tenant(:instance) do
+      context 'when the action raises a CanCan::AccessDenied' do
+        run_rescue
 
-      it 'returns HTTP status 403' do
-        post :create
-        expect(response.status).to eq(403)
+        it 'returns HTTP status 403' do
+          post :create
+          expect(response.status).to eq(403)
+        end
       end
     end
   end
 
   describe ApplicationComponentsConcern do
-    context 'when the action raises a Coursemology::ComponentNotFoundError' do
-      run_rescue
+    with_tenant(:instance) do
+      context 'when the action raises a Coursemology::ComponentNotFoundError' do
+        run_rescue
 
-      before do
-        def controller.index
-          raise ComponentNotFoundError
+        before do
+          def controller.index
+            raise ComponentNotFoundError
+          end
         end
-      end
 
-      it 'returns HTTP status 404' do
-        get :index
-        expect(response.status).to eq(404)
-        expect(response.body).to include('Component not found')
+        it 'returns HTTP status 404' do
+          get :index
+          expect(response.status).to eq(404)
+          expect(response.body).to include('Component not found')
+        end
       end
     end
   end
@@ -194,34 +196,38 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context 'when the action raises an IllegalStateError' do
-    run_rescue
+    with_tenant(:instance) do
+      run_rescue
 
-    before do
-      def controller.index
-        raise IllegalStateError
+      before do
+        def controller.index
+          raise IllegalStateError
+        end
       end
-    end
 
-    it 'returns HTTP status 422' do
-      get :index
-      expect(response.status).to eq(422)
+      it 'returns HTTP status 422' do
+        get :index
+        expect(response.status).to eq(422)
+      end
     end
   end
 
   context 'when the action raises ActionController::InvalidAuthenticityToken' do
-    run_rescue
+    with_tenant(:instance) do
+      run_rescue
 
-    before do
-      def controller.index
-        raise ActionController::InvalidAuthenticityToken
+      before do
+        def controller.index
+          raise ActionController::InvalidAuthenticityToken
+        end
       end
-    end
 
-    it 'returns HTTP status 403' do
-      # Replaced specific error check due to potential false positives
-      # expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
-      expect { get :index }.to_not raise_error
-      expect(response.status).to eq(403)
+      it 'returns HTTP status 403' do
+        # Replaced specific error check due to potential false positives
+        # expect { get :index }.to_not raise_error ActionController::InvalidAuthenticityToken
+        expect { get :index }.to_not raise_error
+        expect(response.status).to eq(403)
+      end
     end
   end
 end

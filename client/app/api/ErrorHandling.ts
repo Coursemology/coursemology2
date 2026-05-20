@@ -1,9 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import {
-  AUTH_USER_MANAGER,
-  oidcConfig,
-} from 'lib/components/wrappers/AuthProvider';
+import { AUTH_USER_MANAGER } from 'lib/components/wrappers/AuthProvider';
 import {
   redirectToForbidden,
   redirectToNotFound,
@@ -33,7 +30,7 @@ const isSuspendedResponse = (response?: AxiosResponse): boolean =>
 
 export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
   if (isUnauthenticatedResponse(response))
-    AUTH_USER_MANAGER.signinRedirect({ redirect_uri: oidcConfig.redirect_uri });
+    AUTH_USER_MANAGER.signinRedirect({ redirect_uri: window.location.href });
   if (isSuspendedResponse(response)) redirectToSuspended();
   if (isUnauthorizedResponse(response))
     // Should open a new window and login

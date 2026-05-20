@@ -26,7 +26,7 @@ Rails.application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
   # We will configure the host from the environment.
-  config.action_mailer.default_url_options = { host: ENV['RAILS_HOSTNAME'] }
+  config.action_mailer.default_url_options = { host: ENV.fetch('RAILS_HOSTNAME') }
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
@@ -134,7 +134,7 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   #
-  config.x.default_host = ENV['RAILS_HOSTNAME']
+  config.x.default_host = ENV.fetch('RAILS_HOSTNAME')
   config.active_job.queue_adapter = :sidekiq
 
   # Rails 6.0.5.1 security patch

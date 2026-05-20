@@ -133,7 +133,7 @@ class Instance < ApplicationRecord
 
   # Replace the hostname of the default instance.
   def host
-    default_host = Application::Application.config.x.default_host || ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
+    default_host = Application::Application.config.x.default_host
     return default_host if default?
 
     read_attribute(:host).gsub('coursemology.org', default_host)
