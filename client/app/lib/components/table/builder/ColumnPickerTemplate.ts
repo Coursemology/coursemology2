@@ -22,15 +22,8 @@ interface ColumnPickerTemplate {
   /** Tooltip shown on the direct-export button. */
   directExportTooltip?: string;
 
-  /** Modal title, default "Select columns to export". */
+  /** Modal title, default "Select columns". */
   dialogTitle?: string;
-
-  /** Reuses the table's client-side CSV pipeline for the Export CSV button. */
-  onExport?: 'csv';
-
-  /** CTA text inside the dialog, default "Apply and Export". */
-  exportLabel?: string;
-
 
   /**
    * Called at CSV export time with the ordered visible column IDs.

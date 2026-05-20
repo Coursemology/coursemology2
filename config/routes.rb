@@ -501,6 +501,7 @@ Rails.application.routes.draw do
 
       resource :gradebook, only: [] do
         get '/' => 'gradebook#index'
+        patch '/weights' => 'gradebook#update_weights'
       end
 
       scope module: :discussion do

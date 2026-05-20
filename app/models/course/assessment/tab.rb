@@ -29,6 +29,30 @@ class Course::Assessment::Tab < ApplicationRecord
       select('(array_agg(title))[0:3]')
   end)
 
+  # Bulk-updates the gradebook_weight for a set of tabs belonging to the given course.
+  # Raises ActiveRecord::RecordNotFound if any tab_id does not belong to the course.
+  # Raises ActiveRecord::RecordInvalid if any weight fails validation; the transaction is rolled back.
+  #
+  # @param course [Course]
+  # @param updates [Array<Hash>] array of { tab_id: Integer, weight: Integer }
+  def self.update_gradebook_weights(course:, updates:)
+    course_tab_ids = course.assessment_tabs.pluck(:id).to_set
+    tab_ids_to_update = updates.map { |e| e[:tab_id] }
+
+    tab_ids_to_update.each do |tab_id|
+      raise ActiveRecord::RecordNotFound unless course_tab_ids.include?(tab_id)
+    end
+
+    tabs_by_id = where(id: tab_ids_to_update).index_by(&:id)
+
+    transaction do
+      updates.each do |entry|
+        tab = tabs_by_id[entry[:tab_id]]
+        tab.update!(gradebook_weight: entry[:weight])
+      end
+    end
+  end
+
   # Returns a boolean value indicating if there are other tabs
   # besides this one remaining in its category.
   #

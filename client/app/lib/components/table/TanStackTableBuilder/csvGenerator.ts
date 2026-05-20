@@ -7,7 +7,6 @@ import { ColumnTemplate, Data } from '../builder';
 interface CsvGenerator<D extends Data> {
   table: Table<D>;
   getRealColumn: (id: string) => ColumnTemplate<D> | undefined;
-  visibilityOverride?: Record<string, boolean>;
   getExtraHeaderRows?: (columnIds: string[]) => string[][];
   onlySelected?: boolean;
 }
@@ -28,11 +27,7 @@ const generateCsv = <D extends Data>(
     // Keep ONLY columns where the consumer explicitly set csvDownloadable === true.
     // Columns with `csvDownloadable: undefined` or `false` are excluded (matches the
     // original behaviour where `csvDownloadable ?? false` gated headers).
-    const leafColumns = options.visibilityOverride
-      ? options.table
-          .getAllLeafColumns()
-          .filter((col) => options.visibilityOverride?.[col.id] !== false)
-      : options.table.getVisibleLeafColumns();
+    const leafColumns = options.table.getVisibleLeafColumns();
     const exportColumns = leafColumns.filter(
       (col) => options.getRealColumn(col.id)?.csvDownloadable === true,
     );
