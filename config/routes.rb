@@ -496,6 +496,10 @@ Rails.application.routes.draw do
         get 'groups', as: :group
       end
 
+      resource :gradebook, only: [] do
+        get '/' => 'gradebook#index'
+      end
+
       scope module: :discussion do
         resources :topics, path: 'comments', only: [:index] do
           get 'pending', on: :collection

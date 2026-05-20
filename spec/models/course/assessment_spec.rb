@@ -407,5 +407,34 @@ RSpec.describe Course::Assessment do
         expect(autograded_assessment.skippable).to be_truthy
       end
     end
+
+    describe '.max_grades' do
+      let(:assessment_with_question) do
+        create(:assessment, :with_mcq_question, course: course)
+      end
+
+      it 'returns empty hash for empty assessment_ids' do
+        expect(Course::Assessment.max_grades([])).to eq({})
+      end
+
+      it 'returns the sum of maximum_grades for each assessment' do
+        assessment_with_question
+        result = Course::Assessment.max_grades([assessment_with_question.id])
+        expected = assessment_with_question.questions.sum(:maximum_grade).to_f
+        expect(result[assessment_with_question.id]).to eq(expected)
+      end
+
+      it 'excludes assessments not in the given ids' do
+        other = create(:assessment, :with_mcq_question, course: course)
+        result = Course::Assessment.max_grades([assessment_with_question.id])
+        expect(result.keys).not_to include(other.id)
+      end
+
+      it 'excludes assessments with no questions from the result' do
+        empty_assessment = create(:assessment, course: course)
+        result = Course::Assessment.max_grades([empty_assessment.id])
+        expect(result).not_to have_key(empty_assessment.id)
+      end
+    end
   end
 end
