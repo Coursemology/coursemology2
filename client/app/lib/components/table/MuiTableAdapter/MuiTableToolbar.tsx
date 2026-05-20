@@ -8,7 +8,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { ToolbarProps } from '../adapters';
 
-import MuiColumnPickerDialog from './MuiColumnPickerDialog';
+import MuiColumnPickerPrompt from './MuiColumnPickerPrompt';
 import translations from './translations';
 
 interface ToolbarContainerProps {
@@ -102,13 +102,12 @@ const MuiTableToolbar = (props: ToolbarProps): JSX.Element | null => {
       </div>
 
       {props.columnPicker && props.commitColumnVisibility && (
-        <MuiColumnPickerDialog
+        <MuiColumnPickerPrompt
           columnPicker={props.columnPicker}
           commitColumnVisibility={props.commitColumnVisibility}
           initialVisibility={props.getColumnVisibility?.() ?? {}}
           locked={props.columnPicker.locked}
           onClose={() => setPickerOpen(false)}
-          onExportFromPicker={props.onExportFromPicker}
           open={pickerOpen}
         />
       )}

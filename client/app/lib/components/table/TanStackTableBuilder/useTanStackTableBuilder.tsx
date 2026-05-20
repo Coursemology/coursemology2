@@ -229,13 +229,10 @@ const useTanStackTableBuilder = <D extends object>(
     return getRealColumn(index);
   };
 
-  const generateAndDownloadCsv = async (
-    visibilityOverride?: Record<string, boolean>,
-  ): Promise<void> => {
+  const generateAndDownloadCsv = async (): Promise<void> => {
     const csvData = await generateCsv({
       table,
       getRealColumn: getRealColumnById,
-      visibilityOverride,
       getExtraHeaderRows: props.columnPicker?.getExtraHeaderRows,
       onlySelected: !isEmpty(rowSelection),
     });
@@ -362,10 +359,6 @@ const useTanStackTableBuilder = <D extends object>(
       columnPicker: props.columnPicker,
       getColumnVisibility: () => columnVisibility,
       commitColumnVisibility: (next) => safeSetVisibility(() => next),
-      onExportFromPicker:
-        props.columnPicker &&
-        ((visibility: Record<string, boolean>): Promise<void> =>
-          generateAndDownloadCsv(visibility)),
       onDirectExport: props.columnPicker
         ? (): Promise<void> => generateAndDownloadCsv()
         : undefined,
