@@ -318,7 +318,10 @@ describe('useTanStackTableBuilder CSV download', () => {
     );
 
     await act(async () => {
-      await result.current.toolbar!.onDirectExport?.();
+      await result.current.toolbar!.onExportFromPicker?.({
+        name: true,
+        email: true,
+      });
     });
 
     expect(mockedDownloadFile).toHaveBeenCalledTimes(1);
@@ -352,7 +355,10 @@ describe('useTanStackTableBuilder CSV download', () => {
     act(() => result.current.body.rows[0].toggleSelected());
 
     await act(async () => {
-      await result.current.toolbar!.onDirectExport?.();
+      await result.current.toolbar!.onExportFromPicker?.({
+        name: true,
+        email: true,
+      });
     });
 
     expect(mockedDownloadFile).toHaveBeenCalledTimes(1);
