@@ -160,6 +160,22 @@ class Course::Assessment < ApplicationRecord
     true
   end
 
+  # Returns a hash of assessment_id => max_grade (sum of question maximum_grades).
+  def self.max_grades(assessment_ids)
+    return {} if assessment_ids.empty?
+
+    rows = find_by_sql(
+      sanitize_sql_array([<<-SQL.squish, assessment_ids])
+        SELECT cqa.assessment_id, COALESCE(SUM(caq.maximum_grade), 0) AS max_grade
+        FROM course_question_assessments cqa
+        JOIN course_assessment_questions caq ON caq.id = cqa.question_id
+        WHERE cqa.assessment_id IN (?)
+        GROUP BY cqa.assessment_id
+      SQL
+    )
+    rows.to_h { |row| [row.assessment_id, row.max_grade.to_f] }
+  end
+
   def to_partial_path
     'course/assessment/assessments/assessment'
   end

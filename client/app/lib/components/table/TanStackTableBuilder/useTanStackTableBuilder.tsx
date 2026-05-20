@@ -323,7 +323,10 @@ const useTanStackTableBuilder = <D extends object>(
       },
       searchKeyword,
       onSearchKeywordChange: setSearchKeyword,
-      onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
+      onDownloadCsv:
+        props.csvDownload && (props.csvDownload.showDownloadButton ?? true)
+          ? generateAndDownloadCsv
+          : undefined,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
