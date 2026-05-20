@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Cell,
   ColumnFiltersState,
@@ -9,12 +9,17 @@ import {
   getSortedRowModel,
   Header,
   Row,
+  Updater,
   useReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 import isEmpty from 'lodash-es/isEmpty';
 
+import { getUserEntity } from 'bundles/users/selectors';
+import { useAppSelector } from 'lib/hooks/store';
+
 import { RowEqualityData, TableProps } from '../adapters';
-import { TableTemplate } from '../builder';
+import { ColumnTemplate, TableTemplate } from '../builder';
 import { downloadCsv } from '../utils';
 
 import buildTanStackColumns from './columnsBuilder';
@@ -30,6 +35,14 @@ type TanStackTableProps<D> = TableProps<
 const useTanStackTableBuilder = <D extends object>(
   props: TableTemplate<D>,
 ): TanStackTableProps<D> => {
+  const currentUserId = useAppSelector(getUserEntity).id;
+  // Namespace the caller's key by userId so two users on the same device
+  // don't share visibility preferences. Guard against userId=0 (not yet loaded).
+  const effectiveStorageKey =
+    props.columnPicker?.storageKey && currentUserId > 0
+      ? `${currentUserId}:${props.columnPicker.storageKey}`
+      : undefined;
+
   const [columns, getRealColumn] = buildTanStackColumns(
     props.columns,
     props.indexing?.rowSelectable,
@@ -46,6 +59,91 @@ const useTanStackTableBuilder = <D extends object>(
       10,
     pageIndex: props.pagination?.initialPageIndex ?? 0,
   });
+
+  const initialVisibility = useMemo<VisibilityState>(() => {
+    let stored: VisibilityState | null = null;
+    if (effectiveStorageKey) {
+      try {
+        const raw = localStorage.getItem(effectiveStorageKey);
+        stored = raw ? (JSON.parse(raw) as VisibilityState) : null;
+      } catch {
+        stored = null;
+      }
+    }
+    return Object.fromEntries(
+      props.columns.map((c) => {
+        const id = c.id ?? (c.of as string);
+        const storedValue = stored?.[id];
+        return [
+          id,
+          storedValue !== undefined ? storedValue : c.defaultVisible ?? true,
+        ];
+      }),
+    );
+  }, []);
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialVisibility);
+
+  // Ref-based so enforceLocked is stable and never a changing useEffect dep.
+  const lockedRef = useRef(props.columnPicker?.locked);
+  lockedRef.current = props.columnPicker?.locked;
+
+  const enforceLocked = useCallback(
+    (next: VisibilityState): VisibilityState => {
+      const locked = lockedRef.current;
+      if (!locked || locked.length === 0) return next;
+      const enforced = { ...next };
+      locked.forEach((id) => {
+        enforced[id] = true;
+      });
+      return enforced;
+    },
+    [],
+  );
+
+  const safeSetVisibility = (updater: Updater<VisibilityState>): void => {
+    setColumnVisibility((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      return enforceLocked(next);
+    });
+  };
+
+  useEffect(() => {
+    if (!effectiveStorageKey) return;
+    try {
+      localStorage.setItem(
+        effectiveStorageKey,
+        JSON.stringify(columnVisibility),
+      );
+    } catch {
+      // setItem throws QuotaExceededError (storage full) or SecurityError (private
+      // browsing on some browsers). Persistence is best-effort; the current session
+      // is unaffected if it fails.
+    }
+  }, [columnVisibility, effectiveStorageKey]);
+
+  // Reconcile when columns change (e.g. async-loaded gradebook assessments).
+  useEffect(() => {
+    setColumnVisibility((prev) => {
+      const currentIds = props.columns.map((c) => c.id ?? (c.of as string));
+      const colMap = new Map(
+        props.columns.map((c) => [c.id ?? (c.of as string), c]),
+      );
+      const next: VisibilityState = {};
+      currentIds.forEach((id) => {
+        next[id] = Object.hasOwn(prev, id)
+          ? prev[id]
+          : colMap.get(id)?.defaultVisible ?? true;
+      });
+      const enforced = enforceLocked(next);
+      // Return prev reference when nothing changed — prevents infinite re-render
+      // loop when columns/locked arrays are new references on every render.
+      const changed =
+        Object.keys(enforced).length !== Object.keys(prev).length ||
+        Object.keys(enforced).some((k) => enforced[k] !== prev[k]);
+      return changed ? enforced : prev;
+    });
+  }, [props.columns, enforceLocked]);
 
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
@@ -83,7 +181,9 @@ const useTanStackTableBuilder = <D extends object>(
       columnFilters,
       globalFilter: searchKeyword.trim(),
       pagination,
+      columnVisibility,
     },
+    onColumnVisibilityChange: safeSetVisibility,
     initialState: {
       sorting: props.sort?.initially && [
         {
@@ -94,24 +194,40 @@ const useTanStackTableBuilder = <D extends object>(
     },
   });
 
+  const getRealColumnById = (id: string): ColumnTemplate<D> | undefined => {
+    // Use the position within getAllLeafColumns() as the index into getRealColumn.
+    // We cannot search table.options.columns by c.id (undefined for accessorKey-based columns),
+    // and we cannot use col.columnDef reference equality because TanStack's createColumn spreads
+    // the def ({ ...defaultColumn, ...columnDef }), so col.columnDef is never === the original.
+    //
+    // Why getAllLeafColumns() index === getRealColumn() index:
+    //   table.options.columns (ColumnDef[])
+    //     → _getColumnDefs() returns it directly
+    //     → getAllColumns() maps each def → Column, preserving order
+    //     → getAllLeafColumns() flatMaps + applies _getOrderColumnsFn
+    //        (identity when columnOrder state is empty — we never set it)
+    //        NOTE: if user-reorderable columns are added, columnOrder state will be set and
+    //        getAllLeafColumns() will no longer match getRealColumn() by position. At that point
+    //        getRealColumnById must be rewritten to look up by id rather than position.
+    //   getRealColumn is built by buildColumns, which maps built-array position → ColumnTemplate
+    //   using the same table.options.columns as input in the same order.
+    //   Both arrays share the same positional index, so getRealColumn(i) matches getAllLeafColumns()[i].
+    //
+    // Visibility safety: getAllLeafColumns() includes hidden columns, so the index is stable
+    // regardless of columnVisibility state. getVisibleLeafColumns() would shift indices and
+    // break the mapping (the root cause of the bug fixed in PR #8226).
+    const index = table.getAllLeafColumns().findIndex((c) => c.id === id);
+    if (index === -1) return undefined;
+    return getRealColumn(index);
+  };
+
   const generateAndDownloadCsv = async (): Promise<void> => {
-    const headers = table.options.columns.reduce<string[]>(
-      (acc, column, index) => {
-        const header = column.header || column.id;
-        if (header && (getRealColumn(index)?.csvDownloadable ?? false)) {
-          acc.push(header as string);
-        }
-        return acc;
-      },
-      [],
-    );
-
     const csvData = await generateCsv({
-      headers,
-      rows: () => table.getCoreRowModel().rows,
-      getRealColumn,
+      table,
+      getRealColumn: getRealColumnById,
+      getExtraHeaderRows: props.columnPicker?.getExtraHeaderRows,
+      onlySelected: !isEmpty(rowSelection),
     });
-
     downloadCsv(csvData, props.csvDownload?.filename);
   };
 
@@ -161,12 +277,17 @@ const useTanStackTableBuilder = <D extends object>(
     body: {
       rows: table.getRowModel().rows,
       getCells: (row) => row.getVisibleCells(),
-      forEachCell: (cell, row, index) => ({
+      // Use getRealColumnById (ID-based) not getRealColumn(index). getVisibleCells() skips hidden
+      // columns, so its positional index diverges from getRealColumn's full-column-list index
+      // whenever any column is hidden — the same misalignment fixed for CSV in PR #8226.
+      forEachCell: (cell, row) => ({
         id: cell.id,
         render: customCellRender(cell),
-        className: getRealColumn(index)?.className,
-        colSpan: getRealColumn(index)?.colSpan?.(row.original),
-        shouldNotRender: getRealColumn(index)?.cellUnless?.(row.original),
+        className: getRealColumnById(cell.column.id)?.className,
+        colSpan: getRealColumnById(cell.column.id)?.colSpan?.(row.original),
+        shouldNotRender: getRealColumnById(cell.column.id)?.cellUnless?.(
+          row.original,
+        ),
       }),
       forEachRow: (row) => ({
         id: row.id,
@@ -178,6 +299,18 @@ const useTanStackTableBuilder = <D extends object>(
             selected: rowSelection[row.id],
           })),
       }),
+      selectedCount: table.getSelectedRowModel().rows.length,
+      allFilteredSelected:
+        table.getFilteredRowModel().rows.length > 0 &&
+        table.getFilteredRowModel().rows.every((r) => r.getIsSelected()),
+      someFilteredSelected: table
+        .getFilteredRowModel()
+        .rows.some((r) => r.getIsSelected()),
+      toggleAllFiltered: (): void => {
+        const filteredRows = table.getFilteredRowModel().rows;
+        const allSelected = filteredRows.every((r) => r.getIsSelected());
+        filteredRows.forEach((r) => r.toggleSelected(!allSelected));
+      },
     },
     handles: {
       getPaginationState: () => pagination,
@@ -212,6 +345,12 @@ const useTanStackTableBuilder = <D extends object>(
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
+      columnPicker: props.columnPicker,
+      getColumnVisibility: () => columnVisibility,
+      commitColumnVisibility: (next) => safeSetVisibility(() => next),
+      onDirectExport: props.columnPicker
+        ? (): Promise<void> => generateAndDownloadCsv()
+        : undefined,
     },
   };
 };
