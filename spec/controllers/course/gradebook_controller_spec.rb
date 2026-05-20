@@ -142,6 +142,7 @@ RSpec.describe Course::GradebookController, type: :controller do
         end
       end
 
+
       context 'with a graded submission where the answer grade is exactly 0' do
         let(:ta) { create(:course_teaching_assistant, course: course) }
         let(:tab) { course.assessment_categories.first.tabs.first }

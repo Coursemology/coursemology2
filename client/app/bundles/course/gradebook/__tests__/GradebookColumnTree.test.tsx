@@ -127,6 +127,7 @@ describe('GradebookColumnTree', () => {
     expect(setVisible).toHaveBeenCalledWith('externalId', expect.any(Boolean));
   });
 
+
   it('name checkbox is disabled and always checked', () => {
     const visibility: Record<string, boolean> = {
       name: false,
