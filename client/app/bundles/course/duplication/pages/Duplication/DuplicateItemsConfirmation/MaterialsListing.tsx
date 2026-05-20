@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { selectDuplicationStore } from 'course/duplication/selectors';
 import {

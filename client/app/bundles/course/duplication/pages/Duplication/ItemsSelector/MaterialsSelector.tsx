@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { ListSubheader, Typography } from '@mui/material';
 
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import BulkSelectors from 'lib/components/core/BulkSelectors';
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { selectDuplicationStore } from 'course/duplication/selectors';
 import { actions } from 'course/duplication/store';
