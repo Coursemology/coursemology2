@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Cell,
   ColumnFiltersState,
@@ -9,7 +9,9 @@ import {
   getSortedRowModel,
   Header,
   Row,
+  Updater,
   useReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 import isEmpty from 'lodash-es/isEmpty';
 
@@ -47,6 +49,47 @@ const useTanStackTableBuilder = <D extends object>(
     pageIndex: props.pagination?.initialPageIndex ?? 0,
   });
 
+  const initialVisibility = useMemo<VisibilityState>(
+    () =>
+      Object.fromEntries(
+        props.columns.map((c) => [c.id ?? (c.of as string), true]),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialVisibility);
+
+  const enforceLocked = (next: VisibilityState): VisibilityState => {
+    const locked = props.columnPicker?.locked;
+    if (!locked || locked.length === 0) return next;
+    const enforced = { ...next };
+    locked.forEach((id) => {
+      enforced[id] = true;
+    });
+    return enforced;
+  };
+
+  const safeSetVisibility = (updater: Updater<VisibilityState>): void => {
+    setColumnVisibility((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      return enforceLocked(next);
+    });
+  };
+
+  // Reconcile when columns change (e.g. async-loaded gradebook assessments).
+  useEffect(() => {
+    setColumnVisibility((prev) => {
+      const currentIds = props.columns.map((c) => c.id ?? (c.of as string));
+      const next: VisibilityState = {};
+      currentIds.forEach((id) => {
+        next[id] = Object.hasOwn(prev, id) ? prev[id] : true;
+      });
+      return enforceLocked(next);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.columns]);
+
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
 
@@ -83,7 +126,9 @@ const useTanStackTableBuilder = <D extends object>(
       columnFilters,
       globalFilter: searchKeyword.trim(),
       pagination,
+      columnVisibility,
     },
+    onColumnVisibilityChange: safeSetVisibility,
     initialState: {
       sorting: props.sort?.initially && [
         {
@@ -205,6 +250,23 @@ const useTanStackTableBuilder = <D extends object>(
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
+      columnPicker: props.columnPicker,
+      getColumnVisibility: () => columnVisibility,
+      commitColumnVisibility: (next) => safeSetVisibility(() => next),
+      onExportFromPicker: props.columnPicker?.onExport
+        ? () => {
+            if (props.columnPicker?.onExport === 'csv') {
+              generateAndDownloadCsv();
+              return;
+            }
+            const visibleIds = table
+              .getVisibleLeafColumns()
+              .map((col) => col.id);
+            (props.columnPicker!.onExport as (ids: string[]) => void)(
+              visibleIds,
+            );
+          }
+        : undefined,
     },
   };
 };
