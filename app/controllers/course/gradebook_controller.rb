@@ -34,7 +34,7 @@ class Course::GradebookController < Course::ComponentController
   end
 
   def fetch_students
-    current_course.levels.to_a
+    current_course.levels.to_a # Warms the AR association cache to prevent N+1 in level_number
     current_course.course_users.students.without_phantom_users.
       calculated(:experience_points).includes(:user).to_a
   end

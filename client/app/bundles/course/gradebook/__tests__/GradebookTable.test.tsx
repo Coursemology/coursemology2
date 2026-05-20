@@ -490,7 +490,6 @@ describe('GradebookTable', () => {
     });
   });
 
-
   describe('cross-page selection', () => {
     it(
       'export label reflects selection count across pages',
