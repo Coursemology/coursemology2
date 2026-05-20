@@ -1,3 +1,4 @@
+import ColumnPickerTemplate from './ColumnPickerTemplate';
 import ColumnTemplate, { Data } from './ColumnTemplate';
 import {
   CsvDownloadTemplate,
@@ -23,6 +24,7 @@ interface TableTemplate<D extends Data> {
   filter?: FilterTemplate;
   toolbar?: ToolbarTemplate<D>;
   sort?: SortTemplate;
+  columnPicker?: ColumnPickerTemplate<D>;
 }
 
 export default TableTemplate;
