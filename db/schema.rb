@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_28_084849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -564,6 +564,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
     t.integer "updater_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.integer "gradebook_weight", default: 0, null: false
     t.index ["category_id"], name: "fk__course_assessment_tabs_category_id"
     t.index ["creator_id"], name: "fk__course_assessment_tabs_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_tabs_updater_id"

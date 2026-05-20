@@ -2,6 +2,11 @@
 class Course::Assessment::Tab < ApplicationRecord
   validates :title, length: { maximum: 255 }, presence: true
   validates :weight, numericality: { only_integer: true }, presence: true
+  validates :gradebook_weight,
+            numericality: { only_integer: true,
+                            greater_than_or_equal_to: 0,
+                            less_than_or_equal_to: 100 },
+            presence: true
   validates :creator, presence: true
   validates :updater, presence: true
   validates :category, presence: true
