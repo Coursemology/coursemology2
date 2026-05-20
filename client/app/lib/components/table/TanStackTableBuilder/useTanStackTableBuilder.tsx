@@ -140,7 +140,12 @@ const useTanStackTableBuilder = <D extends object>(
   });
 
   const getRealColumnById = (id: string): ColumnTemplate<D> | undefined => {
-    const index = table.options.columns.findIndex((c) => c.id === id);
+    // Look up the Column object by TanStack's runtime id, then find its def by reference.
+    // We cannot search table.options.columns by c.id because that field is undefined
+    // for columns that derive their id from accessorKey (the `of` accessor).
+    const col = table.getAllLeafColumns().find((c) => c.id === id);
+    if (!col) return undefined;
+    const index = table.options.columns.findIndex((c) => c === col.columnDef);
     if (index === -1) return undefined;
     return getRealColumn(index);
   };
