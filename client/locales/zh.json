@@ -7862,6 +7862,24 @@
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "日期范围不能超过365天"
   },
+  "lib.components.table.MuiColumnPickerDialog.apply": {
+    "defaultMessage": "应用至视图"
+  },
+  "lib.components.table.MuiColumnPickerDialog.cancel": {
+    "defaultMessage": "取消"
+  },
+  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+    "defaultMessage": "选择列"
+  },
+  "lib.components.table.MuiColumnPickerDialog.export": {
+    "defaultMessage": "应用并导出"
+  },
+  "lib.components.table.MuiTableToolbar.directExport": {
+    "defaultMessage": "导出"
+  },
+  "lib.components.table.MuiTableToolbar.exportTrigger": {
+    "defaultMessage": "导出…"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "无法获取用户。"
   },

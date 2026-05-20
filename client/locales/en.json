@@ -7878,6 +7878,24 @@
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "Date range cannot exceed 365 days"
   },
+  "lib.components.table.MuiColumnPickerDialog.apply": {
+    "defaultMessage": "Apply to view"
+  },
+  "lib.components.table.MuiColumnPickerDialog.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+    "defaultMessage": "Select columns"
+  },
+  "lib.components.table.MuiColumnPickerDialog.export": {
+    "defaultMessage": "Apply and Export"
+  },
+  "lib.components.table.MuiTableToolbar.directExport": {
+    "defaultMessage": "Export"
+  },
+  "lib.components.table.MuiTableToolbar.exportTrigger": {
+    "defaultMessage": "Export…"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "Failed to fetch users."
   },

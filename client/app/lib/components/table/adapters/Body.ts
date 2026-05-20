@@ -26,6 +26,10 @@ interface BodyProps<B, C> {
   getCells: (row: B) => C[];
   forEachCell: (cell: C, row: B, index: number) => CellRender;
   forEachRow: (row: B, index: number) => RowRender;
+  selectedCount?: number;
+  allFilteredSelected?: boolean;
+  someFilteredSelected?: boolean;
+  toggleAllFiltered?: () => void;
 }
 
 export default BodyProps;
