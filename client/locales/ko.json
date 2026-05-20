@@ -4190,6 +4190,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "포럼"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "성적부"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "그룹"
   },
@@ -5350,6 +5353,63 @@
   },
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "이 포럼의 모든 주제를 읽음으로 표시하는 데 실패했습니다. 나중에 다시 시도하세요."
+  },
+  "course.gradebook.GradebookColumnTree.grades": {
+    "defaultMessage": "성적"
+  },
+  "course.gradebook.GradebookColumnTree.email": {
+    "defaultMessage": "이메일"
+  },
+  "course.gradebook.GradebookColumnTree.level": {
+    "defaultMessage": "레벨"
+  },
+  "course.gradebook.GradebookColumnTree.name": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "학생 정보"
+  },
+  "course.gradebook.GradebookColumnTree.totalXp": {
+    "defaultMessage": "총 경험치"
+  },
+  "course.gradebook.GradebookColumnTree.gamification": {
+    "defaultMessage": "게임화"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "열 선택"
+  },
+  "course.gradebook.GradebookIndex.exportAllTooltip": {
+    "defaultMessage": "선택한 행 없음 - 모든 행이 내보내집니다."
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "전체 행 내보내기"
+  },
+  "course.gradebook.GradebookIndex.exportRows": {
+    "defaultMessage": "{count, plural, other {# 행}} 내보내기"
+  },
+  "course.gradebook.GradebookIndex.selectColumns": {
+    "defaultMessage": "열 선택"
+  },
+  "course.gradebook.GradebookIndex.applyAndExport": {
+    "defaultMessage": "적용 및 내보내기"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "성적부를 불러오지 못했습니다."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "성적부"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "이름 또는 이메일로 검색"
+  },
+  "course.gradebook.GradebookIndex.noStudents": {
+    "defaultMessage": "학생 없음"
+  },
+  "course.gradebook.GradebookTable.maxMarks": {
+    "defaultMessage": "최고 점수"
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHint": {
+    "defaultMessage": "성적 열이 선택되지 않았습니다 — 학생 정보만 내보내집니다."
   },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "설명 (선택사항)"

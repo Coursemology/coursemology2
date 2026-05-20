@@ -101,6 +101,13 @@ const MuiColumnPickerPrompt = ({
   return (
     <Prompt
       cancelLabel={t(translations.cancel)}
+      footer={
+        !hasDataColumns && columnPicker.noDataColumnsHint ? (
+          <Alert severity="info" sx={{ mx: 3, mb: 1 }}>
+            {columnPicker.noDataColumnsHint}
+          </Alert>
+        ) : undefined
+      }
       onClickPrimary={commitAndClose}
       onClose={onClose}
       open={open}
@@ -109,11 +116,6 @@ const MuiColumnPickerPrompt = ({
       title={columnPicker.dialogTitle ?? t(translations.defaultTitle)}
     >
       {columnPicker.render(context)}
-      {!hasDataColumns && columnPicker.noDataColumnsHint && (
-        <Alert severity="info" sx={{ mt: 2 }}>
-          {columnPicker.noDataColumnsHint}
-        </Alert>
-      )}
     </Prompt>
   );
 };

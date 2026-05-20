@@ -22,6 +22,7 @@ interface SearchProps<D> {
 export interface CsvDownloadTemplate {
   filename?: string;
   downloadButtonLabel?: string;
+  showDownloadButton?: boolean;
 }
 
 export interface SearchTemplate<D extends Data> {

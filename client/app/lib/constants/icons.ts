@@ -50,6 +50,8 @@ import {
   Star,
   StarOutline,
   SvgIconComponent,
+  TableChart,
+  TableChartOutlined,
   Upload,
   UploadOutlined,
   Videocam,
@@ -65,6 +67,7 @@ interface IconTuple {
 
 export const COURSE_COMPONENT_ICONS = {
   achievement: { outlined: EmojiEventsOutlined, filled: EmojiEvents },
+  gradebook: { outlined: TableChartOutlined, filled: TableChart },
   assessment: { outlined: SendOutlined, filled: Send },
   material: { outlined: FolderOutlined, filled: Folder },
   survey: { outlined: PieChartOutlined, filled: PieChart },

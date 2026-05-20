@@ -4184,6 +4184,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "论坛"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "成绩册"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "组"
   },
@@ -5344,6 +5347,63 @@
   },
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "未能将此论坛中的所有主题标记为已读。请稍后再试。"
+  },
+  "course.gradebook.GradebookColumnTree.grades": {
+    "defaultMessage": "成绩"
+  },
+  "course.gradebook.GradebookColumnTree.email": {
+    "defaultMessage": "电子邮件"
+  },
+  "course.gradebook.GradebookColumnTree.level": {
+    "defaultMessage": "等级"
+  },
+  "course.gradebook.GradebookColumnTree.name": {
+    "defaultMessage": "姓名"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "学生信息"
+  },
+  "course.gradebook.GradebookColumnTree.totalXp": {
+    "defaultMessage": "总经验值"
+  },
+  "course.gradebook.GradebookColumnTree.gamification": {
+    "defaultMessage": "游戏化"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "选择列"
+  },
+  "course.gradebook.GradebookIndex.exportAllTooltip": {
+    "defaultMessage": "未选择行 - 将导出所有行。"
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "导出全部行"
+  },
+  "course.gradebook.GradebookIndex.exportRows": {
+    "defaultMessage": "导出 {count, plural, other {# 行}}"
+  },
+  "course.gradebook.GradebookIndex.selectColumns": {
+    "defaultMessage": "选择列"
+  },
+  "course.gradebook.GradebookIndex.applyAndExport": {
+    "defaultMessage": "应用并导出"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "无法获取成绩册。"
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "成绩册"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "按姓名或电子邮件搜索"
+  },
+  "course.gradebook.GradebookIndex.noStudents": {
+    "defaultMessage": "无学生"
+  },
+  "course.gradebook.GradebookTable.maxMarks": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHint": {
+    "defaultMessage": "未选择成绩列——导出内容将仅包含学生信息。"
   },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "说明（可选）"

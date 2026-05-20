@@ -36,20 +36,14 @@ const generateCsv = <D extends Data>(
       extractHeader(col, options.getRealColumn(col.id)),
     );
 
-    const rows: string[][] = [headers];
+    const colIds = exportColumns.map((col) => col.id);
+    const extraHeaderRows = options.getExtraHeaderRows?.(colIds) ?? [];
+    const rows: string[][] = [headers, ...extraHeaderRows];
 
-    if (options.getExtraHeaderRows) {
-      const extraRows = options.getExtraHeaderRows(
-        exportColumns.map((col) => col.id),
-      );
-      extraRows.forEach((extraRow) => rows.push(extraRow));
-    }
-
-    const dataRows = options.onlySelected
+    const exportRows = options.onlySelected
       ? options.table.getSelectedRowModel().rows
       : options.table.getCoreRowModel().rows;
-
-    dataRows.forEach((row) => {
+    exportRows.forEach((row) => {
       const rowData = exportColumns.map((col) => {
         const realColumn = options.getRealColumn(col.id);
         const value = row.getValue(col.id) as ReactNode;

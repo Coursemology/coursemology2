@@ -15,7 +15,6 @@ import {
 } from '@tanstack/react-table';
 import isEmpty from 'lodash-es/isEmpty';
 
-import { getUserEntity } from 'bundles/users/selectors';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { RowEqualityData, TableProps } from '../adapters';
@@ -35,13 +34,10 @@ type TanStackTableProps<D> = TableProps<
 const useTanStackTableBuilder = <D extends object>(
   props: TableTemplate<D>,
 ): TanStackTableProps<D> => {
-  const currentUserId = useAppSelector(getUserEntity).id;
-  // Namespace the caller's key by userId so two users on the same device
-  // don't share visibility preferences. Guard against userId=0 (not yet loaded).
+  const userId = useAppSelector((state) => state.global.user.user.id);
+  const rawStorageKey = props.columnPicker?.storageKey;
   const effectiveStorageKey =
-    props.columnPicker?.storageKey && currentUserId > 0
-      ? `${currentUserId}:${props.columnPicker.storageKey}`
-      : undefined;
+    userId > 0 && rawStorageKey ? `${userId}:${rawStorageKey}` : undefined;
 
   const [columns, getRealColumn] = buildTanStackColumns(
     props.columns,
@@ -349,7 +345,10 @@ const useTanStackTableBuilder = <D extends object>(
       },
       searchKeyword,
       onSearchKeywordChange: setSearchKeyword,
-      onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
+      onDownloadCsv:
+        props.csvDownload && (props.csvDownload.showDownloadButton ?? true)
+          ? generateAndDownloadCsv
+          : undefined,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,
