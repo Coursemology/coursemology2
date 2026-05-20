@@ -2,8 +2,6 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { ListSubheader, Typography } from '@mui/material';
 
-import BulkSelectors from 'course/duplication/components/BulkSelectors';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { selectDuplicationStore } from 'course/duplication/selectors';
@@ -13,6 +11,8 @@ import {
   DuplicationVideoTabData,
 } from 'course/duplication/types';
 import componentTranslations from 'course/translations';
+import BulkSelectors from 'lib/components/core/BulkSelectors';
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 

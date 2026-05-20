@@ -7868,6 +7868,24 @@
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
   },
+  "lib.components.table.MuiTableToolbar.exportTrigger": {
+    "defaultMessage": "내보내기…"
+  },
+  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+    "defaultMessage": "내보낼 열 선택"
+  },
+  "lib.components.table.MuiColumnPickerDialog.apply": {
+    "defaultMessage": "뷰에 적용"
+  },
+  "lib.components.table.MuiColumnPickerDialog.cancel": {
+    "defaultMessage": "취소"
+  },
+  "lib.components.table.MuiColumnPickerDialog.export": {
+    "defaultMessage": "CSV 내보내기"
+  },
+  "lib.components.table.MuiColumnPickerDialog.identifierRequired": {
+    "defaultMessage": "내보내려면 식별자 열을 하나 이상 선택하세요."
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "사용자를 가져오는 데 실패했습니다."
   },
