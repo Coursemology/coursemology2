@@ -15,7 +15,7 @@ module ApplicationMultitenancy
     tenant_host = deduce_tenant_host
     instance = Instance.find_tenant_by_host_or_default(tenant_host)
 
-    if Rails.env.production? && instance.default? && instance.host.casecmp(tenant_host) != 0
+    if instance.default? && tenant_host.casecmp(Instance.default.host) != 0
       raise ActionController::RoutingError, 'Instance Not Found'
     end
 
@@ -25,14 +25,24 @@ module ApplicationMultitenancy
   # Deduces the current host. We strip any leading www from the host.
   # @return [String] The host, with www removed.
   def deduce_tenant_host
-    stripped_host = request.host.downcase.start_with?('www.') ? request.host[4..] : request.host
-    default_host = Application::Application.config.x.default_host&.gsub(/:\d+$/, '')
+    stripped_host = normalize_tenant_host(request.host)
+    default_host = normalize_tenant_host(Instance.default.host)
 
-    if default_host && stripped_host.downcase.ends_with?(default_host)
+    if default_host && stripped_host == default_host
+      Instance.default.host
+    elsif default_host && stripped_host.ends_with?(default_host)
       stripped_host.sub(default_host, 'coursemology.org')
     else
       stripped_host
     end
+  end
+
+  # We store "host" strings in database without port modifiers,
+  # even when Coursemology is configured with them as part of the host (in local development).
+  def normalize_tenant_host(host)
+    return nil unless host
+
+    (host.starts_with?('www.') ? host[4..] : host).gsub(/:\d+$/, '').downcase
   end
 
   module ClassMethods
