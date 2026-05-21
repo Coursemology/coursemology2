@@ -9,7 +9,7 @@ import {
   DuplicationMaterialData,
 } from 'course/duplication/types';
 import componentTranslations from 'course/translations';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 

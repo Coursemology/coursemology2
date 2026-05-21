@@ -1,5 +1,6 @@
-import { CSSProperties, FC, ReactNode } from 'react';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import { FC, ReactNode } from 'react';
+
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 
 import { ColumnPickerRenderCtx } from '../builder';
 
@@ -33,26 +34,16 @@ const ColumnPickerTreeGroup: FC<ColumnPickerTreeGroupProps> = ({
   const allLocked =
     childIds.length > 0 && childIds.every((id) => locked.includes(id));
 
-  const checkboxStyle: CSSProperties = { marginLeft: indentLevel * 15 };
-
   return (
     <div>
-      <div className="flex items-center">
-        <FormControlLabel
-          className="py-2 px-0 w-auto"
-          control={
-            <Checkbox
-              checked={allVisible}
-              className="py-0 px-2"
-              disabled={allLocked}
-              indeterminate={someVisible}
-              onChange={(e) => ctx.setManyVisible(childIds, e.target.checked)}
-              style={checkboxStyle}
-            />
-          }
-          label={<b>{label}</b>}
-        />
-      </div>
+      <IndentedCheckbox
+        checked={allVisible}
+        disabled={allLocked}
+        indentLevel={indentLevel}
+        indeterminate={someVisible}
+        label={label}
+        onChange={(e) => ctx.setManyVisible(childIds, e.target.checked)}
+      />
       <div>{children}</div>
     </div>
   );

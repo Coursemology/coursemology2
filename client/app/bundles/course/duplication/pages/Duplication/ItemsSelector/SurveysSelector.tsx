@@ -9,7 +9,7 @@ import { actions } from 'course/duplication/store';
 import { DuplicationSurveyData } from 'course/duplication/types';
 import componentTranslations from 'course/translations';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import IndentedCheckbox from 'lib/components/core/IndentedCheckbox';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
