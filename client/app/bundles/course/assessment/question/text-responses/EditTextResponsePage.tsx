@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import {
-  TextResponseData,
+  TextResponseEditableFormData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
@@ -20,8 +20,8 @@ const EditTextResponsePage = (): JSX.Element => {
   const id = parseInt(params?.questionId ?? '', 10) || undefined;
   if (!id) throw new Error(`EditTextResponseForm was loaded with ID: ${id}.`);
 
-  const fetchData = (): Promise<TextResponseFormData<'edit'>> => fetchEdit(id);
-  const handleSubmit = (data: TextResponseData): Promise<void> =>
+  const fetchData = (): Promise<TextResponseFormData> => fetchEdit(id);
+  const handleSubmit = (data: TextResponseEditableFormData): Promise<void> =>
     update(id, data).then(({ redirectUrl }) => {
       toast.success(t(formTranslations.changesSaved));
       window.location.href = redirectUrl;

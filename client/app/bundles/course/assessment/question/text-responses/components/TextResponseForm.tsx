@@ -5,7 +5,7 @@ import {
   AttachmentType,
   INITIAL_MAX_ATTACHMENT_SIZE,
   INITIAL_MAX_ATTACHMENTS,
-  TextResponseData,
+  TextResponseEditableFormData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
@@ -17,7 +17,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 import CommonQuestionFields from '../../components/CommonQuestionFields';
-import { questionSchema, validateSolutions } from '../commons/validations';
+import { questionSchema } from '../commons/validations';
 import {
   getAttachmentTypeFromMaxAttachment,
   getMaxAttachmentFromAttachmentType,
@@ -25,20 +25,17 @@ import {
 } from '../utils';
 
 import FileUploadManager from './FileUploadManager';
-import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
+import SolutionsManager from './SolutionsManager';
 
-export interface TextResponseFormProps<T extends 'new' | 'edit'> {
-  with: TextResponseFormData<T>;
-  onSubmit: (data: TextResponseData) => Promise<void>;
+export interface TextResponseFormProps {
+  with: TextResponseFormData;
+  onSubmit: (data: TextResponseEditableFormData) => Promise<void>;
 }
 
-const TextResponseForm = <T extends 'new' | 'edit'>(
-  props: TextResponseFormProps<T>,
-): JSX.Element => {
+const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
   const { with: data } = props;
 
-  const formattedData = {
-    ...data,
+  const formattedData: TextResponseEditableFormData = {
     question: {
       ...data.question,
       templateText: data.question?.templateText ?? null,
@@ -54,42 +51,21 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
           ? INITIAL_MAX_ATTACHMENT_SIZE
           : data.question!.maxAttachmentSize,
     },
+    solutions: data.solutions ?? [],
   };
 
   const [submitting, setSubmitting] = useState(false);
-  const [isSolutionsDirty, setIsSolutionsDirty] = useState(false);
 
   const formRef = useRef<FormRef>(null);
-  const solutionsRef = useRef<SolutionsManagerRef>(null);
-
-  const prepareSolutions = async (
-    questionType: 'file_upload' | 'text_response',
-  ): Promise<TextResponseData<T>['solutions'] | undefined> => {
-    solutionsRef.current?.resetErrors();
-    if (questionType === 'file_upload') return [];
-
-    const solutions = solutionsRef.current?.getSolutions() ?? [];
-    const errors = await validateSolutions(solutions);
-
-    if (errors) {
-      solutionsRef.current?.setErrors(errors);
-      return undefined;
-    }
-
-    return solutions;
-  };
 
   const { t } = useTranslation();
 
-  const handleSubmit = async (
-    question: TextResponseData['question'],
-  ): Promise<void> => {
-    const solutions = await prepareSolutions(data.questionType);
-    if (!solutions) return;
-
-    const newData: TextResponseData = {
-      questionType: data.questionType,
-      isAssessmentAutograded: data.isAssessmentAutograded,
+  const handleSubmit = async ({
+    solutions,
+    question,
+  }: TextResponseEditableFormData): Promise<void> => {
+    const newData: TextResponseEditableFormData = {
+      solutions: data.questionType === 'file_upload' ? [] : solutions,
       question: {
         ...question,
         isAttachmentRequired:
@@ -100,7 +76,6 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
         maxAttachmentSize: getMaxAttachmentSize(question),
         templateText: question.templateText,
       },
-      solutions,
     };
     setSubmitting(true);
     props.onSubmit(newData).catch((errors) => {
@@ -113,15 +88,14 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     <Form
       ref={formRef}
       contextual
-      dirty={isSolutionsDirty}
       disabled={submitting}
       headsUp
-      initialValues={formattedData.question!}
+      initialValues={formattedData}
       onSubmit={handleSubmit}
       validates={questionSchema(
         t,
-        data.defaultMaxAttachmentSize!,
-        data.defaultMaxAttachments!,
+        data.defaultMaxAttachmentSize,
+        data.defaultMaxAttachments,
       )}
     >
       {(control): JSX.Element => (
@@ -130,6 +104,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             availableSkills={data.availableSkills}
             control={control}
             disabled={submitting}
+            name="question"
             skillsUrl={data.skillsUrl}
           />
           {data.questionType === 'text_response' && (
@@ -181,11 +156,8 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
               title={t(translations.solutions)}
             >
               <SolutionsManager
-                ref={solutionsRef}
                 disabled={submitting}
-                for={data.solutions ?? []}
                 isAssessmentAutograded={data.isAssessmentAutograded}
-                onDirtyChange={setIsSolutionsDirty}
               />
             </Section>
           )}
