@@ -1,4 +1,4 @@
-import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
+import { AvailableSkills, QuestionFormData } from '../questions';
 
 export interface SolutionData {
   id: number | string;
@@ -31,17 +31,18 @@ export interface TextResponseQuestionFormData extends QuestionFormData {
   templateText: string | null;
 }
 
-export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
-  solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
+export interface TextResponseFormData extends AvailableSkills {
+  solutions?: SolutionEntity[];
   questionType: 'file_upload' | 'text_response';
   isAssessmentAutograded: boolean;
-  defaultMaxAttachmentSize?: number;
-  defaultMaxAttachments?: number;
-  question: TextResponseQuestionFormData | OptionalIfNew<T>;
+  defaultMaxAttachmentSize: number;
+  defaultMaxAttachments: number;
+  question: TextResponseQuestionFormData;
 }
-
-export type TextResponseFormData<T extends 'new' | 'edit' = 'edit'> =
-  TextResponseData<T> & AvailableSkills;
+export type TextResponseEditableFormData = Pick<
+  TextResponseFormData,
+  'question' | 'solutions'
+>;
 
 type TextResponseFormDataQuestion = TextResponseFormData['question'];
 
@@ -62,7 +63,7 @@ export interface TextResponsePostData {
     solutions_attributes?: {
       id?: SolutionEntity['id'];
       solution?: SolutionEntity['solution'];
-      solutionType?: SolutionEntity['solutionType'];
+      solution_type?: SolutionEntity['solutionType'];
       grade?: SolutionEntity['grade'];
       explanation?: SolutionEntity['explanation'];
       _destroy?: SolutionEntity['toBeDeleted'];

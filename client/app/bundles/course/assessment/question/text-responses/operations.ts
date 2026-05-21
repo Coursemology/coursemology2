@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import {
-  TextResponseData,
+  TextResponseEditableFormData,
   TextResponseFormData,
   TextResponsePostData,
 } from 'types/course/assessment/question/text-responses';
@@ -9,7 +9,7 @@ import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
 
 export const fetchNewTextResponse = async (): Promise<
-  TextResponseFormData<'new'>
+  Omit<TextResponseFormData, 'question'>
 > => {
   const response =
     await CourseAPI.assessment.question.textResponse.fetchNewTextResponse();
@@ -17,22 +17,22 @@ export const fetchNewTextResponse = async (): Promise<
 };
 
 export const fetchNewFileUpload = async (): Promise<
-  TextResponseFormData<'new'>
+  Omit<TextResponseFormData, 'question'>
 > => {
   const response =
     await CourseAPI.assessment.question.textResponse.fetchNewFileUpload();
   return response.data;
 };
 
-export const fetchEdit = async (
-  id: number,
-): Promise<TextResponseFormData<'edit'>> => {
+export const fetchEdit = async (id: number): Promise<TextResponseFormData> => {
   const response =
     await CourseAPI.assessment.question.textResponse.fetchEdit(id);
   return response.data;
 };
 
-const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
+const adaptPostData = (
+  data: TextResponseEditableFormData,
+): TextResponsePostData => ({
   question_text_response: {
     title: data.question.title,
     description: data.question.description,
@@ -55,7 +55,9 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
   },
 });
 
-export const create = async (data: TextResponseData): Promise<JustRedirect> => {
+export const create = async (
+  data: TextResponseEditableFormData,
+): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
   try {
@@ -71,7 +73,7 @@ export const create = async (data: TextResponseData): Promise<JustRedirect> => {
 
 export const update = async (
   id: number,
-  data: TextResponseData,
+  data: TextResponseEditableFormData,
 ): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 

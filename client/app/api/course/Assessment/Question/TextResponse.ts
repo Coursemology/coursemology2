@@ -12,17 +12,17 @@ export default class TextResponseAPI extends BaseAPI {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/question/text_responses`;
   }
 
-  fetchNewTextResponse(): APIResponse<TextResponseFormData<'new'>> {
+  fetchNewTextResponse(): APIResponse<Omit<TextResponseFormData, 'question'>> {
     return this.client.get(`${this.#urlPrefix}/new`);
   }
 
-  fetchNewFileUpload(): APIResponse<TextResponseFormData<'new'>> {
+  fetchNewFileUpload(): APIResponse<Omit<TextResponseFormData, 'question'>> {
     return this.client.get(`${this.#urlPrefix}/new`, {
       params: { file_upload: true },
     });
   }
 
-  fetchEdit(id: number): APIResponse<TextResponseFormData<'edit'>> {
+  fetchEdit(id: number): APIResponse<TextResponseFormData> {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 

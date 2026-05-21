@@ -12,12 +12,12 @@ describe('<SingleFileInput />', () => {
     // See https://github.com/jsdom/jsdom/issues/1721.
     // `jest.spyOn` cannot be used here because `URL.createObjectURL` is not
     // even available in the environment to begin with to be mocked.
-    // eslint-disable-next-line jest/prefer-spy-on
-    URL.createObjectURL = jest.fn();
+
+    URL.createObjectURL = jest.fn() as typeof URL.createObjectURL;
   });
 
   afterEach(() => {
-    URL.createObjectURL.mockReset();
+    (URL.createObjectURL as jest.Mock).mockReset();
   });
 
   it('renders with url and name', () => {
