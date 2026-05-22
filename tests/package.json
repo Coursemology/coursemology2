@@ -4,8 +4,8 @@
   "repository": "https://github.com/Coursemology/coursemology2.git",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.2",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0",
     "nyc": "^18.0.0"
   },
   "scripts": {
