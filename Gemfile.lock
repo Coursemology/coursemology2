@@ -412,7 +412,7 @@ GEM
       activerecord (>= 7)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.5.7)
+    net-imap (0.5.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -423,7 +423,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.4)
-    nokogiri (1.19.2)
+    nokogiri (1.19.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -758,7 +758,7 @@ DEPENDENCIES
   mimemagic (= 0.4.3)
   mini_magick
   neighbor
-  nokogiri (>= 1.18.8)
+  nokogiri (>= 1.19.3)
   ostruct
   parallel_tests
   pdf-reader
