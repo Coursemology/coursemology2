@@ -201,7 +201,7 @@ gem 'mini_magick'
 # Library for reading and writing zip files
 gem 'rubyzip', '~> 3.3', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
-gem 'nokogiri', '>= 1.18.8'
+gem 'nokogiri', '>= 1.19.3'
 
 # Polyglot support
 gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'
