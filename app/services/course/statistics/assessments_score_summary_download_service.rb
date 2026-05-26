@@ -75,7 +75,7 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadService
     # content
     @all_students.each do |student|
       csv << [student.name, student.user.email, student.phantom? ? 'phantom' : 'normal',
-              *(@include_external_id ? [student.external_id || ''] : []),
+              *(@include_external_id ? [student.external_id.presence || ''] : []),
               *@assessments.flat_map { |a| @submission_grade_hash[[student.id, a.id]] || '' }]
     end
   end

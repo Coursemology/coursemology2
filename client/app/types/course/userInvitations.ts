@@ -11,21 +11,46 @@ export interface InvitationFileEntity {
   file?: Blob;
 }
 
-export type DuplicateReason =
+export type InvitationFailureReason =
   | 'duplicate_email_in_file'
   | 'duplicate_external_id_in_file'
-  | 'external_id_taken';
+  | 'external_id_taken'
+  | 'failed_to_send';
 
-export interface DuplicateUserData extends CourseUserListData {
-  reason?: DuplicateReason;
+export interface FailedInvitationRowData extends CourseUserListData {
+  reason: InvitationFailureReason;
+  timelineAlgorithm?: TimelineAlgorithm;
 }
 
 export interface InvitationResult {
-  duplicateUsers?: DuplicateUserData[];
+  failedUsers?: FailedInvitationRowData[];
   existingCourseUsers?: CourseUserData[];
   existingInvitations?: InvitationListData[];
   newCourseUsers?: CourseUserData[];
   newInvitations?: InvitationListData[];
+  updatedCourseUsers?: InvitationUpdatedItem[];
+  updatedInvitations?: InvitationUpdatedItem[];
+}
+
+export interface InvitationSuccessRow {
+  id: string;
+  name: string;
+  email: string;
+  externalId: string | null;
+  role: string;
+  phantom: boolean;
+  timelineAlgorithm?: TimelineAlgorithm;
+}
+
+export interface InvitationUpdatedItem {
+  id: number;
+  name: string;
+  email: string;
+  externalId: string | null;
+  previousExternalId: string | null;
+  role: string;
+  phantom: boolean;
+  timelineAlgorithm?: TimelineAlgorithm;
 }
 
 export interface IndividualInvites {

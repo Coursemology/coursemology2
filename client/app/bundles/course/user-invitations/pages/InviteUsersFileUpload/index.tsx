@@ -60,7 +60,7 @@ const translations = defineMessages({
   fileUploadInfoExternalId: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
     defaultMessage:
-      'External ID is an optional field for linking a user to an external system. If provided, it must be unique within the course - duplicate external IDs will be skipped.',
+      'External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course.',
   },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',

@@ -134,6 +134,7 @@ export interface ManageCourseUsersSharedData {
   requestsCount: number;
   invitationsCount: number;
   defaultTimelineAlgorithm: TimelineAlgorithm;
+  showPersonalizedTimelineFeatures?: boolean;
 }
 
 export interface LearningRateRecordsData {

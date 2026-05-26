@@ -6975,13 +6975,16 @@
     "defaultMessage": "现有课程用户（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsersInfo": {
-    "defaultMessage": "在邀请中找到了此邮箱对应的现有课程用户。他们不会收到邮件。"
+    "defaultMessage": "这些用户已在课程中注册。他们未被重新注册。"
+  },
+  "course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo": {
+    "defaultMessage": "如有指定，外部ID已更新。"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitations": {
     "defaultMessage": "现有邀请（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitationsInfo": {
-    "defaultMessage": "对于使用此邮箱的用户的邀请已存在。他们不会再次收到邮件。"
+    "defaultMessage": "这些用户已有待处理的邀请。他们未被重新邀请。"
   },
   "course.userInvitations.InvitationResultDialog.header": {
     "defaultMessage": "邀请摘要"
@@ -6992,17 +6995,38 @@
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "新邀请（{count}）"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateEmailInFile": {
-    "defaultMessage": "上传文件中存在重复的电子邮箱"
+  "course.userInvitations.InvitationResultDialog.actionableTitle": {
+    "defaultMessage": "失败（{count}）"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateExternalIdInFile": {
+  "course.userInvitations.InvitationResultDialog.failedInvitations": {
+    "defaultMessage": "发送失败（{count}）"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitationsInfo": {
+    "defaultMessage": "发送邀请邮件时出错，请重试。"
+  },
+  "course.userInvitations.InvitationResultDialog.summaryFailed": {
+    "defaultMessage": "{count} 个失败。"
+  },
+  "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
+    "defaultMessage": "{count} 条已更新 · 优先显示"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateEmailInFile": {
+    "defaultMessage": "上传文件中存在重复的电子邮件地址"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateExternalIdInFile": {
     "defaultMessage": "上传文件中存在重复的外部编号"
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTaken": {
+  "course.userInvitations.InvitationResultFailedTable.externalIdTaken": {
     "defaultMessage": "该外部编号已分配给另一名课程成员"
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTakenEnrolled": {
-    "defaultMessage": "已是课程成员 — 无法应用外部编号（该编号已分配给另一名成员）"
+  "course.userInvitations.InvitationResultFailedTable.failedToSend": {
+    "defaultMessage": "邀请邮件发送失败，请重试 - 如问题持续发生，请联系我们获取帮助"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTakenEnrolled": {
+    "defaultMessage": "已是课程成员 — 外部编号未能应用（已分配给另一名成员"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.previouslyLabel": {
+    "defaultMessage": "之前的值：{value}"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "已接受邀请"
@@ -7050,7 +7074,7 @@
     "defaultMessage": "每个邀请必须使用课程内唯一的电子邮件地址。重复的电子邮件将被跳过。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "外部编号是将用户与外部系统关联的可选字段。若提供，则必须在课程内唯一——重复的外部编号将被跳过。"
+    "defaultMessage": "外部编号为可选项。如填写，将取代该用户现有的外部编号，且不得与本课程内其他用户重复。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "上传具有以下格式的 .csv 文件："

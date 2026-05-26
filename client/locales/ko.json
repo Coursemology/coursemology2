@@ -6981,13 +6981,16 @@
     "defaultMessage": "기존 과정 사용자 ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsersInfo": {
-    "defaultMessage": "초대에서 이 이메일의 기존 과정 사용자가 발견되었습니다. 초대되지 않았습니다."
+    "defaultMessage": "이 사용자들은 이미 과정에 등록되어 있습니다. 재등록되지 않습니다."
+  },
+  "course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo": {
+    "defaultMessage": "외부 ID가 지정된 경우 업데이트되었습니다."
   },
   "course.userInvitations.InvitationResultDialog.existingInvitations": {
     "defaultMessage": "기존 초대장 ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitationsInfo": {
-    "defaultMessage": "이 이메일의 기존 초대장이 이미 존재합니다. 초대되지 않았습니다."
+    "defaultMessage": "이 사용자들은 이미 대기 중인 초대장이 있습니다. 재초대되지 않습니다."
   },
   "course.userInvitations.InvitationResultDialog.header": {
     "defaultMessage": "초대 요약"
@@ -6998,17 +7001,38 @@
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "새 초대장 ({count})"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateEmailInFile": {
+  "course.userInvitations.InvitationResultDialog.actionableTitle": {
+    "defaultMessage": "실패 ({count})"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitations": {
+    "defaultMessage": "전송 실패 ({count})"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitationsInfo": {
+    "defaultMessage": "초대 이메일 전송 중 오류가 발생했습니다. 다시 시도해 주세요."
+  },
+  "course.userInvitations.InvitationResultDialog.summaryFailed": {
+    "defaultMessage": "{count}건이 실패했습니다."
+  },
+  "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
+    "defaultMessage": "{count}개 업데이트됨 · 먼저 표시"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateEmailInFile": {
     "defaultMessage": "업로드 파일에 중복된 이메일 주소가 있습니다"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateExternalIdInFile": {
+  "course.userInvitations.InvitationResultFailedTable.duplicateExternalIdInFile": {
     "defaultMessage": "업로드 파일에 중복된 외부 ID가 있습니다"
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTaken": {
-    "defaultMessage": "해당 외부 ID는 이미 다른 강의 구성원에게 할당되어 있습니다"
+  "course.userInvitations.InvitationResultFailedTable.externalIdTaken": {
+    "defaultMessage": "해당 외부 ID는 이미 다른 과정 구성원에게 할당되어 있습니다"
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTakenEnrolled": {
-    "defaultMessage": "이미 강의 구성원입니다 — 외부 ID를 적용할 수 없습니다(해당 ID가 이미 다른 구성원에게 할당되어 있습니다)"
+  "course.userInvitations.InvitationResultFailedTable.failedToSend": {
+    "defaultMessage": "초대 이메일 전송에 실패했습니다. 다시 시도해 주세요 - 문제가 지속되면 저희에게 문의해 주세요"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTakenEnrolled": {
+    "defaultMessage": "이미 과정 구성원입니다 — 외부 ID를 적용할 수 없습니다(이미 다른 구성원에게 할당됨)"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.previouslyLabel": {
+    "defaultMessage": "이전 값: {value}"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "수락된 초대"
@@ -7056,7 +7080,7 @@
     "defaultMessage": "각 초대는 과정 내에서 고유한 이메일 주소를 사용해야 합니다. 중복된 이메일은 건너뜁니다."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "외부 ID는 사용자를 외부 시스템과 연결하기 위한 선택적 필드입니다. 입력된 경우 과정 내에서 고유해야 하며, 중복된 외부 ID는 건너뜁니다."
+    "defaultMessage": "외부 ID는 선택 사항입니다. 입력된 경우 해당 사용자의 기존 외부 ID를 덮어쓰며, 과정 내에서 고유해야 합니다."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "다음 형식으로 .csv 파일을 업로드하세요:"

@@ -33,14 +33,14 @@ module Course::UniqueExternalIdConcern
   end
 
   def external_id_taken_by_invitation?
-    query = Course::UserInvitation.unconfirmed.where(course_id: course_id, external_id: external_id)
-    query = query.where.not(id: id) if is_a?(Course::UserInvitation)
-    query.exists?
+    scope = Course::UserInvitation.unconfirmed.where(course_id: course_id, external_id: external_id)
+    scope = scope.where.not(id: id) if is_a?(Course::UserInvitation)
+    scope.exists?
   end
 
   def external_id_taken_by_course_user?
-    query = CourseUser.where(course_id: course_id, external_id: external_id)
-    query = query.where.not(id: id) if is_a?(CourseUser)
-    query.exists?
+    scope = CourseUser.where(course_id: course_id, external_id: external_id)
+    scope = scope.where.not(id: id) if is_a?(CourseUser)
+    scope.exists?
   end
 end

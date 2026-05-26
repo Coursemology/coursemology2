@@ -97,9 +97,32 @@ RSpec.describe CourseUser, type: :model do
       context 'when a pending invitation in the same course has the same external_id' do
         let!(:invitation) { create(:course_user_invitation, course: course, external_id: 'pending-id') }
 
-        it 'is invalid' do
+        it 'is invalid for a new record' do
           student = build(:course_student, course: course, external_id: 'pending-id')
           expect(student).not_to be_valid
+        end
+
+        it 'is invalid when updating an existing course user to match the pending invitation ext id' do
+          student = create(:course_student, course: course, external_id: nil)
+          expect(student.update(external_id: 'pending-id')).to be(false)
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+
+        it 'is invalid even when the course user DB id happens to equal the pending invitation DB id' do
+          # Regression guard: validate_unique_external_id_within_course mistakenly applied
+          # where.not(id: self.id) to the invitations query as well as the course_user query,
+          # rather than just the course_user query ("don't compare me against myself").
+          # So if a pending invitation claimed the same external_id, the check would
+          # accidentally exclude it and incorrectly allow the external_id through.
+          # This test ensures that collision is still caught when the IDs happen to match.
+          student = create(:course_student, course: course, external_id: nil)
+          allow(student).to receive(:id).and_return(invitation.id)
+
+          student.external_id = 'pending-id'
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
         end
       end
 

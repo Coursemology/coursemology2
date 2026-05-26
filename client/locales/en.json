@@ -6994,13 +6994,16 @@
     "defaultMessage": "Existing Course Users ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsersInfo": {
-    "defaultMessage": "Existing course users with this email were found in the invitation. They were not invited."
+    "defaultMessage": "These users are already enrolled in this course. They were not re-enrolled."
+  },
+  "course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo": {
+    "defaultMessage": "External IDs were updated where specified."
   },
   "course.userInvitations.InvitationResultDialog.existingInvitations": {
     "defaultMessage": "Existing Invitations ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitationsInfo": {
-    "defaultMessage": "Existing invitations for these users with this email already exist. They were not invited."
+    "defaultMessage": "These users already have a pending invitation. They were not re-invited."
   },
   "course.userInvitations.InvitationResultDialog.header": {
     "defaultMessage": "Invitation Summary"
@@ -7011,17 +7014,44 @@
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "New Invitations ({count})"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateEmailInFile": {
-    "defaultMessage": "Duplicate email in upload"
+  "course.userInvitations.InvitationResultDialog.actionableTitle": {
+    "defaultMessage": "Failed ({count})"
   },
-  "course.userInvitations.InvitationResultUsersTable.duplicateExternalIdInFile": {
-    "defaultMessage": "Duplicate external ID in upload"
+  "course.userInvitations.InvitationResultDialog.failedInvitations": {
+    "defaultMessage": "Failed to Send ({count})"
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTaken": {
-    "defaultMessage": "External ID is already assigned to another course member"
+  "course.userInvitations.InvitationResultDialog.failedInvitationsInfo": {
+    "defaultMessage": "Error occurred when sending invitation email, please try again."
   },
-  "course.userInvitations.InvitationResultUsersTable.externalIdTakenEnrolled": {
-    "defaultMessage": "Already a course member — external ID could not be applied (already assigned to another member)"
+  "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
+    "defaultMessage": "{count} updated · shown first"
+  },
+  "course.userInvitations.InvitationResultDialog.summary": {
+    "defaultMessage": "{newInvitations} new {newInvitations, plural, one {invitation} other {invitations}} sent, {newEnrollments} directly enrolled, {alreadyInCourse} already in course."
+  },
+  "course.userInvitations.InvitationResultDialog.summaryFailed": {
+    "defaultMessage": "{count} failed."
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateEmailInFile": {
+    "defaultMessage": "Duplicate email in uploaded CSV"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateExternalIdInFile": {
+    "defaultMessage": "Duplicate external ID in uploaded CSV"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTaken": {
+    "defaultMessage": "External ID is taken by another course member"
+  },
+  "course.userInvitations.InvitationResultFailedTable.failedToSend": {
+    "defaultMessage": "Failed to send invitation email, please try again - if failures persist, contact us for assistance"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.no": {
+    "defaultMessage": "No"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.previouslyLabel": {
+    "defaultMessage": "Previously: {value}"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.yes": {
+    "defaultMessage": "Yes"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "Accepted Invitations"
@@ -7066,7 +7096,7 @@
     "defaultMessage": "Each invitation must use a unique email address within the course. Duplicate emails will be skipped."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "External ID is an optional field for linking a user to an external system. If provided, it must be unique within the course - duplicate external IDs will be skipped."
+    "defaultMessage": "External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "Upload a .csv file with the following format:"

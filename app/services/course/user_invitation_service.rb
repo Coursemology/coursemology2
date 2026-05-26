@@ -24,28 +24,37 @@ class Course::UserInvitationService
   # because Rails does not handle duplicate nested attribute uniqueness constraints.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [Array<Integer>|nil] An array containing the the size of new_invitations, existing_invitations,
-  #   new_course_users and existing_course_users, duplicate_users respectively if success. nil when fail.
+  # @return [Array<Integer>|nil] An array containing the size of new_invitations, existing_invitations,
+  #   new_course_users, existing_course_users, failed_users, updated_invitations, updated_course_users
+  #   respectively if success. nil when fail.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
     new_invitations = nil
     existing_invitations = nil
     new_course_users = nil
     existing_course_users = nil
-    duplicate_users = nil
+    failed_users = nil
+    updated_invitations = nil
+    updated_course_users = nil
 
     success = Course.transaction do
       new_invitations, existing_invitations,
-      new_course_users, existing_course_users, duplicate_users = invite_users(users)
+      new_course_users, existing_course_users,
+      failed_users, updated_invitations, updated_course_users = invite_users(users)
+      raise ActiveRecord::Rollback unless updated_invitations.all? { |u| u[:record].save }
+      raise ActiveRecord::Rollback unless updated_course_users.all? { |u| u[:record].save }
       raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
       raise ActiveRecord::Rollback unless new_course_users.all?(&:save)
 
       true
     end
 
-    send_registered_emails(new_course_users) if success
-    send_invitation_emails(new_invitations) if success
-    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users] : nil
+    return unless success
+
+    send_registered_emails(new_course_users)
+    send_invitation_emails(new_invitations)
+    [new_invitations, existing_invitations, new_course_users, existing_course_users,
+     failed_users, updated_invitations, updated_course_users]
   end
 
   # Resends invitation emails to CourseUsers to the given course.
@@ -76,7 +85,9 @@ class Course::UserInvitationService
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
     unique_users, parse_duplicates = parse_invitations(users)
-    @duplicate_users = parse_duplicates
-    process_invitations(unique_users) + [@duplicate_users]
+    @failed_users = parse_duplicates
+    @updated_invitations = []
+    @updated_course_users = []
+    process_invitations(unique_users) + [@failed_users, @updated_invitations, @updated_course_users]
   end
 end

@@ -6,7 +6,6 @@ import {
   InvitationStatus,
 } from 'types/course/userInvitations';
 
-import { getManageCourseUserPermissions } from 'course/users/selectors';
 import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import { ColumnTemplate } from 'lib/components/table';
@@ -18,6 +17,7 @@ import { formatMiniDateTime } from 'lib/moment';
 import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
+import { getManageCourseUsersSharedData } from '../../selectors';
 import translations from '../../translations';
 import InvitationActionButtons from '../buttons/InvitationActionButtons';
 import ResendAllInvitationsButton from '../buttons/ResendAllInvitationsButton';
@@ -140,7 +140,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
   );
 
   const { t } = useTranslation();
-  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const { showPersonalizedTimelineFeatures } = useAppSelector(
+    getManageCourseUsersSharedData,
+  );
 
   const columns: ColumnTemplate<InvitationRowData>[] = [
     {
@@ -169,7 +171,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
             title: t(tableTranslations.externalId),
             sortable: false,
             searchable: false,
-            cell: (datum) => datum.externalId ?? null,
+            cell: (datum) => datum.externalId ?? '',
           } satisfies ColumnTemplate<InvitationRowData>,
         ]
       : []),
@@ -186,7 +188,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         TIMELINE_ALGORITHMS.find(
           (timeline) => timeline.value === datum.timelineAlgorithm,
         )?.label ?? '-',
-      unless: !permissions.canManagePersonalTimes,
+      unless: !showPersonalizedTimelineFeatures,
     },
     {
       id: 'status',
