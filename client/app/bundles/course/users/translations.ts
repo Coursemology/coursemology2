@@ -7,7 +7,7 @@ const translations = defineMessages({
   },
   searchText: {
     id: 'course.users.ManageUsersTable.ManageUsersTable.searchText',
-    defaultMessage: 'Search by name or email',
+    defaultMessage: 'Search by name, email or external ID',
   },
   renameSuccess: {
     id: 'course.users.ManageUsersTable.renameSuccess',

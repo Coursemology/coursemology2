@@ -170,8 +170,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
             of: 'externalId',
             title: t(tableTranslations.externalId),
             sortable: false,
-            searchable: false,
-            cell: (datum) => datum.externalId ?? '',
+            searchable: true,
+            cell: (datum) => datum.externalId ?? null,
           } satisfies ColumnTemplate<InvitationRowData>,
         ]
       : []),
@@ -280,6 +280,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
       data={processedInvitations}
       getRowId={(datum) => datum.id.toString()}
       indexing={{ indices: true }}
+      search={{
+        searchPlaceholder: t(translations.searchText),
+      }}
       sort={{
         initially: { by: 'status', order: 'asc' },
       }}

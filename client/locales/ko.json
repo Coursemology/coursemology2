@@ -6270,7 +6270,7 @@
     "defaultMessage": "학생 통계"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
-    "defaultMessage": "학생 이름 또는 학생 유형으로 검색"
+    "defaultMessage": "학생 이름, 학생 유형 또는 외부 ID로 검색"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "학생 데이터를 가져오는 데 실패했습니다!"
@@ -7172,6 +7172,9 @@
   "course.userInvitations.UserInvitationsTable.noInvitations": {
     "defaultMessage": "초대가 없습니다."
   },
+  "course.userInvitations.UserInvitationsTable.searchText": {
+    "defaultMessage": "이름, 이메일 또는 외부 ID로 검색"
+  },
   "course.userInvitations.UserInvitationsTable.pending": {
     "defaultMessage": "대기 중"
   },
@@ -7215,7 +7218,7 @@
     "defaultMessage": "사용자가 없습니다."
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "이름 또는 이메일로 검색"
+    "defaultMessage": "이름, 이메일 또는 외부 ID로 검색"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "타임라인에 할당"
