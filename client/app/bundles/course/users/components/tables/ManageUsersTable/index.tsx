@@ -195,15 +195,11 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
             if (!user.name && !user.email) return false;
             if (!filterValue?.length) return true;
 
+            const query = filterValue.toLowerCase().trim();
             return (
-              user.name
-                .toLowerCase()
-                .trim()
-                .includes(filterValue.toLowerCase().trim()) ||
-              user.email
-                .toLowerCase()
-                .trim()
-                .includes(filterValue.toLowerCase().trim())
+              user.name.toLowerCase().trim().includes(query) ||
+              user.email.toLowerCase().trim().includes(query) ||
+              (user.externalId?.toLowerCase().trim().includes(query) ?? false)
             );
           },
         },

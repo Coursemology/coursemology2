@@ -61,7 +61,7 @@ const translations = defineMessages({
   },
   searchBar: {
     id: 'course.statistics.StatisticsIndex.students.searchBar',
-    defaultMessage: 'Search by Student Name or Student Type',
+    defaultMessage: 'Search by Student Name, Student Type or External ID',
   },
 });
 

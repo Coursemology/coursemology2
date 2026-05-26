@@ -6264,7 +6264,7 @@
     "defaultMessage": "学生统计"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
-    "defaultMessage": "按学生姓名或学生类型搜索"
+    "defaultMessage": "按学生姓名、学生类型或外部编号搜索"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "获取学生数据失败！"
@@ -7166,6 +7166,9 @@
   "course.userInvitations.UserInvitationsTable.noInvitations": {
     "defaultMessage": "没有邀请。"
   },
+  "course.userInvitations.UserInvitationsTable.searchText": {
+    "defaultMessage": "按姓名、电子邮件或外部ID搜索"
+  },
   "course.userInvitations.UserInvitationsTable.pending": {
     "defaultMessage": "待处理"
   },
@@ -7209,7 +7212,7 @@
     "defaultMessage": "没有用户"
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "按姓名、电子邮件、角色等搜索。"
+    "defaultMessage": "按姓名、电子邮件或外部ID搜索"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "分配到时间线"

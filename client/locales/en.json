@@ -6289,7 +6289,7 @@
     "defaultMessage": "Student Statistics"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
-    "defaultMessage": "Search by Student Name or Student Type"
+    "defaultMessage": "Search by Student Name, Student Type or External ID"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "Failed to fetch student data!"
@@ -7231,7 +7231,7 @@
     "defaultMessage": "There are no users"
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "Search by name or email"
+    "defaultMessage": "Search by name, email or external ID"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "Assign to timeline"
