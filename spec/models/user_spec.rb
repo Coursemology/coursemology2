@@ -193,6 +193,20 @@ RSpec.describe User do
       end
     end
 
+    describe '#build_course_user_from_invitation' do
+      let(:course) { create(:course) }
+      let(:user) { create(:user) }
+
+      context 'when invitation has a blank external_id' do
+        let(:invitation) { build(:course_user_invitation, course: course, external_id: '') }
+
+        it 'sets external_id to nil on the built CourseUser' do
+          user.build_course_user_from_invitation(invitation)
+          expect(user.course_users.last.external_id).to be_nil
+        end
+      end
+    end
+
     describe '#send_reset_password_instructions' do
       subject { create(:user) }
 

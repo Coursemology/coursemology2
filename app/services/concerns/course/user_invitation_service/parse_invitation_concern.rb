@@ -50,20 +50,20 @@ module Course::UserInvitationService::ParseInvitationConcern
     seen_emails = Set.new
     seen_external_ids = Set.new
     unique_users = []
-    duplicate_users = []
+    failed_users = []
     users.each do |user|
       ext_id = user[:external_id].presence
       if seen_emails.include?(user[:email])
-        duplicate_users.push(user.merge(reason: :duplicate_email_in_file))
+        failed_users.push(user.merge(reason: :duplicate_email_in_file))
       elsif ext_id && seen_external_ids.include?(ext_id)
-        duplicate_users.push(user.merge(reason: :duplicate_external_id_in_file))
+        failed_users.push(user.merge(reason: :duplicate_external_id_in_file))
       else
         seen_emails.add(user[:email])
         seen_external_ids.add(ext_id) if ext_id
         unique_users << user
       end
     end
-    [unique_users, duplicate_users]
+    [unique_users, failed_users]
   end
 
   # Change all invitees' roles to :student if inviter is a teaching_assistant.
@@ -150,6 +150,10 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Hash] The parsed invitation attributes given the row.
   def parse_file_row(row)
     return nil if row[1].blank?
+
+    if !@current_course.show_personalized_timeline_features? && row.length > 5
+      raise I18n.t('errors.course.user_invitations.timeline_template_mismatch')
+    end
 
     row[0] = row[1] if row[0].blank?
     role = parse_file_role(row[2])

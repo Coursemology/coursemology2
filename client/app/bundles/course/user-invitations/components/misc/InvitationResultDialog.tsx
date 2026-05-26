@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
+import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import HelpIcon from '@mui/icons-material/Help';
 import {
   Button,
@@ -10,29 +11,30 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { InvitationResult } from 'types/course/userInvitations';
+import { CourseUserData } from 'types/course/courseUsers';
+import {
+  FailedInvitationRowData,
+  InvitationListData,
+  InvitationResult,
+  InvitationSuccessRow,
+  InvitationUpdatedItem,
+} from 'types/course/userInvitations';
 
-import InvitationResultInvitationsTable from '../tables/InvitationResultInvitationsTable';
-import InvitationResultUsersTable from '../tables/InvitationResultUsersTable';
+import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+import { getManageCourseUsersSharedData } from '../../selectors';
+import InvitationResultExistingTable, {
+  ExistingRow,
+} from '../tables/InvitationResultExistingTable';
+import InvitationResultFailedTable from '../tables/InvitationResultFailedTable';
+import InvitationResultPrimaryTable from '../tables/InvitationResultPrimaryTable';
+
+interface Props {
   open: boolean;
   handleClose: () => void;
   invitationResult: InvitationResult;
 }
-
-const styles = {
-  icon: {
-    fontSize: '16px',
-    marginRight: '4px',
-  },
-  dialogStyle: {
-    top: 40,
-    '& .MuiDialog-paper': {
-      overflowY: 'hidden',
-    },
-  },
-};
 
 const translations = defineMessages({
   header: {
@@ -43,67 +45,147 @@ const translations = defineMessages({
     id: 'course.userInvitations.InvitationResultDialog.close',
     defaultMessage: 'Close',
   },
-  body: {
-    id: 'course.userInvitations.InvitationResultDialog.body',
+  summary: {
+    id: 'course.userInvitations.InvitationResultDialog.summary',
     defaultMessage:
-      '{newInvitationsCount, plural, =0 {No new users were} one {# new user has been} other {# new users have been}} invited to Coursemology. ' +
-      '{newCourseUsersCount, plural, =0 {No user with Coursemology account has been} one {# new user with existing Coursemology account has been} other {# new users with existing Coursemology accounts have been}} added to this course.',
+      '{newInvitations} new {newInvitations, plural, one {invitation} other {invitations}} sent, {newEnrollments} directly enrolled, {alreadyInCourse} already in course.',
   },
-  duplicateInfo: {
-    id: 'course.userInvitations.InvitationResultDialog.duplicateInfo',
+  summaryFailed: {
+    id: 'course.userInvitations.InvitationResultDialog.summaryFailed',
+    defaultMessage: '{count} failed.',
+  },
+  actionableTitle: {
+    id: 'course.userInvitations.InvitationResultDialog.actionableTitle',
+    defaultMessage: 'Failed ({count})',
+  },
+  failedRowsSubtitle: {
+    id: 'course.userInvitations.InvitationResultDialog.failedRowsSubtitle',
     defaultMessage:
-      'Duplicate users were found in the invitation. Only the first instance of each user will be invited.',
-  },
-  duplicateUsers: {
-    id: 'course.userInvitations.InvitationResultDialog.duplicateUsers',
-    defaultMessage: 'Duplicate Users ({count})',
-  },
-  existingCourseUsersInfo: {
-    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsersInfo',
-    defaultMessage:
-      'Existing course users with this email were found in the invitation. They were not invited.',
-  },
-  existingCourseUsers: {
-    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsers',
-    defaultMessage: 'Existing Course Users ({count})',
-  },
-  existingInvitationsInfo: {
-    id: 'course.userInvitations.InvitationResultDialog.existingInvitationsInfo',
-    defaultMessage:
-      'Existing invitations for these users with this email already exist. They were not invited.',
-  },
-  existingInvitations: {
-    id: 'course.userInvitations.InvitationResultDialog.existingInvitations',
-    defaultMessage: 'Existing Invitations ({count})',
-  },
-  newCourseUsers: {
-    id: 'course.userInvitations.InvitationResultDialog.newCourseUsers',
-    defaultMessage: 'New Course Users ({count})',
+      '{count} {count, plural, one {row} other {rows}} highlighted in red could not be sent',
   },
   newInvitations: {
     id: 'course.userInvitations.InvitationResultDialog.newInvitations',
     defaultMessage: 'New Invitations ({count})',
   },
+  newCourseUsers: {
+    id: 'course.userInvitations.InvitationResultDialog.newCourseUsers',
+    defaultMessage: 'New Course Users ({count})',
+  },
+  existingInvitations: {
+    id: 'course.userInvitations.InvitationResultDialog.existingInvitations',
+    defaultMessage: 'Existing Invitations ({count})',
+  },
+  existingInvitationsInfo: {
+    id: 'course.userInvitations.InvitationResultDialog.existingInvitationsInfo',
+    defaultMessage:
+      'These users already have a pending invitation. They were not re-invited.',
+  },
+  existingCourseUsers: {
+    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsers',
+    defaultMessage: 'Existing Course Users ({count})',
+  },
+  existingCourseUsersInfo: {
+    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsersInfo',
+    defaultMessage:
+      'These users are already enrolled in this course. They were not re-enrolled.',
+  },
+  externalIdUpdatedInfo: {
+    id: 'course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo',
+    defaultMessage: 'External IDs were updated where specified.',
+  },
+  updatedSubtitle: {
+    id: 'course.userInvitations.InvitationResultDialog.updatedSubtitle',
+    defaultMessage: '{count} updated · shown first',
+  },
 });
 
-const InvitationResultDialog: FC<Props> = (props) => {
-  const { open, handleClose, invitationResult, intl } = props;
+const toSuccessRow = (
+  item: InvitationListData | CourseUserData,
+  prefix: string,
+): InvitationSuccessRow => ({
+  id: `${prefix}-${item.id}`,
+  name: item.name,
+  email: item.email,
+  externalId: item.externalId ?? null,
+  role: item.role ?? '',
+  phantom: item.phantom ?? false,
+  timelineAlgorithm: item.timelineAlgorithm,
+});
+
+const toUpdatedExistingRow = (item: InvitationUpdatedItem): ExistingRow => ({
+  id: item.id,
+  name: item.name,
+  email: item.email,
+  externalId: item.externalId,
+  previousExternalId: item.previousExternalId,
+  role: item.role,
+  phantom: item.phantom,
+  timelineAlgorithm: item.timelineAlgorithm,
+});
+
+const InvitationResultDialog: FC<Props> = ({
+  open,
+  handleClose,
+  invitationResult,
+}) => {
+  const { t } = useTranslation();
+  const { showPersonalizedTimelineFeatures } = useAppSelector(
+    getManageCourseUsersSharedData,
+  );
+
+  if (!open) return null;
+
   const {
-    duplicateUsers,
-    existingCourseUsers,
-    existingInvitations,
-    newCourseUsers,
-    newInvitations,
+    newInvitations = [],
+    newCourseUsers = [],
+    existingInvitations = [],
+    existingCourseUsers = [],
+    failedUsers = [],
+    updatedInvitations = [],
+    updatedCourseUsers = [],
   } = invitationResult;
 
-  if (!open) {
-    return null;
-  }
+  const newInvitationRows = newInvitations.map((i) => toSuccessRow(i, 'inv'));
+  const newCourseUserRows = newCourseUsers.map((u) => toSuccessRow(u, 'cu'));
+
+  const failedInvitations = existingInvitations.filter(
+    (i) => i.isRetryable === false,
+  );
+  const normalExistingInvitations = existingInvitations.filter(
+    (i) => i.isRetryable !== false,
+  );
+
+  const failedToSendRows: FailedInvitationRowData[] = failedInvitations.map(
+    (inv) => ({
+      id: inv.id,
+      name: inv.name,
+      email: inv.email,
+      externalId: inv.externalId ?? undefined,
+      role: inv.role,
+      phantom: inv.phantom,
+      reason: 'failed_to_send' as const,
+      timelineAlgorithm: inv.timelineAlgorithm,
+    }),
+  );
+
+  const allFailedUsers: FailedInvitationRowData[] = [
+    ...failedToSendRows,
+    ...failedUsers,
+  ];
+
+  const existingInvitationRows: ExistingRow[] = [
+    ...normalExistingInvitations,
+    ...updatedInvitations.map(toUpdatedExistingRow),
+  ];
+  const existingCourseUserRows: ExistingRow[] = [
+    ...existingCourseUsers,
+    ...updatedCourseUsers.map(toUpdatedExistingRow),
+  ];
+
+  const needsAttentionCount = failedUsers.length + failedInvitations.length;
 
   const handleDialogClose = (_event: object, reason: string): void => {
-    if (reason !== 'backdropClick') {
-      handleClose();
-    }
+    if (reason !== 'backdropClick') handleClose();
   };
 
   return (
@@ -113,113 +195,153 @@ const InvitationResultDialog: FC<Props> = (props) => {
       maxWidth="lg"
       onClose={handleDialogClose}
       open={open}
-      sx={styles.dialogStyle}
+      sx={{ top: 40, '& .MuiDialog-paper': { overflowY: 'auto' } }}
     >
-      <DialogTitle>{intl.formatMessage(translations.header)}</DialogTitle>
+      <DialogTitle>{t(translations.header)}</DialogTitle>
       <DialogContent>
         <Typography gutterBottom variant="body2">
-          {intl.formatMessage(translations.body, {
-            newInvitationsCount: newInvitations?.length ?? 0,
-            newCourseUsersCount: newCourseUsers?.length ?? 0,
+          {needsAttentionCount > 0 &&
+            `${t(translations.summaryFailed, { count: needsAttentionCount })} `}
+          {t(translations.summary, {
+            newInvitations: newInvitations.length,
+            newEnrollments: newCourseUsers.length,
+            alreadyInCourse:
+              existingInvitationRows.length + existingCourseUserRows.length,
           })}
         </Typography>
-        {duplicateUsers && duplicateUsers.length > 0 && (
-          <div className="duplicates">
-            <InvitationResultUsersTable
-              title={
-                <Typography variant="h6">
-                  <Tooltip
-                    title={intl.formatMessage(translations.duplicateInfo)}
-                  >
-                    <HelpIcon style={styles.icon} />
-                  </Tooltip>
-                  {intl.formatMessage(translations.duplicateUsers, {
-                    count: duplicateUsers.length,
-                  })}
-                </Typography>
+
+        {needsAttentionCount > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              <ErrorOutline
+                color="error"
+                sx={{ verticalAlign: 'middle', mr: 0.5 }}
+              />
+              {t(translations.actionableTitle, {
+                count: needsAttentionCount,
+              })}
+            </Typography>
+            {failedInvitations.length > 0 && (
+              <Typography color="error" variant="caption">
+                {t(translations.failedRowsSubtitle, {
+                  count: failedInvitations.length,
+                })}
+              </Typography>
+            )}
+            <InvitationResultFailedTable
+              showPersonalizedTimelineFeatures={
+                showPersonalizedTimelineFeatures
               }
-              users={duplicateUsers}
+              users={allFailedUsers}
             />
-          </div>
+          </section>
         )}
-        {existingInvitations && existingInvitations.length > 0 && (
-          <div className="existingInvitations">
-            <InvitationResultInvitationsTable
-              invitations={existingInvitations}
-              title={
-                <Typography variant="h6">
-                  <Tooltip
-                    title={intl.formatMessage(
-                      translations.existingInvitationsInfo,
-                    )}
-                  >
-                    <HelpIcon style={styles.icon} />
-                  </Tooltip>
-                  {intl.formatMessage(translations.existingInvitations, {
-                    count: existingInvitations.length,
-                  })}
-                </Typography>
+
+        {newInvitationRows.length > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              {t(translations.newInvitations, {
+                count: newInvitationRows.length,
+              })}
+            </Typography>
+            <InvitationResultPrimaryTable
+              rows={newInvitationRows}
+              showPersonalizedTimelineFeatures={
+                showPersonalizedTimelineFeatures
               }
             />
-          </div>
+          </section>
         )}
-        {existingCourseUsers && existingCourseUsers.length > 0 && (
-          <div className="existingCourseUsers">
-            <InvitationResultUsersTable
-              title={
-                <Typography variant="h6">
-                  <Tooltip
-                    title={intl.formatMessage(
-                      translations.existingCourseUsersInfo,
-                    )}
-                  >
-                    <HelpIcon style={styles.icon} />
-                  </Tooltip>
-                  {intl.formatMessage(translations.existingCourseUsers, {
-                    count: existingCourseUsers.length,
-                  })}
-                </Typography>
+
+        {newCourseUserRows.length > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              {t(translations.newCourseUsers, {
+                count: newCourseUserRows.length,
+              })}
+            </Typography>
+            <InvitationResultPrimaryTable
+              rows={newCourseUserRows}
+              showPersonalizedTimelineFeatures={
+                showPersonalizedTimelineFeatures
               }
-              users={existingCourseUsers}
             />
-          </div>
+          </section>
         )}
-        {newInvitations && newInvitations.length > 0 && (
-          <div className="newInvitations">
-            <InvitationResultInvitationsTable
-              invitations={newInvitations}
-              title={
-                <Typography variant="h6">
-                  {intl.formatMessage(translations.newInvitations, {
-                    count: newInvitations.length,
-                  })}
-                </Typography>
+
+        {existingInvitationRows.length > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              <Tooltip
+                title={[
+                  t(translations.existingInvitationsInfo),
+                  ...(updatedInvitations.length > 0
+                    ? [t(translations.externalIdUpdatedInfo)]
+                    : []),
+                ].join(' ')}
+              >
+                <HelpIcon sx={{ fontSize: 16, mr: 0.5 }} />
+              </Tooltip>
+              {t(translations.existingInvitations, {
+                count: existingInvitationRows.length,
+              })}
+            </Typography>
+            {updatedInvitations.length > 0 && (
+              <Typography color="primary" variant="caption">
+                {t(translations.updatedSubtitle, {
+                  count: updatedInvitations.length,
+                })}
+              </Typography>
+            )}
+            <InvitationResultExistingTable
+              rows={existingInvitationRows}
+              showPersonalizedTimelineFeatures={
+                showPersonalizedTimelineFeatures
               }
             />
-          </div>
+          </section>
         )}
-        {newCourseUsers && newCourseUsers.length > 0 && (
-          <div className="newCourseUsers">
-            <InvitationResultUsersTable
-              title={
-                <Typography variant="h6">
-                  {intl.formatMessage(translations.newCourseUsers, {
-                    count: newCourseUsers.length,
-                  })}
-                </Typography>
+
+        {existingCourseUserRows.length > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              <Tooltip
+                title={[
+                  t(translations.existingCourseUsersInfo),
+                  ...(updatedCourseUsers.length > 0
+                    ? [t(translations.externalIdUpdatedInfo)]
+                    : []),
+                ].join(' ')}
+              >
+                <HelpIcon sx={{ fontSize: 16, mr: 0.5 }} />
+              </Tooltip>
+              {t(translations.existingCourseUsers, {
+                count: existingCourseUserRows.length,
+              })}
+            </Typography>
+            {updatedCourseUsers.length > 0 && (
+              <Typography color="primary" variant="caption">
+                {t(translations.updatedSubtitle, {
+                  count: updatedCourseUsers.length,
+                })}
+              </Typography>
+            )}
+            <InvitationResultExistingTable
+              rows={existingCourseUserRows}
+              showPersonalizedTimelineFeatures={
+                showPersonalizedTimelineFeatures
               }
-              users={newCourseUsers}
             />
-          </div>
+          </section>
         )}
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={handleClose}>
-          {intl.formatMessage(translations.close)}
+          {t(translations.close)}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default injectIntl(InvitationResultDialog);
+export default InvitationResultDialog;

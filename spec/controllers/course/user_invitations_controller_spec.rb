@@ -70,6 +70,36 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         end
       end
 
+      context 'when inviting a user who already has a non-retryable (failed) invitation' do
+        render_views
+
+        let!(:course_manager) { create(:course_manager, course: course, user: user) }
+        let!(:failed_invitation) do
+          create(:course_user_invitation, course: course, is_retryable: false)
+        end
+        let(:invite_params) do
+          invitation = { name: failed_invitation.name, email: failed_invitation.email }
+          invitations = { generate(:nested_attribute_new_id) => invitation }
+          { invitations_attributes: invitations }
+        end
+        subject { post :create, as: :json, params: { course_id: course, course: invite_params } }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'includes isRetryable in existingInvitations of the result' do
+          subject
+          body = JSON.parse(response.body)
+          raw_result = body['invitationResult']
+          result = raw_result.is_a?(String) ? JSON.parse(raw_result) : raw_result
+          existing = result['existingInvitations']
+          expect(existing.length).to eq(1)
+          expect(existing.first['isRetryable']).to be(false)
+        end
+      end
+
       context 'when a student visits the page' do
         let!(:course_student) { create(:course_student, course: course, user: user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }

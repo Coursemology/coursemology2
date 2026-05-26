@@ -8,4 +8,5 @@ end
 json.manageCourseUsersData do
   json.partial! 'course/users/tabs_data', current_course: current_course
   json.defaultTimelineAlgorithm current_course.default_timeline_algorithm
+  json.showPersonalizedTimelineFeatures current_course.show_personalized_timeline_features
 end
