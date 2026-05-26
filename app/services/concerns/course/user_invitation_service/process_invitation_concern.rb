@@ -20,7 +20,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return
   #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
   #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
-  #   Conflicts are accumulated into +@duplicate_users+ as a side effect.
+  #   Conflicts are accumulated into +@failed_users+ as a side effect.
   def process_invitations(users)
     @taken_external_ids = load_existing_external_ids
     augment_user_objects(users)
@@ -67,7 +67,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
     new_course_users = []
     users.each do |user|
       if (course_user = all_course_users[user[:user].id])
-        existing_course_users << course_user
+        handle_existing_course_user(user, course_user, existing_course_users)
       else
         enroll_new_user(user, user[:external_id].presence, new_course_users)
       end
@@ -75,9 +75,25 @@ module Course::UserInvitationService::ProcessInvitationConcern
     [new_course_users, existing_course_users]
   end
 
+  def handle_existing_course_user(user, course_user, existing_course_users)
+    csv_ext_id = user[:external_id].presence
+    current_ext_id = course_user.external_id.presence
+
+    if csv_ext_id.nil? || csv_ext_id == current_ext_id
+      existing_course_users << course_user
+    elsif @taken_external_ids.include?(csv_ext_id)
+      @failed_users.push(user.merge(reason: :external_id_taken))
+    else
+      @taken_external_ids.delete(current_ext_id) if current_ext_id
+      @taken_external_ids.add(csv_ext_id)
+      course_user.external_id = csv_ext_id
+      @updated_course_users << { record: course_user, previous_external_id: current_ext_id }
+    end
+  end
+
   def enroll_new_user(user, ext_id, new_course_users)
     if ext_id && @taken_external_ids.include?(ext_id)
-      @duplicate_users.push(user.merge(reason: :external_id_taken))
+      @failed_users.push(user.merge(reason: :external_id_taken))
     else
       @taken_external_ids.add(ext_id) if ext_id
       new_course_users << build_course_user(user)
@@ -88,7 +104,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   def build_course_user(user)
     @current_course.course_users.build(user: user[:user], name: user[:name],
                                        role: user[:role], phantom: user[:phantom],
-                                       timeline_algorithm: @current_course.default_timeline_algorithm,
+                                       timeline_algorithm: user[:timeline_algorithm],
                                        external_id: user[:external_id],
                                        creator: @current_user, updater: @current_user)
   end
@@ -129,7 +145,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
     users.each do |user|
       invitation = all_invitations[user[:email]]
       if invitation
-        existing_invitations << invitation
+        handle_existing_invitation(user, invitation, existing_invitations)
       else
         add_to_new_invitations(user, user[:external_id].presence, new_invitations)
       end
@@ -137,9 +153,27 @@ module Course::UserInvitationService::ProcessInvitationConcern
     [new_invitations, existing_invitations]
   end
 
+  def handle_existing_invitation(user, invitation, existing_invitations)
+    csv_ext_id = user[:external_id].presence
+    current_ext_id = invitation.external_id.presence
+
+    # Non-retryable invitations are surfaced as existing invitations, not errors —
+    # the request succeeded; the prior delivery failure is informational.
+    if csv_ext_id.nil? || csv_ext_id == current_ext_id || invitation.is_retryable == false
+      existing_invitations << invitation
+    elsif @taken_external_ids.include?(csv_ext_id)
+      @failed_users.push(user.merge(reason: :external_id_taken))
+    else
+      @taken_external_ids.delete(current_ext_id) if current_ext_id
+      @taken_external_ids.add(csv_ext_id)
+      invitation.external_id = csv_ext_id
+      @updated_invitations << { record: invitation, previous_external_id: current_ext_id }
+    end
+  end
+
   def add_to_new_invitations(user, ext_id, new_invitations)
     if ext_id && @taken_external_ids.include?(ext_id)
-      @duplicate_users.push(user.merge(reason: :external_id_taken))
+      @failed_users.push(user.merge(reason: :external_id_taken))
     else
       @taken_external_ids.add(ext_id) if ext_id
       new_invitations << build_invitation(user)

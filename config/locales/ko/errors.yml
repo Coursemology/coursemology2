@@ -20,6 +20,7 @@ ko:
         invalid_email: '%{email}을(를) 처리할 수 없습니다: 유효하지 않은 이메일: %{message}.'
         duplicate_external_id: '%{email}을(를) 처리할 수 없습니다: 외부 ID "%{external_id}"는 이미 사용 중입니다.'
         other_error: '%{email}을(를) 처리할 수 없습니다: %{message}.'
+        timeline_template_mismatch: '5개를 초과하는 열이 감지되었습니다. 이 강좌는 개인화된 일정 기능을 사용하지 않습니다. 5열 템플릿(이름, 이메일, 역할, 팬텀, 외부 ID)을 사용하여 다시 업로드해 주십시오.'
       user_registrations:
         invalid_code: '잘못된 초대 코드를 입력하셨습니다.'
         code_taken: >

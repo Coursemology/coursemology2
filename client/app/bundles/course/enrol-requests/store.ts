@@ -32,6 +32,7 @@ const initialState: EnrolRequestsState = {
     requestsCount: 0,
     invitationsCount: 0,
     defaultTimelineAlgorithm: 'fixed',
+    showPersonalizedTimelineFeatures: false,
   },
 };
 

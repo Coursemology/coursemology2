@@ -218,12 +218,16 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Returns the invitation response based on file or entry invitation.
   def parse_invitation_result(new_invitations, existing_invitations, new_course_users,
-                              existing_course_users, duplicate_users)
-    render_to_string(partial: 'invitation_result_data', locals: { new_invitations: new_invitations,
-                                                                  existing_invitations: existing_invitations,
-                                                                  new_course_users: new_course_users,
-                                                                  existing_course_users: existing_course_users,
-                                                                  duplicate_users: duplicate_users })
+                              existing_course_users, failed_users,
+                              updated_invitations, updated_course_users)
+    render_to_string(partial: 'invitation_result_data',
+                     locals: { new_invitations: new_invitations,
+                               existing_invitations: existing_invitations,
+                               new_course_users: new_course_users,
+                               existing_course_users: existing_course_users,
+                               failed_users: failed_users,
+                               updated_invitations: updated_invitations,
+                               updated_course_users: updated_course_users })
   end
 
   # Enables or disables registration codes in the given course.
