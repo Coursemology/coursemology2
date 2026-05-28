@@ -104,8 +104,12 @@ const GradebookIndex: FC = () => {
           size="small"
           value={viewMode}
         >
-          <ToggleButton value="all">{t(translations.allAssessments)}</ToggleButton>
-          <ToggleButton value="weighted">{t(translations.byWeight)}</ToggleButton>
+          <ToggleButton value="all">
+            {t(translations.allAssessments)}
+          </ToggleButton>
+          <ToggleButton value="weighted">
+            {t(translations.byWeight)}
+          </ToggleButton>
         </ToggleButtonGroup>
       </div>
     ) : null;

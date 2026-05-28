@@ -1,5 +1,8 @@
 import { produce } from 'immer';
-import type { GradebookData, UpdateWeightsPayload } from 'types/course/gradebook';
+import type {
+  GradebookData,
+  UpdateWeightsPayload,
+} from 'types/course/gradebook';
 
 import type {
   AssessmentData,

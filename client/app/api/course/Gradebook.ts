@@ -13,7 +13,9 @@ export default class GradebookAPI extends BaseCourseAPI {
     return this.client.get(this.#urlPrefix);
   }
 
-  updateWeights(payload: UpdateWeightsPayload): APIResponse<UpdateWeightsPayload> {
+  updateWeights(
+    payload: UpdateWeightsPayload,
+  ): APIResponse<UpdateWeightsPayload> {
     return this.client.patch(`${this.#urlPrefix}/weights`, payload);
   }
 }

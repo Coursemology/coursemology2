@@ -11,12 +11,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import type { CategoryData, TabData } from 'types/course/gradebook';
 
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import type { CategoryData, TabData } from 'types/course/gradebook';
 import { updateGradebookWeights } from '../operations';
 
 interface Props {
@@ -122,7 +122,7 @@ const ConfigureWeightsDialog: FC<Props> = ({
   };
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open}>
       <DialogTitle>{t(translations.title)}</DialogTitle>
       <DialogContent>
         <Typography color="text.secondary" gutterBottom variant="body2">

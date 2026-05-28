@@ -1,4 +1,8 @@
-import type { AssessmentData, SubmissionData, TabData } from 'types/course/gradebook';
+import type {
+  AssessmentData,
+  SubmissionData,
+  TabData,
+} from 'types/course/gradebook';
 
 interface SubtotalArgs {
   studentId: number;
@@ -20,7 +24,7 @@ export const computeTabSubtotal = ({
 
   let numerator = 0;
   let denominator = 0;
-  for (const a of tabAssessments) {
+  tabAssessments.forEach((a) => {
     const grade = submissions.find(
       (s) => s.studentId === studentId && s.assessmentId === a.id,
     )?.grade;
@@ -30,7 +34,7 @@ export const computeTabSubtotal = ({
     } else if (treatUngradedAsZero) {
       denominator += a.maxGrade;
     }
-  }
+  });
   return denominator > 0 ? numerator / denominator : null;
 };
 
@@ -49,22 +53,25 @@ export const computeStudentTotal = ({
   submissions,
   treatUngradedAsZero,
 }: TotalArgs): number | null => {
-  let weightedSum = 0;
-  let weightSum = 0;
-  for (const tab of tabs) {
-    const weight = tab.gradebookWeight ?? 0;
-    if (weight <= 0) continue;
-    const sub = computeTabSubtotal({
-      studentId,
-      tab,
-      assessments,
-      submissions,
-      treatUngradedAsZero,
-    });
-    if (sub == null) continue;
-    weightedSum += weight * sub;
-    weightSum += weight;
-  }
+  const { weightedSum, weightSum } = tabs.reduce(
+    (acc, tab) => {
+      const weight = tab.gradebookWeight ?? 0;
+      if (weight <= 0) return acc;
+      const sub = computeTabSubtotal({
+        studentId,
+        tab,
+        assessments,
+        submissions,
+        treatUngradedAsZero,
+      });
+      if (sub == null) return acc;
+      return {
+        weightedSum: acc.weightedSum + weight * sub,
+        weightSum: acc.weightSum + weight,
+      };
+    },
+    { weightedSum: 0, weightSum: 0 },
+  );
   return weightSum > 0 ? weightedSum / weightSum : null;
 };
 

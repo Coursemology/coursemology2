@@ -15,9 +15,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-
-import useTranslation from 'lib/hooks/useTranslation';
-
 import type {
   AssessmentData,
   CategoryData,
@@ -25,11 +22,15 @@ import type {
   SubmissionData,
   TabData,
 } from 'types/course/gradebook';
+
+import useTranslation from 'lib/hooks/useTranslation';
+
 import {
   computeStudentTotal,
   computeTabSubtotal,
   sumWeights,
 } from '../computeWeighted';
+
 import ConfigureWeightsDialog from './ConfigureWeightsDialog';
 
 interface Props {
@@ -112,16 +113,19 @@ const GradebookWeightedTable: FC<Props> = ({
   const rows = useMemo(
     () =>
       students.map((stu) => {
-        const subtotalsByTabId: Record<number, number | null> = {};
-        for (const tab of tabs) {
-          subtotalsByTabId[tab.id] = computeTabSubtotal({
-            studentId: stu.id,
-            tab,
-            assessments,
-            submissions,
-            treatUngradedAsZero,
-          });
-        }
+        const subtotalsByTabId: Record<number, number | null> =
+          Object.fromEntries(
+            tabs.map((tab) => [
+              tab.id,
+              computeTabSubtotal({
+                studentId: stu.id,
+                tab,
+                assessments,
+                submissions,
+                treatUngradedAsZero,
+              }),
+            ]),
+          );
         const total = computeStudentTotal({
           studentId: stu.id,
           tabs,
@@ -143,14 +147,14 @@ const GradebookWeightedTable: FC<Props> = ({
   const allWeightsZero = weightSum === 0;
 
   // Category colSpan map
-  const tabsByCategory = useMemo(() => {
-    const map = new Map<number, TabData[]>();
-    for (const tab of tabs) {
-      const existing = map.get(tab.categoryId) ?? [];
-      map.set(tab.categoryId, [...existing, tab]);
-    }
-    return map;
-  }, [tabs]);
+  const tabsByCategory = useMemo(
+    () =>
+      tabs.reduce((map, tab) => {
+        const existing = map.get(tab.categoryId) ?? [];
+        return map.set(tab.categoryId, [...existing, tab]);
+      }, new Map<number, TabData[]>()),
+    [tabs],
+  );
 
   return (
     <div data-testid="gradebook-weighted-table">
@@ -252,12 +256,14 @@ const GradebookWeightedTable: FC<Props> = ({
               <TableCell align="right" sx={{ top: row3Top, zIndex: 2 }}>
                 {weightSum !== 100 ? (
                   <Tooltip
-                    title={t(translations.sumWarningTooltip, { sum: weightSum })}
+                    title={t(translations.sumWarningTooltip, {
+                      sum: weightSum,
+                    })}
                   >
                     <span>
                       {t(translations.totalSubheader, { sum: weightSum })}
                       &nbsp;
-                      <WarningAmberIcon fontSize="inherit" color="warning" />
+                      <WarningAmberIcon color="warning" fontSize="inherit" />
                     </span>
                   </Tooltip>
                 ) : (
