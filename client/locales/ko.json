@@ -2279,20 +2279,23 @@
   "course.assessment.question.textResponses.fileUploadNote": {
     "defaultMessage": "참고: 파일 업로드 질문은 자동 채점이 불가능합니다. 자동 채점기는 항상 최대 등급을 부여합니다."
   },
+  "course.assessment.question.textResponses.noSolutionsNote": {
+    "defaultMessage": "솔루션이 없을 경우, 자동 채점기는 항상 최대 점수를 부여합니다."
+  },
+  "course.assessment.question.textResponses.atLeastOneSolutionNote": {
+    "defaultMessage": "하나 이상의 솔루션이 제공된 경우, 학생들은 일반 텍스트만 입력할 수 있습니다."
+  },
+  "course.assessment.question.textResponses.exactMatchSolutionNote": {
+    "defaultMessage": "정확히 일치를 선택한 경우, 여러 줄의 솔루션은 학생의 답변과 정확히 일치해야 정답으로 채점됩니다. 이러한 일치가 발견된 경우, 자동 채점기는 다른 솔루션을 고려하지 않고 지정된 점수를 부여합니다."
+  },
+  "course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote": {
+    "defaultMessage": "학생의 답변이 여러 솔루션을 충족하는 경우, 자동 채점기는 문제의 최대 점수까지 해당 솔루션들의 점수 합계를 부여합니다."
+  },
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "등급"
   },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "키워드"
-  },
-  "course.assessment.question.textResponses.mustSpecifyGrade": {
-    "defaultMessage": "성적에 대해 유효한 숫자를 지정해야 합니다."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolution": {
-    "defaultMessage": "유효한 솔루션 제목을 지정해야 합니다."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolutionType": {
-    "defaultMessage": "솔루션 유형으로 정확히 일치하거나 키워드를 선택해야 합니다."
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "이것은 새 솔루션입니다. 저장하기 전에 삭제하면 즉시 사라집니다."
@@ -2303,9 +2306,6 @@
   "course.assessment.question.textResponses.solutionType": {
     "defaultMessage": "솔루션 유형"
   },
-  "course.assessment.question.textResponses.solutionTypeExplanation": {
-    "defaultMessage": "정확히 일치를 선택한 경우, 여러 줄의 솔루션은 학생의 답변과 정확히 일치해야 정답으로 평가됩니다."
-  },
   "course.assessment.question.textResponses.solutionWillBeDeleted": {
     "defaultMessage": "변경을 저장하면 이 솔루션이 삭제됩니다."
   },
@@ -2313,10 +2313,7 @@
     "defaultMessage": "솔루션"
   },
   "course.assessment.question.textResponses.solutionsHint": {
-    "defaultMessage": "솔루션을 추가하면 답변을 자동 채점할 수 있습니다. 학생들은 일반 텍스트만 입력할 수 있습니다."
-  },
-  "course.assessment.question.textResponses.textResponseNote": {
-    "defaultMessage": "참고: 솔루션이 제공되지 않은 경우, 자동 채점기는 항상 최대 점수를 부여합니다."
+    "defaultMessage": "솔루션을 추가하면 학생의 답변을 자동으로 채점할 수 있습니다."
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "솔루션 삭제 취소"
@@ -8010,7 +8007,7 @@
     "defaultMessage": "유효하지 않은 날짜"
   },
   "lib.translations.form.validation.numeric": {
-    "defaultMessage": "숫자를 입력하세요."
+    "defaultMessage": "유효한 숫자를 입력하세요."
   },
   "lib.translations.form.validation.required": {
     "defaultMessage": "필수 항목"

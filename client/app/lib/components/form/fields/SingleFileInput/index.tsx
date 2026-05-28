@@ -1,4 +1,4 @@
-import { ComponentType, UIEvent, useEffect, useState } from 'react';
+import { ComponentType, UIEvent, useEffect, useRef, useState } from 'react';
 import Dropzone, { Accept } from 'react-dropzone';
 import {
   ControllerFieldState,
@@ -61,6 +61,7 @@ const FormSingleFileInput = <
   } = props;
 
   const [file, setFile] = useState<File | null>(null);
+  const mounted = useRef(false);
 
   const onCancel = (e: UIEvent): void => {
     setFile(null);
@@ -72,6 +73,10 @@ const FormSingleFileInput = <
   };
 
   useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
     onChange({ file, url, name });
   }, [file]);
 

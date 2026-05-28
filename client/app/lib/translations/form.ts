@@ -108,7 +108,7 @@ const formTranslations = defineMessages({
   },
   numeric: {
     id: 'lib.translations.form.validation.numeric',
-    defaultMessage: 'Enter a number',
+    defaultMessage: 'Enter a valid number',
   },
   email: {
     id: 'lib.translations.form.validation.email',
