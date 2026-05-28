@@ -1,4 +1,4 @@
-import { computeTabSubtotal, computeStudentTotal } from '../computeWeighted';
+import { computeTabSubtotal, computeStudentTotal, sumWeights } from '../computeWeighted';
 
 const assessments = [
   { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
@@ -132,5 +132,23 @@ describe('computeStudentTotal', () => {
     });
     // weightSum = 90; total = (60*(130/150) + 30*0.9)/90
     expect(total).toBeCloseTo((60 * (130 / 150) + 30 * 0.9) / 90);
+  });
+});
+
+describe('sumWeights', () => {
+  it('sums gradebookWeight across tabs', () => {
+    const tabs = [
+      { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+      { id: 20, title: 'T', categoryId: 0, gradebookWeight: 40 },
+    ];
+    expect(sumWeights(tabs)).toBe(100);
+  });
+
+  it('treats undefined gradebookWeight as 0', () => {
+    const tabs = [
+      { id: 10, title: 'M', categoryId: 0 },
+      { id: 20, title: 'T', categoryId: 0, gradebookWeight: 50 },
+    ];
+    expect(sumWeights(tabs)).toBe(50);
   });
 });
