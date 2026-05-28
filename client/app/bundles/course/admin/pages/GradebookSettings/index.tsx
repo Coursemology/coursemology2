@@ -10,10 +10,7 @@ import translations from 'lib/translations/form';
 import { useItemsReloader } from '../../components/SettingsNavigation';
 
 import GradebookSettingsForm from './GradebookSettingsForm';
-import {
-  fetchGradebookSettings,
-  updateGradebookSettings,
-} from './operations';
+import { fetchGradebookSettings, updateGradebookSettings } from './operations';
 
 const GradebookSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
