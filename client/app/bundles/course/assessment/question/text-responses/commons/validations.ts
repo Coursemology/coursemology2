@@ -2,23 +2,24 @@ import { AttachmentType } from 'types/course/assessment/question/text-responses'
 import { AnyObjectSchema, array, bool, number, object, string } from 'yup';
 
 import { MessageTranslator } from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import translations from '../../../translations';
 import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
 const solutionSchema = object({
-  solutionType: string().required(translations.mustSpecifySolutionType),
+  solutionType: string().required(formTranslations.required),
   solution: string().when('toBeDeleted', {
     is: true,
     then: string().notRequired(),
-    otherwise: string().required(translations.mustSpecifySolution),
+    otherwise: string().required(formTranslations.required),
   }),
   grade: number().when('toBeDeleted', {
     is: true,
     then: number().notRequired(),
     otherwise: number()
-      .typeError(translations.mustSpecifyGrade)
-      .required(translations.mustSpecifyGrade),
+      .typeError(formTranslations.numeric)
+      .required(formTranslations.numeric),
   }),
   explanation: string().nullable(),
   toBeDeleted: bool(),

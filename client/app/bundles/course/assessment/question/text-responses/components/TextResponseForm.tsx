@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Control, Controller } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import {
   AttachmentType,
@@ -98,7 +98,7 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
         data.defaultMaxAttachments,
       )}
     >
-      {(control): JSX.Element => (
+      {(control: Control<TextResponseEditableFormData>): JSX.Element => (
         <>
           <CommonQuestionFields
             availableSkills={data.availableSkills}
@@ -115,7 +115,7 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
             >
               <Controller
                 control={control}
-                name="templateText"
+                name="question.templateText"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormRichTextField
                     disabled={submitting}

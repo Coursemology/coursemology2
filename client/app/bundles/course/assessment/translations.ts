@@ -933,8 +933,7 @@ const translations = defineMessages({
   },
   solutionsHint: {
     id: 'course.assessment.question.textResponses.solutionsHint',
-    defaultMessage:
-      'Adding solutions allows the answer to be autograded. Students can only input plain text.',
+    defaultMessage: 'Adding solutions allows the answer to be autograded.',
   },
   solutionWillBeDeleted: {
     id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
@@ -1034,11 +1033,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.solutionType',
     defaultMessage: 'Type of Solution',
   },
-  solutionTypeExplanation: {
-    id: 'course.assessment.question.textResponses.solutionTypeExplanation',
-    defaultMessage:
-      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
-  },
   exactMatch: {
     id: 'course.assessment.question.textResponses.exactMatch',
     defaultMessage: 'Exact Match',
@@ -1055,28 +1049,30 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.deleteSolution',
     defaultMessage: 'Delete solution',
   },
-  mustSpecifyGrade: {
-    id: 'course.assessment.question.textResponses.mustSpecifyGrade',
-    defaultMessage: 'You must specify a valid number for grade.',
-  },
-  mustSpecifySolution: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolution',
-    defaultMessage: 'You must specify a valid solution title.',
-  },
-  textResponseNote: {
-    id: 'course.assessment.question.textResponses.textResponseNote',
+  noSolutionsNote: {
+    id: 'course.assessment.question.textResponses.noSolutionsNote',
     defaultMessage:
-      'Note: If no solutions are provided, the autograder will always award the maximum grade.',
+      'If no solutions are provided, the autograder will always award the maximum grade.',
+  },
+  atLeastOneSolutionNote: {
+    id: 'course.assessment.question.textResponses.atLeastOneSolutionNote',
+    defaultMessage:
+      'If at least one solution is provided, students will only be able to input plain text.',
+  },
+  exactMatchSolutionNote: {
+    id: 'course.assessment.question.textResponses.exactMatchSolutionNote',
+    defaultMessage:
+      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct. If such a match is found, the autograder will award the specified grade without considering other solutions.',
+  },
+  solutionGradesExceedMaximumGradeNote: {
+    id: 'course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote',
+    defaultMessage:
+      "If the student answer satisfies multiple solutions, the autograder will award the sum of those solutions' grades, up to the question's maximum grade.",
   },
   fileUploadNote: {
     id: 'course.assessment.question.textResponses.fileUploadNote',
     defaultMessage:
       'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.',
-  },
-  mustSpecifySolutionType: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolutionType',
-    defaultMessage:
-      'You must choose either exact match or keyword as solution type.',
   },
   validAttachmentSettingValues: {
     id: 'course.assessment.question.textResponses.validAttachmentSettingValues',

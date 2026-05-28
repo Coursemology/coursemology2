@@ -2234,20 +2234,23 @@
   "course.assessment.question.textResponses.fileUploadNote": {
     "defaultMessage": "注意：无法自动评分文件上传题，将始终给出最高分。"
   },
+  "course.assessment.question.textResponses.noSolutionsNote": {
+    "defaultMessage": "如果没有提供答案，自动打分器将始终给出最高分。"
+  },
+  "course.assessment.question.textResponses.atLeastOneSolutionNote": {
+    "defaultMessage": "如果提供了至少一个答案，学生只能输入纯文本。"
+  },
+  "course.assessment.question.textResponses.exactMatchSolutionNote": {
+    "defaultMessage": "如果选择\"精确匹配\"，多行答案必须与学生答案完全匹配，才能被评为正确。如果找到匹配，自动打分器将给出指定分数，不再考虑其他答案。"
+  },
+  "course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote": {
+    "defaultMessage": "如果学生答案满足多个答案条件，自动打分器将给出这些答案分数的总和，最高不超过题目的最高分。"
+  },
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "得分"
   },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "关键词"
-  },
-  "course.assessment.question.textResponses.mustSpecifyGrade": {
-    "defaultMessage": "您必须设定一个有效成绩分数。"
-  },
-  "course.assessment.question.textResponses.mustSpecifySolution": {
-    "defaultMessage": "你必须设定一个有效的答案标题"
-  },
-  "course.assessment.question.textResponses.mustSpecifySolutionType": {
-    "defaultMessage": "你必须选择精确匹配或关键词作为答案类型。"
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "这是一个新答案。如果在保存前删除，它会立即消失。"
@@ -2258,9 +2261,6 @@
   "course.assessment.question.textResponses.solutionType": {
     "defaultMessage": "答案类型"
   },
-  "course.assessment.question.textResponses.solutionTypeExplanation": {
-    "defaultMessage": "如果选择\"完全匹配\"，多行答案必须与学生答案完全匹配，答案才能被评为正确。"
-  },
   "course.assessment.question.textResponses.solutionWillBeDeleted": {
     "defaultMessage": "保存更改后，该答案将被删除。"
   },
@@ -2268,10 +2268,7 @@
     "defaultMessage": "答案"
   },
   "course.assessment.question.textResponses.solutionsHint": {
-    "defaultMessage": "添加答案以启用自动打分。学生只能输入纯文本。"
-  },
-  "course.assessment.question.textResponses.textResponseNote": {
-    "defaultMessage": "注：如果不提供答案，自动打分器将始终给出最高分。"
+    "defaultMessage": "添加答案以启用自动打分。"
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "撤销删除答案"
@@ -7986,7 +7983,7 @@
     "defaultMessage": "失效日期"
   },
   "lib.translations.form.validation.numeric": {
-    "defaultMessage": "输入一个数字"
+    "defaultMessage": "请输入有效数字"
   },
   "lib.translations.form.validation.required": {
     "defaultMessage": "必需的"

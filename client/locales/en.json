@@ -2253,20 +2253,23 @@
   "course.assessment.question.textResponses.fileUploadNote": {
     "defaultMessage": "Note: File upload question is not auto-gradable. The autograder will always award the maximum grade."
   },
+  "course.assessment.question.textResponses.noSolutionsNote": {
+    "defaultMessage": "If no solutions are provided, the autograder will always award the maximum grade."
+  },
+  "course.assessment.question.textResponses.atLeastOneSolutionNote": {
+    "defaultMessage": "If at least one solution is provided, students will only be able to input plain text."
+  },
+  "course.assessment.question.textResponses.exactMatchSolutionNote": {
+    "defaultMessage": "If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct. If such a match is found, the autograder will award the specified grade without considering other solutions."
+  },
+  "course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote": {
+    "defaultMessage": "If the student answer satisfies multiple solutions, the autograder will award the sum of those solutions' grades, up to the question's maximum grade."
+  },
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "Grade"
   },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "Keyword"
-  },
-  "course.assessment.question.textResponses.mustSpecifyGrade": {
-    "defaultMessage": "You must specify a valid number for grade."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolution": {
-    "defaultMessage": "You must specify a valid solution title."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolutionType": {
-    "defaultMessage": "You must choose either exact match or keyword as solution type."
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "This is a new solution. It will immediately disappear if you delete before saving it."
@@ -2277,9 +2280,6 @@
   "course.assessment.question.textResponses.solutionType": {
     "defaultMessage": "Type of Solution"
   },
-  "course.assessment.question.textResponses.solutionTypeExplanation": {
-    "defaultMessage": "If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct."
-  },
   "course.assessment.question.textResponses.solutionWillBeDeleted": {
     "defaultMessage": "This solution will be deleted once you save your changes."
   },
@@ -2287,10 +2287,7 @@
     "defaultMessage": "Solutions"
   },
   "course.assessment.question.textResponses.solutionsHint": {
-    "defaultMessage": "Adding solutions allows the answer to be autograded. Students can only input plain text."
-  },
-  "course.assessment.question.textResponses.textResponseNote": {
-    "defaultMessage": "Note: If no solutions are provided, the autograder will always award the maximum grade."
+    "defaultMessage": "Adding solutions allows the answer to be autograded."
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "Undo delete solution"
@@ -8002,7 +7999,7 @@
     "defaultMessage": "Invalid Date"
   },
   "lib.translations.form.validation.numeric": {
-    "defaultMessage": "Enter a number"
+    "defaultMessage": "Enter a valid number"
   },
   "lib.translations.form.validation.required": {
     "defaultMessage": "Required"
