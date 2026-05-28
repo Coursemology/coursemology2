@@ -32,6 +32,8 @@ const emptyState = {
     students: [],
     submissions: [],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -43,6 +45,8 @@ const noStudentsState = {
     students: [],
     submissions: [],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -62,6 +66,8 @@ const populatedState = {
     ],
     submissions: [{ studentId: 1, assessmentId: 100, grade: 8 }],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -142,5 +148,45 @@ describe('GradebookIndex', () => {
         'No grade or gamification columns selected - export will include student info only.',
       ),
     ).toBeInTheDocument();
+  });
+
+  it('does not render view toggle when weightedViewEnabled is false', async () => {
+    render(<GradebookIndex />, { state: populatedState });
+    await screen.findByText('Gradebook');
+    expect(
+      screen.queryByRole('button', { name: /by weight/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders view toggle when weightedViewEnabled is true', async () => {
+    render(<GradebookIndex />, {
+      state: {
+        gradebook: {
+          ...populatedState.gradebook,
+          weightedViewEnabled: true,
+          canManageWeights: false,
+        },
+      },
+    });
+    expect(
+      await screen.findByRole('button', { name: /all assessments/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /by weight/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('switches to By weight view on toggle click', async () => {
+    render(<GradebookIndex />, {
+      state: {
+        gradebook: {
+          ...populatedState.gradebook,
+          weightedViewEnabled: true,
+          canManageWeights: false,
+        },
+      },
+    });
+    fireEvent.click(await screen.findByRole('button', { name: /by weight/i }));
+    expect(screen.getByTestId('gradebook-weighted-table')).toBeInTheDocument();
   });
 });

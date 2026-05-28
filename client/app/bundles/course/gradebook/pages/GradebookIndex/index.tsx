@@ -3,6 +3,8 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { PeopleAlt } from '@mui/icons-material';
 import { Typography } from '@mui/material';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -12,14 +14,17 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { useCourseContext } from '../../../container/CourseLoader';
 import GradebookTable from '../../components/GradebookTable';
+import GradebookWeightedTable from '../../components/GradebookWeightedTable';
 import fetchGradebook from '../../operations';
 import {
   getAssessments,
+  getCanManageWeights,
   getCategories,
   getGamificationEnabled,
   getStudents,
   getSubmissions,
   getTabs,
+  getWeightedViewEnabled,
 } from '../../selectors';
 
 const translations = defineMessages({
@@ -39,6 +44,14 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookIndex.noStudentsHint',
     defaultMessage: 'Grades will appear here once students join the course.',
   },
+  allAssessments: {
+    id: 'course.gradebook.GradebookIndex.allAssessments',
+    defaultMessage: 'All assessments',
+  },
+  byWeight: {
+    id: 'course.gradebook.GradebookIndex.byWeight',
+    defaultMessage: 'By weight',
+  },
 });
 
 const GradebookIndex: FC = () => {
@@ -48,6 +61,7 @@ const GradebookIndex: FC = () => {
   const { courseId: courseIdParam } = useParams();
   const courseId = parseInt(courseIdParam!, 10);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'all' | 'weighted'>('all');
 
   const assessments = useAppSelector(getAssessments);
   const categories = useAppSelector(getCategories);
@@ -55,6 +69,8 @@ const GradebookIndex: FC = () => {
   const students = useAppSelector(getStudents);
   const submissions = useAppSelector(getSubmissions);
   const gamificationEnabled = useAppSelector(getGamificationEnabled);
+  const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
+  const canManageWeights = useAppSelector(getCanManageWeights);
 
   useEffect(() => {
     dispatch(fetchGradebook())
@@ -78,17 +94,51 @@ const GradebookIndex: FC = () => {
       </div>
     );
   } else {
+    const viewToggle = weightedViewEnabled ? (
+      <div className="flex px-5 pb-2 pt-3">
+        <ToggleButtonGroup
+          exclusive
+          onChange={(_, v) => {
+            if (v) setViewMode(v);
+          }}
+          size="small"
+          value={viewMode}
+        >
+          <ToggleButton value="all">{t(translations.allAssessments)}</ToggleButton>
+          <ToggleButton value="weighted">{t(translations.byWeight)}</ToggleButton>
+        </ToggleButtonGroup>
+      </div>
+    ) : null;
+
+    const tableView =
+      viewMode === 'weighted' && weightedViewEnabled ? (
+        <GradebookWeightedTable
+          assessments={assessments}
+          canManageWeights={canManageWeights}
+          categories={categories}
+          courseTitle={courseTitle}
+          students={students}
+          submissions={submissions}
+          tabs={tabs}
+        />
+      ) : (
+        <GradebookTable
+          assessments={assessments}
+          categories={categories}
+          courseId={courseId}
+          courseTitle={courseTitle}
+          gamificationEnabled={gamificationEnabled}
+          students={students}
+          submissions={submissions}
+          tabs={tabs}
+        />
+      );
+
     content = (
-      <GradebookTable
-        assessments={assessments}
-        categories={categories}
-        courseId={courseId}
-        courseTitle={courseTitle}
-        gamificationEnabled={gamificationEnabled}
-        students={students}
-        submissions={submissions}
-        tabs={tabs}
-      />
+      <>
+        {viewToggle}
+        {tableView}
+      </>
     );
   }
 
