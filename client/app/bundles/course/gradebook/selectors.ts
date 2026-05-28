@@ -22,3 +22,9 @@ export const getGamificationEnabled = (
   state: AppState,
 ): GradebookState['gamificationEnabled'] =>
   getLocalState(state).gamificationEnabled;
+
+export const getWeightedViewEnabled = (state: AppState): boolean =>
+  getLocalState(state).weightedViewEnabled;
+
+export const getCanManageWeights = (state: AppState): boolean =>
+  getLocalState(state).canManageWeights;
