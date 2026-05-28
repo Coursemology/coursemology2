@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import {
   Alert,
@@ -94,6 +94,15 @@ const ConfigureWeightsDialog: FC<Props> = ({
     Object.fromEntries(tabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0])),
   );
   const [submitting, setSubmitting] = useState(false);
+
+  // Re-sync from store whenever dialog opens (handles stale state after external updates)
+  useEffect(() => {
+    if (open) {
+      setWeights(
+        Object.fromEntries(tabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0])),
+      );
+    }
+  }, [open, tabs]);
 
   const sum = Object.values(weights).reduce((acc, w) => acc + w, 0);
   const hasInvalid = Object.values(weights).some((w) => validate(w) !== null);

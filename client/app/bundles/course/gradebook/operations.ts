@@ -14,7 +14,7 @@ export const updateGradebookWeights =
   (weights: UpdateWeightsPayload['weights']): Operation =>
   async (dispatch) => {
     const response = await CourseAPI.gradebook.updateWeights({ weights });
-    dispatch(actions.updateTabWeights(response.data.weights));
+    dispatch(actions.updateTabWeights(response.data?.weights ?? weights));
   };
 
 export default fetchGradebook;

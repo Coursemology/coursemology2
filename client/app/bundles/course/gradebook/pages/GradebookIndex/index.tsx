@@ -78,6 +78,10 @@ const GradebookIndex: FC = () => {
       .catch(() => toast.error(t(translations.fetchFailure)));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (!weightedViewEnabled) setViewMode('all');
+  }, [weightedViewEnabled]);
+
   let content: JSX.Element;
   if (isLoading) {
     content = <LoadingIndicator />;
@@ -120,7 +124,6 @@ const GradebookIndex: FC = () => {
           assessments={assessments}
           canManageWeights={canManageWeights}
           categories={categories}
-          courseTitle={courseTitle}
           students={students}
           submissions={submissions}
           tabs={tabs}

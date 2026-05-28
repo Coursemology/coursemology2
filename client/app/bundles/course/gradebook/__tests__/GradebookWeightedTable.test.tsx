@@ -40,7 +40,6 @@ const defaultProps = {
   students,
   submissions,
   canManageWeights: true,
-  courseTitle: 'Test Course',
 };
 
 const renderTable = (props = {}) =>

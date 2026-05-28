@@ -53,17 +53,34 @@ export const computeStudentTotal = ({
   submissions,
   treatUngradedAsZero,
 }: TotalArgs): number | null => {
+  // Build per-student O(1) lookup map to avoid O(n) scans per assessment
+  const gradeByAssessmentId = new Map<number, number | null>();
+  submissions.forEach((s) => {
+    if (s.studentId === studentId)
+      gradeByAssessmentId.set(s.assessmentId, s.grade);
+  });
+
   const { weightedSum, weightSum } = tabs.reduce(
     (acc, tab) => {
       const weight = tab.gradebookWeight ?? 0;
       if (weight <= 0) return acc;
-      const sub = computeTabSubtotal({
-        studentId,
-        tab,
-        assessments,
-        submissions,
-        treatUngradedAsZero,
+
+      const tabAssessments = assessments.filter((a) => a.tabId === tab.id);
+      if (tabAssessments.length === 0) return acc;
+
+      let numerator = 0;
+      let denominator = 0;
+      tabAssessments.forEach((a) => {
+        const grade = gradeByAssessmentId.get(a.id);
+        if (grade != null) {
+          numerator += grade;
+          denominator += a.maxGrade;
+        } else if (treatUngradedAsZero) {
+          denominator += a.maxGrade;
+        }
       });
+
+      const sub = denominator > 0 ? numerator / denominator : null;
       if (sub == null) return acc;
       return {
         weightedSum: acc.weightedSum + weight * sub,

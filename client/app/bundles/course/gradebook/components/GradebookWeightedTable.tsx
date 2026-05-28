@@ -40,7 +40,6 @@ interface Props {
   students: StudentData[];
   submissions: SubmissionData[];
   canManageWeights: boolean;
-  courseTitle: string;
 }
 
 const translations = defineMessages({
@@ -92,7 +91,6 @@ const GradebookWeightedTable: FC<Props> = ({
   students,
   submissions,
   canManageWeights,
-  courseTitle: _courseTitle,
 }) => {
   const { t } = useTranslation();
   const [treatUngradedAsZero, setTreatUngradedAsZero] = useState(false);
