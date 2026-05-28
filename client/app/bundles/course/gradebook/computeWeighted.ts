@@ -1,4 +1,4 @@
-import { AssessmentData, SubmissionData, TabData } from 'types/course/gradebook';
+import type { AssessmentData, SubmissionData, TabData } from 'types/course/gradebook';
 
 interface SubtotalArgs {
   studentId: number;

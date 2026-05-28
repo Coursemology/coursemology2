@@ -1,7 +1,7 @@
 import type { Operation } from 'store';
 
 import CourseAPI from 'api/course';
-import { UpdateWeightsPayload } from 'types/course/gradebook';
+import type { UpdateWeightsPayload } from 'types/course/gradebook';
 
 import { actions } from './store';
 
