@@ -9223,5 +9223,80 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "Trouble signing in?"
+  },
+  "course.admin.GradebookSettings.gradebookSettings": {
+    "defaultMessage": "Gradebook settings"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabled": {
+    "defaultMessage": "Enable weighted grade view"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabledHint": {
+    "defaultMessage": "Enables a \"By weight\" view in the gradebook where staff can configure per-tab weights and see a weighted Total column."
+  },
+  "course.gradebook.ConfigureWeightsDialog.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.ConfigureWeightsDialog.description": {
+    "defaultMessage": "Set how much each tab contributes to the total grade. Weights should sum to 100."
+  },
+  "course.gradebook.ConfigureWeightsDialog.dialogTitle": {
+    "defaultMessage": "Configure tab weights"
+  },
+  "course.gradebook.ConfigureWeightsDialog.save": {
+    "defaultMessage": "Save"
+  },
+  "course.gradebook.ConfigureWeightsDialog.total": {
+    "defaultMessage": "Total: {sum}%"
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueTooHigh": {
+    "defaultMessage": "Value must be at most 100"
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueTooLow": {
+    "defaultMessage": "Value must be at least 0"
+  },
+  "course.gradebook.ConfigureWeightsDialog.weightsDoNotSum": {
+    "defaultMessage": "Weights do not sum to 100. Saving is allowed; Total may be inaccurate."
+  },
+  "course.gradebook.GradebookIndex.allAssessments": {
+    "defaultMessage": "All assessments"
+  },
+  "course.gradebook.GradebookIndex.byWeight": {
+    "defaultMessage": "By weight"
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
+    "defaultMessage": "No grade or gamification columns selected - export will include student info only."
+  },
+  "course.gradebook.GradebookWeightedTable.configureWeights": {
+    "defaultMessage": "Configure Weights"
+  },
+  "course.gradebook.GradebookWeightedTable.doesNotSumTo100": {
+    "defaultMessage": "Does not sum to 100"
+  },
+  "course.gradebook.GradebookWeightedTable.noWeightsConfigured": {
+    "defaultMessage": "No weights configured - all tab weights are 0. Use \"Configure Weights\" to assign weights."
+  },
+  "course.gradebook.GradebookWeightedTable.percentOfGrade": {
+    "defaultMessage": "{weight}% of grade"
+  },
+  "course.gradebook.GradebookWeightedTable.percentTotalExact": {
+    "defaultMessage": "100% total"
+  },
+  "course.gradebook.GradebookWeightedTable.percentTotalWarning": {
+    "defaultMessage": "{weight}% total"
+  },
+  "course.gradebook.GradebookWeightedTable.student": {
+    "defaultMessage": "Student"
+  },
+  "course.gradebook.GradebookWeightedTable.total": {
+    "defaultMessage": "Total"
+  },
+  "course.gradebook.GradebookWeightedTable.treatUngradedAsZero": {
+    "defaultMessage": "Treat Ungraded as 0"
+  },
+  "course.gradebook.GradebookWeightedTable.treatUngradedAsZeroTooltip": {
+    "defaultMessage": "Counts unsubmitted and ungraded assessments as 0 in the calculation. Use at end of course when all work should be complete."
+  },
+  "course.gradebook.GradebookWeightedTable.weightsDoNotSum": {
+    "defaultMessage": "Weights do not sum to 100. Total may be inaccurate."
   }
 }

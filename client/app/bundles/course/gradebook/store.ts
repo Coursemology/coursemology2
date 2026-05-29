@@ -1,5 +1,8 @@
 import { produce } from 'immer';
-import type { GradebookData } from 'types/course/gradebook';
+import type {
+  GradebookData,
+  UpdateWeightsPayload,
+} from 'types/course/gradebook';
 
 import type {
   AssessmentData,
@@ -10,6 +13,7 @@ import type {
 } from './types';
 
 const SAVE_GRADEBOOK = 'course/gradebook/SAVE_GRADEBOOK';
+const UPDATE_TAB_WEIGHTS = 'course/gradebook/UPDATE_TAB_WEIGHTS';
 
 interface GradebookState {
   categories: CategoryData[];
@@ -19,11 +23,18 @@ interface GradebookState {
   submissions: SubmissionData[];
   gamificationEnabled: boolean;
   userId: number;
+  weightedViewEnabled: boolean;
+  canManageWeights: boolean;
 }
 
 interface SaveGradebookAction {
   type: typeof SAVE_GRADEBOOK;
   payload: GradebookData;
+}
+
+interface UpdateTabWeightsAction {
+  type: typeof UPDATE_TAB_WEIGHTS;
+  payload: UpdateWeightsPayload;
 }
 
 const initialState: GradebookState = {
@@ -34,10 +45,15 @@ const initialState: GradebookState = {
   submissions: [],
   gamificationEnabled: false,
   userId: 0,
+  weightedViewEnabled: false,
+  canManageWeights: false,
 };
 
 const reducer = produce(
-  (draft: GradebookState, action: SaveGradebookAction) => {
+  (
+    draft: GradebookState,
+    action: SaveGradebookAction | UpdateTabWeightsAction,
+  ) => {
     switch (action.type) {
       case SAVE_GRADEBOOK: {
         draft.categories = action.payload.categories;
@@ -47,6 +63,17 @@ const reducer = produce(
         draft.submissions = action.payload.submissions;
         draft.gamificationEnabled = action.payload.gamificationEnabled;
         draft.userId = action.payload.userId ?? 0;
+        draft.weightedViewEnabled = action.payload.weightedViewEnabled;
+        draft.canManageWeights = action.payload.canManageWeights;
+        break;
+      }
+      case UPDATE_TAB_WEIGHTS: {
+        action.payload.weights.forEach(({ tabId, weight }) => {
+          const tab = draft.tabs.find((t) => t.id === tabId);
+          if (tab) {
+            tab.gradebookWeight = weight;
+          }
+        });
         break;
       }
       default:
@@ -60,6 +87,12 @@ export const actions = {
   saveGradebook: (data: GradebookData): SaveGradebookAction => ({
     type: SAVE_GRADEBOOK,
     payload: data,
+  }),
+  updateTabWeights: (
+    payload: UpdateWeightsPayload,
+  ): UpdateTabWeightsAction => ({
+    type: UPDATE_TAB_WEIGHTS,
+    payload,
   }),
 };
 

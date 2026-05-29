@@ -7,6 +7,7 @@ export interface TabData {
   id: number;
   title: string;
   categoryId: number;
+  gradebookWeight?: number;
 }
 
 export interface AssessmentData {
@@ -39,4 +40,10 @@ export interface GradebookData {
   submissions: SubmissionData[];
   gamificationEnabled: boolean;
   userId?: number;
+  weightedViewEnabled: boolean;
+  canManageWeights: boolean;
+}
+
+export interface UpdateWeightsPayload {
+  weights: { tabId: number; weight: number }[];
 }

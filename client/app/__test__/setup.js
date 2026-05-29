@@ -65,3 +65,15 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
   unstable_usePrompt: jest.fn(),
 }));
+
+// Replace I18nProvider with a synchronous stub so tests using test-utils
+// don't stall on async locale loading.
+jest.mock('lib/components/wrappers/I18nProvider', () => {
+  const { IntlProvider } = require('react-intl');
+  const SyncI18nProvider = ({ children }) => (
+    <IntlProvider defaultLocale="en" locale="en" messages={{}}>
+      {children}
+    </IntlProvider>
+  );
+  return { __esModule: true, default: SyncI18nProvider };
+});

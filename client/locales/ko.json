@@ -5405,6 +5405,12 @@
   "course.gradebook.GradebookIndex.noStudents": {
     "defaultMessage": "학생 없음"
   },
+  "course.gradebook.GradebookWeightedTable.doesNotSumTo100": {
+    "defaultMessage": "합계가 100이 아닙니다"
+  },
+  "course.gradebook.GradebookWeightedTable.treatUngradedAsZeroTooltip": {
+    "defaultMessage": "제출되지 않았거나 채점되지 않은 과제/평가를 0점으로 계산합니다. 모든 과제가 완료되어야 하는 학기 말에 사용하세요."
+  },
   "course.gradebook.GradebookTable.maxMarks": {
     "defaultMessage": "최고 점수"
   },
