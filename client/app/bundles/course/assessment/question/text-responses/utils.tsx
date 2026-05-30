@@ -1,5 +1,7 @@
 import {
   AttachmentType,
+  CellRandomConfig,
+  CellRandomConfigBody,
   TextResponseQuestionFormData,
 } from 'types/course/assessment/question/text-responses';
 
@@ -40,3 +42,49 @@ export const getMaxAttachmentSize = (
 
   return question.maxAttachmentSize;
 };
+
+export const generateRandomSeed = (): number => {
+  return Math.floor(Math.random() * 2_147_483_648);
+};
+
+export const getDefaultRandomizationMode = (
+  cellValue: string | number | undefined,
+): CellRandomConfig['mode'] => {
+  if (cellValue === undefined) return 'off';
+  if (typeof cellValue === 'number' || !Number.isNaN(Number(cellValue)))
+    return 'numeric';
+  return cellValue.length > 0 ? 'string' : 'off';
+};
+
+export function getDefaultRandomizationConfig<
+  M extends CellRandomConfig['mode'],
+>(
+  cellValue: string | number | undefined,
+  randomizationMode: M,
+): CellRandomConfigBody<M>;
+export function getDefaultRandomizationConfig(
+  cellValue: string | number | undefined,
+  randomizationMode: CellRandomConfig['mode'],
+): Omit<CellRandomConfig, 'mode' | 'cell'> {
+  switch (randomizationMode) {
+    case 'numeric': {
+      let numericValue = Number(cellValue);
+      if (Number.isNaN(numericValue)) numericValue = 0;
+      return {
+        min: Number((numericValue * 0.9).toPrecision(6)),
+        max: Number((numericValue * 1.1).toPrecision(6)),
+      };
+    }
+    case 'override':
+      return { value: String(cellValue ?? '') };
+    case 'shuffle':
+      return {};
+    case 'string':
+      return {
+        randomizeDigits: true,
+        randomizeLetters: true,
+      };
+    default:
+      return {};
+  }
+}

@@ -18,6 +18,7 @@ interface SingleFileInputProps<
   T extends FieldValues,
   TName extends FieldPath<T> = FieldPath<T>,
 > {
+  className?: string;
   field: ControllerRenderProps<T, TName>;
   fieldState: ControllerFieldState;
   accept?: Accept;
@@ -49,6 +50,7 @@ const FormSingleFileInput = <
   props: SingleFileInputProps<T, TName>,
 ): JSX.Element => {
   const {
+    className,
     field: {
       value: { name, url },
       onChange,
@@ -95,7 +97,7 @@ const FormSingleFileInput = <
               className: `
               dropzone-input select-none cursor-pointer
               flex h-100 p-10 items-center justify-center text-center
-              shadow-md rounded-md
+              shadow-md rounded-md ${className ?? ''}
             `,
             })}
           >

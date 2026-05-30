@@ -88,7 +88,15 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
       )
     else
       permitted_params.concat(
-        [solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation]]
+        [solutions_attributes: [
+          :_destroy, :id, :solution_type, :solution, :grade, :explanation,
+          test_spreadsheet_attributes: [
+            :id, :file, :_destroy, :is_randomization_enabled, :num_random_tests,
+            :is_random_seed_fixed, :test_random_seed,
+            :is_timestamp_fixed, :test_timestamp,
+            :variables
+          ]
+        ]]
       )
     end
     params.require(:question_text_response).permit(*permitted_params)

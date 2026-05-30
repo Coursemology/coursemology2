@@ -1041,6 +1041,66 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.keyword',
     defaultMessage: 'Keyword',
   },
+  regex: {
+    id: 'course.assessment.question.textResponses.regex',
+    defaultMessage: 'Regular Expression',
+  },
+  invalidRegex: {
+    id: 'course.assessment.question.textResponses.invalidRegex',
+    defaultMessage: 'Invalid regular expression',
+  },
+  spreadsheetFormula: {
+    id: 'course.assessment.question.textResponses.spreadsheetFormula',
+    defaultMessage: 'Spreadsheet Formula',
+  },
+  testSpreadsheet: {
+    id: 'course.assessment.question.textResponses.testSpreadsheet',
+    defaultMessage: 'Test spreadsheet',
+  },
+  testSpreadsheetDescription: {
+    id: 'course.assessment.question.textResponses.testSpreadsheetDescription',
+    defaultMessage:
+      'A test spreadsheet is required to auto grade the student answer.',
+  },
+  testSpreadsheetRequired: {
+    id: 'course.assessment.question.textResponses.testSpreadsheetRequired',
+    defaultMessage: 'Please upload a test spreadsheet file.',
+  },
+  spreadsheetAdvancedOptions: {
+    id: 'course.assessment.question.textResponses.spreadsheetAdvancedOptions',
+    defaultMessage: 'Advanced Options',
+  },
+  spreadsheetRandomization: {
+    id: 'course.assessment.question.textResponses.spreadsheetRandomization',
+    defaultMessage: 'Enable randomization',
+  },
+  spreadsheetRandomizationDescription: {
+    id: 'course.assessment.question.textResponses.spreadsheetRandomizationDescription',
+    defaultMessage:
+      'If enabled, some spreadsheet values will be randomly adjusted when autograding. This is useful to ensure the formula actually computes the right answer instead of a preset value.',
+  },
+  numberOfRandomTests: {
+    id: 'course.assessment.question.textResponses.numberOfRandomTests',
+    defaultMessage: 'Number of random tests',
+  },
+  fixedRandomSeed: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed',
+    defaultMessage: 'Fixed random seed',
+  },
+  fixedRandomSeedDescription: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription',
+    defaultMessage:
+      'If checked, randomization will produce the same results every time. This affects both spreadsheet value randomization and random functions in the spreadsheet (RAND, RANDBETWEEN, etc.).',
+  },
+  fixedTimestamp: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp',
+    defaultMessage: 'Fixed date and time',
+  },
+  fixedTimestampDescription: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription',
+    defaultMessage:
+      'If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead.',
+  },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
     defaultMessage: 'Grade',
