@@ -15,6 +15,7 @@ import { TextResponseEditableFormData } from 'types/course/assessment/question/t
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
+import SpreadsheetPreview from 'lib/components/form/fields/SingleFileInput/SpreadsheetPreview';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -48,17 +49,21 @@ const Solution: FC<SolutionProps> = ({
   useEffect(() => {
     if (solution?.solutionType === 'spreadsheet_formula') {
       setValue(`solutions.${index}.spreadsheet`, {
-        isRandomizationEnabled: false,
-        isRandomSeedFixed: false,
-        randomSeed: generateRandomSeed(),
-        isTimestampFixed: false,
-        testTimestamp: new Date(),
-        numRandomTests: 2,
-        file: { name: '', url: '' },
-        ...(solution.spreadsheet ?? {}),
+        isRandomizationEnabled:
+          solution.spreadsheet?.isRandomizationEnabled ?? false,
+        isRandomSeedFixed: solution.spreadsheet?.isRandomSeedFixed ?? false,
+        randomSeed: solution.spreadsheet?.randomSeed ?? generateRandomSeed(),
+        isTimestampFixed: solution.spreadsheet?.isTimestampFixed ?? false,
+        testTimestamp:
+          solution.spreadsheet?.testTimestamp ?? new Date().toISOString(),
+        numRandomTests: solution.spreadsheet?.numRandomTests ?? 2,
+        file: solution.spreadsheet?.file ?? { file: null, name: '', url: '' },
+        variables: solution.spreadsheet?.variables,
       });
     }
   }, [solution?.solutionType]);
+
+  const spreadsheetFile = solution?.spreadsheet?.file?.file;
 
   if (!solution) {
     return null;
@@ -192,8 +197,20 @@ const Solution: FC<SolutionProps> = ({
                       }}
                       className="p-3"
                       disabled={solution.toBeDeleted || disabled}
-                      field={field}
+                      field={{
+                        ...field,
+                        onChange: (value) => {
+                          if (value?.file instanceof File) {
+                            field.onChange({ ...value, name: value.file.name });
+                            setValue(
+                              `solutions.${index}.spreadsheet.variables`,
+                              undefined,
+                            );
+                          }
+                        },
+                      }}
                       fieldState={fieldState}
+                      previewComponent={SpreadsheetPreview}
                     />
                   </>
                 )}
@@ -221,16 +238,23 @@ const Solution: FC<SolutionProps> = ({
               </FormHelperText>
               <Controller
                 control={control}
-                defaultValue={2}
-                disabled={
-                  solution.toBeDeleted ||
-                  !solution.spreadsheet?.isRandomizationEnabled
-                }
                 name={`solutions.${index}.spreadsheet.numRandomTests`}
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    disabled={
+                      solution.toBeDeleted ||
+                      !solution.spreadsheet?.isRandomizationEnabled
+                    }
                     disableMargins
-                    field={field}
+                    field={{
+                      ...field,
+                      onChange: (value) =>
+                        field.onChange(
+                          typeof value === 'number'
+                            ? Math.min(16, Math.max(2, value))
+                            : value,
+                        ),
+                    }}
                     fieldState={fieldState}
                     size="small"
                     type="number"
@@ -248,6 +272,7 @@ const Solution: FC<SolutionProps> = ({
               {t(translations.spreadsheetAdvancedOptions)}
             </Button>
             <SpreadsheetManagerPrompt
+              file={spreadsheetFile}
               index={index}
               onClose={() => setIsAdvancedPromptOpen(false)}
               open={isAdvancedPromptOpen}

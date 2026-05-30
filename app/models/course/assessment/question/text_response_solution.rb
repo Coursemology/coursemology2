@@ -27,9 +27,9 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.question = duplicator.duplicate(other.question)
-    if other.test_spreadsheet && other.spreadsheet_formula?
-      self.test_spreadsheet = duplicator.duplicate(other.test_spreadsheet)
-    end
+    return unless other.test_spreadsheet && other.spreadsheet_formula?
+
+    self.test_spreadsheet = duplicator.duplicate(other.test_spreadsheet)
   end
 
   private

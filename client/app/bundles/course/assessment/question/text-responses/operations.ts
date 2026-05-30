@@ -4,6 +4,7 @@ import {
   TextResponseEditableFormData,
   TextResponseFormData,
   TextResponsePostData,
+  TextResponseSolutionPostData,
   TextResponseSpreadsheetPostData,
 } from 'types/course/assessment/question/text-responses';
 
@@ -32,15 +33,16 @@ export const fetchEdit = async (id: number): Promise<TextResponseFormData> => {
   return response.data;
 };
 
+// https://guides.rubyonrails.org/action_controller_overview.html#hash-and-array-parameters
+
 const objectToFormData = (
   obj: unknown,
   formData: FormData = new FormData(),
   parentKey = '',
 ): FormData => {
   if (obj === null || obj === undefined) {
-    return formData;
-  }
-  if (obj instanceof File) {
+    formData.append(parentKey, '');
+  } else if (obj instanceof File) {
     formData.append(parentKey, obj);
   } else if (typeof obj === 'boolean') {
     formData.append(parentKey, obj ? '1' : '0');
@@ -49,8 +51,8 @@ const objectToFormData = (
   } else if (typeof obj === 'string') {
     formData.append(parentKey, obj);
   } else if (Array.isArray(obj)) {
-    obj.forEach((item, index) => {
-      objectToFormData(item, formData, `${parentKey}[${index}]`);
+    obj.forEach((item) => {
+      objectToFormData(item, formData, `${parentKey}[]`);
     });
   } else {
     Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
@@ -66,8 +68,8 @@ const objectToFormData = (
 
 const adaptSpreadsheetPostData = (
   spreadsheet: SolutionEntity['spreadsheet'],
-): TextResponseSpreadsheetPostData | undefined => {
-  if (!spreadsheet) return undefined;
+): TextResponseSpreadsheetPostData | null => {
+  if (!spreadsheet) return null;
 
   return {
     ...(spreadsheet.id && { id: spreadsheet.id }),
@@ -76,10 +78,25 @@ const adaptSpreadsheetPostData = (
     is_random_seed_fixed: spreadsheet.isRandomSeedFixed,
     test_random_seed: spreadsheet.randomSeed,
     is_timestamp_fixed: spreadsheet.isTimestampFixed,
-    test_timestamp: spreadsheet.testTimestamp?.toISOString() ?? null,
+    test_timestamp: spreadsheet.testTimestamp,
     num_random_tests: spreadsheet.numRandomTests,
     variables: JSON.stringify(spreadsheet.variables ?? []),
   };
+};
+
+const adaptSolutionPostData = (
+  solution: SolutionEntity,
+): TextResponseSolutionPostData => {
+  const solutionData: TextResponseSolutionPostData = {
+    solution: solution.solution,
+    solution_type: solution.solutionType,
+    grade: solution.grade,
+    explanation: solution.explanation,
+    test_spreadsheet_attributes: adaptSpreadsheetPostData(solution.spreadsheet),
+  };
+  if (!solution.draft) solutionData.id = solution.id;
+  if (solution.toBeDeleted) solutionData._destroy = true;
+  return solutionData;
 };
 
 const adaptPostData = (
@@ -97,17 +114,9 @@ const adaptPostData = (
       template_text: data.question.templateText,
       hide_text: data.question.hideText,
       question_assessment: { skill_ids: data.question.skillIds },
-      solutions_attributes: data.solutions?.map((solution, _) => ({
-        id: solution.draft ? undefined : solution.id,
-        solution: solution.solution,
-        solution_type: solution.solutionType,
-        grade: solution.grade,
-        explanation: solution.explanation,
-        _destroy: solution.toBeDeleted,
-        test_spreadsheet_attributes: adaptSpreadsheetPostData(
-          solution.spreadsheet,
-        ),
-      })),
+      solutions_attributes: data.solutions
+        ? data.solutions.map(adaptSolutionPostData)
+        : null,
     },
   };
 };

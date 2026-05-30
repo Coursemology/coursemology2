@@ -51,7 +51,7 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
           ? INITIAL_MAX_ATTACHMENT_SIZE
           : data.question!.maxAttachmentSize,
     },
-    solutions: data.solutions ?? [],
+    solutions: data.solutions,
   };
 
   const [submitting, setSubmitting] = useState(false);
