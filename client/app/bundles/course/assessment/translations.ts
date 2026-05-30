@@ -1101,6 +1101,69 @@ const translations = defineMessages({
     defaultMessage:
       'If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead.',
   },
+  randomizationMode: {
+    id: 'course.assessment.question.textResponses.randomizationMode',
+    defaultMessage: 'Autograding Value Configuration',
+  },
+  randomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.randomizationModeDescription',
+    defaultMessage:
+      'Click on any cell to configure how its value should be replaced/randomized during autograding.',
+  },
+  randomizationModeClearAll: {
+    id: 'course.assessment.question.textResponses.randomizationModeClearAll',
+    defaultMessage: 'Clear All',
+  },
+  randomizationModeRestoreDefaults: {
+    id: 'course.assessment.question.textResponses.randomizationModeRestoreDefaults',
+    defaultMessage: 'Restore Defaults',
+  },
+  randomizationModePopoverTitle: {
+    id: 'course.assessment.question.textResponses.randomizationModePopoverTitle',
+    defaultMessage: 'During autograding...',
+  },
+  noRandomizationMode: {
+    id: 'course.assessment.question.textResponses.noRandomizationMode',
+    defaultMessage: 'Keep original value',
+  },
+  overrideRandomizationMode: {
+    id: 'course.assessment.question.textResponses.overrideRandomizationMode',
+    defaultMessage: 'Override with specified value',
+  },
+  overrideValue: {
+    id: 'course.assessment.question.textResponses.overrideValue',
+    defaultMessage: 'Value',
+  },
+  numericRandomizationMode: {
+    id: 'course.assessment.question.textResponses.numericRandomizationMode',
+    defaultMessage: 'Use random numeric value',
+  },
+  stringRandomizationMode: {
+    id: 'course.assessment.question.textResponses.stringRandomizationMode',
+    defaultMessage: 'Randomize characters in value',
+  },
+  stringRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.stringRandomizationModeDescription',
+    defaultMessage:
+      'Each character class to be randomized may be replaced with different character(s) from the same class.',
+  },
+  randomizeDigits: {
+    id: 'course.assessment.question.textResponses.randomizeDigits',
+    defaultMessage: 'Randomize digits (0-9)',
+  },
+  randomizeLetters: {
+    id: 'course.assessment.question.textResponses.randomizeLetters',
+    defaultMessage: 'Randomize letters (a-z)',
+  },
+  shuffleRandomizationMode: {
+    id: 'course.assessment.question.textResponses.shuffleRandomizationMode',
+    defaultMessage: 'Shuffle value with other cells',
+  },
+  shuffleRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.shuffleRandomizationModeDescription',
+    defaultMessage:
+      'The values of each cell marked "Shuffle" will be randomly rearranged. The overall distribution remains the same, but each value may end up in a different cell.',
+  },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
     defaultMessage: 'Grade',

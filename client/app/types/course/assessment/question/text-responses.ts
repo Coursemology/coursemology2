@@ -8,7 +8,7 @@ export interface NumericRandomConfig {
 
 export interface OverrideRandomConfig {
   mode: 'override';
-  possibleValues: string[];
+  value: string;
 }
 
 export interface ShuffleRandomConfig {
@@ -17,6 +17,12 @@ export interface ShuffleRandomConfig {
 
 export interface StringRandomConfig {
   mode: 'string';
+  randomizeDigits: boolean;
+  randomizeLetters: boolean;
+}
+
+export interface NoRandomConfig {
+  mode: 'off';
 }
 
 export type CellRandomConfig = (
@@ -24,6 +30,7 @@ export type CellRandomConfig = (
   | OverrideRandomConfig
   | ShuffleRandomConfig
   | StringRandomConfig
+  | NoRandomConfig
 ) & { cell: string };
 
 export type CellRandomConfigBody<M extends CellRandomConfig['mode']> = Omit<
@@ -49,12 +56,12 @@ export interface SolutionData {
     isRandomSeedFixed: boolean;
     randomSeed: number;
     isTimestampFixed: boolean;
-    testTimestamp: Date;
+    testTimestamp: string;
     numRandomTests: number;
     file?: {
       name: string;
       url: string;
-      file?: File;
+      file?: File | null;
     };
     variables?: CellRandomConfig[];
   };
@@ -117,6 +124,16 @@ export interface TextResponseSpreadsheetPostData {
   _destroy?: boolean;
 }
 
+export interface TextResponseSolutionPostData {
+  id?: SolutionEntity['id'];
+  solution?: SolutionEntity['solution'];
+  solution_type?: SolutionEntity['solutionType'];
+  grade?: SolutionEntity['grade'];
+  explanation?: SolutionEntity['explanation'];
+  _destroy?: SolutionEntity['toBeDeleted'];
+  test_spreadsheet_attributes: TextResponseSpreadsheetPostData | null;
+}
+
 export interface TextResponsePostData {
   question_text_response: {
     title?: TextResponseFormDataQuestion['title'];
@@ -131,14 +148,6 @@ export interface TextResponsePostData {
     question_assessment?: {
       skill_ids: TextResponseFormDataQuestion['skillIds'];
     };
-    solutions_attributes?: {
-      id?: SolutionEntity['id'];
-      solution?: SolutionEntity['solution'];
-      solution_type?: SolutionEntity['solutionType'];
-      grade?: SolutionEntity['grade'];
-      explanation?: SolutionEntity['explanation'];
-      _destroy?: SolutionEntity['toBeDeleted'];
-      test_spreadsheet_attributes?: TextResponseSpreadsheetPostData;
-    }[];
+    solutions_attributes: TextResponseSolutionPostData[] | null;
   };
 }

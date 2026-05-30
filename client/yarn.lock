@@ -14521,6 +14521,10 @@ wsl-utils@^0.1.0:
   dependencies:
     is-wsl "^3.1.0"
 
+"xlsx@https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz":
+  version "0.20.3"
+  resolved "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz#992725af0bb69fa9733590fcb8ab4a57e10b929b"
+
 xml-name-validator@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-5.0.0.tgz#82be9b957f7afdacf961e5980f1bf227c0bf7673"

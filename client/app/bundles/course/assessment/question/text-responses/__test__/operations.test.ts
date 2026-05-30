@@ -48,6 +48,10 @@ beforeEach(() => {
   );
 });
 
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 describe('solutions_attributes request payload', () => {
   it('sends solution fields for a normal saved solution', async () => {
     const spy = jest.spyOn(
@@ -70,12 +74,13 @@ describe('solutions_attributes request payload', () => {
 
     expect(spy).toHaveBeenCalledWith(expect.any(FormData));
     const fd = spy.mock.calls[0][0] as FormData;
-    const base = 'question_text_response[solutions_attributes][0]';
+    const base = 'question_text_response[solutions_attributes][]';
     expect(fd.get(`${base}[id]`)).toBe('1');
     expect(fd.get(`${base}[solution]`)).toBe('exact answer');
     expect(fd.get(`${base}[solution_type]`)).toBe('exact_match');
     expect(fd.get(`${base}[grade]`)).toBe('5');
     expect(fd.get(`${base}[explanation]`)).toBe('well done');
+    // spreadsheet fields should be set to explicit null to preserve alignment
     // not deleted — _destroy absent
     expect(fd.get(`${base}[_destroy]`)).toBeNull();
   });
@@ -102,7 +107,7 @@ describe('solutions_attributes request payload', () => {
 
     expect(spy).toHaveBeenCalledWith(expect.any(FormData));
     const fd = spy.mock.calls[0][0] as FormData;
-    const base = 'question_text_response[solutions_attributes][0]';
+    const base = 'question_text_response[solutions_attributes][]';
     // draft: true causes id to be omitted (undefined → not appended)
     expect(fd.get(`${base}[id]`)).toBeNull();
     expect(fd.get(`${base}[solution]`)).toBe('new answer');
@@ -131,7 +136,7 @@ describe('solutions_attributes request payload', () => {
 
     expect(spy).toHaveBeenCalledWith(questionId, expect.any(FormData));
     const fd = spy.mock.calls[0][1] as FormData;
-    const base = 'question_text_response[solutions_attributes][0]';
+    const base = 'question_text_response[solutions_attributes][]';
     expect(fd.get(`${base}[id]`)).toBe('2');
     // booleans are encoded as '1' (true) / '0' (false)
     expect(fd.get(`${base}[_destroy]`)).toBe('1');
@@ -157,7 +162,7 @@ describe('solutions_attributes request payload', () => {
             isRandomSeedFixed: true,
             randomSeed: 42,
             isTimestampFixed: false,
-            testTimestamp: new Date(),
+            testTimestamp: new Date().toISOString(),
             numRandomTests: 4,
             variables: [],
             file: { name: 'sheet.xlsx', url: '' },
@@ -168,13 +173,13 @@ describe('solutions_attributes request payload', () => {
 
     expect(spy).toHaveBeenCalledWith(expect.any(FormData));
     const fd = spy.mock.calls[0][0] as FormData;
-    const ss = 'question_text_response[solutions_attributes][0][test_spreadsheet_attributes]';
+    const ss =
+      'question_text_response[solutions_attributes][][test_spreadsheet_attributes]';
     expect(fd.get(`${ss}[is_randomization_enabled]`)).toBe('0');
     expect(fd.get(`${ss}[is_random_seed_fixed]`)).toBe('1');
     expect(fd.get(`${ss}[test_random_seed]`)).toBe('42');
     expect(fd.get(`${ss}[is_timestamp_fixed]`)).toBe('0');
-    // null values are not appended
-    expect(fd.get(`${ss}[test_timestamp]`)).toBeNull();
+    expect(fd.get(`${ss}[test_timestamp]`)).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     expect(fd.get(`${ss}[num_random_tests]`)).toBe('4');
     // variables serialised as JSON string
     expect(fd.get(`${ss}[variables]`)).toBe('[]');

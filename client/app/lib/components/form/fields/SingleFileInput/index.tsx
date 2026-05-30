@@ -51,10 +51,7 @@ const FormSingleFileInput = <
 ): JSX.Element => {
   const {
     className,
-    field: {
-      value: { name, url },
-      onChange,
-    },
+    field: { value, onChange },
     fieldState: { error },
     accept,
     disabled,
@@ -62,7 +59,18 @@ const FormSingleFileInput = <
     label,
   } = props;
 
-  const [file, setFile] = useState<File | null>(null);
+  const {
+    name,
+    url,
+    file: fieldFile,
+  } = value as {
+    name: string;
+    url: string;
+    file?: File | null;
+  };
+  const [file, setFile] = useState<File | null>(
+    fieldFile instanceof File ? fieldFile : null,
+  );
   const mounted = useRef(false);
 
   const onCancel = (e: UIEvent): void => {
