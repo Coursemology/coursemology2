@@ -2282,6 +2282,48 @@
   "course.assessment.question.textResponses.templateTextDescription": {
     "defaultMessage": "学生第一次尝试此题时，答题区域中出现的文字。"
   },
+  "course.assessment.question.textResponses.regex": {
+    "defaultMessage": "正则表达式"
+  },
+  "course.assessment.question.textResponses.invalidRegex": {
+    "defaultMessage": "无效的正则表达式"
+  },
+  "course.assessment.question.textResponses.spreadsheetFormula": {
+    "defaultMessage": "电子表格公式"
+  },
+  "course.assessment.question.textResponses.testSpreadsheet": {
+    "defaultMessage": "测试电子表格"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetDescription": {
+    "defaultMessage": "需要上传测试电子表格以自动评分学生答案。"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetRequired": {
+    "defaultMessage": "请上传测试电子表格文件。"
+  },
+  "course.assessment.question.textResponses.spreadsheetAdvancedOptions": {
+    "defaultMessage": "高级选项"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomization": {
+    "defaultMessage": "启用随机化"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomizationDescription": {
+    "defaultMessage": "启用后，自动评分时将随机调整部分电子表格数值。这有助于确保公式确实计算出正确答案，而不是预设值。"
+  },
+  "course.assessment.question.textResponses.numberOfRandomTests": {
+    "defaultMessage": "随机测试次数"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed": {
+    "defaultMessage": "固定随机种子"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription": {
+    "defaultMessage": "勾选后，随机化将每次产生相同结果。这会影响电子表格数值随机化和电子表格中的随机函数（RAND、RANDBETWEEN 等）。"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp": {
+    "defaultMessage": "固定日期和时间"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
+    "defaultMessage": "勾选后，使用当前日期/时间的公式（NOW、TODAY 等）将改用此特定日期/时间。"
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "评分标准试验场"
   },

@@ -1,15 +1,28 @@
+import { FC, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Undo } from '@mui/icons-material';
-import { Alert, IconButton, Select, Tooltip } from '@mui/material';
+import {
+  Alert,
+  Button,
+  IconButton,
+  Select,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 import { TextResponseEditableFormData } from 'types/course/assessment/question/text-responses';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
+import { generateRandomSeed } from '../utils';
+
+import SpreadsheetManagerPrompt from './SpreadsheetManagerPrompt';
 
 interface SolutionProps {
   index: number;
@@ -18,23 +31,44 @@ interface SolutionProps {
   disabled?: boolean;
 }
 
-const Solution = ({
+const Solution: FC<SolutionProps> = ({
   index,
   disabled,
   onDelete,
   onUndoDelete,
-}: SolutionProps): JSX.Element => {
+}: SolutionProps) => {
   const { t } = useTranslation();
-  const { control, watch } = useFormContext<TextResponseEditableFormData>();
+  const { control, watch, setValue } =
+    useFormContext<TextResponseEditableFormData>();
 
-  const toBeDeleted = watch(`solutions.${index}.toBeDeleted`);
-  const isDraft = watch(`solutions.${index}.draft`);
+  const solution = watch(`solutions.${index}`);
+
+  const [isAdvancedPromptOpen, setIsAdvancedPromptOpen] = useState(false);
+
+  useEffect(() => {
+    if (solution?.solutionType === 'spreadsheet_formula') {
+      setValue(`solutions.${index}.spreadsheet`, {
+        isRandomizationEnabled: false,
+        isRandomSeedFixed: false,
+        randomSeed: generateRandomSeed(),
+        isTimestampFixed: false,
+        testTimestamp: new Date(),
+        numRandomTests: 2,
+        file: { name: '', url: '' },
+        ...(solution.spreadsheet ?? {}),
+      });
+    }
+  }, [solution?.solutionType]);
+
+  if (!solution) {
+    return null;
+  }
 
   return (
     <section
       className={`flex border-0 border-b border-solid border-neutral-200 last:border-b-0 ${
-        toBeDeleted ? 'bg-red-50' : ''
-      } ${isDraft ? 'bg-lime-50' : ''}`}
+        solution?.toBeDeleted ? 'bg-red-50' : ''
+      } ${solution?.draft ? 'bg-lime-50' : ''}`}
     >
       <div className="mx-8 mt-0 flex w-[calc(100%_-_84px)] flex-col space-y-4 py-4">
         <div className="flex flex-row space-x-4">
@@ -46,9 +80,10 @@ const Solution = ({
               render={({ field, fieldState }): JSX.Element => (
                 <>
                   <Select
-                    disabled={toBeDeleted || disabled}
+                    disabled={solution.toBeDeleted || disabled}
                     error={!!fieldState.error}
                     native
+                    size="small"
                     variant="outlined"
                     {...field}
                   >
@@ -56,6 +91,10 @@ const Solution = ({
                       {t(translations.exactMatch)}
                     </option>
                     <option value="keyword">{t(translations.keyword)}</option>
+                    <option value="regex">{t(translations.regex)}</option>
+                    <option value="spreadsheet_formula">
+                      {t(translations.spreadsheetFormula)}
+                    </option>
                   </Select>
                   {fieldState.error && (
                     <FormHelperText error>
@@ -74,11 +113,12 @@ const Solution = ({
               name={`solutions.${index}.grade`}
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
-                  disabled={toBeDeleted || disabled}
+                  disabled={solution.toBeDeleted || disabled}
                   disableMargins
                   field={field}
                   fieldState={fieldState}
                   placeholder={t(translations.zeroGrade)}
+                  size="small"
                 />
               )}
             />
@@ -94,8 +134,8 @@ const Solution = ({
               render={({ field, fieldState }): JSX.Element => (
                 <>
                   <textarea
-                    className="w-full h-full resize-none rounded border border-solid border-neutral-400 p-2 disabled:bg-neutral-100 disabled:text-neutral-400"
-                    disabled={toBeDeleted || disabled}
+                    className={`w-full h-full resize-none rounded border border-solid p-2 disabled:bg-neutral-100 disabled:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-inset ${fieldState.error ? 'border-red-500 focus:ring-red-500' : 'border-neutral-400 focus:ring-blue-600'}`}
+                    disabled={solution.toBeDeleted || disabled}
                     rows={2}
                     {...field}
                   />
@@ -116,7 +156,7 @@ const Solution = ({
               name={`solutions.${index}.explanation`}
               render={({ field }): JSX.Element => (
                 <CKEditorRichText
-                  disabled={toBeDeleted || disabled}
+                  disabled={solution.toBeDeleted || disabled}
                   disableMargins
                   name={`solutions.${index}.explanation`}
                   onChange={field.onChange}
@@ -127,8 +167,94 @@ const Solution = ({
             />
           </div>
         </div>
+        {solution.solutionType === 'spreadsheet_formula' && (
+          <>
+            <div className="flex flex-col space-y-1">
+              <Typography variant="body1">
+                {t(translations.testSpreadsheet)}
+              </Typography>
+              <Controller
+                control={control}
+                defaultValue={{ name: '', url: '' }}
+                name={`solutions.${index}.spreadsheet.file`}
+                render={({ field, fieldState }): JSX.Element => (
+                  <>
+                    <Typography className="text-neutral-500" variant="body2">
+                      {t(translations.testSpreadsheetDescription)}
+                    </Typography>
+                    <FormSingleFileInput
+                      accept={{
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                          ['.xlsx'],
+                        'application/vnd.oasis.opendocument.spreadsheet': [
+                          '.ods',
+                        ],
+                      }}
+                      className="p-3"
+                      disabled={solution.toBeDeleted || disabled}
+                      field={field}
+                      fieldState={fieldState}
+                    />
+                  </>
+                )}
+              />
+            </div>
 
-        {isDraft && (
+            <Controller
+              control={control}
+              name={`solutions.${index}.spreadsheet.isRandomizationEnabled`}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  description={t(
+                    translations.spreadsheetRandomizationDescription,
+                  )}
+                  disabled={solution.toBeDeleted || disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.spreadsheetRandomization)}
+                />
+              )}
+            />
+            <div className="space-y-2">
+              <FormHelperText>
+                {t(translations.numberOfRandomTests)}
+              </FormHelperText>
+              <Controller
+                control={control}
+                defaultValue={2}
+                disabled={
+                  solution.toBeDeleted ||
+                  !solution.spreadsheet?.isRandomizationEnabled
+                }
+                name={`solutions.${index}.spreadsheet.numRandomTests`}
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    disableMargins
+                    field={field}
+                    fieldState={fieldState}
+                    size="small"
+                    type="number"
+                  />
+                )}
+              />
+            </div>
+            <Button
+              className="w-fit"
+              disabled={solution.toBeDeleted || disabled}
+              onClick={() => setIsAdvancedPromptOpen(true)}
+              size="small"
+              variant="contained"
+            >
+              {t(translations.spreadsheetAdvancedOptions)}
+            </Button>
+            <SpreadsheetManagerPrompt
+              index={index}
+              onClose={() => setIsAdvancedPromptOpen(false)}
+              open={isAdvancedPromptOpen}
+            />
+          </>
+        )}
+        {solution.draft && (
           <Alert
             className="border-lime-300"
             severity="warning"
@@ -138,7 +264,7 @@ const Solution = ({
           </Alert>
         )}
 
-        {toBeDeleted && (
+        {solution.toBeDeleted && (
           <Alert className="border-red-300" severity="error" variant="outlined">
             {t(translations.solutionWillBeDeleted)}
           </Alert>
@@ -146,7 +272,7 @@ const Solution = ({
       </div>
 
       <div className="py-4">
-        {toBeDeleted ? (
+        {solution.toBeDeleted ? (
           <Tooltip title={t(translations.undoDeleteSolution)}>
             <IconButton
               aria-label={t(translations.undoDeleteSolution)}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_06_122130) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_23_065615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -430,6 +430,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_06_122130) do
     t.string "solution_lemma", default: [], null: false, array: true
     t.string "information"
     t.index ["point_id"], name: "fk__course_assessment_text_response_compre_solution_point"
+  end
+
+  create_table "course_assessment_question_text_response_solution_spreadsheets", force: :cascade do |t|
+    t.bigint "solution_id", null: false
+    t.boolean "is_randomization_enabled", default: false, null: false
+    t.boolean "is_random_seed_fixed", default: false, null: false
+    t.integer "test_random_seed"
+    t.boolean "is_timestamp_fixed", default: false, null: false
+    t.datetime "test_timestamp"
+    t.integer "num_random_tests", default: 2, null: false
+    t.jsonb "variables", default: [], null: false
+    t.index ["solution_id"], name: "idx_on_solution_id_1073150e65"
   end
 
   create_table "course_assessment_question_text_response_solutions", id: :serial, force: :cascade do |t|
@@ -1825,6 +1837,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_06_122130) do
   add_foreign_key "course_assessment_question_text_response_compre_groups", "course_assessment_question_text_responses", column: "question_id"
   add_foreign_key "course_assessment_question_text_response_compre_points", "course_assessment_question_text_response_compre_groups", column: "group_id"
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
+  add_foreign_key "course_assessment_question_text_response_solution_spreadsheets", "course_assessment_question_text_response_solutions", column: "solution_id"
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"

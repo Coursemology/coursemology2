@@ -9,11 +9,24 @@ import { commonQuestionFieldsValidation } from '../../components/CommonQuestionF
 
 const solutionSchema = object({
   solutionType: string().required(formTranslations.required),
-  solution: string().when('toBeDeleted', {
-    is: true,
-    then: string().notRequired(),
-    otherwise: string().required(formTranslations.required),
-  }),
+  solution: string()
+    .when('toBeDeleted', {
+      is: true,
+      then: string().notRequired(),
+      otherwise: string().required(formTranslations.required),
+    })
+    .test('valid-regex', translations.invalidRegex, function (value) {
+      if (this.parent.toBeDeleted || this.parent.solutionType !== 'regex')
+        return true;
+      if (!value) return true;
+      try {
+        // eslint-disable-next-line no-new
+        new RegExp(value);
+        return true;
+      } catch {
+        return false;
+      }
+    }),
   grade: number().when('toBeDeleted', {
     is: true,
     then: number().notRequired(),
@@ -23,6 +36,21 @@ const solutionSchema = object({
   }),
   explanation: string().nullable(),
   toBeDeleted: bool(),
+  spreadsheet: object()
+    .nullable()
+    .when(['toBeDeleted', 'solutionType'], {
+      is: (toBeDeleted: boolean, solutionType: string) =>
+        !toBeDeleted && solutionType === 'spreadsheet_formula',
+      then: object({
+        file: object({ name: string(), url: string() })
+          .nullable()
+          .test(
+            'spreadsheet-file-required',
+            translations.testSpreadsheetRequired,
+            (value) => Boolean(value?.name),
+          ),
+      }),
+    }),
 });
 
 export const questionSchema = (

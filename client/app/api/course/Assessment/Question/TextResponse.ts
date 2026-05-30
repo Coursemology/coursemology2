@@ -1,7 +1,4 @@
-import {
-  TextResponseFormData,
-  TextResponsePostData,
-} from 'types/course/assessment/question/text-responses';
+import { TextResponseFormData } from 'types/course/assessment/question/text-responses';
 
 import { APIResponse, JustRedirect } from 'api/types';
 
@@ -26,11 +23,11 @@ export default class TextResponseAPI extends BaseAPI {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 
-  create(data: TextResponsePostData): APIResponse<JustRedirect> {
+  create(data: FormData): APIResponse<JustRedirect> {
     return this.client.post(`${this.#urlPrefix}`, data);
   }
 
-  update(id: number, data: TextResponsePostData): APIResponse<JustRedirect> {
+  update(id: number, data: FormData): APIResponse<JustRedirect> {
     return this.client.patch(`${this.#urlPrefix}/${id}`, data);
   }
 }

@@ -2301,6 +2301,48 @@
   "course.assessment.question.textResponses.templateTextDescription": {
     "defaultMessage": "Text that appears in the answer area when students attempt this question for the first time."
   },
+  "course.assessment.question.textResponses.regex": {
+    "defaultMessage": "Regular Expression"
+  },
+  "course.assessment.question.textResponses.invalidRegex": {
+    "defaultMessage": "Invalid regular expression"
+  },
+  "course.assessment.question.textResponses.spreadsheetFormula": {
+    "defaultMessage": "Spreadsheet Formula"
+  },
+  "course.assessment.question.textResponses.testSpreadsheet": {
+    "defaultMessage": "Test spreadsheet"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetDescription": {
+    "defaultMessage": "A test spreadsheet is required to auto grade the student answer."
+  },
+  "course.assessment.question.textResponses.testSpreadsheetRequired": {
+    "defaultMessage": "Please upload a test spreadsheet file."
+  },
+  "course.assessment.question.textResponses.spreadsheetAdvancedOptions": {
+    "defaultMessage": "Advanced Options"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomization": {
+    "defaultMessage": "Enable randomization"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomizationDescription": {
+    "defaultMessage": "If enabled, some spreadsheet values will be randomly adjusted when autograding. This is useful to ensure the formula actually computes the right answer instead of a preset value."
+  },
+  "course.assessment.question.textResponses.numberOfRandomTests": {
+    "defaultMessage": "Number of random tests"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed": {
+    "defaultMessage": "Fixed random seed"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription": {
+    "defaultMessage": "If checked, randomization will produce the same results every time. This affects both spreadsheet value randomization and random functions in the spreadsheet (RAND, RANDBETWEEN, etc.)."
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp": {
+    "defaultMessage": "Fixed date and time"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
+    "defaultMessage": "If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead."
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "Rubric Playground"
   },

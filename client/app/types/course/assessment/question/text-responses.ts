@@ -1,11 +1,69 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
+export interface NumericRandomConfig {
+  mode: 'numeric';
+  min: number;
+  max: number;
+}
+
+export interface OverrideRandomConfig {
+  mode: 'override';
+  possibleValues: string[];
+}
+
+export interface ShuffleRandomConfig {
+  mode: 'shuffle';
+}
+
+export interface StringRandomConfig {
+  mode: 'string';
+}
+
+export type CellRandomConfig = (
+  | NumericRandomConfig
+  | OverrideRandomConfig
+  | ShuffleRandomConfig
+  | StringRandomConfig
+) & { cell: string };
+
+export type CellRandomConfigBody<M extends CellRandomConfig['mode']> = Omit<
+  Extract<CellRandomConfig, { mode: M }>,
+  'mode' | 'cell'
+>;
+
+export type SolutionType =
+  | 'exact_match'
+  | 'keyword'
+  | 'regex'
+  | 'spreadsheet_formula';
+
 export interface SolutionData {
   id: number | string;
   solution: string;
-  solutionType: 'exact_match' | 'keyword';
+  solutionType: SolutionType;
   grade: number | string;
   explanation: string;
+  spreadsheet?: {
+    id?: number;
+    isRandomizationEnabled: boolean;
+    isRandomSeedFixed: boolean;
+    randomSeed: number;
+    isTimestampFixed: boolean;
+    testTimestamp: Date;
+    numRandomTests: number;
+    file?: {
+      name: string;
+      url: string;
+      file?: File;
+    };
+    variables?: CellRandomConfig[];
+  };
+}
+
+export interface ExistingSpreadsheet {
+  filename: string;
+  size: number;
+  id: number;
 }
 
 export interface SolutionEntity extends SolutionData {
@@ -46,6 +104,19 @@ export type TextResponseEditableFormData = Pick<
 
 type TextResponseFormDataQuestion = TextResponseFormData['question'];
 
+export interface TextResponseSpreadsheetPostData {
+  id?: number;
+  file?: File;
+  is_randomization_enabled?: boolean;
+  is_random_seed_fixed?: boolean;
+  test_random_seed?: number | null;
+  is_timestamp_fixed?: boolean;
+  test_timestamp?: string | null;
+  num_random_tests?: number;
+  variables?: string;
+  _destroy?: boolean;
+}
+
 export interface TextResponsePostData {
   question_text_response: {
     title?: TextResponseFormDataQuestion['title'];
@@ -67,6 +138,7 @@ export interface TextResponsePostData {
       grade?: SolutionEntity['grade'];
       explanation?: SolutionEntity['explanation'];
       _destroy?: SolutionEntity['toBeDeleted'];
+      test_spreadsheet_attributes?: TextResponseSpreadsheetPostData;
     }[];
   };
 }
