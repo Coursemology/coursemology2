@@ -57,6 +57,12 @@ zh:
                 generic_error: >
                   发生错误。可能是由于服务器繁忙，请在几分钟后重试。如果问题仍然存在，请联系 coursemology 管理员，
                   并提供此页面的 URL，引用以下错误："%{error}"
+        text_response_auto_grading:
+          grade:
+            regex_timeout: >
+              正则表达式执行超时。
+            evaluation_failed: >
+              评估过程中发生错误。
         live_feedback:
           thread:
             only_one_active_thread: '每个提交问题只能有一个活动线程'

@@ -2369,6 +2369,51 @@
   "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
     "defaultMessage": "체크하면 현재 날짜/시간을 사용하는 공식(NOW, TODAY 등)이 이 특정 날짜/시간을 대신 사용합니다."
   },
+  "course.assessment.question.textResponses.randomizationMode": {
+    "defaultMessage": "자동 채점 값 구성"
+  },
+  "course.assessment.question.textResponses.randomizationModeDescription": {
+    "defaultMessage": "자동 채점 시 값을 어떻게 대체하거나 무작위화할지 설정하려면 셀을 클릭하세요."
+  },
+  "course.assessment.question.textResponses.randomizationModeClearAll": {
+    "defaultMessage": "모두 지우기"
+  },
+  "course.assessment.question.textResponses.randomizationModeRestoreDefaults": {
+    "defaultMessage": "기본값 복원"
+  },
+  "course.assessment.question.textResponses.randomizationModePopoverTitle": {
+    "defaultMessage": "자동 채점 중..."
+  },
+  "course.assessment.question.textResponses.noRandomizationMode": {
+    "defaultMessage": "원래 값 유지"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationMode": {
+    "defaultMessage": "지정된 값으로 덮어쓰기"
+  },
+  "course.assessment.question.textResponses.overrideValue": {
+    "defaultMessage": "값"
+  },
+  "course.assessment.question.textResponses.numericRandomizationMode": {
+    "defaultMessage": "무작위 숫자 값 사용"
+  },
+  "course.assessment.question.textResponses.stringRandomizationMode": {
+    "defaultMessage": "값의 문자 무작위화"
+  },
+  "course.assessment.question.textResponses.stringRandomizationModeDescription": {
+    "defaultMessage": "무작위화할 각 문자 클래스는 같은 클래스의 다른 문자로 대체될 수 있습니다."
+  },
+  "course.assessment.question.textResponses.randomizeDigits": {
+    "defaultMessage": "숫자 무작위화 (0-9)"
+  },
+  "course.assessment.question.textResponses.randomizeLetters": {
+    "defaultMessage": "문자 무작위화 (a-z)"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationMode": {
+    "defaultMessage": "다른 셀과 값 섞기"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationModeDescription": {
+    "defaultMessage": "\"섞기\"로 표시된 각 셀의 값은 무작위로 재배치됩니다. 전체 분포는 동일하게 유지되지만 각 값은 다른 셀에 배치될 수 있습니다."
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "루브릭 플레이그라운드"
   },

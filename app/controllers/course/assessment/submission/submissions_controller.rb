@@ -81,7 +81,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     return head :bad_request if @answer.nil?
 
     job = @answer.auto_grade!(redirect_to_path: nil, reduce_priority: true)
-    render partial: 'jobs/submitted', locals: { job: job.job }
+    if job.nil?
+      @answer.reload
+      render @answer
+    else
+      render partial: 'jobs/submitted', locals: { job: job.job }
+    end
   end
 
   def generate_feedback

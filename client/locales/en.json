@@ -2343,6 +2343,51 @@
   "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
     "defaultMessage": "If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead."
   },
+  "course.assessment.question.textResponses.randomizationMode": {
+    "defaultMessage": "Autograding Value Configuration"
+  },
+  "course.assessment.question.textResponses.randomizationModeDescription": {
+    "defaultMessage": "Click on any cell to configure how its value should be replaced/randomized during autograding."
+  },
+  "course.assessment.question.textResponses.randomizationModeClearAll": {
+    "defaultMessage": "Clear All"
+  },
+  "course.assessment.question.textResponses.randomizationModeRestoreDefaults": {
+    "defaultMessage": "Restore Defaults"
+  },
+  "course.assessment.question.textResponses.randomizationModePopoverTitle": {
+    "defaultMessage": "During autograding..."
+  },
+  "course.assessment.question.textResponses.noRandomizationMode": {
+    "defaultMessage": "Keep original value"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationMode": {
+    "defaultMessage": "Override with specified value"
+  },
+  "course.assessment.question.textResponses.overrideValue": {
+    "defaultMessage": "Value"
+  },
+  "course.assessment.question.textResponses.numericRandomizationMode": {
+    "defaultMessage": "Use random numeric value"
+  },
+  "course.assessment.question.textResponses.stringRandomizationMode": {
+    "defaultMessage": "Randomize characters in value"
+  },
+  "course.assessment.question.textResponses.stringRandomizationModeDescription": {
+    "defaultMessage": "Each character class to be randomized may be replaced with different character(s) from the same class."
+  },
+  "course.assessment.question.textResponses.randomizeDigits": {
+    "defaultMessage": "Randomize digits (0-9)"
+  },
+  "course.assessment.question.textResponses.randomizeLetters": {
+    "defaultMessage": "Randomize letters (a-z)"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationMode": {
+    "defaultMessage": "Shuffle value with other cells"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationModeDescription": {
+    "defaultMessage": "The values of each cell marked \"Shuffle\" will be randomly rearranged. The overall distribution remains the same, but each value may end up in a different cell."
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "Rubric Playground"
   },

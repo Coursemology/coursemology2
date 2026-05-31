@@ -9,6 +9,7 @@ import codaveriFeedbackStatus from './codaveriFeedbackStatus';
 import commentForms from './commentForms';
 import explanations from './explanations';
 import grading from './grading';
+import gradingResults from './gradingResults';
 import history from './history';
 import liveFeedbackChats from './liveFeedbackChats';
 import posts from './posts';
@@ -31,6 +32,7 @@ const submissionReducer = combineReducers({
   codaveriFeedbackStatus,
   commentForms,
   explanations,
+  gradingResults,
   liveFeedbackChats,
   posts,
   questions,
