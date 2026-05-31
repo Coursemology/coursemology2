@@ -64,6 +64,12 @@ en:
                   you may want to try again in a few minutes. If the same issue persists,
                   please contact coursemology admin, provide the URL of this page and
                   quote the following error: "%{error}"
+        text_response_auto_grading:
+          grade:
+            regex_timeout: >
+              Regular expression evaluation timeout.
+            evaluation_failed: >
+              Error occurred during evaluation.
         live_feedback:
           thread:
             only_one_active_thread: 'There can be only one active thread per submission question'

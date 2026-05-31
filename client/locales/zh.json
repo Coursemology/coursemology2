@@ -2324,6 +2324,51 @@
   "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
     "defaultMessage": "勾选后，使用当前日期/时间的公式（NOW、TODAY 等）将改用此特定日期/时间。"
   },
+  "course.assessment.question.textResponses.randomizationMode": {
+    "defaultMessage": "自动评分值配置"
+  },
+  "course.assessment.question.textResponses.randomizationModeDescription": {
+    "defaultMessage": "点击任意单元格以配置在自动评分时如何替换或随机化其值。"
+  },
+  "course.assessment.question.textResponses.randomizationModeClearAll": {
+    "defaultMessage": "全部清除"
+  },
+  "course.assessment.question.textResponses.randomizationModeRestoreDefaults": {
+    "defaultMessage": "恢复默认值"
+  },
+  "course.assessment.question.textResponses.randomizationModePopoverTitle": {
+    "defaultMessage": "在自动评分时..."
+  },
+  "course.assessment.question.textResponses.noRandomizationMode": {
+    "defaultMessage": "保留原始值"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationMode": {
+    "defaultMessage": "覆盖为指定值"
+  },
+  "course.assessment.question.textResponses.overrideValue": {
+    "defaultMessage": "值"
+  },
+  "course.assessment.question.textResponses.numericRandomizationMode": {
+    "defaultMessage": "使用随机数值"
+  },
+  "course.assessment.question.textResponses.stringRandomizationMode": {
+    "defaultMessage": "随机化值中的字符"
+  },
+  "course.assessment.question.textResponses.stringRandomizationModeDescription": {
+    "defaultMessage": "要随机化的每个字符类可以用同一类中的不同字符替换。"
+  },
+  "course.assessment.question.textResponses.randomizeDigits": {
+    "defaultMessage": "随机化数字 (0-9)"
+  },
+  "course.assessment.question.textResponses.randomizeLetters": {
+    "defaultMessage": "随机化字母 (a-z)"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationMode": {
+    "defaultMessage": "与其他单元格随机排列值"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationModeDescription": {
+    "defaultMessage": "每个标记为\"随机排列\"的单元格值将被随机重新分配。总体分布保持不变，但每个值可能出现在不同的单元格中。"
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "评分标准试验场"
   },

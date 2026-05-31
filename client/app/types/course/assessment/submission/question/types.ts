@@ -29,11 +29,17 @@ interface TextResponseAttachmentData extends TextResponseParentQuestionData {
   isAttachmentRequired: boolean;
 }
 
+export type TextResponseSolutionType =
+  | 'exact_match'
+  | 'keyword'
+  | 'regex'
+  | 'spreadsheet_formula';
+
 interface TextResponseQuestionData extends TextResponseAttachmentData {
   templateText?: string | null;
   solutions?: {
     id: number;
-    solutionType: 'exact_match' | 'keyword';
+    solutionType: TextResponseSolutionType;
     solution: string;
     grade: number;
   };

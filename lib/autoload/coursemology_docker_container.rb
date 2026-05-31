@@ -36,13 +36,14 @@ class CoursemologyDockerContainer < Docker::Container
                  'Config' => { 'max-size' => '10m', 'max-file' => '2' } }.freeze
 
   class << self
-    def create(image, argv: nil)
+    def create(image, argv: nil, entrypoint: nil)
       pull_image(image) unless Docker::Image.exist?(image)
 
       ActiveSupport::Notifications.instrument('create.docker.evaluator.coursemology',
                                               image: image) do |payload|
         options = { 'Image' => image }
         options['Cmd'] = argv if argv.present?
+        options['Entrypoint'] = entrypoint if entrypoint.present?
         options['HostConfig'] = {
           Memory: CONTAINER_MEMORY_LIMIT,
           MemorySwap: CONTAINER_MEMORY_LIMIT,

@@ -21,6 +21,22 @@ json.attachments answer.attachments do |attachment|
 end
 
 last_attempt = last_attempt(answer)
+attempt = answer.current_answer? ? last_attempt : answer
+
+job = attempt&.auto_grading&.job
+
+if job
+  json.autograding do
+    json.path job_path(job) if job.submitted?
+    json.partial! "jobs/#{job.status}", job: job
+  end
+end
+
+if attempt.submitted? && !attempt.auto_grading
+  json.autograding do
+    json.status :submitted
+  end
+end
 
 if answer.can_read_grade?(current_ability)
   json.explanation do
@@ -30,6 +46,24 @@ if answer.can_read_grade?(current_ability)
     else
       json.explanations []
     end
+  end
+end
+
+if (
+  can_grade || (@assessment.show_rubric_to_students? && @submission.published?)
+) && last_attempt&.auto_grading&.result
+  graded_solutions =
+    last_attempt.auto_grading.result['evaluation_results'].index_by do |result|
+      result['solution_id']
+    end
+  json.solutionResults answer.question.specific.solutions do |solution|
+    result = graded_solutions[solution.id]
+    json.id solution.id
+    json.maximumGrade solution.grade.to_f
+    json.grade result['grade'].to_f if result
+    json.solution solution.solution
+    json.solutionType solution.solution_type
+    json.tests result['tests'] if result && result['tests']
   end
 end
 
