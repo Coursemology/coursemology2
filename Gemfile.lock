@@ -22,9 +22,9 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/polyglot
-  revision: bf38cf4d4e8a4ee732c604fc27db2263257a23ec
+  revision: 0cbe1260d30a6eb361930f811d92107775edeed3
   specs:
-    coursemology-polyglot (0.4.2)
+    coursemology-polyglot (0.4.3)
       activesupport (>= 4.2)
 
 GIT
