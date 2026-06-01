@@ -31,6 +31,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
     Coursemology::Polyglot::Language::Python::Python3Point10 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point12 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point13 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point14 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point4 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point5 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point6 => '.py',
