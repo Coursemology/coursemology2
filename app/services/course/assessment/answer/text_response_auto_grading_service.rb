@@ -183,6 +183,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
 
   # Returns the spreadsheet formula solutions that matches the given answer text.
   def evaluate_spreadsheet_formula_solutions(answer_text, solutions)
+    return [] if solutions.empty?
+
     container = create_spreadsheet_evaluation_container
     save_container_test_metadata(container, answer_text, solutions)
     save_container_test_spreadsheets(container, solutions)
