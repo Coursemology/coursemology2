@@ -10,10 +10,29 @@ FactoryBot.define do
     is_comprehension { false }
 
     solutions do
-      [
-        build(:course_assessment_question_text_response_solution, :exact_match, question: nil),
-        build(:course_assessment_question_text_response_solution, :keyword, question: nil)
-      ]
+      [build(:course_assessment_question_text_response_solution, :keyword, question: nil)]
+    end
+
+    trait :exact_match_solution do
+      solutions do
+        [build(:course_assessment_question_text_response_solution, :exact_match, question: nil)]
+      end
+    end
+
+    trait :regex_solution do
+      solutions do
+        [build(:course_assessment_question_text_response_solution, :regex, question: nil)]
+      end
+    end
+
+    trait :exact_match_with_keyword do
+      solutions do
+        [
+          build(:course_assessment_question_text_response_solution, :exact_match,
+                question: nil, solution: 'hello keyword world'),
+          build(:course_assessment_question_text_response_solution, :keyword, question: nil)
+        ]
+      end
     end
 
     trait :multiple_keywords do
