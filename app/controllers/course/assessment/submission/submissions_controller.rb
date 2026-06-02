@@ -20,6 +20,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   # edited or updated.
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
+  after_action :publish_cikgo_task_completion, only: [:edit]
+
   signals :assessment_submissions, after: [:unsubmit, :delete]
   signals :assessment_submissions, after: [:update], if: -> { @submission.saved_change_to_workflow_state? }
 
@@ -402,5 +404,9 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     existing_submissions = @assessment.submissions.by_users(course_user_ids.pluck(:user_id))
     user_ids_with_submission = existing_submissions.pluck(:creator_id)
     course_user_ids.pluck(:user_id) - user_ids_with_submission
+  end
+
+  def publish_cikgo_task_completion
+    @submission.publish_task_completion if @submission.should_publish_task_completion?
   end
 end
