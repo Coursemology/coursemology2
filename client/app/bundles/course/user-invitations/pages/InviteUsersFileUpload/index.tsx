@@ -1,8 +1,12 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
-import { InvitationResult } from 'types/course/userInvitations';
+import {
+  InvitationFileEntity,
+  InvitationResult,
+  PendingExternalIdConflict,
+} from 'types/course/userInvitations';
 
 import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
@@ -11,6 +15,7 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
+import ExternalIdConflictPrompt from '../../components/misc/ExternalIdConflictPrompt';
 import { inviteUsersFromFile } from '../../operations';
 import {
   getManageCourseUserPermissions,
@@ -101,38 +106,71 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  const fileRef = useRef<InvitationFileEntity | null>(null);
+  const [conflictData, setConflictData] =
+    useState<PendingExternalIdConflict | null>(null);
+
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
 
-  if (!open) {
+  if (!open && !conflictData) {
     return null;
   }
 
-  const onSubmit = (data): Promise<void> => {
-    return dispatch(inviteUsersFromFile(data.file))
-      .then((response) => {
-        onClose();
-        openResultDialog(response);
-      })
-      .catch((error) => {
-        const rawErrors = error.response?.data?.errors;
-        let errorList: string[];
-        if (Array.isArray(rawErrors)) errorList = rawErrors;
-        else if (typeof rawErrors === 'string') errorList = [rawErrors];
-        else errorList = [];
-        const first = errorList[0];
-        const overflow =
-          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-        if (first) {
-          toast.error(t(translations.failure, { error: first + overflow }), {
-            autoClose: false,
-          });
-        } else {
-          toast.error(t(translations.failureGeneric), { autoClose: false });
-        }
+  const handleError = (error: unknown): void => {
+    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
+      ?.response?.data?.errors;
+    let errorList: string[];
+    if (Array.isArray(rawErrors)) errorList = rawErrors;
+    else if (typeof rawErrors === 'string') errorList = [rawErrors];
+    else errorList = [];
+    const first = errorList[0];
+    const overflow =
+      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+    if (first) {
+      toast.error(t(translations.failure, { error: first + overflow }), {
+        autoClose: false,
       });
+    } else {
+      toast.error(t(translations.failureGeneric), { autoClose: false });
+    }
+  };
+
+  const submitWithResolution = (
+    fileEntity: InvitationFileEntity,
+    resolution?: 'keep_existing' | 'replace_all',
+  ): Promise<void> =>
+    dispatch(inviteUsersFromFile(fileEntity, resolution))
+      .then((response) => {
+        if ('conflict' in response) {
+          setConflictData(response.conflict);
+        } else {
+          onClose();
+          openResultDialog(response as InvitationResult);
+        }
+      })
+      .catch(handleError);
+
+  const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> => {
+    fileRef.current = data.file;
+    return submitWithResolution(data.file);
+  };
+
+  const handleKeepExisting = (): void => {
+    setConflictData(null);
+    if (fileRef.current) submitWithResolution(fileRef.current, 'keep_existing');
+  };
+
+  const handleReplaceAll = (): void => {
+    setConflictData(null);
+    if (fileRef.current) submitWithResolution(fileRef.current, 'replace_all');
+  };
+
+  const handleCancel = (): void => {
+    setConflictData(null);
+    fileRef.current = null;
   };
 
   const formSubtitle = (
@@ -203,12 +241,23 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   );
 
   return (
-    <FileUploadForm
-      formSubtitle={formSubtitle}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      open={open}
-    />
+    <>
+      {conflictData && (
+        <ExternalIdConflictPrompt
+          onCancel={handleCancel}
+          onKeepExisting={handleKeepExisting}
+          onReplaceAll={handleReplaceAll}
+          pendingCourseUserUpdates={conflictData.pendingCourseUserUpdates}
+          pendingInvitationUpdates={conflictData.pendingInvitationUpdates}
+        />
+      )}
+      <FileUploadForm
+        formSubtitle={formSubtitle}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        open={open}
+      />
+    </>
   );
 };
 

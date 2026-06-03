@@ -15,8 +15,20 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create
     result = invite
-    if result
+    case result
+    when Array
       create_invitation_success(result)
+    when :pending_conflict
+      respond_to do |format|
+        format.json do
+          render partial: 'pending_external_id_data',
+                 locals: {
+                   pending_invitation_updates: @pending_conflict.pending_invitation_updates,
+                   pending_course_user_updates: @pending_conflict.pending_course_user_updates
+                 },
+                 status: :ok
+        end
+      end
     else
       propagate_errors
       errors = current_course.errors[:base]
@@ -93,7 +105,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #   1) Single invitation - specified with the user_invitation_id param
   #   2) All un-confirmed invitation - if user_invitation_id param was not found
   def load_invitations
-    @invitations ||= begin
+    @load_invitations ||= begin
       ids = resend_invitation_params
       ids ||= current_course.invitations.retryable.unconfirmed.select(:id)
       if ids.blank?
@@ -118,12 +130,18 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Invites the users via the service object.
   #
-  # @return [Boolean] True if the invitation was successful.
+  # @return [Array] On success.
+  # @return [Symbol] :pending_conflict when external ID updates require resolution.
+  # @return [Boolean] false on failure.
   def invite
-    invitation_service.invite(invitation_params)
+    invitation_service.invite(invitation_params,
+                              external_id_resolution: params[:external_id_resolution])
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:base, e.message)
     false
+  rescue Course::UserInvitationService::PendingExternalIdUpdates => e
+    @pending_conflict = e
+    :pending_conflict
   end
 
   # Creates a user invitation service object for this object.
