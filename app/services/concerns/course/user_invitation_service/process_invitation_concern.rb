@@ -84,10 +84,24 @@ module Course::UserInvitationService::ProcessInvitationConcern
     elsif @taken_external_ids.include?(csv_ext_id)
       @failed_users.push(user.merge(reason: :external_id_taken))
     else
-      @taken_external_ids.delete(current_ext_id) if current_ext_id
-      @taken_external_ids.add(csv_ext_id)
-      course_user.external_id = csv_ext_id
-      @updated_course_users << { record: course_user, previous_external_id: current_ext_id }
+      case @resolution
+      when :replace_all
+        @taken_external_ids.delete(current_ext_id) if current_ext_id
+        @taken_external_ids.add(csv_ext_id)
+        course_user.external_id = csv_ext_id
+        @updated_course_users << { record: course_user, previous_external_id: current_ext_id }
+      when :keep_existing
+        existing_course_users << course_user
+      else
+        @taken_external_ids.delete(current_ext_id) if current_ext_id
+        @taken_external_ids.add(csv_ext_id)
+        @pending_course_user_updates << {
+          record: course_user,
+          previous_external_id: current_ext_id,
+          new_external_id: csv_ext_id
+        }
+        existing_course_users << course_user
+      end
     end
   end
 
@@ -164,10 +178,24 @@ module Course::UserInvitationService::ProcessInvitationConcern
     elsif @taken_external_ids.include?(csv_ext_id)
       @failed_users.push(user.merge(reason: :external_id_taken))
     else
-      @taken_external_ids.delete(current_ext_id) if current_ext_id
-      @taken_external_ids.add(csv_ext_id)
-      invitation.external_id = csv_ext_id
-      @updated_invitations << { record: invitation, previous_external_id: current_ext_id }
+      case @resolution
+      when :replace_all
+        @taken_external_ids.delete(current_ext_id) if current_ext_id
+        @taken_external_ids.add(csv_ext_id)
+        invitation.external_id = csv_ext_id
+        @updated_invitations << { record: invitation, previous_external_id: current_ext_id }
+      when :keep_existing
+        existing_invitations << invitation
+      else
+        @taken_external_ids.delete(current_ext_id) if current_ext_id
+        @taken_external_ids.add(csv_ext_id)
+        @pending_invitation_updates << {
+          record: invitation,
+          previous_external_id: current_ext_id,
+          new_external_id: csv_ext_id
+        }
+        existing_invitations << invitation
+      end
     end
   end
 

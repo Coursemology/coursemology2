@@ -7,7 +7,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
     def temp_csv_from_attributes(records, roles = [], timeline_algorithms = [])
       Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
         file.write(CSV.generate do |csv|
-          csv << [:name, :email, :role]
           records.zip(roles, timeline_algorithms).each do |user, role, timeline_algorithm|
             csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role, false, timeline_algorithm])
           end
@@ -256,7 +255,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'does not abort the batch' do
           csv = csv_with_external_id_and_timeline(
-            [{ name: 'New User', email: generate(:email), external_id: 'taken-id' }]
+            [name: 'New User', email: generate(:email), external_id: 'taken-id']
           )
           result = subject.invite(csv)
           expect(result).not_to be_nil
@@ -267,12 +266,15 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
-      context 'when a 6-column CSV (timeline template) is uploaded to a non-timeline course' do
+      context 'when a timeline-template-header CSV is uploaded to a non-timeline course' do
         before { course.update!(show_personalized_timeline_features: false) }
 
         it 'raises CSV::MalformedCSVError to prevent timeline values being stored as external IDs' do
           csv = Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
-            file.write(CSV.generate { |c| c << ['Alice', generate(:email), 'student', 'false', 'otot', 'EXT001'] })
+            file.write(CSV.generate do |c|
+              c << ['Name', 'Email', 'Role', 'Phantom', 'Timeline', 'ExternalId']
+              c << ['Alice', generate(:email), 'student', 'false', 'otot', 'EXT001']
+            end)
             file.rewind
           end
           expect { subject.invite(csv) }.to raise_error(CSV::MalformedCSVError)
@@ -297,7 +299,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'does not abort the batch' do
           csv = csv_with_external_id_no_timeline(
-            [{ name: 'New User', email: generate(:email), external_id: 'taken-id' }]
+            [name: 'New User', email: generate(:email), external_id: 'taken-id']
           )
           result = subject.invite(csv)
           expect(result).not_to be_nil
@@ -629,8 +631,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         subject(:result) do
           invitation_service.invite(
-            '0' => { name: enrollee.name, email: enrollee.email, role: :student,
-                     phantom: false, timeline_algorithm: :fixed, external_id: 'taken-id' }
+            { '0' => { name: enrollee.name, email: enrollee.email, role: :student,
+                       phantom: false, timeline_algorithm: :fixed, external_id: 'taken-id' } }
           )
         end
 
@@ -657,8 +659,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'puts the row in failed_users with :external_id_taken and does not create an invitation' do
           result = invitation_service.invite(
-            '0' => { name: 'New Person', email: generate(:email), role: :student,
-                     phantom: false, timeline_algorithm: :fixed, external_id: 'cu-taken-id' }
+            { '0' => { name: 'New Person', email: generate(:email), role: :student,
+                       phantom: false, timeline_algorithm: :fixed, external_id: 'cu-taken-id' } }
           )
           new_invitations, _, _, _, failed_users = result
           expect(failed_users.size).to eq(1)
@@ -674,8 +676,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'sends an invitation instead of directly enrolling the user' do
           result = invitation_service.invite(
-            '0' => { name: unconfirmed_user.name, email: unconfirmed_user.email,
-                     role: :student, phantom: false, timeline_algorithm: :fixed, external_id: nil }
+            { '0' => { name: unconfirmed_user.name, email: unconfirmed_user.email,
+                       role: :student, phantom: false, timeline_algorithm: :fixed, external_id: nil } }
           )
           new_invitations, _, new_course_users, = result
           expect(new_invitations.size).to eq(1)
@@ -777,7 +779,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context 'when an invalid email is specified' do
         let(:invalid_user_attributes) do
-          [{ name: build(:user).name, email: 'xxnot an email', role: :student }]
+          [name: build(:user).name, email: 'xxnot an email', role: :student]
         end
 
         it 'fails' do
@@ -805,8 +807,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       it 'assigns the CSV timeline_algorithm to the enrolled CourseUser, not the course default' do
         result = subject.invite(
-          '0' => { name: existing_user.name, email: existing_user.email,
-                   role: :student, phantom: false, timeline_algorithm: :otot, external_id: nil }
+          { '0' => { name: existing_user.name, email: existing_user.email,
+                     role: :student, phantom: false, timeline_algorithm: :otot, external_id: nil } }
         )
         _, _, new_course_users, = result
         expect(new_course_users.size).to eq(1)
@@ -1002,6 +1004,42 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when personal timelines are enabled' do
         before { course.update!(show_personalized_timeline_features: true) }
 
+        it 'accepts a CSV with exact template headers' do
+          csv_content = "Name,Email,Role,Phantom,Timeline,ExternalId\n" \
+                        "Alice,alice@example.com,student,false,fixed,EXT001\n"
+          Tempfile.create(['header_test', '.csv']) do |f|
+            f.write(csv_content)
+            f.rewind
+            result = stubbed_user_invitation_service.send(:parse_from_file, f)
+            expect(result.length).to eq(1)
+            expect(result[0][:external_id]).to eq('EXT001')
+          end
+        end
+
+        it 'accepts a CSV with exact template headers (case-insensitive)' do
+          csv_content = "name,email,role,phantom,timeline,externalid\n" \
+                        "Alice,alice@example.com,student,false,fixed,EXT001\n"
+          Tempfile.create(['header_test_lower', '.csv']) do |f|
+            f.write(csv_content)
+            f.rewind
+            result = stubbed_user_invitation_service.send(:parse_from_file, f)
+            expect(result.length).to eq(1)
+            expect(result[0][:external_id]).to eq('EXT001')
+          end
+        end
+
+        it 'raises invalid_headers error when header column names are wrong (with timeline)' do
+          csv_content = "name,email,role,phantom,timeline_algorithm,external_id\n" \
+                        "Alice,alice@example.com,student,false,fixed,EXT001\n"
+          Tempfile.create(['bad_header_timeline', '.csv']) do |f|
+            f.write(csv_content)
+            f.rewind
+            expect do
+              stubbed_user_invitation_service.send(:parse_from_file, f)
+            end.to raise_error(CSV::MalformedCSVError)
+          end
+        end
+
         it 'accepts a file with name/header' do
           result = subject.send(:parse_from_file, temp_csv)
           expect(result.length).to eq(users.length)
@@ -1130,25 +1168,40 @@ RSpec.describe Course::UserInvitationService, type: :service do
           end
         end
 
-        context 'when the csv header uses a slightly wrong external_id column name' do
-          subject do
-            stubbed_user_invitation_service.
-              send(:parse_from_file, file_fixture('course/invitation_external_id_wrong_header.csv'))
-          end
-
-          it 'still detects and skips the header row' do
-            expect(subject.length).to eq(2)
-          end
-
-          it 'still parses external_id from col 6 correctly' do
-            expect(subject[0][:external_id]).to eq('EXT001')
-            expect(subject[1][:external_id]).to eq('EXT002')
+        context 'when the csv header uses wrong column names' do
+          it 'raises an error for the wrong header' do
+            expect do
+              stubbed_user_invitation_service.
+                send(:parse_from_file, file_fixture('course/invitation_external_id_wrong_header.csv'))
+            end.to raise_error(CSV::MalformedCSVError)
           end
         end
       end
 
       context 'when personal timelines are disabled' do
         before { course.update!(show_personalized_timeline_features: false) }
+
+        it 'accepts a CSV with exact template headers (no timeline)' do
+          csv_content = "Name,Email,Role,Phantom,ExternalId\nAlice,alice@example.com,student,false,EXT001\n"
+          Tempfile.create(['header_no_timeline', '.csv']) do |f|
+            f.write(csv_content)
+            f.rewind
+            result = stubbed_user_invitation_service.send(:parse_from_file, f)
+            expect(result.length).to eq(1)
+            expect(result[0][:external_id]).to eq('EXT001')
+          end
+        end
+
+        it 'raises invalid_headers error when header column names are wrong (no timeline)' do
+          csv_content = "name,email,role,phantom,external_id\nAlice,alice@example.com,student,false,EXT001\n"
+          Tempfile.create(['bad_header_no_timeline', '.csv']) do |f|
+            f.write(csv_content)
+            f.rewind
+            expect do
+              stubbed_user_invitation_service.send(:parse_from_file, f)
+            end.to raise_error(CSV::MalformedCSVError)
+          end
+        end
 
         context 'when the csv has an external_id column' do
           subject do

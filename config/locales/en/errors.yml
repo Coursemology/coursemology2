@@ -20,7 +20,7 @@ en:
         invalid_email: '%{email} could not be processed: invalid email: %{message}.'
         duplicate_external_id: '%{email} could not be processed: external ID "%{external_id}" is already taken.'
         other_error: '%{email} could not be processed: %{message}.'
-        timeline_template_mismatch: 'more than 5 columns detected. This course does not use Personalized Timelines. Please re-upload using the 5-column template (Name, Email, Role, Phantom, External ID).'
+        invalid_headers: 'Invalid CSV headers. Expected: %{expected}. Please download and use the template file.'
       user_registrations:
         invalid_code: 'You have entered an invalid invitation code.'
         code_taken: >

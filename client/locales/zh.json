@@ -5963,7 +5963,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "没有可检查的问题"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "提交数量不足"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -9121,5 +9121,32 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "登录遇到问题？"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.title": {
+    "defaultMessage": "确认外部编号更新"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.body": {
+    "defaultMessage": "这些用户已经注册或有待处理的邀请。不会向他们发送新的邀请邮件。您希望保留其当前的外部编号，还是用文件中的值替换它们？"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingInvitationUpdates": {
+    "defaultMessage": "待处理邀请更新（{count}）"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingCourseUserUpdates": {
+    "defaultMessage": "待处理课程成员更新（{count}）"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.goBack": {
+    "defaultMessage": "返回"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.keepExisting": {
+    "defaultMessage": "保留现有"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.replace": {
+    "defaultMessage": "替换"
+  },
+  "lib.translations.table.column.currentExternalId": {
+    "defaultMessage": "当前外部编号"
+  },
+  "lib.translations.table.column.newExternalId": {
+    "defaultMessage": "新外部编号"
   }
 }

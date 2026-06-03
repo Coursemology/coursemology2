@@ -9,6 +9,8 @@ module Course::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 
   TRUE_VALUES = ['t', 'true', 'y', 'yes'].freeze
+  EXPECTED_HEADERS_WITH_TIMELINE = %w[name email role phantom timeline externalid].freeze
+  EXPECTED_HEADERS_WITHOUT_TIMELINE = %w[name email role phantom externalid].freeze
 
   private
 
@@ -116,8 +118,13 @@ module Course::UserInvitationService::ParseInvitationConcern
         row_num = row_number
         row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)
-        # Ignore first row if it's a header row.
-        next if row_number == 1 && header_row?(row)
+        if row_number == 1 && looks_like_header?(row)
+          unless valid_header_row?(row)
+            raise I18n.t('errors.course.user_invitations.invalid_headers',
+                         expected: expected_headers.join(','))
+          end
+          next
+        end
 
         invite = parse_file_row(row)
         invites << invite if invite
@@ -127,12 +134,22 @@ module Course::UserInvitationService::ParseInvitationConcern
     raise CSV::MalformedCSVError.new(e, row_num), e.message
   end
 
-  # Returns a boolean to determine whether the row is a header row.
-  #
-  # @param[Array] row Array read from CSV file.
-  # @return [Boolean] Whether the row is a header row
-  def header_row?(row)
-    row[0].casecmp('Name') == 0 && row[1].casecmp('Email') == 0
+  def looks_like_header?(row)
+    row[0]&.casecmp('Name')&.zero? && row[1]&.casecmp('Email')&.zero?
+  end
+
+  def expected_headers
+    if @current_course.show_personalized_timeline_features?
+      EXPECTED_HEADERS_WITH_TIMELINE
+    else
+      EXPECTED_HEADERS_WITHOUT_TIMELINE
+    end
+  end
+
+  def valid_header_row?(row)
+    return false unless looks_like_header?(row)
+
+    row.map { |h| h&.downcase }.compact == expected_headers
   end
 
   # Strips a row of whitespaces.
@@ -150,10 +167,6 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Hash] The parsed invitation attributes given the row.
   def parse_file_row(row)
     return nil if row[1].blank?
-
-    if !@current_course.show_personalized_timeline_features? && row.length > 5
-      raise I18n.t('errors.course.user_invitations.timeline_template_mismatch')
-    end
 
     row[0] = row[1] if row[0].blank?
     role = parse_file_role(row[2])

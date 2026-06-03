@@ -32,6 +32,13 @@ export interface InvitationResult {
   updatedInvitations?: InvitationUpdatedItem[];
 }
 
+export type ExternalIdResolution = 'keep_existing' | 'replace_all';
+
+export interface PendingExternalIdConflict {
+  pendingInvitationUpdates: InvitationUpdatedItem[];
+  pendingCourseUserUpdates: InvitationUpdatedItem[];
+}
+
 export interface InvitationSuccessRow {
   id: string;
   name: string;

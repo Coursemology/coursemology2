@@ -12,7 +12,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 interface Props {
   open: boolean;
   onSubmit: (
-    data: InvitationFileEntity,
+    data: { file: InvitationFileEntity },
     setError: UseFormSetError<IFormInputs>,
   ) => Promise<void>;
   onClose: () => void;
