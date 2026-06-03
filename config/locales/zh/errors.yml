@@ -20,7 +20,7 @@ zh:
         invalid_email: '%{email}无法处理：邮箱无效：%{message}。'
         duplicate_external_id: '%{email}无法处理：外部编号"%{external_id}"已被使用。'
         other_error: '%{email}无法处理：%{message}。'
-        timeline_template_mismatch: '检测到超过 5 列。本课程未使用个性化时间线。请使用 5 列模板重新上传（姓名、电子邮箱、角色、虚拟用户、外部编号）。'
+        invalid_headers: 'CSV 标题无效。预期格式：%{expected}。请下载并使用模板文件。'
       user_registrations:
         invalid_code: '你输入了一个无效的邀请码。'
         code_taken: >
