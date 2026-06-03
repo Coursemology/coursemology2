@@ -1,4 +1,4 @@
-name,email,role,phantom,timeline_algorithm,external_id
+name,email,role,phantom,timeline,externalid
 Alice,alice@example.com,student,false,fixed,EXT001
 Bob,bob@example.com,teaching_assistant,false,fomo,EXT002
 Charlie,charlie@example.com,,,,

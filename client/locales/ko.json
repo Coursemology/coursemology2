@@ -5981,7 +5981,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "검사 가능한 질문이 없습니다"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "제출이 충분하지 않습니다"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -9151,5 +9151,32 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "로그인에 문제가 있으신가요?"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.title": {
+    "defaultMessage": "외부 ID 업데이트 확인"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.body": {
+    "defaultMessage": "이 사용자들은 이미 등록되었거나 초대가 대기 중입니다. 새로운 초대 이메일은 발송되지 않습니다. 현재 외부 ID를 유지하거나 파일의 값으로 교체하시겠습니까?"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingInvitationUpdates": {
+    "defaultMessage": "대기 중인 초대 업데이트 ({count}개)"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingCourseUserUpdates": {
+    "defaultMessage": "대기 중인 수강생 업데이트 ({count}개)"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.goBack": {
+    "defaultMessage": "돌아가기"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.keepExisting": {
+    "defaultMessage": "현재 유지"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.replace": {
+    "defaultMessage": "교체"
+  },
+  "lib.translations.table.column.currentExternalId": {
+    "defaultMessage": "현재 외부 ID"
+  },
+  "lib.translations.table.column.newExternalId": {
+    "defaultMessage": "새 외부 ID"
   }
 }

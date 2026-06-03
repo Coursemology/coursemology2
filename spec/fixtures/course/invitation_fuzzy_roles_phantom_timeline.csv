@@ -1,4 +1,4 @@
-name,email,role,phantom,timeline_algorithm
+name,email,role,phantom,timeline,externalid
 Foo,bar@foo.com,,,
 Non-Phantom Staff 1,foo1@bar.com,Teaching Assistant,no,stragGlers
 Non-Phantom Staff 2,foo2@bar.com,manager,no,OTOT

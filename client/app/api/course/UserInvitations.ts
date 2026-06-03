@@ -4,8 +4,10 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
+  ExternalIdResolution,
   InvitationFileEntity,
   InvitationListData,
+  InvitationUpdatedItem,
 } from 'types/course/userInvitations';
 
 import SubmissionsAPI from './Assessment/Submissions';
@@ -36,11 +38,17 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * @return {Promise}
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  invite(data: InvitationFileEntity | FormData): Promise<
-    AxiosResponse<{
-      newInvitations: number;
-      invitationResult: string; // string which is JSON.parsed to type InvitationResult
-    }>
+  invite(
+    data: InvitationFileEntity | FormData,
+    externalIdResolution?: ExternalIdResolution,
+  ): Promise<
+    AxiosResponse<
+      | { newInvitations: number; invitationResult: string }
+      | {
+          pendingInvitationUpdates: InvitationUpdatedItem[];
+          pendingCourseUserUpdates: InvitationUpdatedItem[];
+        }
+    >
   > {
     const config = {
       headers: {
@@ -58,6 +66,10 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       SubmissionsAPI.appendFormData(formData, temp, 'course');
     } else {
       formData = data as FormData;
+    }
+
+    if (externalIdResolution) {
+      formData.append('external_id_resolution', externalIdResolution);
     }
 
     return this.client.post(

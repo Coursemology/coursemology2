@@ -79,10 +79,13 @@ module Course::UserInvitationService::ProcessInvitationConcern
     csv_ext_id = user[:external_id].presence
     current_ext_id = course_user.external_id.presence
 
-    if csv_ext_id.nil? || csv_ext_id == current_ext_id
-      existing_course_users << course_user
-    elsif @taken_external_ids.include?(csv_ext_id)
+    if @taken_external_ids.include?(csv_ext_id) && csv_ext_id != current_ext_id
       @failed_users.push(user.merge(reason: :external_id_taken))
+    elsif csv_ext_id.nil? || csv_ext_id == current_ext_id || @resolution == :keep_existing
+      existing_course_users << course_user
+    elsif @resolution.nil?
+      @pending_course_user_updates << { record: course_user, new_external_id: csv_ext_id,
+                                        previous_external_id: current_ext_id }
     else
       @taken_external_ids.delete(current_ext_id) if current_ext_id
       @taken_external_ids.add(csv_ext_id)
@@ -159,10 +162,14 @@ module Course::UserInvitationService::ProcessInvitationConcern
 
     # Non-retryable invitations are surfaced as existing invitations, not errors —
     # the request succeeded; the prior delivery failure is informational.
-    if csv_ext_id.nil? || csv_ext_id == current_ext_id || invitation.is_retryable == false
-      existing_invitations << invitation
-    elsif @taken_external_ids.include?(csv_ext_id)
+    if @taken_external_ids.include?(csv_ext_id) && csv_ext_id != current_ext_id && invitation.is_retryable != false
       @failed_users.push(user.merge(reason: :external_id_taken))
+    elsif csv_ext_id.nil? || csv_ext_id == current_ext_id ||
+          invitation.is_retryable == false || @resolution == :keep_existing
+      existing_invitations << invitation
+    elsif @resolution.nil?
+      @pending_invitation_updates << { record: invitation, new_external_id: csv_ext_id,
+                                       previous_external_id: current_ext_id }
     else
       @taken_external_ids.delete(current_ext_id) if current_ext_id
       @taken_external_ids.add(csv_ext_id)

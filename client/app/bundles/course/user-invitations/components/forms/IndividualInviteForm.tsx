@@ -1,11 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
+  ExternalIdResolution,
   IndividualInvites,
   InvitationResult,
   InvitationsPostData,
+  PendingExternalIdConflict,
 } from 'types/course/userInvitations';
 import * as yup from 'yup';
 
@@ -20,6 +22,7 @@ import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
+import ExternalIdConflictPrompt from '../misc/ExternalIdConflictPrompt';
 
 import IndividualInvitations from './IndividualInvitations';
 
@@ -60,6 +63,9 @@ const IndividualInviteForm: FC<Props> = (props) => {
   const { openResultDialog } = props;
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
+  const [conflictData, setConflictData] =
+    useState<PendingExternalIdConflict | null>(null);
+  const dataRef = useRef<InvitationsPostData | null>(null);
   const dispatch = useAppDispatch();
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
@@ -114,54 +120,98 @@ const IndividualInviteForm: FC<Props> = (props) => {
     }
   }, [invitationsFields.length === 0]);
 
-  const onSubmit = (data: InvitationsPostData): Promise<void> => {
-    setIsLoading(true);
-    return dispatch(inviteUsersFromForm(data))
+  const handleError = (error: unknown): void => {
+    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
+      ?.response?.data?.errors;
+    let errorList: string[];
+    if (Array.isArray(rawErrors)) errorList = rawErrors;
+    else if (typeof rawErrors === 'string') errorList = [rawErrors];
+    else errorList = [];
+    const first = errorList[0];
+    const overflow =
+      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+    if (first) {
+      toast.error(t(translations.failure, { error: first + overflow }), {
+        autoClose: false,
+      });
+    } else {
+      toast.error(t(translations.failureGeneric), { autoClose: false });
+    }
+  };
+
+  const submitWithResolution = (
+    postData: InvitationsPostData,
+    resolution?: ExternalIdResolution,
+  ): Promise<void> =>
+    dispatch(inviteUsersFromForm(postData, resolution))
       .then((response) => {
-        reset(initialValues);
-        openResultDialog(response);
-      })
-      .catch((error) => {
-        const rawErrors = error.response?.data?.errors;
-        let errorList: string[];
-        if (Array.isArray(rawErrors)) errorList = rawErrors;
-        else if (typeof rawErrors === 'string') errorList = [rawErrors];
-        else errorList = [];
-        const first = errorList[0];
-        const overflow =
-          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-        if (first) {
-          toast.error(t(translations.failure, { error: first + overflow }), {
-            autoClose: false,
-          });
+        if ('conflict' in response) {
+          setConflictData(response.conflict);
         } else {
-          toast.error(t(translations.failureGeneric), { autoClose: false });
+          reset(initialValues);
+          openResultDialog(response as InvitationResult);
         }
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch(handleError)
+      .finally(() => setIsLoading(false));
+
+  const onSubmit = (data: InvitationsPostData): Promise<void> => {
+    setIsLoading(true);
+    dataRef.current = data;
+    return submitWithResolution(data);
+  };
+
+  const handleKeepExisting = (): void => {
+    setConflictData(null);
+    if (dataRef.current) {
+      setIsLoading(true);
+      submitWithResolution(dataRef.current, 'keep_existing');
+    }
+  };
+
+  const handleReplaceAll = (): void => {
+    setConflictData(null);
+    if (dataRef.current) {
+      setIsLoading(true);
+      submitWithResolution(dataRef.current, 'replace_all');
+    }
+  };
+
+  const handleCancel = (): void => {
+    setConflictData(null);
+    dataRef.current = null;
   };
 
   return (
-    <form
-      encType="multipart/form-data"
-      id="invite-users-individual-form"
-      noValidate
-      onSubmit={handleSubmit((data) => onSubmit(data))}
-    >
-      <ErrorText errors={errors} />
-      <IndividualInvitations
-        fieldsConfig={{
-          control,
-          fields: controlledInvitationsFields,
-          append: invitationsAppend,
-          remove: invitationsRemove,
-        }}
-        isLoading={isLoading}
-        permissions={permissions}
-      />
-    </form>
+    <>
+      {conflictData && (
+        <ExternalIdConflictPrompt
+          onCancel={handleCancel}
+          onKeepExisting={handleKeepExisting}
+          onReplaceAll={handleReplaceAll}
+          pendingCourseUserUpdates={conflictData.pendingCourseUserUpdates}
+          pendingInvitationUpdates={conflictData.pendingInvitationUpdates}
+        />
+      )}
+      <form
+        encType="multipart/form-data"
+        id="invite-users-individual-form"
+        noValidate
+        onSubmit={handleSubmit((data) => onSubmit(data))}
+      >
+        <ErrorText errors={errors} />
+        <IndividualInvitations
+          fieldsConfig={{
+            control,
+            fields: controlledInvitationsFields,
+            append: invitationsAppend,
+            remove: invitationsRemove,
+          }}
+          isLoading={isLoading}
+          permissions={permissions}
+        />
+      </form>
+    </>
   );
 };
 
