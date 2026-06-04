@@ -15,13 +15,20 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create
     result = invite
-    if result
+    if result.is_a?(Array)
       create_invitation_success(result)
     else
       propagate_errors
       errors = current_course.errors[:base]
       render json: { errors: errors }, status: :bad_request
     end
+  end
+
+  def update_external_ids
+    invitation_service.update_external_ids(external_id_updates_params)
+    head :ok
+  rescue Course::UserInvitationService::ExternalIdConflict => e
+    render json: { conflictingExternalId: e.external_id }, status: :conflict
   end
 
   def destroy
@@ -43,7 +50,8 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   def resend_invitations
-    if invitation_service.resend_invitation(load_invitations)
+    @invitations = load_invitations
+    if invitation_service.resend_invitation(@invitations)
       resend_invitations_success
     else
       resend_invitations_failure
@@ -55,6 +63,12 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   private
+
+  def external_id_updates_params
+    params.permit(updates: [:type, :id, :external_id])[:updates].to_a.map do |u|
+      { type: u[:type], id: u[:id].to_i, external_id: u[:external_id] }
+    end
+  end
 
   def course_user_invitation_params
     @course_user_invitation_params ||= begin
@@ -93,7 +107,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #   1) Single invitation - specified with the user_invitation_id param
   #   2) All un-confirmed invitation - if user_invitation_id param was not found
   def load_invitations
-    @invitations ||= begin
+    @load_invitations ||= begin
       ids = resend_invitation_params
       ids ||= current_course.invitations.retryable.unconfirmed.select(:id)
       if ids.blank?
@@ -118,7 +132,8 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Invites the users via the service object.
   #
-  # @return [Boolean] True if the invitation was successful.
+  # @return [Array] On success.
+  # @return [Boolean] false on failure.
   def invite
     invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
@@ -219,15 +234,15 @@ class Course::UserInvitationsController < Course::ComponentController
   # Returns the invitation response based on file or entry invitation.
   def parse_invitation_result(new_invitations, existing_invitations, new_course_users,
                               existing_course_users, failed_users,
-                              updated_invitations, updated_course_users)
+                              pending_invitation_updates, pending_course_user_updates)
     render_to_string(partial: 'invitation_result_data',
                      locals: { new_invitations: new_invitations,
                                existing_invitations: existing_invitations,
                                new_course_users: new_course_users,
                                existing_course_users: existing_course_users,
                                failed_users: failed_users,
-                               updated_invitations: updated_invitations,
-                               updated_course_users: updated_course_users })
+                               pending_invitation_updates: pending_invitation_updates,
+                               pending_course_user_updates: pending_course_user_updates })
   end
 
   # Enables or disables registration codes in the given course.
@@ -268,7 +283,7 @@ class Course::UserInvitationsController < Course::ComponentController
   def resend_invitations_success
     respond_to do |format|
       format.json do
-        render partial: 'course_user_invitation_list', locals: { invitations: @invitations.reload }, status: :ok
+        render partial: 'course_user_invitation_list', locals: { invitations: @invitations }, status: :ok
       end
     end
   end

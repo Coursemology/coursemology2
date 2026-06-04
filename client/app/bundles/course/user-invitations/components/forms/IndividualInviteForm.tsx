@@ -114,33 +114,34 @@ const IndividualInviteForm: FC<Props> = (props) => {
     }
   }, [invitationsFields.length === 0]);
 
+  const handleError = (error: unknown): void => {
+    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
+      ?.response?.data?.errors;
+    let errorList: string[];
+    if (Array.isArray(rawErrors)) errorList = rawErrors;
+    else if (typeof rawErrors === 'string') errorList = [rawErrors];
+    else errorList = [];
+    const first = errorList[0];
+    const overflow =
+      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+    if (first) {
+      toast.error(t(translations.failure, { error: first + overflow }), {
+        autoClose: false,
+      });
+    } else {
+      toast.error(t(translations.failureGeneric), { autoClose: false });
+    }
+  };
+
   const onSubmit = (data: InvitationsPostData): Promise<void> => {
     setIsLoading(true);
     return dispatch(inviteUsersFromForm(data))
-      .then((response) => {
+      .then((result) => {
         reset(initialValues);
-        openResultDialog(response);
+        openResultDialog(result);
       })
-      .catch((error) => {
-        const rawErrors = error.response?.data?.errors;
-        let errorList: string[];
-        if (Array.isArray(rawErrors)) errorList = rawErrors;
-        else if (typeof rawErrors === 'string') errorList = [rawErrors];
-        else errorList = [];
-        const first = errorList[0];
-        const overflow =
-          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-        if (first) {
-          toast.error(t(translations.failure, { error: first + overflow }), {
-            autoClose: false,
-          });
-        } else {
-          toast.error(t(translations.failureGeneric), { autoClose: false });
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch(handleError)
+      .finally(() => setIsLoading(false));
   };
 
   return (

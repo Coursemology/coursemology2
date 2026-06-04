@@ -4,6 +4,7 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
+  ExternalIdUpdate,
   InvitationFileEntity,
   InvitationListData,
 } from 'types/course/userInvitations';
@@ -36,11 +37,10 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * @return {Promise}
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  invite(data: InvitationFileEntity | FormData): Promise<
-    AxiosResponse<{
-      newInvitations: number;
-      invitationResult: string; // string which is JSON.parsed to type InvitationResult
-    }>
+  invite(
+    data: InvitationFileEntity | FormData,
+  ): Promise<
+    AxiosResponse<{ newInvitations: number; invitationResult: string }>
   > {
     const config = {
       headers: {
@@ -52,9 +52,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     let formData = new FormData();
 
     if ('file' in data) {
-      const temp = {
-        invitations_file: data.file,
-      };
+      const temp = { invitations_file: data.file };
       SubmissionsAPI.appendFormData(formData, temp, 'course');
     } else {
       formData = data as FormData;
@@ -65,6 +63,16 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       formData,
       config,
     );
+  }
+
+  updateExternalIds(updates: ExternalIdUpdate[]): Promise<AxiosResponse<void>> {
+    return this.client.post(`${this.#urlPrefix}/users/update_external_ids`, {
+      updates: updates.map((u) => ({
+        type: u.type,
+        id: u.id,
+        external_id: u.externalId ?? '',
+      })),
+    });
   }
 
   /**

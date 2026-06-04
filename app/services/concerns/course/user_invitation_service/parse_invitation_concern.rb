@@ -9,6 +9,8 @@ module Course::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 
   TRUE_VALUES = ['t', 'true', 'y', 'yes'].freeze
+  EXPECTED_HEADERS_WITH_TIMELINE = %w[name email role phantom timeline externalid].freeze
+  EXPECTED_HEADERS_WITHOUT_TIMELINE = %w[name email role phantom externalid].freeze
 
   private
 
@@ -35,35 +37,48 @@ module Course::UserInvitationService::ParseInvitationConcern
         parse_from_form(users)
       end
 
-    partition_unique_users(restrict_invitee_role(result))
+    restrict_invitee_role(result)
   end
 
-  # Partition users into unique (including first duplicate instance) and duplicate users.
+  # Partition users into unique and duplicate users.
+  #
+  # Email dedup applies to all rows. External-ID dedup applies only to rows
+  # whose email is NOT in +existing_account_emails+ — users with existing platform
+  # accounts are handled by the DB-aware process phase, so pre-deduping their
+  # external IDs here would incorrectly fail rows that the process phase would
+  # accept (e.g. an enrolled user re-uploaded with their current external ID).
   #
   # @param [Array<Hash>] users
-  # @return [
-  #   [Array<Hash>],
-  #   [Array<Hash>]
-  # ]
-  def partition_unique_users(users)
+  # @param [Set<String>] existing_account_emails Downcased emails of users who
+  #   already have a platform account. These rows skip external-ID dedup.
+  # @return [[Array<Hash>, Array<Hash>]]
+  def partition_unique_users(users, existing_account_emails = Set.new)
     users.each { |user| user[:email] = user[:email].downcase }
     seen_emails = Set.new
     seen_external_ids = Set.new
-    unique_users = []
-    failed_users = []
-    users.each do |user|
-      ext_id = user[:external_id].presence
-      if seen_emails.include?(user[:email])
-        failed_users.push(user.merge(reason: :duplicate_email_in_file))
-      elsif ext_id && seen_external_ids.include?(ext_id)
-        failed_users.push(user.merge(reason: :duplicate_external_id_in_file))
+    users.each_with_object([[], []]) do |user, (unique, failed)|
+      reason = duplicate_reason(user, seen_emails, seen_external_ids, existing_account_emails)
+      if reason
+        failed << user.merge(reason: reason)
       else
-        seen_emails.add(user[:email])
-        seen_external_ids.add(ext_id) if ext_id
-        unique_users << user
+        track_seen!(user, seen_emails, seen_external_ids, existing_account_emails)
+        unique << user
       end
     end
-    [unique_users, failed_users]
+  end
+
+  def duplicate_reason(user, seen_emails, seen_external_ids, existing_account_emails)
+    return :duplicate_email_in_file if seen_emails.include?(user[:email])
+
+    ext_id = user[:external_id].presence
+    return :duplicate_external_id_in_file \
+      if ext_id && !existing_account_emails.include?(user[:email]) && seen_external_ids.include?(ext_id)
+  end
+
+  def track_seen!(user, seen_emails, seen_external_ids, existing_account_emails)
+    seen_emails.add(user[:email])
+    ext_id = user[:external_id].presence
+    seen_external_ids.add(ext_id) if ext_id && !existing_account_emails.include?(user[:email])
   end
 
   # Change all invitees' roles to :student if inviter is a teaching_assistant.
@@ -116,8 +131,13 @@ module Course::UserInvitationService::ParseInvitationConcern
         row_num = row_number
         row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)
-        # Ignore first row if it's a header row.
-        next if row_number == 1 && header_row?(row)
+        if row_number == 1 && looks_like_header?(row)
+          unless valid_header_row?(row)
+            raise I18n.t('errors.course.user_invitations.invalid_headers',
+                         expected: expected_headers.join(','))
+          end
+          next
+        end
 
         invite = parse_file_row(row)
         invites << invite if invite
@@ -127,12 +147,23 @@ module Course::UserInvitationService::ParseInvitationConcern
     raise CSV::MalformedCSVError.new(e, row_num), e.message
   end
 
-  # Returns a boolean to determine whether the row is a header row.
-  #
-  # @param[Array] row Array read from CSV file.
-  # @return [Boolean] Whether the row is a header row
-  def header_row?(row)
-    row[0].casecmp('Name') == 0 && row[1].casecmp('Email') == 0
+  def looks_like_header?(row)
+    row[0]&.casecmp('Name')&.zero? && row[1]&.casecmp('Email')&.zero?
+  end
+
+  def expected_headers
+    if @current_course.show_personalized_timeline_features?
+      EXPECTED_HEADERS_WITH_TIMELINE
+    else
+      EXPECTED_HEADERS_WITHOUT_TIMELINE
+    end
+  end
+
+  def valid_header_row?(row)
+    return false unless looks_like_header?(row)
+
+    provided = row.map { |h| h&.downcase }.compact
+    expected_headers.first(provided.length) == provided
   end
 
   # Strips a row of whitespaces.
@@ -150,10 +181,6 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Hash] The parsed invitation attributes given the row.
   def parse_file_row(row)
     return nil if row[1].blank?
-
-    if !@current_course.show_personalized_timeline_features? && row.length > 5
-      raise I18n.t('errors.course.user_invitations.timeline_template_mismatch')
-    end
 
     row[0] = row[1] if row[0].blank?
     role = parse_file_role(row[2])

@@ -1,11 +1,11 @@
 import { FC, ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
-import { TimelineAlgorithm } from 'types/course/personalTimes';
+import { InvitationUpdatedItem } from 'types/course/userInvitations';
 
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
 import {
-  DEFAULT_TABLE_ROWS_PER_PAGE,
+  DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -14,41 +14,53 @@ import tableTranslations from 'lib/translations/table';
 
 const translations = defineMessages({
   yes: {
-    id: 'course.userInvitations.InvitationResultExistingTable.yes',
+    id: 'course.userInvitations.ExternalIdUpdateTable.yes',
     defaultMessage: 'Yes',
   },
   no: {
-    id: 'course.userInvitations.InvitationResultExistingTable.no',
+    id: 'course.userInvitations.ExternalIdUpdateTable.no',
     defaultMessage: 'No',
+  },
+  existingColumn: {
+    id: 'course.userInvitations.ExternalIdUpdateTable.existingColumn',
+    defaultMessage: 'Existing',
+  },
+  inFileColumn: {
+    id: 'course.userInvitations.ExternalIdUpdateTable.inFileColumn',
+    defaultMessage: 'In file',
+  },
+  currentColumn: {
+    id: 'course.userInvitations.ExternalIdUpdateTable.currentColumn',
+    defaultMessage: '{label} (current)',
   },
 });
 
-export interface ExistingRow {
-  id: number;
-  name: string;
-  email: string;
-  externalId?: string | null;
-  role?: string;
-  phantom?: boolean;
-  timelineAlgorithm?: TimelineAlgorithm;
-}
-
 interface Props {
-  rows: ExistingRow[];
+  rows: InvitationUpdatedItem[];
+  applied: boolean;
   showPersonalizedTimelineFeatures?: boolean;
 }
 
-const InvitationResultExistingTable: FC<Props> = ({
+// The currently-live column (Existing before apply, In file after) gets a full-cell
+// blue fill; the other column is muted. Column `className` lands on the MUI TableCell,
+// so the whole cell fills cleanly (it also tints the column's header cell — intended:
+// the live column reads as one highlighted column, with a "(current)" header label).
+const LIVE_CELL_CLASS = 'bg-blue-100 font-semibold text-blue-900';
+const MUTED_CELL_CLASS = 'text-neutral-400';
+
+const ExternalIdUpdateTable: FC<Props> = ({
   rows,
+  applied,
   showPersonalizedTimelineFeatures,
 }) => {
   const { t } = useTranslation();
 
   if (rows.length === 0) return null;
 
-  const showExternalId = rows.some((r) => r.externalId != null);
+  const currentTitle = (label: string): string =>
+    t(translations.currentColumn, { label });
 
-  const columns: ColumnTemplate<ExistingRow>[] = [
+  const columns: ColumnTemplate<InvitationUpdatedItem>[] = [
     {
       of: 'name',
       title: t(tableTranslations.name),
@@ -63,23 +75,31 @@ const InvitationResultExistingTable: FC<Props> = ({
       cell: (row) => row.email,
       csvDownloadable: true,
     },
-    ...(showExternalId
-      ? ([
-          {
-            of: 'externalId',
-            title: t(tableTranslations.externalId),
-            sortable: false,
-            cell: (row): ReactNode => row.externalId ?? '',
-            csvDownloadable: true,
-          },
-        ] as ColumnTemplate<ExistingRow>[])
-      : []),
+    {
+      of: 'previousExternalId',
+      title: applied
+        ? t(translations.existingColumn)
+        : currentTitle(t(translations.existingColumn)),
+      className: applied ? MUTED_CELL_CLASS : LIVE_CELL_CLASS,
+      sortable: false,
+      cell: (row): ReactNode => row.previousExternalId ?? '—',
+      csvDownloadable: true,
+    },
+    {
+      of: 'externalId',
+      title: applied
+        ? currentTitle(t(translations.inFileColumn))
+        : t(translations.inFileColumn),
+      className: applied ? LIVE_CELL_CLASS : MUTED_CELL_CLASS,
+      sortable: false,
+      cell: (row): ReactNode => row.externalId ?? '—',
+      csvDownloadable: true,
+    },
     {
       of: 'role',
       title: t(tableTranslations.role),
       sortable: false,
       cell: (row): ReactNode => {
-        if (!row.role) return '';
         const desc =
           roleTranslations[row.role as keyof typeof roleTranslations];
         return desc ? t(desc) : row.role;
@@ -105,7 +125,7 @@ const InvitationResultExistingTable: FC<Props> = ({
               )?.label ?? '-',
             csvDownloadable: true,
           },
-        ] as ColumnTemplate<ExistingRow>[])
+        ] as ColumnTemplate<InvitationUpdatedItem>[])
       : []),
   ];
 
@@ -113,10 +133,10 @@ const InvitationResultExistingTable: FC<Props> = ({
     <Table
       columns={columns}
       data={rows}
-      getRowEqualityData={(row) => row}
+      getRowEqualityData={(row) => ({ ...row, applied })}
       getRowId={(row) => String(row.id)}
       pagination={{
-        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+        rowsPerPage: [DEFAULT_MINI_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}
       toolbar={{ show: false }}
@@ -124,4 +144,4 @@ const InvitationResultExistingTable: FC<Props> = ({
   );
 };
 
-export default InvitationResultExistingTable;
+export default ExternalIdUpdateTable;

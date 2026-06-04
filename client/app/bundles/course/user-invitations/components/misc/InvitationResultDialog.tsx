@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import HelpIcon from '@mui/icons-material/Help';
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -13,17 +15,20 @@ import {
 } from '@mui/material';
 import { CourseUserData } from 'types/course/courseUsers';
 import {
+  ExternalIdUpdate,
   FailedInvitationRowData,
   InvitationListData,
   InvitationResult,
   InvitationSuccessRow,
-  InvitationUpdatedItem,
 } from 'types/course/userInvitations';
 
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { updateExternalIds } from '../../operations';
 import { getManageCourseUsersSharedData } from '../../selectors';
+import ExternalIdUpdateTable from '../tables/ExternalIdUpdateTable';
 import InvitationResultExistingTable, {
   ExistingRow,
 } from '../tables/InvitationResultExistingTable';
@@ -71,6 +76,23 @@ const translations = defineMessages({
     id: 'course.userInvitations.InvitationResultDialog.newCourseUsers',
     defaultMessage: 'New Course Users ({count})',
   },
+  externalIdUpdates: {
+    id: 'course.userInvitations.InvitationResultDialog.externalIdUpdates',
+    defaultMessage: 'External ID updates ({count})',
+  },
+  externalIdUpdatesInfo: {
+    id: 'course.userInvitations.InvitationResultDialog.externalIdUpdatesInfo',
+    defaultMessage:
+      'These users are already invited or enrolled. Their External ID changes only if you apply the file values.',
+  },
+  invitationsSubheading: {
+    id: 'course.userInvitations.InvitationResultDialog.invitationsSubheading',
+    defaultMessage: 'Invitations ({count})',
+  },
+  enrolledMembersSubheading: {
+    id: 'course.userInvitations.InvitationResultDialog.enrolledMembersSubheading',
+    defaultMessage: 'Enrolled members ({count})',
+  },
   existingInvitations: {
     id: 'course.userInvitations.InvitationResultDialog.existingInvitations',
     defaultMessage: 'Existing Invitations ({count})',
@@ -89,13 +111,27 @@ const translations = defineMessages({
     defaultMessage:
       'These users are already enrolled in this course. They were not re-enrolled.',
   },
-  externalIdUpdatedInfo: {
-    id: 'course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo',
-    defaultMessage: 'External IDs were updated where specified.',
+  pendingExternalIdInfo: {
+    id: 'course.userInvitations.InvitationResultDialog.pendingExternalIdInfo',
+    defaultMessage:
+      '{count, plural, one {# row has} other {# rows have}} a different External ID in your file. Current values were kept.',
   },
-  updatedSubtitle: {
-    id: 'course.userInvitations.InvitationResultDialog.updatedSubtitle',
-    defaultMessage: '{count} updated · shown first',
+  externalIdUpdatedDone: {
+    id: 'course.userInvitations.InvitationResultDialog.externalIdUpdatedDone',
+    defaultMessage: 'External IDs were updated from your file.',
+  },
+  applyFileValues: {
+    id: 'course.userInvitations.InvitationResultDialog.applyFileValues',
+    defaultMessage: 'Apply file values ({count})',
+  },
+  undo: {
+    id: 'course.userInvitations.InvitationResultDialog.undo',
+    defaultMessage: 'Undo',
+  },
+  applyFailed: {
+    id: 'course.userInvitations.InvitationResultDialog.applyFailed',
+    defaultMessage:
+      "Couldn''t apply — External ID ''{id}'' is now used by another member. No changes were made.",
   },
 });
 
@@ -112,26 +148,25 @@ const toSuccessRow = (
   timelineAlgorithm: item.timelineAlgorithm,
 });
 
-const toUpdatedExistingRow = (item: InvitationUpdatedItem): ExistingRow => ({
-  id: item.id,
-  name: item.name,
-  email: item.email,
-  externalId: item.externalId,
-  previousExternalId: item.previousExternalId,
-  role: item.role,
-  phantom: item.phantom,
-  timelineAlgorithm: item.timelineAlgorithm,
-});
-
 const InvitationResultDialog: FC<Props> = ({
   open,
   handleClose,
   invitationResult,
 }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { showPersonalizedTimelineFeatures } = useAppSelector(
     getManageCourseUsersSharedData,
   );
+  const [applied, setApplied] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setApplied(false);
+      setBusy(false);
+    }
+  }, [open]);
 
   if (!open) return null;
 
@@ -141,8 +176,8 @@ const InvitationResultDialog: FC<Props> = ({
     existingInvitations = [],
     existingCourseUsers = [],
     failedUsers = [],
-    updatedInvitations = [],
-    updatedCourseUsers = [],
+    pendingInvitationUpdates = [],
+    pendingCourseUserUpdates = [],
   } = invitationResult;
 
   const newInvitationRows = newInvitations.map((i) => toSuccessRow(i, 'inv'));
@@ -173,16 +208,46 @@ const InvitationResultDialog: FC<Props> = ({
     ...failedUsers,
   ];
 
-  const existingInvitationRows: ExistingRow[] = [
-    ...normalExistingInvitations,
-    ...updatedInvitations.map(toUpdatedExistingRow),
-  ];
-  const existingCourseUserRows: ExistingRow[] = [
-    ...existingCourseUsers,
-    ...updatedCourseUsers.map(toUpdatedExistingRow),
+  const pendingCount =
+    pendingInvitationUpdates.length + pendingCourseUserUpdates.length;
+
+  const buildApplyUpdates = (): ExternalIdUpdate[] => [
+    ...pendingInvitationUpdates.map((p) => ({
+      type: 'invitation' as const,
+      id: p.id,
+      externalId: applied ? p.previousExternalId : p.externalId,
+    })),
+    ...pendingCourseUserUpdates.map((p) => ({
+      type: 'course_user' as const,
+      id: p.id,
+      externalId: applied ? p.previousExternalId : p.externalId,
+    })),
   ];
 
+  const toggleApply = async (): Promise<void> => {
+    setBusy(true);
+    try {
+      await dispatch(updateExternalIds(buildApplyUpdates()));
+      setApplied(!applied);
+    } catch (error) {
+      const id = (
+        error as { response?: { data?: { conflictingExternalId?: string } } }
+      )?.response?.data?.conflictingExternalId;
+      toast.error(t(translations.applyFailed, { id: id ?? '' }));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const existingInvitationRows: ExistingRow[] = normalExistingInvitations;
+  const existingCourseUserRows: ExistingRow[] = existingCourseUsers;
+
   const needsAttentionCount = failedUsers.length + failedInvitations.length;
+  const alreadyInCourseCount =
+    normalExistingInvitations.length +
+    existingCourseUsers.length +
+    pendingInvitationUpdates.length +
+    pendingCourseUserUpdates.length;
 
   const handleDialogClose = (_event: object, reason: string): void => {
     if (reason !== 'backdropClick') handleClose();
@@ -195,18 +260,24 @@ const InvitationResultDialog: FC<Props> = ({
       maxWidth="lg"
       onClose={handleDialogClose}
       open={open}
-      sx={{ top: 40, '& .MuiDialog-paper': { overflowY: 'auto' } }}
+      sx={{
+        top: 40,
+        '& .MuiDialog-paper': {
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'hidden',
+        },
+      }}
     >
       <DialogTitle>{t(translations.header)}</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ flex: '1 1 auto', overflowY: 'auto' }}>
         <Typography gutterBottom variant="body2">
           {needsAttentionCount > 0 &&
             `${t(translations.summaryFailed, { count: needsAttentionCount })} `}
           {t(translations.summary, {
             newInvitations: newInvitations.length,
             newEnrollments: newCourseUsers.length,
-            alreadyInCourse:
-              existingInvitationRows.length + existingCourseUserRows.length,
+            alreadyInCourse: alreadyInCourseCount,
           })}
         </Typography>
 
@@ -234,6 +305,72 @@ const InvitationResultDialog: FC<Props> = ({
               }
               users={allFailedUsers}
             />
+          </section>
+        )}
+
+        {pendingCount > 0 && (
+          <section style={{ marginTop: 24 }}>
+            <Typography variant="h6">
+              <Tooltip title={t(translations.externalIdUpdatesInfo)}>
+                <WarningAmber
+                  color="warning"
+                  sx={{ verticalAlign: 'middle', mr: 0.5 }}
+                />
+              </Tooltip>
+              {t(translations.externalIdUpdates, { count: pendingCount })}
+            </Typography>
+
+            <Alert
+              action={
+                <Button disabled={busy} onClick={toggleApply} size="small">
+                  {applied
+                    ? t(translations.undo)
+                    : t(translations.applyFileValues, { count: pendingCount })}
+                </Button>
+              }
+              severity="info"
+              sx={{ mt: 1 }}
+            >
+              {applied
+                ? t(translations.externalIdUpdatedDone)
+                : t(translations.pendingExternalIdInfo, {
+                    count: pendingCount,
+                  })}
+            </Alert>
+
+            {pendingInvitationUpdates.length > 0 && (
+              <>
+                <Typography component="div" sx={{ mt: 2 }} variant="subtitle2">
+                  {t(translations.invitationsSubheading, {
+                    count: pendingInvitationUpdates.length,
+                  })}
+                </Typography>
+                <ExternalIdUpdateTable
+                  applied={applied}
+                  rows={pendingInvitationUpdates}
+                  showPersonalizedTimelineFeatures={
+                    showPersonalizedTimelineFeatures
+                  }
+                />
+              </>
+            )}
+
+            {pendingCourseUserUpdates.length > 0 && (
+              <>
+                <Typography component="div" sx={{ mt: 2 }} variant="subtitle2">
+                  {t(translations.enrolledMembersSubheading, {
+                    count: pendingCourseUserUpdates.length,
+                  })}
+                </Typography>
+                <ExternalIdUpdateTable
+                  applied={applied}
+                  rows={pendingCourseUserUpdates}
+                  showPersonalizedTimelineFeatures={
+                    showPersonalizedTimelineFeatures
+                  }
+                />
+              </>
+            )}
           </section>
         )}
 
@@ -272,27 +409,13 @@ const InvitationResultDialog: FC<Props> = ({
         {existingInvitationRows.length > 0 && (
           <section style={{ marginTop: 24 }}>
             <Typography variant="h6">
-              <Tooltip
-                title={[
-                  t(translations.existingInvitationsInfo),
-                  ...(updatedInvitations.length > 0
-                    ? [t(translations.externalIdUpdatedInfo)]
-                    : []),
-                ].join(' ')}
-              >
+              <Tooltip title={t(translations.existingInvitationsInfo)}>
                 <HelpIcon sx={{ fontSize: 16, mr: 0.5 }} />
               </Tooltip>
               {t(translations.existingInvitations, {
                 count: existingInvitationRows.length,
               })}
             </Typography>
-            {updatedInvitations.length > 0 && (
-              <Typography color="primary" variant="caption">
-                {t(translations.updatedSubtitle, {
-                  count: updatedInvitations.length,
-                })}
-              </Typography>
-            )}
             <InvitationResultExistingTable
               rows={existingInvitationRows}
               showPersonalizedTimelineFeatures={
@@ -305,27 +428,13 @@ const InvitationResultDialog: FC<Props> = ({
         {existingCourseUserRows.length > 0 && (
           <section style={{ marginTop: 24 }}>
             <Typography variant="h6">
-              <Tooltip
-                title={[
-                  t(translations.existingCourseUsersInfo),
-                  ...(updatedCourseUsers.length > 0
-                    ? [t(translations.externalIdUpdatedInfo)]
-                    : []),
-                ].join(' ')}
-              >
+              <Tooltip title={t(translations.existingCourseUsersInfo)}>
                 <HelpIcon sx={{ fontSize: 16, mr: 0.5 }} />
               </Tooltip>
               {t(translations.existingCourseUsers, {
                 count: existingCourseUserRows.length,
               })}
             </Typography>
-            {updatedCourseUsers.length > 0 && (
-              <Typography color="primary" variant="caption">
-                {t(translations.updatedSubtitle, {
-                  count: updatedCourseUsers.length,
-                })}
-              </Typography>
-            )}
             <InvitationResultExistingTable
               rows={existingCourseUserRows}
               showPersonalizedTimelineFeatures={
@@ -336,7 +445,7 @@ const InvitationResultDialog: FC<Props> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={handleClose}>
+        <Button color="secondary" disabled={busy} onClick={handleClose}>
           {t(translations.close)}
         </Button>
       </DialogActions>

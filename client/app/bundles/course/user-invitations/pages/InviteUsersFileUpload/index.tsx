@@ -2,7 +2,10 @@ import { FC, ReactNode } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
-import { InvitationResult } from 'types/course/userInvitations';
+import {
+  InvitationFileEntity,
+  InvitationResult,
+} from 'types/course/userInvitations';
 
 import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
@@ -60,7 +63,7 @@ const translations = defineMessages({
   fileUploadInfoExternalId: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
     defaultMessage:
-      'External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course.',
+      'External ID is optional. If provided, it must be unique within the course.',
   },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
@@ -110,30 +113,32 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data): Promise<void> => {
-    return dispatch(inviteUsersFromFile(data.file))
-      .then((response) => {
-        onClose();
-        openResultDialog(response);
-      })
-      .catch((error) => {
-        const rawErrors = error.response?.data?.errors;
-        let errorList: string[];
-        if (Array.isArray(rawErrors)) errorList = rawErrors;
-        else if (typeof rawErrors === 'string') errorList = [rawErrors];
-        else errorList = [];
-        const first = errorList[0];
-        const overflow =
-          errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-        if (first) {
-          toast.error(t(translations.failure, { error: first + overflow }), {
-            autoClose: false,
-          });
-        } else {
-          toast.error(t(translations.failureGeneric), { autoClose: false });
-        }
+  const handleError = (error: unknown): void => {
+    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
+      ?.response?.data?.errors;
+    let errorList: string[];
+    if (Array.isArray(rawErrors)) errorList = rawErrors;
+    else if (typeof rawErrors === 'string') errorList = [rawErrors];
+    else errorList = [];
+    const first = errorList[0];
+    const overflow =
+      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
+    if (first) {
+      toast.error(t(translations.failure, { error: first + overflow }), {
+        autoClose: false,
       });
+    } else {
+      toast.error(t(translations.failureGeneric), { autoClose: false });
+    }
   };
+
+  const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> =>
+    dispatch(inviteUsersFromFile(data.file))
+      .then((result) => {
+        onClose();
+        openResultDialog(result);
+      })
+      .catch(handleError);
 
   const formSubtitle = (
     <>

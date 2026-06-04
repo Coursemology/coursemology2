@@ -1,2 +1,2 @@
-name,email,role,phantom,timeline_algorithm,external_id
-Alice,alice_ext_dupe1@example.com,student,false,fixed,EXT_DUPE
+name,email,role,phantom,externalid
+Alice,alice_ext_dupe1@example.com,student,false,EXT_DUPE

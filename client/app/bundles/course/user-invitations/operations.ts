@@ -1,5 +1,6 @@
 import { Operation } from 'store';
 import {
+  ExternalIdUpdate,
   InvitationFileEntity,
   InvitationPostData,
   InvitationResult,
@@ -80,8 +81,13 @@ export function inviteUsersFromFile(
     CourseAPI.userInvitations.invite(fileEntity).then((response) => {
       const data = response.data;
       dispatch(actions.updateInvitationCounts(data.newInvitations));
-      return JSON.parse(data.invitationResult);
+      return JSON.parse(data.invitationResult) as InvitationResult;
     });
+}
+
+export function updateExternalIds(updates: ExternalIdUpdate[]): Operation {
+  return async () =>
+    CourseAPI.userInvitations.updateExternalIds(updates).then(() => undefined);
 }
 
 export function inviteUsersFromForm(
@@ -92,7 +98,7 @@ export function inviteUsersFromForm(
     CourseAPI.userInvitations.invite(formattedData).then((response) => {
       const data = response.data;
       dispatch(actions.updateInvitationCounts(data.newInvitations));
-      return JSON.parse(data.invitationResult);
+      return JSON.parse(data.invitationResult) as InvitationResult;
     });
 }
 
