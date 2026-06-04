@@ -22,6 +22,7 @@ const StringRandomizationManager: FC<Props> = ({ config, onChange }) => {
         componentsProps={{
           typography: {
             variant: 'subtitle2',
+            fontWeight: 'normal',
           },
         }}
         control={
@@ -38,6 +39,7 @@ const StringRandomizationManager: FC<Props> = ({ config, onChange }) => {
         componentsProps={{
           typography: {
             variant: 'subtitle2',
+            fontWeight: 'normal',
           },
         }}
         control={

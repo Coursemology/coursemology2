@@ -1130,6 +1130,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.overrideRandomizationMode',
     defaultMessage: 'Override with specified value',
   },
+  overrideRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.overrideRandomizationModeDescription',
+    defaultMessage: 'Values starting with "=" are treated as formulas.',
+  },
   overrideValue: {
     id: 'course.assessment.question.textResponses.overrideValue',
     defaultMessage: 'Value',
@@ -1163,6 +1167,18 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.shuffleRandomizationModeDescription',
     defaultMessage:
       'The values of each cell marked "Shuffle" will be randomly rearranged. The overall distribution remains the same, but each value may end up in a different cell.',
+  },
+  dateRandomizationMode: {
+    id: 'course.assessment.question.textResponses.dateRandomizationMode',
+    defaultMessage: 'Use random date value',
+  },
+  roundToInteger: {
+    id: 'course.assessment.question.textResponses.roundToInteger',
+    defaultMessage: 'Round to nearest integer',
+  },
+  roundToDay: {
+    id: 'course.assessment.question.textResponses.roundToDay',
+    defaultMessage: 'Round to nearest day (00:00)',
   },
   grade: {
     id: 'course.assessment.question.textResponses.grade',

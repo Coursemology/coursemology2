@@ -50,12 +50,13 @@ const Solution: FC<SolutionProps> = ({
     if (solution?.solutionType === 'spreadsheet_formula') {
       setValue(`solutions.${index}.spreadsheet`, {
         isRandomizationEnabled:
-          solution.spreadsheet?.isRandomizationEnabled ?? false,
+          solution.spreadsheet?.isRandomizationEnabled ?? true,
         isRandomSeedFixed: solution.spreadsheet?.isRandomSeedFixed ?? false,
         randomSeed: solution.spreadsheet?.randomSeed ?? generateRandomSeed(),
         isTimestampFixed: solution.spreadsheet?.isTimestampFixed ?? false,
-        testTimestamp:
-          solution.spreadsheet?.testTimestamp ?? new Date().toISOString(),
+        testTimestamp: new Date(
+          solution.spreadsheet?.testTimestamp ?? Date.now(),
+        ),
         numRandomTests: solution.spreadsheet?.numRandomTests ?? 2,
         file: solution.spreadsheet?.file ?? { file: null, name: '', url: '' },
         variables: solution.spreadsheet?.variables,
@@ -141,7 +142,6 @@ const Solution: FC<SolutionProps> = ({
                   <textarea
                     className={`w-full h-full resize-none rounded border border-solid p-2 disabled:bg-neutral-100 disabled:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-inset ${fieldState.error ? 'border-red-500 focus:ring-red-500' : 'border-neutral-400 focus:ring-blue-600'}`}
                     disabled={solution.toBeDeleted || disabled}
-                    rows={2}
                     {...field}
                   />
                   {fieldState.error && (

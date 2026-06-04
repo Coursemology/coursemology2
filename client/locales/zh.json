@@ -2345,11 +2345,17 @@
   "course.assessment.question.textResponses.overrideRandomizationMode": {
     "defaultMessage": "覆盖为指定值"
   },
+  "course.assessment.question.textResponses.overrideRandomizationModeDescription": {
+    "defaultMessage": "以\"=\"开头的值将被视为公式。"
+  },
   "course.assessment.question.textResponses.overrideValue": {
     "defaultMessage": "值"
   },
   "course.assessment.question.textResponses.numericRandomizationMode": {
     "defaultMessage": "使用随机数值"
+  },
+  "course.assessment.question.textResponses.roundToInteger": {
+    "defaultMessage": "取整到整数"
   },
   "course.assessment.question.textResponses.stringRandomizationMode": {
     "defaultMessage": "随机化值中的字符"
@@ -2362,6 +2368,12 @@
   },
   "course.assessment.question.textResponses.randomizeLetters": {
     "defaultMessage": "随机化字母 (a-z)"
+  },
+  "course.assessment.question.textResponses.dateRandomizationMode": {
+    "defaultMessage": "使用随机日期值"
+  },
+  "course.assessment.question.textResponses.roundToDay": {
+    "defaultMessage": "取整到天"
   },
   "course.assessment.question.textResponses.shuffleRandomizationMode": {
     "defaultMessage": "与其他单元格随机排列值"

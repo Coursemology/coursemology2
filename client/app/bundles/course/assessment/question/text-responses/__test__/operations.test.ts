@@ -142,6 +142,93 @@ describe('solutions_attributes request payload', () => {
     expect(fd.get(`${base}[_destroy]`)).toBe('1');
   });
 
+  describe('spreadsheet randomSeed and testTimestamp fields', () => {
+    const ss =
+      'question_text_response[solutions_attributes][][test_spreadsheet_attributes]';
+
+    const makeSpreadsheetSolution = (
+      overrides: Partial<NonNullable<SolutionEntity['spreadsheet']>>,
+    ): SolutionEntity => ({
+      id: 1,
+      solution: '=A1',
+      solutionType: 'spreadsheet_formula',
+      grade: 5,
+      explanation: '',
+      spreadsheet: {
+        isRandomizationEnabled: false,
+        isRandomSeedFixed: false,
+        randomSeed: 0,
+        isTimestampFixed: false,
+        testTimestamp: null,
+        numRandomTests: 0,
+        variables: [],
+        file: { name: 'sheet.xlsx', url: '' },
+        ...overrides,
+      },
+    });
+
+    it('forwards randomSeed as a number string when isRandomSeedFixed is true', async () => {
+      const spy = jest.spyOn(
+        CourseAPI.assessment.question.textResponse,
+        'create',
+      );
+      mock.onPost().reply(200, { redirectUrl });
+
+      await create(
+        makeData([
+          makeSpreadsheetSolution({
+            isRandomSeedFixed: true,
+            randomSeed: 12345,
+          }),
+        ]),
+      );
+
+      const fd = spy.mock.calls[0][0] as FormData;
+      expect(fd.get(`${ss}[is_random_seed_fixed]`)).toBe('1');
+      expect(fd.get(`${ss}[test_random_seed]`)).toBe('12345');
+    });
+
+    it('still sends randomSeed when isRandomSeedFixed is false', async () => {
+      const spy = jest.spyOn(
+        CourseAPI.assessment.question.textResponse,
+        'create',
+      );
+      mock.onPost().reply(200, { redirectUrl });
+
+      await create(
+        makeData([
+          makeSpreadsheetSolution({ isRandomSeedFixed: false, randomSeed: 99 }),
+        ]),
+      );
+
+      const fd = spy.mock.calls[0][0] as FormData;
+      expect(fd.get(`${ss}[is_random_seed_fixed]`)).toBe('0');
+      expect(fd.get(`${ss}[test_random_seed]`)).toBe('99');
+    });
+
+    it('serialises testTimestamp Date to an ISO string', async () => {
+      const spy = jest.spyOn(
+        CourseAPI.assessment.question.textResponse,
+        'create',
+      );
+      mock.onPost().reply(200, { redirectUrl });
+
+      const date = new Date('2024-01-15T10:30:00.000Z');
+      await create(
+        makeData([
+          makeSpreadsheetSolution({
+            isTimestampFixed: true,
+            testTimestamp: date,
+          }),
+        ]),
+      );
+
+      const fd = spy.mock.calls[0][0] as FormData;
+      expect(fd.get(`${ss}[is_timestamp_fixed]`)).toBe('1');
+      expect(fd.get(`${ss}[test_timestamp]`)).toBe('2024-01-15T10:30:00.000Z');
+    });
+  });
+
   it('sends spreadsheet attributes for spreadsheet_formula solutions', async () => {
     const spy = jest.spyOn(
       CourseAPI.assessment.question.textResponse,
@@ -162,7 +249,7 @@ describe('solutions_attributes request payload', () => {
             isRandomSeedFixed: true,
             randomSeed: 42,
             isTimestampFixed: false,
-            testTimestamp: new Date().toISOString(),
+            testTimestamp: new Date(),
             numRandomTests: 4,
             variables: [],
             file: { name: 'sheet.xlsx', url: '' },

@@ -1,5 +1,5 @@
 import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { PushPin } from '@mui/icons-material';
+import { InsertInvitation, PushPin } from '@mui/icons-material';
 import {
   Button,
   Divider,
@@ -13,18 +13,21 @@ import {
 import {
   CellRandomConfig,
   CellRandomConfigBody,
+  SpreadsheetCellValue,
 } from 'types/course/assessment/question/text-responses';
 
 import SpreadsheetPreview, {
   getCellKey,
   GridData,
   parseSpreadsheet,
+  renderCellValue,
   SheetGrid,
 } from 'lib/components/form/fields/SingleFileInput/SpreadsheetPreview';
 import AZIcon from 'lib/components/icons/AZIcon';
 import OneNineIcon from 'lib/components/icons/OneNineIcon';
 import RandomizeIcon from 'lib/components/icons/RandomizeIcon';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatRawDate } from 'lib/moment';
 
 import translations from '../../../translations';
 import {
@@ -32,6 +35,7 @@ import {
   getDefaultRandomizationMode,
 } from '../utils';
 
+import DateRandomizationManager from './DateRandomizationManager';
 import NumericRandomizationManager from './NumericRandomizationManager';
 import OverrideRandomizationManager from './OverrideRandomizationManager';
 import ShuffleRandomizationManager from './ShuffleRandomizationManager';
@@ -46,7 +50,7 @@ interface Props {
 interface PopoverState {
   anchorEl: HTMLTableCellElement;
   cellKey: string;
-  cellValue: string | undefined;
+  cellValue: SpreadsheetCellValue;
   rowIdx: number;
   colIdx: number;
   sheetIdx: number;
@@ -61,12 +65,16 @@ type CellRandomConfigState = Record<string, CellRandomConfigsState>;
 const initDefaultConfig = (
   config: { [K in CellRandomConfig['mode']]?: CellRandomConfigBody<K> },
   mode: Exclude<CellRandomConfig['mode'], 'off'>,
-  cellValue: string | undefined,
+  cellValue: SpreadsheetCellValue,
 ): void => {
   // The switch-case is necessary so TypeScript can properly follow type declarations
   /* eslint-disable sonarjs/no-duplicated-branches */
   switch (mode) {
     case 'numeric':
+      config[mode] =
+        config[mode] ?? getDefaultRandomizationConfig(cellValue, mode);
+      break;
+    case 'date':
       config[mode] =
         config[mode] ?? getDefaultRandomizationConfig(cellValue, mode);
       break;
@@ -145,6 +153,13 @@ const CellRandomConfigIndicator: FC<{ mode: string }> = ({ mode }) => {
       return (
         <OneNineIcon className="align-middle h-full text-xl" color="info" />
       );
+    case 'date':
+      return (
+        <InsertInvitation
+          className="align-middle h-full text-xl"
+          color="info"
+        />
+      );
     case 'string':
       return <AZIcon className="align-middle h-full text-xl" color="info" />;
     case 'shuffle':
@@ -153,6 +168,60 @@ const CellRandomConfigIndicator: FC<{ mode: string }> = ({ mode }) => {
       );
     default:
       return null;
+  }
+};
+
+const CellOverrideContent: FC<{
+  cellValue: SpreadsheetCellValue;
+  cellConfig: CellRandomConfigsState;
+}> = ({ cellValue, cellConfig }) => {
+  switch (cellConfig.activeMode) {
+    case 'override':
+      return (
+        <span className="flex-1 text-blue-800">
+          {cellConfig.override?.value ?? renderCellValue(cellValue)}
+        </span>
+      );
+    case 'numeric':
+      if (
+        cellConfig.numeric?.min !== undefined &&
+        cellConfig.numeric?.max !== undefined
+      ) {
+        const min = cellConfig.numeric.roundToInteger
+          ? Math.round(cellConfig.numeric.min)
+          : cellConfig.numeric.min;
+        const max = cellConfig.numeric.roundToInteger
+          ? Math.round(cellConfig.numeric.max)
+          : cellConfig.numeric.max;
+        return (
+          <span className="flex-1 text-blue-800">
+            {min} - {max}
+          </span>
+        );
+      }
+      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
+    case 'date':
+      if (
+        cellConfig.date?.min !== undefined &&
+        cellConfig.date?.max !== undefined
+      ) {
+        return (
+          <span className="flex-1 text-blue-800">
+            {formatRawDate(cellConfig.date.min)} -{' '}
+            {formatRawDate(cellConfig.date.max)}
+          </span>
+        );
+      }
+      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
+    case 'string':
+    case 'shuffle':
+      return (
+        <span className="flex-1 text-blue-800">
+          {renderCellValue(cellValue)}
+        </span>
+      );
+    default:
+      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
   }
 };
 
@@ -194,7 +263,16 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
     initSpreadsheetDefaultConfigFromFile(cellConfigs === undefined);
   }, [file]);
 
+  const isEditableElement = (el: Element | null): boolean => {
+    if (!el) return false;
+    if (el instanceof HTMLTextAreaElement) return true;
+    if (el instanceof HTMLInputElement)
+      return el.type !== 'radio' && el.type !== 'checkbox';
+    return el instanceof HTMLElement && el.isContentEditable;
+  };
+
   const handleArrowKey = (e: KeyboardEvent): void => {
+    if (isEditableElement(document.activeElement)) return;
     const deltas: Record<string, [number, number]> = {
       ArrowUp: [-1, 0],
       ArrowDown: [1, 0],
@@ -330,21 +408,23 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
             });
           }}
           renderCell={(cellValue, key) => {
-            const cellConfig = cellConfigs?.[key];
+            const cellConfig = cellConfigs?.[key] ?? { activeMode: 'off' };
             const icon = (
               <CellRandomConfigIndicator
                 mode={cellConfig?.activeMode ?? 'off'}
               />
             );
-            const content =
-              cellConfig?.activeMode === 'override'
-                ? cellConfig.override?.value
-                : cellValue ?? '';
+            const content = (
+              <CellOverrideContent
+                cellConfig={cellConfig}
+                cellValue={cellValue}
+              />
+            );
             if (!icon) return content;
             return (
               <div className="flex justify-between space-x-1">
                 <span>{icon}</span>
-                <span className="flex-1">{content}</span>
+                {content}
               </div>
             );
           }}
@@ -390,6 +470,10 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
                       label: t(translations.numericRandomizationMode),
                     },
                     {
+                      value: 'date',
+                      label: t(translations.dateRandomizationMode),
+                    },
+                    {
                       value: 'string',
                       label: t(translations.stringRandomizationMode),
                     },
@@ -422,18 +506,19 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
             {activeMode !== 'off' && activeConfig && (
               <>
                 <Divider flexItem orientation="vertical" variant="middle" />
-                <div className="flex flex-col justify-start p-4 w-96">
+                <div className="flex flex-col justify-start p-4 w-144">
                   {activeMode === 'numeric' && (
                     <NumericRandomizationManager
                       config={activeConfig.numeric!}
                       onBlur={() => {
-                        const { min, max } = activeConfig.numeric!;
+                        const { min, max, roundToInteger } =
+                          activeConfig.numeric!;
                         if (min > max)
                           updateCellConfigs({
                             ...cellConfigs,
                             [popover.cellKey]: {
                               ...activeConfig,
-                              numeric: { min: max, max: min },
+                              numeric: { min: max, max: min, roundToInteger },
                             },
                           });
                       }}
@@ -443,6 +528,31 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
                           [popover.cellKey]: {
                             ...activeConfig,
                             numeric: { ...activeConfig.numeric!, ...changed },
+                          },
+                        });
+                      }}
+                    />
+                  )}
+                  {activeMode === 'date' && (
+                    <DateRandomizationManager
+                      config={activeConfig.date!}
+                      onBlur={() => {
+                        const { min, max, roundToDay } = activeConfig.date!;
+                        if (min > max)
+                          updateCellConfigs({
+                            ...cellConfigs,
+                            [popover.cellKey]: {
+                              ...activeConfig,
+                              date: { min: max, max: min, roundToDay },
+                            },
+                          });
+                      }}
+                      onChange={(changed) => {
+                        updateCellConfigs({
+                          ...cellConfigs,
+                          [popover.cellKey]: {
+                            ...activeConfig,
+                            date: { ...activeConfig.date!, ...changed },
                           },
                         });
                       }}

@@ -78,9 +78,14 @@ const adaptSpreadsheetPostData = (
     is_random_seed_fixed: spreadsheet.isRandomSeedFixed,
     test_random_seed: spreadsheet.randomSeed,
     is_timestamp_fixed: spreadsheet.isTimestampFixed,
-    test_timestamp: spreadsheet.testTimestamp,
+    test_timestamp: spreadsheet.testTimestamp?.toISOString() ?? null,
     num_random_tests: spreadsheet.numRandomTests,
-    variables: JSON.stringify(spreadsheet.variables ?? []),
+    variables: JSON.stringify(
+      (spreadsheet.variables ?? []).map((v) => {
+        if (v.mode !== 'date') return v;
+        return { ...v, min: v.min.toISOString(), max: v.max.toISOString() };
+      }),
+    ),
   };
 };
 
