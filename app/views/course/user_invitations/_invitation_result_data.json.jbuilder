@@ -43,8 +43,8 @@ json.existingCourseUsers existing_course_users.each do |course_user|
   json.timelineAlgorithm course_user.timeline_algorithm
 end
 
-json.failedUsers failed_users.each.with_index do |failed_user, index|
-  json.id failed_user[:id] || -(index + 1)
+json.failedUsers(failed_users.each_with_index.map { |fu, i| fu[:id] ? fu : fu.merge(id: -(i + 1)) }) do |failed_user|
+  json.id failed_user[:id]
   json.name failed_user[:name]
   json.email failed_user[:email]
   json.externalId failed_user[:external_id]

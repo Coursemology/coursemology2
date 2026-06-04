@@ -36,7 +36,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return [void]
   def augment_user_objects(users)
     email_user_mapping = find_existing_users(users.map { |user| user[:email] })
-    users.each { |user| user[:user] = email_user_mapping[user[:email]] }
+    users.each { |user| user[:user] ||= email_user_mapping[user[:email]] }
   end
 
   # Given a list of email addresses, returns a Hash containing the mappings from email addresses

@@ -35,35 +35,48 @@ module Course::UserInvitationService::ParseInvitationConcern
         parse_from_form(users)
       end
 
-    partition_unique_users(restrict_invitee_role(result))
+    restrict_invitee_role(result)
   end
 
   # Partition users into unique (including first duplicate instance) and duplicate users.
   #
+  # Email dedup applies to all rows. External-ID dedup applies only to rows whose email
+  # is NOT in +existing_account_emails+ — users with existing platform accounts are handled
+  # by the DB-aware process phase, so pre-deduping their external IDs here would incorrectly
+  # fail rows that the process phase would accept (e.g. an enrolled user re-uploaded with
+  # their current external ID).
+  #
   # @param [Array<Hash>] users
-  # @return [
-  #   [Array<Hash>],
-  #   [Array<Hash>]
-  # ]
-  def partition_unique_users(users)
-    users.each { |user| user[:email] = user[:email].downcase }
-    seen_emails = Set.new
-    seen_external_ids = Set.new
-    unique_users = []
-    failed_users = []
-    users.each do |user|
-      ext_id = user[:external_id].presence
-      if seen_emails.include?(user[:email])
-        failed_users.push(user.merge(reason: :duplicate_email_in_file))
-      elsif ext_id && seen_external_ids.include?(ext_id)
-        failed_users.push(user.merge(reason: :duplicate_external_id_in_file))
+  # @param [Set<String>] existing_account_emails Downcased emails of users who already have
+  #   a platform account. These rows skip external-ID dedup.
+  # @return [[Array<Hash>, Array<Hash>]]
+  def partition_unique_users(users, existing_account_emails = Set.new)
+    users.each { |u| u[:email] = u[:email].downcase }
+    seen_emails, seen_external_ids = Set.new, Set.new
+    users.each_with_object([[], []]) do |user, (unique, failed)|
+      reason = duplicate_reason(user, seen_emails, seen_external_ids, existing_account_emails)
+      if reason
+        failed << user.merge(reason: reason)
       else
-        seen_emails.add(user[:email])
-        seen_external_ids.add(ext_id) if ext_id
-        unique_users << user
+        track_seen_user!(user, seen_emails, seen_external_ids, existing_account_emails)
+        unique << user
       end
     end
-    [unique_users, failed_users]
+  end
+
+  def duplicate_reason(user, seen_emails, seen_external_ids, existing_account_emails)
+    return :duplicate_email_in_file if seen_emails.include?(user[:email])
+
+    ext_id = user[:external_id].presence
+    :duplicate_external_id_in_file if ext_id &&
+                                      !existing_account_emails.include?(user[:email]) &&
+                                      seen_external_ids.include?(ext_id)
+  end
+
+  def track_seen_user!(user, seen_emails, seen_external_ids, existing_account_emails)
+    seen_emails << user[:email]
+    ext_id = user[:external_id].presence
+    seen_external_ids << ext_id if ext_id && !existing_account_emails.include?(user[:email])
   end
 
   # Change all invitees' roles to :student if inviter is a teaching_assistant.
