@@ -117,6 +117,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @param [Array<User>] users The users to ensure have instance users.
   # @return [void]
   def ensure_instance_users(users)
+    # instance_users must be preloaded (done by find_existing_users) — otherwise .any? fires N queries.
     missing_user_ids = users.reject { |user| user.instance_users.any? }.map(&:id)
     return if missing_user_ids.empty?
 

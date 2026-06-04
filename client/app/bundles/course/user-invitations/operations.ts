@@ -93,7 +93,10 @@ export function inviteUsersFromFile(
           };
         }
         dispatch(actions.updateInvitationCounts(data.newInvitations));
-        return JSON.parse(data.invitationResult) as InvitationResult;
+        return {
+          ...(JSON.parse(data.invitationResult) as InvitationResult),
+          blankHeaderWarning: data.blankHeaderWarning ?? false,
+        };
       });
 }
 

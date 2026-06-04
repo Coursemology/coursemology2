@@ -75,6 +75,23 @@ describe('ExternalIdConflictPrompt', () => {
     ).toBeInTheDocument();
   });
 
+  it('does not render course member section when pendingCourseUserUpdates is empty', async () => {
+    render(
+      <ExternalIdConflictPrompt
+        onCancel={noop}
+        onKeepExisting={noop}
+        onReplaceAll={noop}
+        pendingCourseUserUpdates={[]}
+        pendingInvitationUpdates={[invitationUpdate]}
+      />,
+    );
+    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+    expect(
+      screen.queryByText(/Pending Course Member Updates/),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/Pending Invitation Updates/)).toBeInTheDocument();
+  });
+
   it('renders both sections when both non-empty', async () => {
     render(
       <ExternalIdConflictPrompt

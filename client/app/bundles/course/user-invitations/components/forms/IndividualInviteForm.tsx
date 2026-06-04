@@ -13,10 +13,9 @@ import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import toast from 'lib/hooks/toast';
-import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
+import useInviteErrorHandler from '../../hooks/useInviteErrorHandler';
 import { inviteUsersFromForm } from '../../operations';
 import {
   getManageCourseUserPermissions,
@@ -61,7 +60,10 @@ const validationSchema = yup.object({
 
 const IndividualInviteForm: FC<Props> = (props) => {
   const { openResultDialog } = props;
-  const { t } = useTranslation();
+  const handleError = useInviteErrorHandler(
+    translations.failure,
+    translations.failureGeneric,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [conflictData, setConflictData] =
     useState<PendingExternalIdConflict | null>(null);
@@ -119,25 +121,6 @@ const IndividualInviteForm: FC<Props> = (props) => {
       invitationsAppend(emptyInvitation);
     }
   }, [invitationsFields.length === 0]);
-
-  const handleError = (error: unknown): void => {
-    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
-      ?.response?.data?.errors;
-    let errorList: string[];
-    if (Array.isArray(rawErrors)) errorList = rawErrors;
-    else if (typeof rawErrors === 'string') errorList = [rawErrors];
-    else errorList = [];
-    const first = errorList[0];
-    const overflow =
-      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-    if (first) {
-      toast.error(t(translations.failure, { error: first + overflow }), {
-        autoClose: false,
-      });
-    } else {
-      toast.error(t(translations.failureGeneric), { autoClose: false });
-    }
-  };
 
   const submitWithResolution = (
     postData: InvitationsPostData,

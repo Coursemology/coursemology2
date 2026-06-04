@@ -35,7 +35,7 @@ RSpec.configure do |config|
       # @return [Boolean]
       def always_return_actual?(key)
         key.start_with?('errors.', 'support.', 'number.', 'javascript.', 'date.formats.',
-                        'time.formats.') ||
+                        'time.formats.', 'csv.course_user_invitations.headers.') ||
           # The html passed to the key should always be returned.
           key.end_with?('_html')
       end
