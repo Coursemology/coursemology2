@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved } from 'test-utils';
 import { CourseUserData } from 'types/course/courseUsers';
 import {
@@ -7,9 +8,16 @@ import {
   InvitationUpdatedItem,
 } from 'types/course/userInvitations';
 
+import * as operations from '../../../operations';
 import InvitationResultDialog from '../InvitationResultDialog';
 
+jest.mock('../../../operations', () => ({
+  ...jest.requireActual('../../../operations'),
+  updateExternalIds: jest.fn(),
+}));
+
 const CAROL_EMAIL = 'carol@example.com';
+const EXT_ID_UPDATES_1 = 'External ID updates (1)';
 
 const carolDuplicateUser: FailedInvitationRowData = {
   id: 3,
@@ -257,38 +265,32 @@ describe('InvitationResultDialog', () => {
     expect(screen.getByText('Charlie')).toBeInTheDocument();
   });
 
-  it('hides Existing Invitations section when both existingInvitations and updatedInvitations are empty', async () => {
+  it('hides Existing Invitations section when both existingInvitations and pendingInvitationUpdates are empty', async () => {
     renderDialog({ newInvitations: [baseInvitation] });
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
     expect(screen.queryByText(/Existing Invitations/)).not.toBeInTheDocument();
   });
 
-  it('shows updatedSubtitle in Existing Invitations when updatedInvitations is non-empty', async () => {
-    const updatedItem: InvitationUpdatedItem = {
+  it('shows pending invitation diffs in the dedicated section, not Existing Invitations', async () => {
+    const pendingItem: InvitationUpdatedItem = {
       id: 10,
       name: 'Carol',
       email: CAROL_EMAIL,
-      externalId: 'EXT001',
-      previousExternalId: null,
+      externalId: 'NEW001',
+      previousExternalId: 'OLD001',
       role: 'student',
       phantom: false,
     };
-    renderDialog({ updatedInvitations: [updatedItem] });
+    renderDialog({ pendingInvitationUpdates: [pendingItem] });
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
-    expect(screen.getByText('Existing Invitations (1)')).toBeInTheDocument();
-    expect(screen.getByText('1 updated · shown first')).toBeInTheDocument();
+    expect(screen.getByText(EXT_ID_UPDATES_1)).toBeInTheDocument();
+    expect(screen.getByText('Invitations (1)')).toBeInTheDocument();
+    expect(screen.queryByText(/Existing Invitations/)).not.toBeInTheDocument();
+    expect(screen.getByText('Carol')).toBeInTheDocument();
   });
 
-  it('does not show updatedSubtitle when updatedInvitations is empty', async () => {
-    renderDialog({
-      existingInvitations: [{ ...baseInvitation, id: 5, name: 'Charlie' }],
-    });
-    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
-    expect(screen.queryByText(/updated · shown first/)).not.toBeInTheDocument();
-  });
-
-  it('shows combined count, updated rows before normal rows, and correct alreadyInCourse when both existingInvitations and updatedInvitations are present', async () => {
-    const updatedItem: InvitationUpdatedItem = {
+  it('splits pending invitation diffs out of Existing Invitations but still counts them as already in course', async () => {
+    const pendingItem: InvitationUpdatedItem = {
       id: 10,
       name: 'UpdatedAlice',
       email: 'updated@example.com',
@@ -301,23 +303,17 @@ describe('InvitationResultDialog', () => {
       existingInvitations: [
         { ...baseInvitation, id: 5, name: 'NormalCharlie' },
       ],
-      updatedInvitations: [updatedItem],
+      pendingInvitationUpdates: [pendingItem],
     });
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
-    expect(screen.getByText('Existing Invitations (2)')).toBeInTheDocument();
-    expect(screen.getByText('1 updated · shown first')).toBeInTheDocument();
+    expect(screen.getByText('Existing Invitations (1)')).toBeInTheDocument();
+    expect(screen.getByText(EXT_ID_UPDATES_1)).toBeInTheDocument();
+    expect(screen.getByText('Invitations (1)')).toBeInTheDocument();
     expect(
       screen.getByText(
         /0 new invitations sent, 0 directly enrolled, 2 already in course/,
       ),
     ).toBeInTheDocument();
-    const normalRow = screen.getByText('NormalCharlie');
-    const updatedRow = screen.getByText('UpdatedAlice');
-    expect(
-      // eslint-disable-next-line no-bitwise
-      normalRow.compareDocumentPosition(updatedRow) &
-        Node.DOCUMENT_POSITION_PRECEDING,
-    ).toBeTruthy();
   });
 
   // Existing Course Users section
@@ -336,8 +332,8 @@ describe('InvitationResultDialog', () => {
     expect(screen.queryByText(/Existing Course Users/)).not.toBeInTheDocument();
   });
 
-  it('shows updatedSubtitle for Existing Course Users when updatedCourseUsers is non-empty', async () => {
-    const updatedUser = {
+  it('shows pending course-user diffs in the dedicated section, not Existing Course Users', async () => {
+    const pendingUser: InvitationUpdatedItem = {
       id: 20,
       name: 'Dana',
       email: 'dana@example.com',
@@ -346,14 +342,16 @@ describe('InvitationResultDialog', () => {
       role: 'student',
       phantom: false,
     };
-    renderDialog({ updatedCourseUsers: [updatedUser] });
+    renderDialog({ pendingCourseUserUpdates: [pendingUser] });
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
-    expect(screen.getByText('Existing Course Users (1)')).toBeInTheDocument();
-    expect(screen.getByText('1 updated · shown first')).toBeInTheDocument();
+    expect(screen.getByText(EXT_ID_UPDATES_1)).toBeInTheDocument();
+    expect(screen.getByText('Enrolled members (1)')).toBeInTheDocument();
+    expect(screen.queryByText(/Existing Course Users/)).not.toBeInTheDocument();
+    expect(screen.getByText('Dana')).toBeInTheDocument();
   });
 
-  it('shows combined count, updated rows before normal rows, and correct alreadyInCourse when both existingCourseUsers and updatedCourseUsers are present', async () => {
-    const updatedUser = {
+  it('splits pending course-user diffs out of Existing Course Users but still counts them as already in course', async () => {
+    const pendingUser: InvitationUpdatedItem = {
       id: 20,
       name: 'UpdatedDana',
       email: 'updated-dana@example.com',
@@ -364,23 +362,17 @@ describe('InvitationResultDialog', () => {
     };
     renderDialog({
       existingCourseUsers: [{ ...baseCourseUser, id: 6, name: 'NormalEve' }],
-      updatedCourseUsers: [updatedUser],
+      pendingCourseUserUpdates: [pendingUser],
     });
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
-    expect(screen.getByText('Existing Course Users (2)')).toBeInTheDocument();
-    expect(screen.getByText('1 updated · shown first')).toBeInTheDocument();
+    expect(screen.getByText('Existing Course Users (1)')).toBeInTheDocument();
+    expect(screen.getByText(EXT_ID_UPDATES_1)).toBeInTheDocument();
+    expect(screen.getByText('Enrolled members (1)')).toBeInTheDocument();
     expect(
       screen.getByText(
         /0 new invitations sent, 0 directly enrolled, 2 already in course/,
       ),
     ).toBeInTheDocument();
-    const normalRow = screen.getByText('NormalEve');
-    const updatedRow = screen.getByText('UpdatedDana');
-    expect(
-      // eslint-disable-next-line no-bitwise
-      normalRow.compareDocumentPosition(updatedRow) &
-        Node.DOCUMENT_POSITION_PRECEDING,
-    ).toBeTruthy();
   });
 
   describe('Personalized Timeline column (showPersonalizedTimelineFeatures)', () => {
@@ -434,6 +426,219 @@ describe('InvitationResultDialog', () => {
       expect(
         screen.queryByText('Personalized Timeline'),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  it('renders External ID updates before New Invitations in DOM', async () => {
+    renderDialog({
+      newInvitations: [baseInvitation],
+      pendingInvitationUpdates: [
+        {
+          id: 10,
+          name: 'PendingPat',
+          email: 'pat@example.com',
+          externalId: 'NEW001',
+          previousExternalId: 'OLD001',
+          role: 'student',
+          phantom: false,
+        },
+      ],
+    });
+    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+    const headings = screen
+      .getAllByRole('heading')
+      .map((h) => h.textContent ?? '');
+    const updIdx = headings.findIndex((h) => h.includes('External ID updates'));
+    const newInvIdx = headings.findIndex((h) => h.includes('New Invitations'));
+    expect(updIdx).toBeGreaterThanOrEqual(0);
+    expect(newInvIdx).toBeGreaterThanOrEqual(0);
+    expect(updIdx).toBeLessThan(newInvIdx);
+  });
+
+  it('shows a single combined count and both sub-tables when both arrays are non-empty', async () => {
+    renderDialog({
+      pendingInvitationUpdates: [
+        {
+          id: 10,
+          name: 'PendingPat',
+          email: 'pat@example.com',
+          externalId: 'NEW001',
+          previousExternalId: 'OLD001',
+          role: 'student',
+          phantom: false,
+        },
+      ],
+      pendingCourseUserUpdates: [
+        {
+          id: 20,
+          name: 'PendingDana',
+          email: 'dana@example.com',
+          externalId: 'CU001',
+          previousExternalId: 'CU000',
+          role: 'student',
+          phantom: false,
+        },
+      ],
+    });
+    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+    expect(screen.getByText('External ID updates (2)')).toBeInTheDocument();
+    expect(screen.getByText('Invitations (1)')).toBeInTheDocument();
+    expect(screen.getByText('Enrolled members (1)')).toBeInTheDocument();
+    expect(screen.getByText('PendingPat')).toBeInTheDocument();
+    expect(screen.getByText('PendingDana')).toBeInTheDocument();
+  });
+
+  it('exposes the keep-by-default explanation as a tooltip on the section', async () => {
+    renderDialog({
+      pendingInvitationUpdates: [
+        {
+          id: 10,
+          name: 'PendingPat',
+          email: 'pat@example.com',
+          externalId: 'NEW001',
+          previousExternalId: 'OLD001',
+          role: 'student',
+          phantom: false,
+        },
+      ],
+    });
+    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+    // Tooltip text is rendered (in the accessible tree) by MUI's Tooltip title prop.
+    expect(
+      screen.getByLabelText(
+        'These users are already invited or enrolled. Their External ID changes only if you apply the file values.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  describe('pending external-ID toggle', () => {
+    const pendingResult: InvitationResult = {
+      pendingCourseUserUpdates: [
+        {
+          id: 1,
+          name: 'Alice',
+          email: 'alice@example.com',
+          externalId: 'NEW001',
+          previousExternalId: 'OLD001',
+          role: 'student',
+          phantom: false,
+        },
+      ],
+    };
+
+    beforeEach(() => {
+      (operations.updateExternalIds as jest.Mock).mockReturnValue(
+        async () => undefined,
+      );
+    });
+
+    it('shows the flagged status line and Apply button when diffs exist', async () => {
+      renderDialog(pendingResult);
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+      expect(
+        screen.getByText(/1 row has a different External ID/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      ).toBeInTheDocument();
+      expect(screen.getByText(EXT_ID_UPDATES_1)).toBeInTheDocument();
+      expect(screen.getByText('Enrolled members (1)')).toBeInTheDocument();
+    });
+
+    it('applies, swaps to Undo, shows updated status line', async () => {
+      const user = userEvent.setup();
+      renderDialog(pendingResult);
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+
+      await user.click(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      );
+
+      expect(operations.updateExternalIds).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'course_user',
+            id: 1,
+            externalId: 'NEW001',
+          }),
+        ]),
+      );
+      expect(
+        screen.getByText(/External IDs were updated from your file/),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Undo/ })).toBeInTheDocument();
+    });
+
+    it('undo reverts to previous values and restores Apply button', async () => {
+      const user = userEvent.setup();
+      renderDialog(pendingResult);
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+
+      // Apply first
+      await user.click(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      );
+      expect(screen.getByRole('button', { name: /Undo/ })).toBeInTheDocument();
+
+      // Now undo
+      await user.click(screen.getByRole('button', { name: /Undo/ }));
+
+      expect(operations.updateExternalIds).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: 'course_user',
+            id: 1,
+            externalId: 'OLD001',
+          }),
+        ]),
+      );
+      expect(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/1 row has a different External ID/),
+      ).toBeInTheDocument();
+    });
+
+    it('shows no Apply affordance when there are no diffs', async () => {
+      renderDialog({ newInvitations: [baseInvitation] });
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+      expect(
+        screen.queryByRole('button', { name: /Apply file values/ }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/different External ID/),
+      ).not.toBeInTheDocument();
+    });
+
+    it('on apply failure shows error toast and leaves button at Apply', async () => {
+      (operations.updateExternalIds as jest.Mock).mockReturnValue(async () => {
+        throw Object.assign(new Error('conflict'), {
+          response: { data: { conflictingExternalId: 'TAKEN' } },
+        });
+      });
+
+      const user = userEvent.setup();
+      renderDialog(pendingResult);
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+
+      await user.click(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      );
+
+      // Button stays at Apply (not swapped to Undo)
+      expect(
+        screen.getByRole('button', { name: /Apply file values \(1\)/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /Undo/ }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('renders no dedicated diff section when there are no diffs', async () => {
+      renderDialog({ newInvitations: [baseInvitation] });
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+      expect(screen.queryByText(/External ID updates/)).not.toBeInTheDocument();
     });
   });
 });

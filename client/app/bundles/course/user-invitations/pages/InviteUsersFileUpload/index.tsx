@@ -1,11 +1,10 @@
-import { FC, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
 import {
   InvitationFileEntity,
   InvitationResult,
-  PendingExternalIdConflict,
 } from 'types/course/userInvitations';
 
 import { getCourseUserInviteTemplatePath } from 'course/helper';
@@ -15,7 +14,6 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
-import ExternalIdConflictPrompt from '../../components/misc/ExternalIdConflictPrompt';
 import { inviteUsersFromFile } from '../../operations';
 import {
   getManageCourseUserPermissions,
@@ -65,7 +63,7 @@ const translations = defineMessages({
   fileUploadInfoExternalId: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
     defaultMessage:
-      'External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course.',
+      'External ID is optional. If provided, it must be unique within the course.',
   },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
@@ -106,16 +104,12 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const fileRef = useRef<InvitationFileEntity | null>(null);
-  const [conflictData, setConflictData] =
-    useState<PendingExternalIdConflict | null>(null);
-
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
 
-  if (!open && !conflictData) {
+  if (!open) {
     return null;
   }
 
@@ -138,40 +132,13 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     }
   };
 
-  const submitWithResolution = (
-    fileEntity: InvitationFileEntity,
-    resolution?: 'keep_existing' | 'replace_all',
-  ): Promise<void> =>
-    dispatch(inviteUsersFromFile(fileEntity, resolution))
-      .then((response) => {
-        if ('conflict' in response) {
-          setConflictData(response.conflict);
-        } else {
-          onClose();
-          openResultDialog(response as InvitationResult);
-        }
+  const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> =>
+    dispatch(inviteUsersFromFile(data.file))
+      .then((result) => {
+        onClose();
+        openResultDialog(result);
       })
       .catch(handleError);
-
-  const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> => {
-    fileRef.current = data.file;
-    return submitWithResolution(data.file);
-  };
-
-  const handleKeepExisting = (): void => {
-    setConflictData(null);
-    if (fileRef.current) submitWithResolution(fileRef.current, 'keep_existing');
-  };
-
-  const handleReplaceAll = (): void => {
-    setConflictData(null);
-    if (fileRef.current) submitWithResolution(fileRef.current, 'replace_all');
-  };
-
-  const handleCancel = (): void => {
-    setConflictData(null);
-    fileRef.current = null;
-  };
 
   const formSubtitle = (
     <>
@@ -241,23 +208,12 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   );
 
   return (
-    <>
-      {conflictData && (
-        <ExternalIdConflictPrompt
-          onCancel={handleCancel}
-          onKeepExisting={handleKeepExisting}
-          onReplaceAll={handleReplaceAll}
-          pendingCourseUserUpdates={conflictData.pendingCourseUserUpdates}
-          pendingInvitationUpdates={conflictData.pendingInvitationUpdates}
-        />
-      )}
-      <FileUploadForm
-        formSubtitle={formSubtitle}
-        onClose={onClose}
-        onSubmit={onSubmit}
-        open={open}
-      />
-    </>
+    <FileUploadForm
+      formSubtitle={formSubtitle}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+    />
   );
 };
 

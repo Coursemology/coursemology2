@@ -9,25 +9,29 @@ let capturedOnSubmit:
   | ((data: { file: InvitationFileEntity }) => Promise<void>)
   | null = null;
 
-const MockFileUploadForm = ({
-  open,
-  onSubmit,
-}: {
-  open: boolean;
-  onSubmit: (data: { file: InvitationFileEntity }) => Promise<void>;
-}): JSX.Element | null => {
-  capturedOnSubmit = onSubmit;
-  return open ? <button data-testid="mock-file-submit" type="button" /> : null;
-};
-MockFileUploadForm.displayName = 'MockFileUploadForm';
-
-jest.mock(
-  '../../../components/forms/InviteUsersFileUploadForm',
-  () => MockFileUploadForm,
-);
+// jest.mock is hoisted before variable declarations, so MockFileUploadForm must be
+// defined inside the factory (not as a module-level variable referenced in the factory).
+jest.mock('../../../components/forms/InviteUsersFileUploadForm', () => {
+  const MockFileUploadForm = ({
+    open,
+    onSubmit,
+  }: {
+    open: boolean;
+    onSubmit: (data: { file: InvitationFileEntity }) => Promise<void>;
+  }): JSX.Element | null => {
+    capturedOnSubmit = onSubmit;
+    return open ? (
+      <button data-testid="mock-file-submit" type="button" />
+    ) : null;
+  };
+  MockFileUploadForm.displayName = 'MockFileUploadForm';
+  return MockFileUploadForm;
+});
 
 const mockInviteUsersFromFile = jest.fn(
-  (): ((_dispatch: unknown) => Promise<object>) =>
+  (
+    _fileEntity: InvitationFileEntity,
+  ): ((_dispatch: unknown) => Promise<object>) =>
     (_dispatch: unknown): Promise<object> =>
       Promise.resolve({
         newInvitations: [],
@@ -35,14 +39,14 @@ const mockInviteUsersFromFile = jest.fn(
         newCourseUsers: [],
         existingCourseUsers: [],
         failedUsers: [],
-        updatedInvitations: [],
-        updatedCourseUsers: [],
+        pendingInvitationUpdates: [],
+        pendingCourseUserUpdates: [],
       }),
 );
 
 jest.mock('../../../operations', () => ({
-  inviteUsersFromFile: (...args: unknown[]): unknown =>
-    mockInviteUsersFromFile(...args),
+  inviteUsersFromFile: (fileEntity: InvitationFileEntity): unknown =>
+    mockInviteUsersFromFile(fileEntity),
   fetchInvitations: jest.fn(
     (): (() => Promise<void>) => (): Promise<void> => Promise.resolve(),
   ),
@@ -82,7 +86,7 @@ describe('<InviteUsersFileUpload />', () => {
 
     expect(mockInviteUsersFromFile).toHaveBeenCalledTimes(1);
     const firstArg = mockInviteUsersFromFile.mock
-      .calls[0][0] as InvitationFileEntity;
+      .calls[0]![0] as InvitationFileEntity;
 
     // Regression guard: the page must extract .file from the IFormInputs wrapper.
     // If the bug regresses, firstArg would be { file: InvitationFileEntity } and

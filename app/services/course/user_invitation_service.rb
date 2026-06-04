@@ -6,13 +6,12 @@ class Course::UserInvitationService
   include ProcessInvitationConcern
   include EmailInvitationConcern
 
-  class PendingExternalIdUpdates < StandardError
-    attr_reader :pending_invitation_updates, :pending_course_user_updates
+  class ExternalIdConflict < StandardError
+    attr_reader :external_id
 
-    def initialize(pending_invitation_updates:, pending_course_user_updates:)
-      @pending_invitation_updates = pending_invitation_updates
-      @pending_course_user_updates = pending_course_user_updates
-      super('Pending external ID updates require confirmation')
+    def initialize(external_id)
+      @external_id = external_id
+      super("External ID '#{external_id}' is already used by another member")
     end
   end
 
@@ -35,16 +34,14 @@ class Course::UserInvitationService
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
   # @return [Array<Integer>|nil] An array containing the size of new_invitations, existing_invitations,
-  #   new_course_users, existing_course_users, failed_users, updated_invitations, updated_course_users
-  #   respectively if success. nil when fail.
+  #   new_course_users, existing_course_users, failed_users, pending_invitation_updates,
+  #   pending_course_user_updates respectively if success. nil when fail.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
-  def invite(users, external_id_resolution: nil)
-    @resolution = external_id_resolution&.to_sym
+  def invite(users)
     result = nil
 
     success = Course.transaction do
       result = invite_users(users)
-      raise_if_pending_external_id_updates!
       save_invitation_records!(result)
       true
     end
@@ -56,6 +53,28 @@ class Course::UserInvitationService
     send_invitation_emails(new_invitations)
     result
   end
+
+  # Atomically updates external IDs for course users and/or invitations.
+  #
+  # @param [Array<Hash>] updates Each hash must contain :type ('course_user' or 'invitation'),
+  #   :id, and :external_id (blank value clears it).
+  # @raise [ExternalIdConflict] if any new external_id is already taken by another member.
+  # rubocop:disable Metrics/AbcSize
+  def update_external_ids(updates)
+    course_user_updates = updates.select { |u| u[:type].to_s == 'course_user' }
+    invitation_updates = updates.select { |u| u[:type].to_s == 'invitation' }
+
+    course_users = @current_course.course_users.where(id: course_user_updates.map { |u| u[:id] }).index_by(&:id)
+    invitations = @current_course.invitations.where(id: invitation_updates.map { |u| u[:id] }).index_by(&:id)
+
+    taken = external_ids_taken_outside(course_users.keys, invitations.keys)
+
+    Course.transaction do
+      apply_external_id_update(course_user_updates, course_users, taken)
+      apply_external_id_update(invitation_updates, invitations, taken)
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
 
   # Resends invitation emails to CourseUsers to the given course.
   # This method disregards CourseUsers that do not have an 'invited' status.
@@ -69,20 +88,33 @@ class Course::UserInvitationService
 
   private
 
-  def raise_if_pending_external_id_updates!
-    return unless @pending_invitation_updates.any? || @pending_course_user_updates.any?
+  def external_ids_taken_outside(excluded_course_user_ids, excluded_invitation_ids)
+    course_ext_ids = @current_course.course_users.
+                     where.not(id: excluded_course_user_ids).
+                     where.not(external_id: nil).pluck(:external_id)
+    invitation_ext_ids = Course::UserInvitation.unconfirmed.
+                         where(course: @current_course).
+                         where.not(id: excluded_invitation_ids).
+                         where.not(external_id: nil).pluck(:external_id)
+    Set.new(course_ext_ids + invitation_ext_ids)
+  end
 
-    raise PendingExternalIdUpdates.new(
-      pending_invitation_updates: @pending_invitation_updates,
-      pending_course_user_updates: @pending_course_user_updates
-    )
+  def apply_external_id_update(updates, records_by_id, taken)
+    updates.each do |update|
+      record = records_by_id[update[:id]]
+      next unless record
+
+      value = update[:external_id].presence
+      raise ExternalIdConflict, value if value && taken.include?(value)
+
+      taken.add(value) if value
+      record.update!(external_id: value)
+    end
   end
 
   def save_invitation_records!(result)
-    new_invitations, _, new_course_users, _, _, updated_invitations, updated_course_users = result
-    all_records = updated_invitations.map { |u| u[:record] } +
-                  updated_course_users.map { |u| u[:record] } +
-                  new_invitations + new_course_users
+    new_invitations, _, new_course_users, = result
+    all_records = new_invitations + new_course_users
     raise ActiveRecord::Rollback unless all_records.all?(&:save)
   end
 
@@ -101,12 +133,15 @@ class Course::UserInvitationService
   #     newly registered and already registered, and duplicate users respectively.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
-    unique_users, parse_duplicates = parse_invitations(users)
+    user_hashes = parse_invitations(users)
+    augment_user_objects(user_hashes)
+    existing_account_emails = user_hashes.
+                              select { |u| u[:user].present? }.
+                              to_set { |u| u[:email].downcase }
+    unique_users, parse_duplicates = partition_unique_users(user_hashes, existing_account_emails)
     @failed_users = parse_duplicates
-    @updated_invitations = []
-    @updated_course_users = []
     @pending_invitation_updates = []
     @pending_course_user_updates = []
-    process_invitations(unique_users) + [@failed_users, @updated_invitations, @updated_course_users]
+    process_invitations(unique_users) + [@failed_users, @pending_invitation_updates, @pending_course_user_updates]
   end
 end

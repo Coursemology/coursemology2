@@ -28,15 +28,16 @@ export interface InvitationResult {
   existingInvitations?: InvitationListData[];
   newCourseUsers?: CourseUserData[];
   newInvitations?: InvitationListData[];
-  updatedCourseUsers?: InvitationUpdatedItem[];
-  updatedInvitations?: InvitationUpdatedItem[];
+  pendingCourseUserUpdates?: InvitationUpdatedItem[];
+  pendingInvitationUpdates?: InvitationUpdatedItem[];
 }
 
-export type ExternalIdResolution = 'keep_existing' | 'replace_all';
+export type ExternalIdUpdateType = 'course_user' | 'invitation';
 
-export interface PendingExternalIdConflict {
-  pendingInvitationUpdates: InvitationUpdatedItem[];
-  pendingCourseUserUpdates: InvitationUpdatedItem[];
+export interface ExternalIdUpdate {
+  type: ExternalIdUpdateType;
+  id: number;
+  externalId: string | null;
 }
 
 export interface InvitationSuccessRow {

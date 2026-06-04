@@ -1,11 +1,10 @@
 import { Operation } from 'store';
 import {
-  ExternalIdResolution,
+  ExternalIdUpdate,
   InvitationFileEntity,
   InvitationPostData,
   InvitationResult,
   InvitationsPostData,
-  PendingExternalIdConflict,
 } from 'types/course/userInvitations';
 
 import CourseAPI from 'api/course';
@@ -77,47 +76,30 @@ export function fetchPermissionsAndSharedData(): Operation {
 
 export function inviteUsersFromFile(
   fileEntity: InvitationFileEntity,
-  resolution?: ExternalIdResolution,
-): Operation<InvitationResult | { conflict: PendingExternalIdConflict }> {
+): Operation<InvitationResult> {
   return async (dispatch) =>
-    CourseAPI.userInvitations
-      .invite(fileEntity, resolution)
-      .then((response) => {
-        const data = response.data;
-        if ('pendingInvitationUpdates' in data) {
-          return {
-            conflict: {
-              pendingInvitationUpdates: data.pendingInvitationUpdates,
-              pendingCourseUserUpdates: data.pendingCourseUserUpdates,
-            },
-          };
-        }
-        dispatch(actions.updateInvitationCounts(data.newInvitations));
-        return JSON.parse(data.invitationResult) as InvitationResult;
-      });
+    CourseAPI.userInvitations.invite(fileEntity).then((response) => {
+      const data = response.data;
+      dispatch(actions.updateInvitationCounts(data.newInvitations));
+      return JSON.parse(data.invitationResult) as InvitationResult;
+    });
+}
+
+export function updateExternalIds(updates: ExternalIdUpdate[]): Operation {
+  return async () =>
+    CourseAPI.userInvitations.updateExternalIds(updates).then(() => undefined);
 }
 
 export function inviteUsersFromForm(
   postData: InvitationsPostData,
-  resolution?: ExternalIdResolution,
-): Operation<InvitationResult | { conflict: PendingExternalIdConflict }> {
+): Operation<InvitationResult> {
   const formattedData = formatInvitations(postData.invitations);
   return async (dispatch) =>
-    CourseAPI.userInvitations
-      .invite(formattedData, resolution)
-      .then((response) => {
-        const data = response.data;
-        if ('pendingInvitationUpdates' in data) {
-          return {
-            conflict: {
-              pendingInvitationUpdates: data.pendingInvitationUpdates,
-              pendingCourseUserUpdates: data.pendingCourseUserUpdates,
-            },
-          };
-        }
-        dispatch(actions.updateInvitationCounts(data.newInvitations));
-        return JSON.parse(data.invitationResult) as InvitationResult;
-      });
+    CourseAPI.userInvitations.invite(formattedData).then((response) => {
+      const data = response.data;
+      dispatch(actions.updateInvitationCounts(data.newInvitations));
+      return JSON.parse(data.invitationResult) as InvitationResult;
+    });
 }
 
 export function resendAllInvitations(): Operation {
