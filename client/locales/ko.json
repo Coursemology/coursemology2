@@ -6041,7 +6041,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "검사 가능한 질문이 없습니다"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "제출이 충분하지 않습니다"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -6229,6 +6229,9 @@
   },
   "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
     "defaultMessage": "소요 시간 표준편차"
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitle": {
+    "defaultMessage": "개별 학생 성적을 확인하고 내보내려면 <url>성적부</url>를 여세요."
   },
   "course.statistics.StatisticsIndex.assessments.tableTitle": {
     "defaultMessage": "평가 통계 ({numStudents}명의 학생)"

@@ -6035,7 +6035,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "没有可检查的问题"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "提交数量不足"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -6226,6 +6226,9 @@
   },
   "course.statistics.StatisticsIndex.assessments.tableTitle": {
     "defaultMessage": "测验统计（{numStudents} 个学生）"
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitle": {
+    "defaultMessage": "若要查看和导出单个学生的成绩，请打开<url>成绩簿</url>。"
   },
   "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
     "defaultMessage": "测验统计"

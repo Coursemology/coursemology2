@@ -515,7 +515,6 @@ Rails.application.routes.draw do
       namespace :statistics do
         get '/' => 'statistics#index'
         get 'assessments' => 'aggregate#all_assessments'
-        get 'assessments/download' => 'aggregate#download_score_summary'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'

@@ -56,10 +56,3 @@ ko:
       values:
         unknown_question_type: '알 수 없는 질문 유형'
 
-    # Assessment score summary statistics export
-    score_summary:
-      headers:
-        name: '이름'
-        type: '학생 유형'
-        email: '이메일'
-        external_id: '외부 ID'

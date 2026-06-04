@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitFor, within } from 'test-utils';
 import { store as appStore } from 'store';
+import { render, screen, waitFor, within } from 'test-utils';
 
 import GradebookTable from '../components/GradebookTable';
 import type {
