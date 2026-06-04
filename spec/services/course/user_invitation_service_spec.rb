@@ -322,19 +322,19 @@ RSpec.describe Course::UserInvitationService, type: :service do
         subject(:result) { invitation_service.invite(invitation_attributes) }
         let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
 
-        it 'updates the pending invitation external_id' do
+        it 'keeps the pending invitation external_id (no auto-overwrite)' do
           result
-          expect(pending_invitation.reload.external_id).to eq('new-id')
+          expect(pending_invitation.reload.external_id).to be_nil
         end
 
-        it 'puts the user in updated_invitations' do
-          updated_invitations = result[5]
-          expect(updated_invitations.map { |u| u[:record] }).to include(pending_invitation)
+        it 'reports the update in pending_invitation_updates' do
+          pending_invitation_updates = result[5]
+          expect(pending_invitation_updates.map { |u| u[:record] }).to include(pending_invitation)
         end
 
         it 'captures nil as previous_external_id' do
-          updated_invitations = result[5]
-          entry = updated_invitations.find { |u| u[:record] == pending_invitation }
+          pending_invitation_updates = result[5]
+          entry = pending_invitation_updates.find { |u| u[:record] == pending_invitation }
           expect(entry[:previous_external_id]).to be_nil
         end
 
@@ -386,23 +386,23 @@ RSpec.describe Course::UserInvitationService, type: :service do
         subject(:result) { invitation_service.invite(invitation_attributes) }
         let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
 
-        it 'updates the course_user external_id' do
+        it 'keeps the course_user external_id (no auto-overwrite)' do
           result
-          expect(course_user_record.reload.external_id).to eq('new-id')
+          expect(course_user_record.reload.external_id).to be_nil
         end
 
-        it 'puts the user in updated_course_users' do
-          updated_course_users = result[6]
-          expect(updated_course_users.map { |u| u[:record] }).to include(course_user_record)
+        it 'reports the update in pending_course_user_updates' do
+          pending_course_user_updates = result[6]
+          expect(pending_course_user_updates.map { |u| u[:record] }).to include(course_user_record)
         end
 
         it 'captures nil as previous_external_id' do
-          updated_course_users = result[6]
-          entry = updated_course_users.find { |u| u[:record] == course_user_record }
+          pending_course_user_updates = result[6]
+          entry = pending_course_user_updates.find { |u| u[:record] == course_user_record }
           expect(entry[:previous_external_id]).to be_nil
         end
 
-        it 'produces no failed_users entry' do
+        it 'does not create failed_users entry' do
           _, _, _, _, failed_users = result
           expect(failed_users).to be_empty
         end
@@ -538,29 +538,25 @@ RSpec.describe Course::UserInvitationService, type: :service do
         subject(:result) { invitation_service.invite(invitation_attributes) }
         let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
 
-        it 'updates the pending invitation external_id' do
+        it 'keeps the pending invitation external_id (no auto-overwrite)' do
           result
-          expect(pending_invitation.reload.external_id).to eq('new-id')
+          expect(pending_invitation.reload.external_id).to eq('old-id')
         end
 
-        it 'puts the user in updated_invitations' do
-          updated_invitations = result[5]
-          expect(updated_invitations.map { |u| u[:record] }).to include(pending_invitation)
-        end
-
-        it 'captures the previous ext_id' do
-          updated_invitations = result[5]
-          entry = updated_invitations.find { |u| u[:record] == pending_invitation }
+        it 'reports the row in pending_invitation_updates with both values' do
+          pending_invitation_updates = result[5]
+          entry = pending_invitation_updates.find { |u| u[:record] == pending_invitation }
           expect(entry[:previous_external_id]).to eq('old-id')
+          expect(entry[:new_external_id]).to eq('new-id')
         end
 
-        it 'does not create failed_users entry' do
-          _, _, _, _, failed_users = result
+        it 'does not create a failed_users entry' do
+          failed_users = result[4]
           expect(failed_users).to be_empty
         end
       end
 
-      context 'when a batch changes an existing invitation ext_id and a later row claims the freed id' do
+      context 'when a batch queues an existing invitation for a new ext_id and a later row claims the current id' do
         let!(:alice_invitation) do
           create(:course_user_invitation, course: course,
                                           email: 'alice@example.com', name: 'Alice', external_id: 'freed-id')
@@ -575,26 +571,23 @@ RSpec.describe Course::UserInvitationService, type: :service do
         subject(:result) { invitation_service.invite(invitation_attributes) }
         let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
 
-        it 'updates Alice to new-id' do
+        it 'queues Alice in pending_invitation_updates' do
+          pending_invitation_updates = result[5]
+          expect(pending_invitation_updates.map { |u| u[:record] }).to include(alice_invitation)
+        end
+
+        it 'keeps Alice at her current external_id' do
           result
-          expect(alice_invitation.reload.external_id).to eq('new-id')
+          expect(alice_invitation.reload.external_id).to eq('freed-id')
         end
 
-        it 'creates a new invitation for Bob with the freed id' do
-          new_invitations, = result
-          expect(new_invitations.map(&:external_id)).to include('freed-id')
-        end
-
-        it 'produces no failed_users entries' do
+        it 'rejects Bob because the current id is still held by Alice' do
           _, _, _, _, failed_users = result
-          expect(failed_users).to be_empty
+          expect(failed_users.find { |u| u[:email] == bob_email }[:reason]).to eq(:external_id_taken)
         end
       end
 
-      context 'cross-type freed-id: existing course user frees id, new invitation claims it in same batch' do
-        # invite_new_users runs before add_existing_users, so the new invitation is processed
-        # first and sees the id as still taken. The existing course user is then upserted
-        # successfully, but the new invitation has already been rejected.
+      context 'cross-type freed-id: existing course user has pending new id, new invitation claims the current id' do
         let!(:enrolled_user_freeing) { create(:user) }
         let!(:course_user_freeing) do
           create(:course_student, course: course, user: enrolled_user_freeing, external_id: 'freed-id')
@@ -611,12 +604,18 @@ RSpec.describe Course::UserInvitationService, type: :service do
         subject(:result) { invitation_service.invite(invitation_attributes) }
         let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
 
-        it 'upserts the existing course user to new-id' do
+        it 'queues the existing course user in pending_course_user_updates' do
           result
-          expect(course_user_freeing.reload.external_id).to eq('new-id')
+          pending_course_user_updates = result[6]
+          expect(pending_course_user_updates.map { |u| u[:record] }).to include(course_user_freeing)
         end
 
-        it 'rejects the new invitation because it is processed before the id is freed' do
+        it 'keeps the existing course user at their current external_id' do
+          result
+          expect(course_user_freeing.reload.external_id).to eq('freed-id')
+        end
+
+        it 'rejects the new invitation because the id is still held by the course user' do
           _, _, _, _, failed_users = result
           expect(failed_users.map { |u| u[:email] }).to include(new_user_email)
           expect(failed_users.find { |u| u[:email] == new_user_email }[:reason]).to eq(:external_id_taken)
@@ -731,7 +730,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
           let(:enrolled_user) { create(:instance_user).user }
           let!(:course_student) { create(:course_student, course: course, user: enrolled_user) }
 
-          it 'is caught as a batch external_id duplicate and does not fail the batch' do
+          it 'fails the enrolled row with :external_id_taken (bypasses CSV dedup, caught in process phase)' do
             csv = csv_with_timeline([
                                       { name: 'User A', email: 'a@example.com', external_id: 'shared-id' },
                                       { name: 'Enrolled', email: enrolled_user.email, external_id: 'shared-id' }
@@ -740,7 +739,26 @@ RSpec.describe Course::UserInvitationService, type: :service do
             expect(result).not_to be_nil
             _new_invitations, _existing, _new_cu, _existing_cu, failed_users = result
             expect(failed_users.size).to eq(1)
-            expect(failed_users.first[:reason]).to eq(:duplicate_external_id_in_file)
+            expect(failed_users.first[:reason]).to eq(:external_id_taken)
+            csv.close!
+          end
+        end
+
+        context 'when an enrolled user who already owns the external_id appears after a new user claiming it' do
+          let!(:enrolled_user) { create(:user) }
+          let!(:course_user_record) do
+            create(:course_student, course: course, user: enrolled_user, external_id: 'owned-id')
+          end
+
+          it 'routes the enrolled user to existing_course_users, not failed_users' do
+            csv = csv_with_timeline([
+                                      { name: 'New Person', email: generate(:email), external_id: 'owned-id' },
+                                      { name: enrolled_user.name, email: enrolled_user.email, external_id: 'owned-id' }
+                                    ])
+            result = subject.invite(csv)
+            _, _, _, existing_course_users, failed_users = result
+            expect(existing_course_users).to include(course_user_record)
+            expect(failed_users.map { |u| u[:email] }).not_to include(enrolled_user.email)
             csv.close!
           end
         end
@@ -797,6 +815,31 @@ RSpec.describe Course::UserInvitationService, type: :service do
           expect(errors.first[:email].first).to match(/invalid/)
         end
       end
+
+      context 'when an existing course member has a different external_id in the CSV (no resolution)' do
+        let(:existing_user) { create(:user) }
+        let!(:existing_course_user) do
+          create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+        end
+        let(:invitation_attributes) do
+          { '0' => { name: existing_course_user.name, email: existing_user.email, role: :student,
+                     phantom: false, timeline_algorithm: :fixed, external_id: 'NEW001' } }
+        end
+        let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
+        subject(:result) { invitation_service.invite(invitation_attributes) }
+
+        it 'finalizes without raising and keeps the existing external_id' do
+          expect { result }.not_to raise_error
+          expect(existing_course_user.reload.external_id).to eq('OLD001')
+        end
+
+        it 'reports the row in pending_course_user_updates with both values' do
+          pending_course_user_updates = result[6]
+          entry = pending_course_user_updates.find { |u| u[:record] == existing_course_user }
+          expect(entry[:previous_external_id]).to eq('OLD001')
+          expect(entry[:new_external_id]).to eq('NEW001')
+        end
+      end
     end
 
     describe 'timeline_algorithm assignment on direct enrollment' do
@@ -851,13 +894,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
                    role: :student, phantom: false, timeline_algorithm: :fixed, external_id: 'DIFFERENT' } }
       end
 
-      it 'sets ext_id on existing invitation when current is nil and CSV value is free' do
+      it 'queues the pending_invitation_update when current is nil and CSV value is free' do
         result = subject.invite(inv_nil_ext_user_attrs)
         expect(result).not_to be_nil
-        updated_invitations = result[5]
-        expect(updated_invitations.length).to eq(1)
-        expect(updated_invitations.map { |u| u[:record] }.first.external_id).to eq('EXT001')
-        expect(existing_inv_nil_ext.reload.external_id).to eq('EXT001')
+        pending_invitation_updates = result[5]
+        expect(pending_invitation_updates.length).to eq(1)
+        expect(pending_invitation_updates.first[:new_external_id]).to eq('EXT001')
+        expect(existing_inv_nil_ext.reload.external_id).to be_nil
       end
 
       it 'rejects with :external_id_taken when existing invitation has nil ext_id but CSV value is taken' do
@@ -867,31 +910,31 @@ RSpec.describe Course::UserInvitationService, type: :service do
         expect(failed_users.map { |u| u[:reason] }).to include(:external_id_taken)
       end
 
-      it 'sets ext_id on existing course user when current is nil and CSV value is free' do
+      it 'queues the pending_course_user_update when current is nil and CSV value is free' do
         result = subject.invite(enrolled_nil_user_attrs)
         expect(result).not_to be_nil
-        updated_course_users = result[6]
-        expect(updated_course_users.length).to eq(1)
-        expect(updated_course_users.map { |u| u[:record] }.first.external_id).to eq('EXT002')
-        expect(enrolled_nil.reload.external_id).to eq('EXT002')
+        pending_course_user_updates = result[6]
+        expect(pending_course_user_updates.length).to eq(1)
+        expect(pending_course_user_updates.first[:new_external_id]).to eq('EXT002')
+        expect(enrolled_nil.reload.external_id).to be_nil
       end
 
       context 'when an existing course user has non-nil ext_id and CSV provides a free different value' do
-        it 'updates the course_user external_id' do
+        it 'keeps the course_user external_id (no auto-overwrite)' do
           subject.invite(enrolled_conflict_user_attrs)
-          expect(enrolled_conflict.reload.external_id).to eq('DIFFERENT')
+          expect(enrolled_conflict.reload.external_id).to eq('EXISTING')
         end
 
-        it 'puts the user in updated_course_users' do
+        it 'puts the user in pending_course_user_updates' do
           result = subject.invite(enrolled_conflict_user_attrs)
-          updated_course_users = result[6]
-          expect(updated_course_users.map { |u| u[:record] }).to include(enrolled_conflict)
+          pending_course_user_updates = result[6]
+          expect(pending_course_user_updates.map { |u| u[:record] }).to include(enrolled_conflict)
         end
 
         it 'captures the previous ext_id' do
           result = subject.invite(enrolled_conflict_user_attrs)
-          updated_course_users = result[6]
-          entry = updated_course_users.find { |u| u[:record] == enrolled_conflict }
+          pending_course_user_updates = result[6]
+          entry = pending_course_user_updates.find { |u| u[:record] == enrolled_conflict }
           expect(entry[:previous_external_id]).to eq('EXISTING')
         end
 
@@ -900,6 +943,43 @@ RSpec.describe Course::UserInvitationService, type: :service do
           _, _, _, _, failed_users = result
           expect(failed_users).to be_empty
         end
+      end
+    end
+
+    describe '#update_external_ids' do
+      let(:invitation_service) { Course::UserInvitationService.new(course_user, user, course) }
+      let(:target_user) { create(:user) }
+      let!(:target_cu) { create(:course_student, course: course, user: target_user, external_id: 'OLD001') }
+      let!(:target_inv) do
+        create(:course_user_invitation, course: course, email: 'inv@example.com', name: 'Inv', external_id: 'OLDINV')
+      end
+
+      it 'sets course-user and invitation external IDs to the given values' do
+        invitation_service.update_external_ids([
+                                                 { type: 'course_user', id: target_cu.id, external_id: 'NEW001' },
+                                                 { type: 'invitation', id: target_inv.id, external_id: 'NEWINV' }
+                                               ])
+        expect(target_cu.reload.external_id).to eq('NEW001')
+        expect(target_inv.reload.external_id).to eq('NEWINV')
+      end
+
+      it 'clears an external ID when given a blank value (undo to blank)' do
+        invitation_service.update_external_ids([
+                                                 type: 'course_user', id: target_cu.id, external_id: ''
+                                               ])
+        expect(target_cu.reload.external_id).to be_nil
+      end
+
+      it 'is atomic: a collision rolls back all changes and raises' do
+        create(:course_student, course: course, user: create(:user), external_id: 'TAKEN')
+        expect do
+          invitation_service.update_external_ids([
+                                                   { type: 'course_user', id: target_cu.id, external_id: 'NEW001' },
+                                                   { type: 'invitation', id: target_inv.id, external_id: 'TAKEN' }
+                                                 ])
+        end.to raise_error(Course::UserInvitationService::ExternalIdConflict, /TAKEN/)
+        expect(target_cu.reload.external_id).to eq('OLD001')
+        expect(target_inv.reload.external_id).to eq('OLDINV')
       end
     end
 

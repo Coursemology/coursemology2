@@ -23,6 +23,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   #   Conflicts are accumulated into +@failed_users+ as a side effect.
   def process_invitations(users)
     @taken_external_ids = load_existing_external_ids
+    Rails.logger.info("Processing invitations with taken external IDs: #{@taken_external_ids.to_a}")
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
     [*invite_new_users(new_users),
@@ -36,7 +37,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return [void]
   def augment_user_objects(users)
     email_user_mapping = find_existing_users(users.map { |user| user[:email] })
-    users.each { |user| user[:user] = email_user_mapping[user[:email]] }
+    users.each { |user| user[:user] ||= email_user_mapping[user[:email]] }
   end
 
   # Given a list of email addresses, returns a Hash containing the mappings from email addresses
@@ -84,24 +85,13 @@ module Course::UserInvitationService::ProcessInvitationConcern
     elsif @taken_external_ids.include?(csv_ext_id)
       @failed_users.push(user.merge(reason: :external_id_taken))
     else
-      case @resolution
-      when :replace_all
-        @taken_external_ids.delete(current_ext_id) if current_ext_id
-        @taken_external_ids.add(csv_ext_id)
-        course_user.external_id = csv_ext_id
-        @updated_course_users << { record: course_user, previous_external_id: current_ext_id }
-      when :keep_existing
-        existing_course_users << course_user
-      else
-        @taken_external_ids.delete(current_ext_id) if current_ext_id
-        @taken_external_ids.add(csv_ext_id)
-        @pending_course_user_updates << {
-          record: course_user,
-          previous_external_id: current_ext_id,
-          new_external_id: csv_ext_id
-        }
-        existing_course_users << course_user
-      end
+      @taken_external_ids.add(csv_ext_id)
+      @pending_course_user_updates << {
+        record: course_user,
+        previous_external_id: current_ext_id,
+        new_external_id: csv_ext_id
+      }
+      existing_course_users << course_user
     end
   end
 
@@ -178,24 +168,13 @@ module Course::UserInvitationService::ProcessInvitationConcern
     elsif @taken_external_ids.include?(csv_ext_id)
       @failed_users.push(user.merge(reason: :external_id_taken))
     else
-      case @resolution
-      when :replace_all
-        @taken_external_ids.delete(current_ext_id) if current_ext_id
-        @taken_external_ids.add(csv_ext_id)
-        invitation.external_id = csv_ext_id
-        @updated_invitations << { record: invitation, previous_external_id: current_ext_id }
-      when :keep_existing
-        existing_invitations << invitation
-      else
-        @taken_external_ids.delete(current_ext_id) if current_ext_id
-        @taken_external_ids.add(csv_ext_id)
-        @pending_invitation_updates << {
-          record: invitation,
-          previous_external_id: current_ext_id,
-          new_external_id: csv_ext_id
-        }
-        existing_invitations << invitation
-      end
+      @taken_external_ids.add(csv_ext_id)
+      @pending_invitation_updates << {
+        record: invitation,
+        previous_external_id: current_ext_id,
+        new_external_id: csv_ext_id
+      }
+      existing_invitations << invitation
     end
   end
 

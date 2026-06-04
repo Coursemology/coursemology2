@@ -4,10 +4,9 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
-  ExternalIdResolution,
+  ExternalIdUpdate,
   InvitationFileEntity,
   InvitationListData,
-  InvitationUpdatedItem,
 } from 'types/course/userInvitations';
 
 import SubmissionsAPI from './Assessment/Submissions';
@@ -40,15 +39,8 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    */
   invite(
     data: InvitationFileEntity | FormData,
-    externalIdResolution?: ExternalIdResolution,
   ): Promise<
-    AxiosResponse<
-      | { newInvitations: number; invitationResult: string }
-      | {
-          pendingInvitationUpdates: InvitationUpdatedItem[];
-          pendingCourseUserUpdates: InvitationUpdatedItem[];
-        }
-    >
+    AxiosResponse<{ newInvitations: number; invitationResult: string }>
   > {
     const config = {
       headers: {
@@ -60,16 +52,10 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     let formData = new FormData();
 
     if ('file' in data) {
-      const temp = {
-        invitations_file: data.file,
-      };
+      const temp = { invitations_file: data.file };
       SubmissionsAPI.appendFormData(formData, temp, 'course');
     } else {
       formData = data as FormData;
-    }
-
-    if (externalIdResolution) {
-      formData.append('external_id_resolution', externalIdResolution);
     }
 
     return this.client.post(
@@ -77,6 +63,16 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       formData,
       config,
     );
+  }
+
+  updateExternalIds(updates: ExternalIdUpdate[]): Promise<AxiosResponse<void>> {
+    return this.client.post(`${this.#urlPrefix}/users/update_external_ids`, {
+      updates: updates.map((u) => ({
+        type: u.type,
+        id: u.id,
+        external_id: u.externalId ?? '',
+      })),
+    });
   }
 
   /**

@@ -15,25 +15,20 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create
     result = invite
-    case result
-    when Array
+    if result.is_a?(Array)
       create_invitation_success(result)
-    when :pending_conflict
-      respond_to do |format|
-        format.json do
-          render partial: 'pending_external_id_data',
-                 locals: {
-                   pending_invitation_updates: @pending_conflict.pending_invitation_updates,
-                   pending_course_user_updates: @pending_conflict.pending_course_user_updates
-                 },
-                 status: :ok
-        end
-      end
     else
       propagate_errors
       errors = current_course.errors[:base]
       render json: { errors: errors }, status: :bad_request
     end
+  end
+
+  def update_external_ids
+    invitation_service.update_external_ids(external_id_updates_params)
+    head :ok
+  rescue Course::UserInvitationService::ExternalIdConflict => e
+    render json: { conflictingExternalId: e.external_id }, status: :conflict
   end
 
   def destroy
@@ -55,7 +50,8 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   def resend_invitations
-    if invitation_service.resend_invitation(load_invitations)
+    @invitations = load_invitations
+    if invitation_service.resend_invitation(@invitations)
       resend_invitations_success
     else
       resend_invitations_failure
@@ -67,6 +63,12 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   private
+
+  def external_id_updates_params
+    params.permit(updates: [:type, :id, :external_id])[:updates].to_a.map do |u|
+      { type: u[:type], id: u[:id].to_i, external_id: u[:external_id] }
+    end
+  end
 
   def course_user_invitation_params
     @course_user_invitation_params ||= begin
@@ -131,17 +133,12 @@ class Course::UserInvitationsController < Course::ComponentController
   # Invites the users via the service object.
   #
   # @return [Array] On success.
-  # @return [Symbol] :pending_conflict when external ID updates require resolution.
   # @return [Boolean] false on failure.
   def invite
-    invitation_service.invite(invitation_params,
-                              external_id_resolution: params[:external_id_resolution])
+    invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:base, e.message)
     false
-  rescue Course::UserInvitationService::PendingExternalIdUpdates => e
-    @pending_conflict = e
-    :pending_conflict
   end
 
   # Creates a user invitation service object for this object.
@@ -237,15 +234,15 @@ class Course::UserInvitationsController < Course::ComponentController
   # Returns the invitation response based on file or entry invitation.
   def parse_invitation_result(new_invitations, existing_invitations, new_course_users,
                               existing_course_users, failed_users,
-                              updated_invitations, updated_course_users)
+                              pending_invitation_updates, pending_course_user_updates)
     render_to_string(partial: 'invitation_result_data',
                      locals: { new_invitations: new_invitations,
                                existing_invitations: existing_invitations,
                                new_course_users: new_course_users,
                                existing_course_users: existing_course_users,
                                failed_users: failed_users,
-                               updated_invitations: updated_invitations,
-                               updated_course_users: updated_course_users })
+                               pending_invitation_updates: pending_invitation_updates,
+                               pending_course_user_updates: pending_course_user_updates })
   end
 
   # Enables or disables registration codes in the given course.
@@ -286,7 +283,7 @@ class Course::UserInvitationsController < Course::ComponentController
   def resend_invitations_success
     respond_to do |format|
       format.json do
-        render partial: 'course_user_invitation_list', locals: { invitations: @invitations.reload }, status: :ok
+        render partial: 'course_user_invitation_list', locals: { invitations: @invitations }, status: :ok
       end
     end
   end
