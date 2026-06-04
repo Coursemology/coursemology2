@@ -729,7 +729,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
           let(:enrolled_user) { create(:instance_user).user }
           let!(:course_student) { create(:course_student, course: course, user: enrolled_user) }
 
-          it 'is caught as a batch external_id duplicate and does not fail the batch' do
+          it 'passes the enrolled user through to the process phase (not a CSV-level dedup failure)' do
             csv = csv_with_timeline([
                                       { name: 'User A', email: 'a@example.com', external_id: 'shared-id' },
                                       { name: 'Enrolled', email: enrolled_user.email, external_id: 'shared-id' }
@@ -738,7 +738,23 @@ RSpec.describe Course::UserInvitationService, type: :service do
             expect(result).not_to be_nil
             _new_invitations, _existing, _new_cu, _existing_cu, failed_users = result
             expect(failed_users.size).to eq(1)
-            expect(failed_users.first[:reason]).to eq(:duplicate_external_id_in_file)
+            # The enrolled user reaches the DB-aware process phase and fails there because
+            # User A already claimed the external ID — not a CSV-level duplicate.
+            expect(failed_users.first[:reason]).to eq(:external_id_taken)
+            csv.close!
+          end
+
+          it 'enrolled user re-uploaded with their own current external_id succeeds' do
+            course_student.update!(external_id: 'my-id')
+            csv = csv_with_timeline([
+                                      { name: 'Other', email: 'other@example.com', external_id: 'other-id' },
+                                      { name: 'Enrolled', email: enrolled_user.email, external_id: 'my-id' }
+                                    ])
+            result = subject.invite(csv)
+            expect(result).not_to be_nil
+            _new_invitations, _existing, _new_cu, existing_cu, failed_users = result
+            expect(failed_users).to be_empty
+            expect(existing_cu.map(&:user)).to include(enrolled_user)
             csv.close!
           end
         end

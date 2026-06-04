@@ -84,7 +84,12 @@ class Course::UserInvitationService
   #     newly registered and already registered, and duplicate users respectively.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_users(users)
-    unique_users, parse_duplicates = parse_invitations(users)
+    user_hashes = parse_invitations(users)
+    augment_user_objects(user_hashes)
+    existing_account_emails = user_hashes.
+                              select { |u| u[:user].present? }.
+                              to_set { |u| u[:email].downcase }
+    unique_users, parse_duplicates = partition_unique_users(user_hashes, existing_account_emails)
     @failed_users = parse_duplicates
     @updated_invitations = []
     @updated_course_users = []
