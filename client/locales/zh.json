@@ -7086,10 +7086,10 @@
     "defaultMessage": "邀请用户失败。请确保你的数据格式正确。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "姓名，电子邮件,Role,Phantom,外部编号{br}John,test1@example.org,student,y,A0123456{br}Mary,test2@example.org,teaching_assistant,n,A0123457"
+    "defaultMessage": "姓名,电子邮件,外部编号,角色,旁听学生{br}John,test1@example.com,A0123456,student,y{br}Mary,test2@example.com,A0123457,teaching_assistant,n"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "姓名，电子邮件,Role,Phantom,PersonalTimeline,外部编号{br}John,test1@example.org,student,y,otot,A0123456{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457"
+    "defaultMessage": "姓名,电子邮件,外部编号,角色,旁听学生,个人时间线{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
     "defaultMessage": "每个邀请必须使用课程内唯一的电子邮件地址。重复的电子邮件将被跳过。"
@@ -7104,7 +7104,7 @@
     "defaultMessage": "个人时间线可以是<code>[fixed, otot, stragglers, fomo]</code>，若省略则默认为 {defaultTimelineAlgorithm}。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom": {
-    "defaultMessage": "旁听用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
+    "defaultMessage": "旁听学生可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "角色可以是<code>[student, observer, teaching_assistant, manager, owner]</code>，如果省略则默认为学生。用户只能被助教邀请为学生。"

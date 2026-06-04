@@ -43,7 +43,11 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     externalIdResolution?: ExternalIdResolution,
   ): Promise<
     AxiosResponse<
-      | { newInvitations: number; invitationResult: string }
+      | {
+          newInvitations: number;
+          invitationResult: string;
+          blankHeaderWarning: boolean;
+        }
       | {
           pendingInvitationUpdates: InvitationUpdatedItem[];
           pendingCourseUserUpdates: InvitationUpdatedItem[];

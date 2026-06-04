@@ -4,6 +4,7 @@ import { InvitationSuccessRow } from 'types/course/userInvitations';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
 import {
+  DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
   DEFAULT_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
@@ -92,7 +93,7 @@ const InvitationResultPrimaryTable: FC<Props> = ({
       getRowEqualityData={(row) => row}
       getRowId={(row) => row.id}
       pagination={{
-        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+        rowsPerPage: [DEFAULT_MINI_TABLE_ROWS_PER_PAGE],
         showAllRows: false,
       }}
       toolbar={{ show: false }}

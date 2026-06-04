@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'csv'
+require 'set'
 
 # This concern includes methods required to parse the invitations data.
 # This can either be from a form, or a CSV file.
@@ -9,8 +10,8 @@ module Course::UserInvitationService::ParseInvitationConcern
   extend ActiveSupport::Autoload
 
   TRUE_VALUES = ['t', 'true', 'y', 'yes'].freeze
-  EXPECTED_HEADERS_WITH_TIMELINE = %w[name email role phantom timeline externalid].freeze
-  EXPECTED_HEADERS_WITHOUT_TIMELINE = %w[name email role phantom externalid].freeze
+  SUPPORTED_LOCALES = %i[en zh ko].freeze
+  CANONICAL_COLUMNS = %i[name email external_id role phantom personal_timeline].freeze
 
   private
 
@@ -126,43 +127,25 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @raise [CSV::MalformedCSVError] When the file provided is invalid, eg. UTF-16 encoding.
   def parse_from_file(file)
     row_num = 0
+    header_map = nil
+    blank_header_indices = []
+    @blank_header_warning = false
     [].tap do |invites|
       CSV.foreach(file, encoding: 'utf-8').with_index(1) do |row, row_number|
         row_num = row_number
         row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)
-        if row_number == 1 && looks_like_header?(row)
-          unless valid_header_row?(row)
-            raise I18n.t('errors.course.user_invitations.invalid_headers',
-                         expected: expected_headers.join(','))
-          end
+        if row_number == 1
+          header_map, blank_header_indices = build_header_map!(row)
           next
         end
-
-        invite = parse_file_row(row)
+        @blank_header_warning ||= blank_header_indices.any? { |idx| row[idx].present? }
+        invite = parse_file_row(row, header_map)
         invites << invite if invite
       end
     end
   rescue StandardError => e
-    raise CSV::MalformedCSVError.new(e, row_num), e.message
-  end
-
-  def looks_like_header?(row)
-    row[0]&.casecmp('Name')&.zero? && row[1]&.casecmp('Email')&.zero?
-  end
-
-  def expected_headers
-    if @current_course.show_personalized_timeline_features?
-      EXPECTED_HEADERS_WITH_TIMELINE
-    else
-      EXPECTED_HEADERS_WITHOUT_TIMELINE
-    end
-  end
-
-  def valid_header_row?(row)
-    return false unless looks_like_header?(row)
-
-    row.map { |h| h&.downcase }.compact == expected_headers
+    raise CSV::MalformedCSVError.new(e.message, row_num), e.message
   end
 
   # Strips a row of whitespaces.
@@ -173,26 +156,79 @@ module Course::UserInvitationService::ParseInvitationConcern
     row.map { |item| item&.strip }
   end
 
+  def header_alias_map
+    @header_alias_map ||= SUPPORTED_LOCALES.each_with_object({}) do |locale, map|
+      CANONICAL_COLUMNS.each do |col|
+        term = I18n.t("csv.course_user_invitations.headers.#{col}", locale: locale)
+        map[normalize_header(term)] = col
+      end
+    end
+  end
+
+  def normalize_header(value)
+    value&.strip&.downcase&.gsub(/[\s_\-]+/, '')
+  end
+
+  def build_header_map!(row)
+    resolved = {}
+    blank_indices = []
+    row.each_with_index do |cell, idx|
+      if cell.blank?
+        blank_indices << idx
+        next
+      end
+
+      canonical = header_alias_map[normalize_header(cell)]
+      raise_non_canonical_header_error!(cell) unless canonical
+      raise_duplicate_header_error!(canonical) if resolved.key?(canonical)
+
+      resolved[canonical] = idx
+    end
+
+    validate_required_headers!(resolved)
+    [resolved, blank_indices]
+  end
+
+  def raise_non_canonical_header_error!(cell)
+    accepted = CANONICAL_COLUMNS.map { |col| I18n.t("csv.course_user_invitations.headers.#{col}") }.join(', ')
+    raise I18n.t('errors.course.user_invitations.invalid_headers', header: cell, accepted: accepted)
+  end
+
+  def raise_duplicate_header_error!(canonical)
+    raise I18n.t('errors.course.user_invitations.duplicate_headers',
+                 column: I18n.t("csv.course_user_invitations.headers.#{canonical}"))
+  end
+
+  def validate_required_headers!(resolved)
+    return if resolved.key?(:name) && resolved.key?(:email)
+
+    raise I18n.t('errors.course.user_invitations.missing_required_headers')
+  end
+
   # Parses the given CSV row (array) and returns attributes for a user invitation.
   #   - Sets the name as the given email if a name was not provided.
   #
   # @param [Array] row Array with 3 parameters: name, email and role respectively.
   # @return [Hash] The parsed invitation attributes given the row.
-  def parse_file_row(row)
-    return nil if row[1].blank?
+  def parse_file_row(row, header_map)
+    email = row[header_map[:email]]
+    return nil if email.blank?
 
-    row[0] = row[1] if row[0].blank?
-    role = parse_file_role(row[2])
-    phantom = parse_file_phantom(row[3])
-    if @current_course.show_personalized_timeline_features?
-      timeline_algorithm = parse_file_timeline_algorithm(row[4])
-      external_id = parse_file_external_id(row[5])
-    else
-      external_id = parse_file_external_id(row[4])
-      timeline_algorithm = parse_file_timeline_algorithm(nil)
-    end
-    { name: row[0], email: row[1], role: role, phantom: phantom,
+    name = row[header_map[:name]]
+    name = email if name.blank?
+
+    role = parse_file_role(row_cell(row, header_map, :role))
+    phantom = parse_file_phantom(row_cell(row, header_map, :phantom))
+    timeline_algorithm = parse_file_timeline_algorithm(row_cell(row, header_map, :personal_timeline))
+    external_id = parse_file_external_id(row_cell(row, header_map, :external_id))
+
+    { name: name, email: email, role: role, phantom: phantom,
       timeline_algorithm: timeline_algorithm, external_id: external_id }
+  end
+
+  def row_cell(row, header_map, col)
+    idx = header_map[col]
+    idx ? row[idx] : nil
   end
 
   # Parses the role column from the CSV file.

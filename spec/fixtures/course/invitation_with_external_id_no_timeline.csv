@@ -1,4 +1,4 @@
-name,email,role,phantom,externalid
-Alice,alice@example.com,student,false,EXT001
-Bob,bob@example.com,teaching_assistant,false,EXT002
+Name,Email,External ID,Role,Phantom
+Alice,alice@example.com,EXT001,student,false
+Bob,bob@example.com,EXT002,teaching_assistant,false
 Charlie,charlie@example.com,,,

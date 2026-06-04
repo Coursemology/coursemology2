@@ -63,3 +63,13 @@ en:
         type: 'Student Type'
         email: 'Email'
         external_id: 'External ID'
+
+    # Course user invitations CSV header terms (parser source of truth)
+    course_user_invitations:
+      headers:
+        name: "Name"
+        email: "Email"
+        external_id: "External ID"
+        role: "Role"
+        phantom: "Phantom"
+        personal_timeline: "Personal Timeline"

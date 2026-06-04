@@ -6,6 +6,7 @@ import { TimelineAlgorithm } from 'types/course/personalTimes';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
 import {
+  DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
   DEFAULT_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
@@ -140,7 +141,7 @@ const InvitationResultExistingTable: FC<Props> = ({
       getRowEqualityData={(row) => row}
       getRowId={(row) => String(row.id)}
       pagination={{
-        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+        rowsPerPage: [DEFAULT_MINI_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}
       toolbar={{ show: false }}

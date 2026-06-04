@@ -20,7 +20,9 @@ zh:
         invalid_email: '%{email}无法处理：邮箱无效：%{message}。'
         duplicate_external_id: '%{email}无法处理：外部编号"%{external_id}"已被使用。'
         other_error: '%{email}无法处理：%{message}。'
-        invalid_headers: 'CSV 标题无效。预期格式：%{expected}。请下载并使用模板文件。'
+        invalid_headers: 'CSV 标题 "%{header}" 无法识别。接受的标题：%{accepted}。'
+        missing_required_headers: 'CSV 必须包含"姓名"和"电子邮件"列。'
+        duplicate_headers: '重复的 CSV 列："%{column}"。每一列只能出现一次。'
       user_registrations:
         invalid_code: '你输入了一个无效的邀请码。'
         code_taken: >

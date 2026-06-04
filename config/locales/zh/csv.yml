@@ -63,3 +63,13 @@ zh:
         type: '学生类型'
         email: '电子邮箱'
         external_id: '外部编号'
+
+    # Course user invitations CSV header terms (parser source of truth)
+    course_user_invitations:
+      headers:
+        name: "姓名"
+        email: "电子邮件"
+        external_id: "外部编号"
+        role: "角色"
+        phantom: "旁听学生"
+        personal_timeline: "个人时间线"

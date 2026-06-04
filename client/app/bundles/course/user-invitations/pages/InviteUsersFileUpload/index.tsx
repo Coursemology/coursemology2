@@ -1,5 +1,5 @@
 import { FC, ReactNode, useRef, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
 import {
@@ -11,11 +11,11 @@ import {
 import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
 import ExternalIdConflictPrompt from '../../components/misc/ExternalIdConflictPrompt';
+import useInviteErrorHandler from '../../hooks/useInviteErrorHandler';
 import { inviteUsersFromFile } from '../../operations';
 import {
   getManageCourseUserPermissions,
@@ -78,16 +78,16 @@ const translations = defineMessages({
   fileUploadExample: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExample',
     defaultMessage:
-      'Name,Email,Role,Phantom,ExternalId' +
-      '{br}John,test1@example.org,student,y,A0123456' +
-      '{br}Mary,test2@example.org,teaching_assistant,n,A0123457',
+      'Name,Email,External ID,Role,Phantom' +
+      '{br}John,test1@example.com,A0123456,student,y' +
+      '{br}Mary,test2@example.com,A0123457,teaching_assistant,n',
   },
   fileUploadExamplePersonalTimeline: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline',
     defaultMessage:
-      'Name,Email,Role,Phantom,PersonalTimeline,ExternalId' +
-      '{br}John,test1@example.org,student,y,otot,A0123456' +
-      '{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457',
+      'Name,Email,External ID,Role,Phantom,Personal Timeline' +
+      '{br}John,test1@example.com,A0123456,student,y,otot' +
+      '{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed',
   },
   failure: {
     id: 'course.userInvitations.InviteUsersFileUpload.failure',
@@ -104,6 +104,7 @@ const translations = defineMessages({
 const InviteUsersFileUpload: FC<Props> = (props) => {
   const { open, onClose, openResultDialog } = props;
   const { t } = useTranslation();
+  const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const fileRef = useRef<InvitationFileEntity | null>(null);
@@ -114,29 +115,14 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
+  const handleError = useInviteErrorHandler(
+    translations.failure,
+    translations.failureGeneric,
+  );
 
   if (!open && !conflictData) {
     return null;
   }
-
-  const handleError = (error: unknown): void => {
-    const rawErrors = (error as { response?: { data?: { errors?: unknown } } })
-      ?.response?.data?.errors;
-    let errorList: string[];
-    if (Array.isArray(rawErrors)) errorList = rawErrors;
-    else if (typeof rawErrors === 'string') errorList = [rawErrors];
-    else errorList = [];
-    const first = errorList[0];
-    const overflow =
-      errorList.length > 1 ? ` (and ${errorList.length - 1} more)` : '';
-    if (first) {
-      toast.error(t(translations.failure, { error: first + overflow }), {
-        autoClose: false,
-      });
-    } else {
-      toast.error(t(translations.failureGeneric), { autoClose: false });
-    }
-  };
 
   const submitWithResolution = (
     fileEntity: InvitationFileEntity,
@@ -184,6 +170,11 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         </li>
         <li>
           <Typography variant="body2">
+            <FormattedMessage {...translations.fileUploadInfoExternalId} />
+          </Typography>
+        </li>
+        <li>
+          <Typography variant="body2">
             <FormattedMessage {...translations.fileUploadInfoRole} />
           </Typography>
         </li>
@@ -205,11 +196,6 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
             </Typography>
           </li>
         )}
-        <li>
-          <Typography variant="body2">
-            <FormattedMessage {...translations.fileUploadInfoExternalId} />
-          </Typography>
-        </li>
       </ul>
       <Typography variant="body2">
         <strong>{t(translations.exampleHeader)}</strong>
@@ -217,6 +203,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
           download="template.csv"
           href={getCourseUserInviteTemplatePath(
             permissions.canManagePersonalTimes,
+            intl.locale,
           )}
           opensInNewTab
           style={{ textDecoration: 'none', cursor: 'pointer' }}
@@ -255,7 +242,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         formSubtitle={formSubtitle}
         onClose={onClose}
         onSubmit={onSubmit}
-        open={open}
+        open={open && !conflictData}
       />
     </>
   );
