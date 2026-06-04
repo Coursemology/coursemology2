@@ -7037,6 +7037,9 @@
   "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
     "defaultMessage": "{count} updated · shown first"
   },
+  "course.userInvitations.InvitationResultDialog.blankHeaderWarning": {
+    "defaultMessage": "One or more columns had no header - their data was ignored."
+  },
   "course.userInvitations.InvitationResultDialog.summary": {
     "defaultMessage": "{newInvitations} new {newInvitations, plural, one {invitation} other {invitations}} sent, {newEnrollments} directly enrolled, {alreadyInCourse} already in course."
   },
@@ -7104,10 +7107,10 @@
     "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "Name,Email,Role,Phantom,ExternalId{br}John,test1@example.org,student,y,A0123456{br}Mary,test2@example.org,teaching_assistant,n,A0123457"
+    "defaultMessage": "Name,Email,External ID,Role,Phantom{br}John,test1@example.com,A0123456,student,y{br}Mary,test2@example.com,A0123457,teaching_assistant,n"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "Name,Email,Role,Phantom,PersonalTimeline,ExternalId{br}John,test1@example.org,student,y,otot,A0123456{br}Mary,test2@example.org,teaching_assistant,n,fixed,A0123457"
+    "defaultMessage": "Name,Email,External ID,Role,Phantom,Personal Timeline{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
     "defaultMessage": "Each invitation must use a unique email address within the course. Duplicate emails will be skipped."

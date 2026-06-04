@@ -30,6 +30,7 @@ export interface InvitationResult {
   newInvitations?: InvitationListData[];
   updatedCourseUsers?: InvitationUpdatedItem[];
   updatedInvitations?: InvitationUpdatedItem[];
+  blankHeaderWarning?: boolean;
 }
 
 export type ExternalIdResolution = 'keep_existing' | 'replace_all';

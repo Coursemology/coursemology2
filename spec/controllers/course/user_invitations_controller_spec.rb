@@ -77,8 +77,8 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
             create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
           end
           let(:csv_content) do
-            "Name,Email,Role,Phantom,Timeline,ExternalId\n" \
-              "#{existing_user.name},#{existing_user.email},student,false,,NEW001"
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
           end
           let(:csv_file) do
             file = Tempfile.new(['invite', '.csv'])
@@ -91,7 +91,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
             post :create, format: :json, params: { course_id: course, course: { invitations_file: csv_file } }
           end
 
-          it 'returns 200 with pendingInvitationUpdates or pendingCourseUserUpdates' do
+          it 'returns 200 with pendingCourseUserUpdates' do
             subject
             expect(response).to have_http_status(:ok)
             json = JSON.parse(response.body)
@@ -112,8 +112,8 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
             create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
           end
           let(:csv_content) do
-            "Name,Email,Role,Phantom,Timeline,ExternalId\n" \
-              "#{existing_user.name},#{existing_user.email},student,false,,NEW001"
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
           end
           let(:csv_file) do
             file = Tempfile.new(['invite', '.csv'])
@@ -150,8 +150,8 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
             create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
           end
           let(:csv_content) do
-            "Name,Email,Role,Phantom,Timeline,ExternalId\n" \
-              "#{existing_user.name},#{existing_user.email},student,false,,NEW001"
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
           end
           let(:csv_file) do
             file = Tempfile.new(['invite', '.csv'])
@@ -178,6 +178,44 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           it 'updates the external_id to the new value' do
             subject
             expect(existing_course_user.reload.external_id).to eq('NEW001')
+          end
+        end
+
+        context 'when uploading with an unrecognized resolution value' do
+          render_views
+
+          let(:existing_user) { create(:user) }
+          let!(:existing_course_user) do
+            create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+          end
+          let(:csv_content) do
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
+          end
+          let(:csv_file) do
+            file = Tempfile.new(['invite', '.csv'])
+            file.write(csv_content)
+            file.rewind
+            Rack::Test::UploadedFile.new(file.path, 'text/csv').tap { file.close }
+          end
+
+          subject do
+            post :create, format: :json, params: {
+              course_id: course,
+              course: { invitations_file: csv_file },
+              external_id_resolution: 'anything_at_all'
+            }
+          end
+
+          it 'treats the invalid resolution as nil and returns pendingCourseUserUpdates' do
+            subject
+            expect(response).to have_http_status(:ok)
+            json = JSON.parse(response.body)
+            expect(json.keys).to include('pendingCourseUserUpdates')
+          end
+
+          it 'does not overwrite the external_id' do
+            expect { subject }.not_to(change { existing_course_user.reload.external_id })
           end
         end
       end
@@ -261,7 +299,6 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       subject { post :create, params: { course_id: course, course: invite_params } }
 
       context 'when the CSV has invalid emails' do
-        before { course.update!(show_personalized_timeline_features: false) }
         let(:invite_params) do
           { invitations_file: fixture_file_upload('course/invitation_invalid_email.csv') }
         end
@@ -274,7 +311,6 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       end
 
       context 'when the CSV has an external ID already taken by an existing course user' do
-        before { course.update!(show_personalized_timeline_features: false) }
         let!(:existing_user) { create(:course_student, course: course, external_id: 'EXT_DUPE') }
         let(:invite_params) do
           { invitations_file: fixture_file_upload('course/invitation_duplicate_external_id.csv') }

@@ -7028,6 +7028,9 @@
   "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
     "defaultMessage": "{count}개 업데이트됨 · 먼저 표시"
   },
+  "course.userInvitations.InvitationResultDialog.blankHeaderWarning": {
+    "defaultMessage": "헤더가 없는 열이 하나 이상 있어 해당 데이터는 무시되었습니다."
+  },
   "course.userInvitations.InvitationResultDialog.summary": {
     "defaultMessage": "새 초대장 {newInvitations}개 발송, {newEnrollments}명 직접 등록, {alreadyInCourse}명은 이미 과정에 있습니다."
   },
@@ -7092,10 +7095,10 @@
     "defaultMessage": "사용자 초대에 실패했습니다. 데이터가 올바르게 형식화되었는지 확인하세요."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "이름,이메일,역할,팬텀,외부 ID{br}John,test1@example.org,학생,y,A0123456{br}Mary,test2@example.org,티칭 어시스턴트,n,A0123457"
+    "defaultMessage": "이름,이메일,외부 ID,역할,팬텀{br}John,test1@example.com,A0123456,student,y{br}Mary,test2@example.com,A0123457,teaching_assistant,n"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "이름,이메일,역할,팬텀,개인 타임라인,외부 ID{br}John,test1@example.org,학생,y,otot,A0123456{br}Mary,test2@example.org,티칭 어시스턴트,n,fixed,A0123457"
+    "defaultMessage": "이름,이메일,외부 ID,역할,팬텀,개인 타임라인{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
     "defaultMessage": "각 초대는 과정 내에서 고유한 이메일 주소를 사용해야 합니다. 중복된 이메일은 건너뜁니다."

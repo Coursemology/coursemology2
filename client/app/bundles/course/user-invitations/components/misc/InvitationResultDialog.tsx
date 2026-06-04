@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import HelpIcon from '@mui/icons-material/Help';
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -97,6 +98,11 @@ const translations = defineMessages({
     id: 'course.userInvitations.InvitationResultDialog.updatedSubtitle',
     defaultMessage: '{count} updated · shown first',
   },
+  blankHeaderWarning: {
+    id: 'course.userInvitations.InvitationResultDialog.blankHeaderWarning',
+    defaultMessage:
+      'One or more columns had no header - their data was ignored.',
+  },
 });
 
 const toSuccessRow = (
@@ -143,6 +149,7 @@ const InvitationResultDialog: FC<Props> = ({
     failedUsers = [],
     updatedInvitations = [],
     updatedCourseUsers = [],
+    blankHeaderWarning = false,
   } = invitationResult;
 
   const newInvitationRows = newInvitations.map((i) => toSuccessRow(i, 'inv'));
@@ -199,6 +206,11 @@ const InvitationResultDialog: FC<Props> = ({
     >
       <DialogTitle>{t(translations.header)}</DialogTitle>
       <DialogContent>
+        {blankHeaderWarning && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            {t(translations.blankHeaderWarning)}
+          </Alert>
+        )}
         <Typography gutterBottom variant="body2">
           {needsAttentionCount > 0 &&
             `${t(translations.summaryFailed, { count: needsAttentionCount })} `}

@@ -60,19 +60,19 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       csvDownloadable: true,
     },
     {
-      of: 'externalId',
-      title: t(tableTranslations.externalId),
-      sortable: false,
-      searchable: true,
-      cell: (user) => <ExternalIdField for={user} />,
-      csvDownloadable: true,
-    },
-    {
       of: 'email',
       sortable: true,
       searchable: true,
       title: t(tableTranslations.email),
       cell: (user) => user.email,
+      csvDownloadable: true,
+    },
+    {
+      of: 'externalId',
+      title: t(tableTranslations.externalId),
+      sortable: false,
+      searchable: true,
+      cell: (user) => <ExternalIdField for={user} />,
       csvDownloadable: true,
     },
     {

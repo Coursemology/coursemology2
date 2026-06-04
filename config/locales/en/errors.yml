@@ -20,7 +20,9 @@ en:
         invalid_email: '%{email} could not be processed: invalid email: %{message}.'
         duplicate_external_id: '%{email} could not be processed: external ID "%{external_id}" is already taken.'
         other_error: '%{email} could not be processed: %{message}.'
-        invalid_headers: 'Invalid CSV headers. Expected: %{expected}. Please download and use the template file.'
+        invalid_headers: 'Unrecognized CSV header "%{header}". Accepted headers: %{accepted}.'
+        missing_required_headers: 'CSV must include both a "Name" and "Email" column.'
+        duplicate_headers: 'Duplicate CSV column: "%{column}". Each column must appear only once.'
       user_registrations:
         invalid_code: 'You have entered an invalid invitation code.'
         code_taken: >

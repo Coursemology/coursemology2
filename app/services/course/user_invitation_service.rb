@@ -57,6 +57,10 @@ class Course::UserInvitationService
     result
   end
 
+  def blank_header_warning
+    @blank_header_warning || false
+  end
+
   # Resends invitation emails to CourseUsers to the given course.
   # This method disregards CourseUsers that do not have an 'invited' status.
   #

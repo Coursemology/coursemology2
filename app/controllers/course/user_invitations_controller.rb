@@ -105,7 +105,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #   1) Single invitation - specified with the user_invitation_id param
   #   2) All un-confirmed invitation - if user_invitation_id param was not found
   def load_invitations
-    @load_invitations ||= begin
+    @invitations ||= begin
       ids = resend_invitation_params
       ids ||= current_course.invitations.retryable.unconfirmed.select(:id)
       if ids.blank?
@@ -128,14 +128,19 @@ class Course::UserInvitationsController < Course::ComponentController
     invitation_params.is_a?(Tempfile)
   end
 
+  VALID_EXTERNAL_ID_RESOLUTIONS = %w[keep_existing replace_all].freeze
+  private_constant :VALID_EXTERNAL_ID_RESOLUTIONS
+
   # Invites the users via the service object.
   #
   # @return [Array] On success.
   # @return [Symbol] :pending_conflict when external ID updates require resolution.
   # @return [Boolean] false on failure.
   def invite
+    resolution = params[:external_id_resolution]
+    resolution = nil unless VALID_EXTERNAL_ID_RESOLUTIONS.include?(resolution)
     invitation_service.invite(invitation_params,
-                              external_id_resolution: params[:external_id_resolution])
+                              external_id_resolution: resolution)
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:base, e.message)
     false
@@ -314,7 +319,8 @@ class Course::UserInvitationsController < Course::ComponentController
       format.json do
         render json: {
           newInvitations: result[0].length,
-          invitationResult: parse_invitation_result(*result)
+          invitationResult: parse_invitation_result(*result),
+          blankHeaderWarning: invitation_service.blank_header_warning
         }, status: :ok
       end
     end
