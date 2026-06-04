@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
-import { Alert } from '@mui/material';
+import { Control, Controller, UseFormWatch } from 'react-hook-form';
+import { Alert, FormHelperText } from '@mui/material';
 import {
   AttachmentType,
   INITIAL_MAX_ATTACHMENT_SIZE,
@@ -12,6 +12,7 @@ import {
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -51,7 +52,34 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
           ? INITIAL_MAX_ATTACHMENT_SIZE
           : data.question!.maxAttachmentSize,
     },
-    solutions: data.solutions,
+    solutions: data.solutions?.map((solution) => ({
+      ...solution,
+      spreadsheet: solution.spreadsheet
+        ? {
+            ...solution.spreadsheet,
+            testTimestamp: solution.spreadsheet.testTimestamp
+              ? new Date(
+                  solution.spreadsheet.testTimestamp as unknown as string,
+                )
+              : null,
+            variables: solution.spreadsheet.variables?.map((variable) => {
+              if (variable.mode !== 'date') return variable;
+              const v = variable as unknown as {
+                cell: string;
+                mode: 'date';
+                min: string;
+                max: string;
+                roundToDay: boolean;
+              };
+              return {
+                ...variable,
+                min: new Date(v.min),
+                max: new Date(v.max),
+              };
+            }),
+          }
+        : undefined,
+    })),
   };
 
   const [submitting, setSubmitting] = useState(false);
@@ -98,7 +126,10 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
         data.defaultMaxAttachments,
       )}
     >
-      {(control: Control<TextResponseEditableFormData>): JSX.Element => (
+      {(
+        control: Control<TextResponseEditableFormData>,
+        watch: UseFormWatch<TextResponseEditableFormData>,
+      ): JSX.Element => (
         <>
           <CommonQuestionFields
             availableSkills={data.availableSkills}
@@ -116,15 +147,31 @@ const TextResponseForm = (props: TextResponseFormProps): JSX.Element => {
               <Controller
                 control={control}
                 name="question.templateText"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormRichTextField
-                    disabled={submitting}
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    variant="filled"
-                  />
-                )}
+                render={({ field, fieldState }): JSX.Element =>
+                  watch('solutions')?.length ? (
+                    <>
+                      <textarea
+                        className={`w-full h-full resize-none rounded border border-solid p-2 disabled:bg-neutral-100 disabled:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-inset ${fieldState.error ? 'border-red-500 focus:ring-red-500' : 'border-neutral-400 focus:ring-blue-600'}`}
+                        disabled={submitting}
+                        {...field}
+                        value={field.value ?? ''}
+                      />
+                      {fieldState.error && (
+                        <FormHelperText error>
+                          {formatErrorMessage(fieldState.error.message)}
+                        </FormHelperText>
+                      )}
+                    </>
+                  ) : (
+                    <FormRichTextField
+                      disabled={submitting}
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      variant="filled"
+                    />
+                  )
+                }
               />
             </Section>
           )}

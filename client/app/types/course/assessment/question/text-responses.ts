@@ -1,9 +1,19 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
+export type SpreadsheetCellValue = string | number | Date | undefined;
+
 export interface NumericRandomConfig {
   mode: 'numeric';
   min: number;
   max: number;
+  roundToInteger: boolean;
+}
+
+export interface DateRandomConfig {
+  mode: 'date';
+  min: Date;
+  max: Date;
+  roundToDay: boolean;
 }
 
 export interface OverrideRandomConfig {
@@ -27,6 +37,7 @@ export interface NoRandomConfig {
 
 export type CellRandomConfig = (
   | NumericRandomConfig
+  | DateRandomConfig
   | OverrideRandomConfig
   | ShuffleRandomConfig
   | StringRandomConfig
@@ -56,7 +67,7 @@ export interface SolutionData {
     isRandomSeedFixed: boolean;
     randomSeed: number;
     isTimestampFixed: boolean;
-    testTimestamp: string;
+    testTimestamp: Date | null;
     numRandomTests: number;
     file?: {
       name: string;

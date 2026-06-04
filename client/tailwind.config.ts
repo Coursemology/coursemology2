@@ -76,8 +76,9 @@ export default {
       );
     }),
     containerQueries,
-    // Backported from Tailwind v4, should be removed when we upgrade.
     plugin(({ addUtilities }) => {
+      addUtilities({ '.w-144': { width: '36rem' } });
+      // Backports from Tailwind v4, should be removed when we upgrade.
       addUtilities({ '.wrap-anywhere': { 'overflow-wrap': 'anywhere' } });
       addUtilities({
         '.justify-center-safe': {

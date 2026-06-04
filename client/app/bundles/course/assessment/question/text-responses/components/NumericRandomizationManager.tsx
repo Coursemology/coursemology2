@@ -1,9 +1,11 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { CellRandomConfigBody } from 'types/course/assessment/question/text-responses';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
+
+import translations from '../../../translations';
 
 interface Props {
   config: CellRandomConfigBody<'numeric'>;
@@ -72,6 +74,20 @@ const NumericRandomizationManager: FC<Props> = (props) => {
         }}
         size="small"
         value={maxText}
+      />
+      <FormControlLabel
+        componentsProps={{
+          typography: { variant: 'subtitle2', fontWeight: 'normal' },
+        }}
+        control={
+          <Checkbox
+            checked={config.roundToInteger}
+            className="p-2 pl-4"
+            onChange={(e) => onChange({ roundToInteger: e.target.checked })}
+            size="small"
+          />
+        }
+        label={t(translations.roundToInteger)}
       />
     </div>
   );

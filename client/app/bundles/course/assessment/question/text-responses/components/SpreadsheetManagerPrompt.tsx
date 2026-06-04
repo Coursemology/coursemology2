@@ -128,6 +128,7 @@ const SpreadsheetManagerPrompt: FC<Props> = ({
               disableMargins
               field={field}
               fieldState={fieldState}
+              timezone="UTC"
             />
           )}
         />

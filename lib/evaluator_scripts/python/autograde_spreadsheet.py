@@ -2,6 +2,7 @@ from datetime import datetime
 import formulas
 import json
 import numpy as np
+from openpyxl.utils.datetime import to_excel
 import os
 import sys
 import time_machine
@@ -35,6 +36,7 @@ class FormulaEvaluator:
     self.bookname, bookdata = next(iter(self.xl_model.books.items()))
     internal_book = next((v for k, v in bookdata.items() if str(k) == 'Book'), None)
     self.sheetnames = internal_book.sheetnames
+    self.book_epoch = internal_book.epoch
     self.default_sheetname = self.sheetnames[0]
     self.variables = variables
     self.randomize_inputs = randomize_inputs
@@ -87,8 +89,18 @@ class FormulaEvaluator:
           self.xl_model.from_dict({ variable_key: self.rewrite_formula(var_config['value'], default_sheetname=sheetname) })
         else:
           inputs[variable_key] = var_config['value']
+      elif var_config['mode'] == 'date' and self.randomize_inputs:
+        min_timestamp = datetime.fromisoformat(var_config['min']).timestamp()
+        max_timestamp = datetime.fromisoformat(var_config['max']).timestamp()
+        random_timestamp = np.random.uniform(min_timestamp, max_timestamp)
+        random_date = datetime.fromtimestamp(random_timestamp)
+        if var_config.get('roundToDay', False):
+          random_date = random_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        inputs[variable_key] = to_excel(random_date, epoch=self.book_epoch)
       elif var_config['mode'] == 'numeric' and self.randomize_inputs:
         inputs[variable_key] = np.random.uniform(var_config['min'], var_config['max'])
+        if var_config.get('roundToInteger', False):
+          inputs[variable_key] = int(round(inputs[variable_key]))
       elif var_config['mode'] == 'string' and self.randomize_inputs:
         digit_map = generate_character_map('0123456789') if var_config.get('randomizeDigits', False) else {}
         letter_map = generate_character_map('abcdefghijklmnopqrstuvwxyz') if var_config.get('randomizeLetters', False) else {}

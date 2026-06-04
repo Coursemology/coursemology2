@@ -54,6 +54,13 @@ export const formatShortTime = formatterWith(SHORT_TIME_FORMAT);
 export const formatPreciseTime = formatterWith(PRECISE_TIME_FORMAT);
 export const formatPreciseDateTime = formatterWith(PRECISE_DATE_TIME_FORMAT);
 
+export const formatRawDate: DateTimeFormatter = (input) => {
+  const dateTime = moment.utc(input);
+  if (!dateTime.isValid()) return '';
+
+  return dateTime.format(SHORT_DATE_FORMAT);
+};
+
 export const formatMiniDateTime: DateTimeFormatter = (input) => {
   const dateTime = moment(input);
   if (!dateTime.isValid()) return '';

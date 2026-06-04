@@ -2364,11 +2364,17 @@
   "course.assessment.question.textResponses.overrideRandomizationMode": {
     "defaultMessage": "Override with specified value"
   },
+  "course.assessment.question.textResponses.overrideRandomizationModeDescription": {
+    "defaultMessage": "Values starting with \"=\" are treated as formulas."
+  },
   "course.assessment.question.textResponses.overrideValue": {
     "defaultMessage": "Value"
   },
   "course.assessment.question.textResponses.numericRandomizationMode": {
     "defaultMessage": "Use random numeric value"
+  },
+  "course.assessment.question.textResponses.roundToInteger": {
+    "defaultMessage": "Round to nearest integer"
   },
   "course.assessment.question.textResponses.stringRandomizationMode": {
     "defaultMessage": "Randomize characters in value"
@@ -2381,6 +2387,12 @@
   },
   "course.assessment.question.textResponses.randomizeLetters": {
     "defaultMessage": "Randomize letters (a-z)"
+  },
+  "course.assessment.question.textResponses.dateRandomizationMode": {
+    "defaultMessage": "Use random date value"
+  },
+  "course.assessment.question.textResponses.roundToDay": {
+    "defaultMessage": "Round to nearest day (00:00)"
   },
   "course.assessment.question.textResponses.shuffleRandomizationMode": {
     "defaultMessage": "Shuffle value with other cells"

@@ -1,30 +1,35 @@
 import { FC, useEffect, useState } from 'react';
+import { SpreadsheetCellValue } from 'types/course/assessment/question/text-responses';
 import * as XLSX from 'xlsx';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatRawDate } from 'lib/moment';
 
 import translations from './translations';
 
 interface SpreadsheetPreviewProps {
   file: File | null;
   activeCellKey?: string | null;
-  getCellClassName?: (cellValue: string | undefined, cellKey: string) => string;
+  getCellClassName?: (
+    cellValue: SpreadsheetCellValue,
+    cellKey: string,
+  ) => string;
   onCellClick?: (
     e: React.MouseEvent<HTMLTableCellElement>,
     rowIdx: number,
     colIdx: number,
     sheetName: string,
-    cellValue: string | undefined,
+    cellValue: SpreadsheetCellValue,
   ) => void;
   renderCell?: (
-    cellValue: string | undefined,
+    cellValue: SpreadsheetCellValue,
     cellKey: string,
   ) => React.ReactNode;
 }
 
 export interface SheetGrid {
   headers: string[];
-  rows: (string | undefined)[][];
+  rows: SpreadsheetCellValue[][];
   rowOffset: number;
   colOffset: number;
 }
@@ -34,14 +39,19 @@ export interface GridData {
   sheets: SheetGrid[];
 }
 
-export const isNumericCell = (val: string | undefined): boolean =>
-  !!val && val.trim() !== '' && !Number.isNaN(Number(val));
-
 export const getCellKey = (
   rowIdx: number,
   colIdx: number,
   sheetName: string,
 ): string => `${sheetName}!${XLSX.utils.encode_cell({ r: rowIdx, c: colIdx })}`;
+
+const parseCellValue = (cell: XLSX.CellObject): SpreadsheetCellValue => {
+  if (cell?.v === null || cell?.v === undefined) return undefined;
+  if (cell.f !== undefined) return cell.f;
+  if (cell.t === 'd' && cell.v instanceof Date) return cell.v;
+  if (typeof cell.v === 'number') return cell.v;
+  return String(cell.v);
+};
 
 const parseSheetGrid = (worksheet: XLSX.WorkSheet): SheetGrid => {
   const ref = worksheet['!ref'];
@@ -51,31 +61,27 @@ const parseSheetGrid = (worksheet: XLSX.WorkSheet): SheetGrid => {
   const numCols = range.e.c - range.s.c + 1;
   const numRows = range.e.r - range.s.r + 1;
   const headers: string[] = [];
-  const allRows: (string | undefined)[][] = [];
+  const allRows: SpreadsheetCellValue[][] = [];
 
   for (let c = 0; c < numCols; c++) {
     headers.push(XLSX.utils.encode_col(range.s.c + c));
   }
 
   for (let r = 0; r < numRows; r++) {
-    const row: (string | undefined)[] = [];
+    const row: SpreadsheetCellValue[] = [];
     for (let c = 0; c < numCols; c++) {
       const rowIdx = range.s.r + r;
       const colIdx = range.s.c + c;
       const cell = worksheet[XLSX.utils.encode_cell({ r: rowIdx, c: colIdx })];
 
-      row.push(
-        cell === null || cell === undefined
-          ? undefined
-          : String(cell.f ?? cell.v ?? ''),
-      );
+      row.push(parseCellValue(cell));
     }
     allRows.push(row);
   }
 
   const lastNonBlank = allRows.reduce(
     (last, row, idx) =>
-      row.some((c) => c !== undefined && c.trim() !== '') ? idx : last,
+      row.some((c) => c !== undefined && String(c).trim() !== '') ? idx : last,
     -1,
   );
   const rows = lastNonBlank >= 0 ? allRows.slice(0, lastNonBlank + 1) : [];
@@ -84,11 +90,24 @@ const parseSheetGrid = (worksheet: XLSX.WorkSheet): SheetGrid => {
 
 export const parseSpreadsheet = async (file: File): Promise<GridData> => {
   const buffer = await file.arrayBuffer();
-  const workbook = XLSX.read(buffer);
+  const workbook = XLSX.read(buffer, {
+    cellDates: true,
+    cellNF: true,
+    cellFormula: true,
+    UTC: true,
+  });
   const sheets = workbook.SheetNames.map((name) =>
     parseSheetGrid(workbook.Sheets[name]),
   );
   return { sheetNames: workbook.SheetNames, sheets };
+};
+
+export const renderCellValue = (cellValue: SpreadsheetCellValue): string => {
+  if (cellValue === undefined) return '';
+  if (typeof cellValue === 'string') return cellValue;
+  if (typeof cellValue === 'number') return String(cellValue);
+  if (cellValue instanceof Date) return formatRawDate(cellValue);
+  return String(cellValue);
 };
 
 const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
@@ -128,13 +147,13 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
   const multiSheet = grid.sheetNames.length > 1;
 
   const getFullCellClassName = (
-    cellValue: string | undefined,
+    cellValue: SpreadsheetCellValue,
     cellKey: string,
     isActive: boolean,
   ): string => {
     return [
       'cursor-pointer border border-solid border-neutral-300 px-2 py-0.5 bg-white',
-      `${isNumericCell(cellValue) ? 'text-right' : 'text-left'}`,
+      `${typeof cellValue === 'number' || cellValue instanceof Date ? 'text-right' : 'text-left'}`,
       `${isActive ? 'outline outline-2 outline-blue-400' : ''}`,
       `${getCellClassName ? getCellClassName(cellValue, cellKey) : ''}`,
     ].join(' ');
@@ -206,7 +225,7 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
                       >
                         {renderCell
                           ? renderCell(cellValue, cellKey)
-                          : cellValue ?? ''}
+                          : renderCellValue(cellValue)}
                       </td>
                     );
                   })}
