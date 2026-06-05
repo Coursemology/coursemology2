@@ -13,16 +13,19 @@ import {
 import {
   CellRandomConfig,
   CellRandomConfigBody,
-  SpreadsheetCellValue,
 } from 'types/course/assessment/question/text-responses';
 
-import SpreadsheetPreview, {
-  getCellKey,
+import { SpreadsheetCellValueView } from 'lib/components/form/fields/SingleFileInput/SpreadsheetCellValueView';
+import SpreadsheetPreview from 'lib/components/form/fields/SingleFileInput/SpreadsheetPreview';
+import {
   GridData,
-  parseSpreadsheet,
-  renderCellValue,
   SheetGrid,
-} from 'lib/components/form/fields/SingleFileInput/SpreadsheetPreview';
+  SpreadsheetCellValue,
+} from 'lib/components/form/fields/SingleFileInput/types';
+import {
+  getCellKey,
+  parseSpreadsheet,
+} from 'lib/components/form/fields/SingleFileInput/utils';
 import AZIcon from 'lib/components/icons/AZIcon';
 import OneNineIcon from 'lib/components/icons/OneNineIcon';
 import RandomizeIcon from 'lib/components/icons/RandomizeIcon';
@@ -179,7 +182,9 @@ const CellOverrideContent: FC<{
     case 'override':
       return (
         <span className="flex-1 text-blue-800">
-          {cellConfig.override?.value ?? renderCellValue(cellValue)}
+          <SpreadsheetCellValueView
+            cellValue={cellConfig.override?.value ?? cellValue}
+          />
         </span>
       );
     case 'numeric':
@@ -188,10 +193,10 @@ const CellOverrideContent: FC<{
         cellConfig.numeric?.max !== undefined
       ) {
         const min = cellConfig.numeric.roundToInteger
-          ? Math.round(cellConfig.numeric.min)
+          ? Math.floor(cellConfig.numeric.min)
           : cellConfig.numeric.min;
         const max = cellConfig.numeric.roundToInteger
-          ? Math.round(cellConfig.numeric.max)
+          ? Math.floor(cellConfig.numeric.max)
           : cellConfig.numeric.max;
         return (
           <span className="flex-1 text-blue-800">
@@ -199,7 +204,11 @@ const CellOverrideContent: FC<{
           </span>
         );
       }
-      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
+      return (
+        <span className="flex-1">
+          <SpreadsheetCellValueView cellValue={cellValue} />
+        </span>
+      );
     case 'date':
       if (
         cellConfig.date?.min !== undefined &&
@@ -212,16 +221,24 @@ const CellOverrideContent: FC<{
           </span>
         );
       }
-      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
+      return (
+        <span className="flex-1">
+          <SpreadsheetCellValueView cellValue={cellValue} />
+        </span>
+      );
     case 'string':
     case 'shuffle':
       return (
         <span className="flex-1 text-blue-800">
-          {renderCellValue(cellValue)}
+          <SpreadsheetCellValueView cellValue={cellValue} />
         </span>
       );
     default:
-      return <span className="flex-1">{renderCellValue(cellValue)}</span>;
+      return (
+        <span className="flex-1">
+          <SpreadsheetCellValueView cellValue={cellValue} />
+        </span>
+      );
   }
 };
 
@@ -239,6 +256,7 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
   const [gridData, setGridData] = useState<GridData | null>(null);
   const popoverActionsRef = useRef<PopoverActions>(null);
   const spreadsheetRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<File | undefined>(undefined);
 
   const updateCellConfigs = (newState: CellRandomConfigState): void => {
     setCellConfigs(newState);
@@ -258,9 +276,17 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
     }
   };
 
+  // If there is a previous file, we always override because old config structure is no longer valid.
+  // If there are initial variables, it implies this is the first render editing a spreadsheet formula, so don't override.
+  // If there are no initial variables, this triggers when a file is uploaded for the first time creating new spreadsheet formula solution.
   useEffect(() => {
-    if (!file) return;
-    initSpreadsheetDefaultConfigFromFile(cellConfigs === undefined);
+    initSpreadsheetDefaultConfigFromFile(
+      Boolean(fileRef.current) || !initialVariables,
+    );
+    fileRef.current = file;
+    return (): void => {
+      fileRef.current = undefined;
+    };
   }, [file]);
 
   const isEditableElement = (el: Element | null): boolean => {

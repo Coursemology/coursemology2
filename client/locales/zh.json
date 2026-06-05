@@ -2373,7 +2373,7 @@
     "defaultMessage": "使用随机日期值"
   },
   "course.assessment.question.textResponses.roundToDay": {
-    "defaultMessage": "取整到天"
+    "defaultMessage": "向下取整到整天 (00:00 UTC)"
   },
   "course.assessment.question.textResponses.shuffleRandomizationMode": {
     "defaultMessage": "与其他单元格随机排列值"

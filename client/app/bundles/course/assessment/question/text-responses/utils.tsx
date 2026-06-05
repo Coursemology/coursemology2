@@ -2,9 +2,10 @@ import {
   AttachmentType,
   CellRandomConfig,
   CellRandomConfigBody,
-  SpreadsheetCellValue,
   TextResponseQuestionFormData,
 } from 'types/course/assessment/question/text-responses';
+
+import { SpreadsheetCellValue } from 'lib/components/form/fields/SingleFileInput/types';
 
 export const getAttachmentTypeFromMaxAttachment = (
   maxAttachments: number | undefined,
@@ -57,7 +58,10 @@ export const getDefaultRandomizationMode = (
   if (cellValue instanceof Date) return 'date';
   if (typeof cellValue === 'number' || !Number.isNaN(Number(cellValue)))
     return 'numeric';
-  return cellValue.length > 0 ? 'string' : 'off';
+  if (typeof cellValue === 'string') {
+    return cellValue.startsWith('=') ? 'off' : 'string';
+  }
+  return 'off';
 };
 
 export function getDefaultRandomizationConfig<

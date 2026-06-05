@@ -1,7 +1,5 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
-export type SpreadsheetCellValue = string | number | Date | undefined;
-
 export interface NumericRandomConfig {
   mode: 'numeric';
   min: number;

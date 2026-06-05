@@ -37,7 +37,7 @@ FORMULA_CASES = {
 
 class TestEvaluateFormula(unittest.TestCase):
   def assertFormula(self, formula, expected):
-    result = FormulaEvaluator(formula, SPREADSHEET_PATH, None, 0, False).evaluate()
+    result = FormulaEvaluator(formula, SPREADSHEET_PATH, None, False).evaluate()
     self.assertTrue(is_output_correct(result, expected), f'Expected {expected!r}, got {result.value!r}')
 
   def test_formulas(self):

@@ -1174,11 +1174,11 @@ const translations = defineMessages({
   },
   roundToInteger: {
     id: 'course.assessment.question.textResponses.roundToInteger',
-    defaultMessage: 'Round to nearest integer',
+    defaultMessage: 'Round down to nearest integer',
   },
   roundToDay: {
     id: 'course.assessment.question.textResponses.roundToDay',
-    defaultMessage: 'Round to nearest day (00:00)',
+    defaultMessage: 'Round down to day start (00:00)',
   },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
