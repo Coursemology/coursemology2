@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import floor
 import formulas
 import json
 import numpy as np
@@ -31,7 +32,7 @@ def generate_character_map(charset):
 
 
 class FormulaEvaluator:
-  def __init__(self, formula_str, filename, variables, random_seed, randomize_inputs):
+  def __init__(self, formula_str, filename, variables, randomize_inputs):
     self.xl_model = formulas.ExcelModel().loads(local_file_path(filename))
     self.bookname, bookdata = next(iter(self.xl_model.books.items()))
     internal_book = next((v for k, v in bookdata.items() if str(k) == 'Book'), None)
@@ -40,7 +41,6 @@ class FormulaEvaluator:
     self.default_sheetname = self.sheetnames[0]
     self.variables = variables
     self.randomize_inputs = randomize_inputs
-    self.random_seed = random_seed
 
     rewrite_str = self.rewrite_formula(formula_str)
     self.xl_model.from_dict({ "SHEET1!A1": rewrite_str })
@@ -100,11 +100,12 @@ class FormulaEvaluator:
       elif var_config['mode'] == 'numeric' and self.randomize_inputs:
         inputs[variable_key] = np.random.uniform(var_config['min'], var_config['max'])
         if var_config.get('roundToInteger', False):
-          inputs[variable_key] = int(round(inputs[variable_key]))
+          inputs[variable_key] = int(floor(inputs[variable_key]))
       elif var_config['mode'] == 'string' and self.randomize_inputs:
         digit_map = generate_character_map('0123456789') if var_config.get('randomizeDigits', False) else {}
         letter_map = generate_character_map('abcdefghijklmnopqrstuvwxyz') if var_config.get('randomizeLetters', False) else {}
-        char_map = digit_map | letter_map
+        uppercase_letter_map = dict((k.upper(), v.upper()) for k, v in letter_map.items())
+        char_map = digit_map | letter_map | uppercase_letter_map
 
         original_str = source_cells.get(variable_key, '')
         inputs[variable_key] = ''.join(char_map.get(c, c) for c in original_str)
@@ -120,7 +121,6 @@ class FormulaEvaluator:
     return inputs
 
   def evaluate(self):
-    np.random.seed(self.random_seed)
     self.inputs = self.generate_inputs()
 
     self.xl_model.finish(circular=True, complete=True)
@@ -165,14 +165,16 @@ def evaluate_spreadsheet(identifier, answer, solution, filename, variables, rand
   }
 
   try:
-    output_raw = FormulaEvaluator(answer, filename, variables, random_seed, randomize_inputs).evaluate()
+    np.random.seed(random_seed)
+    output_raw = FormulaEvaluator(answer, filename, variables, randomize_inputs).evaluate()
     result['output'] = serialize_output(output_raw)
   except Exception as e:
     print(f"Error occurred while evaluating answer formula: {e}", file=sys.stderr, flush=True)
     result['outputError'] = str(e)
 
   try:
-    expected_raw = FormulaEvaluator(solution, filename, variables, random_seed, randomize_inputs).evaluate()
+    np.random.seed(random_seed)
+    expected_raw = FormulaEvaluator(solution, filename, variables, randomize_inputs).evaluate()
     result['expected'] = serialize_output(expected_raw)
   except Exception as e:
     print(f"Error occurred while evaluating solution formula: {e}", file=sys.stderr, flush=True)

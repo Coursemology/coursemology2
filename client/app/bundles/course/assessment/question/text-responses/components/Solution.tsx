@@ -70,6 +70,10 @@ const Solution: FC<SolutionProps> = ({
     return null;
   }
 
+  // Check spreadsheet existence to prevent early rendering causing issues (isRandomizationEnabled checkbox showing weird state)
+  const shouldRenderSpreadsheetFields =
+    solution.solutionType === 'spreadsheet_formula' && solution.spreadsheet;
+
   return (
     <section
       className={`flex border-0 border-b border-solid border-neutral-200 last:border-b-0 ${
@@ -172,7 +176,7 @@ const Solution: FC<SolutionProps> = ({
             />
           </div>
         </div>
-        {solution.solutionType === 'spreadsheet_formula' && (
+        {shouldRenderSpreadsheetFields && (
           <>
             <div className="flex flex-col space-y-1">
               <Typography variant="body1">

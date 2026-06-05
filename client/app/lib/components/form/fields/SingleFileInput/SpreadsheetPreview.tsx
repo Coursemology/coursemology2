@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { SpreadsheetCellValue } from 'types/course/assessment/question/text-responses';
-import * as XLSX from 'xlsx';
 
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatRawDate } from 'lib/moment';
 
+import { SpreadsheetCellValueView } from './SpreadsheetCellValueView';
 import translations from './translations';
+import { GridData, SpreadsheetCellValue } from './types';
+import { getCellKey, parseSpreadsheet } from './utils';
 
 interface SpreadsheetPreviewProps {
   file: File | null;
@@ -26,89 +26,6 @@ interface SpreadsheetPreviewProps {
     cellKey: string,
   ) => React.ReactNode;
 }
-
-export interface SheetGrid {
-  headers: string[];
-  rows: SpreadsheetCellValue[][];
-  rowOffset: number;
-  colOffset: number;
-}
-
-export interface GridData {
-  sheetNames: string[];
-  sheets: SheetGrid[];
-}
-
-export const getCellKey = (
-  rowIdx: number,
-  colIdx: number,
-  sheetName: string,
-): string => `${sheetName}!${XLSX.utils.encode_cell({ r: rowIdx, c: colIdx })}`;
-
-const parseCellValue = (cell: XLSX.CellObject): SpreadsheetCellValue => {
-  if (cell?.v === null || cell?.v === undefined) return undefined;
-  if (cell.f !== undefined) return cell.f;
-  if (cell.t === 'd' && cell.v instanceof Date) return cell.v;
-  if (typeof cell.v === 'number') return cell.v;
-  return String(cell.v);
-};
-
-const parseSheetGrid = (worksheet: XLSX.WorkSheet): SheetGrid => {
-  const ref = worksheet['!ref'];
-  if (!ref) return { headers: [], rows: [], rowOffset: 0, colOffset: 0 };
-
-  const range = XLSX.utils.decode_range(ref);
-  const numCols = range.e.c - range.s.c + 1;
-  const numRows = range.e.r - range.s.r + 1;
-  const headers: string[] = [];
-  const allRows: SpreadsheetCellValue[][] = [];
-
-  for (let c = 0; c < numCols; c++) {
-    headers.push(XLSX.utils.encode_col(range.s.c + c));
-  }
-
-  for (let r = 0; r < numRows; r++) {
-    const row: SpreadsheetCellValue[] = [];
-    for (let c = 0; c < numCols; c++) {
-      const rowIdx = range.s.r + r;
-      const colIdx = range.s.c + c;
-      const cell = worksheet[XLSX.utils.encode_cell({ r: rowIdx, c: colIdx })];
-
-      row.push(parseCellValue(cell));
-    }
-    allRows.push(row);
-  }
-
-  const lastNonBlank = allRows.reduce(
-    (last, row, idx) =>
-      row.some((c) => c !== undefined && String(c).trim() !== '') ? idx : last,
-    -1,
-  );
-  const rows = lastNonBlank >= 0 ? allRows.slice(0, lastNonBlank + 1) : [];
-  return { headers, rows, rowOffset: range.s.r, colOffset: range.s.c };
-};
-
-export const parseSpreadsheet = async (file: File): Promise<GridData> => {
-  const buffer = await file.arrayBuffer();
-  const workbook = XLSX.read(buffer, {
-    cellDates: true,
-    cellNF: true,
-    cellFormula: true,
-    UTC: true,
-  });
-  const sheets = workbook.SheetNames.map((name) =>
-    parseSheetGrid(workbook.Sheets[name]),
-  );
-  return { sheetNames: workbook.SheetNames, sheets };
-};
-
-export const renderCellValue = (cellValue: SpreadsheetCellValue): string => {
-  if (cellValue === undefined) return '';
-  if (typeof cellValue === 'string') return cellValue;
-  if (typeof cellValue === 'number') return String(cellValue);
-  if (cellValue instanceof Date) return formatRawDate(cellValue);
-  return String(cellValue);
-};
 
 const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
   file,
@@ -163,7 +80,6 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
     <div className="flex min-w-0 flex-col">
       <div
         className={`overflow-auto border border-solid border-neutral-300 ${multiSheet ? 'rounded-t' : 'rounded'}`}
-        style={{ maxHeight: 320 }}
       >
         <table
           className="border-collapse cursor-default select-none text-md"
@@ -223,9 +139,11 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
                           );
                         }}
                       >
-                        {renderCell
-                          ? renderCell(cellValue, cellKey)
-                          : renderCellValue(cellValue)}
+                        {renderCell ? (
+                          renderCell(cellValue, cellKey)
+                        ) : (
+                          <SpreadsheetCellValueView cellValue={cellValue} />
+                        )}
                       </td>
                     );
                   })}

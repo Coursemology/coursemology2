@@ -2374,7 +2374,7 @@
     "defaultMessage": "Use random numeric value"
   },
   "course.assessment.question.textResponses.roundToInteger": {
-    "defaultMessage": "Round to nearest integer"
+    "defaultMessage": "Round down to nearest integer"
   },
   "course.assessment.question.textResponses.stringRandomizationMode": {
     "defaultMessage": "Randomize characters in value"
@@ -2392,7 +2392,7 @@
     "defaultMessage": "Use random date value"
   },
   "course.assessment.question.textResponses.roundToDay": {
-    "defaultMessage": "Round to nearest day (00:00)"
+    "defaultMessage": "Round down to day start (00:00)"
   },
   "course.assessment.question.textResponses.shuffleRandomizationMode": {
     "defaultMessage": "Shuffle value with other cells"
