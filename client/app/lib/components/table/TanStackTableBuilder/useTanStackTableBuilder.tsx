@@ -175,6 +175,14 @@ const useTanStackTableBuilder = <D extends object>(
         props.pagination.onPaginationChange(newValue, pagination);
       }
     },
+    // TanStack's default getColumnCanGlobalFilter sniffs the first row's value
+    // type (string|number) to decide whether a column participates in global
+    // filter. When the first row has a nullable column (e.g. externalId=null),
+    // typeof null === 'object' → false, silently excluding that column from
+    // search even when the column has searchable:true / enableGlobalFilter:true.
+    // We already express intent via enableGlobalFilter, so bypass the sniff.
+    // See: https://github.com/TanStack/table/pull/6252
+    getColumnCanGlobalFilter: () => true,
     autoResetPageIndex: false,
     state: {
       rowSelection,
