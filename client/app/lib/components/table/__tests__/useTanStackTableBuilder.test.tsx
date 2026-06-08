@@ -768,6 +768,58 @@ describe('localStorage persistence', () => {
   });
 });
 
+// ---------- global search — nullable searchable column (regression) ----------
+//
+// Root cause: TanStack's default getColumnCanGlobalFilter sniffs the first row's
+// value type (string|number). When the first row has externalId=null, typeof null
+// === 'object', so TanStack silently excludes the column from global filter for
+// the entire table — even rows with a real string value are never matched.
+// Fix: override getColumnCanGlobalFilter in useReactTable to return true always,
+// relying on enableGlobalFilter (set by searchable:true/false) instead of sniffing.
+
+describe('global search — searchable column whose first row is null', () => {
+  interface StudentRow {
+    id: number;
+    name: string;
+    externalId: string | null;
+  }
+
+  const nullFirstData: StudentRow[] = [
+    { id: 1, name: 'Alice', externalId: null },
+    { id: 2, name: 'Bob', externalId: 'EXT001' },
+  ];
+
+  const searchColumns: ColumnTemplate<StudentRow>[] = [
+    { of: 'name', title: 'Name', cell: (r) => r.name, searchable: true },
+    {
+      of: 'externalId',
+      title: 'External ID',
+      cell: (r) => r.externalId ?? '',
+      searchable: true,
+    },
+  ];
+
+  it('finds rows by a searchable column value even when the first row has null for that column', () => {
+    const { result } = renderHook(
+      () =>
+        useTanStackTableBuilder<StudentRow>({
+          data: nullFirstData,
+          columns: searchColumns,
+          getRowId: (r) => r.id.toString(),
+          search: { searchPlaceholder: 'Search' },
+        }),
+      { wrapper: withStore() },
+    );
+
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('EXT001'));
+
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: StudentRow }).original.name,
+    ).toBe('Bob');
+  });
+});
+
 describe('useTanStackTableBuilder onDirectExport', () => {
   beforeEach(() => {
     mockedDownloadFile.mockClear();
