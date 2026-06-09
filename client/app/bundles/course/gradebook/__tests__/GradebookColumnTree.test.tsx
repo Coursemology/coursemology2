@@ -14,7 +14,7 @@ const assessments: AssessmentData[] = [
 
 const asnId100 = buildAssessmentColumnId(100);
 const asnId101 = buildAssessmentColumnId(101);
-const allIds = ['name', 'email', 'level', asnId100, asnId101];
+const allIds = ['name', 'email', 'externalId', 'level', asnId100, asnId101];
 
 const wrap = (node: JSX.Element): JSX.Element => (
   <IntlProvider defaultLocale="en" locale="en">
@@ -85,6 +85,46 @@ describe('GradebookColumnTree', () => {
     expect(
       screen.queryByRole('checkbox', { name: /^level$/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it('renders an External ID checkbox in the Student info group', () => {
+    const visibility = Object.fromEntries(allIds.map((id) => [id, true]));
+    render(
+      wrap(
+        <GradebookColumnTree
+          assessments={assessments}
+          categories={categories}
+          gamificationEnabled={false}
+          isVisible={(id) => visibility[id] ?? true}
+          setManyVisible={jest.fn()}
+          setVisible={jest.fn()}
+          tabs={tabs}
+        />,
+      ),
+    );
+    expect(
+      screen.getByRole('checkbox', { name: /external id/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('clicking the External ID checkbox calls setVisible with its column id', () => {
+    const setVisible = jest.fn();
+    const visibility = Object.fromEntries(allIds.map((id) => [id, true]));
+    render(
+      wrap(
+        <GradebookColumnTree
+          assessments={assessments}
+          categories={categories}
+          gamificationEnabled={false}
+          isVisible={(id) => visibility[id] ?? true}
+          setManyVisible={jest.fn()}
+          setVisible={setVisible}
+          tabs={tabs}
+        />,
+      ),
+    );
+    fireEvent.click(screen.getByRole('checkbox', { name: /external id/i }));
+    expect(setVisible).toHaveBeenCalledWith('externalId', expect.any(Boolean));
   });
 
   it('name checkbox is disabled and always checked', () => {

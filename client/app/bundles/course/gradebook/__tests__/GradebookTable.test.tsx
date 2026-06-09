@@ -21,6 +21,7 @@ const students: StudentData[] = [
     id: 1,
     name: 'Alice',
     email: 'alice@example.com',
+    externalId: null,
     level: 3,
     totalXp: 150,
   },
@@ -28,6 +29,7 @@ const students: StudentData[] = [
     id: 2,
     name: 'Bob',
     email: 'bob@example.com',
+    externalId: null,
     level: 5,
     totalXp: 300,
   },
@@ -41,6 +43,7 @@ const makeStudents = (n: number): StudentData[] =>
     id: i + 1,
     name: `Student ${i + 1}`,
     email: `student${i + 1}@example.com`,
+    externalId: null,
     level: 1,
     totalXp: 0,
   }));
@@ -371,6 +374,84 @@ describe('GradebookTable', () => {
         expect(screen.queryByText('Alice')).not.toBeInTheDocument(),
       );
       expect(screen.getByText('Bob')).toBeInTheDocument();
+    });
+  });
+
+  describe('external ID column', () => {
+    const studentsWithExtId: StudentData[] = [
+      {
+        id: 1,
+        name: 'Alice',
+        email: 'alice@example.com',
+        externalId: 'EXT-001',
+        level: 3,
+        totalXp: 150,
+      },
+      {
+        id: 2,
+        name: 'Bob',
+        email: 'bob@example.com',
+        externalId: null,
+        level: 5,
+        totalXp: 300,
+      },
+    ];
+
+    const renderWith = (studs: StudentData[]): void => {
+      render(
+        <GradebookTable
+          assessments={assessments}
+          categories={categories}
+          courseId={1}
+          courseTitle="Test Course"
+          gamificationEnabled
+          students={studs}
+          submissions={[]}
+          tabs={tabs}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('shows the External ID column by default when a student has an external ID', async () => {
+      renderWith(studentsWithExtId);
+      expect(await screen.findByText('External ID')).toBeInTheDocument();
+      expect(screen.getByText('EXT-001')).toBeInTheDocument();
+    });
+
+    it('hides the External ID column by default when no student has an external ID', async () => {
+      renderWith(students);
+      await screen.findByText('Alice');
+      expect(screen.queryByText('External ID')).not.toBeInTheDocument();
+    });
+
+    it('treats a blank external ID as none and hides the column by default', async () => {
+      const studentsWithBlankExtId: StudentData[] = [
+        {
+          id: 1,
+          name: 'Alice',
+          email: 'alice@example.com',
+          externalId: '',
+          level: 3,
+          totalXp: 150,
+        },
+      ];
+      renderWith(studentsWithBlankExtId);
+      await screen.findByText('Alice');
+      expect(screen.queryByText('External ID')).not.toBeInTheDocument();
+    });
+
+    it('offers the External ID checkbox in the picker even when no student has one', async () => {
+      const user = userEvent.setup();
+      renderWith(students);
+      const btn = await screen.findByRole('button', {
+        name: /select columns/i,
+      });
+      await user.click(btn);
+      const dialog = await screen.findByRole('dialog');
+      expect(
+        within(dialog).getByRole('checkbox', { name: /external id/i }),
+      ).toBeInTheDocument();
     });
   });
 

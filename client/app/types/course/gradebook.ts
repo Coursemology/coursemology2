@@ -20,6 +20,7 @@ export interface StudentData {
   id: number;
   name: string;
   email: string;
+  externalId: string | null;
   level: number;
   totalXp: number;
 }

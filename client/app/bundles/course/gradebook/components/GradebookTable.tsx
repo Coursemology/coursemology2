@@ -32,6 +32,7 @@ import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
 
 import { GAMIFICATION_COL_IDS } from '../constants';
 import type {
@@ -51,6 +52,7 @@ import GradebookColumnTree from './GradebookColumnTree';
 const COL_WIDTHS = {
   name: 160,
   email: 220,
+  externalId: 160,
   level: 70,
   totalXp: 100,
   assessment: 150,
@@ -61,7 +63,8 @@ const CHECKBOX_WIDTH = 56;
 const getColWidth = (id: string): number =>
   COL_WIDTHS[id as keyof typeof COL_WIDTHS] ?? COL_WIDTHS.assessment;
 
-const isLeftAligned = (id: string): boolean => id === 'name' || id === 'email';
+const isLeftAligned = (id: string): boolean =>
+  id === 'name' || id === 'email' || id === 'externalId';
 
 const translations = defineMessages({
   searchStudents: {
@@ -189,6 +192,7 @@ interface GradebookRow {
   studentId: number;
   name: string;
   email: string;
+  externalId: string | null;
   level: number;
   totalXp: number;
   grades: Partial<Record<number, number | null>>;
@@ -243,12 +247,18 @@ const GradebookTable = ({
           studentId: student.id,
           name: student.name,
           email: student.email,
+          externalId: student.externalId,
           level: student.level,
           totalXp: student.totalXp,
           grades,
         };
       }),
     [students, assessments, submissionsByStudent],
+  );
+
+  const hasExternalIds = useMemo(
+    () => students.some((s) => s.externalId != null && s.externalId !== ''),
+    [students],
   );
 
   const columns = useMemo<ColumnTemplate<GradebookRow>[]>(() => {
@@ -271,6 +281,17 @@ const GradebookTable = ({
         searchable: true,
       },
     ];
+
+    // The External ID column is always offered in the picker, but only shown by
+    // default when the course actually uses external IDs (see column picker).
+    cols.push({
+      id: 'externalId',
+      title: t(tableTranslations.externalId),
+      of: 'externalId',
+      cell: (row) => row.externalId ?? '',
+      csvDownloadable: true,
+      defaultVisible: hasExternalIds,
+    });
 
     if (gamificationEnabled) {
       cols.push({
@@ -306,7 +327,7 @@ const GradebookTable = ({
       });
     });
     return cols;
-  }, [assessments, gamificationEnabled, t]);
+  }, [assessments, gamificationEnabled, hasExternalIds, t]);
 
   const assessmentMaxGrades = useMemo(
     () => new Map(assessments.map((a) => [a.id, a.maxGrade])),

@@ -104,7 +104,8 @@ RSpec.describe Course::GradebookController, type: :controller do
           student_data = data['students'].find { |s| s['id'] == student.user_id }
           expect(student_data).not_to be_nil
           expect(student_data).to have_key('email')
-          expect(student_data).not_to have_key('externalId')
+          expect(student_data).to have_key('externalId')
+          expect(student_data['externalId']).to be_nil
           expect(student_data).to have_key('level')
           expect(student_data['level']).to be_a(Integer)
         end
@@ -124,6 +125,20 @@ RSpec.describe Course::GradebookController, type: :controller do
           data = JSON.parse(response.body)
           assessment_data = data['assessments'].find { |a| a['id'] == assessment.id }
           expect(assessment_data['maxGrade'].to_f).to be > 0
+        end
+      end
+
+      context 'when a student has an external ID' do
+        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let!(:student) { create(:course_student, course: course, external_id: 'EXT-123') }
+        before { controller_sign_in(controller, ta.user) }
+
+        it 'returns the external ID in the students array' do
+          subject
+          data = JSON.parse(response.body)
+          student_data = data['students'].find { |s| s['id'] == student.user_id }
+          expect(student_data).not_to be_nil
+          expect(student_data['externalId']).to eq('EXT-123')
         end
       end
 

@@ -8,6 +8,7 @@ import {
   ColumnPickerTreeGroup,
 } from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
 
 import {
   GAMIFICATION_COL_IDS,
@@ -64,7 +65,8 @@ interface GradebookColumnTreeProps extends ColumnPickerRenderContext {
   gamificationEnabled: boolean;
 }
 
-const STUDENT_ALL_IDS = [...STUDENT_INFO_COL_IDS];
+const EXTERNAL_ID = 'externalId';
+const STUDENT_ALL_IDS = [...STUDENT_INFO_COL_IDS, EXTERNAL_ID];
 const GAMIFICATION_ALL_IDS = [...GAMIFICATION_COL_IDS];
 
 const GradebookColumnTree = ({
@@ -158,6 +160,12 @@ const GradebookColumnTree = ({
             />
           ),
         )}
+        <IndentedCheckbox
+          checked={isVisible(EXTERNAL_ID)}
+          indentLevel={1}
+          label={t(tableTranslations.externalId)}
+          onChange={(e) => setVisible(EXTERNAL_ID, e.target.checked)}
+        />
       </ColumnPickerTreeGroup>
 
       {gamificationEnabled && (

@@ -58,6 +58,7 @@ const populatedState = {
         id: 1,
         name: 'Alice',
         email: 'alice@example.com',
+        externalId: null,
         level: 3,
         totalXp: 150,
       },

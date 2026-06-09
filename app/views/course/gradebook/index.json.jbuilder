@@ -21,6 +21,7 @@ json.students @students do |course_user|
   json.id course_user.user_id
   json.name course_user.name
   json.email course_user.user.email
+  json.externalId course_user.external_id
   json.level course_user.level_number
   json.totalXp course_user.experience_points
 end
