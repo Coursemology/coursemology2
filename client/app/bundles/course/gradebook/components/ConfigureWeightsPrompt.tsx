@@ -7,6 +7,8 @@ import {
   IconButton,
   Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import type {
@@ -53,9 +55,9 @@ const translations = defineMessages({
     id: 'course.gradebook.ConfigureWeightsDialog.valueTooHigh',
     defaultMessage: 'Value must be at most 100',
   },
-  valueNotInteger: {
-    id: 'course.gradebook.ConfigureWeightsDialog.valueNotInteger',
-    defaultMessage: 'Value must be a whole number',
+  valueNotTwoDp: {
+    id: 'course.gradebook.ConfigureWeightsDialog.valueNotTwoDp',
+    defaultMessage: 'Value can have at most 2 decimal places',
   },
   saveError: {
     id: 'course.gradebook.ConfigureWeightsDialog.saveError',
@@ -65,7 +67,50 @@ const translations = defineMessages({
     id: 'course.gradebook.ConfigureWeightsDialog.ofGrade',
     defaultMessage: '{pct}% of grade',
   },
+  equalMode: {
+    id: 'course.gradebook.ConfigureWeightsDialog.equalMode',
+    defaultMessage: 'Equal',
+  },
+  customMode: {
+    id: 'course.gradebook.ConfigureWeightsDialog.customMode',
+    defaultMessage: 'Custom',
+  },
+  modeAria: {
+    id: 'course.gradebook.ConfigureWeightsDialog.modeAria',
+    defaultMessage: '{tab} weight mode',
+  },
+  customSum: {
+    id: 'course.gradebook.ConfigureWeightsDialog.customSum',
+    defaultMessage: 'Assessment weights: {sum} / {total}',
+  },
+  unbalanced: {
+    id: 'course.gradebook.ConfigureWeightsDialog.unbalanced',
+    defaultMessage:
+      'Assessment weights for "{tab}" must sum to its tab total before saving.',
+  },
 });
+
+type WeightMode = 'equal' | 'custom';
+
+const r2 = (n: number): number => Math.round(n * 100) / 100;
+const cents = (n: number): number => Math.round(n * 100);
+const is2dp = (n: number): boolean => Math.abs(n * 100 - Math.round(n * 100)) < 1e-9;
+
+// Distribute a tab total across assessment ids at 2dp; the last id absorbs the rounding
+// remainder so the seeded values sum back exactly to total.
+const distributeEqual = (
+  total: number,
+  ids: number[],
+): Record<number, number> => {
+  const result: Record<number, number> = {};
+  const n = ids.length;
+  if (n === 0) return result;
+  const base = r2(total / n);
+  ids.forEach((id, i) => {
+    result[id] = i === n - 1 ? r2(total - base * (n - 1)) : base;
+  });
+  return result;
+};
 
 interface Props {
   open: boolean;
@@ -87,48 +132,107 @@ const ConfigureWeightsPrompt: FC<Props> = ({
 
   const validate = (value: number): string | null => {
     if (Number.isNaN(value)) return t(translations.valueTooLow);
-    if (!Number.isInteger(value)) return t(translations.valueNotInteger);
     if (value < 0) return t(translations.valueTooLow);
     if (value > 100) return t(translations.valueTooHigh);
+    if (!is2dp(value)) return t(translations.valueNotTwoDp);
     return null;
   };
 
-  const [weights, setWeights] = useState<Record<number, number>>(() =>
-    Object.fromEntries(tabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0])),
-  );
+  const seedWeights = (): Record<number, number> =>
+    Object.fromEntries(tabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0]));
+  const seedModes = (): Record<number, WeightMode> =>
+    Object.fromEntries(tabs.map((tb) => [tb.id, tb.weightMode ?? 'equal']));
+  const seedAssessmentWeights = (): Record<number, number> =>
+    Object.fromEntries(assessments.map((a) => [a.id, a.gradebookWeight ?? 0]));
+
+  const [weights, setWeights] = useState<Record<number, number>>(seedWeights);
+  const [modes, setModes] = useState<Record<number, WeightMode>>(seedModes);
+  const [assessmentWeights, setAssessmentWeights] = useState<
+    Record<number, number>
+  >(seedAssessmentWeights);
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setWeights(
-        Object.fromEntries(tabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0])),
-      );
+      setWeights(seedWeights());
+      setModes(seedModes());
+      setAssessmentWeights(seedAssessmentWeights());
       setExpanded({});
     }
   }, [open]);
 
+  const tabAssessmentIds = (tabId: number): number[] =>
+    assessments.filter((a) => a.tabId === tabId).map((a) => a.id);
+
+  const customSum = (tabId: number): number =>
+    tabAssessmentIds(tabId).reduce(
+      (acc, id) => acc + (assessmentWeights[id] ?? 0),
+      0,
+    );
+
+  const isUnbalanced = (tabId: number): boolean =>
+    (modes[tabId] ?? 'equal') === 'custom' &&
+    tabAssessmentIds(tabId).length > 0 &&
+    cents(customSum(tabId)) !== cents(weights[tabId] ?? 0);
+
   const sum = Object.values(weights).reduce((acc, w) => acc + w, 0);
-  const hasInvalid = Object.values(weights).some((w) => validate(w) !== null);
+  const hasInvalid =
+    Object.values(weights).some((w) => validate(w) !== null) ||
+    Object.values(assessmentWeights).some((w) => validate(w) !== null);
+  const hasUnbalanced = tabs.some((tb) => isUnbalanced(tb.id));
 
   const handleChange = (tabId: number, raw: string): void => {
     const parsed = raw === '' ? 0 : Number(raw);
     setWeights((prev) => ({ ...prev, [tabId]: parsed }));
   };
 
+  const handleAssessmentChange = (assessmentId: number, raw: string): void => {
+    const parsed = raw === '' ? 0 : Number(raw);
+    setAssessmentWeights((prev) => ({ ...prev, [assessmentId]: parsed }));
+  };
+
+  const handleModeChange = (tabId: number, next: WeightMode | null): void => {
+    if (!next) return; // ToggleButtonGroup emits null when clicking the active button
+    setModes((prev) => ({ ...prev, [tabId]: next }));
+    if (next === 'custom') {
+      const ids = tabAssessmentIds(tabId);
+      const allZero = ids.every((id) => (assessmentWeights[id] ?? 0) === 0);
+      if (allZero) {
+        const seeded = distributeEqual(weights[tabId] ?? 0, ids);
+        setAssessmentWeights((prev) => ({ ...prev, ...seeded }));
+      }
+      setExpanded((prev) => ({ ...prev, [tabId]: true }));
+    }
+  };
+
   const toggleExpanded = (tabId: number): void =>
     setExpanded((prev) => ({ ...prev, [tabId]: !prev[tabId] }));
 
   const handleSave = async (): Promise<void> => {
-    if (hasInvalid) return;
+    if (hasInvalid || hasUnbalanced) return;
     setSubmitting(true);
     try {
       await dispatch(
         updateGradebookWeights(
-          tabs.map((tb) => ({
-            tabId: tb.id,
-            weight: weights[tb.id] ?? 0,
-          })),
+          tabs.map((tb) => {
+            const mode = modes[tb.id] ?? 'equal';
+            const entry = {
+              tabId: tb.id,
+              weight: weights[tb.id] ?? 0,
+              weightMode: mode,
+            };
+            if (mode === 'custom') {
+              return {
+                ...entry,
+                assessmentWeights: tabAssessmentIds(tb.id).map((id) => ({
+                  assessmentId: id,
+                  weight: assessmentWeights[id] ?? 0,
+                })),
+              };
+            }
+            return entry;
+          }),
         ),
       );
       onClose();
@@ -144,7 +248,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
       onClickPrimary={handleSave}
       onClose={onClose}
       open={open}
-      primaryDisabled={submitting || hasInvalid}
+      primaryDisabled={submitting || hasInvalid || hasUnbalanced}
       primaryLabel={t(translations.save)}
       title={t(translations.dialogTitle)}
     >
@@ -164,17 +268,17 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                   const tabAssessments = assessments.filter(
                     (a) => a.tabId === tb.id,
                   );
-                  const tabMaxGrade = tabAssessments.reduce(
-                    (s, a) => s + a.maxGrade,
-                    0,
-                  );
+                  const mode = modes[tb.id] ?? 'equal';
                   const isExpanded = !!expanded[tb.id];
+                  const unbalanced = isUnbalanced(tb.id);
+                  const noAssessments = tabAssessments.length === 0;
+                  const n = tabAssessments.length;
 
                   return (
                     <div key={tb.id}>
                       <div className="flex items-center gap-1">
                         <IconButton
-                          disabled={tabAssessments.length === 0}
+                          disabled={noAssessments}
                           onClick={() => toggleExpanded(tb.id)}
                           size="small"
                         >
@@ -187,13 +291,32 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                         <Typography className="flex-1" variant="body2">
                           {tb.title}
                         </Typography>
+                        <ToggleButtonGroup
+                          aria-label={t(translations.modeAria, {
+                            tab: tb.title,
+                          })}
+                          disabled={noAssessments}
+                          exclusive
+                          onChange={(_, next) =>
+                            handleModeChange(tb.id, next as WeightMode | null)
+                          }
+                          size="small"
+                          value={mode}
+                        >
+                          <ToggleButton value="equal">
+                            {t(translations.equalMode)}
+                          </ToggleButton>
+                          <ToggleButton value="custom">
+                            {t(translations.customMode)}
+                          </ToggleButton>
+                        </ToggleButtonGroup>
                         <TextField
                           error={err !== null}
                           inputProps={{
                             'aria-label': tb.title,
                             min: 0,
                             max: 100,
-                            step: 1,
+                            step: 0.01,
                           }}
                           onChange={(e) => handleChange(tb.id, e.target.value)}
                           size="small"
@@ -211,13 +334,47 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                           {err}
                         </Typography>
                       )}
+                      {unbalanced && (
+                        <Alert severity="error" sx={{ mt: 1, ml: 4.5 }}>
+                          {t(translations.unbalanced, { tab: tb.title })}
+                        </Alert>
+                      )}
                       <Collapse in={isExpanded}>
                         <Stack spacing={0} sx={{ pl: 4.5, pt: 0.5, pb: 0.5 }}>
                           {tabAssessments.map((a) => {
-                            const pct =
-                              tabMaxGrade > 0
-                                ? (a.maxGrade / tabMaxGrade) * value
-                                : 0;
+                            if (mode === 'custom') {
+                              const awValue = assessmentWeights[a.id] ?? 0;
+                              const awErr = validate(awValue);
+                              return (
+                                <div
+                                  key={a.id}
+                                  className="flex items-center justify-between py-0.5"
+                                >
+                                  <Typography
+                                    color="text.secondary"
+                                    variant="caption"
+                                  >
+                                    {a.title}
+                                  </Typography>
+                                  <TextField
+                                    error={awErr !== null}
+                                    inputProps={{
+                                      'aria-label': `${tb.title}: ${a.title}`,
+                                      min: 0,
+                                      step: 0.01,
+                                    }}
+                                    onChange={(e) =>
+                                      handleAssessmentChange(a.id, e.target.value)
+                                    }
+                                    size="small"
+                                    sx={{ width: 88 }}
+                                    type="number"
+                                    value={awValue}
+                                  />
+                                </div>
+                              );
+                            }
+                            const pct = n > 0 ? r2(value / n) : 0;
                             return (
                               <div
                                 key={a.id}
@@ -234,12 +391,24 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                   variant="caption"
                                 >
                                   {t(translations.ofGrade, {
-                                    pct: pct.toFixed(1),
+                                    pct: pct.toFixed(2),
                                   })}
                                 </Typography>
                               </div>
                             );
                           })}
+                          {mode === 'custom' && (
+                            <Typography
+                              className="pt-1"
+                              color={unbalanced ? 'error' : 'text.secondary'}
+                              variant="caption"
+                            >
+                              {t(translations.customSum, {
+                                sum: r2(customSum(tb.id)).toFixed(2),
+                                total: value.toFixed(2),
+                              })}
+                            </Typography>
+                          )}
                         </Stack>
                       </Collapse>
                     </div>
