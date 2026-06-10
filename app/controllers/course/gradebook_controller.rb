@@ -21,11 +21,9 @@ class Course::GradebookController < Course::ComponentController
 
   def update_weights
     authorize! :manage_gradebook_weights, current_course
-    updates = update_weights_params[:weights].map do |entry|
-      { tab_id: entry[:tabId].to_i, weight: entry[:weight].to_i }
-    end
+    updates = update_weights_params[:weights].map { |entry| parse_weight_entry(entry) }
     Course::Assessment::Tab.update_gradebook_weights(course: current_course, updates: updates)
-    render json: { weights: updates.map { |u| { tabId: u[:tab_id], weight: u[:weight] } } }
+    render json: { weights: serialize_weight_updates(updates) }
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
   end
@@ -36,8 +34,33 @@ class Course::GradebookController < Course::ComponentController
     authorize! :read_gradebook, current_course
   end
 
+  def parse_weight_entry(entry)
+    {
+      tab_id: entry[:tabId].to_i,
+      weight: entry[:weight].to_f,
+      weight_mode: entry[:weightMode] || 'equal',
+      assessment_weights: (entry[:assessmentWeights] || []).map do |aw|
+        { assessment_id: aw[:assessmentId].to_i, weight: aw[:weight].to_f }
+      end
+    }
+  end
+
   def update_weights_params
-    params.permit(weights: [:tabId, :weight])
+    params.permit(
+      weights: [:tabId, :weight, :weightMode, assessmentWeights: [:assessmentId, :weight]]
+    )
+  end
+
+  def serialize_weight_updates(updates)
+    updates.map do |u|
+      entry = { tabId: u[:tab_id], weight: u[:weight], weightMode: u[:weight_mode].to_s }
+      if u[:weight_mode].to_s == 'custom'
+        entry[:assessmentWeights] = u[:assessment_weights].map do |aw|
+          { assessmentId: aw[:assessment_id], weight: aw[:weight] }
+        end
+      end
+      entry
+    end
   end
 
   def component
@@ -52,7 +75,8 @@ class Course::GradebookController < Course::ComponentController
   def fetch_students
     current_course.levels.to_a
     current_course.course_users.students.without_phantom_users.
-      calculated(:experience_points).includes(:user).to_a
+      calculated(:experience_points).includes(:user).to_a.
+      sort_by { |cu| cu.user.name }
   end
 
   def fetch_published_assessments

@@ -293,6 +293,50 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(tab1.reload.gradebook_weight).to eq(60)
         end
       end
+
+      describe '#update_weights with modes' do
+        render_views
+
+        let(:category) { create(:course_assessment_category, course: course) }
+        let(:tab) { create(:course_assessment_tab, category: category) }
+        let!(:a1) { create(:assessment, course: course, tab: tab) }
+        let!(:a2) { create(:assessment, course: course, tab: tab) }
+
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'persists custom mode + assessment weights and echoes them back' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'custom',
+              assessmentWeights: [
+                { assessmentId: a1.id, weight: '30' },
+                { assessmentId: a2.id, weight: '20' }
+              ]
+            }]
+          }
+          expect(response).to have_http_status(:ok)
+          body = JSON.parse(response.body)
+          entry = body['weights'].first
+          expect(entry['weightMode']).to eq('custom')
+          expect(entry['assessmentWeights']).to contain_exactly(
+            { 'assessmentId' => a1.id, 'weight' => 30.0 },
+            { 'assessmentId' => a2.id, 'weight' => 20.0 }
+          )
+          expect(a1.reload.gradebook_weight).to eq(30.0)
+        end
+
+        it 'returns 422 when custom weights do not sum to the tab total' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'custom',
+              assessmentWeights: [{ assessmentId: a1.id, weight: '10' }]
+            }]
+          }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
 
     describe 'GET index — weighted view fields' do
