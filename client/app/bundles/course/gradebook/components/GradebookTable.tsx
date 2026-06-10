@@ -31,6 +31,8 @@ import {
   DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
   DEFAULT_TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
+import Link from 'lib/components/core/Link';
+import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -196,6 +198,7 @@ interface GradebookRow {
   level: number;
   totalXp: number;
   grades: Partial<Record<number, number | null>>;
+  submissionIds: Partial<Record<number, number>>;
 }
 
 interface GradebookTableProps {
@@ -239,9 +242,13 @@ const GradebookTable = ({
       students.map((student) => {
         const subs = submissionsByStudent.get(student.id) ?? [];
         const grades: Partial<Record<number, number | null>> = {};
+        const submissionIds: Partial<Record<number, number>> = {};
         assessments.forEach((a) => {
           const sub = subs.find((s) => s.assessmentId === a.id);
-          if (sub != null) grades[a.id] = sub.grade;
+          if (sub != null) {
+            grades[a.id] = sub.grade;
+            submissionIds[a.id] = sub.submissionId;
+          }
         });
         return {
           studentId: student.id,
@@ -251,6 +258,7 @@ const GradebookTable = ({
           level: student.level,
           totalXp: student.totalXp,
           grades,
+          submissionIds,
         };
       }),
     [students, assessments, submissionsByStudent],
@@ -320,6 +328,13 @@ const GradebookTable = ({
           const grade = row.grades[asn.id];
           if (grade === undefined) return '—';
           if (grade === null) return '';
+          const submissionId = row.submissionIds[asn.id];
+          if (submissionId != null)
+            return (
+              <Link to={getEditSubmissionURL(courseId, asn.id, submissionId)}>
+                {grade}
+              </Link>
+            );
           return grade;
         },
         csvDownloadable: true,
@@ -524,6 +539,9 @@ const GradebookTable = ({
                     sx={{
                       top: 0,
                       zIndex: 3,
+                      position: 'sticky',
+                      left: 0,
+                      bgcolor: 'background.paper',
                       width: CHECKBOX_WIDTH,
                       minWidth: CHECKBOX_WIDTH,
                       maxWidth: CHECKBOX_WIDTH,
@@ -550,13 +568,21 @@ const GradebookTable = ({
                         align={isLeft ? 'left' : 'right'}
                         sx={{
                           verticalAlign: isLeft || fits ? 'middle' : 'bottom',
+                          ...(id === 'name' && {
+                            position: 'sticky',
+                            left: CHECKBOX_WIDTH,
+                            zIndex: 2,
+                            bgcolor: 'background.paper',
+                          }),
                         }}
                       >
                         <Tooltip title={label}>
-                          <HeaderLabel
-                            onSingleLine={singleLineCallbacks.get(id)!}
-                            text={label}
-                          />
+                          <span>
+                            <HeaderLabel
+                              onSingleLine={singleLineCallbacks.get(id)!}
+                              text={label}
+                            />
+                          </span>
                         </Tooltip>
                       </TableCell>
                     );
@@ -583,10 +609,12 @@ const GradebookTable = ({
                     {visibleCols.map((c) => {
                       const id = c.id ?? (c.of as string);
                       const asnId = parseAssessmentColumnId(id);
-                      let cellContent: string | number = '';
+                      let cellContent: string = '';
                       if (id === 'name') cellContent = t(translations.maxMarks);
-                      else if (asnId !== null)
-                        cellContent = assessmentMaxGrades.get(asnId) ?? '';
+                      else if (asnId !== null) {
+                        const maxGrade = assessmentMaxGrades.get(asnId);
+                        cellContent = maxGrade != null ? `/${maxGrade}` : '';
+                      }
                       return (
                         <TableCell
                           key={id}
@@ -610,6 +638,10 @@ const GradebookTable = ({
                     >
                       <TableCell
                         sx={{
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 1,
+                          bgcolor: 'background.paper',
                           width: CHECKBOX_WIDTH,
                           minWidth: CHECKBOX_WIDTH,
                           maxWidth: CHECKBOX_WIDTH,
@@ -632,6 +664,16 @@ const GradebookTable = ({
                               key={cell.id}
                               align={
                                 isLeftAligned(cell.column.id) ? 'left' : 'right'
+                              }
+                              sx={
+                                cell.column.id === 'name'
+                                  ? {
+                                      position: 'sticky',
+                                      left: CHECKBOX_WIDTH,
+                                      zIndex: 1,
+                                      bgcolor: 'background.paper',
+                                    }
+                                  : undefined
                               }
                             >
                               {flexRender(

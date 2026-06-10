@@ -82,6 +82,11 @@ const translations = defineMessages({
     defaultMessage:
       'To view and export individual student grades, open <url>Gradebook</url>.',
   },
+  subtitleDisabled: {
+    id: 'course.statistics.StatisticsIndex.assessments.subtitleDisabled',
+    defaultMessage:
+      'To view and export individual student grades, enable <url>Gradebook</url>.',
+  },
 });
 
 interface Props {
@@ -252,15 +257,21 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
         <Typography variant="h6">
           {t(translations.tableTitle, { numStudents })}
         </Typography>
-        {gradebookEnabled && (
-          <Typography color="text.secondary" variant="body2">
-            {t(translations.subtitle, {
-              url: (chunks) => (
-                <Link to={getCourseGradebookURL(courseId)}>{chunks}</Link>
-              ),
-            })}
-          </Typography>
-        )}
+        <Typography color="text.secondary" variant="body2">
+          {gradebookEnabled
+            ? t(translations.subtitle, {
+                url: (chunks) => (
+                  <Link to={getCourseGradebookURL(courseId)}>{chunks}</Link>
+                ),
+              })
+            : t(translations.subtitleDisabled, {
+                url: (chunks) => (
+                  <Link to={`/courses/${courseId}/admin/components`}>
+                    {chunks}
+                  </Link>
+                ),
+              })}
+        </Typography>
       </Box>
       <Table
         className="border-none"

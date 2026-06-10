@@ -45,7 +45,7 @@ const translations = defineMessages({
   },
   allAssessments: {
     id: 'course.gradebook.GradebookIndex.allAssessments',
-    defaultMessage: 'All assessments',
+    defaultMessage: 'Raw scores',
   },
   byWeight: {
     id: 'course.gradebook.GradebookIndex.byWeight',

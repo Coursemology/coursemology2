@@ -67,7 +67,7 @@ const populatedState = {
         totalXp: 150,
       },
     ],
-    submissions: [{ studentId: 1, assessmentId: 100, grade: 8 }],
+    submissions: [{ submissionId: 0, studentId: 1, assessmentId: 100, grade: 8 }],
     gamificationEnabled: false,
     userId: 0,
     weightedViewEnabled: false,
@@ -196,7 +196,7 @@ describe('GradebookIndex', () => {
 
   it('renders view toggle when weightedViewEnabled is true', async () => {
     render(<GradebookIndex />, { state: populatedStateWithWeightedView });
-    expect(await screen.findByText(/all assessments/i)).toBeInTheDocument();
+    expect(await screen.findByText(/raw scores/i)).toBeInTheDocument();
     expect(await screen.findByText(/by weight/i)).toBeInTheDocument();
   });
 

@@ -68,12 +68,27 @@ const reducer = produce(
         break;
       }
       case UPDATE_TAB_WEIGHTS: {
-        action.payload.weights.forEach(({ tabId, weight }) => {
-          const tab = draft.tabs.find((t) => t.id === tabId);
-          if (tab) {
-            tab.gradebookWeight = weight;
-          }
-        });
+        action.payload.weights.forEach(
+          ({ tabId, weight, weightMode, assessmentWeights }) => {
+            const tab = draft.tabs.find((t) => t.id === tabId);
+            if (tab) {
+              tab.gradebookWeight = weight;
+              tab.weightMode = weightMode;
+            }
+            if (weightMode === 'equal') {
+              draft.assessments
+                .filter((a) => a.tabId === tabId)
+                .forEach((a) => {
+                  a.gradebookWeight = null;
+                });
+            } else if (assessmentWeights) {
+              assessmentWeights.forEach(({ assessmentId, weight: aw }) => {
+                const a = draft.assessments.find((x) => x.id === assessmentId);
+                if (a) a.gradebookWeight = aw;
+              });
+            }
+          },
+        );
         break;
       }
       default:

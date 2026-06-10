@@ -6,6 +6,8 @@ import {
   TabData,
 } from 'types/course/gradebook';
 
+type GradeEntry = Pick<SubmissionData, 'studentId' | 'assessmentId' | 'grade'>;
+
 export interface WeightedRow {
   studentId: number;
   name: string;
@@ -17,13 +19,26 @@ export interface WeightedRow {
   total: number | null;
 }
 
+export interface AssessmentContribution {
+  assessmentId: number;
+  title: string;
+  grade: number | null;
+  maxGrade: number;
+  points: number; // contribution to this tab's weighted-points cell
+}
+
+export interface TabBreakdown {
+  tabId: number;
+  assessments: AssessmentContribution[];
+}
+
 type GradeLookup = Map<string, number>;
 
 const gradeKey = (studentId: number, assessmentId: number): string =>
   `${studentId}:${assessmentId}`;
 
 // Index submissions by (student, assessment) once: O(submissions).
-const buildGradeLookup = (submissions: SubmissionData[]): GradeLookup => {
+const buildGradeLookup = (submissions: GradeEntry[]): GradeLookup => {
   const lookup: GradeLookup = new Map();
   submissions.forEach((s) => {
     if (s.grade != null)
@@ -45,26 +60,64 @@ const buildAssessmentsByTab = (
   return byTab;
 };
 
-// Single source of truth for the subtotal math, operating on prebuilt indexes.
-const subtotalFromLookup = (
+// Equal-weight formula: average of (grade/maxGrade) ratios.
+// All assessments count in the denominator; ungraded contribute 0 (n = n_total).
+const equalSubtotal = (
   studentId: number,
-  tabAssessments: AssessmentData[] | undefined,
+  tabAssessments: AssessmentData[],
   gradeLookup: GradeLookup,
-  treatUngradedAsZero: boolean,
 ): number | null => {
-  if (!tabAssessments || tabAssessments.length === 0) return null;
   let numerator = 0;
-  let denominator = 0;
+  let count = 0;
   tabAssessments.forEach((a) => {
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     if (grade != null) {
-      numerator += grade;
-      denominator += a.maxGrade;
-    } else if (treatUngradedAsZero) {
-      denominator += a.maxGrade;
+      numerator += grade / a.maxGrade;
+      count++;
+    } else {
+      count++;
     }
   });
-  return denominator > 0 ? numerator / denominator : null;
+  return count > 0 ? numerator / count : null;
+};
+
+// Custom-weight formula: Σ(grade_i/maxGrade_i × assessmentWeight_i) / tabWeight.
+// Returns null if tabWeight=0 or no assessments; ungraded assessments contribute 0.
+const customSubtotal = (
+  studentId: number,
+  tab: TabData,
+  tabAssessments: AssessmentData[],
+  gradeLookup: GradeLookup,
+): number | null => {
+  const tabWeight = tab.gradebookWeight ?? 0;
+  if (tabWeight === 0) return null;
+  let numerator = 0;
+  let hasContributing = false;
+  tabAssessments.forEach((a) => {
+    const grade = gradeLookup.get(gradeKey(studentId, a.id));
+    const assessmentWeight = a.gradebookWeight ?? 0;
+    if (grade != null) {
+      numerator += (grade / a.maxGrade) * assessmentWeight;
+      hasContributing = true;
+    } else {
+      hasContributing = true;
+    }
+  });
+  return hasContributing ? numerator / tabWeight : null;
+};
+
+// Single source of truth for the subtotal math, operating on prebuilt indexes.
+const subtotalFromLookup = (
+  studentId: number,
+  tab: TabData,
+  tabAssessments: AssessmentData[] | undefined,
+  gradeLookup: GradeLookup,
+): number | null => {
+  if (!tabAssessments || tabAssessments.length === 0) return null;
+  if (tab.weightMode === 'custom') {
+    return customSubtotal(studentId, tab, tabAssessments, gradeLookup);
+  }
+  return equalSubtotal(studentId, tabAssessments, gradeLookup);
 };
 
 // Weighted, additive total from already-computed subtotals.
@@ -86,8 +139,7 @@ interface SubtotalArgs {
   studentId: number;
   tab: TabData;
   assessments: AssessmentData[];
-  submissions: SubmissionData[];
-  treatUngradedAsZero: boolean;
+  submissions: GradeEntry[];
 }
 
 export const computeTabSubtotal = ({
@@ -95,21 +147,19 @@ export const computeTabSubtotal = ({
   tab,
   assessments,
   submissions,
-  treatUngradedAsZero,
 }: SubtotalArgs): number | null =>
   subtotalFromLookup(
     studentId,
+    tab,
     assessments.filter((a) => a.tabId === tab.id),
     buildGradeLookup(submissions),
-    treatUngradedAsZero,
   );
 
 interface TotalArgs {
   studentId: number;
   tabs: TabData[];
   assessments: AssessmentData[];
-  submissions: SubmissionData[];
-  treatUngradedAsZero: boolean;
+  submissions: GradeEntry[];
 }
 
 export const computeStudentTotal = ({
@@ -117,27 +167,58 @@ export const computeStudentTotal = ({
   tabs,
   assessments,
   submissions,
-  treatUngradedAsZero,
 }: TotalArgs): number | null => {
   const gradeLookup = buildGradeLookup(submissions);
   const assessmentsByTab = buildAssessmentsByTab(assessments);
   const subtotals = tabs.map((tab) =>
     subtotalFromLookup(
       studentId,
+      tab,
       assessmentsByTab.get(tab.id),
       gradeLookup,
-      treatUngradedAsZero,
     ),
   );
   return totalFromSubtotals(subtotals, tabs);
+};
+
+export const computeStudentBreakdown = ({
+  studentId,
+  tabs,
+  assessments,
+  submissions,
+}: TotalArgs): TabBreakdown[] => {
+  const gradeLookup = buildGradeLookup(submissions);
+  const assessmentsByTab = buildAssessmentsByTab(assessments);
+  return tabs.map((tab) => {
+    const list = assessmentsByTab.get(tab.id) ?? [];
+    const weight = tab.gradebookWeight ?? 0;
+    const n = list.length;
+    const contributions = list.map((a) => {
+      const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
+      const ratio = grade != null ? grade / a.maxGrade : 0;
+      const points =
+        tab.weightMode === 'custom'
+          ? ratio * (a.gradebookWeight ?? 0)
+          : n > 0
+            ? (ratio / n) * weight
+            : 0;
+      return {
+        assessmentId: a.id,
+        title: a.title,
+        grade,
+        maxGrade: a.maxGrade,
+        points,
+      };
+    });
+    return { tabId: tab.id, assessments: contributions };
+  });
 };
 
 interface WeightedRowsArgs {
   students: StudentData[];
   tabs: TabData[];
   assessments: AssessmentData[];
-  submissions: SubmissionData[];
-  treatUngradedAsZero: boolean;
+  submissions: GradeEntry[];
 }
 
 // Batch entry point used by the table: builds the indexes ONCE and reuses them
@@ -147,7 +228,6 @@ export const computeWeightedRows = ({
   tabs,
   assessments,
   submissions,
-  treatUngradedAsZero,
 }: WeightedRowsArgs): WeightedRow[] => {
   const gradeLookup = buildGradeLookup(submissions);
   const assessmentsByTab = buildAssessmentsByTab(assessments);
@@ -155,9 +235,9 @@ export const computeWeightedRows = ({
     const subtotals = tabs.map((tab) =>
       subtotalFromLookup(
         student.id,
+        tab,
         assessmentsByTab.get(tab.id),
         gradeLookup,
-        treatUngradedAsZero,
       ),
     );
     return {

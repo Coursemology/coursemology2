@@ -32,7 +32,7 @@ const translations = defineMessages({
   description: {
     id: 'course.gradebook.ConfigureWeightsDialog.description',
     defaultMessage:
-      'Set how much each tab contributes to the total grade. Weights should sum to 100.',
+      'Set how much each tab contributes to the total grade. Weights should sum to 100. Equal distributes the tab\'s weight evenly across all assessments; Custom lets you set each assessment\'s share individually.',
   },
   total: {
     id: 'course.gradebook.ConfigureWeightsDialog.total',

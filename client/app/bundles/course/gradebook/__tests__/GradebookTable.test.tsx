@@ -35,7 +35,7 @@ const students: StudentData[] = [
   },
 ];
 const submissions: SubmissionData[] = [
-  { studentId: 1, assessmentId: 100, grade: 8 },
+  { submissionId: 0, studentId: 1, assessmentId: 100, grade: 8 },
 ];
 
 const makeStudents = (n: number): StudentData[] =>

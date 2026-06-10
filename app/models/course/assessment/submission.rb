@@ -331,15 +331,15 @@ class Course::Assessment::Submission < ApplicationRecord
 
     find_by_sql(
       sanitize_sql_array([<<-SQL.squish, student_ids, assessment_ids])
-        SELECT cas.creator_id AS student_id, cas.assessment_id,
-               SUM(caa.grade) AS grade
+        SELECT cas.id AS submission_id, cas.creator_id AS student_id,
+               cas.assessment_id, SUM(caa.grade) AS grade
         FROM course_assessment_submissions cas
         JOIN course_assessment_answers caa ON caa.submission_id = cas.id
         WHERE cas.creator_id IN (?)
           AND cas.assessment_id IN (?)
           AND cas.workflow_state IN ('graded', 'published')
           AND caa.current_answer = TRUE
-        GROUP BY cas.creator_id, cas.assessment_id
+        GROUP BY cas.id, cas.creator_id, cas.assessment_id
       SQL
     )
   end
