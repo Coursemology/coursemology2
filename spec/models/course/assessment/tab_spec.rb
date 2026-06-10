@@ -43,9 +43,9 @@ RSpec.describe Course::Assessment::Tab do
         expect(tab).not_to be_valid
       end
 
-      it 'rejects non-integer' do
+      it 'accepts decimal values' do
         tab.gradebook_weight = 50.5
-        expect(tab).not_to be_valid
+        expect(tab).to be_valid
       end
 
       it 'rejects nil' do
@@ -92,6 +92,56 @@ RSpec.describe Course::Assessment::Tab do
             updates: [tab_id: other_tab.id, weight: 50]
           )
         end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    describe '.update_gradebook_weights with modes' do
+      let(:course) { create(:course) }
+      let(:category) { create(:course_assessment_category, course: course) }
+      let(:tab) { create(:course_assessment_tab, category: category) }
+      let!(:a1) { create(:assessment, course: course, tab: tab) }
+      let!(:a2) { create(:assessment, course: course, tab: tab) }
+
+      it 'persists custom mode and assessment weights when they sum to the tab total' do
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [{
+            tab_id: tab.id, weight: 50.0, weight_mode: 'custom',
+            assessment_weights: [
+              { assessment_id: a1.id, weight: 30.0 },
+              { assessment_id: a2.id, weight: 20.0 }
+            ]
+          }]
+        )
+        expect(tab.reload.weight_mode).to eq('custom')
+        expect(a1.reload.gradebook_weight).to eq(30.0)
+        expect(a2.reload.gradebook_weight).to eq(20.0)
+      end
+
+      it 'raises RecordInvalid when custom assessment weights do not sum to the tab total' do
+        expect do
+          described_class.update_gradebook_weights(
+            course: course,
+            updates: [{
+              tab_id: tab.id, weight: 50.0, weight_mode: 'custom',
+              assessment_weights: [
+                { assessment_id: a1.id, weight: 30.0 },
+                { assessment_id: a2.id, weight: 5.0 }
+              ]
+            }]
+          )
+        end.to raise_error(ActiveRecord::RecordInvalid)
+        expect(a1.reload.gradebook_weight).to be_nil # transaction rolled back
+      end
+
+      it 'nulls assessment weights when switching a tab to equal mode' do
+        a1.update!(gradebook_weight: 30.0)
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [{ tab_id: tab.id, weight: 50.0, weight_mode: 'equal' }]
+        )
+        expect(tab.reload.weight_mode).to eq('equal')
+        expect(a1.reload.gradebook_weight).to be_nil
       end
     end
   end

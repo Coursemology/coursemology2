@@ -3,8 +3,7 @@ class Course::Assessment::Tab < ApplicationRecord
   validates :title, length: { maximum: 255 }, presence: true
   validates :weight, numericality: { only_integer: true }, presence: true
   validates :gradebook_weight,
-            numericality: { only_integer: true,
-                            greater_than_or_equal_to: 0,
+            numericality: { greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 100 },
             presence: true
   validates :creator, presence: true
@@ -13,6 +12,8 @@ class Course::Assessment::Tab < ApplicationRecord
 
   belongs_to :category, class_name: 'Course::Assessment::Category', inverse_of: :tabs
   has_many :assessments, class_name: 'Course::Assessment', dependent: :destroy, inverse_of: :tab
+
+  enum :weight_mode, { equal: 0, custom: 1 }
   has_many :folders, class_name: 'Course::Material::Folder', through: :assessments,
                      inverse_of: nil
 
@@ -29,29 +30,54 @@ class Course::Assessment::Tab < ApplicationRecord
       select('(array_agg(title))[0:3]')
   end)
 
-  # Bulk-updates the gradebook_weight for a set of tabs belonging to the given course.
-  # Raises ActiveRecord::RecordNotFound if any tab_id does not belong to the course.
-  # Raises ActiveRecord::RecordInvalid if any weight fails validation; the transaction is rolled back.
+  # Bulk-updates gradebook weights, weight modes, and per-assessment weights for a set
+  # of tabs belonging to the given course.
+  # Raises ActiveRecord::RecordNotFound if any tab_id or assessment_id is unknown.
+  # Raises ActiveRecord::RecordInvalid if validation fails or, for custom tabs, the
+  # assessment weights do not sum (at 2dp) to the tab total; the transaction is rolled back.
   #
   # @param course [Course]
-  # @param updates [Array<Hash>] array of { tab_id: Integer, weight: Integer }
+  # @param updates [Array<Hash>] each { tab_id:, weight:, weight_mode:,
+  #   assessment_weights: [{ assessment_id:, weight: }] }
   def self.update_gradebook_weights(course:, updates:)
     course_tab_ids = course.assessment_tabs.pluck(:id).to_set
-    tab_ids_to_update = updates.map { |e| e[:tab_id] }
+    updates.each { |e| raise ActiveRecord::RecordNotFound unless course_tab_ids.include?(e[:tab_id]) }
 
-    tab_ids_to_update.each do |tab_id|
-      raise ActiveRecord::RecordNotFound unless course_tab_ids.include?(tab_id)
-    end
+    tabs_by_id = where(id: updates.map { |e| e[:tab_id] }).includes(:assessments).index_by(&:id)
 
-    tabs_by_id = where(id: tab_ids_to_update).index_by(&:id)
+    transaction { updates.each { |entry| apply_gradebook_weight_entry(tabs_by_id, entry) } }
+  end
 
-    transaction do
-      updates.each do |entry|
-        tab = tabs_by_id[entry[:tab_id]]
-        tab.update!(gradebook_weight: entry[:weight])
-      end
+  # @api private
+  def self.apply_gradebook_weight_entry(tabs_by_id, entry)
+    tab = tabs_by_id[entry[:tab_id]]
+    mode = (entry[:weight_mode] || 'equal').to_s
+    tab.update!(gradebook_weight: entry[:weight], weight_mode: mode)
+
+    if mode == 'custom'
+      apply_custom_assessment_weights(tab, entry)
+    else
+      tab.assessments.update_all(gradebook_weight: nil)
     end
   end
+  private_class_method :apply_gradebook_weight_entry
+
+  # @api private
+  def self.apply_custom_assessment_weights(tab, entry) # rubocop:disable Metrics/AbcSize
+    assessments_by_id = tab.assessments.index_by(&:id)
+    sum = (entry[:assessment_weights] || []).sum do |aw|
+      assessment = assessments_by_id[aw[:assessment_id]]
+      raise ActiveRecord::RecordNotFound if assessment.nil?
+
+      assessment.update!(gradebook_weight: aw[:weight])
+      aw[:weight]
+    end
+    return unless (sum * 100).round != (entry[:weight] * 100).round
+
+    tab.errors.add(:base, :custom_weights_mismatch)
+    raise ActiveRecord::RecordInvalid, tab
+  end
+  private_class_method :apply_custom_assessment_weights
 
   # Returns a boolean value indicating if there are other tabs
   # besides this one remaining in its category.
