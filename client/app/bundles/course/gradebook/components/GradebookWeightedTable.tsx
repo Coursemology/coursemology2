@@ -1,6 +1,11 @@
 import { Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Download, KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
+import {
+  Download,
+  InfoOutlined,
+  KeyboardArrowDown,
+  KeyboardArrowRight,
+} from '@mui/icons-material';
 import {
   Alert,
   Button,
@@ -36,10 +41,21 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import type { TabBreakdown, WeightedRow } from '../computeWeighted';
-import { computeStudentBreakdown, computeWeightedRows, sumWeights } from '../computeWeighted';
+import type {
+  AssessmentContribution,
+  TabBreakdown,
+  WeightedRow,
+} from '../computeWeighted';
+import {
+  computeStudentBreakdown,
+  computeWeightedRows,
+  sumWeights,
+} from '../computeWeighted';
 
 import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
+import ProjectedTotalHint, {
+  projectedTotalPolicyTranslations,
+} from './ProjectedTotalHint';
 import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
 
 const translations = defineMessages({
@@ -66,7 +82,7 @@ const translations = defineMessages({
   },
   projectedTotal: {
     id: 'course.gradebook.GradebookWeightedTable.projectedTotal',
-    defaultMessage: 'Projected total — ungraded assessments count as 0',
+    defaultMessage: 'Projected total',
   },
   percentOfGrade: {
     id: 'course.gradebook.GradebookWeightedTable.percentOfGrade',
@@ -144,10 +160,6 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookWeightedTable.collapseRow',
     defaultMessage: 'Collapse {name}',
   },
-  breakdownPointsCaption: {
-    id: 'course.gradebook.GradebookWeightedTable.breakdownPointsCaption',
-    defaultMessage: 'Contributions shown in points',
-  },
 });
 
 type DisplayMode = 'points' | 'percent';
@@ -186,11 +198,6 @@ const columnPrecision = (values: (number | null)[]): 0 | 1 | 2 => {
   return prec;
 };
 
-const fmtAt = (v: number | null, prec: 0 | 1 | 2): string => {
-  if (v === null) return '—';
-  return v.toFixed(prec);
-};
-
 const fmtCsv = (v: number | null): string => {
   if (v === null) return '';
   return v.toFixed(2);
@@ -215,7 +222,10 @@ const GradebookWeightedTable = ({
   const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
 
   // Mode-aware display value for a tab cell.
-  const tabDisplayValue = (sub: number | null, weight: number): number | null => {
+  const tabDisplayValue = (
+    sub: number | null,
+    weight: number,
+  ): number | null => {
     if (sub === null) return null;
     return displayMode === 'percent' ? sub * 100 : sub * weight;
   };
@@ -235,6 +245,16 @@ const GradebookWeightedTable = ({
     return displayMode === 'percent' ? `${s}%` : s;
   };
 
+  // Mode-aware display value for a single assessment in the expanded breakdown:
+  // its points contribution in points mode, its own grade percentage in percent
+  // mode (null grade → null so fmtDisplay renders "—").
+  const breakdownDisplayValue = (a: AssessmentContribution): number | null => {
+    if (displayMode === 'percent') {
+      return a.grade === null ? null : (a.grade / a.maxGrade) * 100;
+    }
+    return a.points;
+  };
+
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   const toggleExpanded = (studentId: number): void =>
     setExpandedIds((prev) => {
@@ -247,7 +267,10 @@ const GradebookWeightedTable = ({
   const breakdownsByStudent = useMemo(() => {
     const map = new Map<number, TabBreakdown[]>();
     for (const studentId of expandedIds) {
-      map.set(studentId, computeStudentBreakdown({ studentId, tabs, assessments, submissions }));
+      map.set(
+        studentId,
+        computeStudentBreakdown({ studentId, tabs, assessments, submissions }),
+      );
     }
     return map;
   }, [expandedIds, tabs, assessments, submissions]);
@@ -274,10 +297,25 @@ const GradebookWeightedTable = ({
   );
 
   useLayoutEffect(() => {
-    const h1 = row1Ref.current?.offsetHeight ?? 0;
-    const h2 = row2Ref.current?.offsetHeight ?? 0;
-    setRow2Top(h1);
-    setRow3Top(h1 + h2);
+    const row1 = row1Ref.current;
+    const row2 = row2Ref.current;
+    if (!row1 || !row2) return undefined;
+
+    // Re-measure on every header-row resize, not just on mount. Expanding or
+    // collapsing a row, switching display mode and showing/hiding columns all
+    // reflow the header after mount; with a one-shot measurement rows 2–3 keep
+    // a stale `top` and stay permanently dislodged from the rows above them.
+    const measure = (): void => {
+      const h1 = row1.offsetHeight;
+      setRow2Top(h1);
+      setRow3Top(h1 + row2.offsetHeight);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(row1);
+    observer.observe(row2);
+    return () => observer.disconnect();
   }, [visibleCategories, tabs]);
 
   const rows = useMemo<WeightedRow[]>(
@@ -294,14 +332,15 @@ const GradebookWeightedTable = ({
   const columnPrecisions = useMemo(() => {
     const tabPrecs = tabs.map((tab, idx) =>
       columnPrecision(
-        rows.map((r) => tabDisplayValue(r.subtotals[idx], tab.gradebookWeight ?? 0)),
+        rows.map((r) =>
+          tabDisplayValue(r.subtotals[idx], tab.gradebookWeight ?? 0),
+        ),
       ),
     );
     return {
       tabs: tabPrecs,
       total: columnPrecision(rows.map((r) => totalDisplayValue(r.total))),
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows, tabs, displayMode, totalWeight]);
 
   const hasExternalIds = useMemo(
@@ -363,8 +402,10 @@ const GradebookWeightedTable = ({
       cols.push({
         id: `tab-${tab.id}`,
         title: tab.title,
-        accessorFn: (row) => fmtCsv(tabDisplayValue(row.subtotals[idx], weight)),
-        cell: (row) => fmtDisplay(tabDisplayValue(row.subtotals[idx], weight), prec),
+        accessorFn: (row) =>
+          fmtCsv(tabDisplayValue(row.subtotals[idx], weight)),
+        cell: (row) =>
+          fmtDisplay(tabDisplayValue(row.subtotals[idx], weight), prec),
         csvDownloadable: true,
       });
     });
@@ -373,13 +414,21 @@ const GradebookWeightedTable = ({
       id: 'total',
       title: t(translations.projectedTotal),
       accessorFn: (row) => fmtCsv(totalDisplayValue(row.total)),
-      cell: (row) => fmtDisplay(totalDisplayValue(row.total), columnPrecisions.total),
+      cell: (row) =>
+        fmtDisplay(totalDisplayValue(row.total), columnPrecisions.total),
       csvDownloadable: true,
     });
 
     return cols;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs, t, gamificationEnabled, hasExternalIds, columnPrecisions, displayMode, totalWeight]);
+  }, [
+    tabs,
+    t,
+    gamificationEnabled,
+    hasExternalIds,
+    columnPrecisions,
+    displayMode,
+    totalWeight,
+  ]);
 
   const columnPicker = useMemo(
     () => ({
@@ -449,6 +498,9 @@ const GradebookWeightedTable = ({
 
   return (
     <div data-testid="gradebook-weighted-table">
+      {/* One-time policy banner — only meaningful once real projected totals
+        are on screen (i.e. some weight is configured). */}
+      {!allWeightsZero && <ProjectedTotalHint />}
       {/* Table + toolbar share a fit-content container so toolbar never outruns the table */}
       <div className="px-5">
         <Paper elevation={0} sx={{ width: 'fit-content', maxWidth: '100%' }}>
@@ -523,15 +575,6 @@ const GradebookWeightedTable = ({
                 : t(translations.noWeightsNoAccess)}
             </Alert>
           )}
-          {displayMode === 'percent' && expandedIds.size > 0 && (
-            <Typography
-              color="text.secondary"
-              sx={{ mx: 2, mb: 1 }}
-              variant="caption"
-            >
-              {t(translations.breakdownPointsCaption)}
-            </Typography>
-          )}
           <TableContainer sx={{ overflowX: 'auto' }}>
             <Table
               size="small"
@@ -548,24 +591,30 @@ const GradebookWeightedTable = ({
                     boxSizing: 'border-box',
                     border: 0,
                     borderBottom: gridLine,
+                    py: 0.25,
+                    px: 1,
+                    lineHeight: 1.2,
+                    height: 32,
                   },
-                  '& thead th': {
+                  // Column separators live only on the data cells (tab columns
+                  // + Total), in both the header and body — one rule keyed off
+                  // data-col="value" keeps the two in lockstep. Identity columns
+                  // form a borderless label zone; the frozen Name column carries
+                  // its own right edge via boxShadow, which is the only divider
+                  // the identity zone needs.
+                  '& [data-col="value"]': {
                     borderLeft: gridLine,
                   },
                   // MUI's default `.MuiTableRow-root:last-child th { border: 0 }`
                   // (specificity 0,2,1, the `:last-child` pseudo-class) outranks
-                  // `& thead th`/`& th` (0,1,2 / 0,1,1) and silently zeroes ALL
+                  // the attribute rule above (0,2,0) and silently zeroes ALL
                   // borders on the weight row — it is the last <tr> in <thead>.
                   // Re-assert both the column separators (borderLeft) and the
                   // header's bottom edge (borderBottom) with a higher-specificity
-                  // selector (0,2,3) so they survive through the "% of grade" row.
-                  '& thead tr:last-of-type th': {
+                  // selector (0,3,2) so they survive through the "% of grade" row.
+                  '& thead tr:last-of-type [data-col="value"]': {
                     borderLeft: gridLine,
                     borderBottom: gridLine,
-                  },
-                  // Remove the outer-left line: only the checkbox (row 1, col 1).
-                  '& thead tr:first-of-type th:first-of-type': {
-                    borderLeft: 0,
                   },
                 };
               }}
@@ -648,6 +697,7 @@ const GradebookWeightedTable = ({
                       key={cat.id}
                       align="center"
                       colSpan={categoryTabCounts.get(cat.id) ?? 1}
+                      data-col="value"
                       sx={{ fontWeight: 600 }}
                     >
                       {cat.title}
@@ -655,10 +705,36 @@ const GradebookWeightedTable = ({
                   ))}
                   <TableCell
                     align="center"
+                    data-col="value"
                     rowSpan={2}
                     sx={{ fontWeight: 600, minWidth: 120 }}
                   >
-                    {t(translations.projectedTotal)}
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 2,
+                      }}
+                    >
+                      {t(translations.projectedTotal)}
+                      {/* The policy moved out of the header label into this ⓘ —
+                        the descriptive sentence stays available on demand after
+                        the one-time banner is dismissed. */}
+                      <Tooltip
+                        title={t(projectedTotalPolicyTranslations.policy)}
+                      >
+                        <IconButton
+                          aria-label={t(
+                            projectedTotalPolicyTranslations.policy,
+                          )}
+                          size="small"
+                          sx={{ p: 0 }}
+                        >
+                          <InfoOutlined fontSize="inherit" />
+                        </IconButton>
+                      </Tooltip>
+                    </span>
                   </TableCell>
                 </TableRow>
 
@@ -671,6 +747,7 @@ const GradebookWeightedTable = ({
                     <TableCell
                       key={tab.id}
                       align="center"
+                      data-col="value"
                       sx={{ minWidth: 120 }}
                     >
                       {tab.title}
@@ -686,6 +763,7 @@ const GradebookWeightedTable = ({
                     <TableCell
                       key={tab.id}
                       align="center"
+                      data-col="value"
                       sx={{ bgcolor: 'grey.100' }}
                     >
                       {displayMode === 'percent'
@@ -697,7 +775,11 @@ const GradebookWeightedTable = ({
                           })}
                     </TableCell>
                   ))}
-                  <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
+                  <TableCell
+                    align="center"
+                    data-col="value"
+                    sx={{ bgcolor: 'grey.100' }}
+                  >
                     {totalWeight === 100 ? (
                       displayMode === 'percent' ? (
                         t(translations.percentTotalExact)
@@ -772,12 +854,17 @@ const GradebookWeightedTable = ({
                         >
                           <IconButton
                             aria-label={t(
-                              isExpanded ? translations.collapseRow : translations.expandRow,
+                              isExpanded
+                                ? translations.collapseRow
+                                : translations.expandRow,
                               { name: row.original.name },
                             )}
                             onClick={() => toggleExpanded(studentId)}
                             size="small"
-                            sx={{ mr: 0.5 }}
+                            sx={{
+                              mr: 0.5,
+                              p: 0.25,
+                            }}
                           >
                             {isExpanded ? (
                               <KeyboardArrowDown fontSize="small" />
@@ -787,7 +874,9 @@ const GradebookWeightedTable = ({
                           </IconButton>
                           {row.original.name}
                         </TableCell>
-                        {showEmail && <TableCell>{row.original.email}</TableCell>}
+                        {showEmail && (
+                          <TableCell>{row.original.email}</TableCell>
+                        )}
                         {showExternalId && (
                           <TableCell>{row.original.externalId ?? ''}</TableCell>
                         )}
@@ -804,7 +893,11 @@ const GradebookWeightedTable = ({
                         {row.original.subtotals.map((subtotal, i) => {
                           const weight = tabs[i].gradebookWeight ?? 0;
                           return (
-                            <TableCell key={tabs[i].id} align="right">
+                            <TableCell
+                              key={tabs[i].id}
+                              align="right"
+                              data-col="value"
+                            >
                               {fmtDisplay(
                                 tabDisplayValue(subtotal, weight),
                                 columnPrecisions.tabs[i],
@@ -812,7 +905,7 @@ const GradebookWeightedTable = ({
                             </TableCell>
                           );
                         })}
-                        <TableCell align="right">
+                        <TableCell align="right" data-col="value">
                           {fmtDisplay(
                             totalDisplayValue(row.original.total),
                             columnPrecisions.total,
@@ -820,44 +913,120 @@ const GradebookWeightedTable = ({
                         </TableCell>
                       </TableRow>
                       {isExpanded &&
-                        (breakdownsByStudent.get(studentId) ?? []).flatMap((tb, tabIdx) =>
-                          tb.assessments.map((a) => {
-                            const tabTitle = tabs[tabIdx]?.title ?? '';
-                            return (
-                              <TableRow
-                                key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
-                                data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
-                                sx={{ bgcolor: 'grey.50' }}
-                              >
-                                <TableCell
-                                  colSpan={labelColSpan}
-                                  sx={{
-                                    position: 'sticky',
-                                    left: 0,
-                                    zIndex: 2,
-                                    bgcolor: 'grey.50',
-                                    pl: 6,
-                                    whiteSpace: 'nowrap',
-                                  }}
+                        (breakdownsByStudent.get(studentId) ?? []).flatMap(
+                          (tb, tabIdx) =>
+                            tb.assessments.map((a) => {
+                              // Weightage is always "% of grade" — it never
+                              // follows the points/percent lens.
+                              const weightText = t(
+                                translations.percentOfGrade,
+                                {
+                                  weight:
+                                    Math.round(a.effectiveWeight * 100) / 100,
+                                },
+                              );
+                              const gradeText =
+                                a.grade === null
+                                  ? `—/${a.maxGrade}`
+                                  : `${a.grade}/${a.maxGrade}`;
+                              return (
+                                <TableRow
+                                  key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                  data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                  sx={{ bgcolor: 'grey.50' }}
                                 >
-                                  {`${tabTitle} · ${a.title}`}
-                                  <span style={{ marginLeft: 12, opacity: 0.7 }}>
-                                    {a.grade === null
-                                      ? `—/${a.maxGrade}`
-                                      : `${a.grade}/${a.maxGrade}`}
-                                  </span>
-                                </TableCell>
-                                {tabs.map((tab, i) => (
-                                  <TableCell key={tab.id} align="right">
-                                    {i === tabIdx
-                                      ? fmtAt(a.points, columnPrecisions.tabs[i])
-                                      : ''}
+                                  {/* Freeze only the checkbox+Name zone — the
+                                    same width the main rows freeze — so this cell
+                                    can never paint over the scrolling value
+                                    columns. The title wraps within the Name
+                                    column; its weightage and grade scroll in the
+                                    identity span beside it, mirroring email /
+                                    external ID on the main rows. When no identity
+                                    columns are visible there is no scroll span, so
+                                    they fall back here right-aligned — harmless, as
+                                    the frozen cell then spans the full label
+                                    width. */}
+                                  <TableCell
+                                    colSpan={2}
+                                    sx={(theme) => ({
+                                      position: 'sticky',
+                                      left: 0,
+                                      zIndex: 2,
+                                      bgcolor: 'grey.50',
+                                      pl: 6,
+                                      boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
+                                    })}
+                                  >
+                                    {visibleIdentityCount === 0 ? (
+                                      <span
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'space-between',
+                                          gap: 16,
+                                        }}
+                                      >
+                                        <span>
+                                          {a.title}
+                                          <Typography
+                                            color="text.secondary"
+                                            component="span"
+                                            fontSize="inherit"
+                                            sx={{ ml: 1 }}
+                                          >
+                                            {weightText}
+                                          </Typography>
+                                        </span>
+                                        <span style={{ opacity: 0.7 }}>
+                                          {gradeText}
+                                        </span>
+                                      </span>
+                                    ) : (
+                                      a.title
+                                    )}
                                   </TableCell>
-                                ))}
-                                <TableCell />
-                              </TableRow>
-                            );
-                          }),
+                                  {visibleIdentityCount > 0 && (
+                                    <TableCell
+                                      colSpan={visibleIdentityCount}
+                                      sx={{ whiteSpace: 'nowrap' }}
+                                    >
+                                      <span
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'space-between',
+                                          gap: 16,
+                                        }}
+                                      >
+                                        <Typography
+                                          color="text.secondary"
+                                          component="span"
+                                          fontSize="inherit"
+                                        >
+                                          {weightText}
+                                        </Typography>
+                                        <span style={{ opacity: 0.7 }}>
+                                          {gradeText}
+                                        </span>
+                                      </span>
+                                    </TableCell>
+                                  )}
+                                  {tabs.map((tab, i) => (
+                                    <TableCell
+                                      key={tab.id}
+                                      align="right"
+                                      data-col="value"
+                                    >
+                                      {i === tabIdx
+                                        ? fmtDisplay(
+                                            breakdownDisplayValue(a),
+                                            columnPrecisions.tabs[i],
+                                          )
+                                        : ''}
+                                    </TableCell>
+                                  ))}
+                                  <TableCell data-col="value" />
+                                </TableRow>
+                              );
+                            }),
                         )}
                     </Fragment>
                   );

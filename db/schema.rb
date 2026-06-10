@@ -565,6 +565,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_10_120000) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.decimal "gradebook_weight", precision: 5, scale: 2, default: "0.0", null: false
+    t.boolean "gradebook_excluded", default: false, null: false
     t.integer "weight_mode", default: 0, null: false
     t.index ["category_id"], name: "fk__course_assessment_tabs_category_id"
     t.index ["creator_id"], name: "fk__course_assessment_tabs_creator_id"

@@ -25,6 +25,10 @@ export interface AssessmentContribution {
   grade: number | null;
   maxGrade: number;
   points: number; // contribution to this tab's weighted-points cell
+  // Share of the overall grade this assessment carries, in percentage points.
+  // Equal mode: the tab's weight split evenly across its assessments.
+  // Custom mode: the assessment's own configured weight.
+  effectiveWeight: number;
 }
 
 export interface TabBreakdown {
@@ -202,12 +206,19 @@ export const computeStudentBreakdown = ({
           : n > 0
             ? (ratio / n) * weight
             : 0;
+      const effectiveWeight =
+        tab.weightMode === 'custom'
+          ? a.gradebookWeight ?? 0
+          : n > 0
+            ? weight / n
+            : 0;
       return {
         assessmentId: a.id,
         title: a.title,
         grade,
         maxGrade: a.maxGrade,
         points,
+        effectiveWeight,
       };
     });
     return { tabId: tab.id, assessments: contributions };

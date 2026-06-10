@@ -592,6 +592,58 @@ describe('GradebookWeightedTable', () => {
       );
     });
 
+    it('shows only the assessment name in the breakdown, without the tab prefix', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      const detail = await screen.findByTestId('breakdown-row-1-10-1');
+      // Assessment name shown verbatim — not "Missions · Mission 1".
+      expect(within(detail).getByText('Mission 1')).toBeInTheDocument();
+      expect(within(detail).queryByText(/·/)).not.toBeInTheDocument();
+    });
+
+    it('renders each assessment as a grade/maxGrade percentage in percent mode', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // Mission 1: 80/100 → 80% ; Mission 2: 50/50 → 100% ; Quiz 1: 90/100 → 90%
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-1')).getByText('80%'),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-2')).getByText('100%'),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-20-3')).getByText('90%'),
+      ).toBeInTheDocument();
+    });
+
+    it('renders — for an ungraded assessment in percent mode', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 1, null)],
+      });
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-1')).getByText('—'),
+      ).toBeInTheDocument();
+    });
+
+    it('does not render the "contributions shown in points" caption', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        screen.queryByText(/contributions shown in points/i),
+      ).not.toBeInTheDocument();
+    });
+
     it('breakdown points for a tab sum to the tab cell shown on the main row', async () => {
       const user = userEvent.setup();
       renderWeighted(expandable);
@@ -604,6 +656,86 @@ describe('GradebookWeightedTable', () => {
       ).toBeInTheDocument();
       expect(
         within(screen.getByTestId('breakdown-row-1-10-2')).getByText('30'),
+      ).toBeInTheDocument();
+    });
+
+    it('shows each assessment\'s effective weightage as "% of grade" (equal mode)', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // Missions weight 60 split across 2 assessments → 30% each;
+      // Quizzes weight 40 with a single assessment → 40%.
+      expect(
+        within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
+          '30% of grade',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-2')).getByText(
+          '30% of grade',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-20-3')).getByText(
+          '40% of grade',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it('shows effective weightage as "% of grade" regardless of the points/percentage lens', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // The weightage label never follows the lens: still "30% of grade".
+      expect(
+        within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
+          '30% of grade',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("uses the assessment's own weight for effective weightage in custom mode", async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [
+          {
+            id: 10,
+            title: 'Missions',
+            categoryId: 1,
+            gradebookWeight: 60,
+            weightMode: 'custom',
+          },
+        ],
+        assessments: [
+          {
+            id: 1,
+            title: 'Mission 1',
+            tabId: 10,
+            maxGrade: 100,
+            gradebookWeight: 25,
+          },
+          {
+            id: 2,
+            title: 'Mission 2',
+            tabId: 10,
+            maxGrade: 50,
+            gradebookWeight: 35,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 1, 80), makeSub(1, 2, 50)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
+          '25% of grade',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-2')).getByText(
+          '35% of grade',
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -786,6 +918,59 @@ describe('GradebookWeightedTable', () => {
           within(dialog).getByRole('checkbox', { name: /external id/i }),
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('projected-total policy', () => {
+    it('shows a shortened "Projected total" header without the inline policy sentence', () => {
+      renderWeighted();
+      const thead = document.querySelector('thead')!;
+      expect(
+        within(thead as HTMLElement).getByText('Projected total'),
+      ).toBeInTheDocument();
+      // The policy is no longer crammed into the header label itself.
+      expect(
+        within(thead as HTMLElement).queryByText(/ungraded assessments/i),
+      ).not.toBeInTheDocument();
+    });
+
+    it('exposes the projected-total policy via an ⓘ control on the header', () => {
+      renderWeighted();
+      expect(
+        screen.getByRole('button', {
+          name: /ungraded assessments as 0/i,
+        }),
+      ).toBeInTheDocument();
+    });
+
+    it('shows a one-time projected-total policy banner that can be dismissed', async () => {
+      const user = userEvent.setup();
+      renderWeighted();
+      expect(
+        screen.getByText(/projected totals count ungraded assessments as 0/i),
+      ).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: /close/i }));
+      expect(
+        screen.queryByText(/projected totals count ungraded assessments as 0/i),
+      ).not.toBeInTheDocument();
+    });
+
+    it('does not show the policy banner once it has been dismissed', () => {
+      localStorage.setItem(
+        `${USER_ID}:gradebook_projected_total_policy_hint`,
+        'true',
+      );
+      renderWeighted();
+      expect(
+        screen.queryByText(/projected totals count ungraded assessments as 0/i),
+      ).not.toBeInTheDocument();
+      // The ⓘ on the header still carries the policy after dismissal.
+      expect(
+        screen.getByRole('button', {
+          name: /ungraded assessments as 0/i,
+        }),
+      ).toBeInTheDocument();
     });
   });
 });
