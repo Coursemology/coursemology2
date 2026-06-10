@@ -608,6 +608,61 @@ describe('GradebookWeightedTable', () => {
     });
   });
 
+  describe('display mode toggle — values', () => {
+    // weight 100, one assessment max 100, grade 80 → subtotal 0.8
+    // points cell = 80 ; percent cell = 80%
+    const singleTab = {
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Q1', 10, 100)],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 100, 80)],
+    };
+
+    it('shows points (no % suffix) by default', () => {
+      renderWeighted(singleTab);
+      expect(screen.getAllByText('80').length).toBeGreaterThanOrEqual(1);
+      expect(screen.queryByText('80%')).not.toBeInTheDocument();
+    });
+
+    it('shows percentage with % suffix after switching to Percentage', async () => {
+      const user = userEvent.setup();
+      renderWeighted(singleTab);
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await waitFor(() =>
+        expect(screen.getAllByText('80%').length).toBeGreaterThanOrEqual(1),
+      );
+    });
+
+    it('normalizes the total in percent mode when weights do not sum to 100', async () => {
+      const user = userEvent.setup();
+      // weight 50, max 100, grade 80 → subtotal 0.8
+      // points total = 40 ; percent total = 40 / 50 * 100 = 80%
+      renderWeighted({
+        tabs: [makeTab(10, 'Tab 1', 1, 50)],
+        assessments: [makeAssessment(100, 'Q1', 10, 100)],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 100, 80)],
+      });
+      expect(screen.getAllByText('40').length).toBeGreaterThanOrEqual(1); // points default
+      await user.click(screen.getByRole('button', { name: /percentage/i }));
+      await waitFor(() =>
+        expect(screen.getAllByText('80%').length).toBeGreaterThanOrEqual(1),
+      );
+    });
+  });
+
+  describe('display mode toggle — control', () => {
+    it('renders Points and Percentage toggle buttons with Points pressed by default', () => {
+      renderWeighted();
+      const points = screen.getByRole('button', { name: /points/i });
+      const percent = screen.getByRole('button', { name: /percentage/i });
+      expect(points).toBeInTheDocument();
+      expect(percent).toBeInTheDocument();
+      expect(points).toHaveAttribute('aria-pressed', 'true');
+      expect(percent).toHaveAttribute('aria-pressed', 'false');
+    });
+  });
+
   describe('identity columns rendering', () => {
     it('hides Email, External ID, Level and Total XP by default', () => {
       renderWeighted({ gamificationEnabled: true });

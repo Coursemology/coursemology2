@@ -13,6 +13,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -34,7 +36,7 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import type { WeightedRow } from '../computeWeighted';
+import type { TabBreakdown, WeightedRow } from '../computeWeighted';
 import { computeStudentBreakdown, computeWeightedRows, sumWeights } from '../computeWeighted';
 
 import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
@@ -148,6 +150,8 @@ const translations = defineMessages({
   },
 });
 
+type DisplayMode = 'points' | 'percent';
+
 interface Props {
   categories: CategoryData[];
   tabs: TabData[];
@@ -208,8 +212,29 @@ const GradebookWeightedTable = ({
   const { t } = useTranslation();
   const [configureOpen, setConfigureOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
-  type DisplayMode = 'points' | 'percent';
   const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
+
+  // Mode-aware display value for a tab cell.
+  const tabDisplayValue = (sub: number | null, weight: number): number | null => {
+    if (sub === null) return null;
+    return displayMode === 'percent' ? sub * 100 : sub * weight;
+  };
+
+  // Mode-aware display value for the total cell.
+  const totalDisplayValue = (total: number | null): number | null => {
+    if (total === null) return null;
+    if (displayMode === 'percent') {
+      return totalWeight > 0 ? (total / totalWeight) * 100 : null;
+    }
+    return total;
+  };
+
+  const fmtDisplay = (v: number | null, prec: 0 | 1 | 2): string => {
+    if (v === null) return '—';
+    const s = v.toFixed(prec);
+    return displayMode === 'percent' ? `${s}%` : s;
+  };
+
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   const toggleExpanded = (studentId: number): void =>
     setExpandedIds((prev) => {
@@ -218,6 +243,14 @@ const GradebookWeightedTable = ({
       else next.add(studentId);
       return next;
     });
+
+  const breakdownsByStudent = useMemo(() => {
+    const map = new Map<number, TabBreakdown[]>();
+    for (const studentId of expandedIds) {
+      map.set(studentId, computeStudentBreakdown({ studentId, tabs, assessments, submissions }));
+    }
+    return map;
+  }, [expandedIds, tabs, assessments, submissions]);
 
   const row1Ref = useRef<HTMLTableRowElement>(null);
   const row2Ref = useRef<HTMLTableRowElement>(null);
@@ -259,17 +292,17 @@ const GradebookWeightedTable = ({
   );
 
   const columnPrecisions = useMemo(() => {
-    const tabPrecs = tabs.map((tab, idx) => {
-      const weight = tab.gradebookWeight ?? 0;
-      return columnPrecision(
-        rows.map((r) => {
-          const sub = r.subtotals[idx];
-          return sub !== null ? sub * weight : null;
-        }),
-      );
-    });
-    return { tabs: tabPrecs, total: columnPrecision(rows.map((r) => r.total)) };
-  }, [rows, tabs]);
+    const tabPrecs = tabs.map((tab, idx) =>
+      columnPrecision(
+        rows.map((r) => tabDisplayValue(r.subtotals[idx], tab.gradebookWeight ?? 0)),
+      ),
+    );
+    return {
+      tabs: tabPrecs,
+      total: columnPrecision(rows.map((r) => totalDisplayValue(r.total))),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows, tabs, displayMode, totalWeight]);
 
   const hasExternalIds = useMemo(
     () => students.some((s) => s.externalId != null && s.externalId !== ''),
@@ -330,14 +363,8 @@ const GradebookWeightedTable = ({
       cols.push({
         id: `tab-${tab.id}`,
         title: tab.title,
-        accessorFn: (row) => {
-          const sub = row.subtotals[idx];
-          return fmtCsv(sub !== null ? sub * weight : null);
-        },
-        cell: (row) => {
-          const sub = row.subtotals[idx];
-          return fmtAt(sub !== null ? sub * weight : null, prec);
-        },
+        accessorFn: (row) => fmtCsv(tabDisplayValue(row.subtotals[idx], weight)),
+        cell: (row) => fmtDisplay(tabDisplayValue(row.subtotals[idx], weight), prec),
         csvDownloadable: true,
       });
     });
@@ -345,13 +372,14 @@ const GradebookWeightedTable = ({
     cols.push({
       id: 'total',
       title: t(translations.projectedTotal),
-      accessorFn: (row) => fmtCsv(row.total),
-      cell: (row) => fmtAt(row.total, columnPrecisions.total),
+      accessorFn: (row) => fmtCsv(totalDisplayValue(row.total)),
+      cell: (row) => fmtDisplay(totalDisplayValue(row.total), columnPrecisions.total),
       csvDownloadable: true,
     });
 
     return cols;
-  }, [tabs, t, gamificationEnabled, hasExternalIds, columnPrecisions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabs, t, gamificationEnabled, hasExternalIds, columnPrecisions, displayMode, totalWeight]);
 
   const columnPicker = useMemo(
     () => ({
@@ -433,6 +461,21 @@ const GradebookWeightedTable = ({
               value={toolbar.searchKeyword ?? ''}
             />
             <div className="flex items-center gap-3">
+              <ToggleButtonGroup
+                exclusive
+                onChange={(_, value: DisplayMode | null) => {
+                  if (value) setDisplayMode(value);
+                }}
+                size="small"
+                value={displayMode}
+              >
+                <ToggleButton value="points">
+                  {t(translations.displayPoints)}
+                </ToggleButton>
+                <ToggleButton value="percent">
+                  {t(translations.displayPercent)}
+                </ToggleButton>
+              </ToggleButtonGroup>
               {canManageWeights && (
                 <Button
                   onClick={() => setConfigureOpen(true)}
@@ -762,26 +805,23 @@ const GradebookWeightedTable = ({
                           const weight = tabs[i].gradebookWeight ?? 0;
                           return (
                             <TableCell key={tabs[i].id} align="right">
-                              {fmtAt(
-                                subtotal !== null ? subtotal * weight : null,
+                              {fmtDisplay(
+                                tabDisplayValue(subtotal, weight),
                                 columnPrecisions.tabs[i],
                               )}
                             </TableCell>
                           );
                         })}
                         <TableCell align="right">
-                          {fmtAt(row.original.total, columnPrecisions.total)}
+                          {fmtDisplay(
+                            totalDisplayValue(row.original.total),
+                            columnPrecisions.total,
+                          )}
                         </TableCell>
                       </TableRow>
                       {isExpanded &&
-                        computeStudentBreakdown({
-                          studentId,
-                          tabs,
-                          assessments,
-                          submissions,
-                        }).flatMap((tb) =>
+                        (breakdownsByStudent.get(studentId) ?? []).flatMap((tb, tabIdx) =>
                           tb.assessments.map((a) => {
-                            const tabIdx = tabs.findIndex((tab) => tab.id === tb.tabId);
                             const tabTitle = tabs[tabIdx]?.title ?? '';
                             return (
                               <TableRow
