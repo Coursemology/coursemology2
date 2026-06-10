@@ -1,13 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { Download } from '@mui/icons-material';
 import {
   Alert,
   Button,
   Checkbox,
-  FormControlLabel,
   Paper,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -31,10 +29,7 @@ import type { ColumnTemplate } from 'lib/components/table/builder';
 import MuiColumnPickerPrompt from 'lib/components/table/MuiTableAdapter/MuiColumnPickerPrompt';
 import MuiTablePagination from 'lib/components/table/MuiTableAdapter/MuiTablePagination';
 import useTanStackTableBuilder from 'lib/components/table/TanStackTableBuilder';
-import {
-  DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
-  DEFAULT_TABLE_ROWS_PER_PAGE,
-} from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -45,15 +40,6 @@ import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
 
 const translations = defineMessages({
-  treatUngradedAsZero: {
-    id: 'course.gradebook.GradebookWeightedTable.treatUngradedAsZero',
-    defaultMessage: 'Treat Ungraded as 0',
-  },
-  treatUngradedAsZeroTooltip: {
-    id: 'course.gradebook.GradebookWeightedTable.treatUngradedAsZeroTooltip',
-    defaultMessage:
-      'Counts unsubmitted and ungraded assessments as 0 in the calculation. Use at end of course when all work should be complete.',
-  },
   configureWeights: {
     id: 'course.gradebook.GradebookWeightedTable.configureWeights',
     defaultMessage: 'Configure Weights',
@@ -67,17 +53,17 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookWeightedTable.noWeightsNoAccess',
     defaultMessage: 'No tab weights have been configured yet.',
   },
-  student: {
-    id: 'course.gradebook.GradebookWeightedTable.student',
-    defaultMessage: 'Student',
+  name: {
+    id: 'course.gradebook.GradebookWeightedTable.name',
+    defaultMessage: 'Name',
   },
   email: {
     id: 'course.gradebook.GradebookWeightedTable.email',
     defaultMessage: 'Email',
   },
-  total: {
-    id: 'course.gradebook.GradebookWeightedTable.total',
-    defaultMessage: 'Total',
+  projectedTotal: {
+    id: 'course.gradebook.GradebookWeightedTable.projectedTotal',
+    defaultMessage: 'Projected total — ungraded assessments count as 0',
   },
   percentOfGrade: {
     id: 'course.gradebook.GradebookWeightedTable.percentOfGrade',
@@ -91,6 +77,18 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookWeightedTable.percentTotalWarning',
     defaultMessage: '{weight}% total',
   },
+  outOfWeight: {
+    id: 'course.gradebook.GradebookWeightedTable.outOfWeight',
+    defaultMessage: '/{weight}',
+  },
+  displayPoints: {
+    id: 'course.gradebook.GradebookWeightedTable.displayPoints',
+    defaultMessage: 'Points',
+  },
+  displayPercent: {
+    id: 'course.gradebook.GradebookWeightedTable.displayPercent',
+    defaultMessage: 'Percentage',
+  },
   doesNotSumTo100: {
     id: 'course.gradebook.GradebookWeightedTable.doesNotSumTo100',
     defaultMessage: 'does not sum to 100',
@@ -101,7 +99,7 @@ const translations = defineMessages({
   },
   searchStudents: {
     id: 'course.gradebook.GradebookWeightedTable.searchStudents',
-    defaultMessage: 'Search by name or email',
+    defaultMessage: 'Search students',
   },
   downloadCsv: {
     id: 'course.gradebook.GradebookWeightedTable.downloadCsv',
@@ -149,10 +147,31 @@ interface Props {
   gamificationEnabled: boolean;
 }
 
-const fmt = (v: number | null): string => {
+// How many decimal places a single value needs (0, 1, or 2).
+const precisionNeeded = (v: number): 0 | 1 | 2 => {
+  const at2 = Math.round(v * 100) / 100;
+  const at1 = Math.round(v * 10) / 10;
+  const at0 = Math.round(v);
+  if (Math.abs(at2 - at1) > 1e-9) return 2;
+  if (Math.abs(at1 - at0) > 1e-9) return 1;
+  return 0;
+};
+
+// Maximum precision needed across a column's values.
+const columnPrecision = (values: (number | null)[]): 0 | 1 | 2 => {
+  let prec: 0 | 1 | 2 = 0;
+  for (const v of values) {
+    if (v === null) continue;
+    const p = precisionNeeded(v);
+    if (p === 2) return 2;
+    if (p === 1) prec = 1;
+  }
+  return prec;
+};
+
+const fmtAt = (v: number | null, prec: 0 | 1 | 2): string => {
   if (v === null) return '—';
-  const rounded = Math.round(v);
-  return Math.abs(v - rounded) < 1e-9 ? String(rounded) : v.toFixed(2);
+  return v.toFixed(prec);
 };
 
 const fmtCsv = (v: number | null): string => {
@@ -174,9 +193,15 @@ const GradebookWeightedTable = ({
   gamificationEnabled,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
-  const [treatUngradedAsZero, setTreatUngradedAsZero] = useState(false);
   const [configureOpen, setConfigureOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  type DisplayMode = 'points' | 'percent';
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
+
+  const row1Ref = useRef<HTMLTableRowElement>(null);
+  const row2Ref = useRef<HTMLTableRowElement>(null);
+  const [row2Top, setRow2Top] = useState(0);
+  const [row3Top, setRow3Top] = useState(0);
 
   const totalWeight = sumWeights(tabs);
   const allWeightsZero = totalWeight === 0;
@@ -194,6 +219,13 @@ const GradebookWeightedTable = ({
     [categories, categoryTabCounts],
   );
 
+  useLayoutEffect(() => {
+    const h1 = row1Ref.current?.offsetHeight ?? 0;
+    const h2 = row2Ref.current?.offsetHeight ?? 0;
+    setRow2Top(h1);
+    setRow3Top(h1 + h2);
+  }, [visibleCategories, tabs]);
+
   const rows = useMemo<WeightedRow[]>(
     () =>
       computeWeightedRows({
@@ -201,10 +233,22 @@ const GradebookWeightedTable = ({
         tabs,
         assessments,
         submissions,
-        treatUngradedAsZero,
       }),
-    [students, tabs, assessments, submissions, treatUngradedAsZero],
+    [students, tabs, assessments, submissions],
   );
+
+  const columnPrecisions = useMemo(() => {
+    const tabPrecs = tabs.map((tab, idx) => {
+      const weight = tab.gradebookWeight ?? 0;
+      return columnPrecision(
+        rows.map((r) => {
+          const sub = r.subtotals[idx];
+          return sub !== null ? sub * weight : null;
+        }),
+      );
+    });
+    return { tabs: tabPrecs, total: columnPrecision(rows.map((r) => r.total)) };
+  }, [rows, tabs]);
 
   const hasExternalIds = useMemo(
     () => students.some((s) => s.externalId != null && s.externalId !== ''),
@@ -215,7 +259,7 @@ const GradebookWeightedTable = ({
     const cols: ColumnTemplate<WeightedRow>[] = [
       {
         id: 'name',
-        title: t(translations.student),
+        title: t(translations.name),
         of: 'name',
         cell: (row) => row.name,
         csvDownloadable: true,
@@ -261,6 +305,7 @@ const GradebookWeightedTable = ({
 
     tabs.forEach((tab, idx) => {
       const weight = tab.gradebookWeight ?? 0;
+      const prec = columnPrecisions.tabs[idx];
       cols.push({
         id: `tab-${tab.id}`,
         title: tab.title,
@@ -270,7 +315,7 @@ const GradebookWeightedTable = ({
         },
         cell: (row) => {
           const sub = row.subtotals[idx];
-          return fmt(sub !== null ? sub * weight : null);
+          return fmtAt(sub !== null ? sub * weight : null, prec);
         },
         csvDownloadable: true,
       });
@@ -278,14 +323,14 @@ const GradebookWeightedTable = ({
 
     cols.push({
       id: 'total',
-      title: t(translations.total),
+      title: t(translations.projectedTotal),
       accessorFn: (row) => fmtCsv(row.total),
-      cell: (row) => fmt(row.total),
+      cell: (row) => fmtAt(row.total, columnPrecisions.total),
       csvDownloadable: true,
     });
 
     return cols;
-  }, [tabs, t, gamificationEnabled, hasExternalIds]);
+  }, [tabs, t, gamificationEnabled, hasExternalIds, columnPrecisions]);
 
   const columnPicker = useMemo(
     () => ({
@@ -314,12 +359,7 @@ const GradebookWeightedTable = ({
     getRowEqualityData: (row) => row,
     indexing: { rowSelectable: true },
     pagination: {
-      rowsPerPage: [
-        DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
-        25,
-        50,
-        DEFAULT_TABLE_ROWS_PER_PAGE,
-      ],
+      rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
       showAllRows: true,
     },
     search: { searchPlaceholder: t(translations.searchStudents) },
@@ -365,19 +405,6 @@ const GradebookWeightedTable = ({
               value={toolbar.searchKeyword ?? ''}
             />
             <div className="flex items-center gap-3">
-              <Tooltip title={t(translations.treatUngradedAsZeroTooltip)}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={treatUngradedAsZero}
-                      onChange={(e) => setTreatUngradedAsZero(e.target.checked)}
-                      size="small"
-                    />
-                  }
-                  label={t(translations.treatUngradedAsZero)}
-                  sx={{ ml: 0 }}
-                />
-              </Tooltip>
               {canManageWeights && (
                 <Button
                   onClick={() => setConfigureOpen(true)}
@@ -465,10 +492,14 @@ const GradebookWeightedTable = ({
             >
               <TableHead>
                 {/* Row 1: Checkbox + Student + Categories + Total */}
-                <TableRow>
+                <TableRow ref={row1Ref}>
                   <TableCell
                     rowSpan={3}
                     sx={{
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 5,
+                      bgcolor: 'background.default',
                       width: CHECKBOX_WIDTH,
                       minWidth: CHECKBOX_WIDTH,
                       px: 0,
@@ -485,9 +516,18 @@ const GradebookWeightedTable = ({
                   </TableCell>
                   <TableCell
                     rowSpan={3}
-                    sx={{ minWidth: 160, verticalAlign: 'middle' }}
+                    sx={(theme) => ({
+                      position: 'sticky',
+                      left: CHECKBOX_WIDTH,
+                      zIndex: 4,
+                      bgcolor: 'background.default',
+                      minWidth: 160,
+                      whiteSpace: 'nowrap',
+                      verticalAlign: 'middle',
+                      boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
+                    })}
                   >
-                    {t(translations.student)}
+                    {t(translations.name)}
                   </TableCell>
                   {showEmail && (
                     <TableCell
@@ -538,12 +578,15 @@ const GradebookWeightedTable = ({
                     rowSpan={2}
                     sx={{ fontWeight: 600, minWidth: 120 }}
                   >
-                    {t(translations.total)}
+                    {t(translations.projectedTotal)}
                   </TableCell>
                 </TableRow>
 
                 {/* Row 2: Tab titles */}
-                <TableRow>
+                <TableRow
+                  ref={row2Ref}
+                  sx={{ '& .MuiTableCell-stickyHeader': { top: row2Top } }}
+                >
                   {tabs.map((tab) => (
                     <TableCell
                       key={tab.id}
@@ -556,21 +599,31 @@ const GradebookWeightedTable = ({
                 </TableRow>
 
                 {/* Row 3: Weight subheaders */}
-                <TableRow>
+                <TableRow
+                  sx={{ '& .MuiTableCell-stickyHeader': { top: row3Top } }}
+                >
                   {tabs.map((tab) => (
                     <TableCell
                       key={tab.id}
                       align="center"
                       sx={{ bgcolor: 'grey.100' }}
                     >
-                      {t(translations.percentOfGrade, {
-                        weight: tab.gradebookWeight ?? 0,
-                      })}
+                      {displayMode === 'percent'
+                        ? t(translations.percentOfGrade, {
+                            weight: tab.gradebookWeight ?? 0,
+                          })
+                        : t(translations.outOfWeight, {
+                            weight: tab.gradebookWeight ?? 0,
+                          })}
                     </TableCell>
                   ))}
                   <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
                     {totalWeight === 100 ? (
-                      t(translations.percentTotalExact)
+                      displayMode === 'percent' ? (
+                        t(translations.percentTotalExact)
+                      ) : (
+                        t(translations.outOfWeight, { weight: totalWeight })
+                      )
                     ) : (
                       <Tooltip title={t(translations.weightsDoNotSum)}>
                         <span>
@@ -579,9 +632,13 @@ const GradebookWeightedTable = ({
                             component="span"
                             fontSize="inherit"
                           >
-                            {t(translations.percentTotalWarning, {
-                              weight: totalWeight,
-                            })}
+                            {displayMode === 'percent'
+                              ? t(translations.percentTotalWarning, {
+                                  weight: totalWeight,
+                                })
+                              : t(translations.outOfWeight, {
+                                  weight: totalWeight,
+                                })}
                           </Typography>
                           <Typography
                             color="warning.main"
@@ -605,6 +662,10 @@ const GradebookWeightedTable = ({
                     <TableRow key={rowProps.id}>
                       <TableCell
                         sx={{
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 2,
+                          bgcolor: 'background.paper',
                           width: CHECKBOX_WIDTH,
                           minWidth: CHECKBOX_WIDTH,
                           px: 0,
@@ -617,7 +678,17 @@ const GradebookWeightedTable = ({
                           size="small"
                         />
                       </TableCell>
-                      <TableCell>{row.original.name}</TableCell>
+                      <TableCell
+                        sx={(theme) => ({
+                          position: 'sticky',
+                          left: CHECKBOX_WIDTH,
+                          zIndex: 2,
+                          bgcolor: 'background.paper',
+                          boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
+                        })}
+                      >
+                        {row.original.name}
+                      </TableCell>
                       {showEmail && <TableCell>{row.original.email}</TableCell>}
                       {showExternalId && (
                         <TableCell>{row.original.externalId ?? ''}</TableCell>
@@ -636,12 +707,15 @@ const GradebookWeightedTable = ({
                         const weight = tabs[i].gradebookWeight ?? 0;
                         return (
                           <TableCell key={tabs[i].id} align="right">
-                            {fmt(subtotal !== null ? subtotal * weight : null)}
+                            {fmtAt(
+                              subtotal !== null ? subtotal * weight : null,
+                              columnPrecisions.tabs[i],
+                            )}
                           </TableCell>
                         );
                       })}
                       <TableCell align="right">
-                        {fmt(row.original.total)}
+                        {fmtAt(row.original.total, columnPrecisions.total)}
                       </TableCell>
                     </TableRow>
                   );
