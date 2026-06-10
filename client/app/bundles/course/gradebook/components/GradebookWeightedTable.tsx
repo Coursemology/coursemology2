@@ -1,10 +1,11 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Download } from '@mui/icons-material';
+import { Download, KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
 import {
   Alert,
   Button,
   Checkbox,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -34,7 +35,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import type { WeightedRow } from '../computeWeighted';
-import { computeWeightedRows, sumWeights } from '../computeWeighted';
+import { computeStudentBreakdown, computeWeightedRows, sumWeights } from '../computeWeighted';
 
 import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
@@ -133,6 +134,18 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookColumnTree.totalXp',
     defaultMessage: 'Total XP',
   },
+  expandRow: {
+    id: 'course.gradebook.GradebookWeightedTable.expandRow',
+    defaultMessage: 'Expand {name}',
+  },
+  collapseRow: {
+    id: 'course.gradebook.GradebookWeightedTable.collapseRow',
+    defaultMessage: 'Collapse {name}',
+  },
+  breakdownPointsCaption: {
+    id: 'course.gradebook.GradebookWeightedTable.breakdownPointsCaption',
+    defaultMessage: 'Contributions shown in points',
+  },
 });
 
 interface Props {
@@ -197,6 +210,14 @@ const GradebookWeightedTable = ({
   const [pickerOpen, setPickerOpen] = useState(false);
   type DisplayMode = 'points' | 'percent';
   const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  const toggleExpanded = (studentId: number): void =>
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(studentId)) next.delete(studentId);
+      else next.add(studentId);
+      return next;
+    });
 
   const row1Ref = useRef<HTMLTableRowElement>(null);
   const row2Ref = useRef<HTMLTableRowElement>(null);
@@ -387,6 +408,13 @@ const GradebookWeightedTable = ({
   const showTotalXp =
     gamificationEnabled && (visibility.totalXp ?? false) === true;
 
+  const visibleIdentityCount =
+    (showEmail ? 1 : 0) +
+    (showExternalId ? 1 : 0) +
+    (showLevel ? 1 : 0) +
+    (showTotalXp ? 1 : 0);
+  const labelColSpan = 2 + visibleIdentityCount;
+
   const allRowsSelected = body.allFilteredSelected ?? false;
   const someRowsSelected = body.someFilteredSelected ?? false;
   const toggleAllRows = (): void => body.toggleAllFiltered?.();
@@ -451,6 +479,15 @@ const GradebookWeightedTable = ({
                 ? t(translations.noWeightsConfigured)
                 : t(translations.noWeightsNoAccess)}
             </Alert>
+          )}
+          {displayMode === 'percent' && expandedIds.size > 0 && (
+            <Typography
+              color="text.secondary"
+              sx={{ mx: 2, mb: 1 }}
+              variant="caption"
+            >
+              {t(translations.breakdownPointsCaption)}
+            </Typography>
           )}
           <TableContainer sx={{ overflowX: 'auto' }}>
             <Table
@@ -658,66 +695,131 @@ const GradebookWeightedTable = ({
               <TableBody>
                 {body.rows.map((row, idx) => {
                   const rowProps = body.forEachRow(row, idx);
+                  const studentId = row.original.studentId;
+                  const isExpanded = expandedIds.has(studentId);
                   return (
-                    <TableRow key={rowProps.id}>
-                      <TableCell
-                        sx={{
-                          position: 'sticky',
-                          left: 0,
-                          zIndex: 2,
-                          bgcolor: 'background.paper',
-                          width: CHECKBOX_WIDTH,
-                          minWidth: CHECKBOX_WIDTH,
-                          px: 0,
-                          textAlign: 'center',
-                        }}
-                      >
-                        <Checkbox
-                          checked={row.getIsSelected()}
-                          onChange={row.getToggleSelectedHandler()}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell
-                        sx={(theme) => ({
-                          position: 'sticky',
-                          left: CHECKBOX_WIDTH,
-                          zIndex: 2,
-                          bgcolor: 'background.paper',
-                          boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
-                        })}
-                      >
-                        {row.original.name}
-                      </TableCell>
-                      {showEmail && <TableCell>{row.original.email}</TableCell>}
-                      {showExternalId && (
-                        <TableCell>{row.original.externalId ?? ''}</TableCell>
-                      )}
-                      {showLevel && (
-                        <TableCell align="right">
-                          {row.original.level}
+                    <Fragment key={rowProps.id}>
+                      <TableRow>
+                        <TableCell
+                          sx={{
+                            position: 'sticky',
+                            left: 0,
+                            zIndex: 2,
+                            bgcolor: 'background.paper',
+                            width: CHECKBOX_WIDTH,
+                            minWidth: CHECKBOX_WIDTH,
+                            px: 0,
+                            textAlign: 'center',
+                          }}
+                        >
+                          <Checkbox
+                            checked={row.getIsSelected()}
+                            onChange={row.getToggleSelectedHandler()}
+                            size="small"
+                          />
                         </TableCell>
-                      )}
-                      {showTotalXp && (
-                        <TableCell align="right">
-                          {row.original.totalXp}
-                        </TableCell>
-                      )}
-                      {row.original.subtotals.map((subtotal, i) => {
-                        const weight = tabs[i].gradebookWeight ?? 0;
-                        return (
-                          <TableCell key={tabs[i].id} align="right">
-                            {fmtAt(
-                              subtotal !== null ? subtotal * weight : null,
-                              columnPrecisions.tabs[i],
+                        <TableCell
+                          sx={(theme) => ({
+                            position: 'sticky',
+                            left: CHECKBOX_WIDTH,
+                            zIndex: 2,
+                            bgcolor: 'background.paper',
+                            boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
+                          })}
+                        >
+                          <IconButton
+                            aria-label={t(
+                              isExpanded ? translations.collapseRow : translations.expandRow,
+                              { name: row.original.name },
                             )}
+                            onClick={() => toggleExpanded(studentId)}
+                            size="small"
+                            sx={{ mr: 0.5 }}
+                          >
+                            {isExpanded ? (
+                              <KeyboardArrowDown fontSize="small" />
+                            ) : (
+                              <KeyboardArrowRight fontSize="small" />
+                            )}
+                          </IconButton>
+                          {row.original.name}
+                        </TableCell>
+                        {showEmail && <TableCell>{row.original.email}</TableCell>}
+                        {showExternalId && (
+                          <TableCell>{row.original.externalId ?? ''}</TableCell>
+                        )}
+                        {showLevel && (
+                          <TableCell align="right">
+                            {row.original.level}
                           </TableCell>
-                        );
-                      })}
-                      <TableCell align="right">
-                        {fmtAt(row.original.total, columnPrecisions.total)}
-                      </TableCell>
-                    </TableRow>
+                        )}
+                        {showTotalXp && (
+                          <TableCell align="right">
+                            {row.original.totalXp}
+                          </TableCell>
+                        )}
+                        {row.original.subtotals.map((subtotal, i) => {
+                          const weight = tabs[i].gradebookWeight ?? 0;
+                          return (
+                            <TableCell key={tabs[i].id} align="right">
+                              {fmtAt(
+                                subtotal !== null ? subtotal * weight : null,
+                                columnPrecisions.tabs[i],
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                        <TableCell align="right">
+                          {fmtAt(row.original.total, columnPrecisions.total)}
+                        </TableCell>
+                      </TableRow>
+                      {isExpanded &&
+                        computeStudentBreakdown({
+                          studentId,
+                          tabs,
+                          assessments,
+                          submissions,
+                        }).flatMap((tb) =>
+                          tb.assessments.map((a) => {
+                            const tabIdx = tabs.findIndex((tab) => tab.id === tb.tabId);
+                            const tabTitle = tabs[tabIdx]?.title ?? '';
+                            return (
+                              <TableRow
+                                key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                sx={{ bgcolor: 'grey.50' }}
+                              >
+                                <TableCell
+                                  colSpan={labelColSpan}
+                                  sx={{
+                                    position: 'sticky',
+                                    left: 0,
+                                    zIndex: 2,
+                                    bgcolor: 'grey.50',
+                                    pl: 6,
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  {`${tabTitle} · ${a.title}`}
+                                  <span style={{ marginLeft: 12, opacity: 0.7 }}>
+                                    {a.grade === null
+                                      ? `—/${a.maxGrade}`
+                                      : `${a.grade}/${a.maxGrade}`}
+                                  </span>
+                                </TableCell>
+                                {tabs.map((tab, i) => (
+                                  <TableCell key={tab.id} align="right">
+                                    {i === tabIdx
+                                      ? fmtAt(a.points, columnPrecisions.tabs[i])
+                                      : ''}
+                                  </TableCell>
+                                ))}
+                                <TableCell />
+                              </TableRow>
+                            );
+                          }),
+                        )}
+                    </Fragment>
                   );
                 })}
               </TableBody>

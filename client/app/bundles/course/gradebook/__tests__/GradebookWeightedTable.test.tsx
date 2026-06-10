@@ -1,4 +1,3 @@
-import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { store as appStore } from 'store';
 import { render, screen, waitFor, within } from 'test-utils';
@@ -59,7 +58,7 @@ const makeSub = (
   studentId: number,
   assessmentId: number,
   grade: number | null,
-): SubmissionData => ({ studentId, assessmentId, grade });
+): SubmissionData => ({ submissionId: 0, studentId, assessmentId, grade });
 
 interface RenderWeightedOptions {
   categories?: CategoryData[];
@@ -161,29 +160,29 @@ describe('GradebookWeightedTable', () => {
     expect(within(row2 as HTMLElement).getByText('Exams')).toBeInTheDocument();
   });
 
-  // 3. Weight subheader shows "X% of grade" per tab
-  it('shows weight subheader "X% of grade" for each tab in row 3', () => {
+  // 3. Weight subheader shows "/N" (points-out-of) per tab by default
+  it('shows "/N" points subheader for each tab in row 3 by default', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 30), makeTab(11, 'Tab 2', 1, 70)],
     });
-    expect(screen.getByText('30% of grade')).toBeInTheDocument();
-    expect(screen.getByText('70% of grade')).toBeInTheDocument();
+    expect(screen.getByText('/30')).toBeInTheDocument();
+    expect(screen.getByText('/70')).toBeInTheDocument();
   });
 
-  // 4a. Total column shows "100% total" when sum = 100
-  it('shows "100% total" in total column header when weights sum to 100', () => {
+  // 4a. Total column shows "/100" when sum = 100 (points default)
+  it('shows "/100" in total column header when weights sum to 100', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 40)],
     });
-    expect(screen.getByText('100% total')).toBeInTheDocument();
+    expect(screen.getByText('/100')).toBeInTheDocument();
   });
 
-  // 4b. Total column shows warning text when sum ≠ 100
-  it('shows a warning when weight sum ≠ 100 in total header', () => {
+  // 4b. Total column shows "/N" + warning text when sum ≠ 100 (points default)
+  it('shows "/N" and a warning when weight sum ≠ 100 in total header', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 30), makeTab(11, 'Tab 2', 1, 30)],
     });
-    expect(screen.getByText(/60%/)).toBeInTheDocument();
+    expect(screen.getByText('/60')).toBeInTheDocument();
     expect(screen.getByText(/does not sum to 100/i)).toBeInTheDocument();
   });
 
@@ -213,6 +212,75 @@ describe('GradebookWeightedTable', () => {
     expect(screen.getAllByText('86.67').length).toBeGreaterThanOrEqual(1);
   });
 
+  // 5b. Column precision: 1dp — all values shown at 1dp when any value needs 1dp
+  it('shows 1dp for all values in a column when any value needs 1dp but none needs 2dp', () => {
+    // grade=15, maxGrade=40, weight=100 → 37.5 (needs 1dp)
+    // grade=20, maxGrade=40, weight=100 → 50.0 (integer alone, but column needs 1dp)
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Q1', 10, 40)],
+      students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
+      submissions: [makeSub(1, 100, 15), makeSub(2, 100, 20)],
+    });
+    // Tab cell + total cell both show the same value for single-tab setup
+    expect(screen.getAllByText('37.5').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('50.0').length).toBeGreaterThanOrEqual(1);
+    // Confirm the old 2dp format is NOT shown
+    expect(screen.queryByText('37.50')).not.toBeInTheDocument();
+    expect(screen.queryByText('50.00')).not.toBeInTheDocument();
+  });
+
+  // 5c. Column precision: 2dp forces all values to 2dp, even whole numbers
+  it('shows 2dp for ALL values in a column when any value needs 2dp', () => {
+    // Alice: grade=130, maxGrade=150, weight=100 → 86.67 (needs 2dp)
+    // Bob: grade=150, maxGrade=150, weight=100 → 100 (integer, but column needs 2dp)
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Q1', 10, 150)],
+      students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
+      submissions: [makeSub(1, 100, 130), makeSub(2, 100, 150)],
+    });
+    expect(screen.getAllByText('86.67').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('100.00').length).toBeGreaterThanOrEqual(1);
+    // Confirm the integer format is NOT shown in any table cell
+    expect(
+      screen.queryAllByRole('cell').some((c) => c.textContent === '100'),
+    ).toBe(false);
+  });
+
+  // 5d. Different columns can have independent precision
+  it('applies column precision independently per tab column', () => {
+    // Tab 1 weight=100: Alice → 86.67 (2dp); Tab 2 weight=40: Alice → 36 (integer)
+    renderWeighted({
+      categories: [makeCategory(1, 'Cat A')],
+      tabs: [makeTab(10, 'Tab 1', 1, 100), makeTab(20, 'Tab 2', 1, 40)],
+      assessments: [
+        makeAssessment(100, 'Q1', 10, 150),
+        makeAssessment(200, 'Q2', 20, 100),
+      ],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 100, 130), makeSub(1, 200, 90)],
+    });
+    // Tab 1: 86.67 (2dp); Tab 2: 36 (integer)
+    expect(screen.getByText('86.67')).toBeInTheDocument();
+    expect(screen.getByText('36')).toBeInTheDocument();
+  });
+
+  // 5e. Total column precision is independent of tab column precision
+  it('total column uses its own column precision', () => {
+    // Tab 1 weight=100: Alice=86.67, Bob=100.00; total=86.67 and 100.00
+    // Both totals have same precision as tab (2dp), but they're independently computed
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Q1', 10, 150)],
+      students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
+      submissions: [makeSub(1, 100, 130), makeSub(2, 100, 150)],
+    });
+    // Total for Alice = 86.67 (needs 2dp), so all totals show 2dp
+    expect(screen.getAllByText('86.67').length).toBeGreaterThanOrEqual(2); // tab cell + total cell
+    expect(screen.getAllByText('100.00').length).toBeGreaterThanOrEqual(2);
+  });
+
   // 6. Tab with no assessments → cell shows "—"
   it('shows "—" for a tab with no assessments', () => {
     renderWeighted({
@@ -224,34 +292,34 @@ describe('GradebookWeightedTable', () => {
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1);
   });
 
-  // 7. Student with no graded submissions → cell shows "—"
-  it('shows "—" when student has no graded submissions in a tab', () => {
+  // 7. Student with no graded submissions → cell shows 0 (ungraded count as 0)
+  it('shows 0 when student has no graded submissions in a tab', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
       assessments: [makeAssessment(100, 'Q1', 10, 10)],
       students: [makeStudent(1, 'Alice')],
       submissions: [],
     });
-    expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('0').length).toBeGreaterThanOrEqual(1);
   });
 
-  // 7b. Total cell shows "—" when all tabs have null subtotals
-  it('shows "—" in both the tab cell and the total cell when all tabs have null subtotals', () => {
+  // 7b. Total cell shows 0 when all assessments are ungraded
+  it('shows 0 in both the tab cell and the total cell when all assessments are ungraded', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
       assessments: [makeAssessment(100, 'Q1', 10, 10)],
       students: [makeStudent(1, 'Alice')],
       submissions: [],
     });
-    // tab cell = "—", total cell = "—" → at least 2 dashes
-    expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(2);
+    // tab cell = 0, total cell = 0 → at least 2 zeros
+    expect(screen.getAllByText('0').length).toBeGreaterThanOrEqual(2);
   });
 
   // 8. Total equals the sum of the row's cells
   it('total cell equals the sum of per-tab point cells', () => {
-    // tab10 weight=60: subtotal=130/150 → points=52 (integer → no decimals)
-    // tab20 weight=40: subtotal=0.9 → points=36 (integer → no decimals)
-    // total = 52 + 36 = 88 (integer → no decimals)
+    // tab10 equal-weight: (80/100 + 50/50) / 2 = 0.9 → points = 60*0.9 = 54
+    // tab20 equal-weight: 90/100 = 0.9 → points = 40*0.9 = 36
+    // total = 54 + 36 = 90
     renderWeighted({
       categories: [makeCategory(1, 'Cat A')],
       tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(20, 'Tab 2', 1, 40)],
@@ -263,12 +331,14 @@ describe('GradebookWeightedTable', () => {
       students: [makeStudent(1, 'Alice')],
       submissions: [makeSub(1, 1, 80), makeSub(1, 2, 50), makeSub(1, 3, 90)],
     });
+    expect(screen.getByText('54')).toBeInTheDocument();
     expect(screen.getByText('36')).toBeInTheDocument();
-    expect(screen.getByText('88')).toBeInTheDocument();
+    expect(screen.getByText('90')).toBeInTheDocument();
   });
 
-  // 9. Treat Ungraded as 0 toggle changes numbers
-  it('changes subtotal values when "Treat Ungraded as 0" is toggled', () => {
+  // 9. Ungraded assessments always count as 0
+  it('counts ungraded assessments as 0 in the subtotal', () => {
+    // Q1 graded (40/50), Q2 ungraded → (40/50 + 0) / 2 = 0.4; weight=100 → 40 pts
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
       assessments: [
@@ -278,18 +348,6 @@ describe('GradebookWeightedTable', () => {
       students: [makeStudent(1, 'Alice')],
       submissions: [makeSub(1, 100, 40)],
     });
-
-    // Without toggle: only Q1 is graded → 40/50=0.8; weight=100 → 80 pts (integer)
-    expect(screen.getAllByText('80').length).toBeGreaterThanOrEqual(1);
-
-    // MUI Tooltip sets aria-label from its title, so the checkbox accessible name
-    // is the tooltip description text, not the FormControlLabel label text.
-    const toggle = screen.getByRole('checkbox', {
-      name: /counts unsubmitted and ungraded/i,
-    });
-    fireEvent.click(toggle);
-
-    // With toggle: 40/(50+50)=0.4; weight=100 → 40 pts (integer)
     expect(screen.getAllByText('40').length).toBeGreaterThanOrEqual(1);
   });
 
@@ -369,11 +427,11 @@ describe('GradebookWeightedTable', () => {
 
   // 15. Pagination controls appear when there are more students than the page size
   it('shows pagination controls when students exceed the default page size', () => {
-    const manyStudents = Array.from({ length: 15 }, (_, i) =>
+    const manyStudents = Array.from({ length: 101 }, (_, i) =>
       makeStudent(i + 1, `Student ${i + 1}`),
     );
     renderWeighted({ students: manyStudents });
-    expect(screen.getByText('1-10 / 15')).toBeInTheDocument();
+    expect(screen.getByText('1-100 / 101')).toBeInTheDocument();
   });
 
   // 16. Row selection checkboxes are rendered for each student
@@ -409,8 +467,8 @@ describe('GradebookWeightedTable', () => {
         students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
       });
       const checkboxes = screen.getAllByRole('checkbox');
-      // checkboxes[0] is the treatUngradedAsZero switch; [1] is header "select all"; [2] is the first row
-      await user.click(checkboxes[2]);
+      // checkboxes[0] is header "select all"; [1] is the first row
+      await user.click(checkboxes[1]);
       await waitFor(() =>
         expect(
           screen.getByRole('button', { name: /export 1 row/i }),
@@ -424,8 +482,8 @@ describe('GradebookWeightedTable', () => {
         students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
       });
       const checkboxes = screen.getAllByRole('checkbox');
-      // checkboxes[1] is the header "select all" checkbox
-      await user.click(checkboxes[1]);
+      // checkboxes[0] is the header "select all" checkbox
+      await user.click(checkboxes[0]);
       await waitFor(() =>
         expect(
           screen.getByRole('button', { name: /export all rows/i }),
@@ -454,7 +512,7 @@ describe('GradebookWeightedTable', () => {
         students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
       });
       const checkboxes = screen.getAllByRole('checkbox');
-      await user.click(checkboxes[2]);
+      await user.click(checkboxes[1]);
       const exportBtn = await screen.findByRole('button', {
         name: /export 1 row/i,
       });
@@ -485,6 +543,68 @@ describe('GradebookWeightedTable', () => {
         within(dialog).queryByText('Gamification'),
       ).not.toBeInTheDocument();
       expect(within(dialog).queryByText('Level')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('row-expand breakdown', () => {
+    const expandable = {
+      tabs: [makeTab(10, 'Missions', 1, 60), makeTab(20, 'Quizzes', 1, 40)],
+      assessments: [
+        makeAssessment(1, 'Mission 1', 10, 100),
+        makeAssessment(2, 'Mission 2', 10, 50),
+        makeAssessment(3, 'Quiz 1', 20, 100),
+      ],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [
+        makeSub(1, 1, 80), // 0.8
+        makeSub(1, 2, 50), // 1.0
+        makeSub(1, 3, 90), // 0.9
+      ],
+    };
+
+    it('renders an expand control on each student row', () => {
+      renderWeighted(expandable);
+      expect(
+        screen.getByRole('button', { name: /expand Alice/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('does not show assessment breakdown until expanded', () => {
+      renderWeighted(expandable);
+      expect(screen.queryByText(/Mission 1/)).not.toBeInTheDocument();
+    });
+
+    it('shows per-assessment grade and points after expanding, and hides on collapse', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      const toggle = screen.getByRole('button', { name: /expand Alice/i });
+      await user.click(toggle);
+      // grade/max shown
+      expect(await screen.findByText(/Mission 1/)).toBeInTheDocument();
+      expect(screen.getByText('80/100')).toBeInTheDocument();
+      // points contribution: Mission 1 = (0.8/2)*60 = 24
+      const detail = screen.getByTestId('breakdown-row-1-10-1');
+      expect(within(detail).getByText('24')).toBeInTheDocument();
+      // collapse
+      await user.click(screen.getByRole('button', { name: /collapse Alice/i }));
+      await waitFor(() =>
+        expect(screen.queryByText(/Mission 1/)).not.toBeInTheDocument(),
+      );
+    });
+
+    it('breakdown points for a tab sum to the tab cell shown on the main row', async () => {
+      const user = userEvent.setup();
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // Missions cell (main row) = 24 + 30 = 54
+      expect(screen.getByText('54')).toBeInTheDocument();
+      // and both contributions are present in the detail
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-1')).getByText('24'),
+      ).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId('breakdown-row-1-10-2')).getByText('30'),
+      ).toBeInTheDocument();
     });
   });
 
