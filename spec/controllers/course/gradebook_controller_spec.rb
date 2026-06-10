@@ -385,6 +385,15 @@ RSpec.describe Course::GradebookController, type: :controller do
           body = JSON.parse(response.body)
           expect(body['canManageWeights']).to eq(false)
         end
+
+        it 'serializes weightMode on tabs and gradebookWeight on assessments when weighted view is enabled' do
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          tab_json = body['tabs'].find { |t| t['id'] == tab.id }
+          expect(tab_json).to have_key('weightMode')
+          expect(body['assessments'].first).to have_key('gradebookWeight')
+        end
       end
     end
   end
