@@ -9257,11 +9257,29 @@
   "course.gradebook.ConfigureWeightsDialog.weightsDoNotSum": {
     "defaultMessage": "Weights do not sum to 100. Saving is allowed; Total may be inaccurate."
   },
+  "course.gradebook.ConfigureWeightsDialog.equalMode": {
+    "defaultMessage": "Equal"
+  },
+  "course.gradebook.ConfigureWeightsDialog.customMode": {
+    "defaultMessage": "Custom"
+  },
+  "course.gradebook.ConfigureWeightsDialog.modeAria": {
+    "defaultMessage": "{tab} weight mode"
+  },
+  "course.gradebook.ConfigureWeightsDialog.customSum": {
+    "defaultMessage": "Assessment weights: {sum} / {total}"
+  },
+  "course.gradebook.ConfigureWeightsDialog.unbalanced": {
+    "defaultMessage": "Assessment weights for \"{tab}\" must sum to its tab total before saving."
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueNotTwoDp": {
+    "defaultMessage": "Value can have at most 2 decimal places"
+  },
   "course.gradebook.GradebookIndex.allAssessments": {
-    "defaultMessage": "All assessments"
+    "defaultMessage": "Raw Scores"
   },
   "course.gradebook.GradebookIndex.byWeight": {
-    "defaultMessage": "By weight"
+    "defaultMessage": "Weighted View"
   },
   "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
     "defaultMessage": "No grade or gamification columns selected - export will include student info only."
@@ -9275,6 +9293,9 @@
   "course.gradebook.GradebookWeightedTable.noWeightsConfigured": {
     "defaultMessage": "No weights configured - all tab weights are 0. Use \"Configure Weights\" to assign weights."
   },
+  "course.gradebook.GradebookWeightedTable.name": {
+    "defaultMessage": "Name"
+  },
   "course.gradebook.GradebookWeightedTable.percentOfGrade": {
     "defaultMessage": "{weight}% of grade"
   },
@@ -9284,8 +9305,8 @@
   "course.gradebook.GradebookWeightedTable.percentTotalWarning": {
     "defaultMessage": "{weight}% total"
   },
-  "course.gradebook.GradebookWeightedTable.student": {
-    "defaultMessage": "Student"
+  "course.gradebook.GradebookWeightedTable.searchStudents": {
+    "defaultMessage": "Search students"
   },
   "course.gradebook.GradebookWeightedTable.total": {
     "defaultMessage": "Total"

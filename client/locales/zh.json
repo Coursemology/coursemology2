@@ -9214,5 +9214,47 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "登录遇到问题？"
+  },
+    "course.gradebook.ConfigureWeightsDialog.cancel": {
+    "defaultMessage": "取消"
+  },
+  "course.gradebook.ConfigureWeightsDialog.description": {
+    "defaultMessage": "设置每个标签页对最终成绩的贡献比例。权重总和应为 100。"
+  },
+  "course.gradebook.ConfigureWeightsDialog.dialogTitle": {
+    "defaultMessage": "配置标签页权重"
+  },
+  "course.gradebook.ConfigureWeightsDialog.save": {
+    "defaultMessage": "保存"
+  },
+  "course.gradebook.ConfigureWeightsDialog.total": {
+    "defaultMessage": "总计：{sum}%"
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueTooHigh": {
+    "defaultMessage": "值必须至多为 100"
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueTooLow": {
+    "defaultMessage": "值必须至少为 0"
+  },
+  "course.gradebook.ConfigureWeightsDialog.weightsDoNotSum": {
+    "defaultMessage": "权重总和不为 100。允许保存；总计可能不准确。"
+  },
+  "course.gradebook.ConfigureWeightsDialog.equalMode": {
+    "defaultMessage": "平均"
+  },
+  "course.gradebook.ConfigureWeightsDialog.customMode": {
+    "defaultMessage": "自定义"
+  },
+  "course.gradebook.ConfigureWeightsDialog.modeAria": {
+    "defaultMessage": "{tab} 权重模式"
+  },
+  "course.gradebook.ConfigureWeightsDialog.customSum": {
+    "defaultMessage": "评估权重：{sum} / {total}"
+  },
+  "course.gradebook.ConfigureWeightsDialog.unbalanced": {
+    "defaultMessage": "保存前，\"{tab}\"的各评估权重之和必须等于该标签的总权重。"
+  },
+  "course.gradebook.ConfigureWeightsDialog.valueNotTwoDp": {
+    "defaultMessage": "数值最多只能有两位小数"
   }
 }
