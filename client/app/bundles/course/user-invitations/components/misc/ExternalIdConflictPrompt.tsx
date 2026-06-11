@@ -22,6 +22,7 @@ interface Props {
   onKeepExisting: () => void;
   onReplaceAll: () => void;
   onCancel: () => void;
+  disabled?: boolean;
 }
 
 const translations = defineMessages({
@@ -62,6 +63,7 @@ const ExternalIdConflictPrompt: FC<Props> = ({
   onKeepExisting,
   onReplaceAll,
   onCancel,
+  disabled = false,
 }) => {
   const { t } = useTranslation();
 
@@ -70,6 +72,7 @@ const ExternalIdConflictPrompt: FC<Props> = ({
       disableEscapeKeyDown
       maxWidth="md"
       onClose={(_event, reason) => {
+        if (disabled) return;
         if (reason !== 'backdropClick') onCancel();
       }}
       open
@@ -105,13 +108,17 @@ const ExternalIdConflictPrompt: FC<Props> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} variant="outlined">
+        <Button disabled={disabled} onClick={onCancel} variant="outlined">
           {t(translations.goBack)}
         </Button>
-        <Button onClick={onKeepExisting} variant="contained">
+        <Button
+          disabled={disabled}
+          onClick={onKeepExisting}
+          variant="contained"
+        >
           {t(translations.keepExisting)}
         </Button>
-        <Button onClick={onReplaceAll} variant="contained">
+        <Button disabled={disabled} onClick={onReplaceAll} variant="contained">
           {t(translations.replace)}
         </Button>
       </DialogActions>

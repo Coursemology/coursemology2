@@ -15,6 +15,7 @@ export type InvitationFailureReason =
   | 'duplicate_email_in_file'
   | 'duplicate_external_id_in_file'
   | 'external_id_taken'
+  | 'missing_email'
   | 'failed_to_send';
 
 export interface FailedInvitationRowData extends CourseUserListData {

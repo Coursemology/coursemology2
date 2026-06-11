@@ -130,22 +130,34 @@ module Course::UserInvitationService::ParseInvitationConcern
     header_map = nil
     blank_header_indices = []
     @blank_header_warning = false
-    [].tap do |invites|
-      CSV.foreach(file, encoding: 'utf-8').with_index(1) do |row, row_number|
-        row_num = row_number
-        row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1 && row[0]
-        row = strip_row(row)
-        if row_number == 1
-          header_map, blank_header_indices = build_header_map!(row)
-          next
-        end
-        @blank_header_warning ||= blank_header_indices.any? { |idx| row[idx].present? }
-        invite = parse_file_row(row, header_map)
-        invites << invite if invite
+    @parse_failed_users = []
+    invites = []
+    CSV.foreach(file, encoding: 'utf-8').with_index(1) do |row, row_number|
+      row_num = row_number
+      row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1 && row[0]
+      row = strip_row(row)
+      if row_number == 1
+        header_map, blank_header_indices = build_header_map!(row)
+        next
       end
+      @blank_header_warning ||= blank_header_indices.any? { |idx| row[idx].present? }
+      collect_parsed_row(parse_file_row(row, header_map), invites)
     end
+    raise I18n.t('errors.course.user_invitations.no_valid_rows') if invites.empty? && @parse_failed_users.empty?
+
+    invites
   rescue StandardError => e
     raise CSV::MalformedCSVError.new(e.message, row_num), e.message
+  end
+
+  # Routes a parsed row into the right bucket: a +nil+ row is skipped, a row tagged with
+  # a +:reason+ is a parse-time failure (e.g. missing email), and any other row is a valid
+  # invite. Failures accumulate in +@parse_failed_users+ so the caller can merge them into
+  # the overall failed-users list shown to the user.
+  def collect_parsed_row(invite, invites)
+    return unless invite
+
+    invite[:reason] ? (@parse_failed_users << invite) : (invites << invite)
   end
 
   # Strips a row of whitespaces.
@@ -170,28 +182,42 @@ module Course::UserInvitationService::ParseInvitationConcern
   end
 
   def build_header_map!(row)
-    resolved = {}
-    blank_indices = []
-    row.each_with_index do |cell, idx|
-      if cell.blank?
-        blank_indices << idx
-        next
-      end
-
-      canonical = header_alias_map[normalize_header(cell)]
-      raise_non_canonical_header_error!(cell) unless canonical
-      raise_duplicate_header_error!(canonical) if resolved.key?(canonical)
-
-      resolved[canonical] = idx
-    end
-
+    resolved, blank_indices, unrecognized = scan_header_row(row)
+    raise_non_canonical_header_error!(unrecognized) if unrecognized.any?
     validate_required_headers!(resolved)
     [resolved, blank_indices]
   end
 
-  def raise_non_canonical_header_error!(cell)
-    accepted = CANONICAL_COLUMNS.map { |col| I18n.t("csv.course_user_invitations.headers.#{col}") }.join(', ')
-    raise I18n.t('errors.course.user_invitations.invalid_headers', header: cell, accepted: accepted)
+  # Single pass over the header row, partitioning cells into resolved canonical columns,
+  # blank-header indices, and unrecognized headers. All unrecognized headers are collected
+  # (rather than failing on the first) so the user can fix them in one round-trip.
+  def scan_header_row(row)
+    resolved = {}
+    blank_indices = []
+    unrecognized = []
+    row.each_with_index do |cell, idx|
+      if cell.blank?
+        blank_indices << idx
+      elsif (canonical = header_alias_map[normalize_header(cell)])
+        raise_duplicate_header_error!(canonical) if resolved.key?(canonical)
+        resolved[canonical] = idx
+      else
+        unrecognized << cell
+      end
+    end
+    [resolved, blank_indices, unrecognized]
+  end
+
+  def raise_non_canonical_header_error!(unrecognized)
+    headers = unrecognized.map { |cell| %("#{cell}") }.join(', ')
+    accepted = CANONICAL_COLUMNS.map { |col| header_label(col) }.join(', ')
+    raise I18n.t('errors.course.user_invitations.invalid_headers', headers: headers, accepted: accepted)
+  end
+
+  # The current display label for a canonical column. Single source of truth so the alias
+  # accepted-list (and future per-course relabeling) stay in sync.
+  def header_label(col)
+    I18n.t("csv.course_user_invitations.headers.#{col}")
   end
 
   def raise_duplicate_header_error!(canonical)
@@ -208,23 +234,35 @@ module Course::UserInvitationService::ParseInvitationConcern
   # Parses the given CSV row (array) and returns attributes for a user invitation.
   #   - Columns are resolved by position via +header_map+, not by fixed order.
   #   - Sets the name as the given email if a name was not provided.
+  #   - A blank-email row that still carries identifying data (name or external ID) is the
+  #     row a user meant to invite but forgot the email for: it is returned tagged with
+  #     +reason: :missing_email+ so the caller can surface it as a failure rather than
+  #     silently dropping it. A row with neither email nor identity carries no intent
+  #     (blank line, stray attribute cell) and is skipped (+nil+).
   #
   # @param [Array] row The row's cells as read from the CSV file.
   # @param [Hash{Symbol=>Integer}] header_map Maps each resolved canonical column
   #   (a subset of +CANONICAL_COLUMNS+) to its index in +row+. Only +:name+ and
   #   +:email+ are guaranteed present; optional columns are absent when not in the file.
-  # @return [Hash] The parsed invitation attributes given the row.
+  # @return [Hash, nil] The parsed invitation attributes, a missing-email failure hash, or
+  #   +nil+ when the row should be skipped.
   def parse_file_row(row, header_map)
     email = row[header_map[:email]]
-    return nil if email.blank?
-
     name = row[header_map[:name]]
-    name = email if name.blank?
+    external_id = parse_file_external_id(row_cell(row, header_map, :external_id))
 
     role = parse_file_role(row_cell(row, header_map, :role))
     phantom = parse_file_phantom(row_cell(row, header_map, :phantom))
     timeline_algorithm = parse_file_timeline_algorithm(row_cell(row, header_map, :personal_timeline))
-    external_id = parse_file_external_id(row_cell(row, header_map, :external_id))
+
+    if email.blank?
+      return nil if name.blank? && external_id.blank?
+
+      return { name: name, email: nil, role: role, phantom: phantom,
+               timeline_algorithm: timeline_algorithm, external_id: external_id, reason: :missing_email }
+    end
+
+    name = email if name.blank?
 
     { name: name, email: email, role: role, phantom: phantom,
       timeline_algorithm: timeline_algorithm, external_id: external_id }

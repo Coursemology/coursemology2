@@ -7094,11 +7094,14 @@
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
     "defaultMessage": "姓名,电子邮件,外部编号,角色,旁听学生,个人时间线{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired": {
+    "defaultMessage": "CSV 必须同时包含“姓名”和“电子邮件”列。所有其他列均为可选。"
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
-    "defaultMessage": "每个邀请必须使用课程内唯一的电子邮件地址。重复的电子邮件将被跳过。"
+    "defaultMessage": "每个邀请在课程内必须使用唯一的电子邮件地址。重复的电子邮件将被跳过。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "外部编号为可选项。如填写，将取代该用户现有的外部编号，且不得与本课程内其他用户重复。"
+    "defaultMessage": "如果提供了外部编号，则这些外部编号在课程内必须唯一。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "上传具有以下格式的 .csv 文件："
@@ -7111,6 +7114,12 @@
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "角色可以是<code>[student, observer, teaching_assistant, manager, owner]</code>，如果省略则默认为学生。用户只能被助教邀请为学生。"
+  },
+  "course.userInvitations.InviteUsersFileUpload.importInProgress": {
+    "defaultMessage": "正在导入用户，请稍候…"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileRequired": {
+    "defaultMessage": "请选择要上传的 CSV 文件。"
   },
   "course.userInvitations.InviteUsersFileUpload.template": {
     "defaultMessage": "（模板文件）"

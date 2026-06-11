@@ -27,6 +27,10 @@ const translations = defineMessages({
     id: 'course.userInvitations.InvitationResultFailedTable.externalIdTaken',
     defaultMessage: 'External ID is taken by another course member',
   },
+  missingEmail: {
+    id: 'course.userInvitations.InvitationResultFailedTable.missingEmail',
+    defaultMessage: 'Missing email',
+  },
   failedToSend: {
     id: 'course.userInvitations.InvitationResultFailedTable.failedToSend',
     defaultMessage:
@@ -43,6 +47,7 @@ const REASON_MAP: Record<InvitationFailureReason, keyof typeof translations> = {
   duplicate_email_in_file: 'duplicateEmailInFile',
   duplicate_external_id_in_file: 'duplicateExternalIdInFile',
   external_id_taken: 'externalIdTaken',
+  missing_email: 'missingEmail',
   failed_to_send: 'failedToSend',
 };
 

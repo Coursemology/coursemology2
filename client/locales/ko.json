@@ -7100,11 +7100,14 @@
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
     "defaultMessage": "이름,이메일,외부 ID,역할,팬텀,개인 타임라인{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired": {
+    "defaultMessage": "CSV에는 \"이름\"과 \"이메일\" 열이 모두 포함되어야 합니다. 다른 모든 열은 선택 사항입니다."
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
     "defaultMessage": "각 초대는 과정 내에서 고유한 이메일 주소를 사용해야 합니다. 중복된 이메일은 건너뜁니다."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "외부 ID는 선택 사항입니다. 입력된 경우 해당 사용자의 기존 외부 ID를 덮어쓰며, 과정 내에서 고유해야 합니다."
+    "defaultMessage": "외부 ID가 제공된 경우, 해당 외부 ID는 과정 내에서 고유해야 합니다."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "다음 형식으로 .csv 파일을 업로드하세요:"
@@ -7117,6 +7120,12 @@
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "역할은 <code>[학생, 관찰자, 티칭 어시스턴트, 관리자, 소유자]</code>로 설정할 수 있으며, 생략 시 기본값은 학생입니다. 티칭 어시스턴트는 사용자 초대를 학생으로만 할 수 있습니다."
+  },
+  "course.userInvitations.InviteUsersFileUpload.importInProgress": {
+    "defaultMessage": "사용자를 가져오는 중입니다. 잠시만 기다려 주세요…"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileRequired": {
+    "defaultMessage": "업로드할 CSV 파일을 선택해 주세요."
   },
   "course.userInvitations.InviteUsersFileUpload.template": {
     "defaultMessage": "(템플릿 파일)"
