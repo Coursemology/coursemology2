@@ -5397,7 +5397,7 @@
     "defaultMessage": "成绩册"
   },
   "course.gradebook.GradebookIndex.searchStudents": {
-    "defaultMessage": "搜索学生"
+    "defaultMessage": "按姓名或名字搜索"
   },
   "course.gradebook.GradebookIndex.noStudents": {
     "defaultMessage": "无学生"
