@@ -4,6 +4,7 @@ json.courseUrl course_path(current_course)
 json.courseLogoUrl url_to_course_logo(current_course)
 json.courseUserUrl url_to_user_or_course_user(current_course, current_course_user)
 json.userName current_user&.name
+json.userId current_user&.id
 
 if current_course_user.present? && can?(:read, current_course)
   json.courseUserName current_course_user.name

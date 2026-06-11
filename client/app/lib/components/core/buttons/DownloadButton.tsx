@@ -24,7 +24,7 @@ const DownloadButton = (props: DownloadButtonProps): JSX.Element => (
       >
         <Download color="info" />
 
-        <Typography color="links">{props.children}</Typography>
+        <Typography sx={{ color: 'links.main' }}>{props.children}</Typography>
       </Link>
     </Paper>
   </div>

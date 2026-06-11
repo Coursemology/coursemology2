@@ -47,13 +47,6 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     @course_user_hash = current_course.course_users.index_by(&:user_id)
   end
 
-  def download_score_summary
-    job = Course::Statistics::AssessmentsScoreSummaryDownloadJob.
-          perform_later(current_course, params[:assessment_ids]).job
-
-    render partial: 'jobs/submitted', locals: { job: job }
-  end
-
   private
 
   def sanitize_date_range(start_at_param, end_at_param)
