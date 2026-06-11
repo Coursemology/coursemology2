@@ -28,6 +28,7 @@ export interface StudentData {
 export interface SubmissionData {
   studentId: number;
   assessmentId: number;
+  submissionId: number;
   grade: number | null;
 }
 

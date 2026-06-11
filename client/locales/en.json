@@ -5421,7 +5421,7 @@
     "defaultMessage": "Gradebook"
   },
   "course.gradebook.GradebookIndex.searchStudents": {
-    "defaultMessage": "Search by name or email"
+    "defaultMessage": "Search students"
   },
   "course.gradebook.GradebookIndex.noStudents": {
     "defaultMessage": "No students enrolled yet"

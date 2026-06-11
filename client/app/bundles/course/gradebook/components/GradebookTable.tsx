@@ -69,7 +69,7 @@ const isLeftAligned = (id: string): boolean =>
 const translations = defineMessages({
   searchStudents: {
     id: 'course.gradebook.GradebookIndex.searchStudents',
-    defaultMessage: 'Search by name or email',
+    defaultMessage: 'Search students',
   },
   exportButton: {
     id: 'course.gradebook.GradebookIndex.exportButton',
@@ -188,6 +188,11 @@ const HeaderLabel = forwardRef<
 });
 HeaderLabel.displayName = 'HeaderLabel';
 
+interface GradeEntry {
+  grade: number;
+  submissionId: number;
+}
+
 interface GradebookRow {
   studentId: number;
   name: string;
@@ -195,7 +200,7 @@ interface GradebookRow {
   externalId: string | null;
   level: number;
   totalXp: number;
-  grades: Partial<Record<number, number | null>>;
+  grades: Partial<Record<number, GradeEntry>>;
 }
 
 interface GradebookTableProps {
@@ -238,10 +243,11 @@ const GradebookTable = ({
     () =>
       students.map((student) => {
         const subs = submissionsByStudent.get(student.id) ?? [];
-        const grades: Partial<Record<number, number | null>> = {};
+        const grades: Partial<Record<number, GradeEntry>> = {};
         assessments.forEach((a) => {
           const sub = subs.find((s) => s.assessmentId === a.id);
-          if (sub != null) grades[a.id] = sub.grade;
+          if (sub != null && sub.grade != null)
+            grades[a.id] = { grade: sub.grade, submissionId: sub.submissionId };
         });
         return {
           studentId: student.id,
@@ -290,6 +296,7 @@ const GradebookTable = ({
       of: 'externalId',
       cell: (row) => row.externalId ?? '',
       csvDownloadable: true,
+      searchable: true,
       defaultVisible: hasExternalIds,
     });
 
@@ -315,12 +322,23 @@ const GradebookTable = ({
       cols.push({
         id: colId,
         title: asn.title,
-        accessorFn: (row) => row.grades[asn.id],
+        accessorFn: (row) => row.grades[asn.id]?.grade,
         cell: (row) => {
-          const grade = row.grades[asn.id];
-          if (grade === undefined) return '—';
-          if (grade === null) return '';
-          return grade;
+          const entry = row.grades[asn.id];
+          if (entry === undefined) return '—';
+          const href = `/courses/${courseId}/assessments/${asn.id}/submissions/${entry.submissionId}/edit`;
+          return (
+            <a
+              href={href}
+              style={{
+                color: 'inherit',
+                textDecoration: 'underline dotted',
+                textUnderlineOffset: '2px',
+              }}
+            >
+              {entry.grade}
+            </a>
+          );
         },
         csvDownloadable: true,
         defaultVisible: false,
@@ -402,6 +420,7 @@ const GradebookTable = ({
         50,
         DEFAULT_TABLE_ROWS_PER_PAGE,
       ],
+      initialPageSize: DEFAULT_TABLE_ROWS_PER_PAGE,
       showAllRows: true,
     },
     search: { searchPlaceholder: t(translations.searchStudents) },
@@ -523,7 +542,9 @@ const GradebookTable = ({
                   <TableCell
                     sx={{
                       top: 0,
-                      zIndex: 3,
+                      left: 0,
+                      zIndex: 4,
+                      bgcolor: 'background.paper',
                       width: CHECKBOX_WIDTH,
                       minWidth: CHECKBOX_WIDTH,
                       maxWidth: CHECKBOX_WIDTH,
@@ -544,12 +565,19 @@ const GradebookTable = ({
                     const label = typeof c.title === 'string' ? c.title : id;
                     const isLeft = isLeftAligned(id);
                     const fits = headerFits[id] ?? false;
+                    const isName = id === 'name';
                     return (
                       <TableCell
                         key={id}
                         align={isLeft ? 'left' : 'right'}
                         sx={{
                           verticalAlign: isLeft || fits ? 'middle' : 'bottom',
+                          ...(isName && {
+                            top: 0,
+                            left: CHECKBOX_WIDTH,
+                            zIndex: 4,
+                            bgcolor: 'background.paper',
+                          }),
                         }}
                       >
                         <Tooltip title={label}>
@@ -563,16 +591,12 @@ const GradebookTable = ({
                   })}
                 </TableRow>
                 {hasVisibleAssessments && (
-                  <TableRow
-                    sx={{
-                      '& .MuiTableCell-stickyHeader': {
-                        top: row2Top,
-                        zIndex: 2,
-                      },
-                    }}
-                  >
+                  <TableRow>
                     <TableCell
                       sx={{
+                        top: row2Top,
+                        left: 0,
+                        zIndex: 3,
                         bgcolor: 'grey.100',
                         width: CHECKBOX_WIDTH,
                         minWidth: CHECKBOX_WIDTH,
@@ -583,15 +607,21 @@ const GradebookTable = ({
                     {visibleCols.map((c) => {
                       const id = c.id ?? (c.of as string);
                       const asnId = parseAssessmentColumnId(id);
+                      const isName = id === 'name';
                       let cellContent: string | number = '';
-                      if (id === 'name') cellContent = t(translations.maxMarks);
+                      if (isName) cellContent = t(translations.maxMarks);
                       else if (asnId !== null)
                         cellContent = assessmentMaxGrades.get(asnId) ?? '';
                       return (
                         <TableCell
                           key={id}
                           align={asnId !== null ? 'right' : 'left'}
-                          sx={{ bgcolor: 'grey.100' }}
+                          sx={{
+                            top: row2Top,
+                            zIndex: isName ? 3 : 2,
+                            bgcolor: 'grey.100',
+                            ...(isName && { left: CHECKBOX_WIDTH }),
+                          }}
                         >
                           {cellContent}
                         </TableCell>
@@ -610,6 +640,10 @@ const GradebookTable = ({
                     >
                       <TableCell
                         sx={{
+                          position: 'sticky',
+                          left: 0,
+                          zIndex: 1,
+                          bgcolor: 'background.paper',
                           width: CHECKBOX_WIDTH,
                           minWidth: CHECKBOX_WIDTH,
                           maxWidth: CHECKBOX_WIDTH,
@@ -627,11 +661,22 @@ const GradebookTable = ({
                         .getVisibleCells()
                         .filter((cell) => cell.column.id !== 'rowSelector')
                         .map((cell) => {
+                          const isName = cell.column.id === 'name';
                           return (
                             <TableCell
                               key={cell.id}
                               align={
                                 isLeftAligned(cell.column.id) ? 'left' : 'right'
+                              }
+                              sx={
+                                isName
+                                  ? {
+                                      position: 'sticky',
+                                      left: CHECKBOX_WIDTH,
+                                      zIndex: 1,
+                                      bgcolor: 'background.paper',
+                                    }
+                                  : undefined
                               }
                             >
                               {flexRender(

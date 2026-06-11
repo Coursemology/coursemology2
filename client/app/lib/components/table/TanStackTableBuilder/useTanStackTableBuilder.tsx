@@ -171,14 +171,18 @@ const useTanStackTableBuilder = <D extends object>(
         props.pagination.onPaginationChange(newValue, pagination);
       }
     },
-    // TanStack's default getColumnCanGlobalFilter sniffs the first row's value
-    // type (string|number) to decide whether a column participates in global
-    // filter. When the first row has a nullable column (e.g. externalId=null),
-    // typeof null === 'object' → false, silently excluding that column from
-    // search even when the column has searchable:true / enableGlobalFilter:true.
-    // We already express intent via enableGlobalFilter, so bypass the sniff.
+    // Search only matches columns that are currently visible ("search what you
+    // see"): hiding a column via the picker removes it from search too, so no
+    // result can appear without a visible column explaining it.
+    //
+    // We also bypass TanStack's default type-sniff here. The default
+    // getColumnCanGlobalFilter inspects the first row's value type
+    // (string|number) to decide participation; a nullable first value (e.g.
+    // externalId=null) is typeof 'object' → false, silently excluding the
+    // column even when searchable:true. Intent is already expressed via
+    // enableGlobalFilter (= searchable), so visibility is the only extra gate.
     // See: https://github.com/TanStack/table/pull/6252
-    getColumnCanGlobalFilter: () => true,
+    getColumnCanGlobalFilter: (column) => column.getIsVisible(),
     autoResetPageIndex: false,
     state: {
       rowSelection,

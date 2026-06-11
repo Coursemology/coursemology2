@@ -29,6 +29,7 @@ end
 json.submissions @submissions do |sub|
   json.studentId sub.student_id
   json.assessmentId sub.assessment_id
+  json.submissionId sub.submission_id
   json.grade sub.grade&.to_f
 end
 

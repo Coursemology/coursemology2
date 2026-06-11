@@ -35,7 +35,7 @@ const students: StudentData[] = [
   },
 ];
 const submissions: SubmissionData[] = [
-  { studentId: 1, assessmentId: 100, grade: 8 },
+  { studentId: 1, assessmentId: 100, submissionId: 1001, grade: 8 },
 ];
 
 const makeStudents = (n: number): StudentData[] =>
@@ -375,6 +375,30 @@ describe('GradebookTable', () => {
       );
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
+
+    it('stops searching the email column once it is hidden', async () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, email: false, 'asn-100': true }),
+      );
+      const user = userEvent.setup();
+      renderTable();
+      const input = await screen.findByRole('textbox');
+
+      // The visible name column is still searchable.
+      await user.type(input, 'Bob');
+      await waitFor(() =>
+        expect(screen.queryByText('Alice')).not.toBeInTheDocument(),
+      );
+      expect(screen.getByText('Bob')).toBeInTheDocument();
+
+      // The hidden email column no longer participates in search.
+      await user.clear(input);
+      await user.type(input, 'bob@example.com');
+      await waitFor(() =>
+        expect(screen.queryByText('Bob')).not.toBeInTheDocument(),
+      );
+    });
   });
 
   describe('external ID column', () => {
@@ -453,53 +477,67 @@ describe('GradebookTable', () => {
         within(dialog).getByRole('checkbox', { name: /external id/i }),
       ).toBeInTheDocument();
     });
+
+    it('filters by external ID', async () => {
+      const user = userEvent.setup();
+      renderWith(studentsWithExtId);
+      const input = await screen.findByRole('textbox');
+      await user.type(input, 'EXT-001');
+      await waitFor(() =>
+        expect(screen.queryByText('Bob')).not.toBeInTheDocument(),
+      );
+      expect(screen.getByText('Alice')).toBeInTheDocument();
+    });
   });
 
   describe('cross-page selection', () => {
-    it('export label reflects selection count across pages', async () => {
-      const user = userEvent.setup();
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          name: true,
-          email: true,
+    it(
+      'export label reflects selection count across pages',
+      async () => {
+        const user = userEvent.setup();
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            name: true,
+            email: true,
+            'asn-100': true,
+          }),
+        );
+        render(
+          <GradebookTable
+            assessments={assessments}
+            categories={categories}
+            courseId={1}
+            courseTitle="Test Course"
+            gamificationEnabled
+            students={makeStudents(101)}
+            submissions={[]}
+            tabs={tabs}
+          />,
+          { state: userState },
+        );
 
-          'asn-100': true,
-        }),
-      );
-      render(
-        <GradebookTable
-          assessments={assessments}
-          categories={categories}
-          courseId={1}
-          courseTitle="Test Course"
-          gamificationEnabled
-          students={makeStudents(11)}
-          submissions={[]}
-          tabs={tabs}
-        />,
-        { state: userState },
-      );
+        const checkboxes = await screen.findAllByRole('checkbox');
+        await user.click(checkboxes[1]);
+        await waitFor(() =>
+          expect(
+            screen.getByRole('button', { name: /export 1 row/i }),
+          ).toBeInTheDocument(),
+        );
 
-      const checkboxes = await screen.findAllByRole('checkbox');
-      await user.click(checkboxes[1]);
-      await waitFor(() =>
+        await user.click(
+          screen.getByRole('button', { name: /go to next page/i }),
+        );
+        await waitFor(() =>
+          expect(screen.getByText('Student 101')).toBeInTheDocument(),
+        );
+        expect(screen.queryByText('Student 1')).not.toBeInTheDocument();
+
         expect(
           screen.getByRole('button', { name: /export 1 row/i }),
-        ).toBeInTheDocument(),
-      );
-
-      await user.click(
-        screen.getByRole('button', { name: /go to next page/i }),
-      );
-      await waitFor(() =>
-        expect(screen.getByText('Student 11')).toBeInTheDocument(),
-      );
-      expect(screen.queryByText('Student 1')).not.toBeInTheDocument();
-
-      expect(
-        screen.getByRole('button', { name: /export 1 row/i }),
-      ).toBeInTheDocument();
-    });
+        ).toBeInTheDocument();
+      },
+      15000,
+    );
   });
 });
