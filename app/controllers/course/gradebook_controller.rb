@@ -39,6 +39,7 @@ class Course::GradebookController < Course::ComponentController
       tab_id: entry[:tabId].to_i,
       weight: entry[:weight].to_f,
       weight_mode: entry[:weightMode] || 'equal',
+      excluded_assessment_ids: (entry[:excludedAssessmentIds] || []).map(&:to_i),
       assessment_weights: (entry[:assessmentWeights] || []).map do |aw|
         { assessment_id: aw[:assessmentId].to_i, weight: aw[:weight].to_f }
       end
@@ -47,13 +48,15 @@ class Course::GradebookController < Course::ComponentController
 
   def update_weights_params
     params.permit(
-      weights: [:tabId, :weight, :weightMode, assessmentWeights: [:assessmentId, :weight]]
+      weights: [:tabId, :weight, :weightMode,
+                excludedAssessmentIds: [], assessmentWeights: [:assessmentId, :weight]]
     )
   end
 
   def serialize_weight_updates(updates)
     updates.map do |u|
-      entry = { tabId: u[:tab_id], weight: u[:weight], weightMode: u[:weight_mode].to_s }
+      entry = { tabId: u[:tab_id], weight: u[:weight], weightMode: u[:weight_mode].to_s,
+                excludedAssessmentIds: u[:excluded_assessment_ids] }
       if u[:weight_mode].to_s == 'custom'
         entry[:assessmentWeights] = u[:assessment_weights].map do |aw|
           { assessmentId: aw[:assessment_id], weight: aw[:weight] }

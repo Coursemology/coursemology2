@@ -336,6 +336,21 @@ RSpec.describe Course::GradebookController, type: :controller do
           }
           expect(response).to have_http_status(:unprocessable_entity)
         end
+
+        it 'persists and echoes per-assessment exclusion in equal mode' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'equal',
+              excludedAssessmentIds: [a1.id]
+            }]
+          }
+          expect(response).to have_http_status(:ok)
+          expect(a1.reload.gradebook_excluded).to eq(true)
+          expect(a2.reload.gradebook_excluded).to eq(false)
+          entry = JSON.parse(response.body)['weights'].first
+          expect(entry['excludedAssessmentIds']).to eq([a1.id])
+        end
       end
     end
 
