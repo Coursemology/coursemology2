@@ -10,7 +10,7 @@ import translations from '../../../translations';
 interface Props {
   config: CellRandomConfigBody<'numeric'>;
   onChange: (newConfig: Partial<CellRandomConfigBody<'numeric'>>) => void;
-  onBlur?: () => void;
+  onBlur?: (changedKey: 'min' | 'max') => void;
 }
 
 const NumericRandomizationManager: FC<Props> = (props) => {
@@ -31,7 +31,7 @@ const NumericRandomizationManager: FC<Props> = (props) => {
     if (!maxFocused.current) setMaxText(String(config.max));
   }, [config.max]);
 
-  const handleBlur = (): void => {
+  const handleBlur = (changedKey: 'min' | 'max'): void => {
     minFocused.current = false;
     maxFocused.current = false;
     const min = parseFloat(minText);
@@ -40,7 +40,7 @@ const NumericRandomizationManager: FC<Props> = (props) => {
     else onChange({ min });
     if (Number.isNaN(max)) setMaxText(String(config.max));
     else onChange({ max });
-    onBlur?.();
+    onBlur?.(changedKey);
   };
 
   return (
@@ -48,7 +48,7 @@ const NumericRandomizationManager: FC<Props> = (props) => {
       <TextField
         inputProps={{ inputMode: 'decimal' }}
         label={t(formTranslations.minimum)}
-        onBlur={handleBlur}
+        onBlur={() => handleBlur('min')}
         onChange={(e) => {
           setMinText(e.target.value);
           const v = parseFloat(e.target.value);
@@ -63,7 +63,7 @@ const NumericRandomizationManager: FC<Props> = (props) => {
       <TextField
         inputProps={{ inputMode: 'decimal' }}
         label={t(formTranslations.maximum)}
-        onBlur={handleBlur}
+        onBlur={() => handleBlur('max')}
         onChange={(e) => {
           setMaxText(e.target.value);
           const v = parseFloat(e.target.value);

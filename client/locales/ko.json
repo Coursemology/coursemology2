@@ -8037,6 +8037,9 @@
     "defaultMessage": "인스턴스"
   },
   "lib.components.getHelp.validation.invalidDateSelection": {
+    "defaultMessage": "잘못된 날짜"
+  },
+  "lib.components.getHelp.validation.endDateBeforeStartDate": {
     "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
   },
   "lib.components.getHelp.validation.exceedDateRange": {
