@@ -35,3 +35,6 @@ json.assessments @assessments do |assessment|
   json.numAttempted @num_attempted_students_hash[assessment.id] || 0
   json.numLate @num_late_students_hash[assessment.id] || 0
 end
+
+json.gradebookEnabled current_course.component_enabled?(Course::GradebookComponent) &&
+                      can?(:read_gradebook, current_course)

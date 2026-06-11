@@ -9,13 +9,13 @@ import {
   getSortedRowModel,
   Header,
   Row,
+  SortingState,
   Updater,
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
 import isEmpty from 'lodash-es/isEmpty';
 
-import { getUserEntity } from 'bundles/users/selectors';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { RowEqualityData, TableProps } from '../adapters';
@@ -35,13 +35,13 @@ type TanStackTableProps<D> = TableProps<
 const useTanStackTableBuilder = <D extends object>(
   props: TableTemplate<D>,
 ): TanStackTableProps<D> => {
-  const currentUserId = useAppSelector(getUserEntity).id;
-  // Namespace the caller's key by userId so two users on the same device
-  // don't share visibility preferences. Guard against userId=0 (not yet loaded).
+  const userId = useAppSelector((state) => state.global.user.user.id);
+  const rawStorageKey = props.columnPicker?.storageKey;
   const effectiveStorageKey =
-    props.columnPicker?.storageKey && currentUserId > 0
-      ? `${currentUserId}:${props.columnPicker.storageKey}`
-      : undefined;
+    userId > 0 && rawStorageKey ? `${userId}:${rawStorageKey}` : undefined;
+  const effectiveSortStorageKey = effectiveStorageKey
+    ? `${effectiveStorageKey}_sort`
+    : undefined;
 
   const [columns, getRealColumn] = buildTanStackColumns(
     props.columns,
@@ -52,6 +52,36 @@ const useTanStackTableBuilder = <D extends object>(
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [rowSelection, setRowSelection] = useState({});
+
+  const initialSortState = useMemo<SortingState>(
+    () =>
+      props.sort?.initially
+        ? [
+            {
+              id: props.sort.initially.by,
+              desc: props.sort.initially.order === 'desc',
+            },
+          ]
+        : [],
+    [props.sort?.initially?.by, props.sort?.initially?.order],
+  );
+  const availableColumnIds = useMemo(
+    () => new Set(props.columns.map((c) => c.id ?? (c.of as string))),
+    [props.columns],
+  );
+  const storedSortState = useMemo<SortingState>(() => {
+    if (!effectiveSortStorageKey) return initialSortState;
+    try {
+      const raw = localStorage.getItem(effectiveSortStorageKey);
+      if (!raw) return initialSortState;
+      const parsed = JSON.parse(raw) as SortingState;
+      if (!Array.isArray(parsed)) return initialSortState;
+      return parsed;
+    } catch {
+      return initialSortState;
+    }
+  }, [effectiveSortStorageKey, initialSortState]);
+  const [sorting, setSorting] = useState<SortingState>(storedSortState);
   const [pagination, setPagination] = useState({
     pageSize:
       props.pagination?.initialPageSize ??
@@ -104,7 +134,14 @@ const useTanStackTableBuilder = <D extends object>(
   const safeSetVisibility = (updater: Updater<VisibilityState>): void => {
     setColumnVisibility((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
-      return enforceLocked(next);
+      const enforced = enforceLocked(next);
+      if (props.sort?.resetOnHide) {
+        // A column is hidden when its next value is explicitly false (absent = visible).
+        const nowHidden = (id: string): boolean => enforced[id] === false;
+        const sortedColHidden = sorting.some((s) => nowHidden(s.id));
+        if (sortedColHidden) setSorting(initialSortState);
+      }
+      return enforced;
     });
   };
 
@@ -121,6 +158,15 @@ const useTanStackTableBuilder = <D extends object>(
       // is unaffected if it fails.
     }
   }, [columnVisibility, effectiveStorageKey]);
+
+  useEffect(() => {
+    if (!effectiveSortStorageKey) return;
+    try {
+      localStorage.setItem(effectiveSortStorageKey, JSON.stringify(sorting));
+    } catch {
+      // best-effort — QuotaExceededError or SecurityError leaves the current session intact
+    }
+  }, [sorting, effectiveSortStorageKey]);
 
   // Reconcile when columns change (e.g. async-loaded gradebook assessments).
   useEffect(() => {
@@ -145,6 +191,14 @@ const useTanStackTableBuilder = <D extends object>(
     });
   }, [props.columns, enforceLocked]);
 
+  useEffect(() => {
+    setSorting((current) => {
+      const stillValid = current.filter((s) => availableColumnIds.has(s.id));
+      if (stillValid.length === current.length) return current;
+      return stillValid.length > 0 ? stillValid : initialSortState;
+    });
+  }, [availableColumnIds, initialSortState]);
+
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
 
@@ -162,6 +216,7 @@ const useTanStackTableBuilder = <D extends object>(
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: props.pagination && getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    enableSortingRemoval: props.sort?.enableRemoval ?? true,
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
@@ -175,14 +230,18 @@ const useTanStackTableBuilder = <D extends object>(
         props.pagination.onPaginationChange(newValue, pagination);
       }
     },
-    // TanStack's default getColumnCanGlobalFilter sniffs the first row's value
-    // type (string|number) to decide whether a column participates in global
-    // filter. When the first row has a nullable column (e.g. externalId=null),
-    // typeof null === 'object' → false, silently excluding that column from
-    // search even when the column has searchable:true / enableGlobalFilter:true.
-    // We already express intent via enableGlobalFilter, so bypass the sniff.
+    // Search only matches columns that are currently visible ("search what you
+    // see"): hiding a column via the picker removes it from search too, so no
+    // result can appear without a visible column explaining it.
+    //
+    // We also bypass TanStack's default type-sniff here. The default
+    // getColumnCanGlobalFilter inspects the first row's value type
+    // (string|number) to decide participation; a nullable first value (e.g.
+    // externalId=null) is typeof 'object' → false, silently excluding the
+    // column even when searchable:true. Intent is already expressed via
+    // enableGlobalFilter (= searchable), so visibility is the only extra gate.
     // See: https://github.com/TanStack/table/pull/6252
-    getColumnCanGlobalFilter: () => true,
+    getColumnCanGlobalFilter: (column) => column.getIsVisible(),
     autoResetPageIndex: false,
     state: {
       rowSelection,
@@ -190,16 +249,10 @@ const useTanStackTableBuilder = <D extends object>(
       globalFilter: searchKeyword.trim(),
       pagination,
       columnVisibility,
+      sorting,
     },
     onColumnVisibilityChange: safeSetVisibility,
-    initialState: {
-      sorting: props.sort?.initially && [
-        {
-          id: props.sort.initially.by,
-          desc: props.sort.initially.order === 'desc',
-        },
-      ],
-    },
+    onSortingChange: setSorting,
   });
 
   const getRealColumnById = (id: string): ColumnTemplate<D> | undefined => {
@@ -349,7 +402,10 @@ const useTanStackTableBuilder = <D extends object>(
       },
       searchKeyword,
       onSearchKeywordChange: setSearchKeyword,
-      onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
+      onDownloadCsv:
+        props.csvDownload && (props.csvDownload.showDownloadButton ?? true)
+          ? generateAndDownloadCsv
+          : undefined,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
       buttons: props.toolbar?.buttons,

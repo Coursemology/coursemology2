@@ -3,9 +3,11 @@ import {
   useLoaderData,
   useOutletContext,
 } from 'react-router-dom';
+import { dispatch as imperativeDispatch } from 'store';
 import { CourseLayoutData, SidebarItemData } from 'types/course/courses';
 
 import CourseAPI from 'api/course';
+import { actions as userActions } from 'bundles/users/store';
 import { syncSignals } from 'lib/hooks/unread';
 
 const extractUnreadCountsInto = (
@@ -33,6 +35,12 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!id) throw new Error(`CourseContainer was loaded with ID: ${id}.`);
 
   const response = await CourseAPI.courses.fetchLayout(id);
+
+  // Hydrate the authenticated user's id into the global store. It is otherwise
+  // only populated on the user profile page, so any course page relying on it
+  // (e.g. per-user localStorage namespacing for table column prefs) would read 0.
+  const { userId } = response.data;
+  if (userId != null) imperativeDispatch(userActions.setCurrentUserId(userId));
 
   syncSignals(extractUnreadCountsFromLayoutData(response.data));
 

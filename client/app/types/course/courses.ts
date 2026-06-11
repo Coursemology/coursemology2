@@ -107,6 +107,7 @@ export interface CourseLayoutData {
   courseUrl: string;
   courseUserUrl: string;
   userName: string;
+  userId: number | null;
   courseLogoUrl?: string;
   courseUserName?: string;
   courseUserRole?: CourseUserRole;

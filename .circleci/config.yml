@@ -119,6 +119,7 @@ commands:
           command: yarn build:test
           environment:
             AVAILABLE_CPUS: 4
+            NODE_OPTIONS: --max-old-space-size=4096
 
       - save_cache:
           paths:

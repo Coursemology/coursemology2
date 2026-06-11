@@ -12,6 +12,8 @@ import {
   SaveCourseListAction,
   SaveInstanceListAction,
   SaveUserAction,
+  SET_CURRENT_USER_ID,
+  SetCurrentUserIdAction,
 } from './types';
 
 const initialState: GlobalUserState = {
@@ -31,6 +33,13 @@ const reducer = produce((draft: GlobalUserState, action: GlobalActionType) => {
       const userData = action.user;
       const userEntity = { ...userData };
       draft.user = userEntity;
+      break;
+    }
+    // Sets only the authenticated user's id, leaving name/imageUrl untouched.
+    // The course layout fetch knows the current user id but not the full profile;
+    // this is enough to namespace per-user client state (e.g. table column prefs).
+    case SET_CURRENT_USER_ID: {
+      draft.user.id = action.userId;
       break;
     }
     case SAVE_COURSE_LIST: {
@@ -65,6 +74,10 @@ const reducer = produce((draft: GlobalUserState, action: GlobalActionType) => {
 export const actions = {
   saveUser: (user: UserBasicListData): SaveUserAction => {
     return { type: SAVE_USER, user };
+  },
+
+  setCurrentUserId: (userId: number): SetCurrentUserIdAction => {
+    return { type: SET_CURRENT_USER_ID, userId };
   },
 
   saveCourses: (

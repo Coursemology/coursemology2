@@ -23,6 +23,7 @@ const fixture: Row[] = [
 
 const buildHarness = (
   visibility: Record<string, boolean>,
+  selectedRowIds?: Record<string, boolean>,
 ): {
   table: Table<Row>;
   getRealColumn: (id: string) => ColumnTemplate<Row> | undefined;
@@ -63,8 +64,13 @@ const buildHarness = (
       data: fixture,
       columns: columnDefs,
       getCoreRowModel: getCoreRowModel(),
-      state: { columnVisibility: visibility },
+      enableRowSelection: true,
+      state: {
+        columnVisibility: visibility,
+        rowSelection: selectedRowIds ?? {},
+      },
       onColumnVisibilityChange: () => {},
+      onRowSelectionChange: () => {},
     }),
   );
 
@@ -183,6 +189,20 @@ describe('csvGenerator', () => {
       expect(lines[2]).toBe('Row2A,Row2B');
       expect(lines[3]).toBe('Alice,alice@example.com');
     });
+  });
+
+  it('exports only selected rows when onlySelected is true', async () => {
+    // TanStack uses row index as id by default: '0' = Alice, '1' = Bob
+    const { table, getRealColumn } = buildHarness(
+      { name: true, email: true, score: true },
+      { '1': true }, // Bob selected
+    );
+
+    const csv = await generateCsv({ table, getRealColumn, onlySelected: true });
+
+    const lines = csv.trim().split(/\r?\n/);
+    expect(lines).toHaveLength(2); // header + Bob only
+    expect(lines[1]).toBe('Bob,bob@example.com');
   });
 
   it('respects csvValue override', async () => {
