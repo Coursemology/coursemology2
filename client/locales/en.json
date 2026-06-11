@@ -8050,7 +8050,10 @@
     "defaultMessage": "Instance"
   },
   "lib.components.getHelp.validation.invalidDateSelection": {
-    "defaultMessage": "End Date must be after or equal to Start Date"
+    "defaultMessage": "Invalid date"
+  },
+  "lib.components.getHelp.validation.endDateBeforeStartDate": {
+    "defaultMessage": "End date must be after or equal to Start date"
   },
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "Date range cannot exceed 365 days"

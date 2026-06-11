@@ -16,7 +16,7 @@ import translations from '../../../translations';
 interface Props {
   config: CellRandomConfigBody<'date'>;
   onChange: (newConfig: Partial<CellRandomConfigBody<'date'>>) => void;
-  onBlur?: () => void;
+  onBlur?: (changedKey: 'min' | 'max') => void;
 }
 
 const DateRandomizationManager: FC<Props> = ({ config, onChange, onBlur }) => {
@@ -33,7 +33,7 @@ const DateRandomizationManager: FC<Props> = ({ config, onChange, onBlur }) => {
             if (value?.isValid()) onChange({ min: value.toDate() });
           }}
           slotProps={{
-            textField: { size: 'small', onBlur },
+            textField: { size: 'small', onBlur: () => onBlur?.('min') },
           }}
           timezone="UTC"
           value={config.min ? moment.utc(config.min) : null}
@@ -46,7 +46,7 @@ const DateRandomizationManager: FC<Props> = ({ config, onChange, onBlur }) => {
             if (value?.isValid()) onChange({ max: value.toDate() });
           }}
           slotProps={{
-            textField: { size: 'small', onBlur },
+            textField: { size: 'small', onBlur: () => onBlur?.('max') },
           }}
           timezone="UTC"
           value={config.max ? moment.utc(config.max) : null}

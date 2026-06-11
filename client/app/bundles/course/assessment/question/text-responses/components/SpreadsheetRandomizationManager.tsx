@@ -536,17 +536,28 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
                   {activeMode === 'numeric' && (
                     <NumericRandomizationManager
                       config={activeConfig.numeric!}
-                      onBlur={() => {
+                      onBlur={(changedKey) => {
                         const { min, max, roundToInteger } =
                           activeConfig.numeric!;
-                        if (min > max)
-                          updateCellConfigs({
-                            ...cellConfigs,
-                            [popover.cellKey]: {
-                              ...activeConfig,
-                              numeric: { min: max, max: min, roundToInteger },
-                            },
-                          });
+                        if (min > max) {
+                          if (changedKey === 'min') {
+                            updateCellConfigs({
+                              ...cellConfigs,
+                              [popover.cellKey]: {
+                                ...activeConfig,
+                                numeric: { min, max: min, roundToInteger },
+                              },
+                            });
+                          } else {
+                            updateCellConfigs({
+                              ...cellConfigs,
+                              [popover.cellKey]: {
+                                ...activeConfig,
+                                numeric: { min: max, max, roundToInteger },
+                              },
+                            });
+                          }
+                        }
                       }}
                       onChange={(changed) => {
                         updateCellConfigs({
@@ -562,16 +573,27 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
                   {activeMode === 'date' && (
                     <DateRandomizationManager
                       config={activeConfig.date!}
-                      onBlur={() => {
+                      onBlur={(changedKey) => {
                         const { min, max, roundToDay } = activeConfig.date!;
-                        if (min > max)
-                          updateCellConfigs({
-                            ...cellConfigs,
-                            [popover.cellKey]: {
-                              ...activeConfig,
-                              date: { min: max, max: min, roundToDay },
-                            },
-                          });
+                        if (min > max) {
+                          if (changedKey === 'min') {
+                            updateCellConfigs({
+                              ...cellConfigs,
+                              [popover.cellKey]: {
+                                ...activeConfig,
+                                date: { min, max: min, roundToDay },
+                              },
+                            });
+                          } else {
+                            updateCellConfigs({
+                              ...cellConfigs,
+                              [popover.cellKey]: {
+                                ...activeConfig,
+                                date: { min: max, max, roundToDay },
+                              },
+                            });
+                          }
+                        }
                       }}
                       onChange={(changed) => {
                         updateCellConfigs({
