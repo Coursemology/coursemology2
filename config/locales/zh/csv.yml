@@ -56,14 +56,6 @@ zh:
       values:
         unknown_question_type: '未知问题类型'
 
-    # Assessment score summary statistics export
-    score_summary:
-      headers:
-        name: '用户名'
-        type: '学生类型'
-        email: '电子邮箱'
-        external_id: '外部编号'
-
     # Course user invitations CSV header terms (parser source of truth)
     course_user_invitations:
       headers:

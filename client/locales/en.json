@@ -4340,6 +4340,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "Forums"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "Gradebook"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "Groups"
   },
@@ -5501,6 +5504,63 @@
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "Failed to mark all topics in this forum as read. Please try again later."
   },
+  "course.gradebook.GradebookColumnTree.grades": {
+    "defaultMessage": "Grades"
+  },
+  "course.gradebook.GradebookColumnTree.alwaysIncluded": {
+    "defaultMessage": "Always included"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "Student info"
+  },
+  "course.gradebook.GradebookColumnTree.gamification": {
+    "defaultMessage": "Gamification"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "Select columns"
+  },
+  "course.gradebook.GradebookIndex.exportAllTooltip": {
+    "defaultMessage": "No rows selected - all rows will be exported."
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "Export all rows"
+  },
+  "course.gradebook.GradebookIndex.exportRows": {
+    "defaultMessage": "Export {count, plural, one {# row} other {# rows}}"
+  },
+  "course.gradebook.GradebookIndex.selectColumns": {
+    "defaultMessage": "Select Columns"
+  },
+  "course.gradebook.GradebookIndex.applyAndExport": {
+    "defaultMessage": "Apply and Export"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "Failed to retrieve Gradebook."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "Gradebook"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "Search students"
+  },
+  "course.gradebook.GradebookIndex.noStudents": {
+    "defaultMessage": "No students enrolled yet"
+  },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "Grades will appear here once students join the course."
+  },
+  "course.gradebook.GradebookTable.maxMarks": {
+    "defaultMessage": "Max Marks"
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHint": {
+    "defaultMessage": "No grade columns selected - export will include student info only."
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
+    "defaultMessage": "No grade or gamification columns selected - export will include student info only."
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "Each grade is the total of the marks in a student's submission. Click any grade to open that submission and adjust the marks."
+  },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "Description (Optional)"
   },
@@ -6292,6 +6352,12 @@
   },
   "course.statistics.StatisticsIndex.assessments.startAt": {
     "defaultMessage": "Starts At"
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitle": {
+    "defaultMessage": "To view and export individual student grades, open <url>Gradebook</url>."
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitleDisabled": {
+    "defaultMessage": "To view and export individual student grades, enable <url>Gradebook</url>."
   },
   "course.statistics.StatisticsIndex.assessments.tab": {
     "defaultMessage": "Tab"
@@ -8204,16 +8270,16 @@
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "Date range cannot exceed 365 days"
   },
-  "lib.components.table.MuiColumnPickerDialog.apply": {
+  "lib.components.table.MuiColumnPickerPrompt.apply": {
     "defaultMessage": "Apply to view"
   },
-  "lib.components.table.MuiColumnPickerDialog.cancel": {
+  "lib.components.table.MuiColumnPickerPrompt.cancel": {
     "defaultMessage": "Cancel"
   },
-  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+  "lib.components.table.MuiColumnPickerPrompt.defaultTitle": {
     "defaultMessage": "Select columns"
   },
-  "lib.components.table.MuiColumnPickerDialog.export": {
+  "lib.components.table.MuiColumnPickerPrompt.export": {
     "defaultMessage": "Apply and Export"
   },
   "lib.components.table.MuiTableToolbar.directExport": {
@@ -8530,6 +8596,9 @@
   },
   "lib.translations.table.column.totalUsers": {
     "defaultMessage": "Total Users"
+  },
+  "lib.translations.table.column.totalXp": {
+    "defaultMessage": "Total XP"
   },
   "lib.translations.table.column.updatedAt": {
     "defaultMessage": "Updated At"

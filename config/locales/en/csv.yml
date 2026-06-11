@@ -56,14 +56,6 @@ en:
       values:
         unknown_question_type: 'UNKNOWN QUESTION TYPE'
 
-    # Assessment score summary statistics export
-    score_summary:
-      headers:
-        name: 'Name'
-        type: 'Student Type'
-        email: 'Email'
-        external_id: 'External ID'
-
     # Course user invitations CSV header terms (parser source of truth)
     course_user_invitations:
       headers:

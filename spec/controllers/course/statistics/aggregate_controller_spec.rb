@@ -241,6 +241,29 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
           expect(result).not_to have_key('stdevTimeTaken')
         end
       end
+
+      context 'when the gradebook component is enabled' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'sets gradebookEnabled to true' do
+          subject
+          expect(JSON.parse(response.body)['gradebookEnabled']).to eq(true)
+        end
+      end
+
+      context 'when the gradebook component is disabled' do
+        let(:user) { create(:course_manager, course: course).user }
+        before do
+          course.set_component_enabled_boolean!(:course_gradebook_component, false)
+          controller_sign_in(controller, user)
+        end
+
+        it 'sets gradebookEnabled to false' do
+          subject
+          expect(JSON.parse(response.body)['gradebookEnabled']).to eq(false)
+        end
+      end
     end
 
     describe '#activity_get_help' do
