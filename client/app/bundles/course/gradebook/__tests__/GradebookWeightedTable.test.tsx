@@ -579,9 +579,9 @@ describe('GradebookWeightedTable', () => {
       renderWeighted(expandable);
       const toggle = screen.getByRole('button', { name: /expand Alice/i });
       await user.click(toggle);
-      // grade/max shown
+      // grade/max shown in the muted "raw · weightage" subtitle
       expect(await screen.findByText(/Mission 1/)).toBeInTheDocument();
-      expect(screen.getByText('80/100')).toBeInTheDocument();
+      expect(screen.getByText(/80\/100 ·/)).toBeInTheDocument();
       // points contribution: Mission 1 = (0.8/2)*60 = 24
       const detail = screen.getByTestId('breakdown-row-1-10-1');
       expect(within(detail).getByText('24')).toBeInTheDocument();
@@ -597,9 +597,38 @@ describe('GradebookWeightedTable', () => {
       renderWeighted(expandable);
       await user.click(screen.getByRole('button', { name: /expand Alice/i }));
       const detail = await screen.findByTestId('breakdown-row-1-10-1');
-      // Assessment name shown verbatim — not "Missions · Mission 1".
+      // Assessment name shown verbatim on its own line — not tab-prefixed as
+      // "Missions · Mission 1". (The "·" still appears legitimately in the muted
+      // "raw · weightage" subtitle below the title.)
       expect(within(detail).getByText('Mission 1')).toBeInTheDocument();
-      expect(within(detail).queryByText(/·/)).not.toBeInTheDocument();
+      expect(
+        within(detail).queryByText(/Missions · Mission 1/),
+      ).not.toBeInTheDocument();
+    });
+
+    it('packs title + raw·weightage into one merged label cell spanning the identity columns', async () => {
+      const user = userEvent.setup();
+      // Surface two identity columns so the merged label spans them.
+      localStorage.setItem(
+        WEIGHTED_STORAGE_KEY,
+        JSON.stringify({ email: true, externalId: true }),
+      );
+      renderWeighted(expandable);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      const detail = await screen.findByTestId('breakdown-row-1-10-1');
+
+      // Exactly one spanned label cell: checkbox + Name + Email + External ID = 4.
+      // The metadata is NOT split into discrete identity cells (the bug being
+      // fixed put the weightage under "Email" and the mark under "External ID").
+      const spannedCells = detail.querySelectorAll('td[colspan]');
+      expect(spannedCells).toHaveLength(1);
+      expect(spannedCells[0]).toHaveAttribute('colspan', '4');
+
+      // Title and the muted "raw · weightage" subtitle both live in that one cell.
+      expect(within(detail).getByText('Mission 1')).toBeInTheDocument();
+      expect(
+        within(detail).getByText(/80\/100 · 30% of grade/),
+      ).toBeInTheDocument();
     });
 
     it('renders each assessment as a grade/maxGrade percentage in percent mode', async () => {
@@ -667,17 +696,17 @@ describe('GradebookWeightedTable', () => {
       // Quizzes weight 40 with a single assessment → 40%.
       expect(
         within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
-          '30% of grade',
+          /30% of grade/,
         ),
       ).toBeInTheDocument();
       expect(
         within(screen.getByTestId('breakdown-row-1-10-2')).getByText(
-          '30% of grade',
+          /30% of grade/,
         ),
       ).toBeInTheDocument();
       expect(
         within(screen.getByTestId('breakdown-row-1-20-3')).getByText(
-          '40% of grade',
+          /40% of grade/,
         ),
       ).toBeInTheDocument();
     });
@@ -690,7 +719,7 @@ describe('GradebookWeightedTable', () => {
       // The weightage label never follows the lens: still "30% of grade".
       expect(
         within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
-          '30% of grade',
+          /30% of grade/,
         ),
       ).toBeInTheDocument();
     });
@@ -729,12 +758,12 @@ describe('GradebookWeightedTable', () => {
       await user.click(screen.getByRole('button', { name: /expand Alice/i }));
       expect(
         within(await screen.findByTestId('breakdown-row-1-10-1')).getByText(
-          '25% of grade',
+          /25% of grade/,
         ),
       ).toBeInTheDocument();
       expect(
         within(screen.getByTestId('breakdown-row-1-10-2')).getByText(
-          '35% of grade',
+          /35% of grade/,
         ),
       ).toBeInTheDocument();
     });

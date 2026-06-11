@@ -104,9 +104,19 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookWeightedTable.displayPoints',
     defaultMessage: 'Points',
   },
+  displayPointsTooltip: {
+    id: 'course.gradebook.GradebookWeightedTable.displayPointsTooltip',
+    defaultMessage:
+      'Each tab shows the weighted points it contributes toward the final grade. Add the tabs together to get the projected total.',
+  },
   displayPercent: {
     id: 'course.gradebook.GradebookWeightedTable.displayPercent',
     defaultMessage: 'Percentage',
+  },
+  displayPercentTooltip: {
+    id: 'course.gradebook.GradebookWeightedTable.displayPercentTooltip',
+    defaultMessage:
+      'Each tab shows the proportion of that tab the student earned. For example, 100% on a tab worth 20% means the student captured all 20 points from that tab.',
   },
   doesNotSumTo100: {
     id: 'course.gradebook.GradebookWeightedTable.doesNotSumTo100',
@@ -521,12 +531,16 @@ const GradebookWeightedTable = ({
                 size="small"
                 value={displayMode}
               >
-                <ToggleButton value="points">
-                  {t(translations.displayPoints)}
-                </ToggleButton>
-                <ToggleButton value="percent">
-                  {t(translations.displayPercent)}
-                </ToggleButton>
+                <Tooltip title={t(translations.displayPointsTooltip)}>
+                  <ToggleButton value="points">
+                    {t(translations.displayPoints)}
+                  </ToggleButton>
+                </Tooltip>
+                <Tooltip title={t(translations.displayPercentTooltip)}>
+                  <ToggleButton value="percent">
+                    {t(translations.displayPercent)}
+                  </ToggleButton>
+                </Tooltip>
               </ToggleButtonGroup>
               {canManageWeights && (
                 <Button
@@ -935,80 +949,38 @@ const GradebookWeightedTable = ({
                                   data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
                                   sx={{ bgcolor: 'grey.50' }}
                                 >
-                                  {/* Freeze only the checkbox+Name zone — the
-                                    same width the main rows freeze — so this cell
-                                    can never paint over the scrolling value
-                                    columns. The title wraps within the Name
-                                    column; its weightage and grade scroll in the
-                                    identity span beside it, mirroring email /
-                                    external ID on the main rows. When no identity
-                                    columns are visible there is no scroll span, so
-                                    they fall back here right-aligned — harmless, as
-                                    the frozen cell then spans the full label
-                                    width. */}
+                                  {/* One merged label cell spanning the visible
+                                    identity columns. Content is left-packed and
+                                    stacked — the title over a muted "raw mark ·
+                                    weightage" subtitle — so the layout is the same
+                                    no matter which identity columns are toggled on,
+                                    and the identity area to the right stays blank (a
+                                    breakdown row has no email / external ID). No
+                                    internal headers means nothing to misalign data
+                                    under. */}
                                   <TableCell
-                                    colSpan={2}
-                                    sx={(theme) => ({
+                                    colSpan={labelColSpan}
+                                    sx={{
                                       position: 'sticky',
                                       left: 0,
                                       zIndex: 2,
                                       bgcolor: 'grey.50',
                                       pl: 6,
-                                      boxShadow: `inset -1px 0 0 ${theme.palette.divider}`,
-                                    })}
+                                    }}
                                   >
-                                    {visibleIdentityCount === 0 ? (
-                                      <span
-                                        style={{
-                                          display: 'flex',
-                                          justifyContent: 'space-between',
-                                          gap: 16,
-                                        }}
-                                      >
-                                        <span>
-                                          {a.title}
-                                          <Typography
-                                            color="text.secondary"
-                                            component="span"
-                                            fontSize="inherit"
-                                            sx={{ ml: 1 }}
-                                          >
-                                            {weightText}
-                                          </Typography>
-                                        </span>
-                                        <span style={{ opacity: 0.7 }}>
-                                          {gradeText}
-                                        </span>
-                                      </span>
-                                    ) : (
-                                      a.title
-                                    )}
-                                  </TableCell>
-                                  {visibleIdentityCount > 0 && (
-                                    <TableCell
-                                      colSpan={visibleIdentityCount}
-                                      sx={{ whiteSpace: 'nowrap' }}
+                                    <Typography fontSize="inherit">
+                                      {a.title}
+                                    </Typography>
+                                    {/* Muted metadata: raw mark · effective
+                                      weightage. Weightage is always "% of grade" —
+                                      never routed through the points/percent lens. */}
+                                    <Typography
+                                      color="text.secondary"
+                                      variant="caption"
                                     >
-                                      <span
-                                        style={{
-                                          display: 'flex',
-                                          justifyContent: 'space-between',
-                                          gap: 16,
-                                        }}
-                                      >
-                                        <Typography
-                                          color="text.secondary"
-                                          component="span"
-                                          fontSize="inherit"
-                                        >
-                                          {weightText}
-                                        </Typography>
-                                        <span style={{ opacity: 0.7 }}>
-                                          {gradeText}
-                                        </span>
-                                      </span>
-                                    </TableCell>
-                                  )}
+                                      {`${gradeText} · ${weightText}`}
+                                    </Typography>
+                                  </TableCell>
                                   {tabs.map((tab, i) => (
                                     <TableCell
                                       key={tab.id}

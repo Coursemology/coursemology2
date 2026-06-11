@@ -6260,8 +6260,14 @@
   "course.gradebook.GradebookWeightedTable.displayPercent": {
     "defaultMessage": "Percentage"
   },
+  "course.gradebook.GradebookWeightedTable.displayPercentTooltip": {
+    "defaultMessage": "Each tab shows the proportion of that tab the student earned. For example, 100% on a tab worth 20% means the student captured all 20 points from that tab."
+  },
   "course.gradebook.GradebookWeightedTable.displayPoints": {
     "defaultMessage": "Points"
+  },
+  "course.gradebook.GradebookWeightedTable.displayPointsTooltip": {
+    "defaultMessage": "Each tab shows the weighted points it contributes toward the final grade. Add the tabs together to get the projected total."
   },
   "course.gradebook.GradebookWeightedTable.doesNotSumTo100": {
     "defaultMessage": "does not sum to 100"
@@ -6297,7 +6303,7 @@
     "defaultMessage": "{weight}% total"
   },
   "course.gradebook.GradebookWeightedTable.projectedTotal": {
-    "defaultMessage": "Projected total — ungraded assessments count as 0"
+    "defaultMessage": "Total"
   },
   "course.gradebook.GradebookWeightedTable.searchStudents": {
     "defaultMessage": "Search students"
