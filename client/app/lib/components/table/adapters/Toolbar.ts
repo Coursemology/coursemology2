@@ -16,7 +16,7 @@ interface ToolbarProps {
   searchPlaceholder?: string;
   buttons?: ReactNode[];
 
-  /** Set when consumer passes `columnPicker` on TableTemplate. Drives Export… button + dialog. */
+  /** Set when consumer passes `columnPicker` on TableTemplate. Drives "Select Columns" button + dialog. */
   columnPicker?: ColumnPickerTemplate;
   /** Read-side accessor — called by the dialog to seed staged state. */
   getColumnVisibility?: () => Record<string, boolean>;

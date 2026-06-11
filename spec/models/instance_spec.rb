@@ -210,6 +210,16 @@ RSpec.describe Instance do
     end
   end
 
+  describe '#host' do
+    context 'when a non-default instance has a nil host attribute' do
+      it 'raises NoMethodError (nil host has no fallback; RAILS_HOSTNAME is required)' do
+        instance = build(:instance)
+        allow(instance).to receive(:read_attribute).with(:host).and_return(nil)
+        expect { instance.host }.to raise_error(NoMethodError)
+      end
+    end
+  end
+
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.active_course_count' do

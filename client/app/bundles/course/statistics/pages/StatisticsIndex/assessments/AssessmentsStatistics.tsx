@@ -12,6 +12,7 @@ const AssessmentsStatistics: FC = () => {
       {(data) => (
         <AssessmentsStatisticsTable
           assessments={data.assessments}
+          gradebookEnabled={data.gradebookEnabled}
           numStudents={data.numStudents}
         />
       )}

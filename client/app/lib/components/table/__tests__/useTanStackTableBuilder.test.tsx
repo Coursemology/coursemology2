@@ -13,6 +13,8 @@ jest.mock('utilities/downloadFile', () => ({
 
 const mockedDownloadFile = jest.mocked(downloadFile);
 
+const ALICE_EMAIL = 'alice@example.com';
+
 interface Row {
   id: number;
   name: string;
@@ -27,7 +29,7 @@ const baseColumns: ColumnTemplate<Row>[] = [
 const baseProps = (
   overrides: Partial<TableTemplate<Row>> = {},
 ): TableTemplate<Row> => ({
-  data: [{ id: 1, name: 'Alice', email: 'alice@example.com' }],
+  data: [{ id: 1, name: 'Alice', email: ALICE_EMAIL }],
   columns: baseColumns,
   getRowId: (r) => r.id.toString(),
   ...overrides,
@@ -331,7 +333,7 @@ describe('useTanStackTableBuilder CSV download', () => {
 
   it('exports only selected rows when rows are selected', async () => {
     const twoRowData = [
-      { id: 1, name: 'Alice', email: 'alice@example.com' },
+      { id: 1, name: 'Alice', email: ALICE_EMAIL },
       { id: 2, name: 'Bob', email: 'bob@example.com' },
     ];
     const { result } = renderHook(
@@ -410,7 +412,7 @@ interface ThreeColRow {
 }
 
 const threeColData: ThreeColRow[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com', phone: '111' },
+  { id: 1, name: 'Alice', email: ALICE_EMAIL, phone: '111' },
 ];
 
 const threeColCsvColumns: ColumnTemplate<ThreeColRow>[] = [
@@ -540,7 +542,7 @@ describe('columnVisibility alignment — indices: true + hidden column', () => {
 // ---------- cross-page row selection ----------
 
 const threeRowData: Row[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 1, name: 'Alice', email: ALICE_EMAIL },
   { id: 2, name: 'Bob', email: 'bob@example.com' },
   { id: 3, name: 'Carol', email: 'carol@example.com' },
 ];
@@ -817,6 +819,104 @@ describe('global search — searchable column whose first row is null', () => {
     expect(
       (result.current.body.rows[0] as { original: StudentRow }).original.name,
     ).toBe('Bob');
+  });
+});
+
+// ---------- global search in tables without column pickers (regression) ----------
+//
+// Root cause: getColumnCanGlobalFilter was changed to `column.getIsVisible()` so
+// that hiding a column via the picker removes it from search. Tables WITHOUT a
+// column picker must not regress: all searchable columns are visible by default and
+// must still participate in global search. This set of tests guards that contract.
+
+describe('global search — tables without a column picker', () => {
+  interface PersonRow {
+    id: number;
+    name: string;
+    email: string;
+    tag: string;
+  }
+
+  const people: PersonRow[] = [
+    { id: 1, name: 'Alice', email: ALICE_EMAIL, tag: 'alpha' },
+    { id: 2, name: 'Bob', email: 'bob@example.com', tag: 'beta' },
+  ];
+
+  const searchableCols: ColumnTemplate<PersonRow>[] = [
+    { of: 'name', title: 'Name', cell: (r) => r.name, searchable: true },
+    { of: 'email', title: 'Email', cell: (r) => r.email, searchable: true },
+    { of: 'tag', title: 'Tag', cell: (r) => r.tag, searchable: true },
+  ];
+
+  const makeHook = (
+    cols: ColumnTemplate<PersonRow>[] = searchableCols,
+  ): ReturnType<
+    typeof renderHook<
+      ReturnType<typeof useTanStackTableBuilder<PersonRow>>,
+      unknown
+    >
+  >['result'] => {
+    const { result } = renderHook(
+      () =>
+        useTanStackTableBuilder<PersonRow>({
+          data: people,
+          columns: cols,
+          getRowId: (r) => r.id.toString(),
+          search: { searchPlaceholder: 'Search' },
+          // no columnPicker
+        }),
+      { wrapper: withStore() },
+    );
+    return result;
+  };
+
+  it('matches by the first searchable column', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('Alice'));
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Alice');
+  });
+
+  it('matches by a middle searchable column (email)', () => {
+    const result = makeHook();
+    act(() =>
+      result.current.toolbar!.onSearchKeywordChange?.('bob@example.com'),
+    );
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Bob');
+  });
+
+  it('matches by the last searchable column (tag)', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('alpha'));
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Alice');
+  });
+
+  it('non-searchable column does not participate', () => {
+    const cols: ColumnTemplate<PersonRow>[] = [
+      { of: 'name', title: 'Name', cell: (r) => r.name, searchable: true },
+      // email is not searchable
+      { of: 'email', title: 'Email', cell: (r) => r.email, searchable: false },
+    ];
+    const result = makeHook(cols);
+    act(() => result.current.toolbar!.onSearchKeywordChange?.(ALICE_EMAIL));
+    // email not searchable → no match
+    expect(result.current.body.rows).toHaveLength(0);
+  });
+
+  it('returns all rows when search is cleared', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('Alice'));
+    expect(result.current.body.rows).toHaveLength(1);
+    act(() => result.current.toolbar!.onSearchKeywordChange?.(''));
+    expect(result.current.body.rows).toHaveLength(2);
   });
 });
 

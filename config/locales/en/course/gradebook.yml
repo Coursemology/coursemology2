@@ -1,0 +1,5 @@
+en:
+  course:
+    gradebook:
+      component:
+        sidebar_title: 'Gradebook'
