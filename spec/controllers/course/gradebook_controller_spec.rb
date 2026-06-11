@@ -409,6 +409,14 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(tab_json).to have_key('weightMode')
           expect(body['assessments'].first).to have_key('gradebookWeight')
         end
+
+        it 'serializes gradebookExcluded on assessments when weighted view is enabled' do
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          expect(body['assessments'].first).to have_key('gradebookExcluded')
+          expect(body['assessments'].first['gradebookExcluded']).to eq(false)
+        end
       end
     end
   end

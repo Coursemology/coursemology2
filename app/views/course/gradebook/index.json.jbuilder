@@ -23,6 +23,7 @@ json.assessments @published_assessments do |assessment|
   json.tabId assessment.tab_id
   json.maxGrade @assessment_max_grades[assessment.id] || 0
   json.gradebookWeight assessment.gradebook_weight&.to_f if @weighted_view_enabled
+  json.gradebookExcluded assessment.gradebook_excluded if @weighted_view_enabled
 end
 
 json.students @students do |course_user|
