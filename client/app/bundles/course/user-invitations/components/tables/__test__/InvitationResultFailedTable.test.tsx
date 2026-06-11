@@ -65,6 +65,16 @@ describe('InvitationResultFailedTable', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders reason label for missing_email', async () => {
+    render(
+      <InvitationResultFailedTable
+        users={[{ ...baseUser, email: '', reason: 'missing_email' }]}
+      />,
+    );
+    await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+    expect(screen.getByText('Missing email')).toBeInTheDocument();
+  });
+
   it('renders reason label for failed_to_send', async () => {
     render(<InvitationResultFailedTable users={[baseUser]} />);
     await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));

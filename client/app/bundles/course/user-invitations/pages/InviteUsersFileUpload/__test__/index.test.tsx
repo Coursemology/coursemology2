@@ -5,11 +5,19 @@ import { InvitationFileEntity } from 'types/course/userInvitations';
 import InviteUsersFileUpload from '../index';
 
 const mockToastError = jest.fn();
+const mockToastLoading = jest.fn(
+  (..._args: unknown[]): string => 'loading-toast-id',
+);
+const mockToastDismiss = jest.fn();
+const mockToastUpdate = jest.fn();
 jest.mock('lib/hooks/toast', () => ({
   __esModule: true,
   default: {
     error: (...args: unknown[]): void => mockToastError(...args),
     success: jest.fn(),
+    loading: (...args: unknown[]): unknown => mockToastLoading(...args),
+    dismiss: (...args: unknown[]): void => mockToastDismiss(...args),
+    update: (...args: unknown[]): void => mockToastUpdate(...args),
   },
 }));
 
@@ -70,6 +78,8 @@ jest.mock('../../../operations', () => ({
 }));
 
 const MOCK_FILE_SUBMIT_TESTID = 'mock-file-submit';
+const CONFLICT_PROMPT_TITLE = 'Confirm External ID Updates';
+const KEEP_EXISTING_BUTTON = 'Keep Existing';
 
 const TEST_FILE_ENTITY: InvitationFileEntity = {
   name: 'invites.csv',
@@ -131,6 +141,9 @@ describe('<InviteUsersFileUpload />', () => {
     capturedOnSubmit = null;
     mockInviteUsersFromFile.mockClear();
     mockToastError.mockClear();
+    mockToastLoading.mockClear();
+    mockToastDismiss.mockClear();
+    mockToastUpdate.mockClear();
     noop.mockClear();
   });
 
@@ -176,6 +189,23 @@ describe('<InviteUsersFileUpload />', () => {
     expect(firstArg.file).toBeInstanceOf(Blob);
   });
 
+  it('toasts an error and does not import when submitted without a file', async () => {
+    render(
+      <InviteUsersFileUpload onClose={noop} open openResultDialog={noop} />,
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+    );
+
+    // Reproduces the select-then-remove state: dirty form, but no Blob.
+    await capturedOnSubmit!({ file: { name: '', url: '', file: undefined } });
+
+    expect(mockToastError).toHaveBeenCalledWith(
+      'Please select a CSV file to upload.',
+    );
+    expect(mockInviteUsersFromFile).not.toHaveBeenCalled();
+  });
+
   it('shows ExternalIdConflictPrompt when server returns a conflict', async () => {
     mockInviteUsersFromFile.mockImplementationOnce(
       () =>
@@ -193,9 +223,7 @@ describe('<InviteUsersFileUpload />', () => {
     await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
 
     await waitFor(() =>
-      expect(
-        screen.getByText('Confirm External ID Updates'),
-      ).toBeInTheDocument(),
+      expect(screen.getByText(CONFLICT_PROMPT_TITLE)).toBeInTheDocument(),
     );
   });
 
@@ -353,16 +381,14 @@ describe('<InviteUsersFileUpload />', () => {
       );
       await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
       await waitFor(() =>
-        expect(
-          screen.getByText('Confirm External ID Updates'),
-        ).toBeInTheDocument(),
+        expect(screen.getByText(CONFLICT_PROMPT_TITLE)).toBeInTheDocument(),
       );
     };
 
     it('passes keep_existing resolution when Keep Existing is clicked', async () => {
       await setupConflict();
       await userEvent.click(
-        screen.getByRole('button', { name: 'Keep Existing' }),
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
       );
       expect(mockInviteUsersFromFile).toHaveBeenCalledTimes(2);
       expect((mockInviteUsersFromFile.mock.calls as unknown[][])[1][1]).toBe(
@@ -377,6 +403,180 @@ describe('<InviteUsersFileUpload />', () => {
       expect((mockInviteUsersFromFile.mock.calls as unknown[][])[1][1]).toBe(
         'replace_all',
       );
+    });
+  });
+
+  describe('import progress feedback', () => {
+    it('shows a loading toast while the initial upload is in progress', async () => {
+      render(
+        <InviteUsersFileUpload onClose={noop} open openResultDialog={noop} />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+      );
+
+      await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
+
+      expect(mockToastLoading).toHaveBeenCalledTimes(1);
+    });
+
+    it('dismisses the loading toast after a successful upload', async () => {
+      render(
+        <InviteUsersFileUpload onClose={noop} open openResultDialog={noop} />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+      );
+
+      await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
+
+      expect(mockToastDismiss).toHaveBeenCalledWith('loading-toast-id');
+    });
+
+    it('dismisses the loading toast when the upload fails', async () => {
+      mockInviteUsersFromFile.mockImplementationOnce(
+        () =>
+          (_dispatch: unknown): Promise<object> =>
+            Promise.reject(
+              Object.assign(new Error('Upload failed'), {
+                response: { data: {} },
+              }),
+            ),
+      );
+
+      render(
+        <InviteUsersFileUpload onClose={noop} open openResultDialog={noop} />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+      );
+
+      await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
+
+      await waitFor(() => expect(mockToastError).toHaveBeenCalled());
+      expect(mockToastDismiss).toHaveBeenCalledWith('loading-toast-id');
+    });
+  });
+
+  describe('conflict resolution keeps the prompt open', () => {
+    const deferred = (): {
+      promise: Promise<object>;
+      resolve: (value: object) => void;
+    } => {
+      let resolve!: (value: object) => void;
+      const promise = new Promise<object>((res) => {
+        resolve = res;
+      });
+      return { promise, resolve };
+    };
+
+    // First submit returns a conflict; the resolution submit stays pending so we
+    // can assert what the UI looks like *during* the import wait.
+    const setupPendingResolution = async (): Promise<{
+      resolve: (value: object) => void;
+    }> => {
+      const pending = deferred();
+      mockInviteUsersFromFile.mockImplementationOnce(
+        () =>
+          (_dispatch: unknown): Promise<object> =>
+            Promise.resolve(conflictResponse),
+      );
+      mockInviteUsersFromFile.mockImplementationOnce(
+        () =>
+          (_dispatch: unknown): Promise<object> =>
+            pending.promise,
+      );
+
+      render(
+        <InviteUsersFileUpload onClose={noop} open openResultDialog={noop} />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+      );
+      await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
+      await waitFor(() =>
+        expect(screen.getByText(CONFLICT_PROMPT_TITLE)).toBeInTheDocument(),
+      );
+      return pending;
+    };
+
+    it('does not reopen the upload form while the resolution is in progress', async () => {
+      await setupPendingResolution();
+
+      await userEvent.click(
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
+      );
+
+      // The prompt must remain; the original upload form must NOT reappear.
+      expect(screen.getByText(CONFLICT_PROMPT_TITLE)).toBeInTheDocument();
+      expect(
+        screen.queryByTestId(MOCK_FILE_SUBMIT_TESTID),
+      ).not.toBeInTheDocument();
+    });
+
+    it('disables the conflict prompt buttons while the resolution is in progress', async () => {
+      await setupPendingResolution();
+
+      await userEvent.click(
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
+      );
+
+      expect(
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
+      ).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Replace' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Go Back' })).toBeDisabled();
+    });
+
+    it('shows a loading toast when resolving a conflict', async () => {
+      await setupPendingResolution();
+      mockToastLoading.mockClear();
+
+      await userEvent.click(
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
+      );
+
+      expect(mockToastLoading).toHaveBeenCalledTimes(1);
+    });
+
+    it('closes the prompt and opens the result dialog once resolution succeeds', async () => {
+      const openResultDialog = jest.fn();
+      const onClose = jest.fn();
+      const pending = deferred();
+      mockInviteUsersFromFile.mockImplementationOnce(
+        () =>
+          (_dispatch: unknown): Promise<object> =>
+            Promise.resolve(conflictResponse),
+      );
+      mockInviteUsersFromFile.mockImplementationOnce(
+        () =>
+          (_dispatch: unknown): Promise<object> =>
+            pending.promise,
+      );
+
+      render(
+        <InviteUsersFileUpload
+          onClose={onClose}
+          open
+          openResultDialog={openResultDialog}
+        />,
+      );
+      await waitFor(() =>
+        expect(screen.getByTestId(MOCK_FILE_SUBMIT_TESTID)).toBeInTheDocument(),
+      );
+      await capturedOnSubmit!({ file: TEST_FILE_ENTITY });
+      await waitFor(() =>
+        expect(screen.getByText(CONFLICT_PROMPT_TITLE)).toBeInTheDocument(),
+      );
+
+      await userEvent.click(
+        screen.getByRole('button', { name: KEEP_EXISTING_BUTTON }),
+      );
+      pending.resolve(successResponse);
+
+      await waitFor(() => expect(openResultDialog).toHaveBeenCalledTimes(1));
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(mockToastDismiss).toHaveBeenCalledWith('loading-toast-id');
     });
   });
 });

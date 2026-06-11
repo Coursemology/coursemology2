@@ -7061,6 +7061,9 @@
   "course.userInvitations.InvitationResultFailedTable.failedToSend": {
     "defaultMessage": "Failed to send invitation email, please try again - if failures persist, contact us for assistance"
   },
+  "course.userInvitations.InvitationResultFailedTable.missingEmail": {
+    "defaultMessage": "Missing email"
+  },
   "course.userInvitations.InvitationResultSkippedTable.no": {
     "defaultMessage": "No"
   },
@@ -7112,11 +7115,14 @@
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
     "defaultMessage": "Name,Email,External ID,Role,Phantom,Personal Timeline{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
   },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired": {
+    "defaultMessage": "The CSV must include both a \"Name\" and \"Email\" column. All other columns are optional."
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
     "defaultMessage": "Each invitation must use a unique email address within the course. Duplicate emails will be skipped."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
-    "defaultMessage": "External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course."
+    "defaultMessage": "If external IDs are provided, they must be unique within the course."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "Upload a .csv file with the following format:"
@@ -7129,6 +7135,12 @@
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "Roles can be <code>[student, observer, teaching_assistant, manager, owner]</code>, and defaults to student if omitted. Teaching assistants can only invite users as students."
+  },
+  "course.userInvitations.InviteUsersFileUpload.importInProgress": {
+    "defaultMessage": "Importing users, please wait…"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileRequired": {
+    "defaultMessage": "Please select a CSV file to upload."
   },
   "course.userInvitations.InviteUsersFileUpload.template": {
     "defaultMessage": "(Template File)"

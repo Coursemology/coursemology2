@@ -20,9 +20,10 @@ ko:
         invalid_email: '%{email}을(를) 처리할 수 없습니다: 유효하지 않은 이메일: %{message}.'
         duplicate_external_id: '%{email}을(를) 처리할 수 없습니다: 외부 ID "%{external_id}"는 이미 사용 중입니다.'
         other_error: '%{email}을(를) 처리할 수 없습니다: %{message}.'
-        invalid_headers: '인식되지 않는 CSV 헤더: "%{header}". 허용되는 헤더: %{accepted}.'
+        invalid_headers: '인식되지 않는 CSV 헤더: %{headers}. 허용되는 헤더: %{accepted}.'
         missing_required_headers: 'CSV에는 "이름"과 "이메일" 열이 모두 포함되어야 합니다.'
         duplicate_headers: '중복된 CSV 열: "%{column}". 각 열은 한 번만 나타나야 합니다.'
+        no_valid_rows: 'CSV 파일에 초대할 행이 없습니다.'
       user_registrations:
         invalid_code: '잘못된 초대 코드를 입력하셨습니다.'
         code_taken: >

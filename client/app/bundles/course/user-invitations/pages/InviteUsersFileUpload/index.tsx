@@ -11,6 +11,7 @@ import {
 import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
@@ -32,6 +33,11 @@ const translations = defineMessages({
   fileUploadInfo: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfo',
     defaultMessage: 'Upload a .csv file with the following format:',
+  },
+  fileUploadInfoRequired: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired',
+    defaultMessage:
+      'The CSV must include both a "Name" and "Email" column. All other columns are optional.',
   },
   fileUploadInfoRole: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole',
@@ -65,7 +71,7 @@ const translations = defineMessages({
   fileUploadInfoExternalId: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
     defaultMessage:
-      'External ID is optional. If provided, it overwrites any existing external ID for the user and must be unique within the course.',
+      'If external IDs are provided, they must be unique within the course.',
   },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
@@ -99,6 +105,14 @@ const translations = defineMessages({
     defaultMessage:
       'Failed to invite users. Please ensure your data is formatted correctly.',
   },
+  importInProgress: {
+    id: 'course.userInvitations.InviteUsersFileUpload.importInProgress',
+    defaultMessage: 'Importing users, please wait…',
+  },
+  fileRequired: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileRequired',
+    defaultMessage: 'Please select a CSV file to upload.',
+  },
 });
 
 const InviteUsersFileUpload: FC<Props> = (props) => {
@@ -110,6 +124,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const fileRef = useRef<InvitationFileEntity | null>(null);
   const [conflictData, setConflictData] =
     useState<PendingExternalIdConflict | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
 
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
@@ -124,37 +139,58 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     return null;
   }
 
+  // Drives all imports (initial submit + conflict resolution). The conflict
+  // prompt is kept mounted until the server responds; clearing it eagerly would
+  // flip the FileUploadForm back open (open && !conflictData) mid-import.
   const submitWithResolution = (
     fileEntity: InvitationFileEntity,
     resolution?: 'keep_existing' | 'replace_all',
-  ): Promise<void> =>
-    dispatch(inviteUsersFromFile(fileEntity, resolution))
+  ): Promise<void> => {
+    // Not loadingToast(): this flow dismisses the spinner on every outcome
+    // (success → result dialog, conflict → prompt, error → useInviteErrorHandler's
+    // persistent parsed toast) rather than morphing it into success/error.
+    const toastId = toast.loading(t(translations.importInProgress));
+    setIsResolving(true);
+    return dispatch(inviteUsersFromFile(fileEntity, resolution))
       .then((response) => {
+        toast.dismiss(toastId);
         if ('conflict' in response) {
           setConflictData(response.conflict);
         } else {
+          setConflictData(null);
           onClose();
           openResultDialog(response as InvitationResult);
         }
       })
-      .catch(handleError);
+      .catch((error) => {
+        toast.dismiss(toastId);
+        setConflictData(null);
+        handleError(error);
+      })
+      .finally(() => setIsResolving(false));
+  };
 
   const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> => {
+    // The form's submit unlocks once the field is dirty, which a select-then-remove
+    // leaves true with no file. Surface that as a toast rather than firing an empty import.
+    if (!data.file?.file) {
+      toast.error(t(translations.fileRequired));
+      return Promise.resolve();
+    }
     fileRef.current = data.file;
     return submitWithResolution(data.file);
   };
 
   const handleKeepExisting = (): void => {
-    setConflictData(null);
     if (fileRef.current) submitWithResolution(fileRef.current, 'keep_existing');
   };
 
   const handleReplaceAll = (): void => {
-    setConflictData(null);
     if (fileRef.current) submitWithResolution(fileRef.current, 'replace_all');
   };
 
   const handleCancel = (): void => {
+    if (isResolving) return;
     setConflictData(null);
     fileRef.current = null;
   };
@@ -162,7 +198,12 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const formSubtitle = (
     <>
       <Typography variant="body2">{t(translations.fileUploadInfo)}</Typography>
-      <ul>
+      <ul className="m-0 mt-2 pl-6">
+        <li>
+          <Typography variant="body2">
+            {t(translations.fileUploadInfoRequired)}
+          </Typography>
+        </li>
         <li>
           <Typography variant="body2">
             {t(translations.fileUploadInfoEmail)}
@@ -231,6 +272,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     <>
       {conflictData && (
         <ExternalIdConflictPrompt
+          disabled={isResolving}
           onCancel={handleCancel}
           onKeepExisting={handleKeepExisting}
           onReplaceAll={handleReplaceAll}

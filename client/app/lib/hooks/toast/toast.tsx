@@ -102,6 +102,10 @@ const loading: Toaster = (message, options?) =>
 const update = (id: Id, options?: NodeOnlyUpdateOptions): void =>
   toastify.update(id, customize(options));
 
+const dismiss = (id?: Id): void => {
+  toastify.dismiss(id);
+};
+
 const promise = <T,>(
   data: Promise<T>,
   messages: PromisedToastMessages,
@@ -139,5 +143,6 @@ export default Object.assign(toast, {
   error,
   loading,
   update,
+  dismiss,
   promise,
 });

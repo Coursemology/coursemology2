@@ -111,7 +111,7 @@ class Course::UserInvitationService
                               select { |u| u[:user].present? }.
                               to_set { |u| u[:email].downcase }
     unique_users, parse_duplicates = partition_unique_users(user_hashes, existing_account_emails)
-    @failed_users = parse_duplicates
+    @failed_users = parse_duplicates + (@parse_failed_users || [])
     @updated_invitations = []
     @updated_course_users = []
     @pending_invitation_updates = []
