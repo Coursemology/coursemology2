@@ -29,6 +29,7 @@ export interface AssessmentContribution {
   // Equal mode: the tab's weight split evenly across its assessments.
   // Custom mode: the assessment's own configured weight.
   effectiveWeight: number;
+  excluded: boolean;
 }
 
 export interface TabBreakdown {
@@ -64,8 +65,9 @@ const buildAssessmentsByTab = (
   return byTab;
 };
 
-// Equal-weight formula: average of (grade/maxGrade) ratios.
-// All assessments count in the denominator; ungraded contribute 0 (n = n_total).
+// Equal-weight formula: average of (grade/maxGrade) ratios over INCLUDED assessments.
+// Excluded assessments are dropped from both numerator and count; ungraded included
+// contribute 0. Returns null when no assessment is included.
 const equalSubtotal = (
   studentId: number,
   tabAssessments: AssessmentData[],
@@ -74,19 +76,17 @@ const equalSubtotal = (
   let numerator = 0;
   let count = 0;
   tabAssessments.forEach((a) => {
+    if (a.gradebookExcluded) return;
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
-    if (grade != null) {
-      numerator += grade / a.maxGrade;
-      count++;
-    } else {
-      count++;
-    }
+    if (grade != null) numerator += grade / a.maxGrade;
+    count++;
   });
   return count > 0 ? numerator / count : null;
 };
 
-// Custom-weight formula: Σ(grade_i/maxGrade_i × assessmentWeight_i) / tabWeight.
-// Returns null if tabWeight=0 or no assessments; ungraded assessments contribute 0.
+// Custom-weight formula: Σ(grade_i/maxGrade_i × assessmentWeight_i) / tabWeight over
+// INCLUDED assessments. Returns null if tabWeight=0 or no assessment is included;
+// ungraded included assessments contribute 0.
 const customSubtotal = (
   studentId: number,
   tab: TabData,
@@ -98,14 +98,11 @@ const customSubtotal = (
   let numerator = 0;
   let hasContributing = false;
   tabAssessments.forEach((a) => {
+    if (a.gradebookExcluded) return;
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     const assessmentWeight = a.gradebookWeight ?? 0;
-    if (grade != null) {
-      numerator += (grade / a.maxGrade) * assessmentWeight;
-      hasContributing = true;
-    } else {
-      hasContributing = true;
-    }
+    if (grade != null) numerator += (grade / a.maxGrade) * assessmentWeight;
+    hasContributing = true;
   });
   return hasContributing ? numerator / tabWeight : null;
 };
@@ -196,21 +193,24 @@ export const computeStudentBreakdown = ({
   return tabs.map((tab) => {
     const list = assessmentsByTab.get(tab.id) ?? [];
     const weight = tab.gradebookWeight ?? 0;
-    const n = list.length;
+    const includedCount = list.filter((a) => !a.gradebookExcluded).length;
     const contributions = list.map((a) => {
+      const excluded = !!a.gradebookExcluded;
       const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
       const ratio = grade != null ? grade / a.maxGrade : 0;
-      const points =
-        tab.weightMode === 'custom'
+      const points = excluded
+        ? 0
+        : tab.weightMode === 'custom'
           ? ratio * (a.gradebookWeight ?? 0)
-          : n > 0
-            ? (ratio / n) * weight
+          : includedCount > 0
+            ? (ratio / includedCount) * weight
             : 0;
-      const effectiveWeight =
-        tab.weightMode === 'custom'
+      const effectiveWeight = excluded
+        ? 0
+        : tab.weightMode === 'custom'
           ? a.gradebookWeight ?? 0
-          : n > 0
-            ? weight / n
+          : includedCount > 0
+            ? weight / includedCount
             : 0;
       return {
         assessmentId: a.id,
@@ -219,6 +219,7 @@ export const computeStudentBreakdown = ({
         maxGrade: a.maxGrade,
         points,
         effectiveWeight,
+        excluded,
       };
     });
     return { tabId: tab.id, assessments: contributions };

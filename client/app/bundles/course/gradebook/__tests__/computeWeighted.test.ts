@@ -502,3 +502,83 @@ describe('computeStudentBreakdown', () => {
     expect(breakdown[0].assessments).toEqual([]);
   });
 });
+
+describe('exclusion — equal mode', () => {
+  it('averages over included assessments only (excluded dropped from numerator and count)', () => {
+    // a1 80/100=0.8 included, a2 excluded -> subtotal = 0.8 / 1 = 0.8
+    const withExcluded = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+      { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments: withExcluded,
+        submissions: [{ studentId: 1, assessmentId: 1, grade: 80 }],
+      }),
+    ).toBeCloseTo(0.8);
+  });
+
+  it('returns null when every assessment in the tab is excluded', () => {
+    const allExcluded = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookExcluded: true },
+      { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments: allExcluded,
+        submissions: [{ studentId: 1, assessmentId: 1, grade: 80 }],
+      }),
+    ).toBeNull();
+  });
+});
+
+describe('exclusion — custom mode', () => {
+  it('drops excluded assessments from the numerator', () => {
+    // tab weight 30; a1 weight 30 graded 90/100=0.9 -> 0.9*30=27; a2 excluded.
+    // subtotal = 27 / 30 = 0.9
+    const customAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 20, gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, weightMode: 'custom', gradebookWeight: 30 },
+        assessments: customAssessments,
+        submissions: [
+          { studentId: 1, assessmentId: 1, grade: 90 },
+          { studentId: 1, assessmentId: 2, grade: 100 },
+        ],
+      }),
+    ).toBeCloseTo(0.9);
+  });
+});
+
+describe('breakdown — exclusion', () => {
+  const bdAssessments = [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+    { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+  ];
+
+  it('flags excluded assessments and gives them zero points/effectiveWeight', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 }],
+      assessments: bdAssessments,
+      submissions: [{ studentId: 1, assessmentId: 1, grade: 100 }],
+    });
+    const a = tab.assessments.find((x) => x.assessmentId === 1)!;
+    const b = tab.assessments.find((x) => x.assessmentId === 2)!;
+    expect(b.excluded).toBe(true);
+    expect(b.points).toBe(0);
+    expect(b.effectiveWeight).toBe(0);
+    // equal effectiveWeight uses included count (1), so a gets the full 60
+    expect(a.excluded).toBe(false);
+    expect(a.effectiveWeight).toBeCloseTo(60);
+    expect(a.points).toBeCloseTo(60);
+  });
+});
