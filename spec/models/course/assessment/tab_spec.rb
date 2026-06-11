@@ -95,6 +95,17 @@ RSpec.describe Course::Assessment::Tab do
       end
     end
 
+    describe 'assessment gradebook_excluded' do
+      let(:course) { create(:course) }
+      let(:category) { create(:course_assessment_category, course: course) }
+      let(:tab) { create(:course_assessment_tab, category: category) }
+      let!(:assessment) { create(:assessment, course: course, tab: tab) }
+
+      it 'defaults to false' do
+        expect(assessment.reload.gradebook_excluded).to eq(false)
+      end
+    end
+
     describe '.update_gradebook_weights with modes' do
       let(:course) { create(:course) }
       let(:category) { create(:course_assessment_category, course: course) }
