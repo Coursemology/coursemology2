@@ -38,7 +38,7 @@ class Course::Assessment::Tab < ApplicationRecord
   #
   # @param course [Course]
   # @param updates [Array<Hash>] each { tab_id:, weight:, weight_mode:,
-  #   assessment_weights: [{ assessment_id:, weight: }] }
+  #   excluded_assessment_ids: [Integer], assessment_weights: [{ assessment_id:, weight: }] }
   def self.update_gradebook_weights(course:, updates:)
     course_tab_ids = course.assessment_tabs.pluck(:id).to_set
     updates.each { |e| raise ActiveRecord::RecordNotFound unless course_tab_ids.include?(e[:tab_id]) }
@@ -54,8 +54,11 @@ class Course::Assessment::Tab < ApplicationRecord
     mode = (entry[:weight_mode] || 'equal').to_s
     tab.update!(gradebook_weight: entry[:weight], weight_mode: mode)
 
+    excluded_ids = entry[:excluded_assessment_ids] || []
+    apply_assessment_exclusions(tab, excluded_ids)
+
     if mode == 'custom'
-      apply_custom_assessment_weights(tab, entry)
+      apply_custom_assessment_weights(tab, entry, excluded_ids.to_set)
     else
       tab.assessments.update_all(gradebook_weight: nil)
     end
@@ -63,16 +66,30 @@ class Course::Assessment::Tab < ApplicationRecord
   private_class_method :apply_gradebook_weight_entry
 
   # @api private
-  def self.apply_custom_assessment_weights(tab, entry) # rubocop:disable Metrics/AbcSize
+  # Membership is applied in both modes: excluded ids -> true, the rest of the tab -> false.
+  def self.apply_assessment_exclusions(tab, excluded_ids)
+    tab.assessments.where(id: excluded_ids).update_all(gradebook_excluded: true) if excluded_ids.any?
+    tab.assessments.where.not(id: excluded_ids).update_all(gradebook_excluded: false)
+  end
+  private_class_method :apply_assessment_exclusions
+
+  # @api private
+  def self.apply_custom_assessment_weights(tab, entry, excluded_ids) # rubocop:disable Metrics/AbcSize
     assessments_by_id = tab.assessments.index_by(&:id)
-    sum = (entry[:assessment_weights] || []).sum do |aw|
+    included_sum = 0
+    included_any = false
+    (entry[:assessment_weights] || []).each do |aw|
       assessment = assessments_by_id[aw[:assessment_id]]
       raise ActiveRecord::RecordNotFound if assessment.nil?
 
       assessment.update!(gradebook_weight: aw[:weight])
-      aw[:weight]
+      next if excluded_ids.include?(aw[:assessment_id])
+
+      included_sum += aw[:weight]
+      included_any = true
     end
-    return unless (sum * 100).round != (entry[:weight] * 100).round
+    return unless included_any
+    return unless (included_sum * 100).round != (entry[:weight] * 100).round
 
     tab.errors.add(:base, :custom_weights_mismatch)
     raise ActiveRecord::RecordInvalid, tab

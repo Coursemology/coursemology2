@@ -154,6 +154,61 @@ RSpec.describe Course::Assessment::Tab do
         expect(tab.reload.weight_mode).to eq('equal')
         expect(a1.reload.gradebook_weight).to be_nil
       end
+
+      it 'persists per-assessment exclusion in equal mode' do
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [{ tab_id: tab.id, weight: 50.0, weight_mode: 'equal',
+                      excluded_assessment_ids: [a1.id] }]
+        )
+        expect(a1.reload.gradebook_excluded).to eq(true)
+        expect(a2.reload.gradebook_excluded).to eq(false)
+      end
+
+      it 'drops excluded assessments from the custom balance check' do
+        # a2 excluded: only a1 (30) must equal the tab total (30), even though a2 carries 20.
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [{
+            tab_id: tab.id, weight: 30.0, weight_mode: 'custom',
+            excluded_assessment_ids: [a2.id],
+            assessment_weights: [
+              { assessment_id: a1.id, weight: 30.0 },
+              { assessment_id: a2.id, weight: 20.0 }
+            ]
+          }]
+        )
+        expect(a1.reload.gradebook_excluded).to eq(false)
+        expect(a2.reload.gradebook_excluded).to eq(true)
+        # excluded assessment retains its weight for restore (not zeroed)
+        expect(a2.reload.gradebook_weight).to eq(20.0)
+      end
+
+      it 'skips the custom balance check when every assessment is excluded' do
+        expect do
+          described_class.update_gradebook_weights(
+            course: course,
+            updates: [{
+              tab_id: tab.id, weight: 30.0, weight_mode: 'custom',
+              excluded_assessment_ids: [a1.id, a2.id],
+              assessment_weights: [
+                { assessment_id: a1.id, weight: 0.0 },
+                { assessment_id: a2.id, weight: 0.0 }
+              ]
+            }]
+          )
+        end.not_to raise_error
+      end
+
+      it 're-including a previously excluded assessment clears the flag' do
+        a1.update!(gradebook_excluded: true)
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [{ tab_id: tab.id, weight: 50.0, weight_mode: 'equal',
+                      excluded_assessment_ids: [] }]
+        )
+        expect(a1.reload.gradebook_excluded).to eq(false)
+      end
     end
   end
 end
