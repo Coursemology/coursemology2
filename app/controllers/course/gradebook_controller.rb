@@ -1,0 +1,49 @@
+# frozen_string_literal: true
+class Course::GradebookController < Course::ComponentController
+  before_action :authorize_read_gradebook!
+
+  def index
+    respond_to do |format|
+      format.json do
+        @published_assessments = fetch_published_assessments
+        @categories, @tabs = fetch_categories_and_tabs
+        @students = fetch_students
+        assessment_ids = @published_assessments.pluck(:id)
+        @assessment_max_grades = Course::Assessment.max_grades(assessment_ids)
+        @submissions = Course::Assessment::Submission.grade_summary(
+          student_ids: @students.map(&:user_id),
+          assessment_ids: assessment_ids
+        )
+      end
+    end
+  end
+
+  private
+
+  def authorize_read_gradebook!
+    authorize! :read_gradebook, current_course
+  end
+
+  def component
+    current_component_host[:course_gradebook_component]
+  end
+
+  def fetch_categories_and_tabs
+    tabs = @published_assessments.map(&:tab).uniq(&:id)
+    [tabs.map(&:category).uniq(&:id), tabs]
+  end
+
+  def fetch_students
+    current_course.levels.to_a
+    current_course.course_users.students.without_phantom_users.
+      calculated(:experience_points).includes(:user).to_a
+  end
+
+  def fetch_published_assessments
+    current_course.assessments.
+      published.
+      includes(tab: :category).
+      joins(tab: :category).
+      reorder('course_assessment_categories.weight, course_assessment_tabs.weight, course_assessments.id')
+  end
+end

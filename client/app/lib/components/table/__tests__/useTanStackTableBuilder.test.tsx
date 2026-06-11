@@ -13,6 +13,8 @@ jest.mock('utilities/downloadFile', () => ({
 
 const mockedDownloadFile = jest.mocked(downloadFile);
 
+const ALICE_EMAIL = 'alice@example.com';
+
 interface Row {
   id: number;
   name: string;
@@ -27,7 +29,7 @@ const baseColumns: ColumnTemplate<Row>[] = [
 const baseProps = (
   overrides: Partial<TableTemplate<Row>> = {},
 ): TableTemplate<Row> => ({
-  data: [{ id: 1, name: 'Alice', email: 'alice@example.com' }],
+  data: [{ id: 1, name: 'Alice', email: ALICE_EMAIL }],
   columns: baseColumns,
   getRowId: (r) => r.id.toString(),
   ...overrides,
@@ -331,7 +333,7 @@ describe('useTanStackTableBuilder CSV download', () => {
 
   it('exports only selected rows when rows are selected', async () => {
     const twoRowData = [
-      { id: 1, name: 'Alice', email: 'alice@example.com' },
+      { id: 1, name: 'Alice', email: ALICE_EMAIL },
       { id: 2, name: 'Bob', email: 'bob@example.com' },
     ];
     const { result } = renderHook(
@@ -410,7 +412,7 @@ interface ThreeColRow {
 }
 
 const threeColData: ThreeColRow[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com', phone: '111' },
+  { id: 1, name: 'Alice', email: ALICE_EMAIL, phone: '111' },
 ];
 
 const threeColCsvColumns: ColumnTemplate<ThreeColRow>[] = [
@@ -540,7 +542,7 @@ describe('columnVisibility alignment — indices: true + hidden column', () => {
 // ---------- cross-page row selection ----------
 
 const threeRowData: Row[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 1, name: 'Alice', email: ALICE_EMAIL },
   { id: 2, name: 'Bob', email: 'bob@example.com' },
   { id: 3, name: 'Carol', email: 'carol@example.com' },
 ];
@@ -820,6 +822,104 @@ describe('global search — searchable column whose first row is null', () => {
   });
 });
 
+// ---------- global search in tables without column pickers (regression) ----------
+//
+// Root cause: getColumnCanGlobalFilter was changed to `column.getIsVisible()` so
+// that hiding a column via the picker removes it from search. Tables WITHOUT a
+// column picker must not regress: all searchable columns are visible by default and
+// must still participate in global search. This set of tests guards that contract.
+
+describe('global search — tables without a column picker', () => {
+  interface PersonRow {
+    id: number;
+    name: string;
+    email: string;
+    tag: string;
+  }
+
+  const people: PersonRow[] = [
+    { id: 1, name: 'Alice', email: ALICE_EMAIL, tag: 'alpha' },
+    { id: 2, name: 'Bob', email: 'bob@example.com', tag: 'beta' },
+  ];
+
+  const searchableCols: ColumnTemplate<PersonRow>[] = [
+    { of: 'name', title: 'Name', cell: (r) => r.name, searchable: true },
+    { of: 'email', title: 'Email', cell: (r) => r.email, searchable: true },
+    { of: 'tag', title: 'Tag', cell: (r) => r.tag, searchable: true },
+  ];
+
+  const makeHook = (
+    cols: ColumnTemplate<PersonRow>[] = searchableCols,
+  ): ReturnType<
+    typeof renderHook<
+      ReturnType<typeof useTanStackTableBuilder<PersonRow>>,
+      unknown
+    >
+  >['result'] => {
+    const { result } = renderHook(
+      () =>
+        useTanStackTableBuilder<PersonRow>({
+          data: people,
+          columns: cols,
+          getRowId: (r) => r.id.toString(),
+          search: { searchPlaceholder: 'Search' },
+          // no columnPicker
+        }),
+      { wrapper: withStore() },
+    );
+    return result;
+  };
+
+  it('matches by the first searchable column', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('Alice'));
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Alice');
+  });
+
+  it('matches by a middle searchable column (email)', () => {
+    const result = makeHook();
+    act(() =>
+      result.current.toolbar!.onSearchKeywordChange?.('bob@example.com'),
+    );
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Bob');
+  });
+
+  it('matches by the last searchable column (tag)', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('alpha'));
+    expect(result.current.body.rows).toHaveLength(1);
+    expect(
+      (result.current.body.rows[0] as { original: PersonRow }).original.name,
+    ).toBe('Alice');
+  });
+
+  it('non-searchable column does not participate', () => {
+    const cols: ColumnTemplate<PersonRow>[] = [
+      { of: 'name', title: 'Name', cell: (r) => r.name, searchable: true },
+      // email is not searchable
+      { of: 'email', title: 'Email', cell: (r) => r.email, searchable: false },
+    ];
+    const result = makeHook(cols);
+    act(() => result.current.toolbar!.onSearchKeywordChange?.(ALICE_EMAIL));
+    // email not searchable → no match
+    expect(result.current.body.rows).toHaveLength(0);
+  });
+
+  it('returns all rows when search is cleared', () => {
+    const result = makeHook();
+    act(() => result.current.toolbar!.onSearchKeywordChange?.('Alice'));
+    expect(result.current.body.rows).toHaveLength(1);
+    act(() => result.current.toolbar!.onSearchKeywordChange?.(''));
+    expect(result.current.body.rows).toHaveLength(2);
+  });
+});
+
 describe('useTanStackTableBuilder onDirectExport', () => {
   beforeEach(() => {
     mockedDownloadFile.mockClear();
@@ -867,5 +967,136 @@ describe('useTanStackTableBuilder onDirectExport', () => {
     const lines = csv.trim().split(/\r?\n/);
     expect(lines[0]).toBe('Name,Email');
     expect(lines[1]).toContain('Alice');
+  });
+});
+
+// ---------- default sort must not assume a "name" column (regression) ----------
+//
+// Root cause: a hardcoded DEFAULT_SORT = [{ id: 'name' }] was applied as the
+// per-table default and as the fallback of a column-reconciliation effect. The
+// effect depends on a Set recomputed from props.columns, so callers that build
+// their columns array inline (new reference every render, e.g. AssessmentsTable)
+// re-ran the effect every render; because DEFAULT_SORT was a fresh array literal,
+// setSorting never bailed on Object.is and the component looped forever
+// ("Maximum update depth exceeded"). Tables without a `name` column were also
+// left sorting by a phantom column. The gradebook hid the bug by memoizing its
+// columns, so the Set stayed stable. Fix: default to no sort; fall back to the
+// table's own initial sort; bail when no column was actually removed.
+
+describe('useTanStackTableBuilder sort reconciliation', () => {
+  interface PlainRow {
+    id: number;
+    label: string;
+    score: number;
+  }
+
+  const plainData: PlainRow[] = [
+    { id: 1, label: 'Bob', score: 1 },
+    { id: 2, label: 'Alice', score: 9 },
+  ];
+
+  const names = (result: {
+    current: ReturnType<typeof useTanStackTableBuilder<PlainRow>>;
+  }): string[] =>
+    result.current.body.rows.map(
+      (r) => (r as { original: PlainRow }).original.label,
+    );
+
+  it('does not loop when a caller rebuilds columns inline and has no "name" column', () => {
+    expect(() =>
+      renderHook(
+        () =>
+          // Inline array → new reference every render, like AssessmentsTable.
+          useTanStackTableBuilder<PlainRow>({
+            data: plainData,
+            columns: [
+              { id: 'label', title: 'Label', cell: (r): ReactNode => r.label },
+              { id: 'score', title: 'Score', cell: (r): ReactNode => r.score },
+            ],
+            getRowId: (r) => r.id.toString(),
+          }),
+        { wrapper: withStore() },
+      ),
+    ).not.toThrow();
+  });
+
+  it('leaves rows in input order when no initial sort is given and there is no "name" column', () => {
+    const { result } = renderHook(
+      () =>
+        useTanStackTableBuilder<PlainRow>({
+          data: plainData,
+          columns: [
+            { id: 'label', title: 'Label', cell: (r): ReactNode => r.label },
+            { id: 'score', title: 'Score', cell: (r): ReactNode => r.score },
+          ],
+          getRowId: (r) => r.id.toString(),
+        }),
+      { wrapper: withStore() },
+    );
+
+    // No phantom "name" sort: rows stay in the order they were provided.
+    expect(names(result)).toEqual(['Bob', 'Alice']);
+  });
+
+  it('resets to the initial sort when the actively-sorted column is removed (e.g. gamification disabled)', () => {
+    const columnsFor = (withScore: boolean): ColumnTemplate<PlainRow>[] =>
+      withScore
+        ? [
+            {
+              id: 'label',
+              of: 'label',
+              title: 'Label',
+              cell: (r) => r.label,
+              sortable: true,
+            },
+            // descFirst:false so the first click sorts score ascending → Bob(1),
+            // Alice(9). TanStack otherwise derives desc-first from the numeric
+            // first value, yielding Alice,Bob — which is identical to the
+            // label-asc reset order and would silently defeat this test.
+            {
+              id: 'score',
+              of: 'score',
+              title: 'Score',
+              cell: (r) => r.score,
+              sortable: true,
+              sortProps: { descFirst: false },
+            },
+          ]
+        : [
+            {
+              id: 'label',
+              of: 'label',
+              title: 'Label',
+              cell: (r) => r.label,
+              sortable: true,
+            },
+          ];
+
+    const { result, rerender } = renderHook(
+      ({ withScore }: { withScore: boolean }) =>
+        useTanStackTableBuilder<PlainRow>({
+          data: plainData,
+          columns: columnsFor(withScore),
+          getRowId: (r) => r.id.toString(),
+          sort: { initially: { by: 'label', order: 'asc' } },
+        }),
+      { initialProps: { withScore: true }, wrapper: withStore() },
+    );
+
+    // Initial sort is label asc → Alice, Bob.
+    expect(names(result)).toEqual(['Alice', 'Bob']);
+
+    // User sorts by the score column (asc) → Bob (1), Alice (9).
+    act(() => {
+      const scoreHeader = result.current.header!.headers[1];
+      result.current.header!.forEach(scoreHeader, 1).sorting!.onClickSort!(
+        {} as never,
+      );
+    });
+    expect(names(result)).toEqual(['Bob', 'Alice']);
+
+    // Score column disappears (gamification turned off) → sort resets to label asc.
+    rerender({ withScore: false });
+    expect(names(result)).toEqual(['Alice', 'Bob']);
   });
 });

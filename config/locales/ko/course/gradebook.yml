@@ -1,0 +1,5 @@
+ko:
+  course:
+    gradebook:
+      component:
+        sidebar_title: '성적부'

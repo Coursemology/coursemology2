@@ -17,6 +17,7 @@ interface SearchingProps<D> {
 interface SortingProps<D> {
   sort?: (datumA: D, datumB: D) => number;
   undefinedPriority?: false | 'first' | 'last';
+  descFirst?: boolean;
 }
 
 interface ColumnTemplate<D extends Data> {
