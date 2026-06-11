@@ -17,6 +17,7 @@ export interface AssessmentData {
   tabId: number;
   maxGrade: number;
   gradebookWeight?: number | null;
+  gradebookExcluded?: boolean;
 }
 
 export interface StudentData {
@@ -52,6 +53,7 @@ export interface UpdateWeightsPayload {
     tabId: number;
     weight: number;
     weightMode?: 'equal' | 'custom';
+    excludedAssessmentIds?: number[];
     assessmentWeights?: { assessmentId: number; weight: number }[];
   }[];
 }
