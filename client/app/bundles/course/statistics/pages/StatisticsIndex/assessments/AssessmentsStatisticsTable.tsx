@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { CourseAssessment } from 'course/statistics/types';
 import Link from 'lib/components/core/Link';
@@ -14,12 +14,11 @@ import {
   getAssessmentStatisticsURL,
   getAssessmentWithCategoryURL,
   getAssessmentWithTabURL,
+  getCourseGradebookURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime, formatSecondsDuration } from 'lib/moment';
-
-import AssessmentsScoreSummaryDownload from './AssessmentsScoreSummaryDownload';
 
 const translations = defineMessages({
   title: {
@@ -78,15 +77,26 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.assessments.searchBar',
     defaultMessage: 'Search by Assessment Title, Tab, or Category',
   },
+  subtitle: {
+    id: 'course.statistics.StatisticsIndex.assessments.subtitle',
+    defaultMessage:
+      'To view and export individual student grades, open <url>Gradebook</url>.',
+  },
+  subtitleDisabled: {
+    id: 'course.statistics.StatisticsIndex.assessments.subtitleDisabled',
+    defaultMessage:
+      'To view and export individual student grades, enable <url>Gradebook</url>.',
+  },
 });
 
 interface Props {
   numStudents: number;
   assessments: CourseAssessment[];
+  gradebookEnabled: boolean;
 }
 
 const AssessmentsStatisticsTable: FC<Props> = (props) => {
-  const { numStudents, assessments } = props;
+  const { numStudents, assessments, gradebookEnabled } = props;
   const courseId = getCourseId();
   const { t } = useTranslation();
 
@@ -243,9 +253,26 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
 
   return (
     <>
-      <Typography className="ml-6" variant="h6">
-        {t(translations.tableTitle, { numStudents })}
-      </Typography>
+      <Box className="ml-6 mr-4 mt-4">
+        <Typography variant="h6">
+          {t(translations.tableTitle, { numStudents })}
+        </Typography>
+        <Typography color="text.secondary" variant="body2">
+          {gradebookEnabled
+            ? t(translations.subtitle, {
+                url: (chunks) => (
+                  <Link to={getCourseGradebookURL(courseId)}>{chunks}</Link>
+                ),
+              })
+            : t(translations.subtitleDisabled, {
+                url: (chunks) => (
+                  <Link to={`/courses/${courseId}/admin/components`}>
+                    {chunks}
+                  </Link>
+                ),
+              })}
+        </Typography>
+      </Box>
       <Table
         className="border-none"
         columns={columns}
@@ -256,7 +283,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
         }
         getRowEqualityData={(assessment): CourseAssessment => assessment}
         getRowId={(assessment): string => assessment.id.toString()}
-        indexing={{ indices: true, rowSelectable: true }}
+        indexing={{ indices: true }}
         pagination={{
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
           showAllRows: true,
@@ -285,15 +312,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
             },
           },
         }}
-        toolbar={{
-          show: true,
-          activeToolbar: (selectedAssessments): JSX.Element => (
-            <AssessmentsScoreSummaryDownload
-              assessments={selectedAssessments}
-            />
-          ),
-          keepNative: true,
-        }}
+        toolbar={{ show: true }}
       />
     </>
   );

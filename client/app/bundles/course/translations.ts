@@ -75,6 +75,10 @@ const translations = defineMessages({
     id: 'course.componentTitles.course_forums_component',
     defaultMessage: 'Forums',
   },
+  course_gradebook_component: {
+    id: 'course.componentTitles.course_gradebook_component',
+    defaultMessage: 'Gradebook',
+  },
   course_groups_component: {
     id: 'course.componentTitles.course_groups_component',
     defaultMessage: 'Groups',

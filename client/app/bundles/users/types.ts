@@ -12,6 +12,7 @@ import {
 
 // Action Names
 export const SAVE_USER = 'system/SAVE_USER';
+export const SET_CURRENT_USER_ID = 'system/SET_CURRENT_USER_ID';
 export const SAVE_COURSE_LIST = 'system/SAVE_COURSE_LIST';
 export const SAVE_INSTANCE_LIST = 'system/SAVE_INSTANCE_LIST';
 
@@ -19,6 +20,11 @@ export const SAVE_INSTANCE_LIST = 'system/SAVE_INSTANCE_LIST';
 export interface SaveUserAction {
   type: typeof SAVE_USER;
   user: UserBasicListData;
+}
+
+export interface SetCurrentUserIdAction {
+  type: typeof SET_CURRENT_USER_ID;
+  userId: number;
 }
 
 export interface SaveCourseListAction {
@@ -34,6 +40,7 @@ export interface SaveInstanceListAction {
 
 export type GlobalActionType =
   | SaveUserAction
+  | SetCurrentUserIdAction
   | SaveCourseListAction
   | SaveInstanceListAction;
 
