@@ -9466,5 +9466,164 @@
   },
   "course.assessment.question.rubricPlayground.mockContextPlaceholder": {
     "defaultMessage": "Content the grader would see for this context"
+  },
+  "course.admin.GradebookSettings.gradebookSettings": {
+    "defaultMessage": "성적부 설정"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabled": {
+    "defaultMessage": "가중 성적 보기 사용"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabledHint": {
+    "defaultMessage": "성적부에 \"가중 총점\" 보기를 추가하여 교직원이 탭별 가중치를 설정하고 가중 총점 열을 확인할 수 있습니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcluded": {
+    "defaultMessage": "“{tab}”의 모든 평가가 제외되어 총점에 반영되지 않습니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcludedCount": {
+    "defaultMessage": "전체 {n}개 제외됨"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customMode": {
+    "defaultMessage": "사용자 지정"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customSum": {
+    "defaultMessage": "평가 가중치: {sum} / {total}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
+    "defaultMessage": "아직 설정된 가중치가 없습니다. 모든 탭이 동일한 비중으로 반영되도록 제안된 기본값입니다. 저장하여 확정하거나 아래에서 조정하세요."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
+    "defaultMessage": "동일 모드에서는 평균을 내기 전에 각 학생의 점수가 가장 낮은 평가 N개를 선택적으로 제외할 수 있습니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionExclusion": {
+    "defaultMessage": "탭을 펼쳐 개별 평가를 성적에 포함하거나 제외하세요."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionIntro": {
+    "defaultMessage": "각 탭과 평가가 학생의 총 성적에 어떻게 반영되는지 관리합니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionModes": {
+    "defaultMessage": "“동일”（모든 평가가 탭의 가중치를 동일하게 나눔）또는 “사용자 지정”（각 평가의 비중을 설정）을 선택하세요."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionWeights": {
+    "defaultMessage": "각 탭의 가중치, 즉 총 성적에 기여하는 비중을 설정하세요. 가중치 합계는 100이어야 합니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.equalMode": {
+    "defaultMessage": "동일"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excluded": {
+    "defaultMessage": "제외됨"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excludedCount": {
+    "defaultMessage": "{n}개 제외됨"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.includeAssessment": {
+    "defaultMessage": "{assessment} 성적에 포함"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.modeAria": {
+    "defaultMessage": "{tab} 가중치 모드"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.ofGrade": {
+    "defaultMessage": "성적의 {pct}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.promptTitle": {
+    "defaultMessage": "기여도 설정"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.saveError": {
+    "defaultMessage": "가중치를 저장하지 못했습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.total": {
+    "defaultMessage": "합계: {sum}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.unbalanced": {
+    "defaultMessage": "저장하기 전에 “{tab}”의 평가 가중치 합계가 해당 탭의 총 가중치와 같아야 합니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooHigh": {
+    "defaultMessage": "값은 최대 100이어야 합니다"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
+    "defaultMessage": "값은 최소 0이어야 합니다"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
+    "defaultMessage": "가중치 합계가 100이 아닙니다. 저장은 가능하지만 총점이 정확하지 않을 수 있습니다."
+  },
+  "course.gradebook.GradebookIndex.allAssessments": {
+    "defaultMessage": "전체 평가"
+  },
+  "course.gradebook.GradebookIndex.byWeight": {
+    "defaultMessage": "가중 총점"
+  },
+  "course.gradebook.WeightedGradebookTable.collapseRow": {
+    "defaultMessage": "{name} 접기"
+  },
+  "course.gradebook.WeightedGradebookTable.configureWeights": {
+    "defaultMessage": "가중치 설정"
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeights": {
+    "defaultMessage": "기본 가중치를 표시하고 있습니다. 모든 탭이 동일하게 반영됩니다. \"가중치 설정\"을 클릭하여 직접 설정하세요."
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeightsNoAccess": {
+    "defaultMessage": "기본 가중치를 표시하고 있습니다. 가중치가 설정되기 전까지 모든 탭이 동일하게 반영됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercent": {
+    "defaultMessage": "백분율"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercentTooltip": {
+    "defaultMessage": "학생이 각 탭에서 획득한 비율입니다. 비중이 20%인 탭에서 100%는 해당 탭의 20점을 모두 획득했음을 의미합니다."
+  },
+  "course.gradebook.WeightedGradebookTable.displayPoints": {
+    "defaultMessage": "점수"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPointsTooltip": {
+    "defaultMessage": "각 탭이 기여하는 성적 점수입니다. 각 열의 합이 예상 총점이 됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.downloadCsv": {
+    "defaultMessage": "CSV로 다운로드"
+  },
+  "course.gradebook.WeightedGradebookTable.email": {
+    "defaultMessage": "이메일"
+  },
+  "course.gradebook.WeightedGradebookTable.excluded": {
+    "defaultMessage": "제외됨"
+  },
+  "course.gradebook.WeightedGradebookTable.expandRow": {
+    "defaultMessage": "{name} 펼치기"
+  },
+  "course.gradebook.WeightedGradebookTable.name": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsConfigured": {
+    "defaultMessage": "설정된 가중치가 없습니다. 모든 탭의 가중치가 0입니다. \"가중치 설정\"을 클릭하여 가중치를 지정하세요."
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsNoAccess": {
+    "defaultMessage": "아직 탭 가중치가 설정되지 않았습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.outOfWeight": {
+    "defaultMessage": "/{weight}"
+  },
+  "course.gradebook.WeightedGradebookTable.percentOfGrade": {
+    "defaultMessage": "성적의 {weight}%"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalExact": {
+    "defaultMessage": "합계 100%"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalWarning": {
+    "defaultMessage": "합계 {weight}%"
+  },
+  "course.gradebook.WeightedGradebookTable.weightedTotal": {
+    "defaultMessage": "가중 총점"
+  },
+  "course.gradebook.WeightedGradebookTable.searchStudents": {
+    "defaultMessage": "학생 검색"
+  },
+  "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
+    "defaultMessage": "가중치 합계가 100이 아닙니다. 총점이 정확하지 않을 수 있습니다."
+  },
+  "course.gradebook.TotalHint.policy": {
+    "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."
+  },
+  "course.gradebook.WeightedViewHint.hint": {
+    "defaultMessage": "가중 총점이 필요하신가요? 각 탭이 학생의 전체 성적에 반영되는 비중을 설정하고 여기에서 가중 총점을 확인할 수 있습니다. {link}에서 활성화하세요."
+  },
+  "course.gradebook.WeightedViewHint.settingsLink": {
+    "defaultMessage": "성적부 설정"
   }
 }

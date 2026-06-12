@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from 'test-utils';
+import { fireEvent, render, screen, waitFor, within } from 'test-utils';
 
 import toast from 'lib/hooks/toast';
 
@@ -32,6 +32,8 @@ const emptyState = {
     students: [],
     submissions: [],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -43,6 +45,8 @@ const noStudentsState = {
     students: [],
     submissions: [],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -65,6 +69,8 @@ const populatedState = {
       { studentId: 1, assessmentId: 100, submissionId: 1000, grade: 8 },
     ],
     gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: false,
   },
 };
 
@@ -72,6 +78,39 @@ const populatedStateWithGamification = {
   gradebook: {
     ...populatedState.gradebook,
     gamificationEnabled: true,
+  },
+};
+
+const populatedStateWithWeightedView = {
+  gradebook: {
+    ...populatedState.gradebook,
+    weightedViewEnabled: true,
+    canManageWeights: false,
+  },
+};
+
+const populatedStateWithWeightedViewAndGamification = {
+  gradebook: {
+    ...populatedState.gradebook,
+    weightedViewEnabled: true,
+    gamificationEnabled: true,
+    canManageWeights: false,
+  },
+};
+
+const populatedStateManagerWeightedOff = {
+  gradebook: {
+    ...populatedState.gradebook,
+    weightedViewEnabled: false,
+    canManageWeights: true,
+  },
+};
+
+const populatedStateManagerWeightedOn = {
+  gradebook: {
+    ...populatedState.gradebook,
+    weightedViewEnabled: true,
+    canManageWeights: true,
   },
 };
 
@@ -145,5 +184,67 @@ describe('GradebookIndex', () => {
         'No grade or gamification columns selected - export will include student info only.',
       ),
     ).toBeInTheDocument();
+  });
+
+  it('does not render view toggle when weightedViewEnabled is false', async () => {
+    render(<GradebookIndex />, { state: populatedState });
+    // Wait for loading to finish
+    await screen.findByRole('button', { name: /export/i });
+    expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
+  });
+
+  it('renders view toggle when weightedViewEnabled is true', async () => {
+    render(<GradebookIndex />, { state: populatedStateWithWeightedView });
+    expect(await screen.findByText(/all assessments/i)).toBeInTheDocument();
+    expect(await screen.findByText(/weighted total/i)).toBeInTheDocument();
+  });
+
+  it('switches to Weighted Total view on toggle click', async () => {
+    render(<GradebookIndex />, { state: populatedStateWithWeightedView });
+    const byWeightButton = await screen.findByText(/weighted total/i);
+    fireEvent.click(byWeightButton);
+    expect(
+      await screen.findByTestId('gradebook-weighted-table'),
+    ).toBeInTheDocument();
+  });
+
+  it('weighted view does not expose gamification columns in picker', async () => {
+    render(<GradebookIndex />, {
+      state: populatedStateWithWeightedViewAndGamification,
+    });
+    const byWeightButton = await screen.findByText(/weighted total/i);
+    fireEvent.click(byWeightButton);
+    await screen.findByTestId('gradebook-weighted-table');
+    fireEvent.click(
+      await screen.findByRole('button', { name: /select columns/i }),
+    );
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).queryByText('Level')).not.toBeInTheDocument();
+    expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
+  });
+
+  describe('weighted-view discoverability hint', () => {
+    it('shows the hint to managers when the weighted view is off', async () => {
+      render(<GradebookIndex />, { state: populatedStateManagerWeightedOff });
+      expect(
+        await screen.findByRole('link', { name: /gradebook settings/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('does not show the hint once the weighted view is enabled', async () => {
+      render(<GradebookIndex />, { state: populatedStateManagerWeightedOn });
+      await screen.findByText(/weighted total/i); // wait for data to load
+      expect(
+        screen.queryByRole('link', { name: /gradebook settings/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('does not show the hint to staff who cannot manage weights', async () => {
+      render(<GradebookIndex />, { state: populatedState });
+      await screen.findByRole('button', { name: /export/i }); // wait for load
+      expect(
+        screen.queryByRole('link', { name: /gradebook settings/i }),
+      ).not.toBeInTheDocument();
+    });
   });
 });

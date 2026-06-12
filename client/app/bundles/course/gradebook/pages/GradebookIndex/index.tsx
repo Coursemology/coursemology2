@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useTransition } from 'react';
 import { defineMessages } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleAlt } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { Tab, Tabs, Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -13,14 +13,18 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { useCourseContext } from '../../../container/CourseLoader';
 import GradebookTable from '../../components/GradebookTable';
 import GradeLinkHint from '../../components/GradeLinkHint';
+import WeightedGradebookTable from '../../components/WeightedGradebookTable';
+import WeightedViewHint from '../../components/WeightedViewHint';
 import fetchGradebook from '../../operations';
 import {
   getAssessments,
+  getCanManageWeights,
   getCategories,
   getGamificationEnabled,
   getStudents,
   getSubmissions,
   getTabs,
+  getWeightedViewEnabled,
 } from '../../selectors';
 
 const translations = defineMessages({
@@ -40,6 +44,14 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookIndex.noStudentsHint',
     defaultMessage: 'Grades will appear here once students join the course.',
   },
+  allAssessments: {
+    id: 'course.gradebook.GradebookIndex.allAssessments',
+    defaultMessage: 'All Assessments',
+  },
+  byWeight: {
+    id: 'course.gradebook.GradebookIndex.byWeight',
+    defaultMessage: 'Weighted Total',
+  },
 });
 
 const GradebookIndex: FC = () => {
@@ -48,7 +60,12 @@ const GradebookIndex: FC = () => {
   const { courseTitle } = useCourseContext();
   const { courseId: courseIdParam } = useParams();
   const courseId = parseInt(courseIdParam!, 10);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'all' | 'weighted'>(
+    searchParams.get('view') === 'weighted' ? 'weighted' : 'all',
+  );
+  const [isPending, startTransition] = useTransition();
 
   const assessments = useAppSelector(getAssessments);
   const categories = useAppSelector(getCategories);
@@ -56,6 +73,8 @@ const GradebookIndex: FC = () => {
   const students = useAppSelector(getStudents);
   const submissions = useAppSelector(getSubmissions);
   const gamificationEnabled = useAppSelector(getGamificationEnabled);
+  const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
+  const canManageWeights = useAppSelector(getCanManageWeights);
 
   useEffect(() => {
     dispatch(fetchGradebook())
@@ -78,27 +97,74 @@ const GradebookIndex: FC = () => {
         </Typography>
       </div>
     );
+  } else if (weightedViewEnabled && viewMode === 'weighted') {
+    content = (
+      <WeightedGradebookTable
+        assessments={assessments}
+        canManageWeights={canManageWeights}
+        categories={categories}
+        courseId={courseId}
+        courseTitle={courseTitle}
+        students={students}
+        submissions={submissions}
+        tabs={tabs}
+      />
+    );
   } else {
     content = (
-      <>
-        <GradeLinkHint />
-        <GradebookTable
-          assessments={assessments}
-          categories={categories}
-          courseId={courseId}
-          courseTitle={courseTitle}
-          gamificationEnabled={gamificationEnabled}
-          students={students}
-          submissions={submissions}
-          tabs={tabs}
-        />
-      </>
+      <GradebookTable
+        assessments={assessments}
+        categories={categories}
+        courseId={courseId}
+        courseTitle={courseTitle}
+        gamificationEnabled={gamificationEnabled}
+        students={students}
+        submissions={submissions}
+        tabs={tabs}
+      />
     );
   }
 
   return (
     <Page title={t(translations.gradebook)} unpadded>
-      {content}
+      {!isLoading && canManageWeights && !weightedViewEnabled && (
+        <WeightedViewHint courseId={courseId} />
+      )}
+      {weightedViewEnabled && !isLoading && students.length > 0 && (
+        <Tabs
+          className="border-only-b-neutral-200"
+          onChange={(_, v: 'all' | 'weighted') =>
+            startTransition(() => {
+              setViewMode(v);
+              setSearchParams(v === 'weighted' ? { view: 'weighted' } : {});
+            })
+          }
+          TabIndicatorProps={{ style: { height: 2 } }}
+          value={viewMode}
+        >
+          <Tab label={t(translations.allAssessments)} value="all" />
+          <Tab label={t(translations.byWeight)} value="weighted" />
+        </Tabs>
+      )}
+      {!isLoading &&
+        students.length > 0 &&
+        !(weightedViewEnabled && viewMode === 'weighted') && <GradeLinkHint />}
+      <div className="relative">
+        {isPending && (
+          <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">
+            <LoadingIndicator.Delayed bare delayedForMS={150} size={32} />
+          </div>
+        )}
+        <div
+          className={
+            isPending
+              ? 'pointer-events-none opacity-50 transition-opacity'
+              : 'transition-opacity'
+          }
+        >
+          {content}
+        </div>
+      </div>
     </Page>
   );
 };

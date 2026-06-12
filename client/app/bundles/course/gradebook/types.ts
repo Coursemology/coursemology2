@@ -5,4 +5,5 @@ export type {
   StudentData,
   SubmissionData,
   TabData,
+  UpdateWeightsPayload,
 } from 'types/course/gradebook';
