@@ -9268,5 +9268,164 @@
   },
   "lib.translations.table.column.newExternalId": {
     "defaultMessage": "New External ID"
+  },
+  "course.admin.GradebookSettings.gradebookSettings": {
+    "defaultMessage": "Gradebook settings"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabled": {
+    "defaultMessage": "Enable Weighted Total view"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabledHint": {
+    "defaultMessage": "Enables a \"Weighted Total\" view in the gradebook where staff can configure per-tab weights and see a weighted total column."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcluded": {
+    "defaultMessage": "All assessments in \"{tab}\" are excluded - it contributes nothing to the total."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcludedCount": {
+    "defaultMessage": "All {n} excluded"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customMode": {
+    "defaultMessage": "Custom"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customSum": {
+    "defaultMessage": "Assessment weights: {sum} / {total}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
+    "defaultMessage": "No weights set yet - these are suggested defaults with every tab counting equally. Save to confirm, or adjust below."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
+    "defaultMessage": "In Equal mode, optionally drop each student's N lowest-scoring assessments before averaging."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionExclusion": {
+    "defaultMessage": "Expand a tab to include or exclude individual assessments from grading."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionIntro": {
+    "defaultMessage": "Control how tabs and assessments count toward each student's total grade."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionModes": {
+    "defaultMessage": "Choose Equal (all assessments share the tab's weight) or Custom (set each assessment's share)."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionWeights": {
+    "defaultMessage": "Set each tab's weight - how much it contributes to the total (weights should sum to 100)."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.equalMode": {
+    "defaultMessage": "Equal"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excluded": {
+    "defaultMessage": "Excluded"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excludedCount": {
+    "defaultMessage": "{n} excluded"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.includeAssessment": {
+    "defaultMessage": "Include {assessment} in grade"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.modeAria": {
+    "defaultMessage": "{tab} weight mode"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.ofGrade": {
+    "defaultMessage": "{pct}% of grade"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.promptTitle": {
+    "defaultMessage": "Configure contributions"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.saveError": {
+    "defaultMessage": "Failed to save weights. Please try again."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.total": {
+    "defaultMessage": "Total: {sum}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.unbalanced": {
+    "defaultMessage": "Assessment weights for \"{tab}\" must sum to its tab total before saving."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooHigh": {
+    "defaultMessage": "Value must be at most 100"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
+    "defaultMessage": "Value must be at least 0"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
+    "defaultMessage": "Weights do not sum to 100. Saving is allowed; Total may be inaccurate."
+  },
+  "course.gradebook.GradebookIndex.allAssessments": {
+    "defaultMessage": "All Assessments"
+  },
+  "course.gradebook.GradebookIndex.byWeight": {
+    "defaultMessage": "Weighted Total"
+  },
+  "course.gradebook.WeightedGradebookTable.collapseRow": {
+    "defaultMessage": "Collapse {name}"
+  },
+  "course.gradebook.WeightedGradebookTable.configureWeights": {
+    "defaultMessage": "Configure Weights"
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeights": {
+    "defaultMessage": "Showing default weights - every tab counts equally. Click \"Configure Weights\" to set your own."
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeightsNoAccess": {
+    "defaultMessage": "Showing default weights - every tab counts equally until weights are configured."
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercent": {
+    "defaultMessage": "Percentage"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercentTooltip": {
+    "defaultMessage": "What fraction of each tab the student earned. 100% on a tab worth 20% = the student earned all 20 grade points from that tab."
+  },
+  "course.gradebook.WeightedGradebookTable.displayPoints": {
+    "defaultMessage": "Points"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPointsTooltip": {
+    "defaultMessage": "How many grade points each tab contributes. Columns add up to the projected total."
+  },
+  "course.gradebook.WeightedGradebookTable.downloadCsv": {
+    "defaultMessage": "Download as CSV"
+  },
+  "course.gradebook.WeightedGradebookTable.email": {
+    "defaultMessage": "Email"
+  },
+  "course.gradebook.WeightedGradebookTable.excluded": {
+    "defaultMessage": "Excluded"
+  },
+  "course.gradebook.WeightedGradebookTable.expandRow": {
+    "defaultMessage": "Expand {name}"
+  },
+  "course.gradebook.WeightedGradebookTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsConfigured": {
+    "defaultMessage": "No weights configured - all tab weights are 0. Click \"Configure Weights\" to assign weights."
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsNoAccess": {
+    "defaultMessage": "No tab weights have been configured yet."
+  },
+  "course.gradebook.WeightedGradebookTable.outOfWeight": {
+    "defaultMessage": "/{weight}"
+  },
+  "course.gradebook.WeightedGradebookTable.percentOfGrade": {
+    "defaultMessage": "{weight}% of grade"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalExact": {
+    "defaultMessage": "100% total"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalWarning": {
+    "defaultMessage": "{weight}% total"
+  },
+  "course.gradebook.WeightedGradebookTable.weightedTotal": {
+    "defaultMessage": "Weighted Total"
+  },
+  "course.gradebook.WeightedGradebookTable.searchStudents": {
+    "defaultMessage": "Search students"
+  },
+  "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
+    "defaultMessage": "Weights do not sum to 100. Total may be inaccurate."
+  },
+  "course.gradebook.TotalHint.policy": {
+    "defaultMessage": "Totals count ungraded assessments as 0."
+  },
+  "course.gradebook.WeightedViewHint.hint": {
+    "defaultMessage": "Want to set how much each item contributes to students’ total grades? Enable Weighted Total view in {link}."
+  },
+  "course.gradebook.WeightedViewHint.settingsLink": {
+    "defaultMessage": "Gradebook settings"
   }
 }

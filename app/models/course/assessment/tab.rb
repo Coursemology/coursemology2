@@ -8,6 +8,9 @@ class Course::Assessment::Tab < ApplicationRecord
 
   belongs_to :category, class_name: 'Course::Assessment::Category', inverse_of: :tabs
   has_many :assessments, class_name: 'Course::Assessment', dependent: :destroy, inverse_of: :tab
+  has_one :gradebook_contribution, class_name: 'Course::Gradebook::TabContribution',
+                                   dependent: :destroy, inverse_of: :tab
+
   has_many :folders, class_name: 'Course::Material::Folder', through: :assessments,
                      inverse_of: nil
 

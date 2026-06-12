@@ -1,4 +1,4 @@
-import { GradebookData } from 'types/course/gradebook';
+import { GradebookData, UpdateWeightsPayload } from 'types/course/gradebook';
 
 import { APIResponse } from 'api/types';
 
@@ -11,5 +11,11 @@ export default class GradebookAPI extends BaseCourseAPI {
 
   index(): APIResponse<GradebookData> {
     return this.client.get(this.#urlPrefix);
+  }
+
+  updateWeights(
+    payload: UpdateWeightsPayload,
+  ): APIResponse<UpdateWeightsPayload> {
+    return this.client.patch(`${this.#urlPrefix}/weights`, payload);
   }
 }

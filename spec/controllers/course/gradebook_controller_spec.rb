@@ -8,6 +8,7 @@ RSpec.describe Course::GradebookController, type: :controller do
     let(:course) { create(:course) }
     let(:student) { create(:course_user, :student, course: course) }
     let(:staff) { create(:course_user, :teaching_assistant, course: course) }
+    let(:manager) { create(:course_user, :manager, course: course) }
 
     describe '#index' do
       render_views
@@ -37,6 +38,13 @@ RSpec.describe Course::GradebookController, type: :controller do
         let(:ta) { create(:course_teaching_assistant, course: course) }
         before { controller_sign_in(controller, ta.user) }
 
+        it { expect { subject }.to raise_error(CanCan::AccessDenied) }
+      end
+
+      context 'when a manager visits the page' do
+        let(:manager) { create(:course_manager, course: course) }
+        before { controller_sign_in(controller, manager.user) }
+
         it { expect(subject).to be_successful }
 
         it 'returns all required top-level keys' do
@@ -48,18 +56,11 @@ RSpec.describe Course::GradebookController, type: :controller do
         end
       end
 
-      context 'when a manager visits the page' do
-        let(:manager) { create(:course_manager, course: course) }
-        before { controller_sign_in(controller, manager.user) }
-
-        it { expect(subject).to be_successful }
-      end
-
       context 'when an observer visits the page' do
         let(:observer) { create(:course_observer, course: course) }
         before { controller_sign_in(controller, observer.user) }
 
-        it { expect(subject).to be_successful }
+        it { expect { subject }.to raise_error(CanCan::AccessDenied) }
       end
 
       context 'with a published assessment and a graded submission' do
@@ -77,7 +78,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: 5.0, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'includes the assessment in the assessments array' do
@@ -129,9 +130,8 @@ RSpec.describe Course::GradebookController, type: :controller do
       end
 
       context 'when a student has an external ID' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
         let!(:student) { create(:course_student, course: course, external_id: 'EXT-123') }
-        before { controller_sign_in(controller, ta.user) }
+        before { controller_sign_in(controller, manager.user) }
 
         it 'returns the external ID in the students array' do
           subject
@@ -143,7 +143,7 @@ RSpec.describe Course::GradebookController, type: :controller do
       end
 
       context 'with a graded submission where the answer grade is exactly 0' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let(:manager) { create(:course_manager, course: course) }
         let(:tab) { course.assessment_categories.first.tabs.first }
         let!(:assessment) do
           create(:course_assessment_assessment, :published_with_mcq_question,
@@ -157,7 +157,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: 0.0, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'returns grade 0 (not null) in the submissions array' do
@@ -172,7 +172,7 @@ RSpec.describe Course::GradebookController, type: :controller do
       end
 
       context 'with a graded submission where answer grades are null (blank)' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let(:manager) { create(:course_manager, course: course) }
         let(:tab) { course.assessment_categories.first.tabs.first }
         let!(:assessment) do
           create(:course_assessment_assessment, :published_with_mcq_question,
@@ -186,7 +186,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: nil, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'returns null grade (not 0) in the submissions array' do
@@ -197,6 +197,237 @@ RSpec.describe Course::GradebookController, type: :controller do
           end
           expect(sub).not_to be_nil
           expect(sub['grade']).to be_nil
+        end
+      end
+    end
+
+    describe 'PATCH update_weights' do
+      let(:manager) { create(:course_manager, course: course) }
+      let(:ta) { create(:course_teaching_assistant, course: course) }
+      let(:student) { create(:course_student, course: course) }
+      let(:category) { create(:course_assessment_category, course: course) }
+      let!(:tab1) { create(:course_assessment_tab, category: category) }
+      let!(:tab2) { create(:course_assessment_tab, category: category) }
+      def weight_for(tab)
+        Course::Gradebook::TabContribution.find_by(tab_id: tab.id)&.weight
+      end
+
+      let(:valid_payload) do
+        { weights: [{ tabId: tab1.id, weight: 60 }, { tabId: tab2.id, weight: 40 }] }
+      end
+
+      context 'as manager' do
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'updates and returns 200' do
+          patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(weight_for(tab1)).to eq(60)
+          expect(weight_for(tab2)).to eq(40)
+        end
+
+        it 'accepts sum < 100' do
+          patch :update_weights,
+                params: { course_id: course.id, weights: [tabId: tab1.id, weight: 30] },
+                format: :json
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'accepts sum > 100' do
+          patch :update_weights,
+                params: { course_id: course.id,
+                          weights: [{ tabId: tab1.id, weight: 70 }, { tabId: tab2.id, weight: 70 }] },
+                format: :json
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'rejects negative with 422 and no partial write' do
+          create(:course_gradebook_tab_contribution, tab: tab1, course: course, weight: 10)
+          patch :update_weights,
+                params: { course_id: course.id,
+                          weights: [{ tabId: tab1.id, weight: 50 }, { tabId: tab2.id, weight: -1 }] },
+                format: :json
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(weight_for(tab1)).to eq(10)
+        end
+
+        it 'rejects >100 with 422' do
+          patch :update_weights,
+                params: { course_id: course.id, weights: [tabId: tab1.id, weight: 101] },
+                format: :json
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it 'rejects foreign tab id with 422' do
+          other_course = create(:course)
+          other_tab = create(:course_assessment_tab,
+                             category: create(:course_assessment_category, course: other_course))
+          patch :update_weights,
+                params: { course_id: course.id, weights: [tabId: other_tab.id, weight: 50] },
+                format: :json
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it 'treats an omitted weights param as a no-op rather than a 500' do
+          patch :update_weights, params: { course_id: course.id }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)['weights']).to eq([])
+        end
+
+        it 'rounds the echoed weight to 2dp so it matches the stored DECIMAL(5,2)' do
+          patch :update_weights,
+                params: { course_id: course.id, weights: [tabId: tab1.id, weight: 33.333] },
+                format: :json
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)['weights'].first['weight']).to eq(33.33)
+          expect(weight_for(tab1)).to eq(33.33)
+        end
+      end
+
+      context 'as TA' do
+        before { controller_sign_in(controller, ta.user) }
+        it 'is denied' do
+          expect do
+            patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'as student' do
+        before { controller_sign_in(controller, student.user) }
+        it 'is denied' do
+          expect do
+            patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when setting is disabled' do
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'still allows update (storage independent of display)' do
+          patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(weight_for(tab1)).to eq(60)
+        end
+      end
+
+      describe '#update_weights with modes' do
+        render_views
+
+        let(:category) { create(:course_assessment_category, course: course) }
+        let(:tab) { create(:course_assessment_tab, category: category) }
+        let!(:a1) { create(:assessment, course: course, tab: tab) }
+        let!(:a2) { create(:assessment, course: course, tab: tab) }
+
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'persists custom mode + assessment weights and echoes them back' do
+          patch :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'custom',
+              assessmentWeights: [
+                { assessmentId: a1.id, weight: '30' },
+                { assessmentId: a2.id, weight: '20' }
+              ]
+            }]
+          }
+          expect(response).to have_http_status(:ok)
+          body = JSON.parse(response.body)
+          entry = body['weights'].first
+          expect(entry['weightMode']).to eq('custom')
+          expect(entry['assessmentWeights']).to contain_exactly(
+            { 'assessmentId' => a1.id, 'weight' => 30.0 },
+            { 'assessmentId' => a2.id, 'weight' => 20.0 }
+          )
+          expect(a1.reload.gradebook_assessment_contribution.weight).to eq(30.0)
+        end
+
+        it 'returns 422 when custom weights do not sum to the tab total' do
+          patch :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'custom',
+              assessmentWeights: [{ assessmentId: a1.id, weight: '10' }]
+            }]
+          }
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it 'persists and echoes per-assessment exclusion in equal mode' do
+          patch :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'equal',
+              excludedAssessmentIds: [a1.id]
+            }]
+          }
+          expect(response).to have_http_status(:ok)
+          expect(a1.reload.gradebook_assessment_contribution.excluded).to eq(true)
+          expect(a2.reload.gradebook_assessment_contribution.excluded).to eq(false)
+          entry = JSON.parse(response.body)['weights'].first
+          expect(entry['excludedAssessmentIds']).to eq([a1.id])
+        end
+      end
+    end
+
+    describe 'GET index — weighted view fields' do
+      render_views
+      let(:manager) { create(:course_manager, course: course) }
+      let(:ta) { create(:course_teaching_assistant, course: course) }
+      let(:category) { create(:course_assessment_category, course: course) }
+      let!(:tab) { create(:course_assessment_tab, category: category) }
+      let!(:contribution) { create(:course_gradebook_tab_contribution, tab: tab, course: course, weight: 30) }
+      let!(:assessment) do
+        create(:course_assessment_assessment, :published_with_mcq_question,
+               course: course, tab: tab)
+      end
+
+      context 'when setting is disabled (default)' do
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'returns weightedViewEnabled false and omits gradebookWeight per tab' do
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          expect(body['weightedViewEnabled']).to eq(false)
+          tab_json = body['tabs'].find { |t| t['id'] == tab.id }
+          expect(tab_json).not_to have_key('gradebookWeight')
+        end
+      end
+
+      context 'when setting is enabled' do
+        before do
+          ctx = Struct.new(:current_course, :key).new(course, Course::GradebookComponent.key)
+          Course::Settings::GradebookComponent.new(ctx).weighted_view_enabled = true
+          course.save!
+        end
+
+        it 'includes weightedViewEnabled true and gradebookWeight per tab for manager' do
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          expect(body['weightedViewEnabled']).to eq(true)
+          expect(body['canManageWeights']).to eq(true)
+          tab_json = body['tabs'].find { |t| t['id'] == tab.id }
+          expect(tab_json['gradebookWeight']).to eq(30)
+        end
+
+        it 'serializes weightMode on tabs and gradebookWeight on assessments when weighted view is enabled' do
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          tab_json = body['tabs'].find { |t| t['id'] == tab.id }
+          expect(tab_json).to have_key('weightMode')
+          expect(body['assessments'].first).to have_key('gradebookWeight')
+        end
+
+        it 'serializes gradebookExcluded on assessments when weighted view is enabled' do
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          expect(body['assessments'].first).to have_key('gradebookExcluded')
+          expect(body['assessments'].first['gradebookExcluded']).to eq(false)
         end
       end
     end

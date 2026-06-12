@@ -79,6 +79,9 @@ class Course::Assessment < ApplicationRecord
                                   inverse_of: :assessment, dependent: :destroy
   has_one :plagiarism_check, class_name: 'Course::Assessment::PlagiarismCheck',
                              inverse_of: :assessment, dependent: :destroy, autosave: true
+  has_one :gradebook_assessment_contribution,
+          class_name: 'Course::Gradebook::AssessmentContribution',
+          dependent: :destroy, inverse_of: :assessment
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
   has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
