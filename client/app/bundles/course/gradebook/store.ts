@@ -1,5 +1,8 @@
 import { produce } from 'immer';
-import type { GradebookData } from 'types/course/gradebook';
+import type {
+  GradebookData,
+  UpdateWeightsPayload,
+} from 'types/course/gradebook';
 
 import type {
   AssessmentData,
@@ -10,6 +13,7 @@ import type {
 } from './types';
 
 const SAVE_GRADEBOOK = 'course/gradebook/SAVE_GRADEBOOK';
+const UPDATE_TAB_WEIGHTS = 'course/gradebook/UPDATE_TAB_WEIGHTS';
 
 interface GradebookState {
   categories: CategoryData[];
@@ -18,11 +22,18 @@ interface GradebookState {
   students: StudentData[];
   submissions: SubmissionData[];
   gamificationEnabled: boolean;
+  weightedViewEnabled: boolean;
+  canManageWeights: boolean;
 }
 
 interface SaveGradebookAction {
   type: typeof SAVE_GRADEBOOK;
   payload: GradebookData;
+}
+
+interface UpdateTabWeightsAction {
+  type: typeof UPDATE_TAB_WEIGHTS;
+  payload: UpdateWeightsPayload;
 }
 
 const initialState: GradebookState = {
@@ -32,10 +43,15 @@ const initialState: GradebookState = {
   students: [],
   submissions: [],
   gamificationEnabled: false,
+  weightedViewEnabled: false,
+  canManageWeights: false,
 };
 
 const reducer = produce(
-  (draft: GradebookState, action: SaveGradebookAction) => {
+  (
+    draft: GradebookState,
+    action: SaveGradebookAction | UpdateTabWeightsAction,
+  ) => {
     switch (action.type) {
       case SAVE_GRADEBOOK: {
         draft.categories = action.payload.categories;
@@ -44,6 +60,43 @@ const reducer = produce(
         draft.students = action.payload.students;
         draft.submissions = action.payload.submissions;
         draft.gamificationEnabled = action.payload.gamificationEnabled;
+        draft.weightedViewEnabled = action.payload.weightedViewEnabled;
+        draft.canManageWeights = action.payload.canManageWeights;
+        break;
+      }
+      case UPDATE_TAB_WEIGHTS: {
+        action.payload.weights.forEach(
+          ({
+            tabId,
+            weight,
+            weightMode,
+            assessmentWeights,
+            excludedAssessmentIds,
+          }) => {
+            const tab = draft.tabs.find((t) => t.id === tabId);
+            if (tab) {
+              tab.gradebookWeight = weight;
+              tab.weightMode = weightMode;
+            }
+            const excludedSet = new Set(excludedAssessmentIds ?? []);
+            const tabAssessments = draft.assessments.filter(
+              (a) => a.tabId === tabId,
+            );
+            tabAssessments.forEach((a) => {
+              a.gradebookExcluded = excludedSet.has(a.id);
+            });
+            if (weightMode === 'equal') {
+              tabAssessments.forEach((a) => {
+                a.gradebookWeight = null;
+              });
+            } else if (assessmentWeights) {
+              assessmentWeights.forEach(({ assessmentId, weight: aw }) => {
+                const a = draft.assessments.find((x) => x.id === assessmentId);
+                if (a) a.gradebookWeight = aw;
+              });
+            }
+          },
+        );
         break;
       }
       default:
@@ -57,6 +110,12 @@ export const actions = {
   saveGradebook: (data: GradebookData): SaveGradebookAction => ({
     type: SAVE_GRADEBOOK,
     payload: data,
+  }),
+  updateTabWeights: (
+    payload: UpdateWeightsPayload,
+  ): UpdateTabWeightsAction => ({
+    type: UPDATE_TAB_WEIGHTS,
+    payload,
   }),
 };
 

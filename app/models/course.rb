@@ -53,6 +53,8 @@ class Course < ApplicationRecord
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
   has_many :assessments, through: :assessment_categories
+  has_many :gradebook_contributions, class_name: 'Course::Gradebook::Contribution',
+                                     dependent: :destroy, inverse_of: :course
   has_many :assessment_skills, class_name: 'Course::Assessment::Skill',
                                dependent: :destroy
   has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',
@@ -361,11 +363,22 @@ class Course < ApplicationRecord
 
   # Set default values
   def set_defaults
+    set_default_times
+    set_default_timeline
+    build_creator_course_user
+  end
+
+  def set_default_times
     self.start_at ||= Time.zone.now.beginning_of_hour
-    self.end_at ||= self.start_at + 1.month
+    self.end_at ||= start_at + 1.month
+  end
+
+  def set_default_timeline
     self.default_reference_timeline ||= reference_timelines.new(default: true)
     self.default_timeline_algorithm ||= 0 # 'fixed' algorithm
+  end
 
+  def build_creator_course_user
     return unless creator && course_users.empty?
 
     course_users.build(user: creator,
