@@ -4190,6 +4190,9 @@
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "포럼"
   },
+  "course.componentTitles.course_gradebook_component": {
+    "defaultMessage": "성적부"
+  },
   "course.componentTitles.course_groups_component": {
     "defaultMessage": "그룹"
   },
@@ -5351,6 +5354,69 @@
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "이 포럼의 모든 주제를 읽음으로 표시하는 데 실패했습니다. 나중에 다시 시도하세요."
   },
+  "course.gradebook.GradebookColumnTree.grades": {
+    "defaultMessage": "성적"
+  },
+  "course.gradebook.GradebookColumnTree.email": {
+    "defaultMessage": "이메일"
+  },
+  "course.gradebook.GradebookColumnTree.level": {
+    "defaultMessage": "레벨"
+  },
+  "course.gradebook.GradebookColumnTree.name": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.GradebookColumnTree.studentInfo": {
+    "defaultMessage": "학생 정보"
+  },
+  "course.gradebook.GradebookColumnTree.totalXp": {
+    "defaultMessage": "총 경험치"
+  },
+  "course.gradebook.GradebookColumnTree.alwaysIncluded": {
+    "defaultMessage": "필수 항목"
+  },
+  "course.gradebook.GradebookColumnTree.gamification": {
+    "defaultMessage": "게임화 관련"
+  },
+  "course.gradebook.GradebookIndex.dialogTitle": {
+    "defaultMessage": "열 선택"
+  },
+  "course.gradebook.GradebookIndex.exportAllTooltip": {
+    "defaultMessage": "선택한 행 없음 - 모든 행이 내보내집니다."
+  },
+  "course.gradebook.GradebookIndex.exportButton": {
+    "defaultMessage": "전체 행 내보내기"
+  },
+  "course.gradebook.GradebookIndex.exportRows": {
+    "defaultMessage": "{count, plural, other {# 행}} 내보내기"
+  },
+  "course.gradebook.GradebookIndex.selectColumns": {
+    "defaultMessage": "열 선택"
+  },
+  "course.gradebook.GradebookIndex.applyAndExport": {
+    "defaultMessage": "적용 및 내보내기"
+  },
+  "course.gradebook.GradebookIndex.fetchFailure": {
+    "defaultMessage": "성적부를 불러오지 못했습니다."
+  },
+  "course.gradebook.GradebookIndex.gradebook": {
+    "defaultMessage": "성적부"
+  },
+  "course.gradebook.GradebookIndex.searchStudents": {
+    "defaultMessage": "학생 검색"
+  },
+  "course.gradebook.GradebookIndex.noStudents": {
+    "defaultMessage": "학생 없음"
+  },
+  "course.gradebook.GradebookTable.maxMarks": {
+    "defaultMessage": "최고 점수"
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHint": {
+    "defaultMessage": "성적 열을 선택하지 않았습니다. 내보내기에는 학생 정보만 포함됩니다."
+  },
+  "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
+    "defaultMessage": "성적 또는 게임화 열을 선택하지 않았습니다. 내보내기에는 학생 정보만 포함됩니다."
+  },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "설명 (선택사항)"
   },
@@ -6169,6 +6235,12 @@
   },
   "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
     "defaultMessage": "소요 시간 표준편차"
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitle": {
+    "defaultMessage": "개별 학생 성적을 확인하고 내보내려면 <url>성적부</url>를 여세요."
+  },
+  "course.statistics.StatisticsIndex.assessments.subtitleDisabled": {
+    "defaultMessage": "개별 학생 성적을 확인하고 내보내려면 <url>성적부</url>을 활성화하세요."
   },
   "course.statistics.StatisticsIndex.assessments.tableTitle": {
     "defaultMessage": "평가 통계 ({numStudents}명의 학생)"
@@ -8057,17 +8129,14 @@
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
   },
-  "lib.components.table.MuiColumnPickerDialog.apply": {
+  "lib.components.table.MuiColumnPickerPrompt.apply": {
     "defaultMessage": "뷰에 적용"
   },
-  "lib.components.table.MuiColumnPickerDialog.cancel": {
+  "lib.components.table.MuiColumnPickerPrompt.cancel": {
     "defaultMessage": "취소"
   },
-  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+  "lib.components.table.MuiColumnPickerPrompt.defaultTitle": {
     "defaultMessage": "열 선택"
-  },
-  "lib.components.table.MuiColumnPickerDialog.export": {
-    "defaultMessage": "적용 및 내보내기"
   },
   "lib.components.table.MuiTableToolbar.directExport": {
     "defaultMessage": "내보내기"
