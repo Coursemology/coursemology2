@@ -106,6 +106,52 @@ RSpec.describe Course::Assessment::Tab do
       end
     end
 
+    describe 'gradebook_keep_highest validation' do
+      let(:tab) { create(:course_assessment_tab) }
+
+      it 'rejects a negative gradebook_keep_highest' do
+        tab.gradebook_keep_highest = -1
+        expect(tab).not_to be_valid
+        expect(tab.errors[:gradebook_keep_highest]).to be_present
+      end
+
+      it 'accepts a non-negative integer gradebook_keep_highest' do
+        tab.gradebook_keep_highest = 2
+        expect(tab).to be_valid
+      end
+    end
+
+    describe '.update_gradebook_weights with keep-highest' do
+      let(:course) { create(:course) }
+      let(:category) { create(:course_assessment_category, course: course) }
+      let(:tab) { create(:course_assessment_tab, category: category) }
+
+      it 'persists gradebook_keep_highest for an equal-mode tab' do
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [tab_id: tab.id, weight: 50, weight_mode: 'equal', keep_highest: 2]
+        )
+        expect(tab.reload.gradebook_keep_highest).to eq(2)
+      end
+
+      it 'resets gradebook_keep_highest to 0 when the tab is custom mode' do
+        tab.update!(gradebook_keep_highest: 3)
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [tab_id: tab.id, weight: 50, weight_mode: 'custom', keep_highest: 2]
+        )
+        expect(tab.reload.gradebook_keep_highest).to eq(0)
+      end
+
+      it 'defaults to 0 when keep_highest is omitted' do
+        described_class.update_gradebook_weights(
+          course: course,
+          updates: [tab_id: tab.id, weight: 50, weight_mode: 'equal']
+        )
+        expect(tab.reload.gradebook_keep_highest).to eq(0)
+      end
+    end
+
     describe '.update_gradebook_weights with modes' do
       let(:course) { create(:course) }
       let(:category) { create(:course_assessment_category, course: course) }

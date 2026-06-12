@@ -245,6 +245,17 @@ describe('computeStudentTotal', () => {
     });
     expect(total).toBeCloseTo(60 * 0.9);
   });
+
+  it('returns null when every tab subtotal is null (tab has no assessments)', () => {
+    expect(
+      computeStudentTotal({
+        studentId: 1,
+        tabs: [{ id: 99, title: 'X', categoryId: 0, gradebookWeight: 100 }],
+        assessments: [],
+        submissions: [],
+      }),
+    ).toBeNull();
+  });
 });
 
 describe('sumWeights', () => {
@@ -504,6 +515,7 @@ describe('computeWeightedRows — identity passthrough', () => {
 
     expect(rows[0].level).toBe(5);
     expect(rows[0].totalXp).toBe(1234);
+    expect(rows[0].externalId).toBeNull();
   });
 });
 
@@ -659,6 +671,32 @@ describe('exclusion — custom mode', () => {
       }),
     ).toBeCloseTo(0.9);
   });
+
+  it('returns null when every assessment in a custom-mode tab is excluded', () => {
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: {
+          id: 10,
+          title: 'M',
+          categoryId: 0,
+          weightMode: 'custom',
+          gradebookWeight: 50,
+        },
+        assessments: [
+          {
+            id: 1,
+            tabId: 10,
+            maxGrade: 100,
+            title: 'A',
+            gradebookWeight: 50,
+            gradebookExcluded: true,
+          },
+        ],
+        submissions: [{ studentId: 1, assessmentId: 1, grade: 80 }],
+      }),
+    ).toBeNull();
+  });
 });
 
 describe('breakdown — exclusion', () => {
@@ -686,51 +724,48 @@ describe('breakdown — exclusion', () => {
   });
 });
 
-describe('computeTabSubtotal — equal mode with drop-lowest', () => {
-  // Three graded assessments in one tab, equal max grades for easy ratios.
-  const dropAssessments = [
+describe('computeTabSubtotal — equal mode with keep-highest', () => {
+  const keepAssessments = [
     { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
     { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
     { id: 3, tabId: 10, maxGrade: 100, title: 'C' },
   ];
-  const dropSubs = subs([
-    { studentId: 1, assessmentId: 1, grade: 30 }, // ratio 0.3 (lowest)
-    { studentId: 1, assessmentId: 2, grade: 60 }, // ratio 0.6
-    { studentId: 1, assessmentId: 3, grade: 90 }, // ratio 0.9
+  const keepSubs = subs([
+    { studentId: 1, assessmentId: 1, grade: 30 }, // 0.3 lowest
+    { studentId: 1, assessmentId: 2, grade: 60 }, // 0.6
+    { studentId: 1, assessmentId: 3, grade: 90 }, // 0.9 highest
   ]);
 
-  it('dropLowest=1 drops the single lowest ratio, averaging the rest', () => {
-    // keep 0.6, 0.9 → (0.6 + 0.9) / 2 = 0.75
+  it('keepHighest=2 keeps the two highest ratios, averaging them', () => {
+    // keep 0.6, 0.9 → 0.75
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
-        assessments: dropAssessments,
-        submissions: dropSubs,
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 2 },
+        assessments: keepAssessments,
+        submissions: keepSubs,
       }),
     ).toBeCloseTo(0.75);
   });
 
-  it('dropLowest=2 keeps only the single best ratio', () => {
-    // keep 0.9 → 0.9 / 1 = 0.9
+  it('keepHighest=1 keeps only the single best ratio', () => {
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 2 },
-        assessments: dropAssessments,
-        submissions: dropSubs,
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 1 },
+        assessments: keepAssessments,
+        submissions: keepSubs,
       }),
     ).toBeCloseTo(0.9);
   });
 
-  it('drops an ungraded assessment first (ratio 0 ranks lowest)', () => {
-    // a1 graded 0.3, a2 graded 0.6, a3 ungraded (0). dropLowest=1 drops a3.
-    // keep 0.3, 0.6 → 0.45
+  it('treats an ungraded assessment as ratio 0 (kept last)', () => {
+    // a1 0.3, a2 0.6, a3 ungraded (0). keepHighest=2 keeps 0.3, 0.6 → 0.45
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
-        assessments: dropAssessments,
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 2 },
+        assessments: keepAssessments,
         submissions: subs([
           { studentId: 1, assessmentId: 1, grade: 30 },
           { studentId: 1, assessmentId: 2, grade: 60 },
@@ -739,43 +774,42 @@ describe('computeTabSubtotal — equal mode with drop-lowest', () => {
     ).toBeCloseTo(0.45);
   });
 
-  it('clamps N ≥ includedCount to keep the best 1', () => {
-    // dropLowest=5 over 3 included → keep best 1 (0.9)
+  it('keepHighest > included keeps all (no drop)', () => {
+    // keep 5 over 3 included → average all three: (0.3+0.6+0.9)/3 = 0.6
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 5 },
-        assessments: dropAssessments,
-        submissions: dropSubs,
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 5 },
+        assessments: keepAssessments,
+        submissions: keepSubs,
       }),
-    ).toBeCloseTo(0.9);
+    ).toBeCloseTo(0.6);
   });
 
-  it('dropLowest=0 equals legacy average (byte-identical)', () => {
+  it('keepHighest=0 equals the legacy average (off)', () => {
     const tabBase = { id: 10, title: 'M', categoryId: 0 };
     const legacy = computeTabSubtotal({
       studentId: 1,
       tab: tabBase,
-      assessments: dropAssessments,
-      submissions: dropSubs,
+      assessments: keepAssessments,
+      submissions: keepSubs,
     });
     const withZero = computeTabSubtotal({
       studentId: 1,
-      tab: { ...tabBase, dropLowest: 0 },
-      assessments: dropAssessments,
-      submissions: dropSubs,
+      tab: { ...tabBase, keepHighest: 0 },
+      assessments: keepAssessments,
+      submissions: keepSubs,
     });
     expect(withZero).toEqual(legacy);
   });
 
-  it('ties at the drop boundary produce the correct subtotal', () => {
-    // ratios 0.5, 0.5, 0.9; dropLowest=1 drops one of the tied 0.5s.
-    // keep 0.5, 0.9 → 0.7 regardless of which tied one is dropped.
+  it('ties at the keep boundary produce the correct subtotal', () => {
+    // ratios 0.5, 0.5, 0.9; keepHighest=2 keeps 0.9 + one 0.5 → 0.7
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
-        assessments: dropAssessments,
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 2 },
+        assessments: keepAssessments,
         submissions: subs([
           { studentId: 1, assessmentId: 1, grade: 50 },
           { studentId: 1, assessmentId: 2, grade: 50 },
@@ -785,9 +819,8 @@ describe('computeTabSubtotal — equal mode with drop-lowest', () => {
     ).toBeCloseTo(0.7);
   });
 
-  it('drop ranks over the included set only (exclusion composes)', () => {
-    // a1 0.3 included, a2 0.6 included, a3 excluded. dropLowest=1 ranks over {a1,a2}
-    // and drops a1 → keep 0.6 → 0.6.
+  it('keep ranks over the included set only (exclusion composes)', () => {
+    // a1 0.3, a2 0.6 included; a3 excluded. keepHighest=1 over {a1,a2} keeps 0.6.
     const mixed = [
       { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
       { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
@@ -796,7 +829,7 @@ describe('computeTabSubtotal — equal mode with drop-lowest', () => {
     expect(
       computeTabSubtotal({
         studentId: 1,
-        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
+        tab: { id: 10, title: 'M', categoryId: 0, keepHighest: 1 },
         assessments: mixed,
         submissions: subs([
           { studentId: 1, assessmentId: 1, grade: 30 },
@@ -807,8 +840,7 @@ describe('computeTabSubtotal — equal mode with drop-lowest', () => {
     ).toBeCloseTo(0.6);
   });
 
-  it('custom mode ignores dropLowest', () => {
-    // Custom tab with dropLowest set — must use the custom formula unchanged.
+  it('custom mode ignores keepHighest', () => {
     // a1 w30 graded 0.8 → 24; a2 w70 graded 1.0 → 70; subtotal = 94/100 = 0.94
     expect(
       computeTabSubtotal({
@@ -818,23 +850,23 @@ describe('computeTabSubtotal — equal mode with drop-lowest', () => {
           title: 'M',
           categoryId: 0,
           weightMode: 'custom',
+          keepHighest: 1,
           gradebookWeight: 100,
-          dropLowest: 1,
         },
         assessments: [
           { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
-          { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookWeight: 70 },
+          { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 70 },
         ],
         submissions: subs([
           { studentId: 1, assessmentId: 1, grade: 80 },
-          { studentId: 1, assessmentId: 2, grade: 50 },
+          { studentId: 1, assessmentId: 2, grade: 100 },
         ]),
       }),
     ).toBeCloseTo(0.94);
   });
 });
 
-describe('breakdown — drop-lowest (equal mode)', () => {
+describe('breakdown — keep-highest (equal mode)', () => {
   const tabs = [{ id: 10, title: 'M', categoryId: 1, gradebookWeight: 60 }];
   const bdAssessments = [
     { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
@@ -842,15 +874,15 @@ describe('breakdown — drop-lowest (equal mode)', () => {
     { id: 3, tabId: 10, maxGrade: 100, title: 'C' },
   ];
   const bdSubs = subs([
-    { studentId: 1, assessmentId: 1, grade: 30 }, // 0.3 lowest → dropped
+    { studentId: 1, assessmentId: 1, grade: 30 }, // 0.3 lowest → not kept
     { studentId: 1, assessmentId: 2, grade: 60 }, // 0.6 kept
     { studentId: 1, assessmentId: 3, grade: 90 }, // 0.9 kept
   ]);
 
-  it('flags the lowest assessment as dropped with zero points/effectiveWeight', () => {
+  it('flags the non-kept lowest assessment as dropped with zero points/effectiveWeight', () => {
     const [tab] = computeStudentBreakdown({
       studentId: 1,
-      tabs: tabs.map((t) => ({ ...t, dropLowest: 1 })),
+      tabs: tabs.map((t) => ({ ...t, keepHighest: 2 })),
       assessments: bdAssessments,
       submissions: bdSubs,
     });
@@ -861,30 +893,37 @@ describe('breakdown — drop-lowest (equal mode)', () => {
     expect(a.effectiveWeight).toBe(0);
   });
 
-  it('kept assessments share the tab weight over keptCount (= included − dropN)', () => {
+  it('kept assessments share the tab weight over keptCount (= min(keep, included))', () => {
     const [tab] = computeStudentBreakdown({
       studentId: 1,
-      tabs: tabs.map((t) => ({ ...t, dropLowest: 1 })),
+      tabs: tabs.map((t) => ({ ...t, keepHighest: 2 })),
       assessments: bdAssessments,
       submissions: bdSubs,
     });
     const b = tab.assessments.find((x) => x.assessmentId === 2)!;
     const c = tab.assessments.find((x) => x.assessmentId === 3)!;
-    // keptCount = 3 − 1 = 2 → effectiveWeight = 60 / 2 = 30 each
-    expect(b.dropped).toBe(false);
+    // keptCount = 2 → effectiveWeight = 60 / 2 = 30 each
     expect(b.effectiveWeight).toBeCloseTo(30);
     expect(c.effectiveWeight).toBeCloseTo(30);
-    // points = (ratio / keptCount) × weight → b = (0.6/2)*60 = 18 ; c = (0.9/2)*60 = 27
-    expect(b.points).toBeCloseTo(18);
-    expect(c.points).toBeCloseTo(27);
-    // kept points sum to the tab cell = subtotal × weight = 0.75 × 60 = 45
-    expect(b.points + c.points).toBeCloseTo(45);
+    expect(b.points).toBeCloseTo(18); // (0.6/2)*60
+    expect(c.points).toBeCloseTo(27); // (0.9/2)*60
+    expect(b.points + c.points).toBeCloseTo(45); // subtotal 0.75 × 60
   });
 
-  it('dropLowest=0 leaves every assessment not dropped (legacy breakdown)', () => {
+  it('keepHighest=0 leaves every assessment not dropped (off)', () => {
     const [tab] = computeStudentBreakdown({
       studentId: 1,
       tabs,
+      assessments: bdAssessments,
+      submissions: bdSubs,
+    });
+    expect(tab.assessments.every((a) => a.dropped === false)).toBe(true);
+  });
+
+  it('keepHighest >= included drops nothing', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: tabs.map((t) => ({ ...t, keepHighest: 5 })),
       assessments: bdAssessments,
       submissions: bdSubs,
     });
@@ -901,7 +940,7 @@ describe('breakdown — drop-lowest (equal mode)', () => {
           categoryId: 1,
           gradebookWeight: 60,
           weightMode: 'custom',
-          dropLowest: 2,
+          keepHighest: 1,
         },
       ],
       assessments: [

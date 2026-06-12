@@ -6,6 +6,8 @@ class Course::Assessment::Tab < ApplicationRecord
             numericality: { greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 100 },
             presence: true
+  validates :gradebook_keep_highest,
+            numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :creator, presence: true
   validates :updater, presence: true
   validates :category, presence: true
@@ -54,7 +56,8 @@ class Course::Assessment::Tab < ApplicationRecord
     mode = (entry[:weight_mode] || 'equal').to_s
     tab.update!(
       gradebook_weight: entry[:weight],
-      weight_mode: mode
+      weight_mode: mode,
+      gradebook_keep_highest: (mode == 'equal') ? (entry[:keep_highest] || 0) : 0
     )
 
     excluded_ids = entry[:excluded_assessment_ids] || []

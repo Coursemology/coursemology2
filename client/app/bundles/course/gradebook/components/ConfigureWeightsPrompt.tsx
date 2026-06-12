@@ -52,10 +52,36 @@ const translations = defineMessages({
     defaultMessage:
       "Choose Equal (all assessments share the tab's weight) or Custom (set each assessment's share).",
   },
-  descriptionDrop: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.descriptionDrop',
+  keepHighestLabel: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestLabel',
+    defaultMessage: 'Keep highest',
+  },
+  keepHighestAria: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestAria',
+    defaultMessage: 'Keep highest for {tab}',
+  },
+  keepHighestToggleAria: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestToggleAria',
+    defaultMessage: 'Enable keep highest for {tab}',
+  },
+  keepInvalid: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepInvalid',
+    defaultMessage: 'Keep at least 1 (whole number)',
+  },
+  keepSubtitle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepSubtitle',
     defaultMessage:
-      "In Equal mode, optionally drop each student's N lowest-scoring assessments before averaging.",
+      '— keeps highest {keep} of {included} · each counts as {pct}%',
+  },
+  keepOverflowWarning: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepOverflowWarning',
+    defaultMessage:
+      '"{tab}" keeps more assessments than it contains — all of them will count.',
+  },
+  descriptionKeep: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.descriptionKeep',
+    defaultMessage:
+      "In Equal mode, optionally keep only each student's N highest-scoring assessments.",
   },
   total: {
     id: 'course.gradebook.ConfigureWeightsPrompt.total',
@@ -194,6 +220,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
     Object.fromEntries(
       resolvedTabs.map((tb) => [tb.id, tb.gradebookWeight ?? 0]),
     );
+  const seedKeepHighest = (): Record<number, number> =>
+    Object.fromEntries(resolvedTabs.map((tb) => [tb.id, tb.keepHighest ?? 0]));
   const seedModes = (): Record<number, WeightMode> =>
     Object.fromEntries(
       resolvedTabs.map((tb) => [tb.id, tb.weightMode ?? 'equal']),
@@ -204,6 +232,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
     Object.fromEntries(assessments.map((a) => [a.id, !!a.gradebookExcluded]));
 
   const [weights, setWeights] = useState<Record<number, number>>(seedWeights);
+  const [keepHighest, setKeepHighest] =
+    useState<Record<number, number>>(seedKeepHighest);
   const [modes, setModes] = useState<Record<number, WeightMode>>(seedModes);
   const [assessmentWeights, setAssessmentWeights] = useState<
     Record<number, number>
@@ -216,6 +246,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   useEffect(() => {
     if (open) {
       setWeights(seedWeights());
+      setKeepHighest(seedKeepHighest());
       setModes(seedModes());
       setAssessmentWeights(seedAssessmentWeights());
       setExcluded(seedExclusions());
@@ -248,15 +279,40 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const effectiveWeight = (tabId: number): number =>
     isAllExcluded(tabId) ? 0 : weights[tabId] ?? 0;
 
+  const validateKeep = (value: number): string | null =>
+    Number.isInteger(value) && value >= 1 ? null : t(translations.keepInvalid);
+
+  const activeKeepValue = (tabId: number): number | null => {
+    if ((modes[tabId] ?? 'equal') !== 'equal') return null;
+    const v = keepHighest[tabId] ?? 0;
+    return v > 0 ? v : null;
+  };
+
   const sum = tabs.reduce((acc, tb) => acc + effectiveWeight(tb.id), 0);
   const hasInvalid =
     Object.values(weights).some((w) => validate(w) !== null) ||
-    Object.values(assessmentWeights).some((w) => validate(w) !== null);
+    Object.values(assessmentWeights).some((w) => validate(w) !== null) ||
+    tabs.some((tb) => {
+      const v = activeKeepValue(tb.id);
+      return v !== null && validateKeep(v) !== null;
+    });
   const hasUnbalanced = tabs.some((tb) => isUnbalanced(tb.id));
+
+  const keepOverflowTabs = tabs.filter((tb) => {
+    const v = activeKeepValue(tb.id);
+    if (!v) return false;
+    const included = tabIncludedIds(tb.id).length;
+    return included > 1 && v > included;
+  });
 
   const handleChange = (tabId: number, raw: string): void => {
     const parsed = raw === '' ? 0 : Number(raw);
     setWeights((prev) => ({ ...prev, [tabId]: parsed }));
+  };
+
+  const handleKeepChange = (tabId: number, raw: string): void => {
+    const parsed = raw === '' ? 0 : Number(raw);
+    setKeepHighest((prev) => ({ ...prev, [tabId]: parsed }));
   };
 
   const handleAssessmentChange = (assessmentId: number, raw: string): void => {
@@ -298,6 +354,11 @@ const ConfigureWeightsPrompt: FC<Props> = ({
               tabId: tb.id,
               weight: weights[tb.id] ?? 0,
               weightMode: mode,
+              keepHighest:
+                activeKeepValue(tb.id) !== null &&
+                tabIncludedIds(tb.id).length > 1
+                  ? keepHighest[tb.id] ?? 0
+                  : 0,
               excludedAssessmentIds: tabAssessmentIds(tb.id).filter(
                 (id) => excluded[id],
               ),
@@ -345,6 +406,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           translations.descriptionWeights,
           translations.descriptionExclusion,
           translations.descriptionModes,
+          translations.descriptionKeep,
         ].map((key) => (
           <Typography
             key={key.id}
@@ -372,10 +434,19 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                   const mode = modes[tb.id] ?? 'equal';
                   const isExpanded = !!expanded[tb.id];
                   const unbalanced = isUnbalanced(tb.id);
+                  const isKeepOverflow = keepOverflowTabs.some(
+                    (overflowTab) => overflowTab.id === tb.id,
+                  );
                   const noAssessments = tabAssessments.length === 0;
                   const includedCount = tabIncludedIds(tb.id).length;
                   const excludedCount = tabAssessments.length - includedCount;
                   const pct = includedCount > 0 ? r2(value / includedCount) : 0;
+                  const keepValue = keepHighest[tb.id] ?? 0;
+                  const keepDisabled = includedCount <= 1;
+                  const keepEnabled = !keepDisabled && keepValue > 0;
+                  const keepErr = keepEnabled ? validateKeep(keepValue) : null;
+                  const kept = Math.min(keepValue, includedCount);
+                  const keepPct = kept > 0 ? r2(value / kept) : 0;
 
                   return (
                     <div key={tb.id}>
@@ -447,6 +518,68 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                           value={isAllExcluded(tb.id) ? 0 : value}
                         />
                       </div>
+                      {mode === 'equal' && !noAssessments && (
+                        <div className="pl-9 flex items-center gap-1 flex-wrap">
+                          <Checkbox
+                            checked={keepEnabled}
+                            disabled={keepDisabled}
+                            inputProps={{
+                              'aria-label': t(
+                                translations.keepHighestToggleAria,
+                                { tab: tb.title },
+                              ),
+                            }}
+                            onChange={() => {
+                              setKeepHighest((prev) => ({
+                                ...prev,
+                                [tb.id]:
+                                  keepValue > 0
+                                    ? 0
+                                    : Math.max(1, includedCount - 1),
+                              }));
+                            }}
+                            size="small"
+                          />
+                          <Typography color="text.secondary" variant="caption">
+                            {t(translations.keepHighestLabel)}
+                          </Typography>
+                          {keepEnabled && (
+                            <TextField
+                              error={keepErr !== null}
+                              inputProps={{
+                                'aria-label': t(translations.keepHighestAria, {
+                                  tab: tb.title,
+                                }),
+                                min: 1,
+                                step: 1,
+                              }}
+                              label={t(translations.keepHighestLabel)}
+                              onChange={(e) =>
+                                handleKeepChange(tb.id, e.target.value)
+                              }
+                              onKeyDown={(e) => {
+                                if (
+                                  ['.', ',', 'e', 'E', '-', '+'].includes(e.key)
+                                )
+                                  e.preventDefault();
+                              }}
+                              size="small"
+                              sx={{ width: 80, mx: 0.5 }}
+                              type="number"
+                              value={keepValue}
+                            />
+                          )}
+                          {keepEnabled && keepErr === null && (
+                            <Typography color="primary" variant="caption">
+                              {t(translations.keepSubtitle, {
+                                keep: kept,
+                                included: includedCount,
+                                pct: keepPct.toFixed(2),
+                              })}
+                            </Typography>
+                          )}
+                        </div>
+                      )}
                       {err && (
                         <Typography
                           className="pl-9"
@@ -454,6 +587,15 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                           variant="caption"
                         >
                           {err}
+                        </Typography>
+                      )}
+                      {keepEnabled && keepErr && (
+                        <Typography
+                          className="pl-9"
+                          color="error"
+                          variant="caption"
+                        >
+                          {keepErr}
                         </Typography>
                       )}
                       {unbalanced && (
@@ -464,6 +606,13 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                       {isAllExcluded(tb.id) && (
                         <Alert severity="warning" sx={{ mt: 1, ml: 4.5 }}>
                           {t(translations.allExcluded, { tab: tb.title })}
+                        </Alert>
+                      )}
+                      {isKeepOverflow && (
+                        <Alert severity="warning" sx={{ mt: 1, ml: 4.5 }}>
+                          {t(translations.keepOverflowWarning, {
+                            tab: tb.title,
+                          })}
                         </Alert>
                       )}
                       <Collapse in={isExpanded}>
@@ -532,6 +681,16 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                 </div>
                               );
                             }
+                            let gradeCaption: string;
+                            if (isExcluded) {
+                              gradeCaption = t(translations.excluded);
+                            } else if (keepEnabled) {
+                              gradeCaption = '—';
+                            } else {
+                              gradeCaption = t(translations.ofGrade, {
+                                pct: pct.toFixed(2),
+                              });
+                            }
                             return (
                               <div
                                 key={a.id}
@@ -550,11 +709,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                   color="text.disabled"
                                   variant="caption"
                                 >
-                                  {isExcluded
-                                    ? t(translations.excluded)
-                                    : t(translations.ofGrade, {
-                                        pct: pct.toFixed(2),
-                                      })}
+                                  {gradeCaption}
                                 </Typography>
                               </div>
                             );

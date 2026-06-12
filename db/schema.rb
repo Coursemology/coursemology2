@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_12_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -567,6 +567,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_130000) do
     t.decimal "gradebook_weight", precision: 5, scale: 2, default: "0.0", null: false
     t.boolean "gradebook_excluded", default: false, null: false
     t.integer "weight_mode", default: 0, null: false
+    t.integer "gradebook_keep_highest", default: 0, null: false
     t.index ["category_id"], name: "fk__course_assessment_tabs_category_id"
     t.index ["creator_id"], name: "fk__course_assessment_tabs_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_tabs_updater_id"

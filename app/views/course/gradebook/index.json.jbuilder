@@ -14,6 +14,7 @@ json.tabs @tabs do |tab|
   if @weighted_view_enabled
     json.gradebookWeight tab.gradebook_weight&.to_f
     json.weightMode tab.weight_mode
+    json.keepHighest tab.gradebook_keep_highest
   end
 end
 

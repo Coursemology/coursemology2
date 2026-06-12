@@ -351,6 +351,41 @@ RSpec.describe Course::GradebookController, type: :controller do
           entry = JSON.parse(response.body)['weights'].first
           expect(entry['excludedAssessmentIds']).to eq([a1.id])
         end
+
+        it 'persists and echoes keepHighest for an equal-mode tab' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{ tabId: tab.id, weight: '50', weightMode: 'equal', keepHighest: '1' }]
+          }
+          expect(response).to have_http_status(:ok)
+          entry = JSON.parse(response.body)['weights'].first
+          expect(entry['keepHighest']).to eq(1)
+          expect(tab.reload.gradebook_keep_highest).to eq(1)
+        end
+
+        it 'resets keepHighest to 0 when the tab is custom mode' do
+          tab.update!(gradebook_keep_highest: 3)
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{
+              tabId: tab.id, weight: '50', weightMode: 'custom', keepHighest: '2',
+              assessmentWeights: [
+                { assessmentId: a1.id, weight: '30' },
+                { assessmentId: a2.id, weight: '20' }
+              ]
+            }]
+          }
+          expect(response).to have_http_status(:ok)
+          expect(tab.reload.gradebook_keep_highest).to eq(0)
+        end
+
+        it 'rejects a negative keepHighest with 422' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{ tabId: tab.id, weight: '50', weightMode: 'equal', keepHighest: '-1' }]
+          }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
     end
 

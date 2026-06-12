@@ -9,7 +9,7 @@ export interface TabData {
   categoryId: number;
   gradebookWeight?: number;
   weightMode?: 'equal' | 'custom';
-  dropLowest?: number;
+  keepHighest?: number;
 }
 
 export interface AssessmentData {
@@ -54,7 +54,7 @@ export interface UpdateWeightsPayload {
     tabId: number;
     weight: number;
     weightMode?: 'equal' | 'custom';
-    dropLowest?: number;
+    keepHighest?: number;
     excludedAssessmentIds?: number[];
     assessmentWeights?: { assessmentId: number; weight: number }[];
   }[];

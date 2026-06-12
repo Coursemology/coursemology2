@@ -1165,9 +1165,9 @@ describe('GradebookWeightedTable', () => {
   });
 
   describe('drop-lowest breakdown marker', () => {
-    // One equal tab, dropLowest=1, three graded assessments. The lowest (a1) drops.
+    // One equal tab, keepHighest=1, three graded assessments. The lowest (a1) drops.
     const dropConfig = {
-      tabs: [{ ...makeTab(10, 'Missions', 1, 60), dropLowest: 1 }],
+      tabs: [{ ...makeTab(10, 'Missions', 1, 60), keepHighest: 1 }],
       assessments: [
         makeAssessment(1, 'Mission 1', 10, 100),
         makeAssessment(2, 'Mission 2', 10, 100),
@@ -1177,12 +1177,56 @@ describe('GradebookWeightedTable', () => {
       submissions: [makeSub(1, 1, 30), makeSub(1, 2, 60), makeSub(1, 3, 90)],
     };
 
-    it('labels the dropped assessment "Dropped" (not "Excluded")', async () => {
+    it('keeps only one student expanded at a time (opening another collapses the first)', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+        students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
+        submissions: [makeSub(1, 1, 80), makeSub(2, 1, 60)],
+      });
+
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        await screen.findByTestId(breakdownRowId(1, 10, 1)),
+      ).toBeInTheDocument();
+
+      // Opening Bob must collapse Alice.
+      await user.click(screen.getByRole('button', { name: /expand Bob/i }));
+      expect(
+        await screen.findByTestId(breakdownRowId(2, 10, 1)),
+      ).toBeInTheDocument();
+      await waitFor(() =>
+        expect(
+          screen.queryByTestId(breakdownRowId(1, 10, 1)),
+        ).not.toBeInTheDocument(),
+      );
+    });
+
+    it('keeps focus on the toggle after expanding (keyboard users stay put)', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 1, 80)],
+      });
+      const toggle = screen.getByRole('button', { name: /expand Alice/i });
+      await user.click(toggle);
+      // Same DOM button (label flips expand→collapse), so focus is retained.
+      expect(
+        screen.getByRole('button', { name: /collapse Alice/i }),
+      ).toHaveFocus();
+    });
+
+    it('labels the dropped assessment "Dropped (lowest)" (not "Excluded")', async () => {
       const user = userEvent.setup();
       renderWeighted(dropConfig);
       await user.click(screen.getByRole('button', { name: /expand Alice/i }));
       const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
-      expect(within(detail).getByText(/Dropped/i)).toBeInTheDocument();
+      expect(
+        within(detail).getByText(/Dropped \(lowest\)/),
+      ).toBeInTheDocument();
       expect(within(detail).queryByText(/Excluded/i)).not.toBeInTheDocument();
     });
 
@@ -1204,6 +1248,58 @@ describe('GradebookWeightedTable', () => {
       const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
       // a1 = 30/100 = 30% — visible so the instructor sees the dropped grade.
       expect(within(detail).getByText('30%')).toBeInTheDocument();
+    });
+  });
+
+  describe('auto-scroll on expand', () => {
+    const one = {
+      tabs: [makeTab(10, 'Missions', 1, 100)],
+      assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 1, 80)],
+    };
+
+    afterEach(() => {
+      // Restore the scrollTo we stub in (jsdom doesn't implement it).
+      delete (Element.prototype as unknown as { scrollTo?: unknown }).scrollTo;
+    });
+
+    it('smooth-scrolls the expanded row into view by default', async () => {
+      const scrollSpy = jest.fn();
+      (Element.prototype as unknown as { scrollTo: unknown }).scrollTo =
+        scrollSpy;
+      const user = userEvent.setup();
+      renderWeighted(one);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      await waitFor(() => expect(scrollSpy).toHaveBeenCalled());
+      expect(scrollSpy.mock.calls[0][0]).toMatchObject({ behavior: 'smooth' });
+    });
+
+    it('jumps instantly when the user prefers reduced motion', async () => {
+      const scrollSpy = jest.fn();
+      (Element.prototype as unknown as { scrollTo: unknown }).scrollTo =
+        scrollSpy;
+      const originalMatchMedia = window.matchMedia;
+      window.matchMedia = ((query: string) => ({
+        matches: query === '(prefers-reduced-motion: reduce)',
+        media: query,
+        onchange: null,
+        addEventListener: (): void => {},
+        removeEventListener: (): void => {},
+        addListener: (): void => {},
+        removeListener: (): void => {},
+        dispatchEvent: (): boolean => false,
+      })) as unknown as typeof window.matchMedia;
+
+      try {
+        const user = userEvent.setup();
+        renderWeighted(one);
+        await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+        await waitFor(() => expect(scrollSpy).toHaveBeenCalled());
+        expect(scrollSpy.mock.calls[0][0]).toMatchObject({ behavior: 'auto' });
+      } finally {
+        window.matchMedia = originalMatchMedia;
+      }
     });
   });
 });

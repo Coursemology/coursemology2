@@ -30,7 +30,7 @@ export interface AssessmentContribution {
   // Custom mode: the assessment's own configured weight.
   effectiveWeight: number;
   excluded: boolean;
-  dropped: boolean; // equal-mode drop-lowest: ranked out for this student
+  dropped: boolean; // equal-mode keep-highest: ranked out (not among kept) for this student
 }
 
 export interface TabBreakdown {
@@ -42,9 +42,6 @@ type GradeLookup = Map<string, number>;
 
 const gradeKey = (studentId: number, assessmentId: number): string =>
   `${studentId}:${assessmentId}`;
-
-const clamp = (n: number, lo: number, hi: number): number =>
-  Math.max(lo, Math.min(hi, n));
 
 // Index submissions by (student, assessment) once: O(submissions).
 const buildGradeLookup = (submissions: GradeEntry[]): GradeLookup => {
@@ -71,8 +68,9 @@ const buildAssessmentsByTab = (
 
 // Equal-weight formula: average of (grade/maxGrade) ratios over INCLUDED assessments.
 // Excluded assessments are dropped from both numerator and count; ungraded included
-// contribute 0. When tab.dropLowest is set, the N lowest ratios are dropped before
-// averaging. Returns null when no assessment is included.
+// contribute 0. When tab.keepHighest is set (> 0), only the N highest ratios are kept
+// before averaging (keep min(N, included)); 0 keeps all. Returns null when no
+// assessment is included.
 const equalSubtotal = (
   studentId: number,
   tab: TabData,
@@ -81,13 +79,14 @@ const equalSubtotal = (
 ): number | null => {
   const included = tabAssessments.filter((a) => !a.gradebookExcluded);
   if (included.length === 0) return null;
-  const dropN = clamp(tab.dropLowest ?? 0, 0, included.length - 1);
+  const keepN = tab.keepHighest ?? 0;
   const ratios = included.map((a) => {
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
-    return grade != null ? grade / a.maxGrade : 0;
+    return grade != null && a.maxGrade > 0 ? grade / a.maxGrade : 0;
   });
-  ratios.sort((x, y) => x - y);
-  const kept = ratios.slice(dropN);
+  ratios.sort((x, y) => x - y); // ascending
+  const keep = keepN > 0 ? Math.min(keepN, included.length) : included.length;
+  const kept = ratios.slice(included.length - keep); // the `keep` highest
   return kept.reduce((acc, r) => acc + r, 0) / kept.length;
 };
 
@@ -108,7 +107,8 @@ const customSubtotal = (
     if (a.gradebookExcluded) return;
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     const assessmentWeight = a.gradebookWeight ?? 0;
-    if (grade != null) numerator += (grade / a.maxGrade) * assessmentWeight;
+    if (grade != null && a.maxGrade > 0)
+      numerator += (grade / a.maxGrade) * assessmentWeight;
     hasContributing = true;
   });
   return hasContributing ? numerator / tabWeight : null;
@@ -206,24 +206,30 @@ export const computeStudentBreakdown = ({
     let droppedIds = new Set<number>();
     let keptCount = includedCount;
     if (tab.weightMode !== 'custom' && includedCount > 0) {
-      const dropN = clamp(tab.dropLowest ?? 0, 0, includedCount - 1);
-      if (dropN > 0) {
+      const keepN = tab.keepHighest ?? 0;
+      keptCount = keepN > 0 ? Math.min(keepN, includedCount) : includedCount;
+      if (keptCount < includedCount) {
         const ranked = included
           .map((a) => {
             const grade = gradeLookup.get(gradeKey(studentId, a.id));
-            return { id: a.id, ratio: grade != null ? grade / a.maxGrade : 0 };
+            return {
+              id: a.id,
+              ratio: grade != null && a.maxGrade > 0 ? grade / a.maxGrade : 0,
+            };
           })
-          .sort((x, y) => x.ratio - y.ratio);
-        droppedIds = new Set(ranked.slice(0, dropN).map((r) => r.id));
+          .sort((x, y) => x.ratio - y.ratio); // ascending: lowest first
+        // Drop the lowest (includedCount − keptCount).
+        droppedIds = new Set(
+          ranked.slice(0, includedCount - keptCount).map((r) => r.id),
+        );
       }
-      keptCount = includedCount - droppedIds.size;
     }
 
     const contributions = list.map((a) => {
       const excluded = !!a.gradebookExcluded;
       const dropped = droppedIds.has(a.id);
       const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
-      const ratio = grade != null ? grade / a.maxGrade : 0;
+      const ratio = grade != null && a.maxGrade > 0 ? grade / a.maxGrade : 0;
       const inactive = excluded || dropped;
       let points: number;
       let effectiveWeight: number;

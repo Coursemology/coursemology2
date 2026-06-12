@@ -153,8 +153,8 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
   });
 });
 
-describe('UPDATE_TAB_WEIGHTS — dropLowest', () => {
-  it('writes dropLowest onto the matching tab', () => {
+describe('UPDATE_TAB_WEIGHTS — keepHighest', () => {
+  it('writes keepHighest onto the matching tab', () => {
     const start = reducer(
       undefined,
       actions.saveGradebook({
@@ -172,14 +172,14 @@ describe('UPDATE_TAB_WEIGHTS — dropLowest', () => {
       start,
       actions.updateTabWeights({
         weights: [
-          { tabId: 10, weight: 50, weightMode: 'equal', dropLowest: 2 },
+          { tabId: 10, weight: 50, weightMode: 'equal', keepHighest: 2 },
         ],
       }),
     );
-    expect(next.tabs[0].dropLowest).toBe(2);
+    expect(next.tabs[0].keepHighest).toBe(2);
   });
 
-  it('defaults dropLowest to 0 when omitted from the payload', () => {
+  it('defaults keepHighest to 0 when omitted from the payload', () => {
     const start = reducer(
       undefined,
       actions.saveGradebook({
@@ -190,7 +190,7 @@ describe('UPDATE_TAB_WEIGHTS — dropLowest', () => {
             title: 'M',
             categoryId: 1,
             gradebookWeight: 0,
-            dropLowest: 3,
+            keepHighest: 3,
           },
         ],
         assessments: [],
@@ -207,6 +207,6 @@ describe('UPDATE_TAB_WEIGHTS — dropLowest', () => {
         weights: [{ tabId: 10, weight: 50, weightMode: 'equal' }],
       }),
     );
-    expect(next.tabs[0].dropLowest).toBe(0);
+    expect(next.tabs[0].keepHighest).toBe(0);
   });
 });

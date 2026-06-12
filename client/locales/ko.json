@@ -5462,9 +5462,12 @@
   "course.gradebook.GradebookColumnTree.totalXp": {
     "defaultMessage": "총 경험치"
   },
-  "course.gradebook.GradebookIndex.applyAndExport": {
-    "defaultMessage": "적용 및 내보내기"
-  },
+  "course.gradebook.GradebookIndex.allAssessments": {
+  "defaultMessage": "모든 평가"
+},
+"course.gradebook.GradebookIndex.byWeight": {
+  "defaultMessage": "가중 총점"
+},
   "course.gradebook.GradebookIndex.dialogTitle": {
     "defaultMessage": "열 선택"
   },
@@ -5501,12 +5504,81 @@
   "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
     "defaultMessage": "성적 또는 게임화 열을 선택하지 않았습니다. 내보내기에는 학생 정보만 포함됩니다."
   },
-  "course.gradebook.GradebookWeightedTable.doesNotSumTo100": {
-    "defaultMessage": "합계가 100이 아닙니다"
-  },
-  "course.gradebook.GradebookWeightedTable.treatUngradedAsZeroTooltip": {
-    "defaultMessage": "제출되지 않았거나 채점되지 않은 과제/평가를 0점으로 계산합니다. 모든 과제가 완료되어야 하는 학기 말에 사용하세요."
-  },
+  "course.gradebook.GradebookWeightedTable.breakdownPointsCaption": {
+"defaultMessage": "점수로 표시된 기여도"
+},
+"course.gradebook.GradebookWeightedTable.collapseRow": {
+"defaultMessage": "{name} 접기"
+},
+"course.gradebook.GradebookWeightedTable.configureWeights": {
+"defaultMessage": "가중치 설정"
+},
+"course.gradebook.GradebookWeightedTable.displayPercent": {
+"defaultMessage": "백분율"
+},
+"course.gradebook.GradebookWeightedTable.displayPercentTooltip": {
+"defaultMessage": "학생이 각 탭에서 획득한 비율입니다. 20%의 비중을 가진 탭에서 100%를 받으면, 해당 탭에서 성적 점수 20점을 모두 획득한 것입니다."
+},
+"course.gradebook.GradebookWeightedTable.displayPoints": {
+"defaultMessage": "점수"
+},
+"course.gradebook.GradebookWeightedTable.displayPointsTooltip": {
+"defaultMessage": "각 탭이 기여하는 성적 점수입니다. 각 열의 합계가 예상 총점이 됩니다."
+},
+"course.gradebook.GradebookWeightedTable.doesNotSumTo100": {
+"defaultMessage": "합계가 100이 아닙니다"
+},
+"course.gradebook.GradebookWeightedTable.dropped": {
+  "defaultMessage": "제외됨 (최저)"
+},
+"course.gradebook.GradebookWeightedTable.downloadCsv": {
+"defaultMessage": "CSV로 다운로드"
+},
+"course.gradebook.GradebookWeightedTable.email": {
+"defaultMessage": "이메일"
+},
+"course.gradebook.GradebookWeightedTable.excluded": {
+"defaultMessage": "제외됨"
+},
+"course.gradebook.GradebookWeightedTable.expandRow": {
+"defaultMessage": "{name} 펼치기"
+},
+"course.gradebook.GradebookWeightedTable.name": {
+"defaultMessage": "이름"
+},
+"course.gradebook.GradebookWeightedTable.noWeightsConfigured": {
+"defaultMessage": "설정된 가중치가 없습니다. 모든 탭 가중치가 0입니다. “가중치 설정”을 클릭하여 가중치를 지정하세요."
+},
+"course.gradebook.GradebookWeightedTable.noWeightsNoAccess": {
+"defaultMessage": "아직 설정된 탭 가중치가 없습니다."
+},
+"course.gradebook.GradebookWeightedTable.outOfWeight": {
+"defaultMessage": "/{weight}"
+},
+"course.gradebook.GradebookWeightedTable.percentOfGrade": {
+"defaultMessage": "성적의 {weight}%"
+},
+"course.gradebook.GradebookWeightedTable.percentTotalExact": {
+"defaultMessage": "총 100%"
+},
+"course.gradebook.GradebookWeightedTable.percentTotalWarning": {
+"defaultMessage": "총 {weight}%"
+},
+"course.gradebook.GradebookWeightedTable.projectedTotal": {
+"defaultMessage": "합계"
+},
+"course.gradebook.GradebookWeightedTable.searchStudents": {
+"defaultMessage": "학생 검색"
+},
+"course.gradebook.GradebookWeightedTable.weightsDoNotSum": {
+"defaultMessage": "가중치 합계가 100이 아닙니다. 총점이 정확하지 않을 수 있습니다."
+},
+"course.gradebook.WeightedViewHint.hint": {
+"defaultMessage": "가중 총 성적을 확인하고 싶으신가요? 각 탭이 학생의 전체 성적에 얼마나 반영되는지 설정하고, 여기에서 가중 총점을 확인할 수 있습니다. {link}에서 활성화하세요."
+},
+"course.gradebook.WeightedViewHint.settingsLink": {
+"defaultMessage": "성적부 설정"
+},
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "설명 (선택사항)"
   },

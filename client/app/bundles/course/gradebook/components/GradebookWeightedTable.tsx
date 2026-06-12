@@ -23,6 +23,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
+import { lighten } from '@mui/material/styles';
 import type {
   AssessmentData,
   CategoryData,
@@ -43,6 +45,7 @@ import tableTranslations from 'lib/translations/table';
 
 import type {
   AssessmentContribution,
+  TabBreakdown,
   WeightedRow,
 } from '../computeWeighted';
 import {
@@ -182,7 +185,7 @@ const translations = defineMessages({
   },
   dropped: {
     id: 'course.gradebook.GradebookWeightedTable.dropped',
-    defaultMessage: 'Dropped',
+    defaultMessage: 'Dropped (lowest)',
   },
 });
 
@@ -312,35 +315,59 @@ const GradebookWeightedTable = ({
     return a.points;
   };
 
-  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  // Single-open accordion: auditing one student at a time. Replaces the former
+  // multi-expand Set so only the focused student's breakdown is on screen (and
+  // only one summary row ever pins under the header).
+  const [expandedId, setExpandedId] = useState<number | null>(null);
   const toggleExpanded = (studentId: number): void =>
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(studentId)) next.delete(studentId);
-      else next.add(studentId);
-      return next;
-    });
+    setExpandedId((prev) => (prev === studentId ? null : studentId));
 
-  const breakdownsByStudent = useMemo(
+  const expandedBreakdown = useMemo<TabBreakdown[] | null>(
     () =>
-      new Map(
-        [...expandedIds].map((studentId) => [
-          studentId,
-          computeStudentBreakdown({
-            studentId,
+      expandedId === null
+        ? null
+        : computeStudentBreakdown({
+            studentId: expandedId,
             tabs: resolvedTabs,
             assessments,
             submissions,
           }),
-        ]),
-      ),
-    [expandedIds, resolvedTabs, assessments, submissions],
+    [expandedId, resolvedTabs, assessments, submissions],
   );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeRowRef = useRef<HTMLTableRowElement>(null);
   const row1Ref = useRef<HTMLTableRowElement>(null);
   const row2Ref = useRef<HTMLTableRowElement>(null);
+  const row3Ref = useRef<HTMLTableRowElement>(null);
   const [row2Top, setRow2Top] = useState(0);
   const [row3Top, setRow3Top] = useState(0);
+  // Full header height = where the pinned summary row sticks, and the scroll
+  // offset that lands a focused row just beneath the header.
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  // sx for a cell of the focused (expanded) student's summary row. `variant`
+  // selects the layering: 'checkbox' and 'name' are corner-sticky (top + the
+  // left freeze they already carry) and sit above the body's frozen column;
+  // 'data' cells pin on top only. The checkbox cell also carries the left
+  // accent bar that marks "this is the student you're auditing".
+  const pinnedCellSx =
+    (variant: 'checkbox' | 'name' | 'data') =>
+    (theme: Theme): Record<string, unknown> => {
+      const isLead = variant !== 'data';
+      return {
+        position: 'sticky',
+        top: headerHeight,
+        zIndex: isLead ? 6 : 3,
+        // Opaque tint (not alpha) so scrolled body content can't bleed through
+        // the sticky cell.
+        backgroundColor: lighten(theme.palette.primary.light, 0.96),
+        // The checkbox cell carries the left accent bar marking the audited row.
+        ...(variant === 'checkbox' && {
+          boxShadow: `inset 3px 0 0 ${theme.palette.primary.main}`,
+        }),
+      };
+    };
 
   // Row-3 subheader for a tab: "Excluded" when the tab contributes nothing,
   // else the weight in the active lens ("/{w}" points / "{w}% of grade").
@@ -368,24 +395,53 @@ const GradebookWeightedTable = ({
   useLayoutEffect(() => {
     const row1 = row1Ref.current;
     const row2 = row2Ref.current;
-    if (!row1 || !row2) return undefined;
+    const row3 = row3Ref.current;
+    if (!row1 || !row2 || !row3) return undefined;
 
     // Re-measure on every header-row resize, not just on mount. Expanding or
     // collapsing a row, switching display mode and showing/hiding columns all
     // reflow the header after mount; with a one-shot measurement rows 2–3 keep
     // a stale `top` and stay permanently dislodged from the rows above them.
     const measure = (): void => {
-      const h1 = row1.offsetHeight;
+      // getBoundingClientRect (subpixel) not offsetHeight (integer-rounded):
+      // rows are fractional (32px min + lineHeight content), and a rounded
+      // `top` lands the stuck rows 2-3 a fraction off — opening thin gaps
+      // between header rows (body bleeds through) and overshooting the single
+      // rowSpan=3 frozen-left cell so the right header reads a touch taller.
+      const h1 = row1.getBoundingClientRect().height;
+      const h2 = row2.getBoundingClientRect().height;
+      const h3 = row3.getBoundingClientRect().height;
       setRow2Top(h1);
-      setRow3Top(h1 + row2.offsetHeight);
+      setRow3Top(h1 + h2);
+      setHeaderHeight(h1 + h2 + h3);
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(row1);
     observer.observe(row2);
+    observer.observe(row3);
     return () => observer.disconnect();
   }, [visibleCategories, resolvedTabs]);
+
+  // On expand, glide the focused row to just beneath the header so its
+  // breakdown is guaranteed in view (even when the clicked row was near the
+  // bottom). getBoundingClientRect keeps this correct regardless of the row's
+  // offsetParent; scrollTo is optional-chained because jsdom lacks it.
+  useLayoutEffect(() => {
+    if (expandedId === null) return;
+    const container = containerRef.current;
+    const rowEl = activeRowRef.current;
+    if (!container || !rowEl) return;
+    const prefersReducedMotion =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const delta =
+      rowEl.getBoundingClientRect().top - container.getBoundingClientRect().top;
+    container.scrollTo?.({
+      top: container.scrollTop + delta - headerHeight,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  }, [expandedId, headerHeight]);
 
   const rows = useMemo<WeightedRow[]>(
     () =>
@@ -684,6 +740,7 @@ const GradebookWeightedTable = ({
             toolbar — plus the pagination below, so the table fills the
             remaining viewport; shorter classes shrink to fit (no whitespace). */}
           <TableContainer
+            ref={containerRef}
             sx={{ maxHeight: 'calc(100vh - 22rem)', overflowX: 'auto' }}
           >
             <Table
@@ -723,6 +780,32 @@ const GradebookWeightedTable = ({
                     borderBottom: gridLine,
                     borderRight: gridLine,
                   },
+                  // The same `:last-child` override (0,2,1) zeroes the borders on
+                  // the LAST body <tr> too — dropping the table's bottom edge and
+                  // that row's right edge (the open bottom-right corner). The
+                  // separator ABOVE it is owned by the previous row's borderBottom
+                  // (that row isn't last-child, so it keeps it), so only the bottom
+                  // and right edges need restoring here. Same (0,2,3) > (0,2,1).
+                  '& tbody tr:last-of-type td': {
+                    borderBottom: gridLine,
+                    borderRight: gridLine,
+                  },
+                  // The two frozen columns (checkbox + Name) are each their own
+                  // sticky compositing layer; when scrolled, the next row's
+                  // opaque sticky bg paints over the cell's borderBottom and the
+                  // horizontal line vanishes in those columns only. Mirror the
+                  // header fix (CLAUDE-tables.md): drop the coverable borderBottom
+                  // and draw each separator as the lower cell's borderTop, which
+                  // its own layer owns and always paints. Row 1's top line stays
+                  // owned by the sticky header above it, so only rows 2+ get the
+                  // borderTop — else both borders show at rest and read 2px thick.
+                  '& tbody td:first-of-type, & tbody td:nth-of-type(2)': {
+                    borderBottom: 'none',
+                  },
+                  '& tbody tr:not(:first-of-type) td:first-of-type, & tbody tr:not(:first-of-type) td:nth-of-type(2)':
+                    {
+                      borderTop: gridLine,
+                    },
                 };
               }}
             >
@@ -875,6 +958,7 @@ const GradebookWeightedTable = ({
 
                 {/* Row 3: Weight subheaders */}
                 <TableRow
+                  ref={row3Ref}
                   sx={{ '& .MuiTableCell-stickyHeader': { top: row3Top } }}
                 >
                   {resolvedTabs.map((tab) => (
@@ -914,10 +998,10 @@ const GradebookWeightedTable = ({
                 {body.rows.map((row, idx) => {
                   const rowProps = body.forEachRow(row, idx);
                   const studentId = row.original.studentId;
-                  const isExpanded = expandedIds.has(studentId);
+                  const isExpanded = expandedId === studentId;
                   return (
                     <Fragment key={rowProps.id}>
-                      <TableRow>
+                      <TableRow ref={isExpanded ? activeRowRef : undefined}>
                         {/* Body sticky-left cells sit at zIndex 1 — strictly
                           below the header's sticky cells (MUI gives every
                           stickyHeader cell zIndex 2). On a z-index tie the cell
@@ -926,16 +1010,19 @@ const GradebookWeightedTable = ({
                           column the frozen Name cell (z4) doesn't cover — i.e.
                           the identity columns once they're toggled on. */}
                         <TableCell
-                          sx={{
-                            position: 'sticky',
-                            left: 0,
-                            zIndex: 1,
-                            bgcolor: 'background.paper',
-                            width: CHECKBOX_WIDTH,
-                            minWidth: CHECKBOX_WIDTH,
-                            px: 0,
-                            textAlign: 'center',
-                          }}
+                          sx={[
+                            {
+                              position: 'sticky',
+                              left: 0,
+                              zIndex: 1,
+                              bgcolor: 'background.paper',
+                              width: CHECKBOX_WIDTH,
+                              minWidth: CHECKBOX_WIDTH,
+                              px: 0,
+                              textAlign: 'center',
+                            },
+                            isExpanded && pinnedCellSx('checkbox'),
+                          ]}
                         >
                           <Checkbox
                             checked={row.getIsSelected()}
@@ -944,12 +1031,15 @@ const GradebookWeightedTable = ({
                           />
                         </TableCell>
                         <TableCell
-                          sx={{
-                            position: 'sticky',
-                            left: CHECKBOX_WIDTH,
-                            zIndex: 1,
-                            bgcolor: 'background.paper',
-                          }}
+                          sx={[
+                            {
+                              position: 'sticky',
+                              left: CHECKBOX_WIDTH,
+                              zIndex: 1,
+                              bgcolor: 'background.paper',
+                            },
+                            isExpanded && pinnedCellSx('name'),
+                          ]}
                         >
                           <IconButton
                             aria-label={t(
@@ -974,25 +1064,43 @@ const GradebookWeightedTable = ({
                           {row.original.name}
                         </TableCell>
                         {showEmail && (
-                          <TableCell>{row.original.email}</TableCell>
+                          <TableCell
+                            sx={isExpanded ? pinnedCellSx('data') : undefined}
+                          >
+                            {row.original.email}
+                          </TableCell>
                         )}
                         {showExternalId && (
-                          <TableCell>{row.original.externalId ?? ''}</TableCell>
+                          <TableCell
+                            sx={isExpanded ? pinnedCellSx('data') : undefined}
+                          >
+                            {row.original.externalId ?? ''}
+                          </TableCell>
                         )}
                         {showLevel && (
-                          <TableCell align="right">
+                          <TableCell
+                            align="right"
+                            sx={isExpanded ? pinnedCellSx('data') : undefined}
+                          >
                             {row.original.level}
                           </TableCell>
                         )}
                         {showTotalXp && (
-                          <TableCell align="right">
+                          <TableCell
+                            align="right"
+                            sx={isExpanded ? pinnedCellSx('data') : undefined}
+                          >
                             {row.original.totalXp}
                           </TableCell>
                         )}
                         {row.original.subtotals.map((subtotal, i) => {
                           const weight = resolvedTabs[i].gradebookWeight ?? 0;
                           return (
-                            <TableCell key={resolvedTabs[i].id} align="right">
+                            <TableCell
+                              key={resolvedTabs[i].id}
+                              align="right"
+                              sx={isExpanded ? pinnedCellSx('data') : undefined}
+                            >
                               {fmtDisplay(
                                 tabDisplayValue(subtotal, weight),
                                 columnPrecisions.tabs[i],
@@ -1000,7 +1108,10 @@ const GradebookWeightedTable = ({
                             </TableCell>
                           );
                         })}
-                        <TableCell align="right">
+                        <TableCell
+                          align="right"
+                          sx={isExpanded ? pinnedCellSx('data') : undefined}
+                        >
                           {fmtDisplay(
                             totalDisplayValue(row.original.total),
                             columnPrecisions.total,
@@ -1008,52 +1119,47 @@ const GradebookWeightedTable = ({
                         </TableCell>
                       </TableRow>
                       {isExpanded &&
-                        (breakdownsByStudent.get(studentId) ?? []).flatMap(
-                          (tb, tabIdx) =>
-                            tb.assessments.map((a) => {
-                              const isExcluded = a.excluded;
-                              const isDropped = a.dropped;
-                              const isInactive = isExcluded || isDropped;
-                              const statusText = isExcluded
-                                ? t(translations.excluded)
-                                : t(translations.dropped);
-                              // Weightage is always "% of grade" — it never
-                              // follows the points/percent lens.
-                              const weightText = t(
-                                translations.percentOfGrade,
-                                {
-                                  weight:
-                                    Math.round(a.effectiveWeight * 100) / 100,
-                                },
-                              );
-                              const gradeText =
-                                a.grade === null
-                                  ? `—/${a.maxGrade}`
-                                  : `${a.grade}/${a.maxGrade}`;
-                              return (
-                                <TableRow
-                                  key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
-                                  data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
-                                  sx={{
-                                    bgcolor: 'grey.50',
-                                    opacity: isInactive ? 0.6 : 1,
-                                  }}
-                                >
-                                  {/* Empty checkbox cell so the breakdown row
+                        (expandedBreakdown ?? []).flatMap((tb, tabIdx) =>
+                          tb.assessments.map((a) => {
+                            const isExcluded = a.excluded;
+                            const isDropped = a.dropped;
+                            const isInactive = isExcluded || isDropped;
+                            const statusText = isExcluded
+                              ? t(translations.excluded)
+                              : t(translations.dropped);
+                            // Weightage is always "% of grade" — it never
+                            // follows the points/percent lens.
+                            const weightText = t(translations.percentOfGrade, {
+                              weight: Math.round(a.effectiveWeight * 100) / 100,
+                            });
+                            const gradeText =
+                              a.grade === null
+                                ? `—/${a.maxGrade}`
+                                : `${a.grade}/${a.maxGrade}`;
+                            return (
+                              <TableRow
+                                key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                sx={{
+                                  bgcolor: 'grey.50',
+                                  opacity: isInactive ? 0.6 : 1,
+                                }}
+                              >
+                                {/* Empty checkbox cell so the breakdown row
                                     carries the same checkbox | name divider (the
                                     universal cell borderRight) as the rows above. */}
-                                  <TableCell
-                                    sx={{
-                                      position: 'sticky',
-                                      left: 0,
-                                      zIndex: 1,
-                                      bgcolor: 'grey.50',
-                                      width: CHECKBOX_WIDTH,
-                                      minWidth: CHECKBOX_WIDTH,
-                                      px: 0,
-                                    }}
-                                  />
-                                  {/* Title over a muted "raw mark · weightage"
+                                <TableCell
+                                  sx={{
+                                    position: 'sticky',
+                                    left: 0,
+                                    zIndex: 1,
+                                    bgcolor: 'grey.50',
+                                    width: CHECKBOX_WIDTH,
+                                    minWidth: CHECKBOX_WIDTH,
+                                    px: 0,
+                                  }}
+                                />
+                                {/* Title over a muted "raw mark · weightage"
                                     subtitle, stacked and confined to the (sticky)
                                     Name column. The breakdown row freezes the same
                                     checkbox | Name region as the student rows above —
@@ -1063,76 +1169,76 @@ const GradebookWeightedTable = ({
                                     indent sits the title under the student name (past
                                     the expand chevron), signalling these are that
                                     student's assessments. */}
-                                  <TableCell
-                                    sx={{
-                                      position: 'sticky',
-                                      left: CHECKBOX_WIDTH,
-                                      zIndex: 1,
-                                      bgcolor: 'grey.50',
-                                      // The Table's `& th, & td` sx rule
-                                      // (specificity 0,1,1) sets px:1/py:0.25, which
-                                      // outranks this cell's own sx (0,1,0). Double
-                                      // the selector with `&&` (→ 0,2,0) so the larger
-                                      // vertical padding + the indent win.
-                                      '&&': { pl: 4.5, py: 0.75 },
-                                    }}
-                                  >
-                                    {/* nowrap keeps the title on one line: its
+                                <TableCell
+                                  sx={{
+                                    position: 'sticky',
+                                    left: CHECKBOX_WIDTH,
+                                    zIndex: 1,
+                                    bgcolor: 'grey.50',
+                                    // The Table's `& th, & td` sx rule
+                                    // (specificity 0,1,1) sets px:1/py:0.25, which
+                                    // outranks this cell's own sx (0,1,0). Double
+                                    // the selector with `&&` (→ 0,2,0) so the larger
+                                    // vertical padding + the indent win.
+                                    '&&': { pl: 4.5, py: 0.25 },
+                                  }}
+                                >
+                                  {/* nowrap keeps the title on one line: its
                                       max-content width then drives the table's auto
                                       layout, expanding the (frozen) Name column to fit
                                       the longest title. With the metadata line also
                                       nowrap, every breakdown row is exactly 2 lines —
                                       no fixed widths, no JS measurement. */}
-                                    <Typography
-                                      color={
-                                        isInactive ? 'text.disabled' : undefined
-                                      }
-                                      fontSize="inherit"
-                                      sx={{ whiteSpace: 'nowrap' }}
-                                    >
-                                      {a.title}
-                                    </Typography>
-                                    {/* Muted metadata on its own line below the
+                                  <Typography
+                                    color={
+                                      isInactive ? 'text.disabled' : undefined
+                                    }
+                                    fontSize="inherit"
+                                    sx={{ whiteSpace: 'nowrap' }}
+                                  >
+                                    {a.title}
+                                  </Typography>
+                                  {/* Muted metadata on its own line below the
                                       title: raw mark · effective weightage, kept on
                                       one line (nowrap). Weightage is always "% of
                                       grade" — never routed through the points/percent
                                       lens. */}
-                                    <Typography
-                                      color="text.secondary"
-                                      sx={{
-                                        display: 'block',
-                                        whiteSpace: 'nowrap',
-                                      }}
-                                      variant="caption"
-                                    >
-                                      {`${gradeText} · ${isInactive ? statusText : weightText}`}
-                                    </Typography>
-                                  </TableCell>
-                                  {/* One empty cell per visible identity column so
+                                  <Typography
+                                    color="text.secondary"
+                                    sx={{
+                                      display: 'block',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    variant="caption"
+                                  >
+                                    {`${gradeText} · ${isInactive ? statusText : weightText}`}
+                                  </Typography>
+                                </TableCell>
+                                {/* One empty cell per visible identity column so
                                     the grid lines stay aligned with the rows above.
                                     These scroll with the table (only checkbox + Name
                                     are frozen), matching the student rows. */}
-                                  {showEmail && <TableCell />}
-                                  {showExternalId && <TableCell />}
-                                  {showLevel && <TableCell />}
-                                  {showTotalXp && <TableCell />}
-                                  {resolvedTabs.map((tab, i) => {
-                                    const tabCellValue = isExcluded
-                                      ? '—'
-                                      : fmtDisplay(
-                                          breakdownDisplayValue(a),
-                                          columnPrecisions.tabs[i],
-                                        );
-                                    return (
-                                      <TableCell key={tab.id} align="right">
-                                        {i === tabIdx ? tabCellValue : ''}
-                                      </TableCell>
-                                    );
-                                  })}
-                                  <TableCell />
-                                </TableRow>
-                              );
-                            }),
+                                {showEmail && <TableCell />}
+                                {showExternalId && <TableCell />}
+                                {showLevel && <TableCell />}
+                                {showTotalXp && <TableCell />}
+                                {resolvedTabs.map((tab, i) => {
+                                  const tabCellValue = isExcluded
+                                    ? '—'
+                                    : fmtDisplay(
+                                        breakdownDisplayValue(a),
+                                        columnPrecisions.tabs[i],
+                                      );
+                                  return (
+                                    <TableCell key={tab.id} align="right">
+                                      {i === tabIdx ? tabCellValue : ''}
+                                    </TableCell>
+                                  );
+                                })}
+                                <TableCell />
+                              </TableRow>
+                            );
+                          }),
                         )}
                     </Fragment>
                   );

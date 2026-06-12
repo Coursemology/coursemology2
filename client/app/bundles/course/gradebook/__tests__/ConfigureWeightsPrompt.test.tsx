@@ -118,6 +118,14 @@ describe('<ConfigureWeightsPrompt />', () => {
     expect(screen.getByLabelText('Assignments: Assignment 2')).toHaveValue(25);
   });
 
+  it('shows assessment weights sum footer in custom mode', () => {
+    setup();
+    fireEvent.click(
+      within(modeGroup('Assignments')).getByRole('button', { name: /custom/i }),
+    );
+    expect(screen.getByText(/assessment weights:/i)).toBeInTheDocument();
+  });
+
   it('shows an inline error Alert and disables Save when a custom tab is unbalanced', () => {
     setup();
     fireEvent.click(
@@ -142,7 +150,7 @@ describe('<ConfigureWeightsPrompt />', () => {
           tabId: 10,
           weight: 50,
           weightMode: 'custom',
-          dropLowest: 0,
+          keepHighest: 0,
           excludedAssessmentIds: [],
           assessmentWeights: [
             { assessmentId: 101, weight: 25 },
@@ -153,7 +161,7 @@ describe('<ConfigureWeightsPrompt />', () => {
           tabId: 11,
           weight: 50,
           weightMode: 'equal',
-          dropLowest: 0,
+          keepHighest: 0,
           excludedAssessmentIds: [],
         },
       ]);
@@ -195,13 +203,6 @@ describe('<ConfigureWeightsPrompt />', () => {
     expect(
       within(modeGroup('Optional')).getByRole('button', { name: /custom/i }),
     ).toBeDisabled();
-  });
-
-  it('does not render an Exclude checkbox', () => {
-    setup();
-    expect(
-      screen.queryByRole('checkbox', { name: /exclude/i }),
-    ).not.toBeInTheDocument();
   });
 });
 
@@ -290,6 +291,40 @@ describe('per-assessment exclusion', () => {
     // Re-include it — count should disappear
     fireEvent.click(screen.getByRole('checkbox', { name: INCLUDE_A1 }));
     expect(screen.queryByText(/excluded/)).not.toBeInTheDocument();
+  });
+
+  it('shows "Excluded" label in the per-row position for an excluded assessment (equal mode)', async () => {
+    setup();
+    fireEvent.click(screen.getAllByRole('button', { name: '' })[0]);
+    fireEvent.click(await screen.findByRole('checkbox', { name: INCLUDE_A1 }));
+    expect(screen.getAllByText('Excluded')).toHaveLength(1);
+  });
+
+  it('shows "Excluded" label in the per-row position for a custom-mode excluded assessment', async () => {
+    setup({
+      assessments: [
+        {
+          id: 101,
+          title: A1,
+          tabId: 10,
+          maxGrade: 100,
+          gradebookExcluded: true,
+        },
+        { id: 102, title: A2, tabId: 10, maxGrade: 50 },
+      ],
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          weightMode: 'custom' as const,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: '' })[0]);
+    expect(await screen.findByText('Excluded')).toBeInTheDocument();
   });
 
   it('labels the chip "All N excluded" when every assessment is excluded', () => {
@@ -473,5 +508,258 @@ describe('per-assessment exclusion', () => {
       setup(); // shared fixture tabs carry 50/50
       expect(screen.queryByText(/no weights set yet/i)).not.toBeInTheDocument();
     });
+  });
+});
+
+describe('keep-highest control', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    localStorage.clear();
+  });
+
+  const TOGGLE = 'Enable keep highest for Assignments';
+  const INPUT = 'Keep highest for Assignments';
+  const three = [
+    { id: 101, title: A1, tabId: 10, maxGrade: 100 },
+    { id: 102, title: A2, tabId: 10, maxGrade: 50 },
+    { id: 103, title: 'Assignment 3', tabId: 10, maxGrade: 80 },
+  ];
+
+  it('renders a keep-highest checkbox; number field hidden until checked', () => {
+    setup({ assessments: three });
+    expect(screen.getByLabelText(TOGGLE)).toBeInTheDocument();
+    expect(screen.queryByLabelText(INPUT)).not.toBeInTheDocument();
+  });
+
+  it('shows a visible "Keep highest" text label next to the checkbox', () => {
+    setup({ assessments: three });
+    expect(screen.getByText('Keep highest')).toBeInTheDocument();
+  });
+
+  it('defaults the count to included − 1 when checked', () => {
+    setup({ assessments: three }); // 3 included → default 2
+    fireEvent.click(screen.getByLabelText(TOGGLE));
+    expect(screen.getByLabelText(INPUT)).toHaveValue(2);
+  });
+
+  it('hides checkbox + field in custom mode', async () => {
+    setup({ assessments: three });
+    fireEvent.click(within(modeGroup('Assignments')).getByText('Custom'));
+    await waitFor(() => {
+      expect(screen.queryByLabelText(TOGGLE)).not.toBeInTheDocument();
+      expect(screen.queryByLabelText(INPUT)).not.toBeInTheDocument();
+    });
+  });
+
+  it('seeds the field (checkbox pre-checked) from tab.keepHighest', () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    expect(screen.getByLabelText(TOGGLE)).toBeChecked();
+    expect(screen.getByLabelText(INPUT)).toHaveValue(2);
+  });
+
+  it('disables the checkbox when only one assessment is included', () => {
+    setup(); // shared `assessments` has 2 in tab 10
+    fireEvent.click(screen.getByLabelText(INCLUDE_A1)); // exclude → 1 included
+    expect(screen.getByLabelText(TOGGLE)).toBeDisabled();
+  });
+
+  it('sends keepHighest in the save payload', async () => {
+    const spy = jest.spyOn(operations, 'updateGradebookWeights');
+    setup({ assessments: three });
+    fireEvent.click(screen.getByLabelText(TOGGLE)); // defaults to 2
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(spy).toHaveBeenCalled());
+    expect(spy.mock.calls[0][0].find((e) => e.tabId === 10)!.keepHighest).toBe(
+      2,
+    );
+  });
+
+  it('unchecking sends keepHighest 0', async () => {
+    const spy = jest.spyOn(operations, 'updateGradebookWeights');
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    fireEvent.click(screen.getByLabelText(TOGGLE)); // uncheck
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(spy).toHaveBeenCalled());
+    expect(spy.mock.calls[0][0].find((e) => e.tabId === 10)!.keepHighest).toBe(
+      0,
+    );
+  });
+
+  it('blocks saving only on malformed input (non-integer), not on keep > included', () => {
+    setup({ assessments: three });
+    fireEvent.click(screen.getByLabelText(TOGGLE));
+    // keep > included is allowed (save enabled)
+    fireEvent.change(screen.getByLabelText(INPUT), { target: { value: '9' } });
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+    // non-integer value is malformed (save blocked)
+    fireEvent.change(screen.getByLabelText(INPUT), {
+      target: { value: '0.5' },
+    });
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+  });
+
+  it('prevents decimal and exponential characters from being typed in the N field', () => {
+    setup({ assessments: three });
+    fireEvent.click(screen.getByLabelText(TOGGLE));
+    const field = screen.getByLabelText(INPUT);
+    ['.', ',', 'e', 'E', '-', '+'].forEach((key) => {
+      const prevented = !fireEvent.keyDown(field, { key });
+      expect(prevented).toBe(true);
+    });
+  });
+
+  it('shows the kept-weight subtitle and hides per-row % when keep is on', () => {
+    // weight 50, included 3, keep 2 → 25.00% each
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    const expandBtns = screen.getAllByRole('button', { name: '' });
+    fireEvent.click(expandBtns[0]); // expand Assignments
+    expect(screen.getByText(/keeps highest 2 of 3/i)).toBeInTheDocument();
+    expect(screen.getByText(/each counts as 25\.00%/i)).toBeInTheDocument();
+    expect(screen.queryByText(/% of grade$/)).not.toBeInTheDocument();
+    // Each assessment row shows '—' instead of a percentage
+    expect(screen.getAllByText('—')).toHaveLength(3);
+  });
+
+  it('shows inline overflow warning (no dismiss) when keep > included', () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 5,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    expect(
+      screen.getByText(/keeps more assessments than it contains/i),
+    ).toBeInTheDocument();
+    // No dismiss/close button on the overflow warning
+    expect(
+      screen.queryByRole('button', { name: /close/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows no overflow warning when keep === included (boundary)', () => {
+    setup({
+      assessments: three, // 3 assessments
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 3,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    expect(
+      screen.queryByText(/keeps more assessments than it contains/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not show overflow warning when keep < included', () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    expect(
+      screen.queryByText(/keeps more assessments than it contains/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('overflow warning appears inside the tab region, not at dialog top', () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 5,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    // The warning text is inside the tab row div, which is after the tab list header
+    // Verify: the defaults-hint (top-level) is absent; only the inline per-tab warning is present
+    expect(screen.queryByText(/no weights set yet/i)).not.toBeInTheDocument();
+    // The warning node is inside the tab section (not a top-level sibling of the tab list)
+    const tabSection = screen
+      .getByLabelText('Assignments')
+      .closest('div[class]');
+    expect(tabSection).not.toBeNull();
+    // The warning should NOT be a direct child of the dialog root — it's nested inside the tab
+    // Check it does not appear before the tab list (no top-banner position)
+    const allAlerts = document.querySelectorAll('[role="alert"]');
+    // Only one alert: the inline per-tab one (no top-banner duplicate)
+    const overflowAlerts = Array.from(allAlerts).filter((el) =>
+      el.textContent?.includes('keeps more assessments'),
+    );
+    expect(overflowAlerts).toHaveLength(1);
+  });
+
+  it('does not show the keep subtitle when keep-highest is off', () => {
+    setup({ assessments: three });
+    expect(screen.queryByText(/keeps highest/i)).not.toBeInTheDocument();
+  });
+
+  it('shows an error caption when keep value is non-integer', () => {
+    setup({ assessments: three });
+    fireEvent.click(screen.getByLabelText(TOGGLE));
+    fireEvent.change(screen.getByLabelText(INPUT), {
+      target: { value: '0.5' },
+    });
+    expect(screen.getByText(/keep at least 1/i)).toBeInTheDocument();
   });
 });

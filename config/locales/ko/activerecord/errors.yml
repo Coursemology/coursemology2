@@ -96,6 +96,7 @@ ko:
         course/assessment/tab:
           deletion: '마지막 탭은 삭제할 수 없습니다'
           custom_weights_mismatch: '사용자 지정 평가 가중치의 합은 해당 탭의 총점과 같아야 합니다.'
+        course/condition:
           attributes:
             conditional:
               not_in_same_course: '선택한 조건이 현재 조건과 동일한 코스에 있지 않습니다'
