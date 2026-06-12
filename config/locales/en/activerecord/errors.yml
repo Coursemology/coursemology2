@@ -97,6 +97,7 @@ en:
           autograded_no_partial_answer: 'There are updated answers which have not been re-submitted yet. Please re-submit all answers before finalising your submission.'
         course/assessment/tab:
           deletion: 'the last tab cannot be deleted'
+          custom_weights_mismatch: 'Custom assessment weights must sum to the tab total'
         course/condition:
           attributes:
             conditional:
