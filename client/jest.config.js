@@ -24,7 +24,9 @@ const config = {
     '^course(.*)$': '<rootDir>/app/bundles/course$1',
     '^store(.*)$': '<rootDir>/app/store$1',
     '^lodash-es(.*)$': 'lodash$1',
+    'compiled-locales/.*\\.json$': '<rootDir>/app/__test__/mocks/localeMock.js',
   },
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/dist/'],
   coveragePathIgnorePatterns: ['/node_modules/', '/__test__/'],
 };
 
