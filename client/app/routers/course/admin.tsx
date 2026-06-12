@@ -120,6 +120,17 @@ const adminRouter: Translated<RouteObject> = (_) => ({
       }),
     },
     {
+      path: 'gradebook',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'GradebookSettings' */
+            'course/admin/pages/GradebookSettings'
+          )
+        ).default,
+      }),
+    },
+    {
       path: 'comments',
       lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (

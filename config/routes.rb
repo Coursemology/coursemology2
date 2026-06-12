@@ -196,6 +196,9 @@ Rails.application.routes.draw do
         get 'leaderboard' => 'leaderboard_settings#edit'
         patch 'leaderboard' => 'leaderboard_settings#update'
 
+        get 'gradebook' => 'gradebook_settings#edit'
+        patch 'gradebook' => 'gradebook_settings#update'
+
         get 'comments' => 'discussion/topic_settings#edit', as: 'topics'
         patch 'comments' => 'discussion/topic_settings#update'
 
@@ -498,6 +501,7 @@ Rails.application.routes.draw do
 
       resource :gradebook, only: [] do
         get '/' => 'gradebook#index'
+        patch '/weights' => 'gradebook#update_weights'
       end
 
       scope module: :discussion do

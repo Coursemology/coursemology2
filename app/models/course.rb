@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course < ApplicationRecord
+class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Course::SearchConcern
   include Course::DuplicationConcern
   include Course::CourseComponentsConcern
@@ -53,6 +53,8 @@ class Course < ApplicationRecord
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
   has_many :assessments, through: :assessment_categories
+  has_many :gradebook_contributions, class_name: 'Course::Gradebook::TabContribution',
+                                     dependent: :destroy, inverse_of: :course
   has_many :assessment_skills, class_name: 'Course::Assessment::Skill',
                                dependent: :destroy
   has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',
@@ -362,12 +364,14 @@ class Course < ApplicationRecord
   # Set default values
   def set_defaults
     self.start_at ||= Time.zone.now.beginning_of_hour
-    self.end_at ||= self.start_at + 1.month
+    self.end_at ||= start_at + 1.month
     self.default_reference_timeline ||= reference_timelines.new(default: true)
     self.default_timeline_algorithm ||= 0 # 'fixed' algorithm
 
-    return unless creator && course_users.empty?
+    build_owner_course_user if creator && course_users.empty?
+  end
 
+  def build_owner_course_user
     course_users.build(user: creator,
                        role: :owner,
                        creator: creator,
