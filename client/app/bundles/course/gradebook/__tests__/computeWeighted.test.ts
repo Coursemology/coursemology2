@@ -1,0 +1,918 @@
+// client/app/bundles/course/gradebook/__tests__/computeWeighted.test.ts
+import {
+  computeStudentBreakdown,
+  computeStudentTotal,
+  computeTabSubtotal,
+  computeWeightedRows,
+  resolveTabWeights,
+  sumWeights,
+  usingDefaultWeights,
+} from '../computeWeighted';
+
+const assessments = [
+  { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+  { id: 2, tabId: 10, maxGrade: 50, title: 'B' },
+  { id: 3, tabId: 20, maxGrade: 100, title: 'C' },
+];
+
+const subs = (
+  entries: { studentId: number; assessmentId: number; grade: number | null }[],
+): { studentId: number; assessmentId: number; grade: number | null }[] =>
+  entries;
+
+describe('computeTabSubtotal — equal mode (default)', () => {
+  it('returns null when tab has no assessments', () => {
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 999, title: 'X', categoryId: 0 },
+        assessments,
+        submissions: [],
+      }),
+    ).toBeNull();
+  });
+
+  it('returns 0 when student has no graded submissions (ungraded count as 0)', () => {
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments,
+        submissions: [],
+      }),
+    ).toBe(0);
+  });
+
+  it('average of (grade/maxGrade) ratios with ungraded assessments counted as 0', () => {
+    // Assessment 1 graded (80/100=0.8), assessment 2 ungraded (0)
+    // sub = (0.8 + 0) / 2 = 0.4
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 80 },
+          // assessment 2 ungraded
+        ]),
+      }),
+    ).toBeCloseTo(0.4);
+  });
+
+  it('average of all ratios when fully graded', () => {
+    // Assessment 1: 80/100=0.8, assessment 2: 50/50=1.0
+    // sub = (0.8 + 1.0) / 2 = 0.9
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 80 },
+          { studentId: 1, assessmentId: 2, grade: 50 },
+        ]),
+      }),
+    ).toBeCloseTo(0.9);
+  });
+});
+
+describe('computeTabSubtotal — custom mode', () => {
+  const customTab = {
+    id: 10,
+    title: 'M',
+    categoryId: 0,
+    gradebookWeight: 100,
+    weightMode: 'custom' as const,
+  };
+  const customAssessments = [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
+    { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookWeight: 70 },
+  ];
+
+  it('computes weighted sum over tab weight when fully graded', () => {
+    // sub = (80/100 * 30 + 50/50 * 70) / 100 = (24 + 70) / 100 = 0.94
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: customTab,
+        assessments: customAssessments,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 80 },
+          { studentId: 1, assessmentId: 2, grade: 50 },
+        ]),
+      }),
+    ).toBeCloseTo(0.94);
+  });
+
+  it('treats ungraded as zero (only graded weight contributes to numerator)', () => {
+    // Only assessment 1 graded: sub = (80/100 * 30 + 0 * 70) / 100 = 24/100 = 0.24
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: customTab,
+        assessments: customAssessments,
+        submissions: subs([{ studentId: 1, assessmentId: 1, grade: 80 }]),
+      }),
+    ).toBeCloseTo(0.24);
+  });
+
+  it('returns 0 when no graded assessments', () => {
+    // sub = (0 + 0) / 100 = 0
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: customTab,
+        assessments: customAssessments,
+        submissions: [],
+      }),
+    ).toBe(0);
+  });
+
+  it('returns null when tab gradebookWeight is 0 (divide-by-zero guard)', () => {
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { ...customTab, gradebookWeight: 0 },
+        assessments: customAssessments,
+        submissions: subs([{ studentId: 1, assessmentId: 1, grade: 80 }]),
+      }),
+    ).toBeNull();
+  });
+});
+
+describe('computeStudentTotal', () => {
+  const tabs = [
+    { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+    { id: 20, title: 'T', categoryId: 0, gradebookWeight: 40 },
+  ];
+
+  it('returns additive sum of weight × subtotal (equal-weight count-based)', () => {
+    // tab10 equal subtotal = (80/100 + 50/50) / 2 = (0.8 + 1.0) / 2 = 0.9
+    // tab20 equal subtotal = 90/100 = 0.9
+    // total = 60*0.9 + 40*0.9 = 54 + 36 = 90
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs,
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+        { studentId: 1, assessmentId: 3, grade: 90 },
+      ]),
+    });
+    expect(total).toBeCloseTo(60 * 0.9 + 40 * 0.9);
+  });
+
+  it('weight-0 tab contributes 0 to the sum', () => {
+    // tab20 weight=0 → 0; tab10 subtotal = (80/100 + 50/50) / 2 = 0.9
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs: [
+        { id: 10, title: 'M', categoryId: 0, gradebookWeight: 100 },
+        { id: 20, title: 'T', categoryId: 0, gradebookWeight: 0 },
+      ],
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+        { studentId: 1, assessmentId: 3, grade: 90 },
+      ]),
+    });
+    expect(total).toBeCloseTo(100 * 0.9);
+  });
+
+  it('returns 0 when tab weight is 0 and no graded submissions', () => {
+    expect(
+      computeStudentTotal({
+        studentId: 1,
+        tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 0 }],
+        assessments,
+        submissions: [],
+      }),
+    ).toBe(0);
+  });
+
+  it('is additive (not normalized) when weights do not sum to 100', () => {
+    // total = 60*0.9 + 30*0.9 = 54 + 27 = 81 (NOT divided by 90)
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs: [
+        { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+        { id: 20, title: 'T', categoryId: 0, gradebookWeight: 30 },
+      ],
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+        { studentId: 1, assessmentId: 3, grade: 90 },
+      ]),
+    });
+    expect(total).toBeCloseTo(60 * 0.9 + 30 * 0.9);
+  });
+
+  it('bonus: weights summing past 100 yield a total > 100 for a perfect student', () => {
+    // perfect student: all grades = maxGrade → each ratio = 1.0 → subtotal = 1.0
+    // total = 60*1 + 50*1 = 110
+    const bonusTabs = [
+      { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+      { id: 20, title: 'T', categoryId: 0, gradebookWeight: 50 },
+    ];
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs: bonusTabs,
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 100 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+        { studentId: 1, assessmentId: 3, grade: 100 },
+      ]),
+    });
+    expect(total).toBeCloseTo(110);
+    expect(total!).toBeGreaterThan(100);
+  });
+
+  it('ungraded tab contributes 0 to the total', () => {
+    // tab10 subtotal = (80/100 + 50/50) / 2 = 0.9; tab20 no submissions → subtotal = 0
+    // total = 60*0.9 + 40*0 = 54
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs,
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+      ]),
+    });
+    expect(total).toBeCloseTo(60 * 0.9);
+  });
+});
+
+describe('sumWeights', () => {
+  it('returns the sum of all tab weights', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1, gradebookWeight: 60 },
+      { id: 2, title: 'T2', categoryId: 1, gradebookWeight: 40 },
+    ];
+    expect(sumWeights(tabs)).toBe(100);
+  });
+
+  it('includes all tabs regardless of weight value', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1, gradebookWeight: 60 },
+      { id: 2, title: 'T2', categoryId: 1, gradebookWeight: 0 },
+    ];
+    expect(sumWeights(tabs)).toBe(60);
+  });
+
+  it('handles tabs with no gradebookWeight (treats as 0)', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1, gradebookWeight: 40 },
+      { id: 2, title: 'T2', categoryId: 1 },
+    ];
+    expect(sumWeights(tabs)).toBe(40);
+  });
+});
+
+describe('resolveTabWeights — equal-split default when unconfigured', () => {
+  const twoTabs = [
+    { id: 10, title: 'M', categoryId: 0, gradebookWeight: 0 },
+    { id: 20, title: 'T', categoryId: 0, gradebookWeight: 0 },
+  ];
+  // assessments fixture (top of file) covers tabs 10 and 20.
+
+  it('returns tabs unchanged when any tab already carries a weight', () => {
+    const configured = [
+      { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+      { id: 20, title: 'T', categoryId: 0, gradebookWeight: 0 },
+    ];
+    expect(resolveTabWeights(configured, assessments)).toBe(configured);
+  });
+
+  it('splits 100 equally across non-empty tabs when every weight is 0', () => {
+    const resolved = resolveTabWeights(twoTabs, assessments);
+    expect(resolved.map((t) => t.gradebookWeight)).toEqual([50, 50]);
+    expect(sumWeights(resolved)).toBe(100);
+  });
+
+  it('last non-empty tab absorbs the rounding remainder so it sums to exactly 100', () => {
+    const threeTabs = [
+      { id: 10, title: 'A', categoryId: 0, gradebookWeight: 0 },
+      { id: 20, title: 'B', categoryId: 0, gradebookWeight: 0 },
+      { id: 30, title: 'C', categoryId: 0, gradebookWeight: 0 },
+    ];
+    const threeAssessments = [
+      { id: 1, tabId: 10, maxGrade: 10, title: 'a' },
+      { id: 2, tabId: 20, maxGrade: 10, title: 'b' },
+      { id: 3, tabId: 30, maxGrade: 10, title: 'c' },
+    ];
+    const resolved = resolveTabWeights(threeTabs, threeAssessments);
+    expect(resolved.map((t) => t.gradebookWeight)).toEqual([
+      33.33, 33.33, 33.34,
+    ]);
+    expect(sumWeights(resolved)).toBe(100);
+  });
+
+  it('gives empty tabs (no assessments) 0% and shares 100 among the rest', () => {
+    const withEmpty = [
+      { id: 10, title: 'M', categoryId: 0, gradebookWeight: 0 },
+      { id: 20, title: 'T', categoryId: 0, gradebookWeight: 0 },
+      { id: 99, title: 'Empty', categoryId: 0, gradebookWeight: 0 },
+    ];
+    const resolved = resolveTabWeights(withEmpty, assessments);
+    expect(resolved.find((t) => t.id === 99)!.gradebookWeight).toBe(0);
+    expect(sumWeights(resolved)).toBe(100);
+  });
+
+  it('defaults the weight mode to equal on resolved tabs', () => {
+    const resolved = resolveTabWeights(twoTabs, assessments);
+    expect(resolved.every((t) => t.weightMode === 'equal')).toBe(true);
+  });
+
+  it('returns tabs unchanged when no tab has any assessment (nothing to weight)', () => {
+    const emptyTabs = [
+      { id: 77, title: 'X', categoryId: 0, gradebookWeight: 0 },
+    ];
+    expect(resolveTabWeights(emptyTabs, assessments)).toBe(emptyTabs);
+  });
+});
+
+describe('usingDefaultWeights', () => {
+  it('is true when no weight is configured and a non-empty tab exists', () => {
+    const tabs = [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 0 }];
+    expect(usingDefaultWeights(tabs, assessments)).toBe(true);
+  });
+
+  it('is false once any tab carries a weight', () => {
+    const tabs = [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 50 }];
+    expect(usingDefaultWeights(tabs, assessments)).toBe(false);
+  });
+
+  it('is false when every tab is empty (no default would apply)', () => {
+    const tabs = [{ id: 77, title: 'X', categoryId: 0, gradebookWeight: 0 }];
+    expect(usingDefaultWeights(tabs, assessments)).toBe(false);
+  });
+});
+
+describe('computeWeightedRows', () => {
+  const rowTabs = [
+    { id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 },
+    { id: 20, title: 'T', categoryId: 0, gradebookWeight: 40 },
+  ];
+  const rowStudents = [
+    {
+      id: 1,
+      name: 'Alice',
+      email: 'alice@e.com',
+      externalId: null,
+      level: 1,
+      totalXp: 0,
+    },
+    {
+      id: 2,
+      name: 'Bob',
+      email: 'bob@e.com',
+      externalId: null,
+      level: 1,
+      totalXp: 0,
+    },
+  ];
+  const rowSubmissions = subs([
+    // Alice: full data
+    { studentId: 1, assessmentId: 1, grade: 80 },
+    { studentId: 1, assessmentId: 2, grade: 50 },
+    { studentId: 1, assessmentId: 3, grade: 90 },
+    // Bob: only tab10 graded
+    { studentId: 2, assessmentId: 1, grade: 100 },
+    { studentId: 2, assessmentId: 2, grade: 50 },
+  ]);
+
+  it('returns one row per student carrying studentId, name and email', () => {
+    const rows = computeWeightedRows({
+      students: rowStudents,
+      tabs: rowTabs,
+      assessments,
+      submissions: rowSubmissions,
+    });
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toMatchObject({
+      studentId: 1,
+      name: 'Alice',
+      email: 'alice@e.com',
+    });
+    expect(rows[1]).toMatchObject({
+      studentId: 2,
+      name: 'Bob',
+      email: 'bob@e.com',
+    });
+  });
+
+  it('produces subtotals and total identical to the per-student helpers', () => {
+    const rows = computeWeightedRows({
+      students: rowStudents,
+      tabs: rowTabs,
+      assessments,
+      submissions: rowSubmissions,
+    });
+    rowStudents.forEach((student, i) => {
+      rowTabs.forEach((tab, j) => {
+        expect(rows[i].subtotals[j]).toEqual(
+          computeTabSubtotal({
+            studentId: student.id,
+            tab,
+            assessments,
+            submissions: rowSubmissions,
+          }),
+        );
+      });
+      expect(rows[i].total).toEqual(
+        computeStudentTotal({
+          studentId: student.id,
+          tabs: rowTabs,
+          assessments,
+          submissions: rowSubmissions,
+        }),
+      );
+    });
+  });
+
+  it('computes the known additive total for a fully-graded student (equal-weight)', () => {
+    // Alice tab10 = (80/100 + 50/50) / 2 = (0.8 + 1.0) / 2 = 0.9
+    // Alice tab20 = 90/100 = 0.9
+    // total = 60*0.9 + 40*0.9 = 90
+    const rows = computeWeightedRows({
+      students: [rowStudents[0]],
+      tabs: rowTabs,
+      assessments,
+      submissions: rowSubmissions,
+    });
+    expect(rows[0].subtotals[0]).toBeCloseTo(0.9);
+    expect(rows[0].subtotals[1]).toBeCloseTo(0.9);
+    expect(rows[0].total).toBeCloseTo(60 * 0.9 + 40 * 0.9);
+  });
+
+  it('a tab with no graded submissions yields a 0 subtotal (ungraded count as 0)', () => {
+    // Bob tab10: (100/100 + 50/50) / 2 = 1.0; tab20: no submissions → 0
+    const rows = computeWeightedRows({
+      students: [rowStudents[1]],
+      tabs: rowTabs,
+      assessments,
+      submissions: rowSubmissions,
+    });
+    expect(rows[0].subtotals[0]).toBeCloseTo(1);
+    expect(rows[0].subtotals[1]).toBe(0);
+    expect(rows[0].total).toBeCloseTo(60 * 1 + 40 * 0);
+  });
+
+  it('returns an empty array when there are no students', () => {
+    expect(
+      computeWeightedRows({
+        students: [],
+        tabs: rowTabs,
+        assessments,
+        submissions: rowSubmissions,
+      }),
+    ).toEqual([]);
+  });
+});
+
+describe('computeWeightedRows — identity passthrough', () => {
+  it('carries level and totalXp from each student onto the row', () => {
+    const students = [
+      {
+        id: 1,
+        name: 'Alice',
+        email: 'a@x.com',
+        externalId: null,
+        level: 5,
+        totalXp: 1234,
+      },
+    ];
+    const tabs = [
+      { id: 10, title: 'Tab 1', categoryId: 1, gradebookWeight: 100 },
+    ];
+    const localAssessments = [
+      { id: 100, title: 'Q1', tabId: 10, maxGrade: 10 },
+    ];
+    const submissions = [{ studentId: 1, assessmentId: 100, grade: 8 }];
+
+    const rows = computeWeightedRows({
+      students,
+      tabs,
+      assessments: localAssessments,
+      submissions,
+    });
+
+    expect(rows[0].level).toBe(5);
+    expect(rows[0].totalXp).toBe(1234);
+  });
+});
+
+describe('computeStudentBreakdown', () => {
+  const tabs = [
+    { id: 10, title: 'Tab 1', categoryId: 1, gradebookWeight: 60 },
+    { id: 20, title: 'Tab 2', categoryId: 1, gradebookWeight: 40 },
+  ];
+
+  it('equal mode: per-assessment points sum to the tab cell (subtotal × weight)', () => {
+    // Tab 10 (weight 60), equal: A(80/100=0.8), B(50/50=1.0); n=2
+    //   A points = (0.8/2)*60 = 24 ; B points = (1.0/2)*60 = 30 ; Σ = 54
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs,
+      assessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+        { studentId: 1, assessmentId: 3, grade: 90 },
+      ]),
+    });
+    const tab10 = breakdown.find((b) => b.tabId === 10)!;
+    const a = tab10.assessments.find((x) => x.assessmentId === 1)!;
+    const b = tab10.assessments.find((x) => x.assessmentId === 2)!;
+    expect(a.points).toBeCloseTo(24);
+    expect(b.points).toBeCloseTo(30);
+    expect(a.points + b.points).toBeCloseTo(54); // = tab cell
+  });
+
+  it('carries grade and maxGrade per assessment; ungraded contributes 0 points', () => {
+    // Tab 10: A graded 80/100, B ungraded; n=2 → A=(0.8/2)*60=24, B=0
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs,
+      assessments,
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 80 }]),
+    });
+    const tab10 = breakdown.find((b) => b.tabId === 10)!;
+    const b = tab10.assessments.find((x) => x.assessmentId === 2)!;
+    expect(b.grade).toBeNull();
+    expect(b.maxGrade).toBe(50);
+    expect(b.points).toBe(0);
+  });
+
+  it('custom mode: per-assessment points = ratio × assessmentWeight, summing to the cell', () => {
+    // Tab 10 custom, weight 60: A weight 40 (80/100=0.8 → 32), B weight 20 (50/50=1 → 20)
+    //   subtotal = (0.8*40 + 1*20)/60 = 52/60 ; cell = subtotal*60 = 52 ; Σpoints = 32 + 20 = 52
+    const customTabs = [
+      {
+        id: 10,
+        title: 'Tab 1',
+        categoryId: 1,
+        gradebookWeight: 60,
+        weightMode: 'custom' as const,
+      },
+    ];
+    const customAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 40 },
+      { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookWeight: 20 },
+    ];
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: customTabs,
+      assessments: customAssessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 80 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+      ]),
+    });
+    const tab10 = breakdown[0];
+    const a = tab10.assessments.find((x) => x.assessmentId === 1)!;
+    const b = tab10.assessments.find((x) => x.assessmentId === 2)!;
+    expect(a.points).toBeCloseTo(32);
+    expect(b.points).toBeCloseTo(20);
+    expect(a.points + b.points).toBeCloseTo(52); // = tab cell
+  });
+
+  it('returns an empty assessment list for a tab with no assessments', () => {
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 999, title: 'Empty', categoryId: 1, gradebookWeight: 50 }],
+      assessments,
+      submissions: [],
+    });
+    expect(breakdown[0].assessments).toEqual([]);
+  });
+});
+
+describe('exclusion — equal mode', () => {
+  it('averages over included assessments only (excluded dropped from numerator and count)', () => {
+    // a1 80/100=0.8 included, a2 excluded -> subtotal = 0.8 / 1 = 0.8
+    const withExcluded = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+      { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments: withExcluded,
+        submissions: [{ studentId: 1, assessmentId: 1, grade: 80 }],
+      }),
+    ).toBeCloseTo(0.8);
+  });
+
+  it('returns null when every assessment in the tab is excluded', () => {
+    const allExcluded = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookExcluded: true },
+      { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0 },
+        assessments: allExcluded,
+        submissions: [{ studentId: 1, assessmentId: 1, grade: 80 }],
+      }),
+    ).toBeNull();
+  });
+});
+
+describe('exclusion — custom mode', () => {
+  it('drops excluded assessments from the numerator', () => {
+    // tab weight 30; a1 weight 30 graded 90/100=0.9 -> 0.9*30=27; a2 excluded.
+    // subtotal = 27 / 30 = 0.9
+    const customAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
+      {
+        id: 2,
+        tabId: 10,
+        maxGrade: 100,
+        title: 'B',
+        gradebookWeight: 20,
+        gradebookExcluded: true,
+      },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: {
+          id: 10,
+          title: 'M',
+          categoryId: 0,
+          weightMode: 'custom',
+          gradebookWeight: 30,
+        },
+        assessments: customAssessments,
+        submissions: [
+          { studentId: 1, assessmentId: 1, grade: 90 },
+          { studentId: 1, assessmentId: 2, grade: 100 },
+        ],
+      }),
+    ).toBeCloseTo(0.9);
+  });
+});
+
+describe('breakdown — exclusion', () => {
+  const bdAssessments = [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+    { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
+  ];
+
+  it('flags excluded assessments and gives them zero points/effectiveWeight', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 }],
+      assessments: bdAssessments,
+      submissions: [{ studentId: 1, assessmentId: 1, grade: 100 }],
+    });
+    const a = tab.assessments.find((x) => x.assessmentId === 1)!;
+    const b = tab.assessments.find((x) => x.assessmentId === 2)!;
+    expect(b.excluded).toBe(true);
+    expect(b.points).toBe(0);
+    expect(b.effectiveWeight).toBe(0);
+    // equal effectiveWeight uses included count (1), so a gets the full 60
+    expect(a.excluded).toBe(false);
+    expect(a.effectiveWeight).toBeCloseTo(60);
+    expect(a.points).toBeCloseTo(60);
+  });
+});
+
+describe('computeTabSubtotal — equal mode with drop-lowest', () => {
+  // Three graded assessments in one tab, equal max grades for easy ratios.
+  const dropAssessments = [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+    { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
+    { id: 3, tabId: 10, maxGrade: 100, title: 'C' },
+  ];
+  const dropSubs = subs([
+    { studentId: 1, assessmentId: 1, grade: 30 }, // ratio 0.3 (lowest)
+    { studentId: 1, assessmentId: 2, grade: 60 }, // ratio 0.6
+    { studentId: 1, assessmentId: 3, grade: 90 }, // ratio 0.9
+  ]);
+
+  it('dropLowest=1 drops the single lowest ratio, averaging the rest', () => {
+    // keep 0.6, 0.9 → (0.6 + 0.9) / 2 = 0.75
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
+        assessments: dropAssessments,
+        submissions: dropSubs,
+      }),
+    ).toBeCloseTo(0.75);
+  });
+
+  it('dropLowest=2 keeps only the single best ratio', () => {
+    // keep 0.9 → 0.9 / 1 = 0.9
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 2 },
+        assessments: dropAssessments,
+        submissions: dropSubs,
+      }),
+    ).toBeCloseTo(0.9);
+  });
+
+  it('drops an ungraded assessment first (ratio 0 ranks lowest)', () => {
+    // a1 graded 0.3, a2 graded 0.6, a3 ungraded (0). dropLowest=1 drops a3.
+    // keep 0.3, 0.6 → 0.45
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
+        assessments: dropAssessments,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 30 },
+          { studentId: 1, assessmentId: 2, grade: 60 },
+        ]),
+      }),
+    ).toBeCloseTo(0.45);
+  });
+
+  it('clamps N ≥ includedCount to keep the best 1', () => {
+    // dropLowest=5 over 3 included → keep best 1 (0.9)
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 5 },
+        assessments: dropAssessments,
+        submissions: dropSubs,
+      }),
+    ).toBeCloseTo(0.9);
+  });
+
+  it('dropLowest=0 equals legacy average (byte-identical)', () => {
+    const tabBase = { id: 10, title: 'M', categoryId: 0 };
+    const legacy = computeTabSubtotal({
+      studentId: 1,
+      tab: tabBase,
+      assessments: dropAssessments,
+      submissions: dropSubs,
+    });
+    const withZero = computeTabSubtotal({
+      studentId: 1,
+      tab: { ...tabBase, dropLowest: 0 },
+      assessments: dropAssessments,
+      submissions: dropSubs,
+    });
+    expect(withZero).toEqual(legacy);
+  });
+
+  it('ties at the drop boundary produce the correct subtotal', () => {
+    // ratios 0.5, 0.5, 0.9; dropLowest=1 drops one of the tied 0.5s.
+    // keep 0.5, 0.9 → 0.7 regardless of which tied one is dropped.
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
+        assessments: dropAssessments,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 50 },
+          { studentId: 1, assessmentId: 2, grade: 50 },
+          { studentId: 1, assessmentId: 3, grade: 90 },
+        ]),
+      }),
+    ).toBeCloseTo(0.7);
+  });
+
+  it('drop ranks over the included set only (exclusion composes)', () => {
+    // a1 0.3 included, a2 0.6 included, a3 excluded. dropLowest=1 ranks over {a1,a2}
+    // and drops a1 → keep 0.6 → 0.6.
+    const mixed = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
+      { id: 3, tabId: 10, maxGrade: 100, title: 'C', gradebookExcluded: true },
+    ];
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'M', categoryId: 0, dropLowest: 1 },
+        assessments: mixed,
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 30 },
+          { studentId: 1, assessmentId: 2, grade: 60 },
+          { studentId: 1, assessmentId: 3, grade: 100 },
+        ]),
+      }),
+    ).toBeCloseTo(0.6);
+  });
+
+  it('custom mode ignores dropLowest', () => {
+    // Custom tab with dropLowest set — must use the custom formula unchanged.
+    // a1 w30 graded 0.8 → 24; a2 w70 graded 1.0 → 70; subtotal = 94/100 = 0.94
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: {
+          id: 10,
+          title: 'M',
+          categoryId: 0,
+          weightMode: 'custom',
+          gradebookWeight: 100,
+          dropLowest: 1,
+        },
+        assessments: [
+          { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
+          { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookWeight: 70 },
+        ],
+        submissions: subs([
+          { studentId: 1, assessmentId: 1, grade: 80 },
+          { studentId: 1, assessmentId: 2, grade: 50 },
+        ]),
+      }),
+    ).toBeCloseTo(0.94);
+  });
+});
+
+describe('breakdown — drop-lowest (equal mode)', () => {
+  const tabs = [{ id: 10, title: 'M', categoryId: 1, gradebookWeight: 60 }];
+  const bdAssessments = [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+    { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
+    { id: 3, tabId: 10, maxGrade: 100, title: 'C' },
+  ];
+  const bdSubs = subs([
+    { studentId: 1, assessmentId: 1, grade: 30 }, // 0.3 lowest → dropped
+    { studentId: 1, assessmentId: 2, grade: 60 }, // 0.6 kept
+    { studentId: 1, assessmentId: 3, grade: 90 }, // 0.9 kept
+  ]);
+
+  it('flags the lowest assessment as dropped with zero points/effectiveWeight', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: tabs.map((t) => ({ ...t, dropLowest: 1 })),
+      assessments: bdAssessments,
+      submissions: bdSubs,
+    });
+    const a = tab.assessments.find((x) => x.assessmentId === 1)!;
+    expect(a.dropped).toBe(true);
+    expect(a.excluded).toBe(false);
+    expect(a.points).toBe(0);
+    expect(a.effectiveWeight).toBe(0);
+  });
+
+  it('kept assessments share the tab weight over keptCount (= included − dropN)', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: tabs.map((t) => ({ ...t, dropLowest: 1 })),
+      assessments: bdAssessments,
+      submissions: bdSubs,
+    });
+    const b = tab.assessments.find((x) => x.assessmentId === 2)!;
+    const c = tab.assessments.find((x) => x.assessmentId === 3)!;
+    // keptCount = 3 − 1 = 2 → effectiveWeight = 60 / 2 = 30 each
+    expect(b.dropped).toBe(false);
+    expect(b.effectiveWeight).toBeCloseTo(30);
+    expect(c.effectiveWeight).toBeCloseTo(30);
+    // points = (ratio / keptCount) × weight → b = (0.6/2)*60 = 18 ; c = (0.9/2)*60 = 27
+    expect(b.points).toBeCloseTo(18);
+    expect(c.points).toBeCloseTo(27);
+    // kept points sum to the tab cell = subtotal × weight = 0.75 × 60 = 45
+    expect(b.points + c.points).toBeCloseTo(45);
+  });
+
+  it('dropLowest=0 leaves every assessment not dropped (legacy breakdown)', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs,
+      assessments: bdAssessments,
+      submissions: bdSubs,
+    });
+    expect(tab.assessments.every((a) => a.dropped === false)).toBe(true);
+  });
+
+  it('custom mode never marks an assessment dropped', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [
+        {
+          id: 10,
+          title: 'M',
+          categoryId: 1,
+          gradebookWeight: 60,
+          weightMode: 'custom',
+          dropLowest: 2,
+        },
+      ],
+      assessments: [
+        { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 30 },
+        { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 30 },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 30 },
+        { studentId: 1, assessmentId: 2, grade: 60 },
+      ]),
+    });
+    expect(tab.assessments.every((a) => a.dropped === false)).toBe(true);
+  });
+});

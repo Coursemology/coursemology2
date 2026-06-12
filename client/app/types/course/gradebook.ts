@@ -7,6 +7,9 @@ export interface TabData {
   id: number;
   title: string;
   categoryId: number;
+  gradebookWeight?: number;
+  weightMode?: 'equal' | 'custom';
+  dropLowest?: number;
 }
 
 export interface AssessmentData {
@@ -14,6 +17,8 @@ export interface AssessmentData {
   title: string;
   tabId: number;
   maxGrade: number;
+  gradebookWeight?: number | null;
+  gradebookExcluded?: boolean;
 }
 
 export interface StudentData {
@@ -39,4 +44,18 @@ export interface GradebookData {
   students: StudentData[];
   submissions: SubmissionData[];
   gamificationEnabled: boolean;
+  userId?: number;
+  weightedViewEnabled: boolean;
+  canManageWeights: boolean;
+}
+
+export interface UpdateWeightsPayload {
+  weights: {
+    tabId: number;
+    weight: number;
+    weightMode?: 'equal' | 'custom';
+    dropLowest?: number;
+    excludedAssessmentIds?: number[];
+    assessmentWeights?: { assessmentId: number; weight: number }[];
+  }[];
 }

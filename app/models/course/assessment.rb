@@ -29,6 +29,7 @@ class Course::Assessment < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :tab, presence: true
+  validates :gradebook_weight, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :ssid_folder_id, uniqueness: { if: :ssid_folder_id_changed? }, allow_nil: true
 
   belongs_to :tab, inverse_of: :assessments

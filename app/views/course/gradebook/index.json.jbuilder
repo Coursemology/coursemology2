@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+json.weightedViewEnabled @weighted_view_enabled
+json.canManageWeights can?(:manage_gradebook_weights, current_course)
+
 json.categories @categories do |cat|
   json.id cat.id
   json.title cat.title
@@ -8,6 +11,10 @@ json.tabs @tabs do |tab|
   json.id tab.id
   json.title tab.title
   json.categoryId tab.category_id
+  if @weighted_view_enabled
+    json.gradebookWeight tab.gradebook_weight&.to_f
+    json.weightMode tab.weight_mode
+  end
 end
 
 json.assessments @published_assessments do |assessment|
@@ -15,6 +22,8 @@ json.assessments @published_assessments do |assessment|
   json.title assessment.title
   json.tabId assessment.tab_id
   json.maxGrade @assessment_max_grades[assessment.id] || 0
+  json.gradebookWeight assessment.gradebook_weight&.to_f if @weighted_view_enabled
+  json.gradebookExcluded assessment.gradebook_excluded if @weighted_view_enabled
 end
 
 json.students @students do |course_user|
@@ -27,10 +36,11 @@ json.students @students do |course_user|
 end
 
 json.submissions @submissions do |sub|
+  json.submissionId sub.submission_id
   json.studentId sub.student_id
   json.assessmentId sub.assessment_id
-  json.submissionId sub.submission_id
   json.grade sub.grade&.to_f
 end
 
 json.gamificationEnabled current_course.gamified?
+json.userId current_user&.id
