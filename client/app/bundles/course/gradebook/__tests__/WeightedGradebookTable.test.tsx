@@ -740,6 +740,17 @@ describe('WeightedGradebookTable', () => {
       expect(nameCol().style.width).toBe('150px');
     });
 
+    // The total column's <col> must carry an explicit width: in the fixed table
+    // layout a width-less <col> collapses to 0 once the other (fixed) columns
+    // fill the table — which hid the Weighted Total column entirely whenever the
+    // External ID column was also shown.
+    it('gives the total column an explicit width so it never collapses', () => {
+      renderWeighted({ students: [makeStudent(1, 'Alice')] });
+      const cols = document.querySelectorAll('colgroup col');
+      const totalCol = cols[cols.length - 1] as HTMLElement;
+      expect(totalCol.style.width).not.toBe('');
+    });
+
     it('widens the Name column when a row is expanded and restores it on collapse', async () => {
       const user = userEvent.setup();
       renderWeighted({
@@ -1429,6 +1440,102 @@ describe('WeightedGradebookTable', () => {
       const aliceRow = screen.getByText('Alice').closest('tr')!;
       const cells = within(aliceRow).getAllByRole('cell');
       expect(cells[cells.length - 1]).toHaveTextContent('—');
+    });
+  });
+
+  describe('single-open accordion', () => {
+    it('keeps only one student expanded at a time (opening another collapses the first)', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+        students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
+        submissions: [makeSub(1, 1, 80), makeSub(2, 1, 60)],
+      });
+
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        await screen.findByTestId(breakdownRowId(1, 10, 1)),
+      ).toBeInTheDocument();
+
+      // Opening Bob must collapse Alice.
+      await user.click(screen.getByRole('button', { name: /expand Bob/i }));
+      expect(
+        await screen.findByTestId(breakdownRowId(2, 10, 1)),
+      ).toBeInTheDocument();
+      await waitFor(() =>
+        expect(
+          screen.queryByTestId(breakdownRowId(1, 10, 1)),
+        ).not.toBeInTheDocument(),
+      );
+    });
+
+    it('keeps focus on the toggle after expanding (keyboard users stay put)', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 1, 80)],
+      });
+      const toggle = screen.getByRole('button', { name: /expand Alice/i });
+      await user.click(toggle);
+      // Same DOM button (label flips expand→collapse), so focus is retained.
+      expect(
+        screen.getByRole('button', { name: /collapse Alice/i }),
+      ).toHaveFocus();
+    });
+  });
+
+  describe('auto-scroll on expand', () => {
+    const one = {
+      tabs: [makeTab(10, 'Missions', 1, 100)],
+      assessments: [makeAssessment(1, 'Mission 1', 10, 100)],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 1, 80)],
+    };
+
+    afterEach(() => {
+      // Restore the scrollTo we stub in (jsdom doesn't implement it).
+      delete (Element.prototype as unknown as { scrollTo?: unknown }).scrollTo;
+    });
+
+    it('smooth-scrolls the expanded row into view by default', async () => {
+      const scrollSpy = jest.fn();
+      (Element.prototype as unknown as { scrollTo: unknown }).scrollTo =
+        scrollSpy;
+      const user = userEvent.setup();
+      renderWeighted(one);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      await waitFor(() => expect(scrollSpy).toHaveBeenCalled());
+      expect(scrollSpy.mock.calls[0][0]).toMatchObject({ behavior: 'smooth' });
+    });
+
+    it('jumps instantly when the user prefers reduced motion', async () => {
+      const scrollSpy = jest.fn();
+      (Element.prototype as unknown as { scrollTo: unknown }).scrollTo =
+        scrollSpy;
+      const originalMatchMedia = window.matchMedia;
+      window.matchMedia = ((query: string) => ({
+        matches: query === '(prefers-reduced-motion: reduce)',
+        media: query,
+        onchange: null,
+        addEventListener: (): void => {},
+        removeEventListener: (): void => {},
+        addListener: (): void => {},
+        removeListener: (): void => {},
+        dispatchEvent: (): boolean => false,
+      })) as unknown as typeof window.matchMedia;
+
+      try {
+        const user = userEvent.setup();
+        renderWeighted(one);
+        await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+        await waitFor(() => expect(scrollSpy).toHaveBeenCalled());
+        expect(scrollSpy.mock.calls[0][0]).toMatchObject({ behavior: 'auto' });
+      } finally {
+        window.matchMedia = originalMatchMedia;
+      }
     });
   });
 });
