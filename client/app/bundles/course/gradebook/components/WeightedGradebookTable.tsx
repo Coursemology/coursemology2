@@ -22,6 +22,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import type { Theme } from '@mui/material/styles';
+import { lighten } from '@mui/material/styles';
 import type {
   AssessmentData,
   CategoryData,
@@ -42,7 +44,11 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import type { AssessmentContribution, WeightedRow } from '../computeWeighted';
+import type {
+  AssessmentContribution,
+  TabBreakdown,
+  WeightedRow,
+} from '../computeWeighted';
 import {
   computeStudentBreakdown,
   computeWeightedRows,
@@ -413,20 +419,20 @@ const WeightedGradebookTable = ({
     return a.points;
   };
 
-  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+  // Single-open accordion: auditing one student at a time. Replaces the former
+  // multi-expand Set so only the focused student's breakdown is on screen (and
+  // only one summary row ever pins under the header).
+  const [expandedId, setExpandedId] = useState<number | null>(null);
   const toggleExpanded = (studentId: number): void =>
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(studentId)) next.delete(studentId);
-      else next.add(studentId);
-      return next;
-    });
+    setExpandedId((prev) => (prev === studentId ? null : studentId));
 
-  // Widen the sticky Name column while any row's breakdown is open, so long
-  // assessment titles in the breakdown aren't clipped; shrink back when all
-  // rows are collapsed.
+  // The table is fixed-layout, so the Name column can't auto-grow to fit the
+  // breakdown's assessment titles. Widen its fixed <col> while the audited
+  // student's breakdown is open (single-open accordion → a row is expanded iff
+  // expandedId is set); shrink back when collapsed. Titles longer than this are
+  // ellipsis-clipped with a Tooltip in the breakdown cell below.
   const nameWidth =
-    expandedIds.size > 0 ? NAME_WIDTH_EXPANDED : NAME_WIDTH_COLLAPSED;
+    expandedId !== null ? NAME_WIDTH_EXPANDED : NAME_WIDTH_COLLAPSED;
 
   const studentLevelById = useMemo(
     () => new Map(students.map((s) => [s.id, s.level])),
@@ -438,50 +444,82 @@ const WeightedGradebookTable = ({
     [students],
   );
 
-  const breakdownsByStudent = useMemo(
-    () =>
-      new Map(
-        [...expandedIds].map((studentId) => {
-          const breakdown = computeStudentBreakdown({
-            studentId,
-            tabs: resolvedTabs,
-            assessments,
-            submissions,
-            level: studentLevelById.get(studentId) ?? 0,
-            levelContribution: showLevelContribution
-              ? levelContribution
-              : undefined,
-            levelContributionPoints: showLevelContribution
-              ? studentLevelContributionById.get(studentId) ?? null
-              : null,
-            courseMaxLevel,
-          });
-          // Level row first, mirroring the Level Contribution column being the
-          // first contribution column (left of the tabs).
-          const ordered = [
-            ...breakdown.filter((tb) => tb.tabId === LEVEL_TAB_ID),
-            ...breakdown.filter((tb) => tb.tabId !== LEVEL_TAB_ID),
-          ];
-          return [studentId, ordered] as [studentId: number, typeof ordered];
-        }),
-      ),
-    [
-      expandedIds,
-      resolvedTabs,
+  const expandedBreakdown = useMemo<TabBreakdown[] | null>(() => {
+    if (expandedId === null) return null;
+    const breakdown = computeStudentBreakdown({
+      studentId: expandedId,
+      tabs: resolvedTabs,
       assessments,
       submissions,
-      studentLevelById,
-      studentLevelContributionById,
-      showLevelContribution,
-      levelContribution,
+      level: studentLevelById.get(expandedId) ?? 0,
+      levelContribution: showLevelContribution ? levelContribution : undefined,
+      levelContributionPoints: showLevelContribution
+        ? studentLevelContributionById.get(expandedId) ?? null
+        : null,
       courseMaxLevel,
-    ],
-  );
+    });
+    // Level row first, mirroring the Level Contribution column being the
+    // first contribution column (left of the tabs).
+    return [
+      ...breakdown.filter((tb) => tb.tabId === LEVEL_TAB_ID),
+      ...breakdown.filter((tb) => tb.tabId !== LEVEL_TAB_ID),
+    ];
+  }, [
+    expandedId,
+    resolvedTabs,
+    assessments,
+    submissions,
+    studentLevelById,
+    studentLevelContributionById,
+    showLevelContribution,
+    levelContribution,
+    courseMaxLevel,
+  ]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeRowRef = useRef<HTMLTableRowElement>(null);
   const row1Ref = useRef<HTMLTableRowElement>(null);
   const row2Ref = useRef<HTMLTableRowElement>(null);
+  const row3Ref = useRef<HTMLTableRowElement>(null);
   const [row2Top, setRow2Top] = useState(0);
   const [row3Top, setRow3Top] = useState(0);
+  // Full header height = where the pinned summary row sticks, and the scroll
+  // offset that lands a focused row just beneath the header.
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  // sx for the focused (expanded) student's summary row. Pinning is applied at
+  // the ROW level — every cell sticks beneath the header as a unit — so the
+  // optional identity columns (email, external ID) and any future optional
+  // column (e.g. level / level contribution) are pinned automatically, without
+  // having to remember to decorate each new cell. Layering mirrors the header:
+  // the two left-frozen lead cells (checkbox, name) carry their own left freeze
+  // and ride above the data cells; the checkbox also carries the left accent
+  // bar that marks "this is the student you're auditing".
+  const pinnedRowSx = (theme: Theme): Record<string, unknown> => ({
+    '& > td': {
+      position: 'sticky',
+      top: headerHeight,
+      zIndex: 3,
+      // Opaque tint (not alpha) so scrolled body content can't bleed through
+      // the sticky cell.
+      backgroundColor: lighten(theme.palette.primary.light, 0.96),
+    },
+    // checkbox + name are also left-frozen; keep them above the data cells (and
+    // above the header's frozen corner) while both axes stick.
+    '& > td:nth-of-type(1), & > td:nth-of-type(2)': {
+      zIndex: 6,
+    },
+    // Accent bar PLUS the cell's usual right/bottom borders — a bare accent
+    // boxShadow would otherwise replace (and so erase) the grid lines the
+    // Table's `& th, & td` rule paints via boxShadow.
+    '& > td:first-of-type': {
+      boxShadow: [
+        `inset 3px 0 0 ${theme.palette.primary.main}`,
+        `inset -1px 0 0 ${theme.palette.grey[400]}`,
+        `inset 0 -1px 0 ${theme.palette.grey[400]}`,
+      ].join(', '),
+    },
+  });
 
   const tabSubheaderLabel = (tab: TabData): string => {
     if (allExcludedTabIds.has(tab.id)) return t(translations.excluded);
@@ -519,21 +557,44 @@ const WeightedGradebookTable = ({
   useLayoutEffect(() => {
     const row1 = row1Ref.current;
     const row2 = row2Ref.current;
-    if (!row1 || !row2) return undefined;
+    const row3 = row3Ref.current;
+    if (!row1 || !row2 || !row3) return undefined;
 
     const measure = (): void => {
       const h1 = row1.getBoundingClientRect().height;
       const h2 = row2.getBoundingClientRect().height;
+      const h3 = row3.getBoundingClientRect().height;
       setRow2Top(h1);
       setRow3Top(h1 + h2);
+      setHeaderHeight(h1 + h2 + h3);
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(row1);
     observer.observe(row2);
+    observer.observe(row3);
     return () => observer.disconnect();
   }, [visibleCategories, resolvedTabs]);
+
+  // On expand, glide the focused row to just beneath the header so its
+  // breakdown is guaranteed in view (even when the clicked row was near the
+  // bottom). getBoundingClientRect keeps this correct regardless of the row's
+  // offsetParent; scrollTo is optional-chained because jsdom lacks it.
+  useLayoutEffect(() => {
+    if (expandedId === null) return;
+    const container = containerRef.current;
+    const rowEl = activeRowRef.current;
+    if (!container || !rowEl) return;
+    const prefersReducedMotion =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const delta =
+      rowEl.getBoundingClientRect().top - container.getBoundingClientRect().top;
+    container.scrollTo?.({
+      top: container.scrollTop + delta - headerHeight,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  }, [expandedId, headerHeight]);
 
   const rows = useMemo<WeightedRow[]>(() => {
     const base = computeWeightedRows({
@@ -832,6 +893,7 @@ const WeightedGradebookTable = ({
             </Alert>
           )}
           <TableContainer
+            ref={containerRef}
             sx={(theme) => ({
               maxHeight: 'calc(100vh - 22rem)',
               overflowX: 'auto',
@@ -1037,6 +1099,7 @@ const WeightedGradebookTable = ({
                 </TableRow>
 
                 <TableRow
+                  ref={row3Ref}
                   sx={{ '& .MuiTableCell-stickyHeader': { top: row3Top } }}
                 >
                   {showLevelContributionCol && (
@@ -1103,10 +1166,20 @@ const WeightedGradebookTable = ({
                 {body.rows.map((row, idx) => {
                   const rowProps = body.forEachRow(row, idx);
                   const studentId = row.original.studentId;
-                  const isExpanded = expandedIds.has(studentId);
+                  const isExpanded = expandedId === studentId;
                   return (
                     <Fragment key={rowProps.id}>
-                      <TableRow>
+                      <TableRow
+                        ref={isExpanded ? activeRowRef : undefined}
+                        sx={isExpanded ? pinnedRowSx : undefined}
+                      >
+                        {/* Body sticky-left cells sit at zIndex 1 — strictly
+                          below the header's sticky cells (MUI gives every
+                          stickyHeader cell zIndex 2). On a z-index tie the cell
+                          later in the DOM (the body) wins, so matching z2 here
+                          lets scrolled rows bleed up over the header in any
+                          column the frozen Name cell (z4) doesn't cover — i.e.
+                          the identity columns once they're toggled on. */}
                         <TableCell
                           sx={{
                             position: 'sticky',
@@ -1132,7 +1205,6 @@ const WeightedGradebookTable = ({
                             left: CHECKBOX_WIDTH,
                             zIndex: 1,
                             bgcolor: 'background.paper',
-                            whiteSpace: 'nowrap',
                           }}
                         >
                           <IconButton
@@ -1162,7 +1234,6 @@ const WeightedGradebookTable = ({
                         {showEmail && (
                           <TableCell
                             {...groupEndIf(lastIdentityField === 'email')}
-                            sx={{ whiteSpace: 'nowrap' }}
                           >
                             <Tooltip title={row.original.email}>
                               <span>{row.original.email}</span>
@@ -1172,7 +1243,6 @@ const WeightedGradebookTable = ({
                         {showExternalId && (
                           <TableCell
                             {...groupEndIf(lastIdentityField === 'externalId')}
-                            sx={{ whiteSpace: 'nowrap' }}
                           >
                             <Tooltip title={row.original.externalId ?? ''}>
                               <span>{row.original.externalId ?? ''}</span>
@@ -1251,150 +1321,176 @@ const WeightedGradebookTable = ({
                         </TableCell>
                       </TableRow>
                       {isExpanded &&
-                        (breakdownsByStudent.get(studentId) ?? []).flatMap(
-                          (tb) =>
-                            tb.assessments.map((a) => {
-                              const isExcluded = a.excluded;
-                              const weightText = t(
-                                translations.percentOfGrade,
-                                {
-                                  weight:
-                                    Math.round(a.effectiveWeight * 100) / 100,
-                                },
-                              );
-                              const assessmentGradeText =
-                                a.grade === null
-                                  ? `-/${a.maxGrade}`
-                                  : `${a.grade}/${a.maxGrade}`;
-                              // The level row has no max — courseMaxLevel plays
-                              // no part in the contribution, so showing
-                              // "level/courseMaxLevel" would falsely imply a
-                              // proportional derivation. Show the raw level only.
-                              const gradeText =
-                                tb.tabId === LEVEL_TAB_ID
-                                  ? t(translations.levelBreakdownDetail, {
-                                      level: a.grade ?? 0,
-                                    })
-                                  : assessmentGradeText;
-                              return (
-                                <TableRow
-                                  key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
-                                  data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                        (expandedBreakdown ?? []).flatMap((tb) =>
+                          tb.assessments.map((a) => {
+                            const isExcluded = a.excluded;
+                            // Weightage is always "% of grade" — it never
+                            // follows the points/percent lens.
+                            const weightText = t(translations.percentOfGrade, {
+                              weight: Math.round(a.effectiveWeight * 100) / 100,
+                            });
+                            const assessmentGradeText =
+                              a.grade === null
+                                ? `—/${a.maxGrade}`
+                                : `${a.grade}/${a.maxGrade}`;
+                            // The level row has no max — courseMaxLevel plays
+                            // no part in the contribution, so showing
+                            // "level/courseMaxLevel" would falsely imply a
+                            // proportional derivation. Show the raw level only.
+                            const gradeText =
+                              tb.tabId === LEVEL_TAB_ID
+                                ? t(translations.levelBreakdownDetail, {
+                                    level: a.grade ?? 0,
+                                  })
+                                : assessmentGradeText;
+                            return (
+                              <TableRow
+                                key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
+                                sx={{
+                                  bgcolor: 'grey.50',
+                                  opacity: isExcluded ? 0.6 : 1,
+                                }}
+                              >
+                                {/* Empty checkbox cell so the breakdown row
+                                    carries the same checkbox | name divider (the
+                                    universal cell borderRight) as the rows above. */}
+                                <TableCell
                                   sx={{
+                                    position: 'sticky',
+                                    left: 0,
+                                    zIndex: 1,
                                     bgcolor: 'grey.50',
-                                    opacity: isExcluded ? 0.6 : 1,
+                                    width: CHECKBOX_WIDTH,
+                                    minWidth: CHECKBOX_WIDTH,
+                                    px: 0,
+                                  }}
+                                />
+                                {/* Title over a muted "raw mark · weightage"
+                                    subtitle, stacked and confined to the (sticky)
+                                    Name column. The breakdown row freezes the same
+                                    checkbox | Name region as the student rows above —
+                                    the identity columns get their own empty cells
+                                    after this — so the layout reads identically
+                                    whether identity columns are shown or not. A left
+                                    indent sits the title under the student name (past
+                                    the expand chevron), signalling these are that
+                                    student's assessments. */}
+                                <TableCell
+                                  {...groupEndIf(lastIdentityField === 'name')}
+                                  sx={{
+                                    position: 'sticky',
+                                    left: CHECKBOX_WIDTH,
+                                    zIndex: 1,
+                                    bgcolor: 'grey.50',
+                                    // The Table's `& th, & td` sx rule
+                                    // (specificity 0,1,1) sets px:1/py:0.25, which
+                                    // outranks this cell's own sx (0,1,0). Double
+                                    // the selector with `&&` (→ 0,2,0) so the larger
+                                    // vertical padding + the indent win.
+                                    '&&': { pl: 4.5, py: 0.75 },
                                   }}
                                 >
-                                  <TableCell
-                                    sx={{
-                                      position: 'sticky',
-                                      left: 0,
-                                      zIndex: 1,
-                                      bgcolor: 'grey.50',
-                                      width: CHECKBOX_WIDTH,
-                                      minWidth: CHECKBOX_WIDTH,
-                                      px: 0,
-                                    }}
-                                  />
-                                  <TableCell
-                                    {...groupEndIf(
-                                      lastIdentityField === 'name',
-                                    )}
-                                    sx={{
-                                      position: 'sticky',
-                                      left: CHECKBOX_WIDTH,
-                                      zIndex: 1,
-                                      bgcolor: 'grey.50',
-                                      '&&': { pl: 4.5, py: 0.75 },
-                                    }}
-                                  >
-                                    <Tooltip title={a.title}>
-                                      <Typography
-                                        color={
-                                          isExcluded
-                                            ? 'text.disabled'
-                                            : undefined
-                                        }
-                                        fontSize="inherit"
-                                        sx={{
-                                          overflow: 'hidden',
-                                          textOverflow: 'ellipsis',
-                                          whiteSpace: 'nowrap',
-                                        }}
-                                      >
-                                        {a.title}
-                                      </Typography>
-                                    </Tooltip>
+                                  {/* Fixed-layout table: the Name column is a
+                                      fixed width (widened to NAME_WIDTH_EXPANDED while
+                                      this student is expanded), so a long title can't
+                                      grow the column — it's kept on one line (nowrap)
+                                      and ellipsis-clipped, with a Tooltip exposing the
+                                      full title on hover. The metadata line below is
+                                      clipped the same way, so every breakdown row is
+                                      exactly 2 lines. */}
+                                  <Tooltip title={a.title}>
                                     <Typography
-                                      color="text.secondary"
+                                      color={
+                                        isExcluded ? 'text.disabled' : undefined
+                                      }
+                                      fontSize="inherit"
                                       sx={{
-                                        display: 'block',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap',
                                       }}
-                                      variant="caption"
                                     >
-                                      {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
+                                      {a.title}
                                     </Typography>
+                                  </Tooltip>
+                                  {/* Muted metadata on its own line below the
+                                      title: raw mark · effective weightage, kept on
+                                      one line and clipped. Weightage is always "% of
+                                      grade" — never routed through the points/percent
+                                      lens. */}
+                                  <Typography
+                                    color="text.secondary"
+                                    sx={{
+                                      display: 'block',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    variant="caption"
+                                  >
+                                    {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
+                                  </Typography>
+                                </TableCell>
+                                {/* One empty cell per visible identity column so
+                                    the grid lines stay aligned with the rows above.
+                                    These scroll with the table (only checkbox + Name
+                                    are frozen), matching the student rows. */}
+                                {showEmail && (
+                                  <TableCell
+                                    {...groupEndIf(
+                                      lastIdentityField === 'email',
+                                    )}
+                                  />
+                                )}
+                                {showExternalId && (
+                                  <TableCell
+                                    {...groupEndIf(
+                                      lastIdentityField === 'externalId',
+                                    )}
+                                  />
+                                )}
+                                {/* Mirror the parent row's two level columns so
+                                  the tab cells below stay column-aligned. Raw
+                                  Level has no per-assessment breakdown (empty);
+                                  Level Contribution carries its value on the
+                                  synthetic level row (tabId === LEVEL_TAB_ID),
+                                  matching how each tab cell carries its own. */}
+                                {showRawLevelCol && <TableCell />}
+                                {showLevelContributionCol && (
+                                  <TableCell align="right">
+                                    {tb.tabId === LEVEL_TAB_ID
+                                      ? fmtDisplay(
+                                          a.points,
+                                          columnPrecisions.level,
+                                        )
+                                      : ''}
                                   </TableCell>
-                                  {showEmail && (
+                                )}
+                                {resolvedTabs.map((tab, i) => {
+                                  const tabCellValue = isExcluded
+                                    ? '—'
+                                    : fmtDisplay(
+                                        breakdownDisplayValue(a),
+                                        columnPrecisions.tabs[i],
+                                      );
+                                  return (
                                     <TableCell
-                                      {...groupEndIf(
-                                        lastIdentityField === 'email',
-                                      )}
-                                    />
-                                  )}
-                                  {showExternalId && (
-                                    <TableCell
-                                      {...groupEndIf(
-                                        lastIdentityField === 'externalId',
-                                      )}
-                                    />
-                                  )}
-                                  {/* Mirror the parent row's two level columns so
-                                    the tab cells below stay column-aligned. Raw
-                                    Level has no per-assessment breakdown (empty);
-                                    Level Contribution carries its value on the
-                                    synthetic level row (tabId === LEVEL_TAB_ID),
-                                    matching how each tab cell carries its own. */}
-                                  {showRawLevelCol && <TableCell />}
-                                  {showLevelContributionCol && (
-                                    <TableCell align="right">
-                                      {tb.tabId === LEVEL_TAB_ID
-                                        ? fmtDisplay(
-                                            a.points,
-                                            columnPrecisions.level,
-                                          )
-                                        : ''}
+                                      key={tab.id}
+                                      align="right"
+                                      {...groupEndIf(tabIsCategoryEnd[i])}
+                                    >
+                                      {/* Place the value by tab id, not array
+                                        position, so the breakdown row order is
+                                        free to differ from the column order. */}
+                                      {tab.id === tb.tabId ? tabCellValue : ''}
                                     </TableCell>
-                                  )}
-                                  {resolvedTabs.map((tab, i) => {
-                                    const tabCellValue = isExcluded
-                                      ? '—'
-                                      : fmtDisplay(
-                                          breakdownDisplayValue(a),
-                                          columnPrecisions.tabs[i],
-                                        );
-                                    return (
-                                      <TableCell
-                                        key={tab.id}
-                                        align="right"
-                                        {...groupEndIf(tabIsCategoryEnd[i])}
-                                      >
-                                        {/* Place the value by tab id, not array
-                                          position, so the breakdown row order is
-                                          free to differ from the column order. */}
-                                        {tab.id === tb.tabId
-                                          ? tabCellValue
-                                          : ''}
-                                      </TableCell>
-                                    );
-                                  })}
-                                  <TableCell />
-                                </TableRow>
-                              );
-                            }),
+                                  );
+                                })}
+                                <TableCell />
+                              </TableRow>
+                            );
+                          }),
                         )}
                     </Fragment>
                   );
