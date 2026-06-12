@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -854,6 +854,35 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
     t.index ["course_id"], name: "fk__course_forums_course_id"
     t.index ["creator_id"], name: "fk__course_forums_creator_id"
     t.index ["updater_id"], name: "fk__course_forums_updater_id"
+  end
+
+  create_table "course_gradebook_assessment_contributions", force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.decimal "weight", precision: 5, scale: 2
+    t.boolean "excluded", default: false, null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assessment_id"], name: "index_cgac_on_assessment_id", unique: true
+    t.index ["creator_id"], name: "fk__cgac_creator_id"
+    t.index ["updater_id"], name: "fk__cgac_updater_id"
+  end
+
+  create_table "course_gradebook_contributions", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "tab_id"
+    t.decimal "weight", precision: 5, scale: 2, default: "0.0", null: false
+    t.integer "weight_mode", default: 0, null: false
+    t.integer "keep_highest", default: 0, null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "fk__course_gradebook_contributions_course_id"
+    t.index ["creator_id"], name: "fk__course_gradebook_contributions_creator_id"
+    t.index ["tab_id"], name: "index_course_gradebook_contributions_on_tab_id", unique: true
+    t.index ["updater_id"], name: "fk__course_gradebook_contributions_updater_id"
   end
 
   create_table "course_group_categories", force: :cascade do |t|
@@ -1915,6 +1944,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
   add_foreign_key "course_forums", "courses", name: "fk_course_forums_course_id"
   add_foreign_key "course_forums", "users", column: "creator_id", name: "fk_course_forums_creator_id"
   add_foreign_key "course_forums", "users", column: "updater_id", name: "fk_course_forums_updater_id"
+  add_foreign_key "course_gradebook_assessment_contributions", "course_assessments", column: "assessment_id", on_delete: :cascade
+  add_foreign_key "course_gradebook_assessment_contributions", "users", column: "creator_id"
+  add_foreign_key "course_gradebook_assessment_contributions", "users", column: "updater_id"
+  add_foreign_key "course_gradebook_contributions", "course_assessment_tabs", column: "tab_id", on_delete: :cascade
+  add_foreign_key "course_gradebook_contributions", "courses"
+  add_foreign_key "course_gradebook_contributions", "users", column: "creator_id"
+  add_foreign_key "course_gradebook_contributions", "users", column: "updater_id"
   add_foreign_key "course_group_categories", "courses"
   add_foreign_key "course_group_categories", "users", column: "creator_id"
   add_foreign_key "course_group_categories", "users", column: "updater_id"

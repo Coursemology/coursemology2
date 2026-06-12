@@ -8,6 +8,9 @@ class Course::Assessment::Tab < ApplicationRecord
 
   belongs_to :category, class_name: 'Course::Assessment::Category', inverse_of: :tabs
   has_many :assessments, class_name: 'Course::Assessment', dependent: :destroy, inverse_of: :tab
+  has_one :gradebook_contribution, class_name: 'Course::Gradebook::Contribution',
+                                   dependent: :destroy, inverse_of: :tab
+
   has_many :folders, class_name: 'Course::Material::Folder', through: :assessments,
                      inverse_of: nil
 
@@ -33,17 +36,25 @@ class Course::Assessment::Tab < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, other)
-    self.category = if duplicator.duplicated?(other.category)
-                      duplicator.duplicate(other.category)
-                    else
-                      duplicator.options[:destination_course].assessment_categories.first
-                    end
-    assessments <<
-      other.assessments.select { |assessment| duplicator.duplicated?(assessment) }.map do |assessment|
-        duplicator.duplicate(assessment).tap do |duplicate_assessment|
-          duplicate_assessment.folder.parent = category.folder
-        end
+    self.category = duplicated_category_for(duplicator, other)
+
+    assessments << duplicated_assessments_for(duplicator, other)
+  end
+
+  def duplicated_category_for(duplicator, other)
+    return duplicator.duplicate(other.category) if duplicator.duplicated?(other.category)
+
+    duplicator.options[:destination_course].assessment_categories.first
+  end
+
+  def duplicated_assessments_for(duplicator, other)
+    other.assessments.filter_map do |assessment|
+      next unless duplicator.duplicated?(assessment)
+
+      duplicator.duplicate(assessment).tap do |duplicate_assessment|
+        duplicate_assessment.folder.parent = category.folder
       end
+    end
   end
 
   private
