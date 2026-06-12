@@ -7,6 +7,12 @@ class Course::GradebookComponent < SimpleDelegator
   end
 
   def sidebar_items
+    main_sidebar_items + settings_sidebar_items
+  end
+
+  private
+
+  def main_sidebar_items
     return [] unless can?(:read_gradebook, current_course)
 
     [
@@ -16,6 +22,19 @@ class Course::GradebookComponent < SimpleDelegator
         type: :normal,
         weight: 9,
         path: course_gradebook_path(current_course)
+      }
+    ]
+  end
+
+  def settings_sidebar_items
+    return [] unless can?(:manage_gradebook_settings, current_course)
+
+    [
+      {
+        key: self.class.key,
+        type: :settings,
+        weight: 14,
+        path: course_admin_gradebook_path(current_course)
       }
     ]
   end

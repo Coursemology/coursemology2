@@ -95,6 +95,7 @@ zh:
           autograded_no_partial_answer: '有一些更新的答案还没有重新提交。请在最后提交前重新提交所有答案。'
         course/assessment/tab:
           deletion: '最后一项无法被删除'
+          custom_weights_mismatch: '自定义评估权重的总和必须等于该标签的总分。'
         course/condition:
           attributes:
             conditional:

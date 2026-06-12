@@ -9379,5 +9379,164 @@
   },
   "lib.translations.table.column.newExternalId": {
     "defaultMessage": "新外部编号"
+  },
+  "course.admin.GradebookSettings.gradebookSettings": {
+    "defaultMessage": "成绩册设置"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabled": {
+    "defaultMessage": "启用加权成绩视图"
+  },
+  "course.admin.GradebookSettings.weightedViewEnabledHint": {
+    "defaultMessage": "在成绩册中启用“加权总成绩”视图，教职员可以配置各标签页的权重并查看加权总成绩列。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcluded": {
+    "defaultMessage": "“{tab}”中的所有评估均已排除，且不会计入总成绩。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.allExcludedCount": {
+    "defaultMessage": "已排除全部 {n} 个"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customMode": {
+    "defaultMessage": "自定义"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.customSum": {
+    "defaultMessage": "评估权重：{sum} / {total}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
+    "defaultMessage": "尚未设置权重。以下为建议默认值，所有标签页均按相同比重计算。保存以确认，或在下方进行调整。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
+    "defaultMessage": "在等权模式下，可选择在求平均分前剔除每位学生得分最低的 N 个评估。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionExclusion": {
+    "defaultMessage": "展开标签页以将个别评估纳入或排除在评分之外。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionIntro": {
+    "defaultMessage": "控制各标签页和评估如何计入每位学生的总成绩。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionModes": {
+    "defaultMessage": "选择“等权”（所有评估平分该标签页的权重）或“自定义”（设置每个评估所占的份额）。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionWeights": {
+    "defaultMessage": "设置每个标签页的权重，即其对总成绩的贡献比例（权重合计应为 100）。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.equalMode": {
+    "defaultMessage": "等权"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excluded": {
+    "defaultMessage": "已排除"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.excludedCount": {
+    "defaultMessage": "已排除 {n} 个"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.includeAssessment": {
+    "defaultMessage": "将 {assessment} 计入成绩"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.modeAria": {
+    "defaultMessage": "{tab} 权重模式"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.ofGrade": {
+    "defaultMessage": "占成绩的 {pct}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.promptTitle": {
+    "defaultMessage": "配置贡献比例"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.saveError": {
+    "defaultMessage": "保存权重失败。请重试。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.total": {
+    "defaultMessage": "总计：{sum}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.unbalanced": {
+    "defaultMessage": "保存前，“{tab}”的评估权重合计必须等于该标签页的总权重。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooHigh": {
+    "defaultMessage": "数值最多为 100"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
+    "defaultMessage": "数值至少为 0"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
+    "defaultMessage": "权重合计不为 100。仍可保存；总成绩可能不准确。"
+  },
+  "course.gradebook.GradebookIndex.allAssessments": {
+    "defaultMessage": "全部评估"
+  },
+  "course.gradebook.GradebookIndex.byWeight": {
+    "defaultMessage": "加权总成绩"
+  },
+  "course.gradebook.WeightedGradebookTable.collapseRow": {
+    "defaultMessage": "收起 {name}"
+  },
+  "course.gradebook.WeightedGradebookTable.configureWeights": {
+    "defaultMessage": "配置权重"
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeights": {
+    "defaultMessage": "正在显示默认权重-所有标签页比重相同。点击“配置权重”进行自定义设置。"
+  },
+  "course.gradebook.WeightedGradebookTable.defaultWeightsNoAccess": {
+    "defaultMessage": "正在显示默认权重-在配置权重之前，所有标签页比重相同。"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercent": {
+    "defaultMessage": "百分比"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPercentTooltip": {
+    "defaultMessage": "学生在各标签页所获得的比例。在比重为 20% 的标签页获得 100%，即表示学生获得了该标签页的全部 20 个成绩分。"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPoints": {
+    "defaultMessage": "分数"
+  },
+  "course.gradebook.WeightedGradebookTable.displayPointsTooltip": {
+    "defaultMessage": "各标签页贡献的成绩分数。各列相加即为预计总成绩。"
+  },
+  "course.gradebook.WeightedGradebookTable.downloadCsv": {
+    "defaultMessage": "下载为 CSV"
+  },
+  "course.gradebook.WeightedGradebookTable.email": {
+    "defaultMessage": "电子邮件"
+  },
+  "course.gradebook.WeightedGradebookTable.excluded": {
+    "defaultMessage": "已排除"
+  },
+  "course.gradebook.WeightedGradebookTable.expandRow": {
+    "defaultMessage": "展开 {name}"
+  },
+  "course.gradebook.WeightedGradebookTable.name": {
+    "defaultMessage": "姓名"
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsConfigured": {
+    "defaultMessage": "尚未配置权重-所有标签页的权重均为 0。点击“配置权重”以分配权重。"
+  },
+  "course.gradebook.WeightedGradebookTable.noWeightsNoAccess": {
+    "defaultMessage": "尚未配置任何标签页权重。"
+  },
+  "course.gradebook.WeightedGradebookTable.outOfWeight": {
+    "defaultMessage": "/{weight}"
+  },
+  "course.gradebook.WeightedGradebookTable.percentOfGrade": {
+    "defaultMessage": "占成绩的 {weight}%"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalExact": {
+    "defaultMessage": "合计 100%"
+  },
+  "course.gradebook.WeightedGradebookTable.percentTotalWarning": {
+    "defaultMessage": "合计 {weight}%"
+  },
+  "course.gradebook.WeightedGradebookTable.weightedTotal": {
+    "defaultMessage": "加权总成绩"
+  },
+  "course.gradebook.WeightedGradebookTable.searchStudents": {
+    "defaultMessage": "搜索学生"
+  },
+  "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
+    "defaultMessage": "权重合计不为 100。总成绩可能不准确。"
+  },
+  "course.gradebook.TotalHint.policy": {
+    "defaultMessage": "总成绩将未评分的评估按 0 分计算。"
+  },
+  "course.gradebook.WeightedViewHint.hint": {
+    "defaultMessage": "想要设置每个项目对学生总成绩的占比吗？请在{link}中启用“加权总成绩”视图。"
+  },
+  "course.gradebook.WeightedViewHint.settingsLink": {
+    "defaultMessage": "成绩册设置"
   }
 }
