@@ -223,6 +223,15 @@ describe('GradebookIndex', () => {
     expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
   });
 
+  it('renders the import external assessments button when manager and students exist', async () => {
+    render(<GradebookIndex />, { state: populatedStateManagerWeightedOff });
+    expect(
+      await screen.findByRole('button', {
+        name: /import external assessments/i,
+      }),
+    ).toBeInTheDocument();
+  });
+
   describe('weighted-view discoverability hint', () => {
     it('shows the hint to managers when the weighted view is off', async () => {
       render(<GradebookIndex />, { state: populatedStateManagerWeightedOff });

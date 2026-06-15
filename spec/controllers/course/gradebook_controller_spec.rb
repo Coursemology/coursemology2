@@ -199,6 +199,114 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(sub['grade']).to be_nil
         end
       end
+
+      context 'when the course has an external assessment' do
+        render_views
+        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let(:gb_student) { create(:course_student, course: course) }
+        let!(:external) do
+          create(:course_external_assessment, course: course, title: 'Midterm', maximum_grade: 50)
+        end
+        let!(:external_grade) do
+          create(:course_external_assessment_grade,
+                 external_assessment: external, course_user: gb_student, grade: 41)
+        end
+        before { controller_sign_in(controller, ta.user) }
+
+        it 'merges the external into assessments with a negative id and external flag' do
+          subject
+          data = JSON.parse(response.body)
+          ext_row = data['assessments'].find { |a| a['id'] == -external.id }
+          expect(ext_row).to be_present
+          expect(ext_row['title']).to eq('Midterm')
+          expect(ext_row['external']).to be(true)
+          expect(ext_row['maxGrade']).to eq(50.0)
+          expect(ext_row['tabId']).to eq(external.synthetic_tab_id)
+        end
+
+        it 'merges the external grade into submissions with a negative assessmentId' do
+          subject
+          data = JSON.parse(response.body)
+          sub = data['submissions'].find { |s| s['assessmentId'] == -external.id }
+          expect(sub).to be_present
+          expect(sub['studentId']).to eq(gb_student.user_id)
+          expect(sub['grade']).to eq(41.0)
+        end
+
+        it 'emits a synthetic External Assessments category' do
+          subject
+          data = JSON.parse(response.body)
+          cat = data['categories'].find { |c| c['id'] == Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID }
+          expect(cat).to be_present
+          expect(cat['title']).to eq('External Assessments')
+        end
+
+        it 'emits a synthetic tab with negative id under the synthetic category' do
+          subject
+          data = JSON.parse(response.body)
+          tab = data['tabs'].find { |t| t['id'] == external.synthetic_tab_id }
+          expect(tab).to be_present
+          expect(tab['categoryId']).to eq(Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID)
+        end
+
+        it 'creates no real tab or category for the external' do
+          tab_count_before = Course::Assessment::Tab.count
+          cat_count_before = Course::Assessment::Category.count
+          subject
+          expect(Course::Assessment::Tab.count).to eq(tab_count_before)
+          expect(Course::Assessment::Category.count).to eq(cat_count_before)
+          expect(Course::Assessment::Category.where(title: 'External Assessments')).to be_empty
+        end
+      end
+    end
+
+    describe 'GET #index with externals' do
+      render_views
+      let!(:course) { create(:course) }
+      let!(:external) do
+        Course::ExternalAssessment.create_for_course!(course: course, title: 'Midterm',
+                                                      maximum_grade: 50.0, weight: 40)
+      end
+      let(:ta) { create(:course_teaching_assistant, course: course) }
+
+      before do
+        ctx = Struct.new(:current_course, :key).new(course, Course::GradebookComponent.key)
+        Course::Settings::GradebookComponent.new(ctx).weighted_view_enabled = true
+        course.save!
+        controller_sign_in(controller, ta.user)
+      end
+
+      subject(:body) do
+        get(:index, params: { course_id: course }, format: :json)
+        JSON.parse(response.body)
+      end
+
+      it 'emits a synthetic External Assessments category' do
+        cat = body['categories'].find { |c| c['id'] == Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID }
+        expect(cat['title']).to eq('External Assessments')
+      end
+
+      it 'emits one synthetic tab per external carrying its weight' do
+        tab = body['tabs'].find { |t| t['id'] == -external.id }
+        expect(tab['categoryId']).to eq(Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID)
+        expect(tab['gradebookWeight']).to eq(40.0)
+        expect(tab['weightMode']).to eq('equal')
+      end
+
+      it 'emits the external as a negative-id leaf under its synthetic tab' do
+        leaf = body['assessments'].find { |a| a['id'] == -external.id }
+        expect(leaf['external']).to be(true)
+        expect(leaf['tabId']).to eq(-external.id)
+      end
+
+      it 'creates no real tab or category for the external' do
+        tab_count_before = Course::Assessment::Tab.count
+        cat_count_before = Course::Assessment::Category.count
+        body
+        expect(Course::Assessment::Tab.count).to eq(tab_count_before)
+        expect(Course::Assessment::Category.count).to eq(cat_count_before)
+        expect(Course::Assessment::Category.where(title: 'External Assessments')).to be_empty
+      end
     end
 
     describe 'PATCH update_weights' do
@@ -310,13 +418,13 @@ RSpec.describe Course::GradebookController, type: :controller do
         it 'persists custom mode + assessment weights and echoes them back' do
           post :update_weights, as: :json, params: {
             course_id: course.id,
-            weights: [{
+            weights: [
               tabId: tab.id, weight: '50', weightMode: 'custom',
               assessmentWeights: [
                 { assessmentId: a1.id, weight: '30' },
                 { assessmentId: a2.id, weight: '20' }
               ]
-            }]
+            ]
           }
           expect(response).to have_http_status(:ok)
           body = JSON.parse(response.body)
@@ -332,10 +440,10 @@ RSpec.describe Course::GradebookController, type: :controller do
         it 'returns 422 when custom weights do not sum to the tab total' do
           post :update_weights, as: :json, params: {
             course_id: course.id,
-            weights: [{
+            weights: [
               tabId: tab.id, weight: '50', weightMode: 'custom',
-              assessmentWeights: [{ assessmentId: a1.id, weight: '10' }]
-            }]
+              assessmentWeights: [assessmentId: a1.id, weight: '10']
+            ]
           }
           expect(response).to have_http_status(:unprocessable_entity)
         end
@@ -343,10 +451,10 @@ RSpec.describe Course::GradebookController, type: :controller do
         it 'persists and echoes per-assessment exclusion in equal mode' do
           post :update_weights, as: :json, params: {
             course_id: course.id,
-            weights: [{
+            weights: [
               tabId: tab.id, weight: '50', weightMode: 'equal',
               excludedAssessmentIds: [a1.id]
-            }]
+            ]
           }
           expect(response).to have_http_status(:ok)
           expect(a1.reload.gradebook_assessment_contribution.excluded).to eq(true)

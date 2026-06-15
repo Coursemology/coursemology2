@@ -180,6 +180,19 @@ describe('GradebookWeightedTable', () => {
     expect(screen.getByText('/70')).toBeInTheDocument();
   });
 
+  // 3b. Weight subheader switches to "{weight}% of grade" in percent mode
+  it('shows "{weight}% of grade" subheader for each non-excluded tab in percent mode', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 40)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    const thead = document.querySelector('thead')!;
+    const row3 = thead.querySelectorAll('tr')[2] as HTMLElement;
+    expect(within(row3).getByText('60% of grade')).toBeInTheDocument();
+    expect(within(row3).getByText('40% of grade')).toBeInTheDocument();
+  });
+
   // 4a. Total column shows "/100" when sum = 100 (points default)
   it('shows "/100" in total column header when weights sum to 100', () => {
     renderWeighted({
@@ -209,6 +222,18 @@ describe('GradebookWeightedTable', () => {
         screen.getByText('Weights do not sum to 100. Total may be inaccurate.'),
       ).toBeInTheDocument(),
     );
+  });
+
+  // 4d. Percent mode, weights ≠ 100 → total header shows "{weight}% total" warning
+  it('total column header shows "{weight}% total" warning in percent mode when sum ≠ 100', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 20)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    const thead = document.querySelector('thead')!;
+    const row3 = thead.querySelectorAll('tr')[2] as HTMLElement;
+    expect(within(row3).getByText('80% total')).toBeInTheDocument();
   });
 
   // 5. Cell renders subtotal × weight as points (not percentage); non-integer → 2dp
@@ -377,6 +402,20 @@ describe('GradebookWeightedTable', () => {
     expect(screen.getByText(/set your own/i)).toBeInTheDocument();
   });
 
+  // 10e. Showing default weights suppresses the projected-total policy hint
+  it('does not show the projected-total policy banner when default weights are in effect', () => {
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 0), makeTab(11, 'Tab 2', 1, 0)],
+      assessments: [
+        makeAssessment(100, 'Quiz 1', 10, 150),
+        makeAssessment(101, 'Quiz 2', 11, 100),
+      ],
+    });
+    expect(
+      screen.queryByText(/projected totals count ungraded assessments as 0/i),
+    ).not.toBeInTheDocument();
+  });
+
   // 10a. Default split feeds the totals: two tabs → 50/100 each, summing to 100.
   it('applies an equal split (sums to 100) when no weights are configured', () => {
     renderWeighted({
@@ -409,6 +448,18 @@ describe('GradebookWeightedTable', () => {
       assessments: [],
     });
     expect(screen.getByText(/no weights configured/i)).toBeInTheDocument();
+  });
+
+  // 10f. Degenerate + canManageWeights=false → no-access copy
+  it('shows "No tab weights have been configured yet" when canManageWeights is false and no assessments', () => {
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 0)],
+      assessments: [],
+      canManageWeights: false,
+    });
+    expect(
+      screen.getByText(/no tab weights have been configured yet/i),
+    ).toBeInTheDocument();
   });
 
   // 10c. At least one non-zero weight → banner absent
@@ -1114,6 +1165,46 @@ describe('GradebookWeightedTable', () => {
       const aliceRow = screen.getByText('Alice').closest('tr')!;
       const cells = within(aliceRow).getAllByRole('cell');
       expect(cells[cells.length - 1]).toHaveTextContent('90%');
+    });
+  });
+
+  describe('external assessment regression', () => {
+    it('includes an external assessment in its tab subtotal and the projected total', () => {
+      // Regular tab (weight 50): Quiz id=100, max=10, Alice grade=8
+      //   subtotal = 8/10 = 0.8; cell = 0.8 × 50 = 40
+      // External tab (weight 50): Midterm id=-5, max=50, Alice grade=25
+      //   subtotal = 25/50 = 0.5; cell = 0.5 × 50 = 25
+      // Total = 40 + 25 = 65
+      renderWeighted({
+        categories: [
+          makeCategory(1, 'Cat A'),
+          makeCategory(2, 'External Assessments'),
+        ],
+        tabs: [makeTab(10, 'Tab 1', 1, 50), makeTab(200, 'Midterm', 2, 50)],
+        assessments: [
+          makeAssessment(100, 'Quiz 1', 10, 10),
+          {
+            id: -5,
+            title: 'Midterm',
+            tabId: 200,
+            maxGrade: 50,
+            external: true,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 100, 8), makeSub(1, -5, 25)],
+      });
+
+      // External Assessments category and its tab must appear in the header
+      expect(screen.getByText('External Assessments')).toBeInTheDocument();
+      expect(screen.getByText('Midterm')).toBeInTheDocument();
+
+      // External tab cell = 25 (integer); regular tab cell = 40; total = 65
+      const cells = screen.getAllByRole('cell');
+      const cellTexts = cells.map((c) => c.textContent?.trim());
+      expect(cellTexts).toContain('40');
+      expect(cellTexts).toContain('25');
+      expect(cellTexts).toContain('65');
     });
   });
 });

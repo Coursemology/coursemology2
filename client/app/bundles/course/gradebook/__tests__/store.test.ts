@@ -151,3 +151,152 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
     );
   });
 });
+
+describe('external assessment reducers', () => {
+  const state = {
+    categories: [{ id: 1, title: 'Cat A' }],
+    tabs: [{ id: 10, title: 'Tab 1', categoryId: 1 }],
+    assessments: [{ id: 100, title: 'Quiz 1', tabId: 10, maxGrade: 10 }],
+    students: [],
+    submissions: [{ studentId: 1, assessmentId: 100, grade: 8 }],
+    gamificationEnabled: false,
+    userId: 0,
+    weightedViewEnabled: false,
+    canManageWeights: true,
+  };
+
+  it('applyCreatedExternal adds category, tab and assessment', () => {
+    const next = reducer(
+      state,
+      actions.applyCreatedExternal({
+        assessment: {
+          id: -5,
+          title: 'Midterm',
+          tabId: 200,
+          maxGrade: 50,
+          external: true,
+        },
+        tab: { id: 200, title: 'Midterm', categoryId: 2 },
+        category: { id: 2, title: 'External Assessments' },
+      }),
+    );
+    expect(next.categories.find((c) => c.id === 2)?.title).toBe(
+      'External Assessments',
+    );
+    expect(next.tabs.find((t) => t.id === 200)?.title).toBe('Midterm');
+    expect(next.assessments.find((a) => a.id === -5)?.external).toBe(true);
+  });
+
+  it('applyCreatedExternal does not duplicate an existing category/tab', () => {
+    const seeded = {
+      ...state,
+      categories: [
+        ...state.categories,
+        { id: 2, title: 'External Assessments' },
+      ],
+      tabs: [...state.tabs, { id: 200, title: 'Midterm', categoryId: 2 }],
+    };
+    const next = reducer(
+      seeded,
+      actions.applyCreatedExternal({
+        assessment: {
+          id: -6,
+          title: 'Final',
+          tabId: 200,
+          maxGrade: 100,
+          external: true,
+        },
+        tab: { id: 200, title: 'Midterm', categoryId: 2 },
+        category: { id: 2, title: 'External Assessments' },
+      }),
+    );
+    expect(next.categories.filter((c) => c.id === 2)).toHaveLength(1);
+    expect(next.tabs.filter((t) => t.id === 200)).toHaveLength(1);
+  });
+
+  it('updateExternalAssessment changes title and maxGrade and syncs tab title', () => {
+    const seeded = {
+      ...state,
+      assessments: [
+        ...state.assessments,
+        { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+      ],
+      tabs: [...state.tabs, { id: 200, title: 'Midterm', categoryId: 2 }],
+    };
+    const next = reducer(
+      seeded,
+      actions.updateExternalAssessment({
+        assessment: {
+          id: -5,
+          title: 'Midterm Exam',
+          tabId: 200,
+          maxGrade: 60,
+          external: true,
+        },
+        tab: { id: 200, title: 'Midterm Exam', categoryId: 2 },
+      }),
+    );
+    expect(next.assessments.find((a) => a.id === -5)?.title).toBe(
+      'Midterm Exam',
+    );
+    expect(next.assessments.find((a) => a.id === -5)?.maxGrade).toBe(60);
+    expect(next.tabs.find((t) => t.id === 200)?.title).toBe('Midterm Exam');
+  });
+
+  it('deleteExternalAssessment removes the assessment and its now-empty tab', () => {
+    const seeded = {
+      ...state,
+      assessments: [
+        ...state.assessments,
+        { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+      ],
+      tabs: [...state.tabs, { id: 200, title: 'Midterm', categoryId: 2 }],
+      submissions: [
+        ...state.submissions,
+        { studentId: 1, assessmentId: -5, grade: 30 },
+      ],
+    };
+    const next = reducer(seeded, actions.deleteExternalAssessment(-5));
+    expect(next.assessments.find((a) => a.id === -5)).toBeUndefined();
+    expect(next.tabs.find((t) => t.id === 200)).toBeUndefined();
+    expect(next.submissions.find((s) => s.assessmentId === -5)).toBeUndefined();
+  });
+
+  it('setExternalGrade upserts a submission row by (studentId, assessmentId)', () => {
+    const inserted = reducer(
+      state,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: 42 }),
+    );
+    expect(
+      inserted.submissions.find(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      )?.grade,
+    ).toBe(42);
+
+    const updated = reducer(
+      inserted,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: 17 }),
+    );
+    expect(
+      updated.submissions.filter(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      ),
+    ).toHaveLength(1);
+    expect(
+      updated.submissions.find(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      )?.grade,
+    ).toBe(17);
+  });
+
+  it('setExternalGrade can clear a grade to null', () => {
+    const next = reducer(
+      state,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: null }),
+    );
+    expect(
+      next.submissions.find((s) => s.studentId === 1 && s.assessmentId === -5)
+        ?.grade,
+    ).toBeNull();
+  });
+});

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_16_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -762,6 +762,36 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
     t.index ["updater_id"], name: "fk__course_experience_points_records_updater_id"
   end
 
+  create_table "course_external_assessment_grades", force: :cascade do |t|
+    t.bigint "external_assessment_id", null: false
+    t.bigint "course_user_id", null: false
+    t.decimal "grade", precision: 4, scale: 1
+    t.string "imported_identifier"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_user_id"], name: "fk__course_external_assessment_grades_course_user_id"
+    t.index ["creator_id"], name: "fk__course_external_assessment_grades_creator_id"
+    t.index ["external_assessment_id", "course_user_id"], name: "index_course_external_assessment_grades_on_ea_id_and_cu_id", unique: true
+    t.index ["external_assessment_id"], name: "fk__course_external_assessment_grades_external_assessment_id"
+    t.index ["updater_id"], name: "fk__course_external_assessment_grades_updater_id"
+  end
+
+  create_table "course_external_assessments", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.string "title", null: false
+    t.decimal "maximum_grade", precision: 4, scale: 1, null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "title"], name: "index_course_external_assessments_on_course_id_and_title", unique: true
+    t.index ["course_id"], name: "fk__course_external_assessments_course_id"
+    t.index ["creator_id"], name: "fk__course_external_assessments_creator_id"
+    t.index ["updater_id"], name: "fk__course_external_assessments_updater_id"
+  end
+
   create_table "course_forum_discussion_references", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -879,8 +909,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
     t.bigint "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "external_assessment_id"
+    t.check_constraint "(tab_id IS NOT NULL) <> (external_assessment_id IS NOT NULL)", name: "chk_gradebook_contribution_exactly_one_contributor"
     t.index ["course_id"], name: "fk__course_gradebook_contributions_course_id"
     t.index ["creator_id"], name: "fk__course_gradebook_contributions_creator_id"
+    t.index ["external_assessment_id"], name: "index_course_gradebook_contributions_on_external_assessment_id", unique: true
     t.index ["tab_id"], name: "index_course_gradebook_contributions_on_tab_id", unique: true
     t.index ["updater_id"], name: "fk__course_gradebook_contributions_updater_id"
   end
@@ -1925,6 +1958,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
   add_foreign_key "course_experience_points_records", "users", column: "awarder_id", name: "fk_course_experience_points_records_awarder_id"
   add_foreign_key "course_experience_points_records", "users", column: "creator_id", name: "fk_course_experience_points_records_creator_id"
   add_foreign_key "course_experience_points_records", "users", column: "updater_id", name: "fk_course_experience_points_records_updater_id"
+  add_foreign_key "course_external_assessment_grades", "course_external_assessments", column: "external_assessment_id", name: "fk_course_external_assessment_grades_external_assessment_id"
+  add_foreign_key "course_external_assessment_grades", "course_users", name: "fk_course_external_assessment_grades_course_user_id"
+  add_foreign_key "course_external_assessment_grades", "users", column: "creator_id", name: "fk_course_external_assessment_grades_creator_id"
+  add_foreign_key "course_external_assessment_grades", "users", column: "updater_id", name: "fk_course_external_assessment_grades_updater_id"
+  add_foreign_key "course_external_assessments", "courses", name: "fk_course_external_assessments_course_id"
+  add_foreign_key "course_external_assessments", "users", column: "creator_id", name: "fk_course_external_assessments_creator_id"
+  add_foreign_key "course_external_assessments", "users", column: "updater_id", name: "fk_course_external_assessments_updater_id"
   add_foreign_key "course_forum_discussion_references", "course_forum_discussions", column: "discussion_id", name: "fk_course_forum_discussion_references_discussion_id"
   add_foreign_key "course_forum_discussion_references", "course_forum_imports", column: "forum_import_id", name: "fk_course_forum_discussion_references_forum_import_id"
   add_foreign_key "course_forum_discussion_references", "users", column: "creator_id", name: "fk_course_forum_discussion_references_creator_id"
@@ -1948,6 +1988,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
   add_foreign_key "course_gradebook_assessment_contributions", "users", column: "creator_id"
   add_foreign_key "course_gradebook_assessment_contributions", "users", column: "updater_id"
   add_foreign_key "course_gradebook_contributions", "course_assessment_tabs", column: "tab_id", on_delete: :cascade
+  add_foreign_key "course_gradebook_contributions", "course_external_assessments", column: "external_assessment_id", on_delete: :cascade
   add_foreign_key "course_gradebook_contributions", "courses"
   add_foreign_key "course_gradebook_contributions", "users", column: "creator_id"
   add_foreign_key "course_gradebook_contributions", "users", column: "updater_id"

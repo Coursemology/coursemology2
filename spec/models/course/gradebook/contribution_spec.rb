@@ -62,6 +62,78 @@ RSpec.describe Course::Gradebook::Contribution do
       end
     end
 
+    describe 'external contributor' do
+      let(:course) { create(:course) }
+      let(:external) { create(:course_external_assessment, course: course) }
+
+      it 'accepts an external assessment as the sole contributor' do
+        contribution = build(:course_gradebook_contribution, course: course,
+                                                             tab: nil, external_assessment: external)
+        expect(contribution).to be_valid
+      end
+
+      it 'rejects a row with both a tab and an external assessment' do
+        tab = create(:course_assessment_tab, course: course)
+        contribution = build(:course_gradebook_contribution, course: course,
+                                                             tab: tab, external_assessment: external)
+        expect(contribution).not_to be_valid
+        key = 'activerecord.errors.models.course/gradebook/contribution.attributes.base.exactly_one_contributor'
+        expect(contribution.errors[:base]).to include(I18n.t(key))
+      end
+
+      it 'rejects a row with neither contributor' do
+        contribution = build(:course_gradebook_contribution, course: course,
+                                                             tab: nil, external_assessment: nil)
+        expect(contribution).not_to be_valid
+      end
+
+      it 'validates the external belongs to the same course' do
+        other = create(:course_external_assessment, course: create(:course))
+        contribution = build(:course_gradebook_contribution, course: course,
+                                                             tab: nil, external_assessment: other)
+        expect(contribution).not_to be_valid
+        expect(contribution.errors[:course]).to be_present
+      end
+
+      it 'cascades on external delete' do
+        create(:course_gradebook_contribution, course: course,
+                                               tab: nil, external_assessment: external)
+        expect { external.destroy! }.to change(described_class, :count).by(-1)
+      end
+    end
+
+    describe '.bulk_update with externals' do
+      let(:course) { create(:course) }
+      let!(:external) do
+        Course::ExternalAssessment.create_for_course!(course: course, title: 'Midterm',
+                                                      maximum_grade: 50.0, weight: 0)
+      end
+
+      it 'upserts the external contribution from a negative-id entry' do
+        described_class.bulk_update(course: course, updates: [
+                                      tab_id: -external.id, weight: 35.0, weight_mode: 'equal'
+                                    ])
+        expect(external.gradebook_contribution.reload.weight).to eq(35.0)
+      end
+
+      it 'raises if the external is not in the course' do
+        other = create(:course_external_assessment, course: create(:course))
+        expect do
+          described_class.bulk_update(course: course, updates: [
+                                        tab_id: -other.id, weight: 10.0, weight_mode: 'equal'
+                                      ])
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'does not create assessment-contribution rows for externals' do
+        expect do
+          described_class.bulk_update(course: course, updates: [
+                                        tab_id: -external.id, weight: 35.0, weight_mode: 'equal'
+                                      ])
+        end.not_to change(Course::Gradebook::AssessmentContribution, :count)
+      end
+    end
+
     describe '.bulk_update' do
       let(:tab1) { create(:course_assessment_tab, category: category) }
       let(:tab2) { create(:course_assessment_tab, category: category) }

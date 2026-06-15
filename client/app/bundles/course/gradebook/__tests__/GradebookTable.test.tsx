@@ -2,6 +2,8 @@ import userEvent from '@testing-library/user-event';
 import { store as appStore } from 'store';
 import { render, screen, waitFor, within } from 'test-utils';
 
+import CourseAPI from 'api/course';
+
 import GradebookTable from '../components/GradebookTable';
 import type {
   AssessmentData,
@@ -10,6 +12,8 @@ import type {
   SubmissionData,
   TabData,
 } from '../types';
+
+jest.mock('api/course');
 
 const categories: CategoryData[] = [{ id: 1, title: 'Cat A' }];
 const tabs: TabData[] = [{ id: 10, title: 'Tab 1', categoryId: 1 }];
@@ -224,6 +228,13 @@ describe('GradebookTable', () => {
   it('shows the Max Marks header row', async () => {
     renderTableWithAssessmentVisible();
     expect(await screen.findByText('Max Marks')).toBeInTheDocument();
+  });
+
+  it('hides the Max Marks header row when all assessment columns are deselected', async () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'asn-100': false }));
+    renderTable();
+    await screen.findByText('Alice');
+    expect(screen.queryByText('Max Marks')).not.toBeInTheDocument();
   });
 
   it('renders row selection checkboxes', async () => {
@@ -734,6 +745,237 @@ describe('GradebookTable', () => {
         // Numeric ascending: 9 (Alice) before 10 (Bob). Lexical would reverse this.
         await waitFor(() => expectInOrder(['Alice', 'Bob']));
       });
+    });
+  });
+
+  describe('assessment grade cell rendering', () => {
+    const renderGradeCells = (subs: SubmissionData[]): void => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, 'asn-100': true }),
+      );
+      render(
+        <GradebookTable
+          assessments={assessments}
+          categories={categories}
+          courseId={1}
+          courseTitle="Test Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={subs}
+          tabs={tabs}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('renders "—" when the student has no submission for an assessment', async () => {
+      renderGradeCells([]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).getByText('—'),
+      ).toBeInTheDocument();
+    });
+
+    it('renders an empty cell (not "—") for a submission with a null grade', async () => {
+      // Alice: submission with null grade → empty; Bob: no submission → '—'
+      renderGradeCells([
+        { submissionId: 1, studentId: 1, assessmentId: 100, grade: null },
+      ]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).queryByText('—'),
+      ).not.toBeInTheDocument();
+      const bobRow = screen.getByText('Bob').closest('tr')!;
+      expect(within(bobRow as HTMLElement).getByText('—')).toBeInTheDocument();
+    });
+
+    it('renders the grade as a link to the submission when submissionId is present', async () => {
+      renderGradeCells([
+        { submissionId: 42, studentId: 1, assessmentId: 100, grade: 7 },
+      ]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).getByRole('link', { name: '7' }),
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('external assessment columns', () => {
+    const externalAssessments: AssessmentData[] = [
+      { id: 100, title: 'Quiz 1', tabId: 10, maxGrade: 10 },
+      { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+    ];
+    const externalTabs: TabData[] = [
+      { id: 10, title: 'Tab 1', categoryId: 1 },
+      { id: 200, title: 'Midterm', categoryId: 2 },
+    ];
+    const externalCategories: CategoryData[] = [
+      { id: 1, title: 'Cat A' },
+      { id: 2, title: 'External Assessments' },
+    ];
+
+    const renderWithExternal = (): void => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, 'asn--5': true, 'asn-100': true }),
+      );
+      render(
+        <GradebookTable
+          assessments={externalAssessments}
+          categories={externalCategories}
+          courseId={1}
+          courseTitle="Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={[{ studentId: 1, assessmentId: -5, grade: 30 }]}
+          tabs={externalTabs}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('renders the External badge in the external column header', async () => {
+      renderWithExternal();
+      expect(await screen.findByText('External')).toBeVisible();
+    });
+
+    it('edits an external grade inline and persists optimistically', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockResolvedValue({
+        data: { studentId: 1, assessmentId: -5, grade: 45 },
+      });
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.setExternalGrade).toHaveBeenCalledWith(5, {
+          studentId: 1,
+          grade: 45,
+        }),
+      );
+      expect(await screen.findByText('45')).toBeVisible();
+    });
+
+    it('rolls back the cell and keeps the old value when the API rejects', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockRejectedValue(
+        new Error('boom'),
+      );
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() => expect(screen.getByText('30')).toBeVisible());
+    });
+
+    it('edits external max marks inline and persists', async () => {
+      (CourseAPI.gradebook.updateExternal as jest.Mock).mockResolvedValue({
+        data: {
+          assessment: {
+            id: -5,
+            title: 'Midterm',
+            tabId: 200,
+            maxGrade: 80,
+            external: true,
+          },
+          tab: { id: 200, title: 'Midterm', categoryId: 2 },
+        },
+      });
+      renderWithExternal();
+      const maxCell = await screen.findByText('/50');
+      await userEvent.click(maxCell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm max marks/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '80');
+      await userEvent.tab();
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.updateExternal).toHaveBeenCalledWith(5, {
+          maximumGrade: 80,
+        }),
+      );
+    });
+
+    it('keeps the regular column max-marks cell read-only', async () => {
+      renderWithExternal();
+      // Quiz 1 max is /10 (regular). Clicking it must not produce a textbox.
+      const maxCell = await screen.findByText('/10');
+      await userEvent.click(maxCell);
+      expect(
+        screen.queryByRole('textbox', { name: /quiz 1 max/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('keeps regular assessment cells read-only (no input on click)', async () => {
+      renderWithExternal();
+      // Alice has no Quiz 1 submission → '—' is rendered (not an ExternalGradeCell).
+      // Clicking the '—' in the Quiz 1 column must NOT produce a textbox.
+      await screen.findByText('Midterm'); // wait for render
+      const dashCells = screen.getAllByText('—');
+      // The first '—' in Alice's row is the Quiz 1 cell (no submission).
+      await userEvent.click(dashCells[0]);
+      expect(
+        screen.queryByRole('textbox', { name: /quiz 1/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('renames an external column from the header menu', async () => {
+      (CourseAPI.gradebook.updateExternal as jest.Mock).mockResolvedValue({
+        data: {
+          assessment: {
+            id: -5,
+            title: 'Midterm Exam',
+            tabId: 200,
+            maxGrade: 50,
+            external: true,
+          },
+          tab: { id: 200, title: 'Midterm Exam', categoryId: 2 },
+        },
+      });
+      renderWithExternal();
+      await userEvent.click(
+        await screen.findByRole('button', { name: /manage midterm/i }),
+      );
+      await userEvent.click(screen.getByText('Rename'));
+      const dialog = screen.getByRole('dialog');
+      const input = within(dialog).getByLabelText('Name');
+      await userEvent.clear(input);
+      await userEvent.type(input, 'Midterm Exam');
+      await userEvent.click(screen.getByText('Save'));
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.updateExternal).toHaveBeenCalledWith(5, {
+          title: 'Midterm Exam',
+        }),
+      );
+    });
+
+    it('deletes an external column after confirmation', async () => {
+      (CourseAPI.gradebook.deleteExternal as jest.Mock).mockResolvedValue({
+        data: undefined,
+      });
+      renderWithExternal();
+      await userEvent.click(
+        await screen.findByRole('button', { name: /manage midterm/i }),
+      );
+      await userEvent.click(screen.getByText('Delete'));
+      await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.deleteExternal).toHaveBeenCalledWith(5),
+      );
     });
   });
 

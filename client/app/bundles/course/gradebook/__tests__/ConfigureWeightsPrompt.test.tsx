@@ -477,4 +477,35 @@ describe('per-assessment exclusion', () => {
       expect(screen.queryByText(/no weights set yet/i)).not.toBeInTheDocument();
     });
   });
+
+  describe('external assessment tab', () => {
+    it('shows an external-only tab and lets its weight be edited', () => {
+      render(
+        <ConfigureWeightsPrompt
+          assessments={[
+            {
+              id: -5,
+              title: 'Midterm',
+              tabId: 200,
+              maxGrade: 50,
+              external: true,
+            },
+          ]}
+          categories={[{ id: 2, title: 'External Assessments' }]}
+          onClose={jest.fn()}
+          open
+          tabs={[
+            { id: 200, title: 'Midterm', categoryId: 2, gradebookWeight: 50 },
+          ]}
+        />,
+      );
+
+      // The external tab row must appear with its title and weight input
+      expect(screen.getByText('External Assessments')).toBeInTheDocument();
+      const weightInput = screen.getByLabelText('Midterm');
+      expect(weightInput).toBeInTheDocument();
+      expect(weightInput).not.toBeDisabled();
+      expect(weightInput).toHaveValue(50);
+    });
+  });
 });
