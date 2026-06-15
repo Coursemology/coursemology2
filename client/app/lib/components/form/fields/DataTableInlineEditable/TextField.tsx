@@ -28,15 +28,14 @@ const styles = {
     width: '100%',
   },
   displayFieldStyle: {
-    ':not(:hover)': {
-      '& button': {
-        opacity: 0,
-      },
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    '& button': {
+      opacity: 0,
     },
-    ':hover': {
-      '& button': {
-        opacity: 1,
-      },
+    ':hover button': {
+      opacity: 1,
     },
   },
   buttonStyle: { padding: '4px 4px', minWidth: '0px', color: 'inherit' },
@@ -106,18 +105,18 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const renderDisplayField = (
     <Box className={className} sx={styles.displayFieldStyle}>
-      <>
+      <span className="min-w-0 flex-1 truncate" title={controlledVal}>
         {link ? <Link href={link}>{controlledVal}</Link> : controlledVal}
+      </span>
 
-        <IconButton
-          className="inline-edit-button"
-          disabled={disabled}
-          onClick={(): void => setIsEditing(true)}
-          sx={styles.buttonStyle}
-        >
-          <Edit />
-        </IconButton>
-      </>
+      <IconButton
+        className="inline-edit-button shrink-0"
+        disabled={disabled}
+        onClick={(): void => setIsEditing(true)}
+        sx={styles.buttonStyle}
+      >
+        <Edit />
+      </IconButton>
     </Box>
   );
 
