@@ -25,6 +25,7 @@ const config = {
     '^store(.*)$': '<rootDir>/app/store$1',
     '^lodash-es(.*)$': 'lodash$1',
   },
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/dist/'],
   coveragePathIgnorePatterns: ['/node_modules/', '/__test__/'],
 };
 
