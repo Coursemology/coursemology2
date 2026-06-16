@@ -20,7 +20,9 @@ import {
   getAssessments,
   getCanManageWeights,
   getCategories,
+  getCourseMaxLevel,
   getGamificationEnabled,
+  getLevelContribution,
   getStudents,
   getSubmissions,
   getTabs,
@@ -75,6 +77,8 @@ const GradebookIndex: FC = () => {
   const gamificationEnabled = useAppSelector(getGamificationEnabled);
   const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
   const canManageWeights = useAppSelector(getCanManageWeights);
+  const courseMaxLevel = useAppSelector(getCourseMaxLevel);
+  const levelContribution = useAppSelector(getLevelContribution);
 
   useEffect(() => {
     dispatch(fetchGradebook())
@@ -104,7 +108,10 @@ const GradebookIndex: FC = () => {
         canManageWeights={canManageWeights}
         categories={categories}
         courseId={courseId}
+        courseMaxLevel={courseMaxLevel}
         courseTitle={courseTitle}
+        gamificationEnabled={gamificationEnabled}
+        levelContribution={levelContribution}
         students={students}
         submissions={submissions}
         tabs={tabs}

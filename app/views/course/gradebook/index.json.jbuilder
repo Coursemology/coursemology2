@@ -37,6 +37,7 @@ json.students @students do |course_user|
   json.externalId course_user.external_id
   json.level course_user.level_number
   json.totalXp course_user.experience_points
+  json.levelContribution @student_level_contributions[course_user.user_id]
 end
 
 json.submissions @submissions do |sub|
@@ -47,3 +48,21 @@ json.submissions @submissions do |sub|
 end
 
 json.gamificationEnabled current_course.gamified?
+
+json.courseMaxLevel @course_max_level
+
+json.levelContribution do
+  if @weighted_view_enabled && @level_config
+    json.enabled @level_config.enabled
+    json.formula @level_config.formula
+    json.weight @level_config.weight.to_f
+    json.show @level_config.show
+    json.clamp @level_config.clamp
+  else
+    json.enabled false
+    json.formula ''
+    json.weight 0
+    json.show false
+    json.clamp true
+  end
+end
