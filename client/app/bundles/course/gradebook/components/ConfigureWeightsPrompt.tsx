@@ -5,6 +5,7 @@ import {
   Alert,
   Checkbox,
   Collapse,
+  FormControlLabel,
   IconButton,
   Stack,
   TextField,
@@ -13,6 +14,9 @@ import {
 import type {
   AssessmentData,
   CategoryData,
+  LevelContributionData,
+  LevelContributionSaveData,
+  StudentData,
   TabData,
 } from 'types/course/gradebook';
 
@@ -23,7 +27,18 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import { resolveTabWeights, usingDefaultWeights } from '../computeWeighted';
+import type { LevelOffender } from '../computeWeighted';
+import {
+  levelOffenders,
+  resolveTabWeights,
+  usingDefaultWeights,
+} from '../computeWeighted';
+import {
+  ParsedFormula,
+  parseFormula,
+  seedLevelFormula,
+  serializeFormula,
+} from '../levelFormula';
 import { updateGradebookWeights } from '../operations';
 
 const translations = defineMessages({
@@ -128,12 +143,81 @@ const translations = defineMessages({
     defaultMessage:
       'No weights set yet - these are suggested defaults with every tab counting equally. Save to confirm, or adjust below.',
   },
+  levelTitle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelTitle',
+    defaultMessage: 'Level contribution',
+  },
+  levelSubtitle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelSubtitle',
+    defaultMessage:
+      "Adds grade-points from each student's level, on top of tab contributions.",
+  },
+  levelHighestStudent: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelHighestStudent',
+    defaultMessage: 'Highest student level: {level}',
+  },
+  levelCourseMax: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelCourseMax',
+    defaultMessage: 'Course maximum level: {courseMaxLevel}',
+  },
+  levelClampLabel: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelClampLabel',
+    defaultMessage: 'Keep results between 0 and max level contributions',
+  },
+  levelFormulaLabel: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelFormulaLabel',
+    defaultMessage: 'Formula',
+  },
+  levelFormulaHelper: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper',
+    defaultMessage:
+      'Formulas may contain numbers, arithmetic operators (+ − * /), parentheses, "level" as a variable, and the functions floor, ceil, round, min and max.',
+  },
+  levelShowLabel: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelShowLabel',
+    defaultMessage: 'Show level column in table',
+  },
+  levelOffendersAbove: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelOffendersAbove',
+    defaultMessage:
+      '{count, plural, =1 {{name1} is above {max}.} =2 {{name1} and {name2} are above {max}.} other {{name1}, {name2} and {extra} more are above {max}.}}',
+  },
+  levelOffendersBelow: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelOffendersBelow',
+    defaultMessage:
+      '{count, plural, =1 {{name1} is below 0.} =2 {{name1} and {name2} are below 0.} other {{name1}, {name2} and {extra} more are below 0.}}',
+  },
+  levelFixAtMost: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelFixAtMost',
+    defaultMessage: 'These contributions will be set to {max}.',
+  },
+  levelFixAtLeast: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelFixAtLeast',
+    defaultMessage: 'These contributions will be set to 0.',
+  },
+  levelFixBetween: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelFixBetween',
+    defaultMessage:
+      'Contributions below 0 will be set to 0, and contributions above {max} will be set to {max}.',
+  },
+  levelUnscoreable: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.levelUnscoreable',
+    defaultMessage:
+      '{count, plural, =1 {The formula divides by zero for {name1}, so their level contribution is set to 0.} =2 {The formula divides by zero for {name1} and {name2}, so their level contributions are set to 0.} other {The formula divides by zero for {name1}, {name2} and {extra} more, so their level contributions are set to 0.}}',
+  },
 });
 
 type WeightMode = 'equal' | 'custom';
 
 const r2 = (n: number): number => Math.round(n * 100) / 100;
 const cents = (n: number): number => Math.round(n * 100);
+// "Bob (60.00)" — student name with their contribution at 2dp, for the warning.
+const fmtOffender = (o: LevelOffender): string =>
+  `${o.name} (${r2(o.value).toFixed(2)})`;
+// "Bob (level 0)" — student name with their level, for the divide-by-zero warning
+// (the contribution value is undefined, so we show level instead).
+const fmtUnscoreable = (o: LevelOffender): string =>
+  `${o.name} (level ${o.level})`;
 // Distribute a tab total across assessment ids at 2dp; the last id absorbs the rounding
 // remainder so the seeded values sum back exactly to total.
 const distributeEqual = (
@@ -156,6 +240,10 @@ interface Props {
   categories: CategoryData[];
   tabs: TabData[];
   assessments: AssessmentData[];
+  gamificationEnabled: boolean;
+  courseMaxLevel: number;
+  levelContribution: LevelContributionData;
+  students: StudentData[];
 }
 
 const ConfigureWeightsPrompt: FC<Props> = ({
@@ -164,6 +252,10 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   categories,
   tabs,
   assessments,
+  gamificationEnabled,
+  courseMaxLevel,
+  levelContribution,
+  students,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -204,6 +296,17 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
 
+  const [levelEnabled, setLevelEnabled] = useState(levelContribution.enabled);
+  const [levelFormula, setLevelFormula] = useState(
+    levelContribution.formula || seedLevelFormula,
+  );
+  // Seed the suggested maximum to the course's top level.
+  const [levelWeight, setLevelWeight] = useState(
+    levelContribution.weight || courseMaxLevel,
+  );
+  const [levelShow, setLevelShow] = useState(levelContribution.show);
+  const [levelClamp, setLevelClamp] = useState(levelContribution.clamp);
+
   useEffect(() => {
     if (open) {
       setWeights(seedWeights());
@@ -211,6 +314,11 @@ const ConfigureWeightsPrompt: FC<Props> = ({
       setAssessmentWeights(seedAssessmentWeights());
       setExcluded(seedExclusions());
       setExpanded({});
+      setLevelEnabled(levelContribution.enabled);
+      setLevelFormula(levelContribution.formula || seedLevelFormula);
+      setLevelWeight(levelContribution.weight || courseMaxLevel);
+      setLevelShow(levelContribution.show);
+      setLevelClamp(levelContribution.clamp);
     }
   }, [open]);
 
@@ -239,7 +347,35 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const effectiveWeight = (tabId: number): number =>
     isAllExcluded(tabId) ? 0 : weights[tabId] ?? 0;
 
-  const sum = tabs.reduce((acc, tb) => acc + effectiveWeight(tb.id), 0);
+  const parsedLevel: ParsedFormula | null =
+    levelEnabled && levelFormula ? parseFormula(levelFormula) : null;
+  const levelParseError =
+    parsedLevel && !parsedLevel.ok ? parsedLevel.error : null;
+  // Students whose contribution falls outside [0, levelWeight], split by bound —
+  // the out-of-range warning names the worst offenders on each side.
+  const offenders = levelOffenders(students, parsedLevel, levelWeight);
+  // The cohort's real top level — distinct from courseMaxLevel (the course ceiling).
+  // Helps staff pick a sensible cap; null when there are no students to read.
+  const highestStudentLevel = students.length
+    ? Math.max(...students.map((s) => s.level))
+    : null;
+  // Which bound(s) the cohort breaches — drives a message scoped to the actual
+  // problem (only-below, only-above, or both).
+  const hasBelow = offenders.below.length > 0;
+  const hasAbove = offenders.above.length > 0;
+  const hasUnscoreable = offenders.unscoreable.length > 0;
+  // Fix instruction matching the breached bound(s).
+  let levelFixMessage = translations.levelFixAtLeast;
+  if (hasBelow && hasAbove) levelFixMessage = translations.levelFixBetween;
+  else if (hasAbove) levelFixMessage = translations.levelFixAtMost;
+
+  // Gamification off hides the level section, so a persisted enabled level must be
+  // treated as disabled — it contributes nothing to the Total (matches the table's
+  // showLevelContribution = gamificationEnabled && enabled).
+  const sum = r2(
+    tabs.reduce((acc, tb) => acc + effectiveWeight(tb.id), 0) +
+      (gamificationEnabled && levelEnabled ? levelWeight : 0),
+  );
   const hasInvalid =
     Object.values(weights).some((w) => validate(w) !== null) ||
     Object.values(assessmentWeights).some((w) => validate(w) !== null);
@@ -278,9 +414,19 @@ const ConfigureWeightsPrompt: FC<Props> = ({
     setExpanded((prev) => ({ ...prev, [tabId]: !prev[tabId] }));
 
   const handleSave = async (): Promise<void> => {
-    if (hasInvalid || hasUnbalanced) return;
+    if (hasInvalid || hasUnbalanced || !!levelParseError) return;
     setSubmitting(true);
     try {
+      const serialized = levelEnabled ? serializeFormula(levelFormula) : null;
+      const formulaAst = serialized?.ok ? serialized.ast : null;
+      const lcPayload: LevelContributionSaveData = {
+        enabled: levelEnabled,
+        formula: levelFormula,
+        formulaAst,
+        weight: levelWeight,
+        show: levelShow,
+        clamp: levelClamp,
+      };
       await dispatch(
         updateGradebookWeights(
           tabs.map((tb) => {
@@ -289,6 +435,11 @@ const ConfigureWeightsPrompt: FC<Props> = ({
               tabId: tb.id,
               weight: weights[tb.id] ?? 0,
               weightMode: mode,
+              keepHighest:
+                activeKeepValue(tb.id) !== null &&
+                tabIncludedIds(tb.id).length > 1
+                  ? keepHighest[tb.id] ?? 0
+                  : 0,
               excludedAssessmentIds: tabAssessmentIds(tb.id).filter(
                 (id) => excluded[id],
               ),
@@ -304,6 +455,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
             }
             return entry;
           }),
+          lcPayload,
         ),
       );
       onClose();
@@ -319,7 +471,9 @@ const ConfigureWeightsPrompt: FC<Props> = ({
       onClickPrimary={handleSave}
       onClose={onClose}
       open={open}
-      primaryDisabled={submitting || hasInvalid || hasUnbalanced}
+      primaryDisabled={
+        submitting || hasInvalid || hasUnbalanced || !!levelParseError
+      }
       primaryLabel={t(formTranslations.save)}
       title={t(translations.promptTitle)}
     >
@@ -585,6 +739,151 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           </div>
         ))}
       </Stack>
+      {gamificationEnabled && (
+        <div style={{ marginTop: 16 }}>
+          <div className="flex items-center gap-1">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={levelEnabled}
+                  onChange={(e) => setLevelEnabled(e.target.checked)}
+                  size="small"
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  {t(translations.levelTitle)}
+                </Typography>
+              }
+              sx={{ flex: 1, mr: 0 }}
+            />
+            <TextField
+              disabled={!levelEnabled}
+              inputProps={{
+                'aria-label': t(translations.levelTitle),
+                min: 0,
+                max: 100,
+                step: 0.01,
+              }}
+              onBlur={() => setLevelWeight((prev) => r2(prev))}
+              onChange={(e) =>
+                setLevelWeight(
+                  e.target.value === '' ? 0 : Number(e.target.value),
+                )
+              }
+              size="small"
+              sx={{ width: 96 }}
+              type="number"
+              value={levelEnabled ? levelWeight : 0}
+            />
+          </div>
+          {levelEnabled && (
+            <Stack spacing={1} sx={{ pl: 1, mt: 1 }}>
+              <Typography color="text.secondary" variant="caption">
+                {t(translations.levelSubtitle)}
+              </Typography>
+              <Typography color="text.secondary" variant="caption">
+                {t(translations.levelFormulaHelper)}
+              </Typography>
+              <TextField
+                error={!!levelParseError}
+                fullWidth
+                helperText={levelParseError ?? undefined}
+                inputProps={{ 'aria-label': t(translations.levelFormulaLabel) }}
+                label={t(translations.levelFormulaLabel)}
+                onChange={(e) => setLevelFormula(e.target.value)}
+                size="small"
+                value={levelFormula}
+              />
+              {highestStudentLevel != null && (
+                <Typography color="text.secondary" variant="caption">
+                  {t(translations.levelHighestStudent, {
+                    level: highestStudentLevel,
+                  })}
+                </Typography>
+              )}
+              <Typography color="text.secondary" variant="caption">
+                {t(translations.levelCourseMax, { courseMaxLevel })}
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={levelShow}
+                    onChange={(e) => setLevelShow(e.target.checked)}
+                    size="small"
+                    sx={{ py: 0.25 }}
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    {t(translations.levelShowLabel)}
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={levelClamp}
+                    onChange={(e) => setLevelClamp(e.target.checked)}
+                    size="small"
+                    sx={{ py: 0.25 }}
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    {t(translations.levelClampLabel)}
+                  </Typography>
+                }
+              />
+              {((levelClamp && (hasBelow || hasAbove)) || hasUnscoreable) && (
+                <Alert severity="warning">
+                  <Typography variant="body2">
+                    {[
+                      levelClamp &&
+                        hasAbove &&
+                        t(translations.levelOffendersAbove, {
+                          count: offenders.above.length,
+                          name1: fmtOffender(offenders.above[0]),
+                          name2: offenders.above[1]
+                            ? fmtOffender(offenders.above[1])
+                            : '',
+                          extra: Math.max(0, offenders.above.length - 2),
+                          max: levelWeight,
+                        }),
+                      levelClamp &&
+                        hasBelow &&
+                        t(translations.levelOffendersBelow, {
+                          count: offenders.below.length,
+                          name1: fmtOffender(offenders.below[0]),
+                          name2: offenders.below[1]
+                            ? fmtOffender(offenders.below[1])
+                            : '',
+                          extra: Math.max(0, offenders.below.length - 2),
+                        }),
+                      hasUnscoreable &&
+                        t(translations.levelUnscoreable, {
+                          count: offenders.unscoreable.length,
+                          name1: fmtUnscoreable(offenders.unscoreable[0]),
+                          name2: offenders.unscoreable[1]
+                            ? fmtUnscoreable(offenders.unscoreable[1])
+                            : '',
+                          extra: Math.max(0, offenders.unscoreable.length - 2),
+                        }),
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  </Typography>
+                  {levelClamp && (hasBelow || hasAbove) && (
+                    <Typography sx={{ mt: 0.5 }} variant="body2">
+                      {t(levelFixMessage, { max: levelWeight })}
+                    </Typography>
+                  )}
+                </Alert>
+              )}
+            </Stack>
+          )}
+        </div>
+      )}
       <Typography sx={{ mt: 3, fontWeight: 500 }}>
         {t(translations.total, { sum })}
       </Typography>

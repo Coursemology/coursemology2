@@ -5522,6 +5522,9 @@
   "course.gradebook.GradebookIndex.noStudents": {
     "defaultMessage": "无学生"
   },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "学生加入课程后，成绩将显示在这里。"
+  },
   "course.gradebook.GradebookTable.maxMarks": {
     "defaultMessage": "最高分"
   },
@@ -5530,6 +5533,9 @@
   },
   "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
     "defaultMessage": "未选择任何成绩或游戏化列——导出内容将仅包含学生信息。"
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "每个成绩都是学生提交内容中各项分数的总和。点击任一成绩即可打开该提交内容并调整分数。"
   },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "说明（可选）"
@@ -9404,6 +9410,63 @@
   "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
     "defaultMessage": "尚未设置权重。以下为建议默认值，所有标签页均按相同比重计算。保存以确认，或在下方进行调整。"
   },
+  "course.gradebook.ConfigureWeightsPrompt.levelTitle": {
+    "defaultMessage": "等级贡献值"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelSubtitle": {
+    "defaultMessage": "在标签页贡献值之外，根据每位学生的等级添加成绩点数。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelHighestStudent": {
+    "defaultMessage": "最高学生等级：{level}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCourseMax": {
+    "defaultMessage": "课程最高等级：{courseMaxLevel}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaLabel": {
+    "defaultMessage": "公式"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper": {
+    "defaultMessage": "公式可以包含数字、算术运算符（+ − * /）、括号、作为变量的 \"level\"，以及函数 floor、ceil、round、min 和 max。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelPreview": {
+    "defaultMessage": "最高等级（{maxLevel}）时：{pts} 分"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCustomMaxLabel": {
+    "defaultMessage": "使用自定义最高等级"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelLabel": {
+    "defaultMessage": "最高等级"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelInvalid": {
+    "defaultMessage": "最高等级必须至少为 1"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelShowLabel": {
+    "defaultMessage": "在表格中显示等级列"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersAbove": {
+    "defaultMessage": "{count, plural, =1 {{name1} 高于 {max}。} =2 {{name1} 和 {name2} 高于 {max}。} other {{name1}、{name2} 以及另外 {extra} 人高于 {max}。}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersBelow": {
+    "defaultMessage": "{count, plural, =1 {{name1} 低于 0。} =2 {{name1} 和 {name2} 低于 0。} other {{name1}、{name2} 以及另外 {extra} 人低于 0。}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtMost": {
+    "defaultMessage": "这些贡献值将被设置为 {max}。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtLeast": {
+    "defaultMessage": "这些贡献值将被设置为 0。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixBetween": {
+    "defaultMessage": "低于 0 的贡献值将被设置为 0，高于 {max} 的值将被设置为 {max}。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelClampLabel": {
+    "defaultMessage": "将贡献值保持在 0 到最高等级贡献值之间"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelUnscoreable": {
+    "defaultMessage": "{count, plural, =1 {公式对 {name1} 进行了除以零运算，因此其等级贡献值被设为 0。} =2 {公式对 {name1} 和 {name2} 进行了除以零运算，因此他们的等级贡献值被设为 0。} other {公式对 {name1}、{name2} 以及另外 {extra} 人进行了除以零运算，因此他们的等级贡献值被设为 0。}}"
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellDivByZero": {
+    "defaultMessage": "由于该等级的公式进行了除以零运算，因此设置为 0。"
+  },
   "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
     "defaultMessage": "在等权模式下，可选择在求平均分前剔除每位学生得分最低的 N 个评估。"
   },
@@ -9529,6 +9592,30 @@
   },
   "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
     "defaultMessage": "权重合计不为 100。总成绩可能不准确。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetAboveOnly": {
+    "defaultMessage": "部分等级贡献值超出等级权重上限，已被限制。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBelowOnly": {
+    "defaultMessage": "部分等级贡献值低于 0，已被提升至 0。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBoth": {
+    "defaultMessage": "部分等级贡献值超出有效范围 — 低于 0 或超出等级权重上限。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedAbove": {
+    "defaultMessage": "由于公式产生了 {raw}，因此设置为 {weight}。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedBelow": {
+    "defaultMessage": "由于公式产生了 {raw}，因此设置为 0。"
+  },
+  "course.gradebook.WeightedGradebookTable.levelHeader": {
+    "defaultMessage": "等级"
+  },
+  "course.gradebook.WeightedGradebookTable.levelContributionHeader": {
+    "defaultMessage": "等级贡献值"
+  },
+  "course.gradebook.WeightedGradebookTable.levelBreakdownDetail": {
+    "defaultMessage": "等级 {level}"
   },
   "course.gradebook.TotalHint.policy": {
     "defaultMessage": "总成绩将未评分的评估按 0 分计算。"

@@ -8279,9 +8279,6 @@
   "lib.components.table.MuiColumnPickerPrompt.defaultTitle": {
     "defaultMessage": "Select columns"
   },
-  "lib.components.table.MuiColumnPickerPrompt.export": {
-    "defaultMessage": "Apply and Export"
-  },
   "lib.components.table.MuiTableToolbar.directExport": {
     "defaultMessage": "Export"
   },
@@ -9425,6 +9422,78 @@
   "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
     "defaultMessage": "No weights set yet - these are suggested defaults with every tab counting equally. Save to confirm, or adjust below."
   },
+  "course.gradebook.ConfigureWeightsPrompt.levelTitle": {
+    "defaultMessage": "Level contribution"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelSubtitle": {
+    "defaultMessage": "Adds grade-points from each student's level, on top of tab contributions."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelHighestStudent": {
+    "defaultMessage": "Highest student level: {level}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCourseMax": {
+    "defaultMessage": "Course maximum level: {courseMaxLevel}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaLabel": {
+    "defaultMessage": "Formula"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper": {
+    "defaultMessage": "Formulas may contain numbers, arithmetic operators (+ − * /), parentheses, \"level\" as a variable, and the functions floor, ceil, round, min and max."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelPreview": {
+    "defaultMessage": "At max level ({maxLevel}): {pts} pts"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCustomMaxLabel": {
+    "defaultMessage": "Use custom max level"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelLabel": {
+    "defaultMessage": "Max level"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelInvalid": {
+    "defaultMessage": "Max level must be at least 1"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelShowLabel": {
+    "defaultMessage": "Show level column in table"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersAbove": {
+    "defaultMessage": "{count, plural, =1 {{name1} is above {max}.} =2 {{name1} and {name2} are above {max}.} other {{name1}, {name2} and {extra} more are above {max}.}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersBelow": {
+    "defaultMessage": "{count, plural, =1 {{name1} is below 0.} =2 {{name1} and {name2} are below 0.} other {{name1}, {name2} and {extra} more are below 0.}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtMost": {
+    "defaultMessage": "These contributions will be set to {max}."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtLeast": {
+    "defaultMessage": "These contributions will be set to 0."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixBetween": {
+    "defaultMessage": "Contributions below 0 will be set to 0, and contributions above {max} will be set to {max}."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelClampLabel": {
+    "defaultMessage": "Keep results between 0 and max level contributions"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelUnscoreable": {
+    "defaultMessage": "{count, plural, =1 {The formula divides by zero for {name1}, so their level contribution is set to 0.} =2 {The formula divides by zero for {name1} and {name2}, so their level contributions are set to 0.} other {The formula divides by zero for {name1}, {name2} and {extra} more, so their level contributions are set to 0.}}"
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetAboveOnly": {
+    "defaultMessage": "Some level contributions are above the maximum level contributions and have been capped."
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBelowOnly": {
+    "defaultMessage": "Some level contributions are below 0 and have been raised to 0."
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBoth": {
+    "defaultMessage": "Some level contributions are outside the valid range (below 0 or above the maximum level contributions) and are floored and capped accordingly."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedAbove": {
+    "defaultMessage": "Set to {weight} because the formula produced {raw}."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedBelow": {
+    "defaultMessage": "Set to 0 because the formula produced {raw}."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellDivByZero": {
+    "defaultMessage": "Set to 0 because the formula divides by zero for this level."
+  },
   "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
     "defaultMessage": "In Equal mode, optionally drop each student's N lowest-scoring assessments before averaging."
   },
@@ -9550,6 +9619,15 @@
   },
   "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
     "defaultMessage": "Weights do not sum to 100. Total may be inaccurate."
+  },
+  "course.gradebook.WeightedGradebookTable.levelHeader": {
+    "defaultMessage": "Level"
+  },
+  "course.gradebook.WeightedGradebookTable.levelContributionHeader": {
+    "defaultMessage": "Level Contribution"
+  },
+  "course.gradebook.WeightedGradebookTable.levelBreakdownDetail": {
+    "defaultMessage": "Level {level}"
   },
   "course.gradebook.TotalHint.policy": {
     "defaultMessage": "Totals count ungraded assessments as 0."

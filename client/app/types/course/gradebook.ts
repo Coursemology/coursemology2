@@ -27,6 +27,7 @@ export interface StudentData {
   externalId: string | null;
   level: number;
   totalXp: number;
+  levelContribution: number | null;
 }
 
 export interface SubmissionData {
@@ -34,6 +35,14 @@ export interface SubmissionData {
   assessmentId: number;
   submissionId: number;
   grade: number | null;
+}
+
+export interface LevelContributionData {
+  enabled: boolean;
+  formula: string;
+  weight: number;
+  show: boolean;
+  clamp: boolean;
 }
 
 export interface GradebookData {
@@ -45,6 +54,8 @@ export interface GradebookData {
   gamificationEnabled: boolean;
   weightedViewEnabled: boolean;
   canManageWeights: boolean;
+  courseMaxLevel: number;
+  levelContribution: LevelContributionData;
 }
 
 export interface UpdateWeightsPayload {
@@ -55,4 +66,22 @@ export interface UpdateWeightsPayload {
     excludedAssessmentIds?: number[];
     assessmentWeights?: { assessmentId: number; weight: number }[];
   }[];
+  levelContribution?: LevelContributionSaveData;
+}
+
+export type FormulaNode =
+  | { type: 'num'; value: number }
+  | { type: 'var'; name: 'level' }
+  | { type: 'neg'; operand: FormulaNode }
+  | {
+      type: 'binop';
+      op: '+' | '-' | '*' | '/';
+      left: FormulaNode;
+      right: FormulaNode;
+    }
+  | { type: 'call1'; fn: 'floor' | 'ceil' | 'round'; arg: FormulaNode }
+  | { type: 'call2'; fn: 'min' | 'max'; a: FormulaNode; b: FormulaNode };
+
+export interface LevelContributionSaveData extends LevelContributionData {
+  formulaAst: FormulaNode | null;
 }
