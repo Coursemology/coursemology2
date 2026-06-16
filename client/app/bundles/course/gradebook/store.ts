@@ -85,6 +85,7 @@ const reducer = produce(
             tabId,
             weight,
             weightMode,
+            keepHighest,
             assessmentWeights,
             excludedAssessmentIds,
           }) => {
@@ -92,6 +93,7 @@ const reducer = produce(
             if (tab) {
               tab.gradebookWeight = weight;
               tab.weightMode = weightMode;
+              tab.keepHighest = keepHighest ?? 0;
             }
             const excludedSet = new Set(excludedAssessmentIds ?? []);
             const tabAssessments = draft.assessments.filter(
