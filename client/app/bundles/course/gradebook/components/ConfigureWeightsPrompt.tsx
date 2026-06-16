@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
 import {
   Alert,
   Checkbox,
@@ -44,7 +44,7 @@ import { updateGradebookWeights } from '../operations';
 const translations = defineMessages({
   promptTitle: {
     id: 'course.gradebook.ConfigureWeightsPrompt.promptTitle',
-    defaultMessage: 'Configure contributions',
+    defaultMessage: 'Configure weights',
   },
   descriptionIntro: {
     id: 'course.gradebook.ConfigureWeightsPrompt.descriptionIntro',
@@ -66,10 +66,36 @@ const translations = defineMessages({
     defaultMessage:
       "Choose Equal (all assessments share the tab's weight) or Custom (set each assessment's share).",
   },
-  descriptionDrop: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.descriptionDrop',
+  keepHighestLabel: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestLabel',
+    defaultMessage: 'Keep highest',
+  },
+  keepHighestAria: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestAria',
+    defaultMessage: 'Keep highest for {tab}',
+  },
+  keepHighestToggleAria: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepHighestToggleAria',
+    defaultMessage: 'Enable keep highest for {tab}',
+  },
+  keepInvalid: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepInvalid',
+    defaultMessage: 'Keep at least 1 (whole number)',
+  },
+  keepSubtitle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepSubtitle',
     defaultMessage:
-      "In Equal mode, optionally drop each student's N lowest-scoring assessments before averaging.",
+      '— keeps highest {keep} of {included} · each counts as {pct}%',
+  },
+  keepOverflowWarning: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.keepOverflowWarning',
+    defaultMessage:
+      '"{tab}" keeps more assessments than it contains — all of them will count.',
+  },
+  descriptionKeep: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.descriptionKeep',
+    defaultMessage:
+      "In Equal mode, optionally keep only each student's N highest-scoring assessments.",
   },
   total: {
     id: 'course.gradebook.ConfigureWeightsPrompt.total',
@@ -171,7 +197,7 @@ const translations = defineMessages({
   levelFormulaHelper: {
     id: 'course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper',
     defaultMessage:
-      'Formulas may contain numbers, arithmetic operators (+ − * /), parentheses, "level" as a variable, and the functions floor, ceil, round, min and max.',
+      'The formula may use numbers, arithmetic operators (+ − * /), parentheses, the variable "level", and the functions floor, ceil, round, min and max.',
   },
   levelShowLabel: {
     id: 'course.gradebook.ConfigureWeightsPrompt.levelShowLabel',
@@ -286,6 +312,13 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const seedExclusions = (): Record<number, boolean> =>
     Object.fromEntries(assessments.map((a) => [a.id, !!a.gradebookExcluded]));
 
+  const seedKeepHighest = (): Record<number, number> =>
+    Object.fromEntries(resolvedTabs.map((tb) => [tb.id, tb.keepHighest ?? 0]));
+  const seedKeepOn = (): Record<number, boolean> =>
+    Object.fromEntries(
+      resolvedTabs.map((tb) => [tb.id, (tb.keepHighest ?? 0) > 0]),
+    );
+
   const [weights, setWeights] = useState<Record<number, number>>(seedWeights);
   const [modes, setModes] = useState<Record<number, WeightMode>>(seedModes);
   const [assessmentWeights, setAssessmentWeights] = useState<
@@ -293,6 +326,9 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   >(seedAssessmentWeights);
   const [excluded, setExcluded] =
     useState<Record<number, boolean>>(seedExclusions);
+  const [keepHighest, setKeepHighest] =
+    useState<Record<number, number>>(seedKeepHighest);
+  const [keepOn, setKeepOn] = useState<Record<number, boolean>>(seedKeepOn);
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -313,6 +349,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
       setModes(seedModes());
       setAssessmentWeights(seedAssessmentWeights());
       setExcluded(seedExclusions());
+      setKeepHighest(seedKeepHighest());
+      setKeepOn(seedKeepOn());
       setExpanded({});
       setLevelEnabled(levelContribution.enabled);
       setLevelFormula(levelContribution.formula || seedLevelFormula);
@@ -369,6 +407,22 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   if (hasBelow && hasAbove) levelFixMessage = translations.levelFixBetween;
   else if (hasAbove) levelFixMessage = translations.levelFixAtMost;
 
+  const validateKeep = (value: number): string | null =>
+    Number.isInteger(value) && value >= 1 ? null : t(translations.keepInvalid);
+
+  // Returns the effective keep-N value when the feature is active for a tab,
+  // or null when not applicable (mode != equal, checkbox off, or only 1 included).
+  const activeKeepValue = (tabId: number): number | null => {
+    if ((modes[tabId] ?? 'equal') !== 'equal') return null;
+    if (!keepOn[tabId]) return null;
+    return keepHighest[tabId] ?? 0;
+  };
+
+  const handleKeepChange = (tabId: number, raw: string): void => {
+    const parsed = raw === '' ? 0 : Number(raw);
+    setKeepHighest((prev) => ({ ...prev, [tabId]: parsed }));
+  };
+
   // Gamification off hides the level section, so a persisted enabled level must be
   // treated as disabled — it contributes nothing to the Total (matches the table's
   // showLevelContribution = gamificationEnabled && enabled).
@@ -378,8 +432,22 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   );
   const hasInvalid =
     Object.values(weights).some((w) => validate(w) !== null) ||
-    Object.values(assessmentWeights).some((w) => validate(w) !== null);
+    Object.values(assessmentWeights).some((w) => validate(w) !== null) ||
+    tabs.some((tb) => {
+      if ((modes[tb.id] ?? 'equal') !== 'equal') return false;
+      if (!keepOn[tb.id]) return false;
+      const includedCount = tabIncludedIds(tb.id).length;
+      if (includedCount <= 1) return false;
+      return validateKeep(keepHighest[tb.id] ?? 0) !== null;
+    });
   const hasUnbalanced = tabs.some((tb) => isUnbalanced(tb.id));
+
+  const keepOverflowTabs = tabs.filter((tb) => {
+    const v = activeKeepValue(tb.id);
+    if (!v) return false;
+    const included = tabIncludedIds(tb.id).length;
+    return included > 1 && v > included;
+  });
 
   const handleChange = (tabId: number, raw: string): void => {
     const parsed = raw === '' ? 0 : Number(raw);
@@ -490,6 +558,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           translations.descriptionWeights,
           translations.descriptionExclusion,
           translations.descriptionModes,
+          translations.descriptionKeep,
         ].map((key) => (
           <Typography
             key={key.id}
@@ -522,6 +591,17 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                   const excludedCount = tabAssessments.length - includedCount;
                   const pct = includedCount > 0 ? r2(value / includedCount) : 0;
 
+                  // keep-highest vars
+                  const keepValue = keepHighest[tb.id] ?? 0;
+                  const keepDisabled = includedCount <= 1;
+                  const keepEnabled = !keepDisabled && !!keepOn[tb.id];
+                  const keepErr = keepEnabled ? validateKeep(keepValue) : null;
+                  const kept = Math.min(keepValue, includedCount);
+                  const keepPct = kept > 0 ? r2(value / kept) : 0;
+                  const isKeepOverflow = keepOverflowTabs.some(
+                    (ot) => ot.id === tb.id,
+                  );
+
                   return (
                     <div key={tb.id}>
                       <div className="flex items-center gap-1">
@@ -531,9 +611,9 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                           size="small"
                         >
                           {isExpanded ? (
-                            <ExpandLess fontSize="small" />
+                            <KeyboardArrowDown fontSize="small" />
                           ) : (
-                            <ExpandMore fontSize="small" />
+                            <KeyboardArrowRight fontSize="small" />
                           )}
                         </IconButton>
                         <Typography className="flex-1" variant="body2">
@@ -608,6 +688,104 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                         >
                           {err}
                         </Typography>
+                      )}
+                      {mode === 'equal' && !noAssessments && (
+                        <>
+                          <div className="pl-9 flex items-center gap-1 flex-wrap">
+                            <Checkbox
+                              checked={keepEnabled}
+                              disabled={keepDisabled}
+                              inputProps={{
+                                'aria-label': t(
+                                  translations.keepHighestToggleAria,
+                                  { tab: tb.title },
+                                ),
+                              }}
+                              onChange={() => {
+                                if (keepEnabled) {
+                                  // Turn off: just toggle the on flag
+                                  setKeepOn((prev) => ({
+                                    ...prev,
+                                    [tb.id]: false,
+                                  }));
+                                } else {
+                                  // Turn on: seed default value if not already set
+                                  if (keepValue === 0) {
+                                    setKeepHighest((prev) => ({
+                                      ...prev,
+                                      [tb.id]: Math.max(1, includedCount - 1),
+                                    }));
+                                  }
+                                  setKeepOn((prev) => ({
+                                    ...prev,
+                                    [tb.id]: true,
+                                  }));
+                                }
+                              }}
+                              size="small"
+                            />
+                            <Typography
+                              color="text.secondary"
+                              variant="caption"
+                            >
+                              {t(translations.keepHighestLabel)}
+                            </Typography>
+                            {keepEnabled && (
+                              <TextField
+                                error={keepErr !== null}
+                                inputProps={{
+                                  'aria-label': t(
+                                    translations.keepHighestAria,
+                                    { tab: tb.title },
+                                  ),
+                                  min: 1,
+                                  step: 1,
+                                }}
+                                label={t(translations.keepHighestLabel)}
+                                onChange={(e) =>
+                                  handleKeepChange(tb.id, e.target.value)
+                                }
+                                onKeyDown={(e) => {
+                                  if (
+                                    ['.', ',', 'e', 'E', '-', '+'].includes(
+                                      e.key,
+                                    )
+                                  )
+                                    e.preventDefault();
+                                }}
+                                size="small"
+                                sx={{ width: 80, mx: 0.5 }}
+                                type="number"
+                                value={keepValue}
+                              />
+                            )}
+                            {keepEnabled && keepErr === null && (
+                              <Typography color="primary" variant="caption">
+                                {t(translations.keepSubtitle, {
+                                  keep: kept,
+                                  included: includedCount,
+                                  pct: keepPct.toFixed(2),
+                                })}
+                              </Typography>
+                            )}
+                          </div>
+                          {keepEnabled && keepErr && (
+                            <Typography
+                              className="pl-9"
+                              color="error"
+                              variant="caption"
+                            >
+                              {keepErr}
+                            </Typography>
+                          )}
+                          {isKeepOverflow && (
+                            <Alert severity="warning" sx={{ mt: 1, ml: 4.5 }}>
+                              {t(translations.keepOverflowWarning, {
+                                tab: tb.title,
+                              })}
+                            </Alert>
+                          )}
+                        </>
                       )}
                       {unbalanced && (
                         <Alert severity="error" sx={{ mt: 1, ml: 4.5 }}>
@@ -691,6 +869,14 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                 </div>
                               );
                             }
+                            let caption = t(translations.ofGrade, {
+                              pct: pct.toFixed(2),
+                            });
+                            if (isExcluded) {
+                              caption = t(translations.excluded);
+                            } else if (keepEnabled) {
+                              caption = '—';
+                            }
                             return (
                               <div
                                 key={a.id}
@@ -709,11 +895,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                   color="text.disabled"
                                   variant="caption"
                                 >
-                                  {isExcluded
-                                    ? t(translations.excluded)
-                                    : t(translations.ofGrade, {
-                                        pct: pct.toFixed(2),
-                                      })}
+                                  {caption}
                                 </Typography>
                               </div>
                             );

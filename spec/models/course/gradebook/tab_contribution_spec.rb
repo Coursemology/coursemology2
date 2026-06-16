@@ -234,6 +234,41 @@ RSpec.describe Course::Gradebook::TabContribution do
           expect(excluded?(a1)).to eq(false)
         end
       end
+
+      context 'with keep_highest' do
+        it 'persists keep_highest in equal mode' do
+          described_class.bulk_update(
+            course: course,
+            updates: [{ tab_id: tab1.id, weight: 50, weight_mode: 'equal', keep_highest: 3 }]
+          )
+          expect(described_class.find_by(tab_id: tab1.id).keep_highest).to eq(3)
+        end
+
+        it 'accepts 0 as a valid keep_highest value' do
+          described_class.bulk_update(
+            course: course,
+            updates: [{ tab_id: tab1.id, weight: 50, weight_mode: 'equal', keep_highest: 5 }]
+          )
+          expect(described_class.find_by(tab_id: tab1.id).keep_highest).to eq(5)
+          described_class.bulk_update(
+            course: course,
+            updates: [{ tab_id: tab1.id, weight: 50, weight_mode: 'equal', keep_highest: 0 }]
+          )
+          expect(described_class.find_by(tab_id: tab1.id).keep_highest).to eq(0)
+        end
+
+        it 'retains the previous keep_highest when an update omits it' do
+          described_class.bulk_update(
+            course: course,
+            updates: [{ tab_id: tab1.id, weight: 50, weight_mode: 'equal', keep_highest: 3 }]
+          )
+          described_class.bulk_update(
+            course: course,
+            updates: [{ tab_id: tab1.id, weight: 60, weight_mode: 'equal' }]
+          )
+          expect(described_class.find_by(tab_id: tab1.id).keep_highest).to eq(3)
+        end
+      end
     end
   end
 end

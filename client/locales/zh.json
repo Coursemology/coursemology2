@@ -9491,6 +9491,27 @@
   "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
     "defaultMessage": "尚未设置权重。以下为建议默认值，所有标签页均按相同比重计算。保存以确认，或在下方进行调整。"
   },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionKeep": {
+    "defaultMessage": "在等权重模式下，可选择仅保留每位学生得分最高的 N 个评估。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestLabel": {
+    "defaultMessage": "保留最高分"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestAria": {
+    "defaultMessage": "保留 {tab} 的最高分"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestToggleAria": {
+    "defaultMessage": "为 {tab} 启用保留最高分"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepInvalid": {
+    "defaultMessage": "至少保留 1 个（整数）"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepSubtitle": {
+    "defaultMessage": "— 保留 {included} 个中的最高 {keep} 个 · 每个计为 {pct}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepOverflowWarning": {
+    "defaultMessage": "\"{tab}\" 保留的评估数量超过其包含的数量 - 所有评估都会计入。"
+  },
   "course.gradebook.ConfigureWeightsPrompt.levelTitle": {
     "defaultMessage": "等级贡献值"
   },

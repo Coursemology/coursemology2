@@ -1094,3 +1094,203 @@ describe('levelOffenders unscoreable bucket', () => {
     expect(r.unscoreable.map((o) => o.name)).toEqual(['Amy', 'Zoe']);
   });
 });
+
+// ---------------------------------------------------------------------------
+// keep-N (keepHighest) — equal mode only
+// ---------------------------------------------------------------------------
+
+// Three equal-mode assessments: a1=60/100=0.60, a2=80/100=0.80, a3=100/100=1.00
+// keepHighest:1 → keep top 1 (a3, ratio 1.0), drop a1 and a2
+const dropConfig = {
+  tab: {
+    id: 10,
+    title: 'Tab',
+    categoryId: 0,
+    gradebookWeight: 60,
+    keepHighest: 1,
+  },
+  assessments: [
+    { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+    { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
+    { id: 3, tabId: 10, maxGrade: 100, title: 'C' },
+  ],
+  submissions: subs([
+    { studentId: 1, assessmentId: 1, grade: 60 },
+    { studentId: 1, assessmentId: 2, grade: 80 },
+    { studentId: 1, assessmentId: 3, grade: 100 },
+  ]),
+};
+
+describe('equalSubtotal — keepHighest via computeTabSubtotal', () => {
+  it('keepHighest=0 (unset): keeps all assessments — same as default behavior', () => {
+    // (0.6 + 0.8 + 1.0) / 3 = 0.8
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { id: 10, title: 'Tab', categoryId: 0, gradebookWeight: 60 },
+        assessments: dropConfig.assessments,
+        submissions: dropConfig.submissions,
+      }),
+    ).toBeCloseTo(0.8);
+  });
+
+  it('keepHighest=1: averages only the single highest ratio', () => {
+    // top 1: a3 ratio=1.0 → subtotal = 1.0/1 = 1.0
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: dropConfig.tab,
+        assessments: dropConfig.assessments,
+        submissions: dropConfig.submissions,
+      }),
+    ).toBeCloseTo(1.0);
+  });
+
+  it('keepHighest > count: clamps to all assessments', () => {
+    // keepHighest=99 with 3 assessments → keep all 3 → (0.6+0.8+1.0)/3 = 0.8
+    expect(
+      computeTabSubtotal({
+        studentId: 1,
+        tab: { ...dropConfig.tab, keepHighest: 99 },
+        assessments: dropConfig.assessments,
+        submissions: dropConfig.submissions,
+      }),
+    ).toBeCloseTo(0.8);
+  });
+});
+
+describe('computeStudentBreakdown — keepHighest', () => {
+  it('dropped flag is true on lowest-ratio assessments, false on kept ones', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    const a1 = tab.assessments.find((x) => x.assessmentId === 1)!; // ratio 0.60 — dropped
+    const a2 = tab.assessments.find((x) => x.assessmentId === 2)!; // ratio 0.80 — dropped
+    const a3 = tab.assessments.find((x) => x.assessmentId === 3)!; // ratio 1.00 — kept
+
+    expect(a1.dropped).toBe(true);
+    expect(a2.dropped).toBe(true);
+    expect(a3.dropped).toBe(false);
+  });
+
+  it('dropped assessment has points=0 and effectiveWeight=0', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    const a1 = tab.assessments.find((x) => x.assessmentId === 1)!;
+    const a2 = tab.assessments.find((x) => x.assessmentId === 2)!;
+
+    expect(a1.points).toBe(0);
+    expect(a1.effectiveWeight).toBe(0);
+    expect(a2.points).toBe(0);
+    expect(a2.effectiveWeight).toBe(0);
+  });
+
+  it('kept assessment points/effectiveWeight are computed over keptCount=1', () => {
+    // tab weight=60, keptCount=1 → effectiveWeight=60/1=60; ratio=1.0 → points=(1.0/1)*60=60
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    const a3 = tab.assessments.find((x) => x.assessmentId === 3)!;
+
+    expect(a3.effectiveWeight).toBeCloseTo(60);
+    expect(a3.points).toBeCloseTo(60);
+  });
+
+  it('excluded=false and dropped=false on kept assessment', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    const a3 = tab.assessments.find((x) => x.assessmentId === 3)!;
+    expect(a3.excluded).toBe(false);
+    expect(a3.dropped).toBe(false);
+  });
+
+  it('no keepHighest (0): dropped=false for all assessments', () => {
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'Tab', categoryId: 0, gradebookWeight: 60 }],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    tab.assessments.forEach((a) => expect(a.dropped).toBe(false));
+  });
+
+  it('tie-break: equal ratios → lower id is dropped first', () => {
+    // a1 (id=1) and a2 (id=2) both have ratio 0.5; keepHighest=1.
+    // Tie-break ascending by id → a1 is ranked lower → a1 is dropped; a2 is kept.
+    const tieAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B' },
+    ];
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [
+        {
+          id: 10,
+          title: 'Tab',
+          categoryId: 0,
+          gradebookWeight: 60,
+          keepHighest: 1,
+        },
+      ],
+      assessments: tieAssessments,
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 50 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+      ]),
+    });
+    const a1 = tab.assessments.find((x) => x.assessmentId === 1)!;
+    const a2 = tab.assessments.find((x) => x.assessmentId === 2)!;
+    expect(a1.dropped).toBe(true); // lower id dropped
+    expect(a2.dropped).toBe(false); // higher id kept
+  });
+});
+
+describe('computeWeightedRows — keepHighest', () => {
+  const keepStudent = [
+    {
+      id: 1,
+      name: 'Alice',
+      email: 'alice@e.com',
+      externalId: null,
+      level: 1,
+      totalXp: 0,
+      levelContribution: null,
+    },
+  ];
+
+  it('subtotal for tab with keepHighest=1 equals average of the single top ratio', () => {
+    // top ratio among a1,a2,a3 = 1.0; subtotal = 1.0
+    const rows = computeWeightedRows({
+      students: keepStudent,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    expect(rows[0].subtotals[0]).toBeCloseTo(1.0);
+  });
+
+  it('total reflects keepHighest subtotal multiplied by tab weight', () => {
+    // subtotal=1.0, tabWeight=60 → total=60
+    const rows = computeWeightedRows({
+      students: keepStudent,
+      tabs: [dropConfig.tab],
+      assessments: dropConfig.assessments,
+      submissions: dropConfig.submissions,
+    });
+    expect(rows[0].total).toBeCloseTo(60);
+  });
+});
