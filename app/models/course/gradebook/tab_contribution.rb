@@ -41,7 +41,9 @@ class Course::Gradebook::TabContribution < ApplicationRecord
 
     contribution = find_or_initialize_by(tab_id: tab.id)
     contribution.course = course
-    contribution.assign_attributes(weight: entry[:weight], weight_mode: mode)
+    attrs = { weight: entry[:weight], weight_mode: mode }
+    attrs[:keep_highest] = entry[:keep_highest] if entry.key?(:keep_highest)
+    contribution.assign_attributes(attrs)
     contribution.save!
 
     excluded_ids = entry[:excluded_assessment_ids] || []

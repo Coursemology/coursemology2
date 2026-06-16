@@ -415,9 +415,16 @@ RSpec.describe Course::GradebookController, type: :controller do
             course_id: course.id,
             weights: [],
             levelContribution: {
-              enabled: true, formula: 'min(level, 30) * 0.05', weight: 8, show: true
+              enabled: true, formula: 'min(level, 30) * 0.05', weight: 8, show: true,
+              formulaAst: {
+                type: 'binop', op: '*',
+                left: { type: 'call2', fn: 'min',
+                        a: { type: 'var', name: 'level' },
+                        b: { type: 'num', value: 30 } },
+                right: { type: 'num', value: 0.05 }
+              }
             }
-          }, format: :json
+          }, as: :json
           expect(response).to have_http_status(:ok)
           config = course.reload.gradebook_level_config
           expect(config.enabled).to eq(true)
@@ -433,9 +440,10 @@ RSpec.describe Course::GradebookController, type: :controller do
             course_id: course.id,
             weights: [],
             levelContribution: {
-              enabled: true, formula: 'level', weight: 8, show: false, clamp: false
+              enabled: true, formula: 'level', weight: 8, show: false, clamp: false,
+              formulaAst: { type: 'var', name: 'level' }
             }
-          }, format: :json
+          }, as: :json
           expect(response).to have_http_status(:ok)
           expect(course.reload.gradebook_level_config.clamp).to eq(false)
           expect(JSON.parse(response.body)['levelContribution']).to include('clamp' => false)
@@ -498,6 +506,26 @@ RSpec.describe Course::GradebookController, type: :controller do
           patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
           expect(response).to have_http_status(:ok)
           expect(weight_for(tab1)).to eq(60)
+        end
+      end
+
+      describe '#update_weights keepHighest' do
+        render_views
+
+        let(:category2) { create(:course_assessment_category, course: course) }
+        let(:tab) { create(:course_assessment_tab, category: category2) }
+
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'persists keepHighest and echoes it back' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [{ tabId: tab.id, weight: '50', weightMode: 'equal', keepHighest: 2 }]
+          }
+          expect(response).to have_http_status(:ok)
+          body = JSON.parse(response.body)
+          expect(body['weights'].first['keepHighest']).to eq(2)
+          expect(Course::Gradebook::TabContribution.find_by(tab_id: tab.id).keep_highest).to eq(2)
         end
       end
 
@@ -617,6 +645,16 @@ RSpec.describe Course::GradebookController, type: :controller do
           body = JSON.parse(response.body)
           expect(body['assessments'].first).to have_key('gradebookExcluded')
           expect(body['assessments'].first['gradebookExcluded']).to eq(false)
+        end
+
+        it 'includes keepHighest in the weighted tabs response' do
+          contribution.update!(keep_highest: 3)
+          controller_sign_in(controller, manager.user)
+          get :index, params: { course_id: course.id }, format: :json
+          body = JSON.parse(response.body)
+          tab_json = body['tabs'].find { |t| t['id'] == tab.id }
+          expect(tab_json).to have_key('keepHighest')
+          expect(tab_json['keepHighest']).to eq(3)
         end
       end
     end

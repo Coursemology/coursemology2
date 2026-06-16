@@ -15,6 +15,7 @@ json.tabs @tabs do |tab|
     contribution = @tab_contributions[tab.id]
     json.gradebookWeight (contribution&.weight || 0).to_f
     json.weightMode(contribution&.weight_mode || 'equal')
+    json.keepHighest(contribution&.keep_highest || 0)
   end
 end
 

@@ -37,6 +37,7 @@ export interface AssessmentContribution {
   // Custom mode: the assessment's own configured weight.
   effectiveWeight: number;
   excluded: boolean;
+  dropped: boolean; // equal-mode keep-highest: ranked out for this student
 }
 
 export interface TabBreakdown {
@@ -80,19 +81,25 @@ const buildAssessmentsByTab = (
 
 // Equal-weight formula: average of (grade/maxGrade) ratios over INCLUDED assessments.
 // Excluded assessments are dropped from both numerator and count; ungraded included
-// contribute 0. Returns null when no assessment is included.
+// contribute 0. When keepN > 0, only the top keepN ratios are averaged.
+// Returns null when no assessment is included.
 const equalSubtotal = (
   studentId: number,
+  tab: TabData,
   tabAssessments: AssessmentData[],
   gradeLookup: GradeLookup,
 ): number | null => {
   const included = tabAssessments.filter((a) => !a.gradebookExcluded);
   if (included.length === 0) return null;
+  const keepN = tab.keepHighest ?? 0;
   const ratios = included.map((a) => {
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     return grade != null ? gradeRatio(grade, a.maxGrade) : 0;
   });
-  return ratios.reduce((acc, r) => acc + r, 0) / ratios.length;
+  ratios.sort((x, y) => x - y); // ascending
+  const keep = keepN > 0 ? Math.min(keepN, included.length) : included.length;
+  const kept = ratios.slice(included.length - keep); // the `keep` highest
+  return kept.reduce((acc, r) => acc + r, 0) / kept.length;
 };
 
 // Custom-weight formula: Σ(grade_i/maxGrade_i × assessmentWeight_i) / tabWeight over
@@ -130,7 +137,7 @@ const subtotalFromLookup = (
   if (tab.weightMode === 'custom') {
     return customSubtotal(studentId, tab, tabAssessments, gradeLookup);
   }
-  return equalSubtotal(studentId, tabAssessments, gradeLookup);
+  return equalSubtotal(studentId, tab, tabAssessments, gradeLookup);
 };
 
 // Weighted, additive total from already-computed subtotals.
@@ -282,23 +289,47 @@ export const computeStudentBreakdown = ({
   const result: TabBreakdown[] = tabs.map((tab) => {
     const list = assessmentsByTab.get(tab.id) ?? [];
     const weight = tab.gradebookWeight ?? 0;
-    const includedCount = list.filter((a) => !a.gradebookExcluded).length;
+    const included = list.filter((a) => !a.gradebookExcluded);
+    const includedCount = included.length;
+
+    let droppedIds = new Set<number>();
+    let keptCount = includedCount;
+    if (tab.weightMode !== 'custom' && includedCount > 0) {
+      const keepN = tab.keepHighest ?? 0;
+      keptCount = keepN > 0 ? Math.min(keepN, includedCount) : includedCount;
+      if (keptCount < includedCount) {
+        const ranked = included
+          .map((a) => {
+            const grade = gradeLookup.get(gradeKey(studentId, a.id));
+            return {
+              id: a.id,
+              ratio: grade != null && a.maxGrade > 0 ? grade / a.maxGrade : 0,
+            };
+          })
+          .sort((x, y) => x.ratio - y.ratio || x.id - y.id); // ascending: lowest first, tie-break by id
+        // Drop the lowest (includedCount − keptCount).
+        droppedIds = new Set(
+          ranked.slice(0, includedCount - keptCount).map((r) => r.id),
+        );
+      }
+    }
 
     const contributions = list.map((a) => {
       const excluded = !!a.gradebookExcluded;
+      const dropped = droppedIds.has(a.id);
       const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
       const ratio = grade != null ? gradeRatio(grade, a.maxGrade) : 0;
       let points: number;
       let effectiveWeight: number;
-      if (excluded) {
+      if (excluded || dropped) {
         points = 0;
         effectiveWeight = 0;
       } else if (tab.weightMode === 'custom') {
         points = ratio * (a.gradebookWeight ?? 0);
         effectiveWeight = a.gradebookWeight ?? 0;
       } else {
-        points = includedCount > 0 ? (ratio / includedCount) * weight : 0;
-        effectiveWeight = includedCount > 0 ? weight / includedCount : 0;
+        points = keptCount > 0 ? (ratio / keptCount) * weight : 0;
+        effectiveWeight = keptCount > 0 ? weight / keptCount : 0;
       }
       return {
         assessmentId: a.id,
@@ -308,6 +339,7 @@ export const computeStudentBreakdown = ({
         points,
         effectiveWeight,
         excluded,
+        dropped,
       };
     });
     return { tabId: tab.id, assessments: contributions };
@@ -326,6 +358,7 @@ export const computeStudentBreakdown = ({
           points: lvl,
           effectiveWeight: levelContribution.weight,
           excluded: false,
+          dropped: false,
         },
       ],
     });

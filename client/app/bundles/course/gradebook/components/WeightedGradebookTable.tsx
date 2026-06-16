@@ -40,7 +40,10 @@ import type { ColumnTemplate } from 'lib/components/table/builder';
 import MuiColumnPickerPrompt from 'lib/components/table/MuiTableAdapter/MuiColumnPickerPrompt';
 import MuiTablePagination from 'lib/components/table/MuiTableAdapter/MuiTablePagination';
 import useTanStackTableBuilder from 'lib/components/table/TanStackTableBuilder';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import {
+  DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
+  DEFAULT_TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -171,6 +174,10 @@ const translations = defineMessages({
   excluded: {
     id: 'course.gradebook.WeightedGradebookTable.excluded',
     defaultMessage: 'Excluded',
+  },
+  dropped: {
+    id: 'course.gradebook.WeightedGradebookTable.dropped',
+    defaultMessage: 'Dropped (lowest)',
   },
   total: {
     id: 'course.gradebook.WeightedGradebookTable.weightedTotal',
@@ -758,7 +765,13 @@ const WeightedGradebookTable = ({
     getRowEqualityData: (row) => row,
     indexing: { rowSelectable: true },
     pagination: {
-      rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+      initialPageSize: DEFAULT_TABLE_ROWS_PER_PAGE,
+      rowsPerPage: [
+        DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
+        25,
+        50,
+        DEFAULT_TABLE_ROWS_PER_PAGE,
+      ],
       showAllRows: true,
     },
     search: { searchPlaceholder: t(translations.searchStudents) },
@@ -1321,6 +1334,8 @@ const WeightedGradebookTable = ({
                         (expandedBreakdown ?? []).flatMap((tb) =>
                           tb.assessments.map((a) => {
                             const isExcluded = a.excluded;
+                            const isDropped = a.dropped;
+                            const isInactive = isExcluded || isDropped;
                             // Weightage is always "% of grade" — it never
                             // follows the points/percent lens.
                             const weightText = t(translations.percentOfGrade, {
@@ -1340,13 +1355,19 @@ const WeightedGradebookTable = ({
                                     level: a.grade ?? 0,
                                   })
                                 : assessmentGradeText;
+                            let statusText = weightText;
+                            if (isExcluded) {
+                              statusText = t(translations.excluded);
+                            } else if (isDropped) {
+                              statusText = t(translations.dropped);
+                            }
                             return (
                               <TableRow
                                 key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
                                 data-testid={`breakdown-row-${studentId}-${tb.tabId}-${a.assessmentId}`}
                                 sx={{
                                   bgcolor: 'grey.50',
-                                  opacity: isExcluded ? 0.6 : 1,
+                                  opacity: isInactive ? 0.6 : 1,
                                 }}
                               >
                                 {/* Empty checkbox cell so the breakdown row
@@ -1399,7 +1420,7 @@ const WeightedGradebookTable = ({
                                   <Tooltip title={a.title}>
                                     <Typography
                                       color={
-                                        isExcluded ? 'text.disabled' : undefined
+                                        isInactive ? 'text.disabled' : undefined
                                       }
                                       fontSize="inherit"
                                       sx={{
@@ -1426,7 +1447,7 @@ const WeightedGradebookTable = ({
                                     }}
                                     variant="caption"
                                   >
-                                    {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
+                                    {`${gradeText} · ${statusText}`}
                                   </Typography>
                                 </TableCell>
                                 {/* One empty cell per visible identity column so
