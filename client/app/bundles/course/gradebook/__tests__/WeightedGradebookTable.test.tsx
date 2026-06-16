@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { store as appStore } from 'store';
 import { render, screen, waitFor, within } from 'test-utils';
+import TestApp from 'utilities/TestApp';
 
 import WeightedGradebookTable from '../components/WeightedGradebookTable';
 import type {
@@ -18,6 +19,7 @@ jest.mock('lib/components/wrappers/I18nProvider');
 const USER_ID = 42;
 const WEIGHTED_STORAGE_KEY = `${USER_ID}:gradebook_weighted_columns_1`;
 const EXTERNAL_ID = 'External ID';
+const LEVEL_CONTRIBUTION = 'Level Contribution';
 
 // Mirrors the component's data-testid for a breakdown row:
 // `breakdown-row-${studentId}-${tabId}-${assessmentId}`.
@@ -65,6 +67,7 @@ const makeStudent = (id: number, name: string): StudentData => ({
   externalId: null,
   level: 1,
   totalXp: 0,
+  levelContribution: null,
 });
 
 const makeSub = (
@@ -72,6 +75,14 @@ const makeSub = (
   assessmentId: number,
   grade: number | null,
 ): SubmissionData => ({ submissionId: 0, studentId, assessmentId, grade });
+
+const defaultLevelContribution = {
+  enabled: false,
+  formula: '',
+  weight: 0,
+  show: false,
+  clamp: true,
+};
 
 interface RenderWeightedOptions {
   categories?: CategoryData[];
@@ -82,6 +93,9 @@ interface RenderWeightedOptions {
   canManageWeights?: boolean;
   courseTitle?: string;
   courseId?: number;
+  gamificationEnabled?: boolean;
+  courseMaxLevel?: number;
+  levelContribution?: typeof defaultLevelContribution;
 }
 
 const renderWeighted = (
@@ -100,7 +114,10 @@ const renderWeighted = (
       canManageWeights={opts.canManageWeights ?? true}
       categories={cats}
       courseId={opts.courseId ?? 1}
+      courseMaxLevel={opts.courseMaxLevel ?? 0}
       courseTitle={opts.courseTitle ?? 'Test Course'}
+      gamificationEnabled={opts.gamificationEnabled ?? false}
+      levelContribution={opts.levelContribution ?? defaultLevelContribution}
       students={students}
       submissions={submissions}
       tabs={tabs}
@@ -186,6 +203,25 @@ describe('WeightedGradebookTable', () => {
       tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 40)],
     });
     expect(screen.getByText('/100')).toBeInTheDocument();
+  });
+
+  // 4a-bis. Regression: 2dp weights that sum to exactly 100 must not trip the
+  // IEEE-754 float sum (14.29×6 + 14.26 = 99.99999999999999). Header shows /100,
+  // never the raw float.
+  it('shows "/100" (not the raw float) when 2dp weights sum to 100', () => {
+    renderWeighted({
+      tabs: [
+        makeTab(10, 'T0', 1, 14.29),
+        makeTab(11, 'T1', 1, 14.29),
+        makeTab(12, 'T2', 1, 14.29),
+        makeTab(13, 'T3', 1, 14.29),
+        makeTab(14, 'T4', 1, 14.29),
+        makeTab(15, 'T5', 1, 14.29),
+        makeTab(16, 'T6', 1, 14.26),
+      ],
+    });
+    expect(screen.getByText('/100')).toBeInTheDocument();
+    expect(screen.queryByText(/99\.999/)).not.toBeInTheDocument();
   });
 
   // 4b. Total column shows just "/N" on one line when sum ≠ 100
@@ -834,6 +870,90 @@ describe('WeightedGradebookTable', () => {
       expect(cells[3]).toBeEmptyDOMElement();
     });
 
+    it('aligns breakdown tab values with the parent columns when both level columns are shown', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        ...expandable,
+        students: [
+          { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 15 },
+        ],
+        gamificationEnabled: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: true,
+          show: true,
+          weight: 30,
+          formula: 'level',
+          clamp: true,
+        },
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+
+      // With Raw Level + Level Contribution present and no identity columns:
+      // checkbox | Name | Level | Level Contribution | Missions | Quizzes | Total
+      const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
+      const cells = within(detail).getAllByRole('cell');
+      expect(cells).toHaveLength(7);
+      // Mission 1's contribution (24) lands under Missions (index 4) — not
+      // shifted left into the Level (2) or Level Contribution (3) columns.
+      expect(cells[2]).toBeEmptyDOMElement(); // Raw Level
+      expect(cells[3]).toBeEmptyDOMElement(); // Level Contribution
+      expect(cells[4]).toHaveTextContent('24'); // Missions
+    });
+
+    it('gives every column an explicit-width colgroup <col>, including Total', () => {
+      renderWeighted({
+        ...expandable,
+        students: [
+          { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 15 },
+        ],
+        gamificationEnabled: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: true,
+          show: true,
+          weight: 30,
+          formula: 'level',
+          clamp: true,
+        },
+      });
+
+      const cols = [...document.querySelectorAll<HTMLElement>('colgroup col')];
+      const studentRow = screen.getByText('Alice').closest('tr')!;
+      const cells = within(studentRow).getAllByRole('cell');
+      expect(cells).toHaveLength(7);
+      expect(cols).toHaveLength(cells.length);
+      cols.forEach((col) => expect(col.style.width).not.toBe(''));
+    });
+
+    it('shows the level contribution in its own column on the level breakdown row', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        ...expandable,
+        students: [
+          { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 15 },
+        ],
+        gamificationEnabled: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: true,
+          show: true,
+          weight: 30,
+          formula: 'level',
+          clamp: true,
+        },
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+
+      // Synthetic Level breakdown row (tabId -1, assessmentId -1): its
+      // contribution (15) sits under Level Contribution, tab columns stay empty.
+      const levelRow = await screen.findByTestId(breakdownRowId(1, -1, -1));
+      const cells = within(levelRow).getAllByRole('cell');
+      expect(cells).toHaveLength(7);
+      expect(cells[3]).toHaveTextContent('15'); // Level Contribution
+      expect(cells[4]).toBeEmptyDOMElement(); // Missions empty on the level row
+    });
+
     it('renders each assessment as a grade/maxGrade percentage in percent mode', async () => {
       const user = userEvent.setup();
       renderWeighted(expandable);
@@ -1329,5 +1449,382 @@ describe('WeightedGradebookTable', () => {
       const cells = within(aliceRow).getAllByRole('cell');
       expect(cells[cells.length - 1]).toHaveTextContent('—');
     });
+  });
+});
+
+describe('level contribution columns', () => {
+  beforeEach(() => localStorage.clear());
+
+  // `enabled` drives the always-on "Level Contribution" column; `show`
+  // additionally drives the raw "Level" column. Formula uses only the `level`
+  // grammar variable so these tests assert layout without coupling to the
+  // contribution-value computation (owned elsewhere).
+  const levelOn = {
+    enabled: true,
+    formula: 'level',
+    weight: 10,
+    show: true,
+    clamp: true,
+  };
+
+  // The first <thead> row carries every column's top header cell left-to-right
+  // (Name, raw Level, Level Contribution, category groups, Total) — the cleanest
+  // place to assert presence and ordering.
+  const headerRow1 = (): HTMLElement =>
+    document.querySelector('thead tr') as HTMLElement;
+
+  it('shows neither level column when gamification is off', () => {
+    renderWeighted({ gamificationEnabled: false, levelContribution: levelOn });
+    expect(screen.queryByText(LEVEL_CONTRIBUTION)).not.toBeInTheDocument();
+    expect(screen.queryByText('Level')).not.toBeInTheDocument();
+  });
+
+  it('shows neither level column when the contribution is disabled', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: { ...levelOn, enabled: false },
+    });
+    expect(screen.queryByText(LEVEL_CONTRIBUTION)).not.toBeInTheDocument();
+    expect(screen.queryByText('Level')).not.toBeInTheDocument();
+  });
+
+  it('shows Level Contribution but hides raw Level when show is off', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: { ...levelOn, show: false },
+    });
+    expect(
+      within(headerRow1()).getByText(LEVEL_CONTRIBUTION),
+    ).toBeInTheDocument();
+    expect(within(headerRow1()).queryByText('Level')).not.toBeInTheDocument();
+  });
+
+  it('shows both Level Contribution and raw Level when enabled and show are on', () => {
+    renderWeighted({ gamificationEnabled: true, levelContribution: levelOn });
+    expect(
+      within(headerRow1()).getByText(LEVEL_CONTRIBUTION),
+    ).toBeInTheDocument();
+    expect(within(headerRow1()).getByText('Level')).toBeInTheDocument();
+  });
+
+  it('orders raw Level last among student info and Level Contribution first among contributions', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: levelOn,
+      students: [{ ...makeStudent(1, 'Alice'), externalId: 'EXT-1' }],
+    });
+    const headers = within(headerRow1())
+      .getAllByRole('columnheader')
+      .map((c) => c.textContent);
+    const ext = headers.indexOf('External ID');
+    const raw = headers.indexOf('Level');
+    const contrib = headers.indexOf(LEVEL_CONTRIBUTION);
+    const cat = headers.indexOf('Cat A');
+    // External ID (student info) < raw Level (last student info) < Level
+    // Contribution (first contribution) < Cat A (tab group).
+    expect(ext).toBeLessThan(raw);
+    expect(raw).toBeLessThan(contrib);
+    expect(contrib).toBeLessThan(cat);
+  });
+
+  it("renders each student's actual level in the raw Level column", () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      // level * 2 keeps the contribution value (14) distinct from the raw level
+      // (7) so the assertion targets the raw Level cell unambiguously.
+      levelContribution: { ...levelOn, formula: 'level * 2' },
+      students: [{ ...makeStudent(1, 'Alice'), level: 7 }],
+    });
+    const aliceRow = screen.getByText('Alice').closest('tr')!;
+    expect(within(aliceRow).getByText('7')).toBeInTheDocument();
+  });
+
+  it('lists the Level row first in the expanded breakdown', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: { ...levelOn, formula: 'level' },
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 10)],
+      // BE pre-computes the per-student contribution; Alice (level 1) under
+      // formula 'level' → 1. The component renders this value, not the formula.
+      students: [{ ...makeStudent(1, 'Alice'), levelContribution: 1 }],
+      submissions: [makeSub(1, 100, 8)],
+    });
+    await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+    const bdRows = await screen.findAllByTestId(/^breakdown-row-/);
+    // Synthetic level tab uses LEVEL_TAB_ID (-1); its row must come first, before
+    // the real tab (id 10) rows — mirroring the column order.
+    expect(bdRows[0].getAttribute('data-testid')).toMatch(
+      /^breakdown-row-1--1-/,
+    );
+    expect(
+      bdRows.some((r) => r.getAttribute('data-testid')?.includes('-10-')),
+    ).toBe(true);
+  });
+
+  it('shows the raw level (no max-level denominator) in the Level breakdown row', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      gamificationEnabled: true,
+      // courseMaxLevel plays no part in the contribution, so showing "14/20"
+      // would falsely imply a level/maxLevel derivation. Expect a plain "Level 14".
+      levelContribution: { ...levelOn, formula: 'level', weight: 20 },
+      courseMaxLevel: 20,
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 10)],
+      // BE-supplied contribution; Alice (level 14) under formula 'level' → 14.
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 14, levelContribution: 14 },
+      ],
+      submissions: [makeSub(1, 100, 8)],
+    });
+    await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+    const levelRow = (await screen.findAllByTestId(/^breakdown-row-1--1-/))[0];
+    expect(within(levelRow).getByText(/Level 14/)).toBeInTheDocument();
+    // The misleading "14/20" fraction must NOT appear.
+    expect(
+      within(levelRow).queryByText(/14\s*\/\s*\d+/),
+    ).not.toBeInTheDocument();
+  });
+
+  // Over-budget warning: the level weight is a suggested maximum, so a formula can
+  // push a student's contribution past it or below 0. The Level Contribution subheader
+  // shows a bound-aware message (above-only, below-only, or both).
+  it('shows above-only tooltip when a student exceeds the level weight', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      // level * 5 → Alice (level 3) contributes 15, over the 10-pt budget.
+      levelContribution: { ...levelOn, formula: 'level * 5', weight: 10 },
+      students: [{ ...makeStudent(1, 'Alice'), level: 3 }],
+    });
+    expect(
+      screen.getByLabelText(/above the maximum level contributions/i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows below-only tooltip when a student contribution falls below 0', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      // level - 10 → Alice (level 1) contributes -9, below 0.
+      levelContribution: { ...levelOn, formula: 'level - 10', weight: 10 },
+      students: [{ ...makeStudent(1, 'Alice'), level: 1 }],
+    });
+    expect(screen.getByLabelText(/below 0/i)).toBeInTheDocument();
+  });
+
+  it('shows both-bounds tooltip when students breach both bounds', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      // level - 3 with weight 5: Alice (level 1) → -2 (below 0), Bob (level 10) → 7 (above 5).
+      levelContribution: { ...levelOn, formula: 'level - 3', weight: 5 },
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 1 },
+        { ...makeStudent(2, 'Bob'), level: 10 },
+      ],
+    });
+    expect(
+      screen.getByLabelText(/outside the valid range/i),
+    ).toBeInTheDocument();
+  });
+
+  it('does not flag the subheader when every student is within budget', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      // level → Alice (level 3) contributes 3, within the 10-pt budget.
+      levelContribution: { ...levelOn, formula: 'level', weight: 10 },
+      students: [{ ...makeStudent(1, 'Alice'), level: 3 }],
+    });
+    expect(
+      screen.queryByLabelText(
+        /above the level weight|below 0|outside the valid range/i,
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  // Regression: neither level column is user-pickable, so a stale persisted-hidden
+  // entry from a prior session must NOT keep them hidden (no picker to recover).
+  it('keeps Level Contribution visible despite a stale persisted-hidden entry', () => {
+    localStorage.setItem(
+      WEIGHTED_STORAGE_KEY,
+      JSON.stringify({ levelContribution: false }),
+    );
+    renderWeighted({ gamificationEnabled: true, levelContribution: levelOn });
+    expect(
+      within(headerRow1()).getByText(LEVEL_CONTRIBUTION),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps raw Level visible despite a stale persisted-hidden entry', () => {
+    localStorage.setItem(
+      WEIGHTED_STORAGE_KEY,
+      JSON.stringify({ level: false }),
+    );
+    renderWeighted({ gamificationEnabled: true, levelContribution: levelOn });
+    expect(within(headerRow1()).getByText('Level')).toBeInTheDocument();
+  });
+
+  // Regression: toggling settings while the table is already mounted (e.g. the
+  // teacher saves the dialog) must reveal the affected column live.
+  it('reveals raw Level when show is toggled on after mount', () => {
+    const props = {
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 150)],
+      canManageWeights: true,
+      categories: [makeCategory(1, 'Cat A')],
+      courseId: 1,
+      courseMaxLevel: 10,
+      courseTitle: 'Test Course',
+      gamificationEnabled: true,
+      students: [makeStudent(1, 'Alice')],
+      submissions: [],
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+    };
+    const { rerender } = render(
+      <WeightedGradebookTable
+        {...props}
+        levelContribution={{ ...levelOn, show: false }}
+      />,
+      { state: userState },
+    );
+    expect(within(headerRow1()).queryByText('Level')).not.toBeInTheDocument();
+
+    // rerender bypasses test-utils' TestApp wrapper, so re-wrap to keep providers.
+    rerender(
+      <TestApp state={userState}>
+        <WeightedGradebookTable
+          {...props}
+          levelContribution={{ ...levelOn, show: true }}
+        />
+      </TestApp>,
+    );
+    expect(within(headerRow1()).getByText('Level')).toBeInTheDocument();
+  });
+
+  it('reveals Level Contribution when the contribution is enabled after mount', () => {
+    const props = {
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 150)],
+      canManageWeights: true,
+      categories: [makeCategory(1, 'Cat A')],
+      courseId: 1,
+      courseMaxLevel: 10,
+      courseTitle: 'Test Course',
+      gamificationEnabled: true,
+      students: [makeStudent(1, 'Alice')],
+      submissions: [],
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+    };
+    const { rerender } = render(
+      <WeightedGradebookTable
+        {...props}
+        levelContribution={{ ...levelOn, enabled: false }}
+      />,
+      { state: userState },
+    );
+    expect(
+      within(headerRow1()).queryByText(LEVEL_CONTRIBUTION),
+    ).not.toBeInTheDocument();
+
+    rerender(
+      <TestApp state={userState}>
+        <WeightedGradebookTable {...props} levelContribution={levelOn} />
+      </TestApp>,
+    );
+    expect(
+      within(headerRow1()).getByText(LEVEL_CONTRIBUTION),
+    ).toBeInTheDocument();
+  });
+
+  it('shows a receipt icon and clamped value when a contribution is capped above', async () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      courseMaxLevel: 30,
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 10 },
+      ],
+      levelContribution: {
+        enabled: true,
+        show: false,
+        weight: 10,
+        formula: 'level * 5', // raw 40 -> clamped 10
+        clamp: true,
+      },
+    });
+    const row = screen.getByText('Alice').closest('tr')!;
+    expect(within(row).getByTestId('WarningAmberIcon')).toBeInTheDocument();
+  });
+
+  it('shows no receipt icon when clamp is off', () => {
+    renderWeighted({
+      gamificationEnabled: true,
+      courseMaxLevel: 30,
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 40 },
+      ],
+      levelContribution: {
+        enabled: true,
+        show: false,
+        weight: 10,
+        formula: 'level * 5', // raw 40, shown raw because clamp off
+        clamp: false,
+      },
+    });
+    const row = screen.getByText('Alice').closest('tr')!;
+    expect(
+      within(row).queryByTestId('WarningAmberIcon'),
+    ).not.toBeInTheDocument();
+  });
+
+  // Divide-by-zero: the formula is mathematically undefined for this student.
+  // Store/backend coerce it to null; the cell must surface 0 + a warning to
+  // match the clamp cells and the dialog's "set to 0" copy.
+  const divByZeroProps = {
+    gamificationEnabled: true,
+    courseMaxLevel: 30,
+    students: [
+      { ...makeStudent(1, 'Alice'), level: 8, levelContribution: null },
+    ],
+    levelContribution: {
+      enabled: true,
+      show: false,
+      weight: 30,
+      formula: '30 / (level - 8)', // at level 8 -> divide by zero -> NaN
+      clamp: true,
+    },
+  };
+
+  it('renders 0 with a warning icon when the formula divides by zero', () => {
+    renderWeighted(divByZeroProps);
+    // checkbox | Name | Level Contribution | Tab 1 | Total
+    const cells = within(screen.getByText('Alice').closest('tr')!).getAllByRole(
+      'cell',
+    );
+    expect(
+      within(cells[2]).getByTestId('WarningAmberIcon'),
+    ).toBeInTheDocument();
+    expect(cells[2]).toHaveTextContent('0');
+  });
+
+  it('explains the divide-by-zero fallback in the cell tooltip on hover', async () => {
+    const user = userEvent.setup();
+    renderWeighted(divByZeroProps);
+    const row = screen.getByText('Alice').closest('tr')!;
+    await user.hover(within(row).getByTestId('WarningAmberIcon'));
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      /divides by zero/i,
+    );
+  });
+
+  it('still shows 0 with a warning on divide-by-zero when clamp is off', () => {
+    renderWeighted({
+      ...divByZeroProps,
+      levelContribution: { ...divByZeroProps.levelContribution, clamp: false },
+    });
+    const cells = within(screen.getByText('Alice').closest('tr')!).getAllByRole(
+      'cell',
+    );
+    expect(
+      within(cells[2]).getByTestId('WarningAmberIcon'),
+    ).toBeInTheDocument();
+    expect(cells[2]).toHaveTextContent('0');
   });
 });

@@ -1,10 +1,11 @@
 import { Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, MessageDescriptor } from 'react-intl';
 import {
   Download,
   InfoOutlined,
   KeyboardArrowDown,
   KeyboardArrowRight,
+  WarningAmber,
 } from '@mui/icons-material';
 import {
   Alert,
@@ -24,6 +25,7 @@ import {
 import type {
   AssessmentData,
   CategoryData,
+  LevelContributionData,
   StudentData,
   SubmissionData,
   TabData,
@@ -45,9 +47,12 @@ import {
   computeStudentBreakdown,
   computeWeightedRows,
   gradeRatio,
+  LEVEL_TAB_ID,
+  levelOffenders,
   resolveTabWeights,
   usingDefaultWeights,
 } from '../computeWeighted';
+import { parseFormula } from '../levelFormula';
 
 import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import ProjectedTotalHint, {
@@ -165,6 +170,46 @@ const translations = defineMessages({
     id: 'course.gradebook.WeightedGradebookTable.weightedTotal',
     defaultMessage: 'Weighted Total',
   },
+  levelHeader: {
+    id: 'course.gradebook.WeightedGradebookTable.levelHeader',
+    defaultMessage: 'Level',
+  },
+  levelContributionHeader: {
+    id: 'course.gradebook.WeightedGradebookTable.levelContributionHeader',
+    defaultMessage: 'Level Contribution',
+  },
+  levelBreakdownDetail: {
+    id: 'course.gradebook.WeightedGradebookTable.levelBreakdownDetail',
+    defaultMessage: 'Level {level}',
+  },
+  levelOverBudgetAboveOnly: {
+    id: 'course.gradebook.WeightedGradebookTable.levelOverBudgetAboveOnly',
+    defaultMessage:
+      'Some level contributions are above the maximum level contributions and have been capped.',
+  },
+  levelOverBudgetBelowOnly: {
+    id: 'course.gradebook.WeightedGradebookTable.levelOverBudgetBelowOnly',
+    defaultMessage:
+      'Some level contributions are below 0 and have been raised to 0.',
+  },
+  levelOverBudgetBoth: {
+    id: 'course.gradebook.WeightedGradebookTable.levelOverBudgetBoth',
+    defaultMessage:
+      'Some level contributions are outside the valid range (below 0 or above the maximum level contributions) and are floored and capped accordingly.',
+  },
+  levelCellCappedAbove: {
+    id: 'course.gradebook.WeightedGradebookTable.levelCellCappedAbove',
+    defaultMessage: 'Set to {weight} because the formula produced {raw}.',
+  },
+  levelCellCappedBelow: {
+    id: 'course.gradebook.WeightedGradebookTable.levelCellCappedBelow',
+    defaultMessage: 'Set to 0 because the formula produced {raw}.',
+  },
+  levelCellDivByZero: {
+    id: 'course.gradebook.WeightedGradebookTable.levelCellDivByZero',
+    defaultMessage:
+      'Set to 0 because the formula divides by zero for this level.',
+  },
 });
 
 type DisplayMode = 'points' | 'percent';
@@ -178,7 +223,12 @@ interface Props {
   canManageWeights: boolean;
   courseTitle: string;
   courseId: number;
+  gamificationEnabled: boolean;
+  courseMaxLevel: number;
+  levelContribution: LevelContributionData;
 }
+
+const r2 = (n: number): number => Math.round(n * 100) / 100;
 
 const precisionNeeded = (v: number): 0 | 1 | 2 => {
   const at2 = Math.round(v * 100) / 100;
@@ -209,6 +259,9 @@ const NAME_WIDTH_EXPANDED = 260;
 const EMAIL_WIDTH = 250;
 const EXTERNAL_ID_WIDTH = 150;
 const TAB_WIDTH = 120;
+const LEVEL_WIDTH = 90;
+const LEVEL_CONTRIBUTIONS_WIDTH = 110;
+const TOTAL_WIDTH = 120;
 
 const WeightedGradebookTable = ({
   categories,
@@ -219,6 +272,9 @@ const WeightedGradebookTable = ({
   canManageWeights,
   courseTitle,
   courseId,
+  gamificationEnabled,
+  courseMaxLevel,
+  levelContribution,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [configureOpen, setConfigureOpen] = useState(false);
@@ -253,10 +309,86 @@ const WeightedGradebookTable = ({
     );
   }, [assessments]);
 
-  const totalWeight = resolvedTabs.reduce(
+  // Level Contribution column: shown whenever the contribution is active (drives
+  // the total + per-row points too).
+  const showLevelContribution =
+    gamificationEnabled && levelContribution.enabled;
+  // Raw Level column: the actual student level, shown alongside the contribution
+  // so staff can sanity-check it. Gated additionally on `show`.
+  //
+  // Both columns are server-controlled (not in the column picker), so their
+  // *presence* — not just their default visibility — is gated here, and they are
+  // locked visible (below). Plumbing these through `defaultVisible` failed:
+  // defaultVisible is a one-time seed that loses to stale persisted localStorage,
+  // stranding a column hidden with no picker entry to recover it.
+  const showRawLevel = showLevelContribution && levelContribution.show;
+
+  // The level weight is a suggested maximum (never caps the total), so a formula
+  // can push a student's contribution past it. Flag that on the column subheader.
+  // Reuses the dialog's check so both views warn on identical conditions.
+  const levelBudgetOffenders = useMemo(
+    () =>
+      showLevelContribution
+        ? levelOffenders(
+            students,
+            parseFormula(levelContribution.formula),
+            levelContribution.weight,
+          )
+        : null,
+    [showLevelContribution, students, levelContribution],
+  );
+
+  // Students for whom the formula is undefined (divide-by-zero -> NaN). The
+  // store/backend store these as null; we surface them as 0 + a warning.
+  const unscoreableIds = useMemo(
+    () => new Set(levelBudgetOffenders?.unscoreable.map((o) => o.id) ?? []),
+    [levelBudgetOffenders],
+  );
+  const levelOverBudget =
+    levelBudgetOffenders !== null &&
+    (levelBudgetOffenders.below.length > 0 ||
+      levelBudgetOffenders.above.length > 0);
+  const levelClampByStudent = useMemo(() => {
+    const map = new Map<
+      number,
+      { bound: 'below' | 'above' | 'unscoreable'; raw: number }
+    >();
+    if (showLevelContribution && levelBudgetOffenders) {
+      if (levelContribution.clamp) {
+        levelBudgetOffenders.below.forEach((o) =>
+          map.set(o.id, { bound: 'below', raw: o.value }),
+        );
+        levelBudgetOffenders.above.forEach((o) =>
+          map.set(o.id, { bound: 'above', raw: o.value }),
+        );
+      }
+      levelBudgetOffenders.unscoreable.forEach((o) =>
+        map.set(o.id, { bound: 'unscoreable', raw: NaN }),
+      );
+    }
+    return map;
+  }, [showLevelContribution, levelContribution.clamp, levelBudgetOffenders]);
+  const getLevelOverBudgetTranslation = (): MessageDescriptor => {
+    const below = levelBudgetOffenders?.below.length ?? 0;
+    const above = levelBudgetOffenders?.above.length ?? 0;
+    if (below > 0 && above > 0) return translations.levelOverBudgetBoth;
+    if (above > 0) return translations.levelOverBudgetAboveOnly;
+    return translations.levelOverBudgetBelowOnly;
+  };
+  const getLevelCellTranslation = (
+    bound: 'below' | 'above' | 'unscoreable',
+  ): MessageDescriptor => {
+    if (bound === 'unscoreable') return translations.levelCellDivByZero;
+    if (bound === 'below') return translations.levelCellCappedBelow;
+    return translations.levelCellCappedAbove;
+  };
+  const tabTotalWeight = resolvedTabs.reduce(
     (acc, tab) =>
       acc + (allExcludedTabIds.has(tab.id) ? 0 : tab.gradebookWeight ?? 0),
     0,
+  );
+  const totalWeight = r2(
+    tabTotalWeight + (showLevelContribution ? levelContribution.weight : 0),
   );
   const allWeightsZero = totalWeight === 0;
 
@@ -296,20 +428,54 @@ const WeightedGradebookTable = ({
   const nameWidth =
     expandedIds.size > 0 ? NAME_WIDTH_EXPANDED : NAME_WIDTH_COLLAPSED;
 
+  const studentLevelById = useMemo(
+    () => new Map(students.map((s) => [s.id, s.level])),
+    [students],
+  );
+
+  const studentLevelContributionById = useMemo(
+    () => new Map(students.map((s) => [s.id, s.levelContribution ?? null])),
+    [students],
+  );
+
   const breakdownsByStudent = useMemo(
     () =>
       new Map(
-        [...expandedIds].map((studentId) => [
-          studentId,
-          computeStudentBreakdown({
+        [...expandedIds].map((studentId) => {
+          const breakdown = computeStudentBreakdown({
             studentId,
             tabs: resolvedTabs,
             assessments,
             submissions,
-          }),
-        ]),
+            level: studentLevelById.get(studentId) ?? 0,
+            levelContribution: showLevelContribution
+              ? levelContribution
+              : undefined,
+            levelContributionPoints: showLevelContribution
+              ? studentLevelContributionById.get(studentId) ?? null
+              : null,
+            courseMaxLevel,
+          });
+          // Level row first, mirroring the Level Contribution column being the
+          // first contribution column (left of the tabs).
+          const ordered = [
+            ...breakdown.filter((tb) => tb.tabId === LEVEL_TAB_ID),
+            ...breakdown.filter((tb) => tb.tabId !== LEVEL_TAB_ID),
+          ];
+          return [studentId, ordered] as [studentId: number, typeof ordered];
+        }),
       ),
-    [expandedIds, resolvedTabs, assessments, submissions],
+    [
+      expandedIds,
+      resolvedTabs,
+      assessments,
+      submissions,
+      studentLevelById,
+      studentLevelContributionById,
+      showLevelContribution,
+      levelContribution,
+      courseMaxLevel,
+    ],
   );
 
   const row1Ref = useRef<HTMLTableRowElement>(null);
@@ -369,16 +535,26 @@ const WeightedGradebookTable = ({
     return () => observer.disconnect();
   }, [visibleCategories, resolvedTabs]);
 
-  const rows = useMemo<WeightedRow[]>(
-    () =>
-      computeWeightedRows({
-        students,
-        tabs: resolvedTabs,
-        assessments,
-        submissions,
-      }),
-    [students, resolvedTabs, assessments, submissions],
-  );
+  const rows = useMemo<WeightedRow[]>(() => {
+    const base = computeWeightedRows({
+      students,
+      tabs: resolvedTabs,
+      assessments,
+      submissions,
+      showLevelContribution,
+    });
+    if (unscoreableIds.size === 0) return base;
+    return base.map((r) =>
+      unscoreableIds.has(r.studentId) ? { ...r, levelContribution: 0 } : r,
+    );
+  }, [
+    students,
+    resolvedTabs,
+    assessments,
+    submissions,
+    showLevelContribution,
+    unscoreableIds,
+  ]);
 
   const columnPrecisions = useMemo(() => {
     const tabPrecs = resolvedTabs.map((tab, idx) =>
@@ -391,6 +567,7 @@ const WeightedGradebookTable = ({
     return {
       tabs: tabPrecs,
       total: columnPrecision(rows.map((r) => totalDisplayValue(r.total))),
+      level: columnPrecision(rows.map((r) => r.levelContribution ?? null)),
     };
   }, [rows, resolvedTabs, displayMode, totalWeight]);
 
@@ -429,6 +606,31 @@ const WeightedGradebookTable = ({
       },
     ];
 
+    // Raw Level — the right-most student-info column, just left of the
+    // contribution columns. The actual student level, shown for verification.
+    if (showRawLevel) {
+      cols.push({
+        id: 'level',
+        title: t(translations.levelHeader),
+        accessorFn: (row) => `${row.level}`,
+        cell: (row) => `${row.level}`,
+        csvDownloadable: true,
+      });
+    }
+
+    // Level Contribution — the left-most contribution column, immediately right
+    // of the student-info columns and before the per-tab columns.
+    if (showLevelContribution) {
+      cols.push({
+        id: 'levelContribution',
+        title: t(translations.levelContributionHeader),
+        accessorFn: (row) => fmtCsv(row.levelContribution ?? null),
+        cell: (row) =>
+          fmtDisplay(row.levelContribution ?? null, columnPrecisions.level),
+        csvDownloadable: true,
+      });
+    }
+
     resolvedTabs.forEach((tab, idx) => {
       const weight = tab.gradebookWeight ?? 0;
       const prec = columnPrecisions.tabs[idx];
@@ -460,19 +662,31 @@ const WeightedGradebookTable = ({
     columnPrecisions,
     displayMode,
     totalWeight,
+    showLevelContribution,
+    showRawLevel,
+    levelContribution.weight,
   ]);
+
+  // Lock the level columns visible whenever present so a stale persisted-hidden
+  // entry can't keep them hidden (the picker doesn't expose them to recover).
+  const lockedColumns = useMemo(() => {
+    const locked = ['name'];
+    if (showLevelContribution) locked.push('levelContribution');
+    if (showRawLevel) locked.push('level');
+    return locked;
+  }, [showLevelContribution, showRawLevel]);
 
   const columnPicker = useMemo(
     () => ({
       render: (context: ColumnPickerRenderContext) => (
         <WeightedGradebookColumnTree {...context} />
       ),
-      locked: ['name'],
+      locked: lockedColumns,
       triggerLabel: t(translations.selectColumns),
       dialogTitle: t(translations.dialogTitle),
       storageKey: `gradebook_weighted_columns_${courseId}`,
     }),
-    [courseId, t],
+    [courseId, t, lockedColumns],
   );
 
   const {
@@ -513,6 +727,12 @@ const WeightedGradebookTable = ({
   let lastIdentityField: 'name' | 'email' | 'externalId' = 'name';
   if (showExternalId) lastIdentityField = 'externalId';
   else if (showEmail) lastIdentityField = 'email';
+  // These columns are locked visible when present, so visibility resolves to true;
+  // gating the manual header on it keeps the header in lockstep with the body
+  // (no colSpan drift) even on the first frame before the lock effect runs.
+  const showLevelContributionCol =
+    showLevelContribution && (visibility.levelContribution ?? true) === true;
+  const showRawLevelCol = showRawLevel && (visibility.level ?? true) === true;
 
   const allRowsSelected = body.allFilteredSelected ?? false;
   const someRowsSelected = body.someFilteredSelected ?? false;
@@ -522,6 +742,11 @@ const WeightedGradebookTable = ({
     displayMode === 'percent'
       ? t(translations.percentTotalExact)
       : t(translations.outOfWeight, { weight: totalWeight });
+
+  const levelBudgetLabel =
+    displayMode === 'percent'
+      ? t(translations.percentOfGrade, { weight: levelContribution.weight })
+      : t(translations.outOfWeight, { weight: levelContribution.weight });
 
   return (
     <div data-testid="gradebook-weighted-table">
@@ -649,10 +874,14 @@ const WeightedGradebookTable = ({
                 <col style={{ width: nameWidth }} />
                 {showEmail && <col style={{ width: EMAIL_WIDTH }} />}
                 {showExternalId && <col style={{ width: EXTERNAL_ID_WIDTH }} />}
+                {showRawLevelCol && <col style={{ width: LEVEL_WIDTH }} />}
+                {showLevelContributionCol && (
+                  <col style={{ width: LEVEL_CONTRIBUTIONS_WIDTH }} />
+                )}
                 {resolvedTabs.map((tab) => (
                   <col key={tab.id} style={{ width: TAB_WIDTH }} />
                 ))}
-                <col />
+                <col style={{ width: TOTAL_WIDTH }} />
               </colgroup>
               <TableHead>
                 <TableRow ref={row1Ref}>
@@ -708,6 +937,36 @@ const WeightedGradebookTable = ({
                       sx={{ minWidth: 160, verticalAlign: 'middle' }}
                     >
                       {t(tableTranslations.externalId)}
+                    </TableCell>
+                  )}
+                  {/* Raw Level — last student-info column (spans all 3 rows, no
+                    weight subheader). */}
+                  {showRawLevelCol && (
+                    <TableCell
+                      align="center"
+                      rowSpan={3}
+                      sx={{
+                        fontWeight: 600,
+                        minWidth: 120,
+                        verticalAlign: 'middle',
+                      }}
+                    >
+                      {t(translations.levelHeader)}
+                    </TableCell>
+                  )}
+                  {/* Level Contribution — first contribution column, before the
+                    category-grouped tabs. */}
+                  {showLevelContributionCol && (
+                    <TableCell
+                      align="center"
+                      rowSpan={2}
+                      sx={{
+                        fontWeight: 600,
+                        minWidth: 120,
+                        '&&': { borderBottom: 'none' },
+                      }}
+                    >
+                      {t(translations.levelContributionHeader)}
                     </TableCell>
                   )}
                   {visibleCategories.map((cat) => (
@@ -780,6 +1039,32 @@ const WeightedGradebookTable = ({
                 <TableRow
                   sx={{ '& .MuiTableCell-stickyHeader': { top: row3Top } }}
                 >
+                  {showLevelContributionCol && (
+                    <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
+                      {levelContribution.clamp &&
+                      levelOverBudget &&
+                      levelBudgetOffenders ? (
+                        <Tooltip title={t(getLevelOverBudgetTranslation())}>
+                          <Typography
+                            aria-label={t(getLevelOverBudgetTranslation())}
+                            color="warning.main"
+                            component="span"
+                            fontSize="inherit"
+                            sx={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 0.25,
+                            }}
+                          >
+                            {levelBudgetLabel}
+                            <WarningAmber fontSize="inherit" />
+                          </Typography>
+                        </Tooltip>
+                      ) : (
+                        levelBudgetLabel
+                      )}
+                    </TableCell>
+                  )}
                   {resolvedTabs.map((tab, i) => (
                     <TableCell
                       key={tab.id}
@@ -894,6 +1179,55 @@ const WeightedGradebookTable = ({
                             </Tooltip>
                           </TableCell>
                         )}
+                        {showRawLevelCol && (
+                          <TableCell align="right">
+                            {row.original.level}
+                          </TableCell>
+                        )}
+                        {showLevelContributionCol &&
+                          ((): React.JSX.Element => {
+                            const valueText = fmtDisplay(
+                              row.original.levelContribution ?? null,
+                              columnPrecisions.level,
+                            );
+                            const info = levelClampByStudent.get(
+                              row.original.studentId,
+                            );
+                            return (
+                              <TableCell align="right">
+                                {info ? (
+                                  <span
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'flex-end',
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <Tooltip
+                                      title={t(
+                                        getLevelCellTranslation(info.bound),
+                                        {
+                                          weight: levelContribution.weight,
+                                          raw: Number.isNaN(info.raw)
+                                            ? ''
+                                            : info.raw.toFixed(2),
+                                        },
+                                      )}
+                                    >
+                                      <WarningAmber
+                                        color="warning"
+                                        fontSize="inherit"
+                                      />
+                                    </Tooltip>
+                                    {valueText}
+                                  </span>
+                                ) : (
+                                  valueText
+                                )}
+                              </TableCell>
+                            );
+                          })()}
                         {row.original.subtotals.map((subtotal, i) => {
                           const weight = resolvedTabs[i].gradebookWeight ?? 0;
                           return (
@@ -918,7 +1252,7 @@ const WeightedGradebookTable = ({
                       </TableRow>
                       {isExpanded &&
                         (breakdownsByStudent.get(studentId) ?? []).flatMap(
-                          (tb, tabIdx) =>
+                          (tb) =>
                             tb.assessments.map((a) => {
                               const isExcluded = a.excluded;
                               const weightText = t(
@@ -928,10 +1262,20 @@ const WeightedGradebookTable = ({
                                     Math.round(a.effectiveWeight * 100) / 100,
                                 },
                               );
-                              const gradeText =
+                              const assessmentGradeText =
                                 a.grade === null
                                   ? `-/${a.maxGrade}`
                                   : `${a.grade}/${a.maxGrade}`;
+                              // The level row has no max — courseMaxLevel plays
+                              // no part in the contribution, so showing
+                              // "level/courseMaxLevel" would falsely imply a
+                              // proportional derivation. Show the raw level only.
+                              const gradeText =
+                                tb.tabId === LEVEL_TAB_ID
+                                  ? t(translations.levelBreakdownDetail, {
+                                      level: a.grade ?? 0,
+                                    })
+                                  : assessmentGradeText;
                               return (
                                 <TableRow
                                   key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
@@ -1008,6 +1352,23 @@ const WeightedGradebookTable = ({
                                       )}
                                     />
                                   )}
+                                  {/* Mirror the parent row's two level columns so
+                                    the tab cells below stay column-aligned. Raw
+                                    Level has no per-assessment breakdown (empty);
+                                    Level Contribution carries its value on the
+                                    synthetic level row (tabId === LEVEL_TAB_ID),
+                                    matching how each tab cell carries its own. */}
+                                  {showRawLevelCol && <TableCell />}
+                                  {showLevelContributionCol && (
+                                    <TableCell align="right">
+                                      {tb.tabId === LEVEL_TAB_ID
+                                        ? fmtDisplay(
+                                            a.points,
+                                            columnPrecisions.level,
+                                          )
+                                        : ''}
+                                    </TableCell>
+                                  )}
                                   {resolvedTabs.map((tab, i) => {
                                     const tabCellValue = isExcluded
                                       ? '—'
@@ -1021,7 +1382,12 @@ const WeightedGradebookTable = ({
                                         align="right"
                                         {...groupEndIf(tabIsCategoryEnd[i])}
                                       >
-                                        {i === tabIdx ? tabCellValue : ''}
+                                        {/* Place the value by tab id, not array
+                                          position, so the breakdown row order is
+                                          free to differ from the column order. */}
+                                        {tab.id === tb.tabId
+                                          ? tabCellValue
+                                          : ''}
                                       </TableCell>
                                     );
                                   })}
@@ -1044,8 +1410,12 @@ const WeightedGradebookTable = ({
         <ConfigureWeightsPrompt
           assessments={assessments}
           categories={categories}
+          courseMaxLevel={courseMaxLevel}
+          gamificationEnabled={gamificationEnabled}
+          levelContribution={levelContribution}
           onClose={() => setConfigureOpen(false)}
           open={configureOpen}
+          students={students}
           tabs={tabs}
         />
       )}

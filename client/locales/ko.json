@@ -5528,6 +5528,9 @@
   "course.gradebook.GradebookIndex.noStudents": {
     "defaultMessage": "학생 없음"
   },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "학생이 강좌에 참여하면 여기에 성적이 표시됩니다."
+  },
   "course.gradebook.GradebookTable.maxMarks": {
     "defaultMessage": "최고 점수"
   },
@@ -5536,6 +5539,9 @@
   },
   "course.gradebook.GradebookTable.noDataColumnsHintWithGamification": {
     "defaultMessage": "성적 또는 게임화 열을 선택하지 않았습니다. 내보내기에는 학생 정보만 포함됩니다."
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "각 성적은 학생 제출물의 점수 합계입니다. 성적을 클릭하면 해당 제출물을 열고 점수를 조정할 수 있습니다."
   },
   "course.group.GroupCreationForm.description": {
     "defaultMessage": "설명 (선택사항)"
@@ -9491,6 +9497,60 @@
   "course.gradebook.ConfigureWeightsPrompt.defaultsHint": {
     "defaultMessage": "아직 설정된 가중치가 없습니다. 모든 탭이 동일한 비중으로 반영되도록 제안된 기본값입니다. 저장하여 확정하거나 아래에서 조정하세요."
   },
+  "course.gradebook.ConfigureWeightsPrompt.levelTitle": {
+    "defaultMessage": "레벨 기여도"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelSubtitle": {
+    "defaultMessage": "탭 기여도에 더해 각 학생의 레벨에서 성적 점수를 추가합니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelHighestStudent": {
+    "defaultMessage": "최고 학생 레벨: {level}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCourseMax": {
+    "defaultMessage": "강좌 최대 레벨: {courseMaxLevel}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaLabel": {
+    "defaultMessage": "수식"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper": {
+    "defaultMessage": "수식에는 숫자, 산술 연산자(+ − * /), 괄호, 변수 \"level\", 그리고 floor, ceil, round, min, max 함수를 사용할 수 있습니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelPreview": {
+    "defaultMessage": "최대 레벨({maxLevel})에서: {pts}점"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelCustomMaxLabel": {
+    "defaultMessage": "사용자 지정 최대 레벨 사용"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelLabel": {
+    "defaultMessage": "최대 레벨"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelMaxLevelInvalid": {
+    "defaultMessage": "최대 레벨은 1 이상이어야 합니다"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelShowLabel": {
+    "defaultMessage": "표에 레벨 열 표시"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersAbove": {
+    "defaultMessage": "{count, plural, =1 {{name1}이(가) {max}보다 높습니다.} =2 {{name1} 및 {name2}이(가) {max}보다 높습니다.} other {{name1}, {name2} 및 그 외 {extra}명이 {max}보다 높습니다.}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelOffendersBelow": {
+    "defaultMessage": "{count, plural, =1 {{name1}이(가) 0보다 낮습니다.} =2 {{name1} 및 {name2}이(가) 0보다 낮습니다.} other {{name1}, {name2} 및 그 외 {extra}명이 0보다 낮습니다.}}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtMost": {
+    "defaultMessage": "이 기여도는 {max}(으)로 설정됩니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixAtLeast": {
+    "defaultMessage": "이 기여도는 0으로 설정됩니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelFixBetween": {
+    "defaultMessage": "0보다 낮은 기여도는 0으로 설정되고, {max}보다 높은 값은 {max}(으)로 설정됩니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelClampLabel": {
+    "defaultMessage": "기여도를 0에서 최대 레벨 기여도 사이로 유지"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.levelUnscoreable": {
+    "defaultMessage": "{count, plural, =1 {{name1}의 경우 수식이 0으로 나누기를 하므로, 해당 레벨 기여도가 0으로 설정됩니다.} =2 {{name1} 및 {name2}의 경우 수식이 0으로 나누기를 하므로, 해당 레벨 기여도가 0으로 설정됩니다.} other {{name1}, {name2} 및 그 외 {extra}명의 경우 수식이 0으로 나누기를 하므로, 해당 레벨 기여도가 0으로 설정됩니다.}}"
+  },
   "course.gradebook.ConfigureWeightsPrompt.descriptionDrop": {
     "defaultMessage": "동일 모드에서는 평균을 내기 전에 각 학생의 점수가 가장 낮은 평가 N개를 선택적으로 제외할 수 있습니다."
   },
@@ -9616,6 +9676,33 @@
   },
   "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
     "defaultMessage": "가중치 합계가 100이 아닙니다. 총점이 정확하지 않을 수 있습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetAboveOnly": {
+    "defaultMessage": "일부 레벨 기여도가 레벨 가중치를 초과하여 제한되었습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBelowOnly": {
+    "defaultMessage": "일부 레벨 기여도가 0 미만이어서 0으로 올려졌습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelOverBudgetBoth": {
+    "defaultMessage": "일부 레벨 기여도가 유효 범위를 벗어났습니다 — 0 미만이거나 레벨 가중치를 초과합니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedAbove": {
+    "defaultMessage": "수식 결과가 {raw}이므로 {weight}(으)로 설정되었습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellCappedBelow": {
+    "defaultMessage": "수식 결과가 {raw}이므로 0으로 설정되었습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelCellDivByZero": {
+    "defaultMessage": "이 레벨에서 수식이 0으로 나누기를 하므로 0으로 설정되었습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.levelHeader": {
+    "defaultMessage": "레벨"
+  },
+  "course.gradebook.WeightedGradebookTable.levelContributionHeader": {
+    "defaultMessage": "레벨 기여도"
+  },
+  "course.gradebook.WeightedGradebookTable.levelBreakdownDetail": {
+    "defaultMessage": "레벨 {level}"
   },
   "course.gradebook.TotalHint.policy": {
     "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."

@@ -1,9 +1,11 @@
 import { produce } from 'immer';
 import type {
   GradebookData,
+  LevelContributionData,
   UpdateWeightsPayload,
 } from 'types/course/gradebook';
 
+import { evaluateNode } from './levelFormula';
 import type {
   AssessmentData,
   CategoryData,
@@ -24,6 +26,8 @@ interface GradebookState {
   gamificationEnabled: boolean;
   weightedViewEnabled: boolean;
   canManageWeights: boolean;
+  levelContribution: LevelContributionData;
+  courseMaxLevel: number;
 }
 
 interface SaveGradebookAction {
@@ -45,6 +49,14 @@ const initialState: GradebookState = {
   gamificationEnabled: false,
   weightedViewEnabled: false,
   canManageWeights: false,
+  levelContribution: {
+    enabled: false,
+    formula: '',
+    weight: 0,
+    show: false,
+    clamp: true,
+  },
+  courseMaxLevel: 0,
 };
 
 const reducer = produce(
@@ -62,6 +74,9 @@ const reducer = produce(
         draft.gamificationEnabled = action.payload.gamificationEnabled;
         draft.weightedViewEnabled = action.payload.weightedViewEnabled;
         draft.canManageWeights = action.payload.canManageWeights;
+        draft.levelContribution =
+          action.payload.levelContribution ?? initialState.levelContribution;
+        draft.courseMaxLevel = action.payload.courseMaxLevel ?? 0;
         break;
       }
       case UPDATE_TAB_WEIGHTS: {
@@ -97,6 +112,26 @@ const reducer = produce(
             }
           },
         );
+        if (action.payload.levelContribution) {
+          const { formulaAst, ...lcData } = action.payload.levelContribution;
+          draft.levelContribution = lcData;
+          if (lcData.enabled && formulaAst) {
+            draft.students.forEach((student) => {
+              const val = evaluateNode(formulaAst, { level: student.level });
+              if (!Number.isFinite(val)) {
+                student.levelContribution = null;
+              } else {
+                student.levelContribution = lcData.clamp
+                  ? Math.min(Math.max(val, 0), lcData.weight)
+                  : val;
+              }
+            });
+          } else {
+            draft.students.forEach((student) => {
+              student.levelContribution = null;
+            });
+          }
+        }
         break;
       }
       default:

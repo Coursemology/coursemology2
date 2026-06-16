@@ -54,6 +54,26 @@ RSpec.describe Course::GradebookController, type: :controller do
             expect(data).to have_key(key), "expected response to have key '#{key}'"
           end
         end
+
+        it 'serializes courseMaxLevel and a default levelContribution' do
+          subject
+          data = JSON.parse(response.body)
+          expect(data).to have_key('courseMaxLevel')
+          expect(data['courseMaxLevel']).to be_a(Integer)
+          expect(data['levelContribution']).to include(
+            'enabled' => false, 'formula' => '', 'weight' => 0, 'show' => false
+          )
+          expect(data['levelContribution']).to include('clamp' => true)
+        end
+
+        it 'includes levelContribution (null) on each student when level contribution disabled' do
+          subject
+          data = JSON.parse(response.body)
+          data['students'].each do |s|
+            expect(s).to have_key('levelContribution')
+            expect(s['levelContribution']).to be_nil
+          end
+        end
       end
 
       context 'when an observer visits the page' do
@@ -126,6 +146,113 @@ RSpec.describe Course::GradebookController, type: :controller do
           data = JSON.parse(response.body)
           assessment_data = data['assessments'].find { |a| a['id'] == assessment.id }
           expect(assessment_data['maxGrade'].to_f).to be > 0
+        end
+      end
+
+      context 'with weighted view enabled and a level config with formula_ast' do
+        let(:manager) { create(:course_manager, course: course) }
+        let!(:student_cu) { create(:course_student, course: course) }
+
+        before do
+          # Enable weighted view via the persisted course component setting, so the
+          # controller's @settings.weighted_view_enabled reads true on the real request.
+          gradebook_settings = Course::Settings::GradebookComponent.new(
+            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          )
+          gradebook_settings.weighted_view_enabled = true
+          course.save!
+          controller_sign_in(controller, manager.user)
+          # Create a level config with a known AST: formula = 'level * 0.5'
+          ast = {
+            'type' => 'binop', 'op' => '*',
+            'left' => { 'type' => 'var', 'name' => 'level' },
+            'right' => { 'type' => 'num', 'value' => 0.5 }
+          }
+          Course::Gradebook::LevelConfig.upsert_for(
+            course: course,
+            attrs: { enabled: true, formula: 'level * 0.5', formula_ast: ast, weight: 10, show: false }
+          )
+        end
+
+        it 'includes levelContribution on each student' do
+          get :index, params: { course_id: course.id }, format: :json
+          data = JSON.parse(response.body)
+          student_data = data['students'].find { |s| s['id'] == student_cu.user_id }
+          expect(student_data).not_to be_nil
+          expect(student_data).to have_key('levelContribution')
+          # level is 0 initially; 0 * 0.5 = 0.0
+          expect(student_data['levelContribution'].to_f).to be_within(0.001).of(0.0)
+        end
+      end
+
+      context 'with weighted view enabled, a level config, and a student above level 0' do
+        let(:manager) { create(:course_manager, course: course) }
+        let!(:level1) { create(:course_level, course: course, experience_points_threshold: 100) }
+        let!(:student_cu) { create(:course_student, course: course) }
+        let!(:exp_record) do
+          create(:course_experience_points_record, course_user: student_cu, points_awarded: 500)
+        end
+
+        before do
+          gradebook_settings = Course::Settings::GradebookComponent.new(
+            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          )
+          gradebook_settings.weighted_view_enabled = true
+          course.save!
+          controller_sign_in(controller, manager.user)
+          # formula = 'level' → contribution equals the student's level_number.
+          Course::Gradebook::LevelConfig.upsert_for(
+            course: course,
+            attrs: { enabled: true, formula: 'level',
+                     formula_ast: { 'type' => 'var', 'name' => 'level' },
+                     weight: 10, show: false }
+          )
+        end
+
+        it 'computes a non-null levelContribution from the student level_number' do
+          get :index, params: { course_id: course.id }, format: :json
+          data = JSON.parse(response.body)
+          student_data = data['students'].find { |s| s['id'] == student_cu.user_id }
+          expect(student_data).not_to be_nil
+          # 500 EXP places the student in level 1 (threshold 100); formula 'level' → 1.0.
+          expect(student_data['level']).to eq(1)
+          expect(student_data['levelContribution']).not_to be_nil
+          expect(student_data['levelContribution'].to_f).to be_within(0.001).of(1.0)
+        end
+      end
+
+      context 'with a clamping level config and an out-of-range student' do
+        let(:manager) { create(:course_manager, course: course) }
+        let!(:level1) { create(:course_level, course: course, experience_points_threshold: 100) }
+        let!(:student_cu) { create(:course_student, course: course) }
+        let!(:exp_record) do
+          create(:course_experience_points_record, course_user: student_cu, points_awarded: 500)
+        end
+
+        before do
+          gradebook_settings = Course::Settings::GradebookComponent.new(
+            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          )
+          gradebook_settings.weighted_view_enabled = true
+          course.save!
+          controller_sign_in(controller, manager.user)
+          # formula 'level * 5', weight 3, clamp on: level 1 -> raw 5 -> clamped 3.
+          Course::Gradebook::LevelConfig.upsert_for(
+            course: course,
+            attrs: { enabled: true, formula: 'level * 5',
+                     formula_ast: { 'type' => 'binop', 'op' => '*',
+                                    'left' => { 'type' => 'var', 'name' => 'level' },
+                                    'right' => { 'type' => 'num', 'value' => 5 } },
+                     weight: 3, show: false, clamp: true }
+          )
+        end
+
+        it 'serializes the clamped per-student contribution' do
+          get :index, params: { course_id: course.id }, format: :json
+          data = JSON.parse(response.body)
+          student_data = data['students'].find { |s| s['id'] == student_cu.user_id }
+          expect(student_data['levelContribution'].to_f).to be_within(0.001).of(3.0)
+          expect(data['levelContribution']).to include('clamp' => true)
         end
       end
 
@@ -281,6 +408,68 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(response).to have_http_status(:ok)
           expect(JSON.parse(response.body)['weights'].first['weight']).to eq(33.33)
           expect(weight_for(tab1)).to eq(33.33)
+        end
+
+        it 'persists an enabled levelContribution and echoes it back' do
+          patch :update_weights, params: {
+            course_id: course.id,
+            weights: [],
+            levelContribution: {
+              enabled: true, formula: 'min(level, 30) * 0.05', weight: 8, show: true
+            }
+          }, format: :json
+          expect(response).to have_http_status(:ok)
+          config = course.reload.gradebook_level_config
+          expect(config.enabled).to eq(true)
+          expect(config.formula).to eq('min(level, 30) * 0.05')
+          expect(config.weight).to eq(8)
+          echoed = JSON.parse(response.body)['levelContribution']
+          expect(echoed).to include('enabled' => true, 'weight' => 8.0)
+          expect(echoed).not_to have_key('maxLevel')
+        end
+
+        it 'persists the clamp flag sent in the levelContribution payload' do
+          patch :update_weights, params: {
+            course_id: course.id,
+            weights: [],
+            levelContribution: {
+              enabled: true, formula: 'level', weight: 8, show: false, clamp: false
+            }
+          }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(course.reload.gradebook_level_config.clamp).to eq(false)
+          expect(JSON.parse(response.body)['levelContribution']).to include('clamp' => false)
+        end
+
+        it 'rejects an enabled levelContribution with a blank formula (422)' do
+          patch :update_weights, params: {
+            course_id: course.id, weights: [],
+            levelContribution: { enabled: true, formula: '', weight: 8, show: false }
+          }, format: :json
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(course.reload.gradebook_level_config).to be_nil
+        end
+
+        it 'leaves the config untouched when no levelContribution is sent' do
+          patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)).not_to have_key('levelContribution')
+          expect(course.reload.gradebook_level_config).to be_nil
+        end
+
+        it 'rejects a tampered formulaAst with 422' do
+          patch :update_weights, params: {
+            course_id: course.id,
+            weights: [],
+            levelContribution: {
+              enabled: true,
+              formula: 'level',
+              formulaAst: { type: 'evil', payload: 'x' },
+              weight: 5,
+              show: false
+            }
+          }, format: :json
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 

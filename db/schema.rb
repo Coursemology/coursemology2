@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_16_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -896,6 +896,23 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
     t.index ["assessment_id"], name: "index_cgac_on_assessment_id", unique: true
     t.index ["creator_id"], name: "fk__cgac_creator_id"
     t.index ["updater_id"], name: "fk__cgac_updater_id"
+  end
+
+  create_table "course_gradebook_level_configs", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.boolean "enabled", default: false, null: false
+    t.string "formula", default: "", null: false
+    t.jsonb "formula_ast"
+    t.decimal "weight", precision: 5, scale: 2, default: "0.0", null: false
+    t.boolean "show", default: false, null: false
+    t.boolean "clamp", default: true, null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_gradebook_level_configs_on_course_id", unique: true
+    t.index ["creator_id"], name: "fk__course_gradebook_level_configs_creator_id"
+    t.index ["updater_id"], name: "fk__course_gradebook_level_configs_updater_id"
   end
 
   create_table "course_gradebook_tab_contributions", force: :cascade do |t|
@@ -1984,6 +2001,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_000000) do
   add_foreign_key "course_gradebook_assessment_contributions", "course_assessments", column: "assessment_id", on_delete: :cascade
   add_foreign_key "course_gradebook_assessment_contributions", "users", column: "creator_id"
   add_foreign_key "course_gradebook_assessment_contributions", "users", column: "updater_id"
+  add_foreign_key "course_gradebook_level_configs", "courses", on_delete: :cascade
+  add_foreign_key "course_gradebook_level_configs", "users", column: "creator_id"
+  add_foreign_key "course_gradebook_level_configs", "users", column: "updater_id"
   add_foreign_key "course_gradebook_tab_contributions", "course_assessment_tabs", column: "tab_id", on_delete: :cascade
   add_foreign_key "course_gradebook_tab_contributions", "courses"
   add_foreign_key "course_gradebook_tab_contributions", "users", column: "creator_id"
