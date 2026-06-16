@@ -1161,6 +1161,31 @@ RSpec.describe Course::UserInvitationService, type: :service do
         expect(new_course_users.size).to eq(1)
         expect(new_course_users.first.timeline_algorithm).to eq('otot')
       end
+
+      context 'when the form omits timeline_algorithm (nil) on a non-timeline course' do
+        let(:course) do
+          create(:course, default_timeline_algorithm: :fixed,
+                          show_personalized_timeline_features: false)
+        end
+
+        it 'enrolls the existing user successfully without raising a validation error' do
+          result = subject.invite(
+            { '0' => { name: existing_user.name, email: existing_user.email,
+                       role: :student, phantom: false, timeline_algorithm: nil, external_id: nil } }
+          )
+          _, _, new_course_users, = result
+          expect(new_course_users.size).to eq(1)
+        end
+
+        it 'falls back to the course default timeline_algorithm when nil is supplied' do
+          result = subject.invite(
+            { '0' => { name: existing_user.name, email: existing_user.email,
+                       role: :student, phantom: false, timeline_algorithm: nil, external_id: nil } }
+          )
+          _, _, new_course_users, = result
+          expect(new_course_users.first.timeline_algorithm).to eq('fixed')
+        end
+      end
     end
 
     describe '#resend_invitation' do
