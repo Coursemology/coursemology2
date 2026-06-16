@@ -107,7 +107,10 @@ module Course::UserInvitationService::ProcessInvitationConcern
   def build_course_user(user)
     @current_course.course_users.build(user: user[:user], name: user[:name],
                                        role: user[:role], phantom: user[:phantom],
-                                       timeline_algorithm: user[:timeline_algorithm],
+                                       timeline_algorithm: (
+                                         user[:timeline_algorithm].presence ||
+                                           @current_course.default_timeline_algorithm
+                                       ),
                                        external_id: user[:external_id],
                                        creator: @current_user, updater: @current_user)
   end
