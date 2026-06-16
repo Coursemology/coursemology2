@@ -34,6 +34,14 @@ const emptyState = {
     gamificationEnabled: false,
     weightedViewEnabled: false,
     canManageWeights: false,
+    courseMaxLevel: 0,
+    levelContribution: {
+      enabled: false,
+      formula: '',
+      weight: 0,
+      show: false,
+      clamp: true,
+    },
   },
 };
 
@@ -47,6 +55,14 @@ const noStudentsState = {
     gamificationEnabled: false,
     weightedViewEnabled: false,
     canManageWeights: false,
+    courseMaxLevel: 0,
+    levelContribution: {
+      enabled: false,
+      formula: '',
+      weight: 0,
+      show: false,
+      clamp: true,
+    },
   },
 };
 
@@ -63,6 +79,7 @@ const populatedState = {
         externalId: null,
         level: 3,
         totalXp: 150,
+        levelContribution: null,
       },
     ],
     submissions: [
@@ -71,6 +88,14 @@ const populatedState = {
     gamificationEnabled: false,
     weightedViewEnabled: false,
     canManageWeights: false,
+    courseMaxLevel: 0,
+    levelContribution: {
+      enabled: false,
+      formula: '',
+      weight: 0,
+      show: false,
+      clamp: true,
+    },
   },
 };
 

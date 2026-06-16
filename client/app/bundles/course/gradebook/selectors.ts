@@ -26,3 +26,9 @@ export const getWeightedViewEnabled = (state: AppState): boolean =>
   getLocalState(state).weightedViewEnabled;
 export const getCanManageWeights = (state: AppState): boolean =>
   getLocalState(state).canManageWeights;
+export const getLevelContribution = (
+  state: AppState,
+): GradebookState['levelContribution'] =>
+  getLocalState(state).levelContribution;
+export const getCourseMaxLevel = (state: AppState): number =>
+  getLocalState(state).courseMaxLevel;

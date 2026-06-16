@@ -1,12 +1,19 @@
 // client/app/bundles/course/gradebook/computeWeighted.ts
 import {
   AssessmentData,
+  LevelContributionData,
   StudentData,
   SubmissionData,
   TabData,
 } from 'types/course/gradebook';
 
+import { ParsedFormula } from './levelFormula';
+
 type GradeEntry = Pick<SubmissionData, 'studentId' | 'assessmentId' | 'grade'>;
+
+// Synthetic ids for the Level term — disjoint from real (positive) tab/assessment ids.
+export const LEVEL_TAB_ID = -1;
+export const LEVEL_ASSESSMENT_ID = -1;
 
 export interface WeightedRow {
   studentId: number;
@@ -14,6 +21,8 @@ export interface WeightedRow {
   email: string;
   externalId: string | null;
   subtotals: (number | null)[];
+  level: number;
+  levelContribution: number | null;
   total: number | null;
 }
 
@@ -139,6 +148,71 @@ const totalFromSubtotals = (
   return contributingCount > 0 ? total : null;
 };
 
+// Combine the tab total with the Level term: null only when neither contributes.
+const combineTotal = (
+  tabTotal: number | null,
+  lvl: number | null,
+): number | null =>
+  tabTotal == null && lvl == null ? null : (tabTotal ?? 0) + (lvl ?? 0);
+
+// True when any student's contribution falls outside [0, weight] (drives the dialog warning).
+export const levelOutOfRange = (
+  students: { level: number }[],
+  cfg: LevelContributionData,
+  parsed: ParsedFormula,
+): boolean => {
+  if (!parsed.ok) return false;
+  return students.some((s) => {
+    const p = parsed.evaluate(s.level);
+    return p < 0 || p > cfg.weight;
+  });
+};
+
+export interface LevelOffender {
+  id: number;
+  name: string;
+  level: number;
+  value: number;
+}
+
+export interface LevelOffenders {
+  // Below 0, most negative first; above max, highest first — so the dialog can
+  // name the worst offenders on each side.
+  below: LevelOffender[];
+  above: LevelOffender[];
+  // Students whose contribution is undefined (divide-by-zero) — value is NaN,
+  // so the dialog names them by level, not value.
+  unscoreable: LevelOffender[];
+}
+
+// Students whose Level contribution falls outside [0, max], split by which bound
+// they breach. Empty on both sides when the formula is invalid. Feeds the dialog's
+// out-of-range warning, which names the most extreme offenders.
+export const levelOffenders = (
+  students: { id: number; name: string; level: number }[],
+  parsed: ParsedFormula | null,
+  max: number,
+): LevelOffenders => {
+  if (!parsed?.ok) return { below: [], above: [], unscoreable: [] };
+  const evaluated = students.map((s) => ({
+    id: s.id,
+    name: s.name,
+    level: s.level,
+    value: parsed.evaluate(s.level),
+  }));
+  return {
+    below: evaluated
+      .filter((e) => e.value < 0)
+      .sort((a, b) => a.value - b.value),
+    above: evaluated
+      .filter((e) => e.value > max)
+      .sort((a, b) => b.value - a.value),
+    unscoreable: evaluated
+      .filter((e) => Number.isNaN(e.value))
+      .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)),
+  };
+};
+
 interface SubtotalArgs {
   studentId: number;
   tab: TabData;
@@ -164,6 +238,11 @@ interface TotalArgs {
   tabs: TabData[];
   assessments: AssessmentData[];
   submissions: GradeEntry[];
+  level?: number;
+  levelContribution?: LevelContributionData;
+  levelContributionPoints?: number | null;
+  // The course's current top level, used only as the Level breakdown row's denominator.
+  courseMaxLevel?: number;
 }
 
 export const computeStudentTotal = ({
@@ -171,6 +250,8 @@ export const computeStudentTotal = ({
   tabs,
   assessments,
   submissions,
+  level,
+  levelContributionPoints,
 }: TotalArgs): number | null => {
   const gradeLookup = buildGradeLookup(submissions);
   const assessmentsByTab = buildAssessmentsByTab(assessments);
@@ -182,7 +263,8 @@ export const computeStudentTotal = ({
       gradeLookup,
     ),
   );
-  return totalFromSubtotals(subtotals, tabs);
+  const tabTotal = totalFromSubtotals(subtotals, tabs);
+  return combineTotal(tabTotal, levelContributionPoints ?? null);
 };
 
 export const computeStudentBreakdown = ({
@@ -190,10 +272,14 @@ export const computeStudentBreakdown = ({
   tabs,
   assessments,
   submissions,
+  level,
+  levelContribution,
+  levelContributionPoints,
+  courseMaxLevel,
 }: TotalArgs): TabBreakdown[] => {
   const gradeLookup = buildGradeLookup(submissions);
   const assessmentsByTab = buildAssessmentsByTab(assessments);
-  return tabs.map((tab) => {
+  const result: TabBreakdown[] = tabs.map((tab) => {
     const list = assessmentsByTab.get(tab.id) ?? [];
     const weight = tab.gradebookWeight ?? 0;
     const includedCount = list.filter((a) => !a.gradebookExcluded).length;
@@ -226,6 +312,25 @@ export const computeStudentBreakdown = ({
     });
     return { tabId: tab.id, assessments: contributions };
   });
+
+  const lvl = levelContributionPoints ?? null;
+  if (levelContribution?.enabled && lvl != null) {
+    result.push({
+      tabId: LEVEL_TAB_ID,
+      assessments: [
+        {
+          assessmentId: LEVEL_ASSESSMENT_ID,
+          title: 'Level',
+          grade: level ?? 0,
+          maxGrade: courseMaxLevel ?? 0,
+          points: lvl,
+          effectiveWeight: levelContribution.weight,
+          excluded: false,
+        },
+      ],
+    });
+  }
+  return result;
 };
 
 interface WeightedRowsArgs {
@@ -233,6 +338,7 @@ interface WeightedRowsArgs {
   tabs: TabData[];
   assessments: AssessmentData[];
   submissions: GradeEntry[];
+  showLevelContribution?: boolean;
 }
 
 // Batch entry point used by the table: builds the indexes ONCE and reuses them
@@ -242,6 +348,7 @@ export const computeWeightedRows = ({
   tabs,
   assessments,
   submissions,
+  showLevelContribution = true,
 }: WeightedRowsArgs): WeightedRow[] => {
   const gradeLookup = buildGradeLookup(submissions);
   const assessmentsByTab = buildAssessmentsByTab(assessments);
@@ -254,13 +361,19 @@ export const computeWeightedRows = ({
         gradeLookup,
       ),
     );
+    const tabTotal = totalFromSubtotals(subtotals, tabs);
+    const lvl = showLevelContribution
+      ? student.levelContribution ?? null
+      : null;
     return {
       studentId: student.id,
       name: student.name,
       email: student.email,
       externalId: student.externalId,
       subtotals,
-      total: totalFromSubtotals(subtotals, tabs),
+      level: student.level,
+      levelContribution: lvl,
+      total: combineTotal(tabTotal, lvl),
     };
   });
 };
