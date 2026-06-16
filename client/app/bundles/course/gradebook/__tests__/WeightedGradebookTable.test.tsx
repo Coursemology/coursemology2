@@ -20,6 +20,7 @@ const USER_ID = 42;
 const WEIGHTED_STORAGE_KEY = `${USER_ID}:gradebook_weighted_columns_1`;
 const EXTERNAL_ID = 'External ID';
 const LEVEL_CONTRIBUTION = 'Level Contribution';
+const ALICE_EMAIL = 'alice@example.com';
 
 // Mirrors the component's data-testid for a breakdown row:
 // `breakdown-row-${studentId}-${tabId}-${assessmentId}`.
@@ -569,9 +570,9 @@ describe('WeightedGradebookTable', () => {
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(screen.getByText('alice@example.com')).toBeInTheDocument();
+    expect(screen.getByText(ALICE_EMAIL)).toBeInTheDocument();
 
-    await user.type(screen.getByRole('textbox'), 'alice@example.com');
+    await user.type(screen.getByRole('textbox'), ALICE_EMAIL);
 
     await waitFor(() =>
       expect(screen.queryByText('Bob')).not.toBeInTheDocument(),
@@ -1229,7 +1230,7 @@ describe('WeightedGradebookTable', () => {
       renderWeighted();
       expect(screen.queryByText('Email')).not.toBeInTheDocument();
       expect(screen.queryByText(EXTERNAL_ID)).not.toBeInTheDocument();
-      expect(screen.queryByText('alice@example.com')).not.toBeInTheDocument();
+      expect(screen.queryByText(ALICE_EMAIL)).not.toBeInTheDocument();
     });
 
     it('shows the Email column header and value when Email is enabled via storage', async () => {
@@ -1244,7 +1245,7 @@ describe('WeightedGradebookTable', () => {
         within(thead as HTMLElement).getByText('Email'),
       ).toBeInTheDocument();
       // body value
-      expect(screen.getByText('alice@example.com')).toBeInTheDocument();
+      expect(screen.getByText(ALICE_EMAIL)).toBeInTheDocument();
     });
 
     it('does not render Level or Total XP columns even if storage enables them', () => {
@@ -1506,6 +1507,64 @@ describe('WeightedGradebookTable', () => {
     });
   });
 
+  describe('pinned summary row', () => {
+    // Enable both optional identity columns so the assertion covers the cells
+    // that the per-cell pinning used to miss (and stands in for any future
+    // optional column, e.g. level / level contribution).
+    const expandedRow = async (): Promise<HTMLTableRowElement> => {
+      localStorage.setItem(
+        WEIGHTED_STORAGE_KEY,
+        JSON.stringify({ email: true, externalId: true }),
+      );
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 60), makeTab(20, 'Quizzes', 1, 40)],
+        assessments: [
+          makeAssessment(1, 'Mission 1', 10, 100),
+          makeAssessment(3, 'Quiz 1', 20, 100),
+        ],
+        students: [{ ...makeStudent(1, 'Alice'), externalId: 'EXT-001' }],
+        submissions: [makeSub(1, 1, 80), makeSub(1, 3, 90)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      return screen
+        .getByRole('button', { name: /collapse Alice/i })
+        .closest('tr') as HTMLTableRowElement;
+    };
+
+    // jsdom can't lay out `position: sticky`, but getComputedStyle resolves the
+    // emotion class, so a pinned cell reports a concrete `top` (0px here, since
+    // the measured header height is 0 without layout) while an un-pinned sticky
+    // cell reports an empty `top`. That distinguishes a torn row from a whole one.
+    it('pins every cell of the expanded row beneath the header, identity columns included', async () => {
+      const row = await expandedRow();
+      const cells = Array.from(row.querySelectorAll('td'));
+      // checkbox | Name | Email | External ID | Missions | Quizzes | Total
+      expect(cells).toHaveLength(7);
+      cells.forEach((cell) => {
+        const cs = getComputedStyle(cell);
+        expect(cs.position).toBe('sticky');
+        expect(cs.top).not.toBe('');
+      });
+    });
+
+    it('does not pin a collapsed student row', () => {
+      localStorage.setItem(
+        WEIGHTED_STORAGE_KEY,
+        JSON.stringify({ email: true, externalId: true }),
+      );
+      renderWeighted({
+        students: [{ ...makeStudent(1, 'Alice'), externalId: 'EXT-001' }],
+      });
+      const row = screen
+        .getByRole('button', { name: /expand Alice/i })
+        .closest('tr') as HTMLTableRowElement;
+      // The data/identity cells are not sticky at all while collapsed.
+      const emailCell = within(row).getByText(ALICE_EMAIL).closest('td')!;
+      expect(getComputedStyle(emailCell).top).toBe('');
+    });
+  });
+
   describe('auto-scroll on expand', () => {
     const one = {
       tabs: [makeTab(10, 'Missions', 1, 100)],
@@ -1555,6 +1614,51 @@ describe('WeightedGradebookTable', () => {
       } finally {
         window.matchMedia = originalMatchMedia;
       }
+    });
+  });
+
+  describe('keep-highest breakdown marker', () => {
+    // One equal tab, keepHighest=1, three graded assessments. The lowest (a1) drops.
+    const keepConfig = {
+      tabs: [{ ...makeTab(10, 'Missions', 1, 60), keepHighest: 1 }],
+      assessments: [
+        makeAssessment(1, 'Mission 1', 10, 100),
+        makeAssessment(2, 'Mission 2', 10, 100),
+        makeAssessment(3, 'Mission 3', 10, 100),
+      ],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 1, 30), makeSub(1, 2, 60), makeSub(1, 3, 90)],
+    };
+
+    it('labels the dropped assessment "Dropped (lowest)" (not "Excluded")', async () => {
+      const user = userEvent.setup();
+      renderWeighted(keepConfig);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
+      expect(
+        within(detail).getByText(/Dropped \(lowest\)/),
+      ).toBeInTheDocument();
+      expect(within(detail).queryByText(/Excluded/i)).not.toBeInTheDocument();
+    });
+
+    it('shows 0 (not —) in the dropped assessment cell in points mode', async () => {
+      const user = userEvent.setup();
+      renderWeighted(keepConfig);
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
+      // Dropped contributes 0 points — distinct from excluded's em dash.
+      expect(within(detail).getByText('0')).toBeInTheDocument();
+      expect(within(detail).queryByText('—')).not.toBeInTheDocument();
+    });
+
+    it("shows the dropped assessment's own grade % in percentage mode", async () => {
+      const user = userEvent.setup();
+      renderWeighted(keepConfig);
+      await user.click(screen.getByRole('radio', { name: /percentage/i }));
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
+      // a1 = 30/100 = 30% — visible so the instructor sees the dropped grade.
+      expect(within(detail).getByText('30%')).toBeInTheDocument();
     });
   });
 });

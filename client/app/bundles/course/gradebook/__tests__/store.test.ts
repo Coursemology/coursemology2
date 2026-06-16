@@ -451,3 +451,70 @@ describe('level contribution', () => {
     expect(next.students[0].levelContribution).toBeNull();
   });
 });
+
+describe('UPDATE_TAB_WEIGHTS — keepHighest', () => {
+  it('writes keepHighest onto the matching tab', () => {
+    const state = {
+      ...baseState,
+      tabs: [{ id: 10, title: 'T', categoryId: 1, gradebookWeight: 50 }],
+    };
+    const next = reducer(
+      state,
+      actions.updateTabWeights({
+        weights: [{ tabId: 10, weight: 50, keepHighest: 2 }],
+      }),
+    );
+    expect(next.tabs[0].keepHighest).toBe(2);
+  });
+
+  it('defaults keepHighest to 0 when omitted from the payload', () => {
+    const state = {
+      ...baseState,
+      tabs: [
+        {
+          id: 10,
+          title: 'T',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 3,
+        },
+      ],
+    };
+    const next = reducer(
+      state,
+      actions.updateTabWeights({
+        weights: [{ tabId: 10, weight: 50 }],
+      }),
+    );
+    expect(next.tabs[0].keepHighest).toBe(0);
+  });
+
+  it('does not modify keepHighest on other tabs', () => {
+    const state = {
+      ...baseState,
+      tabs: [
+        {
+          id: 10,
+          title: 'T1',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 1,
+        },
+        {
+          id: 11,
+          title: 'T2',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+      ],
+    };
+    const next = reducer(
+      state,
+      actions.updateTabWeights({
+        weights: [{ tabId: 10, weight: 50, keepHighest: 5 }],
+      }),
+    );
+    expect(next.tabs[1].keepHighest).toBe(2);
+  });
+});

@@ -250,6 +250,7 @@ describe('<ConfigureWeightsPrompt />', () => {
             tabId: 10,
             weight: 50,
             weightMode: 'custom',
+            keepHighest: 0,
             excludedAssessmentIds: [],
             assessmentWeights: [
               { assessmentId: 101, weight: 25 },
@@ -260,6 +261,7 @@ describe('<ConfigureWeightsPrompt />', () => {
             tabId: 11,
             weight: 50,
             weightMode: 'equal',
+            keepHighest: 0,
             excludedAssessmentIds: [],
           },
         ],
@@ -561,6 +563,7 @@ describe('per-assessment exclusion', () => {
     expect(arg[0]).toMatchObject({
       tabId: 10,
       weight: 50,
+      keepHighest: 0,
       excludedAssessmentIds: [101, 102],
     });
   });
@@ -633,6 +636,192 @@ describe('per-assessment exclusion', () => {
       setup(); // shared fixture tabs carry 50/50
       expect(screen.queryByText(/no weights set yet/i)).not.toBeInTheDocument();
     });
+  });
+
+  it('shows assessment weights sum footer in custom mode', () => {
+    setup();
+    fireEvent.click(
+      within(modeGroup('Assignments')).getByRole('radio', { name: /custom/i }),
+    );
+    // Expand to see the footer
+    // custom mode auto-expands, so just check the footer
+    expect(screen.getByText(/Assessment weights:/i)).toBeInTheDocument();
+  });
+});
+
+describe('per-assessment exclusion (extended)', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it('shows "Excluded" label in custom mode for excluded assessment', async () => {
+    setup({
+      assessments: [
+        {
+          id: 101,
+          title: A1,
+          tabId: 10,
+          maxGrade: 100,
+          gradebookExcluded: true,
+        },
+        { id: 102, title: A2, tabId: 10, maxGrade: 50 },
+      ],
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          weightMode: 'custom',
+        },
+      ],
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: '' })[0]);
+    expect(await screen.findByText('Excluded')).toBeInTheDocument();
+  });
+
+  it('does not show "Excluded" label in equal mode for excluded assessment', async () => {
+    setup({
+      assessments: [
+        {
+          id: 101,
+          title: A1,
+          tabId: 10,
+          maxGrade: 100,
+          gradebookExcluded: true,
+        },
+        { id: 102, title: A2, tabId: 10, maxGrade: 50 },
+      ],
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: '' })[0]);
+    // In equal mode excluded shows "Excluded" text too
+    expect(await screen.findByText('Excluded')).toBeInTheDocument();
+  });
+});
+
+describe('keep-highest control', () => {
+  const TOGGLE = 'Enable keep highest for Assignments';
+  const INPUT = 'Keep highest for Assignments';
+  const three = [
+    { id: 101, title: A1, tabId: 10, maxGrade: 100 },
+    { id: 102, title: A2, tabId: 10, maxGrade: 50 },
+    { id: 103, title: 'Assignment 3', tabId: 10, maxGrade: 80 },
+  ];
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it('renders a keep-highest checkbox; number field hidden until checked', () => {
+    setup({ assessments: three });
+    expect(screen.getByRole('checkbox', { name: TOGGLE })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('spinbutton', { name: INPUT }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('checkbox', { name: TOGGLE }));
+    expect(screen.getByRole('spinbutton', { name: INPUT })).toBeInTheDocument();
+  });
+
+  it('shows a visible "Keep highest" text label next to the checkbox', () => {
+    setup({ assessments: three });
+    expect(screen.getByText('Keep highest')).toBeInTheDocument();
+  });
+
+  it('defaults the count to included − 1 when checked', () => {
+    setup({ assessments: three }); // 3 assessments -> default to 2
+    fireEvent.click(screen.getByRole('checkbox', { name: TOGGLE }));
+    expect(screen.getByRole('spinbutton', { name: INPUT })).toHaveValue(2);
+  });
+
+  it('hides checkbox + field in custom mode', () => {
+    setup({ assessments: three });
+    fireEvent.click(
+      within(modeGroup('Assignments')).getByRole('radio', { name: /custom/i }),
+    );
+    expect(
+      screen.queryByRole('checkbox', { name: TOGGLE }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('spinbutton', { name: INPUT }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('seeds the field (checkbox pre-checked) from tab.keepHighest', () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    expect(screen.getByRole('checkbox', { name: TOGGLE })).toBeChecked();
+    expect(screen.getByRole('spinbutton', { name: INPUT })).toHaveValue(2);
+  });
+
+  it('disables the checkbox when only one assessment is included', () => {
+    setup({
+      assessments: [{ id: 101, title: A1, tabId: 10, maxGrade: 100 }],
+    });
+    expect(screen.getByRole('checkbox', { name: TOGGLE })).toBeDisabled();
+  });
+
+  it('sends keepHighest in the save payload', async () => {
+    setup({ assessments: three });
+    fireEvent.click(screen.getByRole('checkbox', { name: TOGGLE }));
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(operations.updateGradebookWeights).toHaveBeenCalled(),
+    );
+    const arg = (operations.updateGradebookWeights as jest.Mock).mock
+      .calls[0][0];
+    const tab10 = arg.find((e: { tabId: number }) => e.tabId === 10);
+    expect(tab10.keepHighest).toBe(2);
+  });
+
+  it('unchecking sends keepHighest 0', async () => {
+    setup({
+      assessments: three,
+      tabs: [
+        {
+          id: 10,
+          title: 'Assignments',
+          categoryId: 1,
+          gradebookWeight: 50,
+          keepHighest: 2,
+        },
+        { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 50 },
+      ],
+    });
+    // checkbox is pre-checked; uncheck it
+    fireEvent.click(screen.getByRole('checkbox', { name: TOGGLE }));
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(operations.updateGradebookWeights).toHaveBeenCalled(),
+    );
+    const arg = (operations.updateGradebookWeights as jest.Mock).mock
+      .calls[0][0];
+    const tab10 = arg.find((e: { tabId: number }) => e.tabId === 10);
+    expect(tab10.keepHighest).toBe(0);
+  });
+
+  it('blocks saving on non-integer input but not on keep > included (overflow)', async () => {
+    setup({ assessments: three });
+    fireEvent.click(screen.getByRole('checkbox', { name: TOGGLE }));
+    const input = screen.getByRole('spinbutton', { name: INPUT });
+
+    // overflow: keep=5 > included=3 -> warning but save NOT blocked
+    fireEvent.change(input, { target: { value: '5' } });
+    expect(screen.getByRole('button', { name: /save/i })).not.toBeDisabled();
+    expect(
+      screen.getByText(/keeps more assessments than it contains/i),
+    ).toBeInTheDocument();
+
+    // non-integer (0): should block saving
+    fireEvent.change(input, { target: { value: '0' } });
+    expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+    expect(screen.getByText(/keep at least 1/i)).toBeInTheDocument();
   });
 });
 

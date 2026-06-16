@@ -9438,7 +9438,7 @@
     "defaultMessage": "Formula"
   },
   "course.gradebook.ConfigureWeightsPrompt.levelFormulaHelper": {
-    "defaultMessage": "Formulas may contain numbers, arithmetic operators (+ − * /), parentheses, \"level\" as a variable, and the functions floor, ceil, round, min and max."
+    "defaultMessage": "The formula may use numbers, arithmetic operators (+ − * /), parentheses, the variable \"level\", and the functions floor, ceil, round, min and max."
   },
   "course.gradebook.ConfigureWeightsPrompt.levelPreview": {
     "defaultMessage": "At max level ({maxLevel}): {pts} pts"
@@ -9509,6 +9509,9 @@
   "course.gradebook.ConfigureWeightsPrompt.descriptionWeights": {
     "defaultMessage": "Set each tab's weight - how much it contributes to the total (weights should sum to 100)."
   },
+  "course.gradebook.ConfigureWeightsPrompt.descriptionKeep": {
+    "defaultMessage": "In Equal mode, optionally keep only each student's N highest-scoring assessments."
+  },
   "course.gradebook.ConfigureWeightsPrompt.equalMode": {
     "defaultMessage": "Equal"
   },
@@ -9517,6 +9520,24 @@
   },
   "course.gradebook.ConfigureWeightsPrompt.excludedCount": {
     "defaultMessage": "{n} excluded"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestLabel": {
+    "defaultMessage": "Keep highest"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestAria": {
+    "defaultMessage": "Keep highest for {tab}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepHighestToggleAria": {
+    "defaultMessage": "Enable keep highest for {tab}"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepInvalid": {
+    "defaultMessage": "Keep at least 1 (whole number)"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepSubtitle": {
+    "defaultMessage": "— keeps highest {keep} of {included} · each counts as {pct}%"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.keepOverflowWarning": {
+    "defaultMessage": "\"{tab}\" keeps more assessments than it contains - all of them will count."
   },
   "course.gradebook.ConfigureWeightsPrompt.includeAssessment": {
     "defaultMessage": "Include {assessment} in grade"
@@ -9528,7 +9549,7 @@
     "defaultMessage": "{pct}% of grade"
   },
   "course.gradebook.ConfigureWeightsPrompt.promptTitle": {
-    "defaultMessage": "Configure contributions"
+    "defaultMessage": "Configure weights"
   },
   "course.gradebook.ConfigureWeightsPrompt.saveError": {
     "defaultMessage": "Failed to save weights. Please try again."
@@ -9583,6 +9604,9 @@
   },
   "course.gradebook.WeightedGradebookTable.email": {
     "defaultMessage": "Email"
+  },
+  "course.gradebook.WeightedGradebookTable.dropped": {
+    "defaultMessage": "Dropped (lowest)"
   },
   "course.gradebook.WeightedGradebookTable.excluded": {
     "defaultMessage": "Excluded"

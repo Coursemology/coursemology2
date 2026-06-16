@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_16_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_18_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -897,10 +897,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_16_000000) do
     t.bigint "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "fk__course_gradebook_tabcontributions_course_id"
-    t.index ["creator_id"], name: "fk__course_gradebook_tabcontributions_creator_id"
-    t.index ["tab_id"], name: "index_course_gradebook_tabcontributions_on_tab_id", unique: true
-    t.index ["updater_id"], name: "fk__course_gradebook_tabcontributions_updater_id"
+    t.integer "keep_highest", default: 0, null: false
+    t.index ["course_id"], name: "fk__course_gradebook_tab_contributions_course_id"
+    t.index ["creator_id"], name: "fk__course_gradebook_tab_contributions_creator_id"
+    t.index ["tab_id"], name: "index_course_gradebook_tab_contributions_on_tab_id", unique: true
+    t.index ["updater_id"], name: "fk__course_gradebook_tab_contributions_updater_id"
   end
 
   create_table "course_group_categories", force: :cascade do |t|

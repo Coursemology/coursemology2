@@ -41,7 +41,7 @@ class Course::Gradebook::TabContribution < ApplicationRecord
 
     contribution = find_or_initialize_by(tab_id: tab.id)
     contribution.course = course
-    contribution.assign_attributes(weight: entry[:weight], weight_mode: mode)
+    contribution.assign_attributes(contribution_attrs(entry, mode))
     contribution.save!
 
     excluded_ids = entry[:excluded_assessment_ids] || []
@@ -54,6 +54,16 @@ class Course::Gradebook::TabContribution < ApplicationRecord
     end
   end
   private_class_method :apply_entry
+
+  # @api private
+  # keep_highest is only assigned when the payload carries it, so an omitted field
+  # leaves the previously persisted value untouched rather than resetting it.
+  def self.contribution_attrs(entry, mode)
+    attrs = { weight: entry[:weight], weight_mode: mode }
+    attrs[:keep_highest] = entry[:keep_highest] if entry.key?(:keep_highest)
+    attrs
+  end
+  private_class_method :contribution_attrs
 
   # @api private
   def self.assessment_contribution_for(assessment)
