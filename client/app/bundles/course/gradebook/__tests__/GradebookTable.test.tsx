@@ -24,6 +24,7 @@ const students: StudentData[] = [
     externalId: null,
     level: 3,
     totalXp: 150,
+    levelContribution: null,
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const students: StudentData[] = [
     externalId: null,
     level: 5,
     totalXp: 300,
+    levelContribution: null,
   },
 ];
 const submissions: SubmissionData[] = [
@@ -46,6 +48,7 @@ const makeStudents = (n: number): StudentData[] =>
     externalId: null,
     level: 1,
     totalXp: 0,
+    levelContribution: null,
   }));
 
 // Asserts the given texts appear in this top-to-bottom DOM order.
@@ -420,6 +423,7 @@ describe('GradebookTable', () => {
         externalId: 'EXT-001',
         level: 3,
         totalXp: 150,
+        levelContribution: null,
       },
       {
         id: 2,
@@ -428,6 +432,7 @@ describe('GradebookTable', () => {
         externalId: null,
         level: 5,
         totalXp: 300,
+        levelContribution: null,
       },
     ];
 
@@ -468,6 +473,7 @@ describe('GradebookTable', () => {
           externalId: '',
           level: 3,
           totalXp: 150,
+          levelContribution: null,
         },
       ];
       renderWith(studentsWithBlankExtId);
@@ -658,6 +664,7 @@ describe('GradebookTable', () => {
         externalId: null,
         level: 1,
         totalXp: 0,
+        levelContribution: null,
       });
 
       const renderGrades = (

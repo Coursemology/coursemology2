@@ -15,6 +15,14 @@ const baseState = {
   gamificationEnabled: false,
   weightedViewEnabled: false,
   canManageWeights: false,
+  courseMaxLevel: 0,
+  levelContribution: {
+    enabled: false,
+    formula: '',
+    weight: 0,
+    show: false,
+    clamp: true,
+  },
 };
 
 describe('UPDATE_TAB_WEIGHTS reducer', () => {
@@ -126,6 +134,14 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
         gamificationEnabled: false,
         weightedViewEnabled: true,
         canManageWeights: true,
+        courseMaxLevel: 0,
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
       }),
     );
 
@@ -149,5 +165,289 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
     expect(next.assessments.find((a) => a.id === 102)!.gradebookExcluded).toBe(
       false,
     );
+  });
+});
+
+describe('level contribution', () => {
+  it('stores levelContribution and courseMaxLevel on SAVE_GRADEBOOK', () => {
+    const data = {
+      categories: [],
+      tabs: [],
+      assessments: [],
+      students: [],
+      submissions: [],
+      gamificationEnabled: true,
+      weightedViewEnabled: true,
+      canManageWeights: true,
+      courseMaxLevel: 20,
+      levelContribution: {
+        enabled: true,
+        formula: 'level / 20 * 8',
+        weight: 8,
+        show: true,
+        clamp: true,
+      },
+    };
+    const next = reducer(undefined, actions.saveGradebook(data));
+    expect(next.courseMaxLevel).toBe(20);
+    expect(next.levelContribution.enabled).toBe(true);
+    expect(next.levelContribution.weight).toBe(8);
+  });
+
+  it('applies an echoed levelContribution on UPDATE_TAB_WEIGHTS', () => {
+    const next = reducer(
+      undefined,
+      actions.updateTabWeights({
+        weights: [],
+        levelContribution: {
+          enabled: true,
+          formula: 'level',
+          formulaAst: null,
+          weight: 5,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    expect(next.levelContribution.enabled).toBe(true);
+    expect(next.levelContribution.weight).toBe(5);
+  });
+
+  it('recomputes student levelContribution from formulaAst when enabled', () => {
+    const stateWithStudents = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [],
+        tabs: [],
+        assessments: [],
+        students: [
+          {
+            id: 1,
+            name: 'A',
+            email: 'a@x',
+            externalId: null,
+            level: 10,
+            totalXp: 0,
+            levelContribution: null,
+          },
+          {
+            id: 2,
+            name: 'B',
+            email: 'b@x',
+            externalId: null,
+            level: 20,
+            totalXp: 0,
+            levelContribution: null,
+          },
+        ],
+        submissions: [],
+        gamificationEnabled: true,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    // formula: 'level * 0.5' → AST: binop(*) [var(level), num(0.5)]
+    const formulaAst = {
+      type: 'binop' as const,
+      op: '*' as const,
+      left: { type: 'var' as const, name: 'level' as const },
+      right: { type: 'num' as const, value: 0.5 },
+    };
+    const next = reducer(
+      stateWithStudents,
+      actions.updateTabWeights({
+        weights: [],
+        levelContribution: {
+          enabled: true,
+          formula: 'level * 0.5',
+          formulaAst,
+          weight: 15,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    expect(next.students[0].levelContribution).toBeCloseTo(5); // 10 * 0.5
+    expect(next.students[1].levelContribution).toBeCloseTo(10); // 20 * 0.5
+  });
+
+  it('clamps recomputed levelContribution to [0, weight] when clamp is on', () => {
+    const stateWithStudents = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [],
+        tabs: [],
+        assessments: [],
+        students: [
+          {
+            id: 1,
+            name: 'A',
+            email: 'a@x',
+            externalId: null,
+            level: 10,
+            totalXp: 0,
+            levelContribution: null,
+          },
+          {
+            id: 2,
+            name: 'B',
+            email: 'b@x',
+            externalId: null,
+            level: 20,
+            totalXp: 0,
+            levelContribution: null,
+          },
+        ],
+        submissions: [],
+        gamificationEnabled: true,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    // formula: 'level + 5' → AST: binop(+) [var(level), num(5)]
+    const formulaAst = {
+      type: 'binop' as const,
+      op: '+' as const,
+      left: { type: 'var' as const, name: 'level' as const },
+      right: { type: 'num' as const, value: 5 },
+    };
+    const next = reducer(
+      stateWithStudents,
+      actions.updateTabWeights({
+        weights: [],
+        levelContribution: {
+          enabled: true,
+          formula: 'level + 5',
+          formulaAst,
+          weight: 12,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    // raw 10 + 5 = 15 → clamped to weight 12; raw 20 + 5 = 25 → clamped to 12
+    expect(next.students[0].levelContribution).toBeCloseTo(12);
+    expect(next.students[1].levelContribution).toBeCloseTo(12);
+  });
+
+  it('leaves recomputed levelContribution unclamped when clamp is off', () => {
+    const stateWithStudents = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [],
+        tabs: [],
+        assessments: [],
+        students: [
+          {
+            id: 1,
+            name: 'A',
+            email: 'a@x',
+            externalId: null,
+            level: 10,
+            totalXp: 0,
+            levelContribution: null,
+          },
+        ],
+        submissions: [],
+        gamificationEnabled: true,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    const formulaAst = {
+      type: 'binop' as const,
+      op: '+' as const,
+      left: { type: 'var' as const, name: 'level' as const },
+      right: { type: 'num' as const, value: 5 },
+    };
+    const next = reducer(
+      stateWithStudents,
+      actions.updateTabWeights({
+        weights: [],
+        levelContribution: {
+          enabled: true,
+          formula: 'level + 5',
+          formulaAst,
+          weight: 12,
+          show: false,
+          clamp: false,
+        },
+      }),
+    );
+    // clamp off → raw 10 + 5 = 15 kept as-is
+    expect(next.students[0].levelContribution).toBeCloseTo(15);
+  });
+
+  it('sets all students levelContribution to null when level contribution disabled', () => {
+    const stateWithStudents = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [],
+        tabs: [],
+        assessments: [],
+        students: [
+          {
+            id: 1,
+            name: 'A',
+            email: 'a@x',
+            externalId: null,
+            level: 10,
+            totalXp: 0,
+            levelContribution: 5,
+          },
+        ],
+        submissions: [],
+        gamificationEnabled: true,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+        courseMaxLevel: 30,
+        levelContribution: {
+          enabled: true,
+          formula: 'level * 0.5',
+          weight: 15,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    const next = reducer(
+      stateWithStudents,
+      actions.updateTabWeights({
+        weights: [],
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          formulaAst: null,
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    expect(next.students[0].levelContribution).toBeNull();
   });
 });

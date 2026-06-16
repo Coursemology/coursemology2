@@ -1,13 +1,19 @@
 // client/app/bundles/course/gradebook/__tests__/computeWeighted.test.ts
+import type { LevelContributionData } from 'types/course/gradebook';
+
 import {
   computeStudentBreakdown,
   computeStudentTotal,
   computeTabSubtotal,
   computeWeightedRows,
+  LEVEL_TAB_ID,
+  levelOffenders,
+  levelOutOfRange,
   resolveTabWeights,
   sumWeights,
   usingDefaultWeights,
 } from '../computeWeighted';
+import { parseFormula } from '../levelFormula';
 
 const assessments = [
   { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
@@ -20,7 +26,7 @@ const subs = (
 ): { studentId: number; assessmentId: number; grade: number | null }[] =>
   entries;
 
-describe('computeTabSubtotal — equal mode (default)', () => {
+describe('computeTabSubtotal - equal mode (default)', () => {
   it('returns null when tab has no assessments', () => {
     expect(
       computeTabSubtotal({
@@ -76,7 +82,7 @@ describe('computeTabSubtotal — equal mode (default)', () => {
   });
 });
 
-describe('computeTabSubtotal — custom mode', () => {
+describe('computeTabSubtotal - custom mode', () => {
   const customTab = {
     id: 10,
     title: 'M',
@@ -359,7 +365,7 @@ describe('sumWeights', () => {
   });
 });
 
-describe('resolveTabWeights — equal-split default when unconfigured', () => {
+describe('resolveTabWeights - equal-split default when unconfigured', () => {
   const twoTabs = [
     { id: 10, title: 'M', categoryId: 0, gradebookWeight: 0 },
     { id: 20, title: 'T', categoryId: 0, gradebookWeight: 0 },
@@ -475,6 +481,7 @@ describe('computeWeightedRows', () => {
       externalId: null,
       level: 1,
       totalXp: 0,
+      levelContribution: null,
     },
     {
       id: 2,
@@ -483,6 +490,7 @@ describe('computeWeightedRows', () => {
       externalId: null,
       level: 1,
       totalXp: 0,
+      levelContribution: null,
     },
   ];
   const rowSubmissions = subs([
@@ -584,7 +592,7 @@ describe('computeWeightedRows', () => {
   });
 });
 
-describe('computeWeightedRows — identity passthrough', () => {
+describe('computeWeightedRows - identity passthrough', () => {
   it('carries name, email and externalId from each student onto the row', () => {
     const students = [
       {
@@ -594,6 +602,7 @@ describe('computeWeightedRows — identity passthrough', () => {
         externalId: 'EXT-1',
         level: 5,
         totalXp: 1234,
+        levelContribution: null,
       },
     ];
     const tabs = [
@@ -703,7 +712,7 @@ describe('computeStudentBreakdown', () => {
   });
 });
 
-describe('exclusion — equal mode', () => {
+describe('exclusion - equal mode', () => {
   it('averages over included assessments only (excluded dropped from numerator and count)', () => {
     // a1 80/100=0.8 included, a2 excluded -> subtotal = 0.8 / 1 = 0.8
     const withExcluded = [
@@ -736,7 +745,7 @@ describe('exclusion — equal mode', () => {
   });
 });
 
-describe('exclusion — custom mode', () => {
+describe('exclusion - custom mode', () => {
   it('drops excluded assessments from the numerator', () => {
     // tab weight 30; a1 weight 30 graded 90/100=0.9 -> 0.9*30=27; a2 excluded.
     // subtotal = 27 / 30 = 0.9
@@ -771,7 +780,7 @@ describe('exclusion — custom mode', () => {
   });
 });
 
-describe('breakdown — exclusion', () => {
+describe('breakdown - exclusion', () => {
   const bdAssessments = [
     { id: 1, tabId: 10, maxGrade: 100, title: 'A' },
     { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookExcluded: true },
@@ -866,5 +875,222 @@ describe('zero-maxGrade assessments (0/0 must not produce NaN)', () => {
     const a = tab.assessments.find((x) => x.assessmentId === 1)!;
     expect(Number.isNaN(a.points)).toBe(false);
     expect(a.points).toBe(0);
+  });
+});
+
+const lc = (
+  over: Partial<LevelContributionData> = {},
+): LevelContributionData => ({
+  enabled: true,
+  formula: 'level / 30 * 8', // cap baked in literally - no maxLevel variable
+  weight: 8,
+  show: false,
+  clamp: true,
+  ...over,
+});
+
+describe('computeWeightedRows - level contribution', () => {
+  const baseStudent = {
+    id: 1,
+    name: 'A',
+    email: 'a@x',
+    externalId: null,
+    level: 15,
+    totalXp: 0,
+  };
+
+  it('reads levelContribution from the student object', () => {
+    const rows = computeWeightedRows({
+      students: [{ ...baseStudent, levelContribution: 4 }],
+      tabs: [],
+      assessments: [],
+      submissions: [],
+    });
+    expect(rows[0].levelContribution).toBeCloseTo(4);
+    expect(rows[0].total).toBeCloseTo(4);
+  });
+
+  it('contributes null when the student levelContribution is null', () => {
+    const rows = computeWeightedRows({
+      students: [{ ...baseStudent, levelContribution: null }],
+      tabs: [],
+      assessments: [],
+      submissions: [],
+    });
+    expect(rows[0].levelContribution).toBeNull();
+    expect(rows[0].total).toBeNull();
+  });
+
+  it('treats levelContribution as null when showLevelContribution is false', () => {
+    const rows = computeWeightedRows({
+      students: [{ ...baseStudent, levelContribution: 4 }],
+      tabs: [],
+      assessments: [],
+      submissions: [],
+      showLevelContribution: false,
+    });
+    expect(rows[0].levelContribution).toBeNull();
+    expect(rows[0].total).toBeNull();
+  });
+
+  it('carries level from student regardless of showLevelContribution', () => {
+    const rows = computeWeightedRows({
+      students: [{ ...baseStudent, levelContribution: null }],
+      tabs: [],
+      assessments: [],
+      submissions: [],
+    });
+    expect(rows[0].level).toBe(15);
+  });
+});
+
+describe('levelOutOfRange', () => {
+  it('flags a student whose contribution exceeds the weight', () => {
+    const parsed = parseFormula('level'); // raw level as points
+    expect(parsed.ok).toBe(true);
+    if (parsed.ok) {
+      expect(
+        levelOutOfRange(
+          [{ level: 50 }],
+          lc({ formula: 'level', weight: 8 }),
+          parsed,
+        ),
+      ).toBe(true);
+      expect(
+        levelOutOfRange(
+          [{ level: 5 }],
+          lc({ formula: 'level', weight: 8 }),
+          parsed,
+        ),
+      ).toBe(false);
+    }
+  });
+});
+
+describe('levelOffenders', () => {
+  const A = { id: 1, name: 'A', level: 5 };
+  const B = { id: 2, name: 'B', level: 12 };
+  const C = { id: 3, name: 'C', level: 3 };
+
+  it('returns no offenders when the formula does not parse', () => {
+    const parsed = parseFormula('level /');
+    expect(levelOffenders([A], parsed, 10)).toEqual({
+      below: [],
+      above: [],
+      unscoreable: [],
+    });
+  });
+
+  it('returns no offenders when every contribution is within [0, max]', () => {
+    const parsed = parseFormula('level * 0.1'); // 0.5, 1.2 - within [0, 10]
+    if (!parsed.ok) throw new Error('expected ok');
+    expect(levelOffenders([A, B], parsed, 10)).toEqual({
+      below: [],
+      above: [],
+      unscoreable: [],
+    });
+  });
+
+  it('lists students above the max, most extreme first', () => {
+    const parsed = parseFormula('level * 5'); // A 25, B 60, C 15
+    if (!parsed.ok) throw new Error('expected ok');
+    const { above, below } = levelOffenders([A, B, C], parsed, 10);
+    expect(below).toEqual([]);
+    expect(above.map((o) => o.name)).toEqual(['B', 'A', 'C']);
+    expect(above[0]).toMatchObject({ id: 2, name: 'B', value: 60 });
+  });
+
+  it('lists students below 0, most negative first', () => {
+    const parsed = parseFormula('level - 8'); // A -3, B 4, C -5
+    if (!parsed.ok) throw new Error('expected ok');
+    const { above, below } = levelOffenders([A, B, C], parsed, 10);
+    expect(above).toEqual([]);
+    expect(below.map((o) => o.name)).toEqual(['C', 'A']);
+    expect(below[0]).toMatchObject({ id: 3, name: 'C', value: -5 });
+  });
+
+  it('splits offenders across both bounds', () => {
+    const parsed = parseFormula('level * 5 - 30'); // A -5, B 30
+    if (!parsed.ok) throw new Error('expected ok');
+    const { above, below } = levelOffenders([A, B], parsed, 10);
+    expect(below.map((o) => o.value)).toEqual([-5]);
+    expect(above.map((o) => o.value)).toEqual([30]);
+  });
+});
+
+describe('computeStudentBreakdown - level', () => {
+  it('appends a synthetic Level entry when enabled with pre-computed points', () => {
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [],
+      assessments: [],
+      submissions: [],
+      level: 15,
+      levelContribution: lc(),
+      levelContributionPoints: 4, // pre-computed: 15/30*8=4
+    });
+    const levelTab = breakdown.find((tb) => tb.tabId === LEVEL_TAB_ID);
+    expect(levelTab).toBeDefined();
+    expect(levelTab!.assessments[0].title).toBe('Level');
+    expect(levelTab!.assessments[0].points).toBeCloseTo(4);
+    expect(levelTab!.assessments[0].effectiveWeight).toBe(8);
+  });
+
+  it('omits the Level entry when disabled', () => {
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [],
+      assessments: [],
+      submissions: [],
+      level: 15,
+      levelContribution: lc({ enabled: false }),
+      levelContributionPoints: null,
+    });
+    expect(breakdown.find((tb) => tb.tabId === LEVEL_TAB_ID)).toBeUndefined();
+  });
+
+  it('omits the Level entry when levelContributionPoints is null (even if enabled)', () => {
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [],
+      assessments: [],
+      submissions: [],
+      level: 15,
+      levelContribution: lc(),
+      levelContributionPoints: null,
+    });
+    expect(breakdown.find((tb) => tb.tabId === LEVEL_TAB_ID)).toBeUndefined();
+  });
+});
+
+describe('levelOffenders unscoreable bucket', () => {
+  const students = [
+    { id: 1, name: 'Ann', level: 0 },
+    { id: 2, name: 'Bob', level: 5 },
+    { id: 3, name: 'Cy', level: 10 },
+  ];
+
+  it('collects students whose contribution is NaN (divide-by-zero)', () => {
+    const parsed = parseFormula('100 / level'); // level 0 -> NaN
+    const r = levelOffenders(students, parsed, 50);
+    expect(r.unscoreable.map((o) => o.id)).toEqual([1]);
+    expect(r.unscoreable[0].level).toBe(0);
+    expect(r.below).toHaveLength(0);
+    expect(r.above).toHaveLength(0);
+  });
+
+  it('is empty when no student divides by zero', () => {
+    const parsed = parseFormula('level');
+    expect(levelOffenders(students, parsed, 50).unscoreable).toHaveLength(0);
+  });
+
+  it('sorts unscoreable by level ascending', () => {
+    const parsed = parseFormula('100 / (level - 5)'); // NaN at level 5 only
+    const many = [
+      { id: 1, name: 'Zoe', level: 5 },
+      { id: 2, name: 'Amy', level: 5 },
+    ];
+    const r = levelOffenders(many, parsed, 50);
+    expect(r.unscoreable.map((o) => o.name)).toEqual(['Amy', 'Zoe']);
   });
 });
