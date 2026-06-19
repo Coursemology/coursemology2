@@ -34,7 +34,7 @@ when 'production'
   state_path "#{tmp_dir}/pids/puma.state"
   activate_control_app
 
-  on_worker_boot do
+  before_worker_boot do
     require 'active_record'
     begin
       ActiveRecord::Base.connection.disconnect!

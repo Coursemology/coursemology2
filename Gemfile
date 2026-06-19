@@ -12,7 +12,7 @@ gem 'csv'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.2'
+gem 'rails', '~> 7.2.3'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -151,9 +151,9 @@ group :assets do
   gem 'image_optim_rails'
 end
 
-group :production, :test do
+group :development, :production, :test do
   # Puma will be our app server
-  gem 'puma'
+  gem 'puma', '~> 7.2'
 end
 
 group :production, :test, :ci do
@@ -193,7 +193,7 @@ gem 'jwt'
 gem 'cancancan'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave', '~> 3'
+gem 'carrierwave', '~> 3.1.3'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing
