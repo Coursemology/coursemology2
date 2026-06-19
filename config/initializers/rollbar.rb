@@ -10,6 +10,8 @@ if Rails.env.production?
     # To disable in specific environments, set config.enabled=false.
     config.access_token = Rails.application.credentials.dig(:rollbar, :access_token)
     config.environment = Rails.application.credentials.dig(:rollbar, :environment)
+    # Tag every error with the deployed commit for traceability across deploys.
+    config.code_version = ENV['GIT_COMMIT']
 
     # By default, Rollbar will try to call the `current_user` controller method
     # to fetch the logged-in user object, and then call that object's `id`,
