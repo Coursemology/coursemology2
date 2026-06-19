@@ -201,12 +201,6 @@ commands:
           command: |
             touch .env
             echo RAILS_HOSTNAME="localhost:3000" >> .env
-            echo KEYCLOAK_AUTH_SERVER_URL="http://localhost:8443/" >> .env
-            echo KEYCLOAK_AUTH_JWKS_URL="http://localhost:8443/realms/coursemology_test/protocol/openid-connect/certs" >> .env
-            echo KEYCLOAK_AUTH_INSTROPECTION_URL="http://localhost:8443/realms/coursemology_test/protocol/openid-connect/token/introspect" >> .env
-            echo KEYCLOAK_ISS="http://localhost:8443/realms/coursemology_test" >> .env
-            echo KEYCLOAK_AUD="account" >> .env
-            echo KEYCLOAK_REALM="coursemology_test" >> .env
 
       - run:
           name: Serve Rails server
