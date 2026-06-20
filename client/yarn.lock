@@ -7319,10 +7319,10 @@ extend@^3.0.0:
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
 
-fabric@^7.3.1:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/fabric/-/fabric-7.3.1.tgz#1dee1b68bb793aca68c0d31936b3897f330ef47b"
-  integrity sha512-RoLAQzUX+/3RNMYKliuN0P2HXdSDEGzyjS7FnmEbo3nhb8LFh59T+l3f6ApIu5LT4YB49YfMNrEajeIbutmD7Q==
+fabric@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/fabric/-/fabric-7.4.0.tgz#a504ded4ee76e0f025f81b5350f62ccd414aaf01"
+  integrity sha512-NalYDc3eifTl1C33zryQwpH6+XA/2ClxQrH9vkASkZw3tbkRmorpikhYMmxhUTmi7O3e9ODz0vOT8qfaCh9IVA==
   optionalDependencies:
     canvas "^3.2.0"
     jsdom "^26.1.0"
