@@ -1571,10 +1571,10 @@
     "@ckeditor/ckeditor5-utils" "47.6.2"
     ckeditor5 "47.6.2"
 
-"@ckeditor/ckeditor5-integrations-common@^2.2.5":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-integrations-common/-/ckeditor5-integrations-common-2.3.0.tgz#a9297d089c4e50f33159405b2dc47b63b3f24aee"
-  integrity sha512-g0ezia9TZ534lT3/vB2gJECzMJZju/A6L6Q3EqWf5hz7v8wswxaBgoDCjdHOyPelquPKn/WdlsHvaLSKHYubsA==
+"@ckeditor/ckeditor5-integrations-common@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-integrations-common/-/ckeditor5-integrations-common-2.3.1.tgz#c6013b9e31e87e3e409dc33721d97e9b1ab78e4f"
+  integrity sha512-YcNvRhPMBIHjExmSVGypx98N8E5AiESUZTBzphrzstfxtunJFFVvFJ3KuzHwKLaBUPs7YIpqS6cNVft1gFRH7Q==
 
 "@ckeditor/ckeditor5-language@47.6.2":
   version "47.6.2"
@@ -1718,12 +1718,12 @@
     "@ckeditor/ckeditor5-engine" "47.6.2"
     ckeditor5 "47.6.2"
 
-"@ckeditor/ckeditor5-react@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-11.1.0.tgz#4fb29ba83a910d3c22251761787317fa9a037253"
-  integrity sha512-ac0iQnHg31n+IjMHeUT6xxAEH2l7H0QVT3tEeReDOTXusi4neL5GslLRmsYtz7nPnUQnoXXAaervf0YY1sOLWg==
+"@ckeditor/ckeditor5-react@^11.1.2":
+  version "11.1.2"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-11.1.2.tgz#169edc11ee2f19ecabb21da6125172433737ab11"
+  integrity sha512-RCmCTatLfJkr1q2wyJH1jk4d1WSqpTy/ThTiTsXJmgkapjUnlPU/841NcVD7MNK6/73RUC4mOpQKS3C3XyzexA==
   dependencies:
-    "@ckeditor/ckeditor5-integrations-common" "^2.2.5"
+    "@ckeditor/ckeditor5-integrations-common" "^2.3.1"
 
 "@ckeditor/ckeditor5-remove-format@47.6.2":
   version "47.6.2"
