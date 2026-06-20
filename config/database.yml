@@ -6,6 +6,7 @@ default: &default
 development:
   <<: *default
   database: coursemology
+  host: localhost
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -17,3 +18,15 @@ test:
 production:
   <<: *default
   database: coursemology
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= Rails.application.credentials.dig(:production_database, :username) %>
+  password: <%= Rails.application.credentials.dig(:production_database, :password) %>
+  pool: <%= ENV["RAILS_MAX_THREADS"] || 5 %>
+  port: <%= ENV["DB_PORT"] || 5432 %>
+
+maintenance:
+  <<: *default
+  database: coursemology
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= Rails.application.credentials.dig(:maintenance_database, :username) %>
+  password: <%= Rails.application.credentials.dig(:maintenance_database, :password) %>

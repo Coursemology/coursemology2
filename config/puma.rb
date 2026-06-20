@@ -15,6 +15,8 @@ when 'development'
 
   environment 'development'
 when 'production'
+  raise 'RAILS_HOSTNAME must be set in production' if ENV['RAILS_HOSTNAME'].to_s.strip.empty?
+
   # Change to match your CPU core count
   workers `cat /proc/cpuinfo | grep processor | wc -l`.to_i
 
