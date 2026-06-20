@@ -2,6 +2,8 @@ const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const MomentTimezoneDataPlugin = require('moment-timezone-data-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require('zlib');
 
 const common = require('./webpack.common');
 
@@ -66,6 +68,20 @@ module.exports = merge(common, {
       minimizer: {
         implementation: ImageMinimizerPlugin.svgoMinify,
       },
+    }),
+    new CompressionPlugin({
+      test: /\.(js|css|html|svg|png)$/,
+      algorithm: 'gzip',
+    }),
+    new CompressionPlugin({
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|html|svg|png)$/,
+      compressionOptions: {
+        params: {
+          [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+        },
+      },
+      threshold: 10240,
     }),
   ],
 });
