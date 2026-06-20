@@ -1,4 +1,20 @@
 # frozen_string_literal: true
+if Rails.env.production?
+  Sidekiq.configure_server do |config|
+    config.redis = {
+      url: "redis://#{ENV['REDIS_HOST']}:6379/0",
+      password: Rails.application.credentials.dig(:redis, :password)
+    }
+  end
+
+  Sidekiq.configure_client do |config|
+    config.redis = {
+      url: "redis://#{ENV['REDIS_HOST']}:6379/0",
+      password: Rails.application.credentials.dig(:redis, :password)
+    }
+  end
+end
+
 # Sidekiq Cron configuration to invoke ConsolidatedItemEmailJob for opening reminder emails,
 # and VideoStatisticUpdateJob for per video watch_freq cache
 schedule_file = 'config/schedule.yml'
