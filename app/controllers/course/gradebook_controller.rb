@@ -15,6 +15,7 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
         load_weighted_view(assessment_ids) if @weighted_view_enabled
         load_grades(assessment_ids)
         @student_level_contributions = compute_student_level_contributions
+        load_externals
       end
     end
   end
@@ -22,13 +23,7 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def update_weights
     authorize! :manage_gradebook_weights, current_course
     updates = (update_weights_params[:weights] || []).map { |entry| parse_weight_entry(entry) }
-    level_config = nil
-    # One transaction so a rejected level formula rolls back the tab-weight writes too,
-    # rather than leaving a partial save.
-    ActiveRecord::Base.transaction do
-      Course::Gradebook::TabContribution.bulk_update(course: current_course, updates: updates)
-      level_config = persist_level_contribution
-    end
+    level_config = persist_weight_updates(updates)
     response_body = { weights: serialize_weight_updates(updates) }
     response_body[:levelContribution] = serialize_level_contribution(level_config) if level_config
     render json: response_body
@@ -37,6 +32,20 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   end
 
   private
+
+  # Persists tab weights, external-assessment weights (negative tab ids), and the optional
+  # level contribution atomically, so a mixed save from the single weights request can't desync.
+  # Returns the persisted LevelConfig, or nil when no levelContribution was sent.
+  def persist_weight_updates(updates)
+    external_updates, tab_updates = updates.partition { |entry| entry[:tab_id] < 0 }
+    level_config = nil
+    ActiveRecord::Base.transaction do
+      Course::Gradebook::TabContribution.bulk_update(course: current_course, updates: tab_updates)
+      Course::Gradebook::ExternalContribution.bulk_update(course: current_course, updates: external_updates)
+      level_config = persist_level_contribution
+    end
+    level_config
+  end
 
   def authorize_read_gradebook!
     authorize! :read_gradebook, current_course
@@ -148,6 +157,15 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def fetch_categories_and_tabs
     tabs = @published_assessments.map(&:tab).uniq(&:id)
     [tabs.map(&:category).uniq(&:id), tabs]
+  end
+
+  def load_externals
+    @external_assessments = Course::ExternalAssessment.for_course(current_course).
+                            includes(:gradebook_contribution, external_assessment_grades: :course_user).to_a
+    @external_grades = @external_assessments.flat_map(&:external_assessment_grades)
+    @external_contributions = @external_assessments.
+                              index_by(&:id).
+                              transform_values(&:gradebook_contribution)
   end
 
   def fetch_students

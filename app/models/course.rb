@@ -57,6 +57,10 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                      dependent: :destroy, inverse_of: :course
   has_one :gradebook_level_config, class_name: 'Course::Gradebook::LevelConfig',
                                    dependent: :destroy, inverse_of: :course
+  has_many :gradebook_external_contributions, class_name: 'Course::Gradebook::ExternalContribution',
+                                              dependent: :destroy, inverse_of: :course
+  has_many :external_assessments, class_name: 'Course::ExternalAssessment',
+                                  inverse_of: :course, dependent: :destroy
   has_many :assessment_skills, class_name: 'Course::Assessment::Skill',
                                dependent: :destroy
   has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',
