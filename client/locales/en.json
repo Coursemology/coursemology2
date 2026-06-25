@@ -9745,5 +9745,17 @@
   },
   "course.gradebook.WeightedViewHint.settingsLink": {
     "defaultMessage": "Gradebook settings"
+  },
+  "course.gradebook.GradebookTable.externalBadge": {
+    "defaultMessage": "External"
+  },
+  "course.gradebook.GradebookTable.externalGradeAria": {
+    "defaultMessage": "{title} grade for {name}"
+  },
+  "course.gradebook.GradebookTable.gradeSaveError": {
+    "defaultMessage": "Could not save the grade. Please try again."
+  },
+  "course.gradebook.GradebookTable.gradeSaved": {
+    "defaultMessage": "Grade saved. {title} · {name}: {oldGrade} → {newGrade}"
   }
 }

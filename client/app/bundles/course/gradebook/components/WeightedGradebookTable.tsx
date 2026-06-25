@@ -433,7 +433,7 @@ const WeightedGradebookTable = ({
 
   const breakdownDisplayValue = (a: AssessmentContribution): number | null => {
     if (displayMode === 'percent') {
-      return a.grade === null ? null : gradeRatio(a.grade, a.maxGrade) * 100;
+      return a.grade === null ? null : a.ratio * 100;
     }
     return a.points;
   };
