@@ -92,6 +92,18 @@ RSpec.describe Course::Gradebook::TabContribution do
         end.not_to change(described_class, :count)
       end
 
+      it 'issues no queries for an empty updates array' do
+        course # instantiate outside the counted block
+        queries = 0
+        counter = lambda do |_name, _start, _finish, _id, payload|
+          queries += 1 unless payload[:name] == 'SCHEMA' || payload[:cached]
+        end
+        ActiveSupport::Notifications.subscribed(counter, 'sql.active_record') do
+          described_class.bulk_update(course: course, updates: [])
+        end
+        expect(queries).to eq(0)
+      end
+
       it 'is transactional — an invalid value rolls everything back' do
         create(:course_gradebook_tab_contribution, tab: tab1, course: course, weight: 10)
         create(:course_gradebook_tab_contribution, tab: tab2, course: course, weight: 20)

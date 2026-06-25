@@ -6,6 +6,10 @@ en:
           attributes:
             reference_timelines:
               must_have_at_most_one_default: 'must have at most one default'
+        course/gradebook/contribution:
+          attributes:
+            base:
+              exactly_one_contributor: "must reference exactly one contributor (a tab or an external assessment)"
         course/announcement:
           attributes:
             end_at:

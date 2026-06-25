@@ -1,4 +1,8 @@
-import { GradebookData, UpdateWeightsPayload } from 'types/course/gradebook';
+import {
+  ExternalGradePayload,
+  GradebookData,
+  UpdateWeightsPayload,
+} from 'types/course/gradebook';
 
 import { APIResponse } from 'api/types';
 
@@ -17,5 +21,15 @@ export default class GradebookAPI extends BaseCourseAPI {
     payload: UpdateWeightsPayload,
   ): APIResponse<UpdateWeightsPayload> {
     return this.client.patch(`${this.#urlPrefix}/weights`, payload);
+  }
+
+  setExternalGrade(
+    id: number,
+    payload: { studentId: number; grade: number | null },
+  ): APIResponse<ExternalGradePayload> {
+    return this.client.put(
+      `${this.#urlPrefix}/external_assessments/${id}/grades`,
+      payload,
+    );
   }
 }
