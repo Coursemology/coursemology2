@@ -1368,3 +1368,101 @@ describe('customTabImbalanced', () => {
     expect(customTabImbalanced(tab, tabAssessments)).toBe(false);
   });
 });
+
+describe('external-assessment grade bounding (floorAtZero / capAtMaximum)', () => {
+  it('equal mode: capAtMaximum clamps an over-max grade before ratioing', () => {
+    // a1 graded 120/100 with capAtMaximum → effective 100 → ratio 1.0 (not 1.2)
+    // a2 graded 25/50 → 0.5 ; subtotal = (1.0 + 0.5)/2 = 0.75
+    const result = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 10, title: 'M', categoryId: 0 },
+      assessments: [
+        { id: 1, tabId: 10, maxGrade: 100, title: 'A', capAtMaximum: true },
+        { id: 2, tabId: 10, maxGrade: 50, title: 'B' },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 120 },
+        { studentId: 1, assessmentId: 2, grade: 25 },
+      ]),
+    });
+    expect(result).toBeCloseTo(0.75);
+  });
+
+  it('equal mode: floorAtZero clamps a negative grade to 0 before ratioing', () => {
+    // a1 graded -40/100 with floorAtZero → effective 0 → ratio 0 (not -0.4)
+    // a2 graded 50/50 → 1.0 ; subtotal = (0 + 1.0)/2 = 0.5
+    const result = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 10, title: 'M', categoryId: 0 },
+      assessments: [
+        { id: 1, tabId: 10, maxGrade: 100, title: 'A', floorAtZero: true },
+        { id: 2, tabId: 10, maxGrade: 50, title: 'B' },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: -40 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+      ]),
+    });
+    expect(result).toBeCloseTo(0.5);
+  });
+
+  it('native assessment (no flags) passes an over-max grade through uncapped', () => {
+    // a1 graded 120/100, no capAtMaximum → ratio 1.2 (native behaviour unchanged)
+    const result = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 10, title: 'M', categoryId: 0 },
+      assessments: [{ id: 1, tabId: 10, maxGrade: 100, title: 'A' }],
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 120 }]),
+    });
+    expect(result).toBeCloseTo(1.2);
+  });
+
+  it('custom mode: bounds the grade before applying the assessment weight', () => {
+    // a1 120/100 capAtMaximum weight 70 → effective 100 → 1.0*70 = 70
+    // a2 50/50 weight 30 → 1.0*30 = 30 ; subtotal = (70 + 30)/100 = 1.0
+    const result = computeTabSubtotal({
+      studentId: 1,
+      tab: {
+        id: 10,
+        title: 'M',
+        categoryId: 0,
+        gradebookWeight: 100,
+        weightMode: 'custom' as const,
+      },
+      assessments: [
+        {
+          id: 1,
+          tabId: 10,
+          maxGrade: 100,
+          title: 'A',
+          gradebookWeight: 70,
+          capAtMaximum: true,
+        },
+        { id: 2, tabId: 10, maxGrade: 50, title: 'B', gradebookWeight: 30 },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 120 },
+        { studentId: 1, assessmentId: 2, grade: 50 },
+      ]),
+    });
+    expect(result).toBeCloseTo(1.0);
+  });
+
+  it('breakdown: ratio/points reflect the bounded grade while grade stays raw', () => {
+    // a1 120/100 capAtMaximum, equal mode, n=1, tab weight 60
+    //   effective 100 → ratio 1.0 → points = (1.0/1)*60 = 60
+    //   raw grade preserved for the "120/100" display
+    const [tab] = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 60 }],
+      assessments: [
+        { id: 1, tabId: 10, maxGrade: 100, title: 'A', capAtMaximum: true },
+      ],
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 120 }]),
+    });
+    const a = tab.assessments.find((x) => x.assessmentId === 1)!;
+    expect(a.grade).toBe(120); // raw, for display
+    expect(a.ratio).toBeCloseTo(1.0); // bounded fraction earned
+    expect(a.points).toBeCloseTo(60);
+  });
+});

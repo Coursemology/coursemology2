@@ -6,6 +6,10 @@ ko:
           attributes:
             reference_timelines:
               must_have_at_most_one_default: '최대 하나의 기본값만 있어야 합니다'
+        course/gradebook/contribution:
+          attributes:
+            base:
+              exactly_one_contributor: '정확히 하나의 기여 대상(탭 또는 외부 평가)을 참조해야 합니다'
         course/announcement:
           attributes:
             end_at:

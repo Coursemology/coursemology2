@@ -25,6 +25,8 @@ class Course::Gradebook::TabContribution < ApplicationRecord
   # @param updates [Array<Hash>] each { tab_id:, weight:, weight_mode:,
   #   excluded_assessment_ids: [Integer], assessment_weights: [{ assessment_id:, weight: }] }
   def self.bulk_update(course:, updates:)
+    return if updates.blank?
+
     course_tab_ids = course.assessment_tabs.pluck(:id).to_set
     updates.each { |e| raise ActiveRecord::RecordNotFound unless course_tab_ids.include?(e[:tab_id]) }
 

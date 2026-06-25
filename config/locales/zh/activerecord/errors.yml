@@ -6,6 +6,10 @@ zh:
           attributes:
             reference_timelines:
               must_have_at_most_one_default: '至少要包含一个默认值'
+        course/gradebook/contribution:
+          attributes:
+            base:
+              exactly_one_contributor: '必须且只能引用一个贡献项（一个标签页或一个外部评估）'
         course/announcement:
           attributes:
             end_at:

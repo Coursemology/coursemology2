@@ -19,6 +19,9 @@ export interface AssessmentData {
   maxGrade: number;
   gradebookWeight?: number | null;
   gradebookExcluded?: boolean;
+  external?: boolean;
+  floorAtZero?: boolean;
+  capAtMaximum?: boolean;
 }
 
 export interface StudentData {
@@ -34,7 +37,7 @@ export interface StudentData {
 export interface SubmissionData {
   studentId: number;
   assessmentId: number;
-  submissionId: number;
+  submissionId?: number;
   grade: number | null;
 }
 
@@ -86,4 +89,10 @@ export type FormulaNode =
 
 export interface LevelContributionSaveData extends LevelContributionData {
   formulaAst: FormulaNode | null;
+}
+
+export interface ExternalGradePayload {
+  studentId: number;
+  assessmentId: number;
+  grade: number | null;
 }
