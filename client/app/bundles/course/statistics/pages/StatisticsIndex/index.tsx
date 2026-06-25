@@ -115,7 +115,10 @@ const StatisticsIndex: FC = () => {
 
         return (
           <Page title={t(translations.statistics)} unpadded>
-            <Box className="max-w-full border-b border-divider">
+            <Box
+              className="max-w-full"
+              sx={{ borderBottom: 1, borderColor: 'divider' }}
+            >
               <Tabs
                 aria-label="Statistics Index Tabs"
                 onChange={(_, value) => {

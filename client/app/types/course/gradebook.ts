@@ -18,6 +18,9 @@ export interface AssessmentData {
   maxGrade: number;
   gradebookWeight?: number | null;
   gradebookExcluded?: boolean;
+  external?: boolean;
+  floorAtZero?: boolean;
+  capAtMaximum?: boolean;
 }
 
 export interface StudentData {
@@ -32,7 +35,7 @@ export interface StudentData {
 export interface SubmissionData {
   studentId: number;
   assessmentId: number;
-  submissionId: number;
+  submissionId?: number;
   grade: number | null;
 }
 
@@ -55,4 +58,10 @@ export interface UpdateWeightsPayload {
     excludedAssessmentIds?: number[];
     assessmentWeights?: { assessmentId: number; weight: number }[];
   }[];
+}
+
+export interface ExternalGradePayload {
+  studentId: number;
+  assessmentId: number;
+  grade: number | null;
 }

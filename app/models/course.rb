@@ -55,6 +55,8 @@ class Course < ApplicationRecord
   has_many :assessments, through: :assessment_categories
   has_many :gradebook_contributions, class_name: 'Course::Gradebook::Contribution',
                                      dependent: :destroy, inverse_of: :course
+  has_many :external_assessments, class_name: 'Course::ExternalAssessment',
+                                  inverse_of: :course, dependent: :destroy
   has_many :assessment_skills, class_name: 'Course::Assessment::Skill',
                                dependent: :destroy
   has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',

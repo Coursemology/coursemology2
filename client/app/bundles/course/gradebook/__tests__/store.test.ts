@@ -151,3 +151,55 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
     );
   });
 });
+
+describe('external assessment reducers', () => {
+  const state = {
+    categories: [{ id: 1, title: 'Cat A' }],
+    tabs: [{ id: 10, title: 'Tab 1', categoryId: 1 }],
+    assessments: [{ id: 100, title: 'Quiz 1', tabId: 10, maxGrade: 10 }],
+    students: [],
+    submissions: [{ studentId: 1, assessmentId: 100, grade: 8 }],
+    gamificationEnabled: false,
+    userId: 0,
+    weightedViewEnabled: false,
+    canManageWeights: true,
+  };
+
+  it('setExternalGrade upserts a submission row by (studentId, assessmentId)', () => {
+    const inserted = reducer(
+      state,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: 42 }),
+    );
+    expect(
+      inserted.submissions.find(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      )?.grade,
+    ).toBe(42);
+
+    const updated = reducer(
+      inserted,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: 17 }),
+    );
+    expect(
+      updated.submissions.filter(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      ),
+    ).toHaveLength(1);
+    expect(
+      updated.submissions.find(
+        (s) => s.studentId === 1 && s.assessmentId === -5,
+      )?.grade,
+    ).toBe(17);
+  });
+
+  it('setExternalGrade can clear a grade to null', () => {
+    const next = reducer(
+      state,
+      actions.setExternalGrade({ studentId: 1, assessmentId: -5, grade: null }),
+    );
+    expect(
+      next.submissions.find((s) => s.studentId === 1 && s.assessmentId === -5)
+        ?.grade,
+    ).toBeNull();
+  });
+});

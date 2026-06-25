@@ -9412,5 +9412,17 @@
   },
   "course.gradebook.WeightedViewHint.settingsLink": {
     "defaultMessage": "성적부 설정"
+  },
+  "course.gradebook.GradebookTable.externalBadge": {
+    "defaultMessage": "외부"
+  },
+  "course.gradebook.GradebookTable.externalGradeAria": {
+    "defaultMessage": "{name}의 {title} 성적"
+  },
+  "course.gradebook.GradebookTable.gradeSaveError": {
+    "defaultMessage": "성적을 저장할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.GradebookTable.gradeSaved": {
+    "defaultMessage": "성적이 저장되었습니다. {title} · {name}: {oldGrade} → {newGrade}"
   }
 }
