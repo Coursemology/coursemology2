@@ -29,8 +29,11 @@ export interface WeightedRow {
 export interface AssessmentContribution {
   assessmentId: number;
   title: string;
-  grade: number | null;
+  grade: number | null; // raw grade, for the "grade/maxGrade" display
   maxGrade: number;
+  // Bounded fraction earned (effectiveGrade/maxGrade), 0 when ungraded. Use this —
+  // not grade/maxGrade — for the percent display so it matches the weighted points.
+  ratio: number;
   points: number; // contribution to this tab's weighted-points cell
   // Share of the overall grade this assessment carries, in percentage points.
   // Equal mode: the tab's weight split evenly across its assessments.
@@ -55,6 +58,19 @@ const gradeKey = (studentId: number, assessmentId: number): string =>
 // poisons subtotals, totals or the breakdown.
 export const gradeRatio = (grade: number, maxGrade: number): number =>
   maxGrade === 0 ? 0 : grade / maxGrade;
+
+// Per-assessment grade bounding (external assessments only). Applied at READ time
+// so the toggles stay reversible and the stored grade is never mutated. Native
+// assessments leave both flags undefined → passthrough (unchanged behaviour).
+export const effectiveGrade = (
+  grade: number,
+  a: Pick<AssessmentData, 'maxGrade' | 'floorAtZero' | 'capAtMaximum'>,
+): number => {
+  let g = grade;
+  if (a.floorAtZero && g < 0) g = 0;
+  if (a.capAtMaximum && g > a.maxGrade) g = a.maxGrade;
+  return g;
+};
 
 // Index submissions by (student, assessment) once: O(submissions).
 const buildGradeLookup = (submissions: GradeEntry[]): GradeLookup => {
@@ -94,7 +110,7 @@ const equalSubtotal = (
   const keepN = tab.keepHighest ?? 0;
   const ratios = included.map((a) => {
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
-    return grade != null ? gradeRatio(grade, a.maxGrade) : 0;
+    return grade != null ? gradeRatio(effectiveGrade(grade, a), a.maxGrade) : 0;
   });
   ratios.sort((x, y) => x - y); // ascending
   const keep = keepN > 0 ? Math.min(keepN, included.length) : included.length;
@@ -120,7 +136,8 @@ const customSubtotal = (
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     const assessmentWeight = a.gradebookWeight ?? 0;
     if (grade != null)
-      numerator += gradeRatio(grade, a.maxGrade) * assessmentWeight;
+      numerator +=
+        gradeRatio(effectiveGrade(grade, a), a.maxGrade) * assessmentWeight;
     hasContributing = true;
   });
   return hasContributing ? numerator / tabWeight : null;
@@ -318,7 +335,8 @@ export const computeStudentBreakdown = ({
       const excluded = !!a.gradebookExcluded;
       const dropped = droppedIds.has(a.id);
       const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
-      const ratio = grade != null ? gradeRatio(grade, a.maxGrade) : 0;
+      const ratio =
+        grade != null ? gradeRatio(effectiveGrade(grade, a), a.maxGrade) : 0;
       let points: number;
       let effectiveWeight: number;
       if (excluded || dropped) {
@@ -336,6 +354,7 @@ export const computeStudentBreakdown = ({
         title: a.title,
         grade,
         maxGrade: a.maxGrade,
+        ratio,
         points,
         effectiveWeight,
         excluded,
@@ -355,6 +374,7 @@ export const computeStudentBreakdown = ({
           title: 'Level',
           grade: level ?? 0,
           maxGrade: courseMaxLevel ?? 0,
+          ratio: gradeRatio(level ?? 0, courseMaxLevel ?? 0),
           points: lvl,
           effectiveWeight: levelContribution.weight,
           excluded: false,

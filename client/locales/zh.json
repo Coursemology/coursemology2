@@ -9649,5 +9649,17 @@
   },
   "course.gradebook.WeightedViewHint.settingsLink": {
     "defaultMessage": "成绩册设置"
+  },
+  "course.gradebook.GradebookTable.externalBadge": {
+    "defaultMessage": "外部"
+  },
+  "course.gradebook.GradebookTable.externalGradeAria": {
+    "defaultMessage": "{name} 的 {title} 成绩"
+  },
+  "course.gradebook.GradebookTable.gradeSaveError": {
+    "defaultMessage": "无法保存成绩。请重试。"
+  },
+  "course.gradebook.GradebookTable.gradeSaved": {
+    "defaultMessage": "成绩已保存。{title} · {name}：{oldGrade} → {newGrade}"
   }
 }
