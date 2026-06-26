@@ -34,6 +34,14 @@ class Course::ExternalAssessmentsController < Course::ComponentController
     head :ok
   end
 
+  def reorder
+    authorize! :manage_gradebook_weights, current_course
+    Course::ExternalAssessment.reorder!(course: current_course, ordered_ids: reorder_params)
+    head :ok
+  rescue ArgumentError
+    head :unprocessable_entity
+  end
+
   def grades
     authorize! :grade, @external_assessment
     # The gradebook keys students by user_id (see index/update_grade jbuilders), so the
@@ -103,5 +111,9 @@ class Course::ExternalAssessmentsController < Course::ComponentController
   # Blank cell clears the grade to null (ungraded), never zero (decision #7).
   def normalized_grade(value)
     value.blank? ? nil : value
+  end
+
+  def reorder_params
+    params.require(:orderedIds).map(&:to_i)
   end
 end

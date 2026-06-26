@@ -9416,11 +9416,17 @@
   "course.gradebook.AddExternalColumnPrompt.cancel": {
     "defaultMessage": "취소"
   },
+  "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The grade you see is unchanged."
+  },
   "course.gradebook.AddExternalColumnPrompt.create": {
     "defaultMessage": "만들기"
   },
   "course.gradebook.AddExternalColumnPrompt.error": {
     "defaultMessage": "외부 평가를 생성할 수 없습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The grade you see is unchanged."
   },
   "course.gradebook.AddExternalColumnPrompt.maxLabel": {
     "defaultMessage": "최대 점수"
@@ -9433,6 +9439,9 @@
   },
   "course.gradebook.AddExternalColumnPrompt.title": {
     "defaultMessage": "외부 평가 추가"
+  },
+  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
+    "defaultMessage": "가중치"
   },
   "course.gradebook.DeleteExternalColumnPrompt.body": {
     "defaultMessage": "\"{title}\"을(를) 삭제하시겠습니까? 이 작업은 해당 열과 그 안의 모든 학생 성적을 영구적으로 제거합니다. 이 작업은 되돌릴 수 없습니다."
@@ -9449,8 +9458,20 @@
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "외부 평가 삭제"
   },
+  "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The grade you see is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The grade you see is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
+    "defaultMessage": "가중치"
+  },
   "course.gradebook.ExternalGradeConflictPrompt.body": {
-    "defaultMessage": "이 학생들은 이미 해당 구성 요소에 대한 성적이 있습니다. 기존 성적을 유지하시겠습니까, 아니면 파일의 값으로 대체하시겠습니까? 새 학생과 빈 셀은 영향을 받지 않습니다."
+    "defaultMessage": "일부 학생은 이 구성 요소에 이미 성적이 있으며, 파일의 값과 다릅니다. '바꾸기'를 선택하면 파일의 값으로 기존 성적을 덮어씁니다. '기존 성적 유지'를 선택하면 기존 성적이 변경되지 않습니다."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.changesSummary": {
+    "defaultMessage": "{total}개 행 중 {changed}개에 변경 사항이 있습니다"
   },
   "course.gradebook.ExternalGradeConflictPrompt.goBack": {
     "defaultMessage": "돌아가기"
@@ -9464,20 +9485,11 @@
   "course.gradebook.ExternalGradeConflictPrompt.title": {
     "defaultMessage": "성적 충돌 해결"
   },
-  "course.gradebook.ExternalGradeConflictTable.component": {
-    "defaultMessage": "구성 요소"
-  },
-  "course.gradebook.ExternalGradeConflictTable.existing": {
-    "defaultMessage": "기존 성적"
-  },
-  "course.gradebook.ExternalGradeConflictTable.inFile": {
-    "defaultMessage": "파일 내 성적"
-  },
   "course.gradebook.ExternalGradeConflictTable.mismatch": {
     "defaultMessage": "이 식별자는 이제 기존 성적을 가져올 때의 학생과 다른 학생으로 확인됩니다."
   },
-  "course.gradebook.ExternalGradeConflictTable.student": {
-    "defaultMessage": "학생"
+  "course.gradebook.ExternalGradeConflictTable.name": {
+    "defaultMessage": "이름"
   },
   "course.gradebook.GradeLinkHint.hint": {
     "defaultMessage": "각 성적은 학생 제출물의 점수 합계입니다. 성적을 클릭하면 해당 제출물을 열고 점수를 조정할 수 있습니다."
@@ -9488,8 +9500,8 @@
   "course.gradebook.GradebookIndex.noStudentsHint": {
     "defaultMessage": "학생이 강좌에 참여하면 여기에 성적이 표시됩니다."
   },
-  "course.gradebook.GradebookTable.delete": {
-    "defaultMessage": "삭제"
+  "course.gradebook.GradebookTable.acceptEdit": {
+    "defaultMessage": "Accept"
   },
   "course.gradebook.GradebookTable.externalBadge": {
     "defaultMessage": "외부"
@@ -9497,20 +9509,26 @@
   "course.gradebook.GradebookTable.externalGradeAria": {
     "defaultMessage": "{name}의 {title} 성적"
   },
-  "course.gradebook.GradebookTable.externalMaxAria": {
-    "defaultMessage": "{title} 최대 점수"
+  "course.gradebook.GradebookTable.gradeBelowZero": {
+    "defaultMessage": "This grade is below 0."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZeroWeighted": {
+    "defaultMessage": "This grade is below 0; it is floored to 0 in the weighted total."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMax": {
+    "defaultMessage": "This grade exceeds the maximum of {max}."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMaxWeighted": {
+    "defaultMessage": "This grade exceeds the maximum of {max}; its contribution to the weighted total is capped at {max}."
   },
   "course.gradebook.GradebookTable.gradeSaveError": {
     "defaultMessage": "성적을 저장할 수 없습니다. 다시 시도해 주세요."
   },
-  "course.gradebook.GradebookTable.manageAria": {
-    "defaultMessage": "{title} 관리"
-  },
-  "course.gradebook.GradebookTable.maxSaveError": {
-    "defaultMessage": "최대 점수를 저장할 수 없습니다. 다시 시도해 주세요."
-  },
   "course.gradebook.GradebookTable.rename": {
     "defaultMessage": "이름 변경"
+  },
+  "course.gradebook.GradebookTable.revertEdit": {
+    "defaultMessage": "Revert"
   },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "표시 모드"
@@ -9545,11 +9563,23 @@
   "course.gradebook.ImportWizard.email": {
     "defaultMessage": "이메일"
   },
+  "course.gradebook.ImportWizard.externalId": {
+    "defaultMessage": "외부 ID"
+  },
+  "course.gradebook.ImportWizard.externalIdBlocked": {
+    "defaultMessage": "{count, plural, =0 {{name}에게 외부 ID가 없습니다} one {{name} 외 학생 1명에게 외부 ID가 없습니다} other {{name} 외 학생 #명에게 외부 ID가 없습니다}}. 외부 ID로 가져오려면 <link>사용자 관리</link>에서 누락된 ID를 추가하세요."
+  },
+  "course.gradebook.ImportWizard.externalIdHint": {
+    "defaultMessage": "각 학생의 외부 ID를 사용하여 일치 여부를 확인합니다. <link>사용자 관리</link>에서 외부 ID를 최신 상태로 유지하세요."
+  },
   "course.gradebook.ImportWizard.identifierMode": {
     "defaultMessage": "학생 매칭 기준"
   },
   "course.gradebook.ImportWizard.malformed": {
-    "defaultMessage": "다음 셀은 올바른 숫자가 아닙니다: {cells}"
+    "defaultMessage": "이 셀에는 유효한 숫자가 포함되어 있지 않습니다:"
+  },
+  "course.gradebook.ImportWizard.malformedMore": {
+    "defaultMessage": "외 {count}개 더"
   },
   "course.gradebook.ImportWizard.maxMarks": {
     "defaultMessage": "최대 점수"
@@ -9557,8 +9587,23 @@
   "course.gradebook.ImportWizard.next": {
     "defaultMessage": "다음"
   },
+  "course.gradebook.ImportWizard.outOfRangeSubtitle": {
+    "defaultMessage": "성적은 입력한 값 그대로 가져옵니다. 이는 경고일 뿐이며, 평가 설정에서 이러한 경고를 끌 수 있습니다. 범위를 벗어난 성적이 의도한 값이라면 계속 진행하세요."
+  },
+  "course.gradebook.ImportWizard.outOfRangeTitle": {
+    "defaultMessage": "일부 성적이 유효 범위를 벗어났습니다."
+  },
+  "course.gradebook.ImportWizard.outOfRangeWeightedSubtitle": {
+    "defaultMessage": "성적은 입력한 값 그대로 가져옵니다. 이는 경고일 뿐이며, 평가 설정에서 이러한 경고를 끌 수 있습니다. 범위를 벗어난 성적은 평가별 설정에 따라 가중 총점에서만 하한 또는 상한이 적용되며, 이 설정은 평가를 편집할 때 변경할 수 있습니다. 범위를 벗어난 성적이 의도한 값이라면 계속 진행하세요."
+  },
   "course.gradebook.ImportWizard.previewError": {
     "defaultMessage": "파일을 확인할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.ImportWizard.previewFewRows": {
+    "defaultMessage": "전체 {totalRows}개 행을 미리보고 있습니다. 계속하기 전에 이 미리보기가 CSV와 일치하는지 확인하세요."
+  },
+  "course.gradebook.ImportWizard.previewRows": {
+    "defaultMessage": "총 {totalRows}개 행 중 처음 5개 행을 미리보고 있습니다. 계속하기 전에 이 미리보기가 CSV와 일치하는지 확인하세요."
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "구성 요소 정의"
@@ -9578,8 +9623,11 @@
   "course.gradebook.ImportWizard.title": {
     "defaultMessage": "외부 평가 가져오기"
   },
-  "course.gradebook.ImportWizard.unresolved": {
-    "defaultMessage": "다음 식별자를 강좌에서 찾을 수 없습니다: {ids}"
+  "course.gradebook.ImportWizard.unresolvedEmail": {
+    "defaultMessage": "{count, plural, one {이 이메일 주소를 강좌에서 찾을 수 없습니다: {ids}} other {이 이메일 주소들을 강좌에서 찾을 수 없습니다: {ids}}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedExternalId": {
+    "defaultMessage": "{count, plural, one {이 외부 ID를 강좌에서 찾을 수 없습니다: {ids}} other {이 외부 ID들을 강좌에서 찾을 수 없습니다: {ids}}}"
   },
   "course.gradebook.ImportWizard.updatesExisting": {
     "defaultMessage": "기존 항목 업데이트 - 성적부에서 관리됨"
@@ -9592,6 +9640,15 @@
   },
   "course.gradebook.ImportWizard.weightage": {
     "defaultMessage": "가중치"
+  },
+  "course.gradebook.ImportWizard.willChangeExisting": {
+    "defaultMessage": "{count, plural, one {#개 행에} other {#개 행에}} 기존 성적에 대한 변경 사항이 있습니다. 이 미리보기가 CSV와 일치하는지 확인한 후, 가져오기 확인을 클릭하여 가져오기 전에 이러한 충돌을 검토하세요."
+  },
+  "course.gradebook.OutOfRangeAlert.warning": {
+    "defaultMessage": "외부 평가 {assessmentNames}의 {gradeCount, plural, one {#개 성적} other {#개 성적}}이 범위를 벗어났습니다. 내보내기 전에 검토하세요."
+  },
+  "course.gradebook.OutOfRangeAlert.warningWeighted": {
+    "defaultMessage": "외부 평가 {assessmentNames}의 {gradeCount, plural, one {#개 성적} other {#개 성적}}이 범위를 벗어났으며, 가중 총점에서 상한 또는 하한이 적용됩니다. 내보내기 전에 검토하세요."
   },
   "course.gradebook.ProjectedTotalHint.policy": {
     "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."

@@ -506,6 +506,9 @@ Rails.application.routes.draw do
           member do
             put 'grades' => 'external_assessments#grades'
           end
+          collection do
+            put 'reorder' => 'external_assessments#reorder'
+          end
         end
         resources :external_assessment_imports, only: [:create] do
           collection do

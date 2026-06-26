@@ -1,5 +1,7 @@
 import reducer, { actions } from '../store';
 
+const EXTERNAL_ASSESSMENTS = 'External Assessments';
+
 const baseState = {
   categories: [],
   tabs: [
@@ -17,6 +19,45 @@ const baseState = {
   canManageWeights: false,
 };
 
+describe('SAVE_GRADEBOOK reducer', () => {
+  it('returns the initial state for an unknown action', () => {
+    const next = reducer(undefined, { type: 'unknown' } as never);
+    expect(next).toEqual({
+      categories: [],
+      tabs: [],
+      assessments: [],
+      students: [],
+      submissions: [],
+      gamificationEnabled: false,
+      weightedViewEnabled: false,
+      canManageWeights: false,
+    });
+  });
+
+  it('hydrates every field from the payload', () => {
+    const next = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [{ id: 1, title: 'C' }],
+        tabs: [{ id: 10, title: 'T', categoryId: 1, gradebookWeight: 50 }],
+        assessments: [{ id: 100, title: 'A', tabId: 10, maxGrade: 100 }],
+        students: [],
+        submissions: [{ studentId: 1, assessmentId: 100, grade: 8 }],
+        gamificationEnabled: true,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+      }),
+    );
+    expect(next.categories).toHaveLength(1);
+    expect(next.tabs[0].gradebookWeight).toBe(50);
+    expect(next.assessments[0].id).toBe(100);
+    expect(next.submissions[0].grade).toBe(8);
+    expect(next.gamificationEnabled).toBe(true);
+    expect(next.weightedViewEnabled).toBe(true);
+    expect(next.canManageWeights).toBe(true);
+  });
+});
+
 describe('UPDATE_TAB_WEIGHTS reducer', () => {
   it('updates gradebookWeight and weightMode for the matching tab', () => {
     const next = reducer(
@@ -30,7 +71,7 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
     expect(next.tabs.find((t) => t.id === 2)?.gradebookWeight).toBe(50);
   });
 
-  it('does not set any excluded field', () => {
+  it('does not set any excluded field in tabs', () => {
     const next = reducer(
       baseState,
       actions.updateTabWeights({
@@ -150,6 +191,40 @@ describe('UPDATE_TAB_WEIGHTS reducer', () => {
       false,
     );
   });
+
+  it('clears assessment exclusion when excludedAssessmentIds is omitted', () => {
+    const seeded = {
+      ...baseState,
+      assessments: [
+        {
+          id: 101,
+          title: 'A1',
+          tabId: 1,
+          maxGrade: 100,
+          gradebookExcluded: true,
+        },
+        {
+          id: 102,
+          title: 'A2',
+          tabId: 1,
+          maxGrade: 100,
+          gradebookExcluded: true,
+        },
+      ],
+    };
+    const next = reducer(
+      seeded,
+      actions.updateTabWeights({
+        weights: [{ tabId: 1, weight: 50, weightMode: 'equal' }],
+      }),
+    );
+    expect(next.assessments.find((a) => a.id === 101)?.gradebookExcluded).toBe(
+      false,
+    );
+    expect(next.assessments.find((a) => a.id === 102)?.gradebookExcluded).toBe(
+      false,
+    );
+  });
 });
 
 describe('external assessment reducers', () => {
@@ -177,23 +252,20 @@ describe('external assessment reducers', () => {
           external: true,
         },
         tab: { id: 200, title: 'Midterm', categoryId: 2 },
-        category: { id: 2, title: 'External Assessments' },
+        category: { id: 2, title: EXTERNAL_ASSESSMENTS },
       }),
     );
     expect(next.categories.find((c) => c.id === 2)?.title).toBe(
-      'External Assessments',
+      EXTERNAL_ASSESSMENTS,
     );
     expect(next.tabs.find((t) => t.id === 200)?.title).toBe('Midterm');
     expect(next.assessments.find((a) => a.id === -5)?.external).toBe(true);
   });
 
-  it('applyCreatedExternal does not duplicate an existing category/tab', () => {
+  it('applyCreatedExternal does not duplicate existing category, tab, or assessment', () => {
     const seeded = {
       ...state,
-      categories: [
-        ...state.categories,
-        { id: 2, title: 'External Assessments' },
-      ],
+      categories: [...state.categories, { id: 2, title: EXTERNAL_ASSESSMENTS }],
       tabs: [...state.tabs, { id: 200, title: 'Midterm', categoryId: 2 }],
     };
     const next = reducer(
@@ -207,11 +279,12 @@ describe('external assessment reducers', () => {
           external: true,
         },
         tab: { id: 200, title: 'Midterm', categoryId: 2 },
-        category: { id: 2, title: 'External Assessments' },
+        category: { id: 2, title: EXTERNAL_ASSESSMENTS },
       }),
     );
     expect(next.categories.filter((c) => c.id === 2)).toHaveLength(1);
     expect(next.tabs.filter((t) => t.id === 200)).toHaveLength(1);
+    expect(next.assessments.filter((a) => a.id === -6)).toHaveLength(1);
   });
 
   it('updateExternalAssessment changes title and maxGrade and syncs tab title', () => {
@@ -243,6 +316,49 @@ describe('external assessment reducers', () => {
     expect(next.tabs.find((t) => t.id === 200)?.title).toBe('Midterm Exam');
   });
 
+  it('updateExternalAssessment writes tab.gradebookWeight when provided and preserves it when omitted', () => {
+    const seeded = {
+      ...state,
+      assessments: [
+        ...state.assessments,
+        { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+      ],
+      tabs: [
+        ...state.tabs,
+        { id: 200, title: 'Midterm', categoryId: 2, gradebookWeight: 40 },
+      ],
+    };
+    const withWeight = reducer(
+      seeded,
+      actions.updateExternalAssessment({
+        assessment: {
+          id: -5,
+          title: 'M',
+          tabId: 200,
+          maxGrade: 50,
+          external: true,
+        },
+        tab: { id: 200, title: 'M', categoryId: 2, gradebookWeight: 75 },
+      }),
+    );
+    expect(withWeight.tabs.find((t) => t.id === 200)?.gradebookWeight).toBe(75);
+
+    const noWeight = reducer(
+      seeded,
+      actions.updateExternalAssessment({
+        assessment: {
+          id: -5,
+          title: 'M',
+          tabId: 200,
+          maxGrade: 50,
+          external: true,
+        },
+        tab: { id: 200, title: 'M', categoryId: 2 },
+      }),
+    );
+    expect(noWeight.tabs.find((t) => t.id === 200)?.gradebookWeight).toBe(40);
+  });
+
   it('deleteExternalAssessment removes the assessment and its now-empty tab', () => {
     const seeded = {
       ...state,
@@ -265,10 +381,7 @@ describe('external assessment reducers', () => {
   it('deleteExternalAssessment drops the synthetic category once its last external is gone', () => {
     const seeded = {
       ...state,
-      categories: [
-        ...state.categories,
-        { id: 2, title: 'External Assessments' },
-      ],
+      categories: [...state.categories, { id: 2, title: EXTERNAL_ASSESSMENTS }],
       assessments: [
         ...state.assessments,
         { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
@@ -283,10 +396,7 @@ describe('external assessment reducers', () => {
   it('deleteExternalAssessment keeps the category while other externals remain', () => {
     const seeded = {
       ...state,
-      categories: [
-        ...state.categories,
-        { id: 2, title: 'External Assessments' },
-      ],
+      categories: [...state.categories, { id: 2, title: EXTERNAL_ASSESSMENTS }],
       assessments: [
         ...state.assessments,
         { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
@@ -342,7 +452,7 @@ describe('external assessment reducers', () => {
   });
 
   it('UPDATE_EXTERNAL_ASSESSMENT copies bound flags', () => {
-    const seed = (overrides = {}) =>
+    const seed = (overrides = {}): ReturnType<typeof reducer> =>
       reducer(
         undefined,
         actions.saveGradebook({
@@ -386,5 +496,41 @@ describe('external assessment reducers', () => {
     const a = next.assessments.find((x) => x.id === -1)!;
     expect(a.floorAtZero).toBe(false);
     expect(a.capAtMaximum).toBe(false);
+  });
+
+  it('REORDER_EXTERNAL_ASSESSMENTS permutes external assessments and their synthetic tabs', () => {
+    const externalState = {
+      ...baseState,
+      tabs: [
+        { id: -1, title: 'Quiz', categoryId: -1 },
+        { id: -2, title: 'Exam', categoryId: -1 },
+      ],
+      assessments: [
+        { id: -1, title: 'Quiz', tabId: -1, maxGrade: 10, external: true },
+        { id: -2, title: 'Exam', tabId: -2, maxGrade: 20, external: true },
+      ],
+    };
+    const next = reducer(
+      externalState,
+      actions.reorderExternalAssessments([-2, -1]),
+    );
+    expect(next.assessments.map((a) => a.id)).toEqual([-2, -1]);
+    expect(next.tabs.map((t) => t.id)).toEqual([-2, -1]);
+  });
+
+  it('deleteExternalAssessment is a no-op for an unknown id', () => {
+    const seeded = {
+      ...state,
+      categories: [...state.categories, { id: 2, title: EXTERNAL_ASSESSMENTS }],
+      assessments: [
+        ...state.assessments,
+        { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+      ],
+      tabs: [...state.tabs, { id: 200, title: 'Midterm', categoryId: 2 }],
+    };
+    const next = reducer(seeded, actions.deleteExternalAssessment(-999));
+    expect(next.assessments.find((a) => a.id === -5)).toBeDefined();
+    expect(next.tabs.find((t) => t.id === 200)).toBeDefined();
+    expect(next.categories.find((c) => c.id === 2)).toBeDefined();
   });
 });

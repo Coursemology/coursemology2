@@ -22,6 +22,8 @@ const UPDATE_EXTERNAL_ASSESSMENT =
   'course/gradebook/UPDATE_EXTERNAL_ASSESSMENT';
 const DELETE_EXTERNAL_ASSESSMENT =
   'course/gradebook/DELETE_EXTERNAL_ASSESSMENT';
+const REORDER_EXTERNAL_ASSESSMENTS =
+  'course/gradebook/REORDER_EXTERNAL_ASSESSMENTS';
 const SET_EXTERNAL_GRADE = 'course/gradebook/SET_EXTERNAL_GRADE';
 
 interface GradebookState {
@@ -57,6 +59,10 @@ interface DeleteExternalAssessmentAction {
   type: typeof DELETE_EXTERNAL_ASSESSMENT;
   payload: number; // negative serialized assessment id
 }
+interface ReorderExternalAssessmentsAction {
+  type: typeof REORDER_EXTERNAL_ASSESSMENTS;
+  payload: number[]; // negative serialized assessment ids, new order
+}
 interface SetExternalGradeAction {
   type: typeof SET_EXTERNAL_GRADE;
   payload: ExternalGradePayload;
@@ -82,6 +88,7 @@ const reducer = produce(
       | ApplyCreatedExternalAction
       | UpdateExternalAssessmentAction
       | DeleteExternalAssessmentAction
+      | ReorderExternalAssessmentsAction
       | SetExternalGradeAction,
   ) => {
     switch (action.type) {
@@ -189,6 +196,25 @@ const reducer = produce(
         }
         break;
       }
+      case REORDER_EXTERNAL_ASSESSMENTS: {
+        const rank = new Map(action.payload.map((id, i) => [id, i]));
+        const externalsSorted = draft.assessments
+          .filter((a) => a.external)
+          .sort((x, y) => (rank.get(x.id) ?? 0) - (rank.get(y.id) ?? 0));
+        let ai = 0;
+        draft.assessments = draft.assessments.map((a) =>
+          a.external ? externalsSorted[ai++] : a,
+        );
+        const tabRank = new Map(externalsSorted.map((a, i) => [a.tabId, i]));
+        const tabsSorted = draft.tabs
+          .filter((t) => tabRank.has(t.id))
+          .sort((x, y) => (tabRank.get(x.id) ?? 0) - (tabRank.get(y.id) ?? 0));
+        let ti = 0;
+        draft.tabs = draft.tabs.map((t) =>
+          tabRank.has(t.id) ? tabsSorted[ti++] : t,
+        );
+        break;
+      }
       case SET_EXTERNAL_GRADE: {
         const { studentId, assessmentId, grade } = action.payload;
         const existing = draft.submissions.find(
@@ -228,6 +254,12 @@ export const actions = {
   deleteExternalAssessment: (id: number): DeleteExternalAssessmentAction => ({
     type: DELETE_EXTERNAL_ASSESSMENT,
     payload: id,
+  }),
+  reorderExternalAssessments: (
+    payload: number[],
+  ): ReorderExternalAssessmentsAction => ({
+    type: REORDER_EXTERNAL_ASSESSMENTS,
+    payload,
   }),
   setExternalGrade: (
     payload: ExternalGradePayload,

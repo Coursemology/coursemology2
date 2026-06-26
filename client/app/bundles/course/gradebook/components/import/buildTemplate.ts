@@ -1,19 +1,28 @@
-import type { ImportComponent } from 'types/course/gradebook';
+import type { IdentifierMode, ImportComponent } from 'types/course/gradebook';
 
 const csvCell = (value: string): string =>
   /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
 
-// Header-only template: Identifier + one column per component (dialog order).
-export const buildTemplateCsv = (components: ImportComponent[]): string => {
-  const header = ['Identifier', ...components.map((c) => c.name)]
+export const identifierHeader = (mode: IdentifierMode): string =>
+  mode === 'email' ? 'Email' : 'External ID';
+
+// Header-only template: per-mode identifier header + one column per component.
+export const buildTemplateCsv = (
+  components: ImportComponent[],
+  mode: IdentifierMode,
+): string => {
+  const header = [identifierHeader(mode), ...components.map((c) => c.name)]
     .map(csvCell)
     .join(',');
   return `${header}\n`;
 };
 
 // Triggers a client-side download of the template.
-export const downloadTemplate = (components: ImportComponent[]): void => {
-  const blob = new Blob([buildTemplateCsv(components)], {
+export const downloadTemplate = (
+  components: ImportComponent[],
+  mode: IdentifierMode,
+): void => {
+  const blob = new Blob([buildTemplateCsv(components, mode)], {
     type: 'text/csv;charset=utf-8;',
   });
   const url = URL.createObjectURL(blob);

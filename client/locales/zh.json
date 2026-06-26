@@ -9410,11 +9410,17 @@
   "course.gradebook.AddExternalColumnPrompt.cancel": {
     "defaultMessage": "取消"
   },
+  "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The grade you see is unchanged."
+  },
   "course.gradebook.AddExternalColumnPrompt.create": {
     "defaultMessage": "创建"
   },
   "course.gradebook.AddExternalColumnPrompt.error": {
     "defaultMessage": "无法创建外部评估。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The grade you see is unchanged."
   },
   "course.gradebook.AddExternalColumnPrompt.maxLabel": {
     "defaultMessage": "最高分"
@@ -9427,6 +9433,9 @@
   },
   "course.gradebook.AddExternalColumnPrompt.title": {
     "defaultMessage": "添加外部评估"
+  },
+  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
+    "defaultMessage": "权重"
   },
   "course.gradebook.DeleteExternalColumnPrompt.body": {
     "defaultMessage": "要删除\"{title}\"吗？这将永久移除该列及其中每位学生的成绩。此操作无法撤销。"
@@ -9443,8 +9452,20 @@
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "删除外部评估"
   },
+  "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The grade you see is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The grade you see is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
+    "defaultMessage": "权重"
+  },
   "course.gradebook.ExternalGradeConflictPrompt.body": {
-    "defaultMessage": "这些学生在这些组成部分中已有成绩。要保留他们现有的成绩，还是用文件中的值替换？新学生和空白单元格不受影响。"
+    "defaultMessage": "部分学生在这些组件中已有成绩，且与文件中的值不同。选择“替换”将使用文件中的值覆盖现有成绩。选择“保留现有成绩”将保持现有成绩不变。"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.changesSummary": {
+    "defaultMessage": "{changed}/{total} 行有更改"
   },
   "course.gradebook.ExternalGradeConflictPrompt.goBack": {
     "defaultMessage": "返回"
@@ -9458,20 +9479,11 @@
   "course.gradebook.ExternalGradeConflictPrompt.title": {
     "defaultMessage": "解决成绩冲突"
   },
-  "course.gradebook.ExternalGradeConflictTable.component": {
-    "defaultMessage": "组成部分"
-  },
-  "course.gradebook.ExternalGradeConflictTable.existing": {
-    "defaultMessage": "现有成绩"
-  },
-  "course.gradebook.ExternalGradeConflictTable.inFile": {
-    "defaultMessage": "文件中的成绩"
-  },
   "course.gradebook.ExternalGradeConflictTable.mismatch": {
     "defaultMessage": "此标识符现在对应的学生与现有成绩导入时对应的学生不同。"
   },
-  "course.gradebook.ExternalGradeConflictTable.student": {
-    "defaultMessage": "学生"
+  "course.gradebook.ExternalGradeConflictTable.name": {
+    "defaultMessage": "姓名"
   },
   "course.gradebook.GradeLinkHint.hint": {
     "defaultMessage": "每个成绩都是学生提交内容中各项分数的总和。点击任一成绩即可打开该提交内容并调整分数。"
@@ -9482,8 +9494,8 @@
   "course.gradebook.GradebookIndex.noStudentsHint": {
     "defaultMessage": "学生加入课程后，成绩将显示在这里。"
   },
-  "course.gradebook.GradebookTable.delete": {
-    "defaultMessage": "删除"
+  "course.gradebook.GradebookTable.acceptEdit": {
+    "defaultMessage": "Accept"
   },
   "course.gradebook.GradebookTable.externalBadge": {
     "defaultMessage": "外部"
@@ -9491,20 +9503,26 @@
   "course.gradebook.GradebookTable.externalGradeAria": {
     "defaultMessage": "{name} 的 {title} 成绩"
   },
-  "course.gradebook.GradebookTable.externalMaxAria": {
-    "defaultMessage": "{title} 最高分"
+  "course.gradebook.GradebookTable.gradeBelowZero": {
+    "defaultMessage": "This grade is below 0."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZeroWeighted": {
+    "defaultMessage": "This grade is below 0; it is floored to 0 in the weighted total."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMax": {
+    "defaultMessage": "This grade exceeds the maximum of {max}."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMaxWeighted": {
+    "defaultMessage": "This grade exceeds the maximum of {max}; its contribution to the weighted total is capped at {max}."
   },
   "course.gradebook.GradebookTable.gradeSaveError": {
     "defaultMessage": "无法保存成绩。请重试。"
   },
-  "course.gradebook.GradebookTable.manageAria": {
-    "defaultMessage": "管理 {title}"
-  },
-  "course.gradebook.GradebookTable.maxSaveError": {
-    "defaultMessage": "无法保存最高分。请重试。"
-  },
   "course.gradebook.GradebookTable.rename": {
     "defaultMessage": "重命名"
+  },
+  "course.gradebook.GradebookTable.revertEdit": {
+    "defaultMessage": "Revert"
   },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "显示模式"
@@ -9539,11 +9557,23 @@
   "course.gradebook.ImportWizard.email": {
     "defaultMessage": "电子邮件"
   },
+  "course.gradebook.ImportWizard.externalId": {
+    "defaultMessage": "外部编号"
+  },
+  "course.gradebook.ImportWizard.externalIdBlocked": {
+    "defaultMessage": "{count, plural, =0 {{name} 没有外部编号} one {{name} 和另外 1 名学生没有外部编号} other {{name} 和另外 # 名学生没有外部编号}}。请在 <link>管理用户</link> 中添加缺少的编号，以通过外部编号导入。"
+  },
+  "course.gradebook.ImportWizard.externalIdHint": {
+    "defaultMessage": "匹配时将使用每位学生的外部编号。请在 <link>管理用户</link> 中保持外部编号为最新。"
+  },
   "course.gradebook.ImportWizard.identifierMode": {
-    "defaultMessage": "匹配学生的依据"
+    "defaultMessage": "使用以下标识匹配学生成绩"
   },
   "course.gradebook.ImportWizard.malformed": {
-    "defaultMessage": "以下单元格不是有效数字：{cells}"
+    "defaultMessage": "这些单元格不包含有效数字："
+  },
+  "course.gradebook.ImportWizard.malformedMore": {
+    "defaultMessage": "以及其他 {count} 个"
   },
   "course.gradebook.ImportWizard.maxMarks": {
     "defaultMessage": "最高分"
@@ -9551,8 +9581,23 @@
   "course.gradebook.ImportWizard.next": {
     "defaultMessage": "下一步"
   },
+  "course.gradebook.ImportWizard.outOfRangeSubtitle": {
+    "defaultMessage": "成绩将完全按照输入内容导入。如果这些超出范围的成绩正是您要导入的内容，请继续。"
+  },
+  "course.gradebook.ImportWizard.outOfRangeTitle": {
+    "defaultMessage": "部分成绩超出了其有效范围。"
+  },
+  "course.gradebook.ImportWizard.outOfRangeWeightedSubtitle": {
+    "defaultMessage": "成绩将完全按照输入内容导入。只有在加权总分中才会按下限或上限限制，这是每项评估的设置，可在编辑评估时更改。如果这些超出范围的成绩正是您要导入的内容，请继续。"
+  },
   "course.gradebook.ImportWizard.previewError": {
     "defaultMessage": "无法验证文件。请重试。"
+  },
+  "course.gradebook.ImportWizard.previewFewRows": {
+    "defaultMessage": "正在预览全部 {totalRows} 行。请检查此预览是否与您的 CSV 一致，然后再继续。"
+  },
+  "course.gradebook.ImportWizard.previewRows": {
+    "defaultMessage": "正在预览 {totalRows} 行中的前 5 行。请检查此预览是否与您的 CSV 一致，然后再继续。"
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "定义组成部分"
@@ -9572,8 +9617,11 @@
   "course.gradebook.ImportWizard.title": {
     "defaultMessage": "导入外部评估"
   },
-  "course.gradebook.ImportWizard.unresolved": {
-    "defaultMessage": "在课程中找不到以下标识符：{ids}"
+  "course.gradebook.ImportWizard.unresolvedEmail": {
+    "defaultMessage": "{count, plural, one {在课程中找不到此电子邮件地址：{ids}} other {在课程中找不到这些电子邮件地址：{ids}}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedExternalId": {
+    "defaultMessage": "{count, plural, one {在课程中找不到此外部编号：{ids}} other {在课程中找不到这些外部编号：{ids}}}"
   },
   "course.gradebook.ImportWizard.updatesExisting": {
     "defaultMessage": "更新现有项目 - 在成绩册中管理"
@@ -9586,6 +9634,15 @@
   },
   "course.gradebook.ImportWizard.weightage": {
     "defaultMessage": "权重"
+  },
+  "course.gradebook.ImportWizard.willChangeExisting": {
+    "defaultMessage": "{count, plural, one {# 行包含} other {# 行包含}}对现有成绩的更改。请先检查此预览是否与您的 CSV 一致，然后点击“确认导入”以在导入前查看这些冲突。"
+  },
+  "course.gradebook.OutOfRangeAlert.warning": {
+    "defaultMessage": "外部评估 {assessmentNames} 中有 {gradeCount, plural, one {# 个成绩} other {# 个成绩}}超出了范围。请在导出前检查。"
+  },
+  "course.gradebook.OutOfRangeAlert.warningWeighted": {
+    "defaultMessage": "外部评估 {assessmentNames} 中有 {gradeCount, plural, one {# 个成绩} other {# 个成绩}}超出了范围，并且会在加权总分中应用上限或下限限制。请在导出前检查。"
   },
   "course.gradebook.ProjectedTotalHint.policy": {
     "defaultMessage": "总分会将未评分的评估计为 0。"

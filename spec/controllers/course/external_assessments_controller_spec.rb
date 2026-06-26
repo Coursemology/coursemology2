@@ -314,5 +314,28 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         end
       end
     end
+
+    describe '#reorder' do
+      let!(:a) { create(:course_external_assessment, course: course) }
+      let!(:b) { create(:course_external_assessment, course: course) }
+      let!(:c) { create(:course_external_assessment, course: course) }
+
+      context 'as a manager' do
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'rewrites positions to the given order' do
+          put :reorder, params: { course_id: course.id, format: :json,
+                                  orderedIds: [c.id, a.id, b.id] }
+          expect(response).to have_http_status(:ok)
+          expect([a.reload.position, b.reload.position, c.reload.position]).to eq([1, 2, 0])
+        end
+
+        it 'rejects a payload whose id set does not match' do
+          put :reorder, params: { course_id: course.id, format: :json,
+                                  orderedIds: [a.id, b.id] }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
   end
 end

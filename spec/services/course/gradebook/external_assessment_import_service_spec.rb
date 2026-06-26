@@ -21,13 +21,13 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
 
     describe '#preview' do
       it 'writes nothing (dry-run)' do
-        csv = "Identifier,Midterm\nA001,41\nA002,37\n"
+        csv = "External ID,Midterm\nA001,41\nA002,37\n"
         expect { service(csv_data: csv, components: components).preview }.
           not_to(change { Course::ExternalAssessmentGrade.count })
       end
 
       it 'returns ok with the first 5 resolved rows (student names)' do
-        csv = "Identifier,Midterm\nA001,41\nA002,37\n"
+        csv = "External ID,Midterm\nA001,41\nA002,37\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:ok]).to be(true)
         expect(result[:unresolved]).to be_empty
@@ -37,21 +37,21 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'resolves by email when in email mode' do
-        csv = "Identifier,Midterm\n#{alice.user.email},41\n"
+        csv = "Email,Midterm\n#{alice.user.email},41\n"
         result = service(csv_data: csv, components: components, identifier_mode: 'email').preview
         expect(result[:ok]).to be(true)
         expect(result[:sample].first[:studentName]).to eq(alice.name)
       end
 
       it 'fails the whole batch on any unresolved identifier' do
-        csv = "Identifier,Midterm\nA001,41\nZZZZ,37\n"
+        csv = "External ID,Midterm\nA001,41\nZZZZ,37\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:ok]).to be(false)
         expect(result[:unresolved]).to include('ZZZZ')
       end
 
       it 'flags a malformed (non-numeric) cell' do
-        csv = "Identifier,Midterm\nA001,oops\n"
+        csv = "External ID,Midterm\nA001,oops\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:ok]).to be(false)
         expect(result[:malformed]).to be_present
@@ -60,7 +60,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       it 'rejects an in-file duplicate component name' do
         dup = [{ name: 'Midterm', weightage: 30, maximum_grade: 50 },
                { name: 'Midterm', weightage: 20, maximum_grade: 40 }]
-        csv = "Identifier,Midterm,Midterm\nA001,1,2\n"
+        csv = "External ID,Midterm,Midterm\nA001,1,2\n"
         expect { service(csv_data: csv, components: dup).preview }.
           to raise_error(described_class::ImportError)
       end
@@ -72,7 +72,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'returns ok with empty sample when CSV has no data rows' do
-        csv = "Identifier,Midterm\n"
+        csv = "External ID,Midterm\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:ok]).to be(true)
         expect(result[:sample]).to be_empty
@@ -80,22 +80,42 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'resolves by email case-insensitively' do
-        csv = "Identifier,Midterm\n#{alice.user.email.upcase},41\n"
+        csv = "Email,Midterm\n#{alice.user.email.upcase},41\n"
         result = service(csv_data: csv, components: components, identifier_mode: 'email').preview
         expect(result[:ok]).to be(true)
         expect(result[:sample].first[:studentName]).to eq(alice.name)
       end
 
       it 'deduplicates unresolved identifiers' do
-        csv = "Identifier,Midterm\nZZZZ,1\nZZZZ,2\n"
+        csv = "External ID,Midterm\nZZZZ,1\nZZZZ,2\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:unresolved].count('ZZZZ')).to eq(1)
       end
 
       it 'treats a blank cell as ungraded in the sample' do
-        csv = "Identifier,Midterm\nA001,\n"
+        csv = "External ID,Midterm\nA001,\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:sample].first[:grades]['Midterm']).to be_nil
+      end
+
+      it 'accepts the External ID header in student_id mode' do
+        csv = "External ID,Midterm\nA001,41\n"
+        result = service(csv_data: csv, components: components).preview
+        expect(result[:ok]).to be(true)
+        expect(result[:sample].first[:studentName]).to eq(alice.name)
+      end
+
+      it 'accepts the Email header in email mode' do
+        csv = "Email,Midterm\n#{alice.user.email},41\n"
+        result = service(csv_data: csv, components: components, identifier_mode: 'email').preview
+        expect(result[:ok]).to be(true)
+        expect(result[:sample].first[:studentName]).to eq(alice.name)
+      end
+
+      it 'rejects the legacy Identifier header' do
+        csv = "Identifier,Midterm\nA001,41\n"
+        expect { service(csv_data: csv, components: components).preview }.
+          to raise_error(described_class::ImportError)
       end
     end
 
@@ -103,7 +123,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       let(:components) { [name: 'Midterm', weightage: 30, maximum_grade: 50] }
 
       it 'creates the external in the External Assessments category with the typed weight' do
-        csv = "Identifier,Midterm\nA001,41\nA002,37\n"
+        csv = "External ID,Midterm\nA001,41\nA002,37\n"
         summary = service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         external = Course::ExternalAssessment.for_course(course).find_by(title: 'Midterm')
         expect(external).to be_present
@@ -114,7 +134,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'writes one grade row per resolved student bound to course_user' do
-        csv = "Identifier,Midterm\nA001,41\n"
+        csv = "External ID,Midterm\nA001,41\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         external = Course::ExternalAssessment.for_course(course).find_by!(title: 'Midterm')
         grade = external.external_assessment_grades.find_by!(course_user: alice)
@@ -124,7 +144,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'skips a blank cell on a fresh import (no grade row created)' do
-        csv = "Identifier,Midterm\nA001,\n"
+        csv = "External ID,Midterm\nA001,\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         # After fix: blank cell on fresh import does NOT create a grade row (filter_map skips nil)
         external = Course::ExternalAssessment.for_course(course).find_by(title: 'Midterm')
@@ -132,7 +152,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'accepts a grade greater than the max (no ceiling)' do
-        csv = "Identifier,Midterm\nA001,60\n"
+        csv = "External ID,Midterm\nA001,60\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         external = Course::ExternalAssessment.for_course(course).find_by!(title: 'Midterm')
         expect(external.external_assessment_grades.find_by!(course_user: alice).grade).to eq(60)
@@ -141,7 +161,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       it 'creates multiple components as separate externals' do
         comps = [{ name: 'Midterm', weightage: 30, maximum_grade: 50 },
                  { name: 'Final', weightage: 50, maximum_grade: 100 }]
-        csv = "Identifier,Midterm,Final\nA001,40,80\n"
+        csv = "External ID,Midterm,Final\nA001,40,80\n"
         service(csv_data: csv, components: comps).commit(on_conflict: 'replace')
         expect(Course::ExternalAssessment.for_course(course).pluck(:title)).to contain_exactly('Midterm', 'Final')
         expect(Course::ExternalAssessment.for_course(course).find_by!(title: 'Midterm').
@@ -151,7 +171,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
 
       it 'writes nothing when an identifier does not resolve' do
-        csv = "Identifier,Midterm\nA001,41\nZZZ,9\n"
+        csv = "External ID,Midterm\nA001,41\nZZZ,9\n"
         expect do
           expect do
             service(csv_data: csv, components: components).commit(on_conflict: 'replace')
@@ -164,14 +184,14 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       let(:components) { [name: 'Midterm', weightage: 30, maximum_grade: 50] }
 
       def seed_initial!
-        csv = "Identifier,Midterm\nA001,10\n"
+        csv = "External ID,Midterm\nA001,10\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         Course::ExternalAssessment.for_course(course).find_by(title: 'Midterm')
       end
 
       it 'updates grades into the same component (no second tab)' do
         external = seed_initial!
-        csv = "Identifier,Midterm\nA001,20\n"
+        csv = "External ID,Midterm\nA001,20\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         expect(Course::ExternalAssessment.for_course(course).where(title: 'Midterm').count).to eq(1)
         expect(external.external_assessment_grades.find_by(course_user: alice).grade).to eq(20)
@@ -179,28 +199,28 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
 
       it "keeps existing grades when on_conflict is 'keep'" do
         external = seed_initial!
-        csv = "Identifier,Midterm\nA001,99\n"
+        csv = "External ID,Midterm\nA001,99\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'keep')
         expect(external.external_assessment_grades.find_by(course_user: alice).grade).to eq(10)
       end
 
       it 'inserts a grade for a brand-new student regardless of on_conflict' do
         external = seed_initial!
-        csv = "Identifier,Midterm\nA002,55\n"
+        csv = "External ID,Midterm\nA002,55\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'keep')
         expect(external.external_assessment_grades.find_by(course_user: bob).grade).to eq(55)
       end
 
       it 'skips a blank cell on upsert (existing grade unchanged)' do
         external = seed_initial!
-        csv = "Identifier,Midterm\nA001,\n"
+        csv = "External ID,Midterm\nA001,\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         expect(external.external_assessment_grades.find_by(course_user: alice).grade).to eq(10)
       end
 
       it 'never changes the external max or contribution weight on upsert' do
         external = seed_initial!
-        csv = "Identifier,Midterm\nA001,20\n"
+        csv = "External ID,Midterm\nA001,20\n"
         comps = [name: 'Midterm', weightage: 99, maximum_grade: 999]
         service(csv_data: csv, components: comps).commit(on_conflict: 'replace')
         expect(external.reload.maximum_grade).to eq(50)
@@ -209,7 +229,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
 
       it 'lists conflicts only for existing non-blank grade rows' do
         seed_initial!
-        csv = "Identifier,Midterm\nA001,20\nA002,33\n"
+        csv = "External ID,Midterm\nA001,20\nA002,33\n"
         result = service(csv_data: csv, components: components).preview
         expect(result[:conflicts].map { |c| c[:studentName] }).to contain_exactly(alice.name)
         conflict = result[:conflicts].first
@@ -221,7 +241,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
         seed_initial! # alice imported under 'A001'
         bob.update!(external_id: 'A777')
         alice.update!(external_id: 'A002') # alice now owns A002 (formerly bob's)
-        csv = "Identifier,Midterm\nA002,20\n" # A002 now → alice, but her grade was imported as 'A001'
+        csv = "External ID,Midterm\nA002,20\n" # A002 now -> alice, but her grade was imported as 'A001'
         result = service(csv_data: csv, components: components).preview
         mismatch = result[:conflicts].find { |c| c[:studentName] == alice.name }
         expect(mismatch[:identifierMismatch]).to be(true)
@@ -229,7 +249,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
 
       it 'returns updatedComponents: 1 after an upsert' do
         seed_initial!
-        csv = "Identifier,Midterm\nA001,20\n"
+        csv = "External ID,Midterm\nA001,20\n"
         summary = service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         expect(summary[:updatedComponents]).to eq(1)
         expect(summary[:createdComponents]).to eq(0)
@@ -239,7 +259,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
         external = seed_initial!
         # Manually clear the grade to nil (simulates a partial import that wrote the row but not the value)
         external.external_assessment_grades.find_by(course_user: alice).update_column(:grade, nil)
-        csv = "Identifier,Midterm\nA001,50\n"
+        csv = "External ID,Midterm\nA001,50\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'keep')
         expect(external.external_assessment_grades.find_by(course_user: alice).grade).to eq(50)
       end
@@ -248,10 +268,10 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
         comps = [{ name: 'Midterm', weightage: 30, maximum_grade: 50 },
                  { name: 'Final', weightage: 50, maximum_grade: 100 }]
         # Seed both components
-        seed_csv = "Identifier,Midterm,Final\nA001,10,80\n"
+        seed_csv = "External ID,Midterm,Final\nA001,10,80\n"
         service(csv_data: seed_csv, components: comps).commit(on_conflict: 'replace')
         # Re-import with different values
-        csv = "Identifier,Midterm,Final\nA001,20,90\n"
+        csv = "External ID,Midterm,Final\nA001,20,90\n"
         result = service(csv_data: csv, components: comps).preview
         expect(result[:conflicts].map { |c| c[:component] }).to contain_exactly('Midterm', 'Final')
       end
@@ -261,7 +281,7 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       let(:components) { [name: 'Midterm', weightage: 30, maximum_grade: 50] }
 
       it 'does not move a grade when the student external_id changes after import' do
-        csv = "Identifier,Midterm\nA001,41\n"
+        csv = "External ID,Midterm\nA001,41\n"
         service(csv_data: csv, components: components).commit(on_conflict: 'replace')
         grade = Course::ExternalAssessmentGrade.last
         alice.update!(external_id: 'CHANGED')

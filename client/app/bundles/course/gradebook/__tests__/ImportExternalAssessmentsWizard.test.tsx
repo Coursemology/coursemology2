@@ -1,5 +1,4 @@
 import userEvent from '@testing-library/user-event';
-import { store as appStore } from 'store';
 import { render, screen, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
@@ -9,16 +8,33 @@ import ImportExternalAssessmentsWizard from '../components/import/ImportExternal
 jest.mock('api/course');
 jest.mock('lib/components/wrappers/I18nProvider');
 
+const defaultProps = {
+  existingAssessments: [],
+  onClose: jest.fn(),
+  weightedViewEnabled: true,
+};
+
 const renderWizard = (): void => {
   render(
     <ImportExternalAssessmentsWizard
-      existingExternalTitles={[]}
+      existingAssessments={[]}
       onClose={jest.fn()}
       open
       weightedViewEnabled
     />,
-    { store: appStore },
   );
+};
+
+const studentsState = (students: object[]): object => ({
+  gradebook: {
+    categories: [], tabs: [], submissions: [], assessments: [],
+    gamificationEnabled: false, weightedViewEnabled: false, canManageWeights: true,
+    students,
+  },
+});
+
+const fillOneComponent = async (): Promise<void> => {
+  await userEvent.type(screen.getByLabelText('Component name'), 'Midterm');
 };
 
 const file = (text: string): File =>
@@ -114,12 +130,11 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('hides weightage field when weightedViewEnabled is false', async () => {
     render(
       <ImportExternalAssessmentsWizard
-        existingExternalTitles={[]}
+        existingAssessments={[]}
         onClose={jest.fn()}
         open
         weightedViewEnabled={false}
       />,
-      { store: appStore },
     );
     await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
     expect(screen.queryByLabelText(/weightage/i)).not.toBeInTheDocument();
@@ -129,6 +144,19 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('disables Next when component name is empty', () => {
     renderWizard();
     expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
+  });
+
+  it('labels the identifier toggle "External ID"', () => {
+    render(
+      <ImportExternalAssessmentsWizard
+        existingAssessments={[]}
+        onClose={jest.fn()}
+        open
+        weightedViewEnabled={false}
+      />,
+    );
+    expect(screen.getByRole('radio', { name: 'External ID' })).toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: 'Student ID' })).not.toBeInTheDocument();
   });
 
   it('commits with keep when Keep Existing is clicked on the conflict prompt', async () => {
@@ -186,6 +214,53 @@ describe('ImportExternalAssessmentsWizard', () => {
           .onConflict,
       ).toBe('keep'),
     );
+  });
+
+  it('blocks Next in External ID mode while a student has no External ID', async () => {
+    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
+      state: studentsState([
+        { id: 1, name: 'Alice Lim', email: 'a@x.com', externalId: null, level: 0, totalXp: 0 },
+        { id: 2, name: 'Bob Tan', email: 'b@x.com', externalId: 'E2', level: 0, totalXp: 0 },
+      ]),
+    });
+    await fillOneComponent();
+    expect(screen.getByText(/Alice Lim has no External ID/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+  });
+
+  it('enables Next once matching by Email instead', async () => {
+    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
+      state: studentsState([
+        { id: 1, name: 'Alice Lim', email: 'a@x.com', externalId: null, level: 0, totalXp: 0 },
+      ]),
+    });
+    await fillOneComponent();
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+    expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
+  });
+
+  it('lists the exact required headers on the upload step', async () => {
+    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
+      state: studentsState([
+        { id: 1, name: 'Alice', email: 'a@x.com', externalId: 'E1', level: 0, totalXp: 0 },
+      ]),
+    });
+    await userEvent.type(screen.getByLabelText('Component name'), 'Midterm');
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(
+      screen.getByText(/Your CSV needs these column headers: External ID, Midterm/),
+    ).toBeInTheDocument();
+  });
+
+  it('summarises the count when several students lack an External ID', async () => {
+    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
+      state: studentsState([
+        { id: 1, name: 'Alice Lim', email: 'a@x.com', externalId: null, level: 0, totalXp: 0 },
+        { id: 2, name: 'Bob Tan', email: 'b@x.com', externalId: '', level: 0, totalXp: 0 },
+      ]),
+    });
+    await fillOneComponent();
+    expect(screen.getByText(/2 students have no External ID, including Alice Lim/)).toBeInTheDocument();
   });
 
   it('does not show Confirm import button when preview has errors', async () => {
@@ -249,12 +324,11 @@ describe('ImportExternalAssessmentsWizard', () => {
     });
     render(
       <ImportExternalAssessmentsWizard
-        existingExternalTitles={['Midterm']}
+        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
         onClose={jest.fn()}
         open
         weightedViewEnabled
       />,
-      { store: appStore },
     );
     // Step 1: 'Midterm' matches existing → max/weightage locked; just Next.
     await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
@@ -277,5 +351,70 @@ describe('ImportExternalAssessmentsWizard', () => {
           .onConflict,
       ).toBe('replace'),
     );
+  });
+
+  it('renders existing external chips in the define step', () => {
+    render(
+      <ImportExternalAssessmentsWizard
+        existingAssessments={[
+          { name: 'Midterm', maximumGrade: 50, weightage: 30 },
+          { name: 'Finals', maximumGrade: 100, weightage: 70 },
+        ]}
+        onClose={jest.fn()}
+        open
+        weightedViewEnabled
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Midterm' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Finals' })).toBeInTheDocument();
+  });
+
+  it('clicking an existing chip inserts a locked row pre-filled with correct max and weight', async () => {
+    render(
+      <ImportExternalAssessmentsWizard
+        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
+        onClose={jest.fn()}
+        open
+        weightedViewEnabled
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Midterm' }));
+
+    // The chip-inserted row's name field is read-only (disabled input)
+    const nameInput = screen.getByDisplayValue('Midterm');
+    expect(nameInput).toBeDisabled();
+
+    // Max and weight are pre-filled with the existing values
+    expect(screen.getByDisplayValue('50')).toBeDisabled();
+    expect(screen.getByDisplayValue('30')).toBeDisabled();
+
+    // "Updates existing" label is shown
+    expect(screen.getByText(/updates existing/i)).toBeInTheDocument();
+  });
+
+  it('hides a chip once the corresponding external has been added to the component list', async () => {
+    render(
+      <ImportExternalAssessmentsWizard
+        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
+        onClose={jest.fn()}
+        open
+        weightedViewEnabled
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Midterm' }));
+    // After clicking, chip disappears (already in the list)
+    expect(screen.queryByRole('button', { name: 'Midterm' })).not.toBeInTheDocument();
+  });
+
+  it('does not render the From existing section when there are no existing externals', () => {
+    render(
+      <ImportExternalAssessmentsWizard
+        existingAssessments={[]}
+        onClose={jest.fn()}
+        open
+        weightedViewEnabled
+      />,
+    );
+    expect(screen.queryByText(/from existing/i)).not.toBeInTheDocument();
   });
 });

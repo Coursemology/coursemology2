@@ -44,6 +44,7 @@ import type { AssessmentContribution, WeightedRow } from '../computeWeighted';
 import {
   computeStudentBreakdown,
   computeWeightedRows,
+  effectiveGrade,
   resolveTabWeights,
   usingDefaultWeights,
 } from '../computeWeighted';
@@ -163,6 +164,18 @@ const translations = defineMessages({
   total: {
     id: 'course.gradebook.GradebookWeightedTable.total',
     defaultMessage: 'Total',
+  },
+  gradeCapped: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeCapped',
+    defaultMessage: 'Capped at {value}',
+  },
+  gradeFloored: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeFloored',
+    defaultMessage: 'Floored to {value}',
+  },
+  gradeCountsAs: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeCountsAs',
+    defaultMessage: 'Counts as {value}',
   },
 });
 
@@ -298,6 +311,11 @@ const GradebookWeightedTable = ({
       else next.add(studentId);
       return next;
     });
+
+  const assessmentsById = useMemo(
+    () => new Map(assessments.map((a) => [a.id, a])),
+    [assessments],
+  );
 
   const breakdownsByStudent = useMemo(
     () =>
@@ -943,6 +961,24 @@ const GradebookWeightedTable = ({
                                 a.grade === null
                                   ? `—/${a.maxGrade}`
                                   : `${a.grade}/${a.maxGrade}`;
+                              const assessmentData = assessmentsById.get(
+                                a.assessmentId,
+                              );
+                              const eff =
+                                a.grade != null && assessmentData != null
+                                  ? effectiveGrade(a.grade, assessmentData)
+                                  : null;
+                              const wasCapped =
+                                eff != null &&
+                                a.grade != null &&
+                                a.grade > a.maxGrade &&
+                                eff !== a.grade;
+                              const wasFloored =
+                                eff != null &&
+                                a.grade != null &&
+                                a.grade < 0 &&
+                                eff !== a.grade;
+                              const clamped = wasCapped || wasFloored;
                               return (
                                 <TableRow
                                   key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
@@ -1015,10 +1051,35 @@ const GradebookWeightedTable = ({
                                       sx={{
                                         display: 'block',
                                         whiteSpace: 'nowrap',
+                                        alignItems: 'center',
                                       }}
                                       variant="caption"
                                     >
                                       {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
+                                      {clamped && (
+                                        <Tooltip
+                                          title={t(
+                                            translations.gradeCountsAs,
+                                            { value: eff },
+                                          )}
+                                        >
+                                          <InfoOutlined
+                                            aria-label={
+                                              wasCapped
+                                                ? t(
+                                                    translations.gradeCapped,
+                                                    { value: eff },
+                                                  )
+                                                : t(
+                                                    translations.gradeFloored,
+                                                    { value: eff },
+                                                  )
+                                            }
+                                            fontSize="inherit"
+                                            sx={{ ml: 0.5 }}
+                                          />
+                                        </Tooltip>
+                                      )}
                                     </Typography>
                                   </TableCell>
                                   {/* One empty cell per visible identity column so

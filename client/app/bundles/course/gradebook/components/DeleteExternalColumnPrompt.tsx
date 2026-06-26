@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
+import { LoadingButton } from '@mui/lab';
 import {
   Button,
   Dialog,
@@ -78,14 +79,14 @@ const DeleteExternalColumnPrompt: FC<Props> = ({
         <Button disabled={saving} onClick={onClose} variant="outlined">
           {t(translations.cancel)}
         </Button>
-        <Button
+        <LoadingButton
           color="error"
-          disabled={saving}
+          loading={saving}
           onClick={submit}
           variant="contained"
         >
           {t(translations.confirm)}
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

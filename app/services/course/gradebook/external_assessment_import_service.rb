@@ -76,10 +76,14 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
   end
 
   def guard_header!(headers)
-    expected = ['Identifier'] + @components.map { |c| c[:name] }
+    expected = [identifier_header] + @components.map { |c| c[:name] }
     return if headers == expected
 
     raise ImportError, { message: 'bad_header', expected: expected, got: headers }
+  end
+
+  def identifier_header
+    (@identifier_mode == 'email') ? 'Email' : 'External ID'
   end
 
   def roster_lookup
@@ -100,7 +104,7 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     unresolved = []
     malformed = []
     table.each_with_index do |row, idx|
-      identifier = row['Identifier'].to_s.strip
+      identifier = row[identifier_header].to_s.strip
       course_user = roster_lookup[lookup_key(identifier)]
       if course_user.nil?
         unresolved << identifier

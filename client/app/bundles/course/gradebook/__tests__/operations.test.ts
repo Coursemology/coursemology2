@@ -1,0 +1,614 @@
+import type { AppDispatch } from 'store';
+
+import CourseAPI from 'api/course';
+
+import fetchGradebook, {
+  commitImport,
+  createExternalAssessment,
+  deleteExternalAssessment,
+  editExternalAssessment,
+  previewImport,
+  renameExternalAssessment,
+  reorderExternalAssessments,
+  setExternalGrade,
+  updateGradebookWeights,
+} from '../operations';
+
+const REORDER = 'course/gradebook/REORDER_EXTERNAL_ASSESSMENTS';
+
+const externals = [
+  { id: -1, title: 'A', tabId: -1, maxGrade: 10, external: true },
+  { id: -2, title: 'B', tabId: -2, maxGrade: 10, external: true },
+];
+
+// Minimal thunk harness: record plain actions, stub getState.
+const harness = (): {
+  dispatched: { type: string; payload: unknown }[];
+  dispatch: AppDispatch;
+  getState: () => never;
+} => {
+  const dispatched: { type: string; payload: unknown }[] = [];
+  return {
+    dispatched,
+    // The operation only dispatches plain { type, payload } actions, which we
+    // record; cast to AppDispatch so it satisfies the thunk's dispatch param.
+    dispatch: ((a: { type: string; payload: unknown }) => {
+      dispatched.push(a);
+      return a;
+    }) as unknown as AppDispatch,
+    getState: () => ({ gradebook: { assessments: externals } }) as never,
+  };
+};
+
+describe('reorderExternalAssessments', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('applies optimistically, then reverts and rethrows when the PUT fails', async () => {
+    const { dispatched, dispatch, getState } = harness();
+    jest
+      .spyOn(CourseAPI.gradebook, 'reorderExternals')
+      .mockRejectedValue(new Error('network'));
+
+    await expect(
+      reorderExternalAssessments([-2, -1])(dispatch, getState, {}),
+    ).rejects.toThrow('network');
+
+    const reorders = dispatched.filter((a) => a.type === REORDER);
+    expect(reorders[0].payload).toEqual([-2, -1]); // optimistic apply
+    expect(reorders[reorders.length - 1].payload).toEqual([-1, -2]); // rolled back to original
+  });
+
+  it('does not roll back on success', async () => {
+    const { dispatched, dispatch, getState } = harness();
+    jest
+      .spyOn(CourseAPI.gradebook, 'reorderExternals')
+      .mockResolvedValue({ data: undefined } as never);
+
+    await reorderExternalAssessments([-2, -1])(dispatch, getState, {});
+
+    const reorders = dispatched.filter((a) => a.type === REORDER);
+    expect(reorders).toHaveLength(1);
+    expect(reorders[0].payload).toEqual([-2, -1]);
+  });
+
+  it('calls the API with positive external ids (negated store ids)', async () => {
+    const { dispatch, getState } = harness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'reorderExternals')
+      .mockResolvedValue({ data: undefined } as never);
+
+    await reorderExternalAssessments([-2, -1])(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith({ orderedIds: [2, 1] });
+  });
+
+  it('rolls back only external assessments in their stored order', async () => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    const dispatch = ((a: { type: string; payload: unknown }) => {
+      dispatched.push(a);
+      return a;
+    }) as unknown as AppDispatch;
+    const getState = (() => ({
+      gradebook: {
+        assessments: [
+          { id: 5, external: false },
+          ...externals, // ids -1, -2
+        ],
+      },
+    })) as unknown as () => never;
+    jest
+      .spyOn(CourseAPI.gradebook, 'reorderExternals')
+      .mockRejectedValue(new Error('network'));
+
+    await expect(
+      reorderExternalAssessments([-2, -1])(dispatch, getState, {}),
+    ).rejects.toThrow('network');
+
+    const reorders = dispatched.filter((a) => a.type === REORDER);
+    expect(reorders[reorders.length - 1].payload).toEqual([-1, -2]);
+  });
+});
+
+describe('setExternalGrade', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const gradeHarness = (
+    submissions: {
+      studentId: number;
+      assessmentId: number;
+      grade: number | null;
+    }[],
+  ): {
+    dispatched: { type: string; payload: unknown }[];
+    dispatch: AppDispatch;
+    getState: () => never;
+  } => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    return {
+      dispatched,
+      dispatch: ((a: { type: string; payload: unknown }) => {
+        dispatched.push(a);
+        return a;
+      }) as unknown as AppDispatch,
+      getState: () => ({ gradebook: { submissions } }) as never,
+    };
+  };
+
+  const SET = 'course/gradebook/SET_EXTERNAL_GRADE';
+
+  it('applies optimistically, calls the API with the negated id, then reconciles', async () => {
+    const { dispatched, dispatch, getState } = gradeHarness([
+      { studentId: 7, assessmentId: -1, grade: 3 },
+    ]);
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'setExternalGrade')
+      .mockResolvedValue({
+        data: { studentId: 7, assessmentId: -1, grade: 9 },
+      } as never);
+
+    await setExternalGrade(-1, 7, 9)(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith(1, { studentId: 7, grade: 9 });
+    const sets = dispatched.filter((a) => a.type === SET);
+    expect(sets[0].payload).toEqual({
+      studentId: 7,
+      assessmentId: -1,
+      grade: 9,
+    }); // optimistic
+    expect(sets[sets.length - 1].payload).toEqual({
+      studentId: 7,
+      assessmentId: -1,
+      grade: 9,
+    }); // reconciled from response.data
+  });
+
+  it('restores the prior grade and rethrows when the PUT fails', async () => {
+    const { dispatched, dispatch, getState } = gradeHarness([
+      { studentId: 7, assessmentId: -1, grade: 3 },
+    ]);
+    jest
+      .spyOn(CourseAPI.gradebook, 'setExternalGrade')
+      .mockRejectedValue(new Error('network'));
+
+    await expect(
+      setExternalGrade(-1, 7, 9)(dispatch, getState, {}),
+    ).rejects.toThrow('network');
+
+    const sets = dispatched.filter((a) => a.type === SET);
+    expect(sets[0].payload).toEqual({
+      studentId: 7,
+      assessmentId: -1,
+      grade: 9,
+    }); // optimistic
+    expect(sets[sets.length - 1].payload).toEqual({
+      studentId: 7,
+      assessmentId: -1,
+      grade: 3,
+    }); // rolled back to prev
+  });
+
+  it('rolls back to null when no prior submission exists', async () => {
+    const { dispatched, dispatch, getState } = gradeHarness([]);
+    jest
+      .spyOn(CourseAPI.gradebook, 'setExternalGrade')
+      .mockRejectedValue(new Error('network'));
+
+    await expect(
+      setExternalGrade(-1, 7, 9)(dispatch, getState, {}),
+    ).rejects.toThrow('network');
+
+    const sets = dispatched.filter((a) => a.type === SET);
+    expect(sets[sets.length - 1].payload).toEqual({
+      studentId: 7,
+      assessmentId: -1,
+      grade: null,
+    });
+  });
+});
+
+describe('createExternalAssessment', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const createHarness = (): {
+    dispatch: AppDispatch;
+    getState: () => never;
+  } => ({
+    dispatch: ((a: unknown) => a) as unknown as AppDispatch,
+    getState: (() => ({})) as unknown as () => never,
+  });
+
+  it('omits weight from the payload when undefined', async () => {
+    const { dispatch, getState } = createHarness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'createExternal')
+      .mockResolvedValue({ data: {} } as never);
+
+    await createExternalAssessment(
+      'A',
+      10,
+      true,
+      false,
+    )(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith({
+      title: 'A',
+      maximumGrade: 10,
+      floorAtZero: true,
+      capAtMaximum: false,
+    });
+  });
+
+  it('includes weight in the payload when provided', async () => {
+    const { dispatch, getState } = createHarness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'createExternal')
+      .mockResolvedValue({ data: {} } as never);
+
+    await createExternalAssessment(
+      'A',
+      10,
+      true,
+      false,
+      2,
+    )(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith({
+      title: 'A',
+      maximumGrade: 10,
+      floorAtZero: true,
+      capAtMaximum: false,
+      weight: 2,
+    });
+  });
+});
+
+describe('id-negating thunks', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const noopHarness = (): { dispatch: AppDispatch; getState: () => never } => ({
+    dispatch: ((a: unknown) => a) as unknown as AppDispatch,
+    getState: (() => ({})) as unknown as () => never,
+  });
+
+  it('renameExternalAssessment negates the id for the API call', async () => {
+    const { dispatch, getState } = noopHarness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'updateExternal')
+      .mockResolvedValue({ data: {} } as never);
+
+    await renameExternalAssessment(-3, 'New')(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith(3, { title: 'New' });
+  });
+
+  it('editExternalAssessment negates the id and forwards the patch', async () => {
+    const { dispatch, getState } = noopHarness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'updateExternal')
+      .mockResolvedValue({ data: {} } as never);
+
+    await editExternalAssessment(-3, { maximumGrade: 20 })(
+      dispatch,
+      getState,
+      {},
+    );
+
+    expect(spy).toHaveBeenCalledWith(3, { maximumGrade: 20 });
+  });
+
+  it('deleteExternalAssessment negates the id for the API but dispatches the original id', async () => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    const dispatch = ((a: { type: string; payload: unknown }) => {
+      dispatched.push(a);
+      return a;
+    }) as unknown as AppDispatch;
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'deleteExternal')
+      .mockResolvedValue({ data: undefined } as never);
+
+    await deleteExternalAssessment(-3)(dispatch, (() => ({})) as never, {});
+
+    expect(spy).toHaveBeenCalledWith(3);
+    expect(dispatched).toContainEqual({
+      type: 'course/gradebook/DELETE_EXTERNAL_ASSESSMENT',
+      payload: -3,
+    });
+  });
+});
+
+describe('commitImport', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('commits, refreshes the gradebook, and returns the commit summary', async () => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    const dispatch = ((a: { type: string; payload: unknown }) => {
+      dispatched.push(a);
+      return a;
+    }) as unknown as AppDispatch;
+    jest
+      .spyOn(CourseAPI.gradebook, 'importCommit')
+      .mockResolvedValue({ data: { inserted: 2 } } as never);
+    jest
+      .spyOn(CourseAPI.gradebook, 'index')
+      .mockResolvedValue({ data: { refreshed: true } } as never);
+
+    const summary = await commitImport({
+      components: [],
+      onConflict: 'replace',
+    } as never)(
+      dispatch,
+      (() => ({})) as never,
+      {},
+    );
+
+    expect(summary).toEqual({ inserted: 2 });
+    expect(dispatched).toContainEqual({
+      type: 'course/gradebook/SAVE_GRADEBOOK',
+      payload: { refreshed: true },
+    });
+  });
+});
+
+describe('simple pass-through thunks', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const passHarness = (): {
+    dispatched: { type: string; payload: unknown }[];
+    dispatch: AppDispatch;
+    getState: () => never;
+  } => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    return {
+      dispatched,
+      dispatch: ((a: { type: string; payload: unknown }) => {
+        dispatched.push(a);
+        return a;
+      }) as unknown as AppDispatch,
+      getState: (() => ({})) as unknown as () => never,
+    };
+  };
+
+  it('fetchGradebook dispatches saveGradebook with the index response', async () => {
+    const { dispatched, dispatch, getState } = passHarness();
+    jest
+      .spyOn(CourseAPI.gradebook, 'index')
+      .mockResolvedValue({ data: { loaded: true } } as never);
+
+    await fetchGradebook()(dispatch, getState, {});
+
+    expect(dispatched).toContainEqual({
+      type: 'course/gradebook/SAVE_GRADEBOOK',
+      payload: { loaded: true },
+    });
+  });
+
+  it('updateGradebookWeights wraps weights and dispatches updateTabWeights', async () => {
+    const { dispatched, dispatch, getState } = passHarness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+
+    await updateGradebookWeights([])(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith({ weights: [] });
+    expect(dispatched).toContainEqual({
+      type: 'course/gradebook/UPDATE_TAB_WEIGHTS',
+      payload: { weights: [] },
+    });
+  });
+
+  it('previewImport returns the API data without dispatching', async () => {
+    const { dispatched, dispatch, getState } = passHarness();
+    jest
+      .spyOn(CourseAPI.gradebook, 'importPreview')
+      .mockResolvedValue({ data: { conflicts: [] } } as never);
+
+    const result = await previewImport({} as never)(dispatch, getState, {});
+
+    expect(result).toEqual({ conflicts: [] });
+    expect(dispatched).toHaveLength(0);
+  });
+});
+
+// Thunk-aware harness: executes nested thunks (createExternalAssessment dispatches
+// the materialize thunk, which dispatches updateGradebookWeights) and records plain
+// actions. getState returns the supplied gradebook slice.
+const thunkHarness = (
+  gradebook: unknown,
+): { dispatch: AppDispatch; getState: () => never } => {
+  const getState = (() => ({ gradebook })) as unknown as () => never;
+  const dispatch = ((a: unknown) =>
+    typeof a === 'function'
+      ? (a as (d: unknown, g: unknown, e: unknown) => unknown)(
+          dispatch,
+          getState,
+          {},
+        )
+      : a) as unknown as AppDispatch;
+  return { dispatch, getState };
+};
+
+const defaultGradebook = {
+  tabs: [
+    { id: 1, title: 'T1', categoryId: 1 },
+    { id: 2, title: 'T2', categoryId: 1 },
+  ],
+  assessments: [
+    { id: 10, title: 'a', tabId: 1, maxGrade: 10 },
+    { id: 11, title: 'b', tabId: 2, maxGrade: 10 },
+  ],
+};
+
+const createdNode = {
+  data: {
+    assessment: { id: -1, title: 'X', tabId: -1, maxGrade: 10, external: true },
+    tab: { id: -1, title: 'X', categoryId: -1, gradebookWeight: 20 },
+    category: { id: -1, title: 'External Assessments' },
+  },
+};
+
+describe('createExternalAssessment — default-weight materialization', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('persists the equal split before creating when a non-zero weight is set', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    const createExternal = jest
+      .spyOn(CourseAPI.gradebook, 'createExternal')
+      .mockResolvedValue(createdNode as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await createExternalAssessment('X', 10, true, true, 20)(dispatch, getState, {});
+
+    expect(updateWeights).toHaveBeenCalledWith({
+      weights: [
+        { tabId: 1, weight: 50, weightMode: 'equal' },
+        { tabId: 2, weight: 50, weightMode: 'equal' },
+      ],
+    });
+    expect(updateWeights.mock.invocationCallOrder[0]).toBeLessThan(
+      createExternal.mock.invocationCallOrder[0],
+    );
+  });
+
+  it('does not materialize when the new weight is zero', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    jest
+      .spyOn(CourseAPI.gradebook, 'createExternal')
+      .mockResolvedValue(createdNode as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await createExternalAssessment('X', 10, true, true, 0)(dispatch, getState, {});
+
+    expect(updateWeights).not.toHaveBeenCalled();
+  });
+
+  it('does not materialize when weights are already configured', async () => {
+    const configured = {
+      tabs: [
+        { id: 1, title: 'T1', categoryId: 1, gradebookWeight: 70 },
+        { id: 2, title: 'T2', categoryId: 1, gradebookWeight: 30 },
+      ],
+      assessments: defaultGradebook.assessments,
+    };
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    const createExternal = jest
+      .spyOn(CourseAPI.gradebook, 'createExternal')
+      .mockResolvedValue(createdNode as never);
+    const { dispatch, getState } = thunkHarness(configured);
+
+    await createExternalAssessment('X', 10, true, true, 20)(dispatch, getState, {});
+
+    expect(updateWeights).not.toHaveBeenCalled();
+    expect(createExternal).toHaveBeenCalled();
+  });
+});
+
+describe('editExternalAssessment — default-weight materialization', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('persists the equal split before updating when a non-zero weight is set', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    const updateExternal = jest
+      .spyOn(CourseAPI.gradebook, 'updateExternal')
+      .mockResolvedValue({
+        data: {
+          assessment: { id: -1, title: 'X', tabId: -1, maxGrade: 10, external: true },
+          tab: { id: -1, title: 'X', categoryId: -1, gradebookWeight: 40 },
+        },
+      } as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await editExternalAssessment(-1, { weight: 40 })(dispatch, getState, {});
+
+    expect(updateWeights).toHaveBeenCalled();
+    expect(updateWeights.mock.invocationCallOrder[0]).toBeLessThan(
+      updateExternal.mock.invocationCallOrder[0],
+    );
+  });
+
+  it('does not materialize when the edit carries no weight', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    jest.spyOn(CourseAPI.gradebook, 'updateExternal').mockResolvedValue({
+      data: {
+        assessment: { id: -1, title: 'X', tabId: -1, maxGrade: 10, external: true },
+        tab: { id: -1, title: 'X', categoryId: -1 },
+      },
+    } as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await editExternalAssessment(-1, { title: 'X' })(dispatch, getState, {});
+
+    expect(updateWeights).not.toHaveBeenCalled();
+  });
+});
+
+describe('commitImport — default-weight materialization', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const fullGradebook = {
+    categories: [],
+    tabs: [],
+    assessments: [],
+    students: [],
+    submissions: [],
+    gamificationEnabled: false,
+    weightedViewEnabled: true,
+    canManageWeights: true,
+  };
+
+  const importPayload = (weightage: number) => ({
+    components: [{ name: 'Q', weightage, maximumGrade: 10 }],
+    identifierMode: 'email' as const,
+    csvData: 'x',
+    onConflict: 'keep' as const,
+  });
+
+  it('persists the equal split before committing when any component is weighted', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    const importCommit = jest
+      .spyOn(CourseAPI.gradebook, 'importCommit')
+      .mockResolvedValue({
+        data: { createdComponents: 1, updatedComponents: 0, gradesWritten: 0 },
+      } as never);
+    jest
+      .spyOn(CourseAPI.gradebook, 'index')
+      .mockResolvedValue({ data: fullGradebook } as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await commitImport(importPayload(20))(dispatch, getState, {});
+
+    expect(updateWeights).toHaveBeenCalled();
+    expect(updateWeights.mock.invocationCallOrder[0]).toBeLessThan(
+      importCommit.mock.invocationCallOrder[0],
+    );
+  });
+
+  it('does not materialize when no imported component is weighted', async () => {
+    const updateWeights = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+    jest.spyOn(CourseAPI.gradebook, 'importCommit').mockResolvedValue({
+      data: { createdComponents: 1, updatedComponents: 0, gradesWritten: 0 },
+    } as never);
+    jest
+      .spyOn(CourseAPI.gradebook, 'index')
+      .mockResolvedValue({ data: fullGradebook } as never);
+    const { dispatch, getState } = thunkHarness(defaultGradebook);
+
+    await commitImport(importPayload(0))(dispatch, getState, {});
+
+    expect(updateWeights).not.toHaveBeenCalled();
+  });
+});

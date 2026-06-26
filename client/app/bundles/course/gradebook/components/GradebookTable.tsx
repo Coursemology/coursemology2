@@ -1,4 +1,5 @@
 import {
+  cloneElement,
   forwardRef,
   useCallback,
   useLayoutEffect,
@@ -7,13 +8,10 @@ import {
   useState,
 } from 'react';
 import { defineMessages } from 'react-intl';
-import { MoreVert } from '@mui/icons-material';
 import {
   Checkbox,
   Chip,
-  IconButton,
-  Menu,
-  MenuItem,
+  CircularProgress,
   Paper,
   type SxProps,
   Table,
@@ -48,7 +46,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import { GAMIFICATION_COL_IDS } from '../constants';
-import { setExternalGrade, updateExternalMaxGrade } from '../operations';
+import { setExternalGrade } from '../operations';
 import type {
   AssessmentData,
   CategoryData,
@@ -61,9 +59,7 @@ import {
   buildAssessmentColumnId,
   parseAssessmentColumnId,
 } from './buildAssessmentColumnIds';
-import DeleteExternalColumnPrompt from './DeleteExternalColumnPrompt';
 import GradebookColumnTree from './GradebookColumnTree';
-import RenameExternalColumnPrompt from './RenameExternalColumnPrompt';
 
 const COL_WIDTHS = {
   name: 160,
@@ -131,7 +127,7 @@ const translations = defineMessages({
   },
   gradeSaveError: {
     id: 'course.gradebook.GradebookTable.gradeSaveError',
-    defaultMessage: 'Could not save the grade. Please try again.',
+    defaultMessage: 'Could not save the {title} grade for {name}. Please try again.',
   },
   externalMaxAria: {
     id: 'course.gradebook.GradebookTable.externalMaxAria',
@@ -140,18 +136,6 @@ const translations = defineMessages({
   maxSaveError: {
     id: 'course.gradebook.GradebookTable.maxSaveError',
     defaultMessage: 'Could not save the max marks. Please try again.',
-  },
-  rename: {
-    id: 'course.gradebook.GradebookTable.rename',
-    defaultMessage: 'Rename',
-  },
-  deleteAction: {
-    id: 'course.gradebook.GradebookTable.delete',
-    defaultMessage: 'Delete',
-  },
-  manageAria: {
-    id: 'course.gradebook.GradebookTable.manageAria',
-    defaultMessage: 'manage {title}',
   },
 });
 
@@ -240,6 +224,7 @@ const ExternalGradeCell = ({
   const [localValue, setLocalValue] = useState<number | null | undefined>(
     value,
   );
+  const [saving, setSaving] = useState(false);
 
   const commit = async (): Promise<void> => {
     setEditing(false);
@@ -249,11 +234,14 @@ const ExternalGradeCell = ({
     if (next === (localValue ?? null)) return;
     const prev = localValue;
     setLocalValue(next);
+    setSaving(true);
     try {
       await dispatch(setExternalGrade(assessmentId, studentId, next));
     } catch {
       setLocalValue(prev);
-      toast.error(t(translations.gradeSaveError));
+      toast.error(t(translations.gradeSaveError, { name: studentName, title }));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -288,10 +276,20 @@ const ExternalGradeCell = ({
         setEditing(true);
       }}
       role="button"
-      style={{ cursor: 'pointer', display: 'inline-block', minWidth: 24 }}
+      // Fill the cell so the whole editable column band is the click target,
+      // not just the digits at the right edge.
+      style={{
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        gap: 4,
+        width: '100%',
+      }}
       tabIndex={0}
     >
-      {localValue == null ? '—' : localValue}
+      {saving && <CircularProgress size={12} />}
+      <span>{localValue == null ? '—' : localValue}</span>
     </span>
   );
 };
@@ -378,6 +376,8 @@ interface GradebookTableProps {
   courseTitle: string;
   courseId: number;
   gamificationEnabled: boolean;
+  /** Optional action rendered in the toolbar, left of the column picker. */
+  toolbarAction?: JSX.Element;
 }
 
 const GradebookTable = ({
@@ -389,17 +389,9 @@ const GradebookTable = ({
   courseTitle,
   courseId,
   gamificationEnabled,
+  toolbarAction,
 }: GradebookTableProps): JSX.Element => {
   const { t } = useTranslation();
-
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const [menuAsnId, setMenuAsnId] = useState<number | null>(null);
-  const [renameOpen, setRenameOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const menuAsn =
-    menuAsnId !== null
-      ? assessments.find((a) => a.id === menuAsnId)
-      : undefined;
 
   const submissionsByStudent = useMemo(() => {
     const map = new Map<number, SubmissionData[]>();
@@ -544,7 +536,7 @@ const GradebookTable = ({
           return grade;
         },
         csvDownloadable: true,
-        defaultVisible: false,
+        defaultVisible: asn.external ?? false,
       });
     });
     return cols;
@@ -662,16 +654,24 @@ const GradebookTable = ({
     return t(translations.exportButton);
   }, [selectedCount, rows.length, t]);
 
-  const toolbarWithLabel = toolbar?.columnPicker
+  const toolbarWithLabel = toolbar
     ? {
-        ...toolbar,
+      ...toolbar,
+      buttons: toolbarAction
+        ? [
+          ...(toolbar.buttons ?? []),
+          cloneElement(toolbarAction, { key: 'toolbar-action' }),
+        ]
+        : toolbar.buttons,
+      ...(toolbar.columnPicker && {
         columnPicker: {
           ...toolbar.columnPicker,
           directExportLabel,
           directExportTooltip:
             selectedCount === 0 ? t(translations.exportAllTooltip) : undefined,
         },
-      }
+      }),
+    }
     : toolbar;
 
   const totalWidth = useMemo(
@@ -803,7 +803,7 @@ const GradebookTable = ({
                     const isExternalCol =
                       asnId !== null &&
                       assessments.find((a) => a.id === asnId)?.external ===
-                        true;
+                      true;
                     const labelNode = (
                       <Tooltip title={label}>
                         <span>
@@ -859,18 +859,6 @@ const GradebookTable = ({
                               size="small"
                               sx={{ ml: 0.5 }}
                             />
-                            <IconButton
-                              aria-label={t(translations.manageAria, {
-                                title: label,
-                              })}
-                              onClick={(e) => {
-                                setMenuAnchor(e.currentTarget);
-                                setMenuAsnId(asnId);
-                              }}
-                              size="small"
-                            >
-                              <MoreVert fontSize="small" />
-                            </IconButton>
                           </span>
                         ) : (
                           sortedLabel
@@ -1049,44 +1037,6 @@ const GradebookTable = ({
           {pagination && <MuiTablePagination {...pagination} />}
         </Paper>
       </div>
-      <Menu
-        anchorEl={menuAnchor}
-        onClose={() => setMenuAnchor(null)}
-        open={Boolean(menuAnchor)}
-      >
-        <MenuItem
-          onClick={() => {
-            setMenuAnchor(null);
-            setRenameOpen(true);
-          }}
-        >
-          {t(translations.rename)}
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setMenuAnchor(null);
-            setDeleteOpen(true);
-          }}
-        >
-          {t(translations.deleteAction)}
-        </MenuItem>
-      </Menu>
-      {menuAsn && (
-        <RenameExternalColumnPrompt
-          assessmentId={menuAsn.id}
-          currentTitle={menuAsn.title}
-          onClose={() => setRenameOpen(false)}
-          open={renameOpen}
-        />
-      )}
-      {menuAsn && (
-        <DeleteExternalColumnPrompt
-          assessmentId={menuAsn.id}
-          onClose={() => setDeleteOpen(false)}
-          open={deleteOpen}
-          title={menuAsn.title}
-        />
-      )}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import type {
 import CourseAPI from 'api/course';
 
 import { actions } from './store';
+import { materializedDefaultWeights, usingDefaultWeights } from './computeWeighted';
 
 const fetchGradebook = (): Operation => async (dispatch) => {
   const response = await CourseAPI.gradebook.index();
@@ -22,6 +23,18 @@ export const updateGradebookWeights =
     dispatch(actions.updateTabWeights(response.data));
   };
 
+// When the weighted view is showing the equal-split default (no weights stored),
+// persist that visible split for the existing tabs. Call this BEFORE a mutation that
+// will set a real weight, so the other tabs keep their on-screen weights instead of
+// snapping to their stored 0 once the fallback disengages. No-op when weights are
+// already configured. Idempotent / best-effort: it only makes the visible state
+// durable, so it needs no rollback if the following mutation fails.
+const materializeDefaultWeights = (): Operation => async (dispatch, getState) => {
+  const { tabs, assessments } = getState().gradebook;
+  if (!usingDefaultWeights(tabs, assessments)) return;
+  await dispatch(updateGradebookWeights(materializedDefaultWeights(tabs, assessments)));
+};
+
 export const createExternalAssessment =
   (
     title: string,
@@ -31,6 +44,7 @@ export const createExternalAssessment =
     weight?: number,
   ): Operation =>
   async (dispatch) => {
+    if (weight) await dispatch(materializeDefaultWeights());
     const response = await CourseAPI.gradebook.createExternal({
       title,
       maximumGrade,
@@ -62,6 +76,7 @@ export const editExternalAssessment =
     },
   ): Operation =>
   async (dispatch) => {
+    if (patch.weight) await dispatch(materializeDefaultWeights());
     const response = await CourseAPI.gradebook.updateExternal(
       -assessmentId,
       patch,
@@ -74,6 +89,27 @@ export const deleteExternalAssessment =
   async (dispatch) => {
     await CourseAPI.gradebook.deleteExternal(-assessmentId);
     dispatch(actions.deleteExternalAssessment(assessmentId));
+  };
+
+// Optimistic: apply the new external order immediately, persist via one PUT.
+// On failure, restore the previous order and rethrow so the caller can toast.
+// `orderedAssessmentIds` are the negative serialized ids (store ids); the API
+// wants the positive external ids, so we negate them.
+export const reorderExternalAssessments =
+  (orderedAssessmentIds: number[]): Operation =>
+  async (dispatch, getState) => {
+    const prevOrder = getState()
+      .gradebook.assessments.filter((a) => a.external)
+      .map((a) => a.id);
+    dispatch(actions.reorderExternalAssessments(orderedAssessmentIds));
+    try {
+      await CourseAPI.gradebook.reorderExternals({
+        orderedIds: orderedAssessmentIds.map((id) => -id),
+      });
+    } catch (error) {
+      dispatch(actions.reorderExternalAssessments(prevOrder));
+      throw error;
+    }
   };
 
 // Optimistic: apply the new grade immediately, then reconcile with the server.
@@ -115,6 +151,9 @@ export const commitImport =
     payload: ImportPreviewRequest & { onConflict: 'keep' | 'replace' },
   ): Operation<ImportCommitSummary> =>
   async (dispatch) => {
+    if (payload.components.some((c) => c.weightage > 0)) {
+      await dispatch(materializeDefaultWeights());
+    }
     const response = await CourseAPI.gradebook.importCommit(payload);
     const refreshed = await CourseAPI.gradebook.index();
     dispatch(actions.saveGradebook(refreshed.data));

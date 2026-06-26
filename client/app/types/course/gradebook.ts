@@ -85,6 +85,12 @@ export interface ImportComponent {
   maximumGrade: number;
 }
 
+export interface ExistingExternalAssessment {
+  name: string;
+  maximumGrade: number;
+  weightage: number;
+}
+
 export interface ImportPreviewRequest {
   components: ImportComponent[];
   identifierMode: IdentifierMode;

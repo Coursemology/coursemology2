@@ -59,6 +59,13 @@ export default class GradebookAPI extends BaseCourseAPI {
     return this.client.delete(`${this.#urlPrefix}/external_assessments/${id}`);
   }
 
+  reorderExternals(payload: { orderedIds: number[] }): APIResponse<void> {
+    return this.client.put(
+      `${this.#urlPrefix}/external_assessments/reorder`,
+      payload,
+    );
+  }
+
   setExternalGrade(
     id: number,
     payload: { studentId: number; grade: number | null },

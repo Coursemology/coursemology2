@@ -12,7 +12,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
     let!(:bob) { create(:course_student, course: course, external_id: 'A002') }
 
     let(:components) { [name: 'Midterm', weightage: 30, maximumGrade: 50] }
-    let(:csv_data) { "Identifier,Midterm\nA001,41\n" }
+    let(:csv_data) { "External ID,Midterm\nA001,41\n" }
     let(:base_params) do
       { course_id: course.id, format: :json,
         components: components, identifierMode: 'student_id', csvData: csv_data }
@@ -32,7 +32,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         end
 
         it 'returns ok:false with unresolved identifiers' do
-          post :preview, params: base_params.merge(csvData: "Identifier,Midterm\nZZZ,1\n")
+          post :preview, params: base_params.merge(csvData: "External ID,Midterm\nZZZ,1\n")
           data = JSON.parse(response.body)
           expect(data['ok']).to be(false)
           expect(data['unresolved']).to include('ZZZ')
@@ -48,18 +48,18 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           service = Course::Gradebook::ExternalAssessmentImportService.new(
             course: course, actor: manager.user,
             components: [name: 'Midterm', weightage: 30, maximum_grade: 50],
-            identifier_mode: 'student_id', csv_data: "Identifier,Midterm\nA001,10\n"
+            identifier_mode: 'student_id', csv_data: "External ID,Midterm\nA001,10\n"
           )
           service.commit(on_conflict: 'replace')
 
-          post :preview, params: base_params.merge(csvData: "Identifier,Midterm\nA001,20\n")
+          post :preview, params: base_params.merge(csvData: "External ID,Midterm\nA001,20\n")
           data = JSON.parse(response.body)
           expect(data['conflicts'].size).to eq(1)
           expect(data['conflicts'].first['component']).to eq('Midterm')
         end
 
         it 'returns ok:false with malformed grade cells' do
-          post :preview, params: base_params.merge(csvData: "Identifier,Midterm\nA001,oops\n")
+          post :preview, params: base_params.merge(csvData: "External ID,Midterm\nA001,oops\n")
           data = JSON.parse(response.body)
           expect(data['ok']).to be(false)
           expect(data['malformed']).to be_present
@@ -70,7 +70,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
                             { name: 'Midterm', weightage: 20, maximumGrade: 40 }]
           post :preview, params: base_params.merge(
             components: dup_components,
-            csvData: "Identifier,Midterm,Midterm\nA001,1,2\n"
+            csvData: "External ID,Midterm,Midterm\nA001,1,2\n"
           )
           expect(response).to have_http_status(:unprocessable_entity)
         end
@@ -78,7 +78,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         it 'resolves by email when identifierMode is email' do
           post :preview, params: base_params.merge(
             identifierMode: 'email',
-            csvData: "Identifier,Midterm\n#{alice.user.email},41\n"
+            csvData: "Email,Midterm\n#{alice.user.email},41\n"
           )
           data = JSON.parse(response.body)
           expect(data['ok']).to be(true)
@@ -111,7 +111,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         it 'returns 422 and writes nothing on an unresolved identifier' do
           expect do
             post :create, params: base_params.merge(
-              csvData: "Identifier,Midterm\nZZZ,1\n", onConflict: 'replace'
+              csvData: "External ID,Midterm\nZZZ,1\n", onConflict: 'replace'
             )
           end.not_to(change { Course::ExternalAssessmentGrade.count })
           expect(response).to have_http_status(:unprocessable_entity)
@@ -123,7 +123,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           # Re-import with keep
           expect do
             post :create, params: base_params.merge(onConflict: 'keep',
-                                                    csvData: "Identifier,Midterm\nA001,99\n")
+                                                    csvData: "External ID,Midterm\nA001,99\n")
           end.not_to(change { Course::ExternalAssessmentGrade.count })
           data = JSON.parse(response.body)
           expect(data['updatedComponents']).to eq(1)
@@ -133,7 +133,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         it 'returns 422 and writes nothing on malformed grade cells' do
           expect do
             post :create, params: base_params.merge(
-              csvData: "Identifier,Midterm\nA001,oops\n", onConflict: 'replace'
+              csvData: "External ID,Midterm\nA001,oops\n", onConflict: 'replace'
             )
           end.not_to(change { Course::ExternalAssessmentGrade.count })
           expect(response).to have_http_status(:unprocessable_entity)

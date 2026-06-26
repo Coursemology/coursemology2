@@ -1,10 +1,12 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
+import Dropzone from 'react-dropzone';
 import { Add, Delete } from '@mui/icons-material';
 import {
   Alert,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,22 +22,26 @@ import {
   TableHead,
   TableRow,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
+  Typography,
 } from '@mui/material';
+import { FilePreview } from 'lib/components/form/fields/SingleFileInput';
+import SegmentedSwitch from 'lib/components/core/buttons/SegmentedSwitch';
 import type {
+  ExistingExternalAssessment,
   IdentifierMode,
   ImportComponent,
   ImportPreviewResult,
 } from 'types/course/gradebook';
 
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { getStudents } from '../../selectors';
+
 import { commitImport, previewImport } from '../../operations';
 
-import { downloadTemplate, readFileText } from './buildTemplate';
+import { downloadTemplate, identifierHeader, readFileText } from './buildTemplate';
 import ExternalGradeConflictPrompt from './ExternalGradeConflictPrompt';
 
 const translations = defineMessages({
@@ -75,19 +81,26 @@ const translations = defineMessages({
     id: 'course.gradebook.ImportWizard.updatesExisting',
     defaultMessage: 'Updates existing — managed in the gradebook',
   },
+  fromExisting: {
+    id: 'course.gradebook.ImportWizard.fromExisting',
+    defaultMessage: 'From existing',
+  },
   identifierMode: {
     id: 'course.gradebook.ImportWizard.identifierMode',
     defaultMessage: 'Match students by',
   },
-  studentId: {
-    id: 'course.gradebook.ImportWizard.studentId',
-    defaultMessage: 'Student ID',
+  externalId: {
+    id: 'course.gradebook.ImportWizard.externalId',
+    defaultMessage: 'External ID',
   },
   email: { id: 'course.gradebook.ImportWizard.email', defaultMessage: 'Email' },
-  studentIdHint: {
-    id: 'course.gradebook.ImportWizard.studentIdHint',
-    defaultMessage:
-      "Matching uses each student's current Student ID. Keep Student IDs up to date in Manage Users.",
+  requiredHeaders: {
+    id: 'course.gradebook.ImportWizard.requiredHeaders',
+    defaultMessage: 'Your CSV needs these column headers: {headers}',
+  },
+  dropzone: {
+    id: 'course.gradebook.ImportWizard.dropzone',
+    defaultMessage: 'Drag a CSV here, or click to choose a file',
   },
   downloadTemplate: {
     id: 'course.gradebook.ImportWizard.downloadTemplate',
@@ -131,13 +144,23 @@ const translations = defineMessages({
     id: 'course.gradebook.ImportWizard.previewError',
     defaultMessage: 'Could not verify the file. Please try again.',
   },
+  externalIdHint: {
+    id: 'course.gradebook.ImportWizard.externalIdHint',
+    defaultMessage:
+      "Matching uses each student's External ID. Keep External IDs up to date in <link>Manage Users</link>.",
+  },
+  externalIdBlocked: {
+    id: 'course.gradebook.ImportWizard.externalIdBlocked',
+    defaultMessage:
+      '{count, plural, one {{name} has no External ID.} other {# students have no External ID, including {name}.}} Importing by External ID needs every student to have one, so this import is blocked until they are all filled in. In <link>Manage Users</link>, sort by the External ID column to group the blank ones together and fill them in, then come back here. Prefer to match by Email instead? Switch the toggle above.',
+  },
 });
 
 interface Props {
   open: boolean;
   onClose: () => void;
   weightedViewEnabled: boolean;
-  existingExternalTitles: string[];
+  existingAssessments: ExistingExternalAssessment[];
 }
 
 let rowId = 0;
@@ -150,25 +173,35 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
   open,
   onClose,
   weightedViewEnabled,
-  existingExternalTitles,
+  existingAssessments,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { courseId } = useParams();
+  const { courseId: courseIdParam } = useParams();
+  const courseId = courseIdParam ?? '';
   const [step, setStep] = useState(0);
   const [components, setComponents] = useState<
     (ImportComponent & { id: number })[]
   >([blankComponent()]);
   const [mode, setMode] = useState<IdentifierMode>('student_id');
+  const [file, setFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState('');
   const [preview, setPreview] = useState<ImportPreviewResult | null>(null);
   const [conflictOpen, setConflictOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
+  const students = useAppSelector(getStudents);
+  const missingStudents = useMemo(
+    () => students.filter((s) => s.externalId == null || s.externalId === ''),
+    [students],
+  );
+  const identifierReady = mode === 'email' || missingStudents.length === 0;
+
   useEffect(() => {
     if (!open) {
       setStep(0);
       setComponents([blankComponent()]);
+      setFile(null);
       setCsvData('');
       setPreview(null);
       setConflictOpen(false);
@@ -176,17 +209,35 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
     }
   }, [open]);
 
-  const existingSet = useMemo(
-    () => new Set(existingExternalTitles),
-    [existingExternalTitles],
+  const existingMap = useMemo(
+    () => new Map(existingAssessments.map((a) => [a.name, a])),
+    [existingAssessments],
   );
-  const isExisting = (name: string): boolean => existingSet.has(name.trim());
+  const isExisting = (name: string): boolean => existingMap.has(name.trim());
+
+  const addedNames = useMemo(
+    () => new Set(components.map((c) => c.name.trim())),
+    [components],
+  );
+
+  const availableChips = useMemo(
+    () => existingAssessments.filter((a) => !addedNames.has(a.name)),
+    [existingAssessments, addedNames],
+  );
 
   const updateComponent = (
     i: number,
     patch: Partial<ImportComponent & { id: number }>,
   ): void =>
     setComponents((cs) => cs.map((c, j) => (j === i ? { ...c, ...patch } : c)));
+
+  const insertFromExisting = (a: ExistingExternalAssessment): void => {
+    rowId += 1;
+    setComponents((cs) => [
+      ...cs,
+      { id: rowId, name: a.name, weightage: a.weightage, maximumGrade: a.maximumGrade },
+    ]);
+  };
 
   const defineValid =
     components.length > 0 &&
@@ -256,11 +307,31 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
 
         {step === 0 && (
           <>
+            {availableChips.length > 0 && (
+              <div className="mb-3">
+                <Typography sx={{ mb: 1 }} variant="subtitle2">
+                  {t(translations.fromExisting)}
+                </Typography>
+                <div className="flex flex-wrap gap-1">
+                  {availableChips.map((a) => (
+                    <Chip
+                      key={a.name}
+                      label={a.name}
+                      onClick={() => insertFromExisting(a)}
+                      variant="outlined"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {components.map((c, i) => {
               const locked = isExisting(c.name);
+              const existing = locked ? existingMap.get(c.name.trim()) : undefined;
               return (
                 <div key={c.id} className="mb-2 flex items-center gap-2">
                   <TextField
+                    disabled={locked}
                     inputProps={{ 'aria-label': t(translations.componentName) }}
                     label={t(translations.componentName)}
                     onChange={(e) =>
@@ -281,7 +352,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                       }
                       size="small"
                       type="number"
-                      value={c.weightage}
+                      value={locked && existing ? existing.weightage : c.weightage}
                     />
                   )}
                   <TextField
@@ -295,7 +366,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                     }
                     size="small"
                     type="number"
-                    value={c.maximumGrade}
+                    value={locked && existing ? existing.maximumGrade : c.maximumGrade}
                   />
                   {locked && (
                     <span className="text-sm text-neutral-500">
@@ -322,28 +393,43 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
               {t(translations.addComponent)}
             </Button>
 
-            <div className="mt-4">
-              <span className="mr-2">{t(translations.identifierMode)}</span>
-              <ToggleButtonGroup
-                exclusive
-                onChange={(_, v: IdentifierMode | null) => v && setMode(v)}
-                size="small"
+            <div className="mt-4 flex items-center gap-2">
+              <Typography component="span" variant="subtitle2">
+                {t(translations.identifierMode)}
+              </Typography>
+              <SegmentedSwitch
+                ariaLabel={t(translations.identifierMode)}
+                onChange={setMode}
+                options={[
+                  { value: 'student_id' as IdentifierMode, label: t(translations.externalId) },
+                  { value: 'email' as IdentifierMode, label: t(translations.email) },
+                ]}
                 value={mode}
-              >
-                <ToggleButton value="student_id">
-                  {t(translations.studentId)}
-                </ToggleButton>
-                <ToggleButton value="email">
-                  {t(translations.email)}
-                </ToggleButton>
-              </ToggleButtonGroup>
+              />
             </div>
+
             {mode === 'student_id' && (
-              <Alert severity="info" sx={{ mt: 2 }}>
-                {t(translations.studentIdHint)}{' '}
-                <MuiLink href={`/courses/${courseId}/users`}>
-                  Manage Users
-                </MuiLink>
+              <Alert
+                severity={identifierReady ? 'info' : 'warning'}
+                sx={{ mt: 2 }}
+              >
+                {identifierReady
+                  ? t(translations.externalIdHint, {
+                      link: (chunks) => (
+                        <MuiLink href={`/courses/${courseId}/users`}>
+                          {chunks}
+                        </MuiLink>
+                      ),
+                    })
+                  : t(translations.externalIdBlocked, {
+                      name: missingStudents[0]?.name ?? '',
+                      count: missingStudents.length,
+                      link: (chunks) => (
+                        <MuiLink href={`/courses/${courseId}/users`}>
+                          {chunks}
+                        </MuiLink>
+                      ),
+                    })}
               </Alert>
             )}
           </>
@@ -351,20 +437,49 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
 
         {step === 1 && (
           <div className="flex flex-col gap-3">
+            <Typography variant="body2">
+              {t(translations.requiredHeaders, {
+                headers: [
+                  identifierHeader(mode),
+                  ...components.map((c) => c.name),
+                ].join(', '),
+              })}
+            </Typography>
             <Button
-              onClick={() => downloadTemplate(components)}
+              onClick={() => downloadTemplate(components, mode)}
               variant="outlined"
             >
               {t(translations.downloadTemplate)}
             </Button>
-            <TextField
-              inputProps={{ 'aria-label': t(translations.upload) }}
-              onChange={async (e) => {
-                const f = (e.target as HTMLInputElement).files?.[0];
-                if (f) setCsvData(await readFileText(f));
+            <Dropzone
+              accept={{ 'text/csv': ['.csv'] }}
+              multiple={false}
+              onDrop={async (files) => {
+                const f = files[0];
+                if (f) {
+                  setFile(f);
+                  setCsvData(await readFileText(f));
+                }
               }}
-              type="file"
-            />
+            >
+              {({ getRootProps, getInputProps }) => (
+                <div
+                  {...getRootProps({
+                    className:
+                      'dropzone-input select-none cursor-pointer flex p-10 items-center justify-center text-center shadow-md rounded-md',
+                  })}
+                >
+                  <input
+                    {...getInputProps({ 'aria-label': t(translations.upload) })}
+                  />
+                  {file ? (
+                    <FilePreview file={file} />
+                  ) : (
+                    <div>{t(translations.dropzone)}</div>
+                  )}
+                </div>
+              )}
+            </Dropzone>
           </div>
         )}
 
@@ -422,7 +537,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
         )}
         {step === 0 && (
           <Button
-            disabled={!defineValid}
+            disabled={!defineValid || !identifierReady}
             onClick={() => setStep(1)}
             variant="contained"
           >

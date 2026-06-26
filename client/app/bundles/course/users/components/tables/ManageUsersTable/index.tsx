@@ -70,10 +70,23 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
     {
       of: 'externalId',
       title: t(tableTranslations.externalId),
-      sortable: false,
+      sortable: true,
       searchable: true,
       cell: (user) => <ExternalIdField for={user} />,
       csvDownloadable: true,
+      sortProps: {
+        // Empties first so all blank External IDs cluster onto page 1 for a
+        // single fix pass; non-empty values sort lexicographically after.
+        // descFirst: false ensures the first click sorts ascending (empties first).
+        descFirst: false,
+        sort: (a, b) => {
+          const av = a.externalId ?? '';
+          const bv = b.externalId ?? '';
+          if (!av && bv) return -1;
+          if (av && !bv) return 1;
+          return av.localeCompare(bv);
+        },
+      },
     },
     {
       of: 'phantom',

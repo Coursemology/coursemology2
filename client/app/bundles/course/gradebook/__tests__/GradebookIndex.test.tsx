@@ -223,13 +223,17 @@ describe('GradebookIndex', () => {
     expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
   });
 
-  it('renders the import external assessments button when manager and students exist', async () => {
+  it('shows the manage button and not the old import/add buttons', async () => {
     render(<GradebookIndex />, { state: populatedStateManagerWeightedOff });
     expect(
-      await screen.findByRole('button', {
-        name: /import external assessments/i,
-      }),
-    ).toBeInTheDocument();
+      await screen.findByRole('button', { name: 'Manage external assessments' }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Import external assessments' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add external assessment' }),
+    ).not.toBeInTheDocument();
   });
 
   describe('weighted-view discoverability hint', () => {

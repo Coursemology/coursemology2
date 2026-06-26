@@ -20,10 +20,36 @@ class Course::ExternalAssessment < ApplicationRecord
   belongs_to :course, inverse_of: :external_assessments
   has_one :gradebook_contribution, class_name: 'Course::Gradebook::Contribution',
                                    inverse_of: :external_assessment, dependent: :destroy
+  # delete_all (not destroy): grades carry no destroy callbacks, so destroying the
+  # parent would otherwise fire one SELECT+DELETE per grade (N+1). delete_all removes
+  # them in a single statement. Rails must issue it — the DB FK has no ON DELETE CASCADE.
   has_many :external_assessment_grades, class_name: 'Course::ExternalAssessmentGrade',
-                                        inverse_of: :external_assessment, dependent: :destroy
+                                        inverse_of: :external_assessment, dependent: :delete_all
 
   scope :for_course, ->(course) { where(course_id: course.id) }
+
+  before_create :assign_default_position
+
+  # Next free position for the course (positions are 0-based, per course, not
+  # required to be unique). Drives append-at-end for both manual add and import.
+  def self.next_position(course)
+    (for_course(course).maximum(:position) || -1) + 1
+  end
+
+  # Rewrites positions to match ordered_ids (the canonical gradebook order). The
+  # id set must match the course's externals exactly, else the order would be
+  # corrupted by a stale/partial payload.
+  def self.reorder!(course:, ordered_ids:)
+    scope = for_course(course)
+    raise ArgumentError, 'ordered_ids must match the course externals' unless
+      ordered_ids.map(&:to_i).sort == scope.pluck(:id).sort
+
+    transaction do
+      ordered_ids.each_with_index do |id, index|
+        scope.where(id: id).update_all(position: index)
+      end
+    end
+  end
 
   # The negative serialized id used by the synthetic tab AND the leaf assessment.
   def synthetic_tab_id
@@ -43,5 +69,12 @@ class Course::ExternalAssessment < ApplicationRecord
                                               weight: weight, weight_mode: 'equal', keep_highest: 0)
       external
     end
+  end
+
+
+  private
+
+  def assign_default_position
+    self.position ||= self.class.next_position(course)
   end
 end
