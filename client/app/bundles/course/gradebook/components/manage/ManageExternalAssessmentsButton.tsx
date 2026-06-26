@@ -13,16 +13,24 @@ const translations = defineMessages({
   },
 });
 
-const ManageExternalAssessmentsButton: FC = () => {
+interface Props {
+  /** Match the host toolbar's button size. Defaults to MUI's `medium`. */
+  size?: 'small' | 'medium';
+}
+
+const ManageExternalAssessmentsButton: FC<Props> = ({ size }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} size="small" variant="outlined">
+      <Button onClick={() => setOpen(true)} size={size} variant="outlined">
         {t(translations.manage)}
       </Button>
-      <ManageExternalAssessmentsPanel onClose={() => setOpen(false)} open={open} />
+      <ManageExternalAssessmentsPanel
+        onClose={() => setOpen(false)}
+        open={open}
+      />
     </>
   );
 };

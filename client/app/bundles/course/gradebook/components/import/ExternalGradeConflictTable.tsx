@@ -1,81 +1,98 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { WarningAmber } from '@mui/icons-material';
+import { ArrowForward } from '@mui/icons-material';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material';
-import type { ImportConflict } from 'types/course/gradebook';
+import type { ConflictRow } from 'types/course/gradebook';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
-  component: {
-    id: 'course.gradebook.ExternalGradeConflictTable.component',
-    defaultMessage: 'Component',
-  },
-  student: {
-    id: 'course.gradebook.ExternalGradeConflictTable.student',
-    defaultMessage: 'Student',
-  },
-  existing: {
-    id: 'course.gradebook.ExternalGradeConflictTable.existing',
-    defaultMessage: 'Existing grade',
-  },
-  inFile: {
-    id: 'course.gradebook.ExternalGradeConflictTable.inFile',
-    defaultMessage: 'In-file grade',
-  },
-  mismatch: {
-    id: 'course.gradebook.ExternalGradeConflictTable.mismatch',
-    defaultMessage:
-      'This identifier now resolves to a different student than the existing grade was imported under.',
+  name: {
+    id: 'course.gradebook.ExternalGradeConflictTable.name',
+    defaultMessage: 'Name',
   },
 });
 
 interface Props {
-  rows: ImportConflict[];
+  rows: ConflictRow[];
+  componentNames: string[];
+  identifierLabel: string;
 }
 
-const ExternalGradeConflictTable: FC<Props> = ({ rows }) => {
+const formatGrade = (value: number | null): string =>
+  value == null ? '—' : String(value);
+
+const ExternalGradeConflictTable: FC<Props> = ({
+  rows,
+  componentNames,
+  identifierLabel,
+}) => {
   const { t } = useTranslation();
   return (
     <Table size="small">
       <TableHead>
         <TableRow>
-          <TableCell>{t(translations.component)}</TableCell>
-          <TableCell>{t(translations.student)}</TableCell>
-          <TableCell>{t(translations.existing)}</TableCell>
-          <TableCell>{t(translations.inFile)}</TableCell>
+          <TableCell sx={{ whiteSpace: 'nowrap' }}>{identifierLabel}</TableCell>
+          <TableCell>{t(translations.name)}</TableCell>
+          {componentNames.map((name) => (
+            <TableCell key={name} sx={{ whiteSpace: 'nowrap' }}>
+              {name}
+            </TableCell>
+          ))}
         </TableRow>
       </TableHead>
       <TableBody>
         {rows.map((row) => (
-          <TableRow key={`${row.component}-${row.studentName}`}>
-            <TableCell>{row.component}</TableCell>
-            <TableCell>
-              {row.studentName}
-              {row.identifierMismatch && (
-                <Tooltip title={t(translations.mismatch)}>
-                  <WarningAmber
-                    color="warning"
-                    fontSize="inherit"
-                    sx={{ ml: 0.5, verticalAlign: 'middle' }}
-                  />
-                </Tooltip>
-              )}
+          <TableRow key={row.identifier}>
+            <TableCell sx={{ whiteSpace: 'nowrap' }}>
+              {row.identifier}
             </TableCell>
-            <TableCell>{row.existingGrade}</TableCell>
-            <TableCell>
-              <Typography fontWeight="bold" variant="body2">
-                {row.inFileGrade}
-              </Typography>
-            </TableCell>
+            <TableCell>{row.studentName}</TableCell>
+            {componentNames.map((name) => {
+              const cell = row.cells[name];
+              if (cell?.changed) {
+                return (
+                  <TableCell key={name} sx={{ whiteSpace: 'nowrap' }}>
+                    <Typography
+                      component="span"
+                      sx={{ textDecoration: 'line-through' }}
+                      variant="body2"
+                    >
+                      {formatGrade(cell.existing)}
+                    </Typography>
+                    <ArrowForward
+                      fontSize="inherit"
+                      sx={{
+                        mx: 0.5,
+                        verticalAlign: 'middle',
+                        display: 'inline-block',
+                      }}
+                    />
+                    <Typography
+                      component="span"
+                      fontWeight="bold"
+                      variant="body2"
+                    >
+                      {formatGrade(cell.inFile)}
+                    </Typography>
+                  </TableCell>
+                );
+              }
+              // unchanged / new-fill / blank: show the value that will be stored
+              const value = cell == null ? null : cell.inFile ?? cell.existing;
+              return (
+                <TableCell key={name} sx={{ whiteSpace: 'nowrap' }}>
+                  {formatGrade(value)}
+                </TableCell>
+              );
+            })}
           </TableRow>
         ))}
       </TableBody>
@@ -83,4 +100,4 @@ const ExternalGradeConflictTable: FC<Props> = ({ rows }) => {
   );
 };
 
-export default ExternalGradeConflictTable;
+export default memo(ExternalGradeConflictTable);

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -8,8 +9,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from '@mui/material';
-import type { ImportConflict } from 'types/course/gradebook';
+import type { ConflictRow } from 'types/course/gradebook';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -23,7 +25,7 @@ const translations = defineMessages({
   body: {
     id: 'course.gradebook.ExternalGradeConflictPrompt.body',
     defaultMessage:
-      'These students already have a grade for these components. Keep their existing grades, or replace them with the values from your file? New students and blank cells are unaffected.',
+      'Some students already have grades for these components that differ from the values in your file. Replace will overwrite the existing grades with the values from your file. Keep Existing will leave the existing grades unchanged.',
   },
   goBack: {
     id: 'course.gradebook.ExternalGradeConflictPrompt.goBack',
@@ -37,12 +39,21 @@ const translations = defineMessages({
     id: 'course.gradebook.ExternalGradeConflictPrompt.replace',
     defaultMessage: 'Replace',
   },
+  changesSummary: {
+    id: 'course.gradebook.ExternalGradeConflictPrompt.changesSummary',
+    defaultMessage: '{changed} of {total} rows have changes',
+  },
 });
 
 interface Props {
   open: boolean;
-  conflicts: ImportConflict[];
+  rows: ConflictRow[];
+  componentNames: string[];
+  identifierLabel: string;
+  totalRows: number;
   disabled?: boolean;
+  keepLoading?: boolean;
+  replaceLoading?: boolean;
   onKeepExisting: () => void;
   onReplaceAll: () => void;
   onCancel: () => void;
@@ -50,36 +61,65 @@ interface Props {
 
 const ExternalGradeConflictPrompt: FC<Props> = ({
   open,
-  conflicts,
+  rows,
+  componentNames,
+  identifierLabel,
+  totalRows,
   disabled = false,
+  keepLoading = false,
+  replaceLoading = false,
   onKeepExisting,
   onReplaceAll,
   onCancel,
 }) => {
   const { t } = useTranslation();
   return (
-    <Dialog disableEscapeKeyDown maxWidth="md" onClose={onCancel} open={open}>
+    <Dialog
+      disableEscapeKeyDown
+      maxWidth="md"
+      onClose={(_event, reason) => {
+        if (reason === 'backdropClick') return;
+        onCancel();
+      }}
+      open={open}
+    >
       <DialogTitle>{t(translations.title)}</DialogTitle>
       <DialogContent>
         <DialogContentText>{t(translations.body)}</DialogContentText>
+        <Typography sx={{ mt: 2 }} variant="subtitle2">
+          {t(translations.changesSummary, {
+            changed: rows.length,
+            total: totalRows,
+          })}
+        </Typography>
         <Box sx={{ maxHeight: 320, mt: 2, overflow: 'auto' }}>
-          <ExternalGradeConflictTable rows={conflicts} />
+          <ExternalGradeConflictTable
+            componentNames={componentNames}
+            identifierLabel={identifierLabel}
+            rows={rows}
+          />
         </Box>
       </DialogContent>
       <DialogActions>
         <Button disabled={disabled} onClick={onCancel} variant="outlined">
           {t(translations.goBack)}
         </Button>
-        <Button
+        <LoadingButton
           disabled={disabled}
+          loading={keepLoading}
           onClick={onKeepExisting}
           variant="contained"
         >
           {t(translations.keepExisting)}
-        </Button>
-        <Button disabled={disabled} onClick={onReplaceAll} variant="contained">
+        </LoadingButton>
+        <LoadingButton
+          disabled={disabled}
+          loading={replaceLoading}
+          onClick={onReplaceAll}
+          variant="contained"
+        >
           {t(translations.replace)}
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

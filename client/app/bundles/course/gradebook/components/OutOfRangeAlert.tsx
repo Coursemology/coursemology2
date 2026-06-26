@@ -31,7 +31,11 @@ const formatAssessmentNames = (names: string[]): string => {
   return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 };
 
-const OutOfRangeAlert: FC<Props> = ({ gradeCount, assessmentNames, weightedViewEnabled }) => {
+const OutOfRangeAlert: FC<Props> = ({
+  gradeCount,
+  assessmentNames,
+  weightedViewEnabled,
+}) => {
   const { t } = useTranslation();
   if (gradeCount === 0) return null;
   if (weightedViewEnabled) {
@@ -43,18 +47,17 @@ const OutOfRangeAlert: FC<Props> = ({ gradeCount, assessmentNames, weightedViewE
           assessmentNames: formatAssessmentNames(assessmentNames),
         })}
       </Alert>
-    )
-  } else {
-    return (
-      <Alert severity="warning" sx={{ mx: 2, my: 1 }}>
-        {t(translations.warning, {
-          gradeCount,
-          assessmentCount: assessmentNames.length,
-          assessmentNames: formatAssessmentNames(assessmentNames),
-        })}
-      </Alert>
     );
   }
+  return (
+    <Alert severity="warning" sx={{ mx: 2, my: 1 }}>
+      {t(translations.warning, {
+        gradeCount,
+        assessmentCount: assessmentNames.length,
+        assessmentNames: formatAssessmentNames(assessmentNames),
+      })}
+    </Alert>
+  );
 };
 
 export default OutOfRangeAlert;

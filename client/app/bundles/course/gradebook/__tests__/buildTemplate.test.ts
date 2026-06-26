@@ -1,8 +1,11 @@
-import { buildTemplateCsv, identifierHeader } from '../components/import/buildTemplate';
+import {
+  buildTemplateCsv,
+  identifierHeader,
+} from '../components/import/buildTemplate';
 
 describe('identifierHeader', () => {
   it('maps mode to the concrete header', () => {
-    expect(identifierHeader('student_id')).toBe('External ID');
+    expect(identifierHeader('external_id')).toBe('External ID');
     expect(identifierHeader('email')).toBe('Email');
   });
 });
@@ -10,8 +13,10 @@ describe('identifierHeader', () => {
 describe('buildTemplateCsv', () => {
   const components = [{ name: 'Midterm', weightage: 30, maximumGrade: 50 }];
 
-  it('uses the External ID header in student_id mode', () => {
-    expect(buildTemplateCsv(components, 'student_id')).toBe('External ID,Midterm\n');
+  it('uses the External ID header in external_id mode', () => {
+    expect(buildTemplateCsv(components, 'external_id')).toBe(
+      'External ID,Midterm\n',
+    );
   });
 
   it('uses the Email header in email mode', () => {
@@ -19,35 +24,39 @@ describe('buildTemplateCsv', () => {
   });
 
   it('quotes a component name containing a comma', () => {
-    const csv = buildTemplateCsv([
-      { name: 'Lab, week 1', weightage: 10, maximumGrade: 20 },
-    ], 'student_id');
+    const csv = buildTemplateCsv(
+      [{ name: 'Lab, week 1', weightage: 10, maximumGrade: 20 }],
+      'external_id',
+    );
     expect(csv.split('\n')[0]).toBe('External ID,"Lab, week 1"');
   });
 
-  it('returns "External ID\\n" for empty components array in student_id mode', () => {
-    expect(buildTemplateCsv([], 'student_id')).toBe('External ID\n');
+  it('returns "External ID\\n" for empty components array in external_id mode', () => {
+    expect(buildTemplateCsv([], 'external_id')).toBe('External ID\n');
   });
 
   it('quotes a component name containing a double-quote', () => {
-    const csv = buildTemplateCsv([
-      { name: 'My "Best" Quiz', weightage: 10, maximumGrade: 20 },
-    ], 'student_id');
+    const csv = buildTemplateCsv(
+      [{ name: 'My "Best" Quiz', weightage: 10, maximumGrade: 20 }],
+      'external_id',
+    );
     expect(csv.split('\n')[0]).toBe('External ID,"My ""Best"" Quiz"');
   });
 
   it('quotes a component name containing a newline', () => {
-    const csv = buildTemplateCsv([
-      { name: 'Lab\nWeek1', weightage: 10, maximumGrade: 20 },
-    ], 'student_id');
+    const csv = buildTemplateCsv(
+      [{ name: 'Lab\nWeek1', weightage: 10, maximumGrade: 20 }],
+      'external_id',
+    );
     // The quoted cell spans two lines; verify the full header row content.
     expect(csv.startsWith('External ID,"Lab\nWeek1"')).toBe(true);
   });
 
   it('always ends with exactly one newline', () => {
-    const csv = buildTemplateCsv([
-      { name: 'A', weightage: 0, maximumGrade: 100 },
-    ], 'student_id');
+    const csv = buildTemplateCsv(
+      [{ name: 'A', weightage: 0, maximumGrade: 100 }],
+      'external_id',
+    );
     expect(csv.endsWith('\n')).toBe(true);
     expect(csv.split('\n')).toHaveLength(2); // header line + empty string after trailing \n
   });

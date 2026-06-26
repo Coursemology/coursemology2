@@ -79,7 +79,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
         // single fix pass; non-empty values sort lexicographically after.
         // descFirst: false ensures the first click sorts ascending (empties first).
         descFirst: false,
-        sort: (a, b) => {
+        sort: (a, b): number => {
           const av = a.externalId ?? '';
           const bv = b.externalId ?? '';
           if (!av && bv) return -1;

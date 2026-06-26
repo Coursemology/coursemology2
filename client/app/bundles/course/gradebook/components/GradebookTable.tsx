@@ -738,24 +738,24 @@ const GradebookTable = ({
 
   const toolbarWithLabel = toolbar
     ? {
-      ...toolbar,
-      buttons: toolbarAction
-        ? [
-          ...(toolbar.buttons ?? []),
-          cloneElement(toolbarAction, { key: 'toolbar-action' }),
-        ]
-        : toolbar.buttons,
-      ...(toolbar.columnPicker && {
-        columnPicker: {
-          ...toolbar.columnPicker,
-          directExportLabel,
-          directExportTooltip:
-            selectedCount === 0
-              ? t(translations.exportAllTooltip)
-              : undefined,
-        },
-      }),
-    }
+        ...toolbar,
+        buttons: toolbarAction
+          ? [
+              ...(toolbar.buttons ?? []),
+              cloneElement(toolbarAction, { key: 'toolbar-action' }),
+            ]
+          : toolbar.buttons,
+        ...(toolbar.columnPicker && {
+          columnPicker: {
+            ...toolbar.columnPicker,
+            directExportLabel,
+            directExportTooltip:
+              selectedCount === 0
+                ? t(translations.exportAllTooltip)
+                : undefined,
+          },
+        }),
+      }
     : toolbar;
 
   const totalWidth = useMemo(
