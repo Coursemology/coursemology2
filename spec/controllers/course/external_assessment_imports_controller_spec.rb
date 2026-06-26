@@ -28,7 +28,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
             not_to(change { Course::ExternalAssessmentGrade.count })
           data = JSON.parse(response.body)
           expect(data['ok']).to be(true)
-          expect(data['sample'].first['studentName']).to eq(alice.name)
+          expect(data['sample'].first['identifier']).to eq('A001')
         end
 
         it 'returns ok:false with unresolved identifiers' do
@@ -41,6 +41,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         it 'returns 422 on a malformed header' do
           post :preview, params: base_params.merge(csvData: "Wrong,Midterm\nA001,1\n")
           expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)['errors']['message']).to eq('bad_header')
         end
 
         it 'returns conflicts when a grade already exists' do
@@ -54,8 +55,8 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
 
           post :preview, params: base_params.merge(csvData: "External ID,Midterm\nA001,20\n")
           data = JSON.parse(response.body)
-          expect(data['conflicts'].size).to eq(1)
-          expect(data['conflicts'].first['component']).to eq('Midterm')
+          expect(data['conflictRows'].size).to eq(1)
+          expect(data['conflictRows'].first['studentName']).to eq(alice.name)
         end
 
         it 'returns ok:false with malformed grade cells' do
@@ -72,6 +73,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
             components: dup_components,
             csvData: "External ID,Midterm,Midterm\nA001,1,2\n"
           )
+          expect(JSON.parse(response.body)['errors']['message']).to eq('duplicate_component_name')
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -92,7 +94,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           )
           data = JSON.parse(response.body)
           expect(data['ok']).to be(true)
-          expect(data['sample'].first['studentName']).to eq(alice.name)
+          expect(data['sample'].first['identifier']).to eq(alice.user.email)
         end
       end
 
@@ -138,6 +140,36 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           data = JSON.parse(response.body)
           expect(data['updatedComponents']).to eq(1)
           expect(data['createdComponents']).to eq(0)
+          kept = Course::ExternalAssessment.for_course(course).find_by(title: 'Midterm').
+                 external_assessment_grades.find_by(course_user: alice)
+          expect(kept.grade).to eq(41)
+        end
+
+        it 'overwrites an existing grade when onConflict is replace' do
+          post :create, params: base_params.merge(onConflict: 'replace')
+          post :create, params: base_params.merge(onConflict: 'replace',
+                                                   csvData: "External ID,Midterm\nA001,99\n")
+          data = JSON.parse(response.body)
+          expect(data['updatedComponents']).to eq(1)
+          expect(data['createdComponents']).to eq(0)
+          grade = Course::ExternalAssessmentGrade.
+                  joins(:external_assessment).
+                  find_by(course_externalassessments: { course_id: course.id },
+                          course_user_id: alice.id)
+          expect(grade.grade).to eq(99)
+        end
+
+        it 'returns 422 on duplicate component names' do
+          dup_components = [{ name: 'Midterm', weightage: 30, maximumGrade: 50 },
+                            { name: 'Midterm', weightage: 20, maximumGrade: 40 }]
+          expect do
+            post :create, params: base_params.merge(
+              components: dup_components,
+              csvData: "External ID,Midterm,Midterm\nA001,1,2\n",
+              onConflict: 'replace'
+            )
+          end.not_to(change { Course::ExternalAssessmentGrade.count })
+          expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'returns 422 and writes nothing on malformed grade cells' do
