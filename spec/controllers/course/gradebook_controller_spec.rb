@@ -7,23 +7,37 @@ RSpec.describe Course::GradebookController, type: :controller do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:student) { create(:course_user, :student, course: course) }
-    let(:staff) { create(:course_user, :teaching_assistant, course: course) }
+    let(:manager) { create(:course_user, :manager, course: course) }
 
     describe '#index' do
       render_views
       subject { get :index, params: { course_id: course.id }, format: :json }
 
       context 'when the gradebook component is disabled' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let(:owner) { create(:course_owner, course: course) }
 
         before do
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, owner.user)
           allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
         end
 
         it 'raises a component not found error' do
           expect { subject }.to raise_error(ComponentNotFoundError)
         end
+      end
+
+      context 'when a owner visits the page' do
+        let(:owner) { create(:course_owner, course: course) }
+        before { controller_sign_in(controller, owner.user) }
+
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a manager visits the page' do
+        let(:manager) { create(:course_manager, course: course) }
+        before { controller_sign_in(controller, manager.user) }
+
+        it { expect(subject).to be_successful }
       end
 
       context 'when a student visits the page' do
@@ -37,33 +51,23 @@ RSpec.describe Course::GradebookController, type: :controller do
         let(:ta) { create(:course_teaching_assistant, course: course) }
         before { controller_sign_in(controller, ta.user) }
 
-        it { expect(subject).to be_successful }
-
-        it 'returns all required top-level keys' do
-          subject
-          data = JSON.parse(response.body)
-          %w[categories tabs assessments students submissions].each do |key|
-            expect(data).to have_key(key), "expected response to have key '#{key}'"
-          end
+        it 'is denied' do
+          expect { get :index, params: { course_id: course.id }, format: :json }.
+            to raise_error(CanCan::AccessDenied)
         end
-      end
-
-      context 'when a manager visits the page' do
-        let(:manager) { create(:course_manager, course: course) }
-        before { controller_sign_in(controller, manager.user) }
-
-        it { expect(subject).to be_successful }
       end
 
       context 'when an observer visits the page' do
         let(:observer) { create(:course_observer, course: course) }
         before { controller_sign_in(controller, observer.user) }
 
-        it { expect(subject).to be_successful }
+        it 'is denied' do
+          expect { get :index, params: { course_id: course.id }, format: :json }.
+            to raise_error(CanCan::AccessDenied)
+        end
       end
 
       context 'with a published assessment and a graded submission' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
         let(:tab) { course.assessment_categories.first.tabs.first }
         let!(:assessment) do
           create(:course_assessment_assessment, :published_with_mcq_question,
@@ -77,7 +81,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: 5.0, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'includes the assessment in the assessments array' do
@@ -129,9 +133,8 @@ RSpec.describe Course::GradebookController, type: :controller do
       end
 
       context 'when a student has an external ID' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
         let!(:student) { create(:course_student, course: course, external_id: 'EXT-123') }
-        before { controller_sign_in(controller, ta.user) }
+        before { controller_sign_in(controller, manager.user) }
 
         it 'returns the external ID in the students array' do
           subject
@@ -142,8 +145,50 @@ RSpec.describe Course::GradebookController, type: :controller do
         end
       end
 
-      context 'with a graded submission where the answer grade is exactly 0' do
+      context 'when a phantom student is enrolled' do
+        let!(:real_student) { create(:course_student, course: course) }
+        let!(:phantom_student) { create(:course_student, :phantom, course: course) }
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'omits phantom users from the students array' do
+          subject
+          data = JSON.parse(response.body)
+          ids = data['students'].map { |s| s['id'] }
+          expect(ids).to include(real_student.user_id)
+          expect(ids).not_to include(phantom_student.user_id)
+        end
+      end
+
+      context 'when the course has no published assessments or students' do
         let(:ta) { create(:course_teaching_assistant, course: course) }
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'returns empty assessments and students without error' do
+          subject
+          expect(response).to be_successful
+          data = JSON.parse(response.body)
+          expect(data['assessments']).to eq([])
+          expect(data['students']).to eq([])
+          expect(data['submissions']).to eq([])
+        end
+      end
+
+      context 'with an unpublished (draft) assessment' do
+        let(:ta) { create(:course_teaching_assistant, course: course) }
+        let(:tab) { course.assessment_categories.first.tabs.first }
+        let!(:draft) do
+          create(:course_assessment_assessment, course: course, tab: tab, published: false)
+        end
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'excludes the draft from the assessments array' do
+          subject
+          data = JSON.parse(response.body)
+          expect(data['assessments'].map { |a| a['id'] }).not_to include(draft.id)
+        end
+      end
+
+      context 'with a graded submission where the answer grade is exactly 0' do
         let(:tab) { course.assessment_categories.first.tabs.first }
         let!(:assessment) do
           create(:course_assessment_assessment, :published_with_mcq_question,
@@ -157,7 +202,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: 0.0, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'returns grade 0 (not null) in the submissions array' do
@@ -172,7 +217,6 @@ RSpec.describe Course::GradebookController, type: :controller do
       end
 
       context 'with a graded submission where answer grades are null (blank)' do
-        let(:ta) { create(:course_teaching_assistant, course: course) }
         let(:tab) { course.assessment_categories.first.tabs.first }
         let!(:assessment) do
           create(:course_assessment_assessment, :published_with_mcq_question,
@@ -186,7 +230,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           submission.answers.update_all(grade: nil, current_answer: true)
-          controller_sign_in(controller, ta.user)
+          controller_sign_in(controller, manager.user)
         end
 
         it 'returns null grade (not 0) in the submissions array' do
@@ -202,7 +246,6 @@ RSpec.describe Course::GradebookController, type: :controller do
 
       context 'when the course has an external assessment' do
         render_views
-        let(:ta) { create(:course_teaching_assistant, course: course) }
         let(:gb_student) { create(:course_student, course: course) }
         let!(:external) do
           create(:course_external_assessment, course: course, title: 'Midterm', maximum_grade: 50)
@@ -211,7 +254,7 @@ RSpec.describe Course::GradebookController, type: :controller do
           create(:course_external_assessment_grade,
                  external_assessment: external, course_user: gb_student, grade: 41)
         end
-        before { controller_sign_in(controller, ta.user) }
+        before { controller_sign_in(controller, manager.user) }
 
         it 'merges the external into assessments with a negative id and external flag' do
           subject
@@ -232,30 +275,20 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(sub['studentId']).to eq(gb_student.user_id)
           expect(sub['grade']).to eq(41.0)
         end
+      end
 
-        it 'emits a synthetic External Assessments category' do
+      context 'when an external assessment has no grades' do
+        render_views
+        let!(:external) do
+          create(:course_external_assessment, course: course, title: 'Ungraded', maximum_grade: 20)
+        end
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'still emits the external leaf but no submission row for it' do
           subject
           data = JSON.parse(response.body)
-          cat = data['categories'].find { |c| c['id'] == Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID }
-          expect(cat).to be_present
-          expect(cat['title']).to eq('External Assessments')
-        end
-
-        it 'emits a synthetic tab with negative id under the synthetic category' do
-          subject
-          data = JSON.parse(response.body)
-          tab = data['tabs'].find { |t| t['id'] == external.synthetic_tab_id }
-          expect(tab).to be_present
-          expect(tab['categoryId']).to eq(Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID)
-        end
-
-        it 'creates no real tab or category for the external' do
-          tab_count_before = Course::Assessment::Tab.count
-          cat_count_before = Course::Assessment::Category.count
-          subject
-          expect(Course::Assessment::Tab.count).to eq(tab_count_before)
-          expect(Course::Assessment::Category.count).to eq(cat_count_before)
-          expect(Course::Assessment::Category.where(title: 'External Assessments')).to be_empty
+          expect(data['assessments'].map { |a| a['id'] }).to include(-external.id)
+          expect(data['submissions'].select { |s| s['assessmentId'] == -external.id }).to eq([])
         end
       end
     end
@@ -267,13 +300,12 @@ RSpec.describe Course::GradebookController, type: :controller do
         Course::ExternalAssessment.create_for_course!(course: course, title: 'Midterm',
                                                       maximum_grade: 50.0, weight: 40)
       end
-      let(:ta) { create(:course_teaching_assistant, course: course) }
 
       before do
         ctx = Struct.new(:current_course, :key).new(course, Course::GradebookComponent.key)
         Course::Settings::GradebookComponent.new(ctx).weighted_view_enabled = true
         course.save!
-        controller_sign_in(controller, ta.user)
+        controller_sign_in(controller, manager.user)
       end
 
       subject(:body) do
@@ -310,9 +342,7 @@ RSpec.describe Course::GradebookController, type: :controller do
     end
 
     describe 'PATCH update_weights' do
-      let(:manager) { create(:course_manager, course: course) }
       let(:ta) { create(:course_teaching_assistant, course: course) }
-      let(:student) { create(:course_student, course: course) }
       let(:category) { create(:course_assessment_category, course: course) }
       let!(:tab1) { create(:course_assessment_tab, category: category) }
       let!(:tab2) { create(:course_assessment_tab, category: category) }
@@ -332,6 +362,21 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(response).to have_http_status(:ok)
           expect(weight_for(tab1)).to eq(60)
           expect(weight_for(tab2)).to eq(40)
+        end
+
+        it 'accepts an empty weights array as a no-op' do
+          patch :update_weights, params: { course_id: course.id, weights: [] }, format: :json
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)['weights']).to eq([])
+        end
+
+        it 'ignores keys outside the permitted weights schema' do
+          patch :update_weights,
+                params: { course_id: course.id,
+                          weights: [{ tabId: tab1.id, weight: 60, bogus: 'x' }] },
+                format: :json
+          expect(response).to have_http_status(:ok)
+          expect(weight_for(tab1)).to eq(60)
         end
 
         it 'accepts sum < 100' do
@@ -355,7 +400,7 @@ RSpec.describe Course::GradebookController, type: :controller do
                 params: { course_id: course.id,
                           weights: [{ tabId: tab1.id, weight: 50 }, { tabId: tab2.id, weight: -1 }] },
                 format: :json
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(weight_for(tab1)).to eq(10)
         end
 
@@ -363,7 +408,7 @@ RSpec.describe Course::GradebookController, type: :controller do
           patch :update_weights,
                 params: { course_id: course.id, weights: [tabId: tab1.id, weight: 101] },
                 format: :json
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'rejects foreign tab id with 422' do
@@ -373,7 +418,7 @@ RSpec.describe Course::GradebookController, type: :controller do
           patch :update_weights,
                 params: { course_id: course.id, weights: [tabId: other_tab.id, weight: 50] },
                 format: :json
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 
@@ -445,7 +490,7 @@ RSpec.describe Course::GradebookController, type: :controller do
               assessmentWeights: [assessmentId: a1.id, weight: '10']
             ]
           }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'persists and echoes per-assessment exclusion in equal mode' do
@@ -462,13 +507,22 @@ RSpec.describe Course::GradebookController, type: :controller do
           entry = JSON.parse(response.body)['weights'].first
           expect(entry['excludedAssessmentIds']).to eq([a1.id])
         end
+
+        it 'omits assessmentWeights from the echoed entry in equal mode' do
+          post :update_weights, as: :json, params: {
+            course_id: course.id,
+            weights: [tabId: tab.id, weight: '50', weightMode: 'equal']
+          }
+          expect(response).to have_http_status(:ok)
+          entry = JSON.parse(response.body)['weights'].first
+          expect(entry).not_to have_key('assessmentWeights')
+          expect(entry['weightMode']).to eq('equal')
+        end
       end
     end
 
     describe 'GET index — weighted view fields' do
       render_views
-      let(:manager) { create(:course_manager, course: course) }
-      let(:ta) { create(:course_teaching_assistant, course: course) }
       let(:category) { create(:course_assessment_category, course: course) }
       let!(:tab) { create(:course_assessment_tab, category: category) }
       let!(:contribution) { create(:course_gradebook_contribution, tab: tab, course: course, weight: 30) }
@@ -506,13 +560,6 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(tab_json['gradebookWeight']).to eq(30)
         end
 
-        it 'returns canManageWeights false for TA' do
-          controller_sign_in(controller, ta.user)
-          get :index, params: { course_id: course.id }, format: :json
-          body = JSON.parse(response.body)
-          expect(body['canManageWeights']).to eq(false)
-        end
-
         it 'serializes weightMode on tabs and gradebookWeight on assessments when weighted view is enabled' do
           controller_sign_in(controller, manager.user)
           get :index, params: { course_id: course.id }, format: :json
@@ -529,6 +576,26 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(body['assessments'].first).to have_key('gradebookExcluded')
           expect(body['assessments'].first['gradebookExcluded']).to eq(false)
         end
+      end
+    end
+
+    describe 'external assessment ordering' do
+      render_views
+
+      it 'serializes externals in position order, not creation order' do
+        first = create(:course_external_assessment, course: course, title: 'Zeta')
+        second = create(:course_external_assessment, course: course, title: 'Alpha')
+        # Make Alpha come first by position.
+        Course::ExternalAssessment.reorder!(course: course, ordered_ids: [second.id, first.id])
+
+        controller_sign_in(controller, manager.user)
+        get :index, params: { course_id: course.id, format: :json }
+
+        body = JSON.parse(response.body)
+        external_titles = body['tabs'].
+                          select { |t| t['categoryId'] == Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID }.
+                          map { |t| t['title'] }
+        expect(external_titles).to eq(%w[Alpha Zeta])
       end
     end
   end

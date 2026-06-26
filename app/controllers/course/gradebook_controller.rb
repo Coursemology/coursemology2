@@ -23,7 +23,7 @@ class Course::GradebookController < Course::ComponentController
 
   def update_weights
     authorize! :manage_gradebook_weights, current_course
-    updates = update_weights_params[:weights].map { |entry| parse_weight_entry(entry) }
+    updates = (update_weights_params[:weights] || []).map { |entry| parse_weight_entry(entry) }
     Course::Gradebook::Contribution.bulk_update(course: current_course, updates: updates)
     render json: { weights: serialize_weight_updates(updates) }
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e

@@ -8,6 +8,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
     let(:course) { create(:course) }
     let(:manager) { create(:course_manager, course: course) }
     let(:ta) { create(:course_teaching_assistant, course: course) }
+    let(:observer) { create(:course_observer, course: course) }
 
     describe '#create' do
       render_views
@@ -89,12 +90,24 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
 
         it 'returns 422 on a blank title' do
           post :create, params: params.merge(title: '')
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'returns 422 on a blank maximumGrade' do
           post :create, params: params.merge(maximumGrade: '')
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it "serializes the tab weightMode as 'equal' when weighted" do
+          context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
+          course.save!
+
+          post :create, as: :json, params: {
+            course_id: course, title: 'Presentation', maximumGrade: 10, weight: 25
+          }
+          json = JSON.parse(response.body)
+          expect(json['tab']['weightMode']).to eq('equal')
         end
       end
 
@@ -105,11 +118,20 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
           expect { post :create, params: params }.to raise_error(CanCan::AccessDenied)
         end
       end
+
+      context 'as an observer' do
+        before { controller_sign_in(controller, observer.user) }
+
+        it 'is denied' do
+          expect { post :create, params: params }.to raise_error(CanCan::AccessDenied)
+        end
+      end
     end
 
     describe '#update' do
       render_views
       let!(:external) { create(:course_external_assessment, course: course, title: 'Mid') }
+      let(:gb_student) { create(:course_student, course: course) }
 
       context 'as a manager' do
         before { controller_sign_in(controller, manager.user) }
@@ -146,10 +168,17 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
           expect(response).to have_http_status(:not_found)
         end
 
+        it 'returns 404 when grading an external that belongs to another course' do
+          other_external = create(:course_external_assessment)
+          put :grades, params: { course_id: course.id, id: other_external.id, format: :json,
+                                 studentId: gb_student.user_id, grade: 50 }
+          expect(response).to have_http_status(:not_found)
+        end
+
         it 'returns 422 on a blank title' do
           patch :update, params: { course_id: course.id, id: external.id, format: :json,
                                    title: '' }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'updates a bound flag' do
@@ -185,6 +214,22 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
             expect(body['assessment']['gradebookWeight']).to eq(40.0)
             expect(body['tab']['gradebookWeight']).to eq(40.0)
           end
+
+          it "serializes the tab weightMode as 'equal'" do
+            patch :update, as: :json, params: {
+              course_id: course, id: weighted_external.id, weight: 40
+            }
+            body = JSON.parse(response.body)
+            expect(body['tab']['weightMode']).to eq('equal')
+          end
+
+          it 'leaves the contribution weight untouched when no weight param is sent' do
+            patch :update, as: :json, params: {
+              course_id: course, id: weighted_external.id, title: 'Renamed'
+            }
+            expect(response).to be_successful
+            expect(weighted_external.gradebook_contribution.reload.weight).to eq(10)
+          end
         end
 
         it 'ignores a weight when weighted view is disabled' do
@@ -198,6 +243,14 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
           body = JSON.parse(response.body)
           expect(body['assessment']).not_to have_key('gradebookWeight')
           expect(body['tab']).not_to have_key('gradebookWeight')
+        end
+
+        it 'inserts a grade for a student who has none' do
+          expect do
+            put :grades, params: { course_id: course.id, id: external.id, format: :json,
+                                   studentId: gb_student.user_id, grade: 70 }
+          end.to change { Course::ExternalAssessmentGrade.count }.by(1)
+          expect(response).to be_successful
         end
       end
 
@@ -251,8 +304,8 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
       let!(:external) { create(:course_external_assessment, course: course) }
       let(:gb_student) { create(:course_student, course: course) }
 
-      context 'as a teaching assistant (grading-capable staff)' do
-        before { controller_sign_in(controller, ta.user) }
+      context 'as a manager' do
+        before { controller_sign_in(controller, manager.user) }
 
         # The gradebook frontend keys students by user_id (json.studentId == course_user.user_id),
         # so #grades must resolve the course_user from the `studentId` param, not a course_user PK.
@@ -302,9 +355,19 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         end
       end
 
-      context 'as a student' do
-        let(:viewer) { create(:course_student, course: course) }
-        before { controller_sign_in(controller, viewer.user) }
+      context 'as a teaching assistant' do
+        before { controller_sign_in(controller, ta.user) }
+
+        it 'is denied' do
+          expect do
+            put :grades, params: { course_id: course.id, id: external.id, format: :json,
+                                   studentId: gb_student.user_id, grade: 5 }
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'as an observer' do
+        before { controller_sign_in(controller, observer.user) }
 
         it 'is denied' do
           expect do
@@ -333,7 +396,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         it 'rejects a payload whose id set does not match' do
           put :reorder, params: { course_id: course.id, format: :json,
                                   orderedIds: [a.id, b.id] }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
