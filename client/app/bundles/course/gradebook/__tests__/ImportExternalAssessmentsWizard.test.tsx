@@ -14,27 +14,48 @@ const defaultProps = {
   weightedViewEnabled: true,
 };
 
-const renderWizard = (): void => {
+const renderWizard = (
+  props: Partial<{ weightedViewEnabled: boolean }> = {},
+): void => {
   render(
     <ImportExternalAssessmentsWizard
       existingAssessments={[]}
       onClose={jest.fn()}
       open
-      weightedViewEnabled
+      weightedViewEnabled={props.weightedViewEnabled ?? true}
     />,
   );
 };
 
+const advanceToVerifyStep = async (): Promise<void> => {
+  await userEvent.type(componentNameInput(), 'Midterms');
+  await userEvent.click(screen.getByRole('button', { name: /next/i }));
+  await userEvent.upload(
+    screen.getByLabelText(/upload/i),
+    file('Identifier,Midterms\nA001,105\n'),
+  );
+  await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+  await screen.findByRole('button', { name: /confirm import/i });
+};
+
 const studentsState = (students: object[]): object => ({
   gradebook: {
-    categories: [], tabs: [], submissions: [], assessments: [],
-    gamificationEnabled: false, weightedViewEnabled: false, canManageWeights: true,
+    categories: [],
+    tabs: [],
+    submissions: [],
+    assessments: [],
+    gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: true,
     students,
   },
 });
 
+const componentNameInput = (): HTMLElement =>
+  screen.getByRole('textbox', { name: 'Component name' });
+
 const fillOneComponent = async (): Promise<void> => {
-  await userEvent.type(screen.getByLabelText('Component name'), 'Midterm');
+  await userEvent.type(componentNameInput(), 'Midterm');
 };
 
 const file = (text: string): File =>
@@ -49,6 +70,7 @@ describe('ImportExternalAssessmentsWizard', () => {
         ok: true,
         unresolved: [],
         malformed: [],
+        outOfRange: [],
         sample: [{ studentName: 'Alice', grades: { Midterm: 41 } }],
         conflicts: [],
       },
@@ -71,7 +93,7 @@ describe('ImportExternalAssessmentsWizard', () => {
 
     renderWizard();
     // Step 1: type a component
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.type(screen.getByLabelText(/weightage/i), '30');
     await userEvent.type(screen.getByLabelText(/max marks/i), '50');
     await userEvent.click(screen.getByRole('button', { name: /next/i }));
@@ -85,6 +107,12 @@ describe('ImportExternalAssessmentsWizard', () => {
 
     // Step 3: preview shows the sample
     expect(await screen.findByText('Alice')).toBeVisible();
+    expect(
+      screen.getByRole('columnheader', { name: 'External ID' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('columnheader', { name: 'Component name' }),
+    ).not.toBeInTheDocument();
     await userEvent.click(
       screen.getByRole('button', { name: /continue|confirm/i }),
     );
@@ -95,7 +123,7 @@ describe('ImportExternalAssessmentsWizard', () => {
     const payload = (CourseAPI.gradebook.importCommit as jest.Mock).mock
       .calls[0][0];
     expect(payload.onConflict).toBe('replace');
-    expect(payload.identifierMode).toBe('student_id');
+    expect(payload.identifierMode).toBe('external_id');
     expect(payload.components[0]).toMatchObject({
       name: 'Midterm',
       weightage: 30,
@@ -109,12 +137,13 @@ describe('ImportExternalAssessmentsWizard', () => {
         ok: false,
         unresolved: ['ZZZ'],
         malformed: [],
+        outOfRange: [],
         sample: [],
         conflicts: [],
       },
     });
     renderWizard();
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.type(screen.getByLabelText(/weightage/i), '30');
     await userEvent.type(screen.getByLabelText(/max marks/i), '50');
     await userEvent.click(screen.getByRole('button', { name: /next/i }));
@@ -136,7 +165,7 @@ describe('ImportExternalAssessmentsWizard', () => {
         weightedViewEnabled={false}
       />,
     );
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     expect(screen.queryByLabelText(/weightage/i)).not.toBeInTheDocument();
     expect(screen.getByLabelText(/max marks/i)).toBeInTheDocument();
   });
@@ -155,8 +184,27 @@ describe('ImportExternalAssessmentsWizard', () => {
         weightedViewEnabled={false}
       />,
     );
-    expect(screen.getByRole('radio', { name: 'External ID' })).toBeInTheDocument();
-    expect(screen.queryByRole('radio', { name: 'Student ID' })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('radio', { name: 'External ID' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('radio', { name: 'Student ID' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('keeps the component input label independent of the selected identifier mode', async () => {
+    renderWizard();
+    expect(componentNameInput()).toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', { name: 'External ID' }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+
+    expect(componentNameInput()).toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', { name: 'Email' }),
+    ).not.toBeInTheDocument();
   });
 
   it('commits with keep when Keep Existing is clicked on the conflict prompt', async () => {
@@ -165,6 +213,7 @@ describe('ImportExternalAssessmentsWizard', () => {
         ok: true,
         unresolved: [],
         malformed: [],
+        outOfRange: [],
         sample: [{ studentName: 'Alice', grades: { Midterm: 20 } }],
         conflicts: [
           {
@@ -193,7 +242,7 @@ describe('ImportExternalAssessmentsWizard', () => {
       },
     });
     renderWizard();
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.type(screen.getByLabelText(/weightage/i), '30');
     await userEvent.type(screen.getByLabelText(/max marks/i), '50');
     await userEvent.click(screen.getByRole('button', { name: /next/i }));
@@ -219,19 +268,42 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('blocks Next in External ID mode while a student has no External ID', async () => {
     render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
       state: studentsState([
-        { id: 1, name: 'Alice Lim', email: 'a@x.com', externalId: null, level: 0, totalXp: 0 },
-        { id: 2, name: 'Bob Tan', email: 'b@x.com', externalId: 'E2', level: 0, totalXp: 0 },
+        {
+          id: 1,
+          name: 'Alice Lim',
+          email: 'a@x.com',
+          externalId: null,
+          level: 0,
+          totalXp: 0,
+        },
+        {
+          id: 2,
+          name: 'Bob Tan',
+          email: 'b@x.com',
+          externalId: 'E2',
+          level: 0,
+          totalXp: 0,
+        },
       ]),
     });
     await fillOneComponent();
-    expect(screen.getByText(/Alice Lim has no External ID/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Alice Lim has no External ID/),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
   });
 
   it('enables Next once matching by Email instead', async () => {
     render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
       state: studentsState([
-        { id: 1, name: 'Alice Lim', email: 'a@x.com', externalId: null, level: 0, totalXp: 0 },
+        {
+          id: 1,
+          name: 'Alice Lim',
+          email: 'a@x.com',
+          externalId: null,
+          level: 0,
+          totalXp: 0,
+        },
       ]),
     });
     await fillOneComponent();
@@ -242,13 +314,22 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('lists the exact required headers on the upload step', async () => {
     render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
       state: studentsState([
-        { id: 1, name: 'Alice', email: 'a@x.com', externalId: 'E1', level: 0, totalXp: 0 },
+        {
+          id: 1,
+          name: 'Alice',
+          email: 'a@x.com',
+          externalId: 'E1',
+          level: 0,
+          totalXp: 0,
+        },
       ]),
     });
-    await userEvent.type(screen.getByLabelText('Component name'), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(
-      screen.getByText(/Your CSV needs these column headers: External ID, Midterm/),
+      screen.getByText(
+        /Your CSV needs these column headers: External ID, Midterm/,
+      ),
     ).toBeInTheDocument();
   });
 
@@ -269,12 +350,13 @@ describe('ImportExternalAssessmentsWizard', () => {
         ok: false,
         unresolved: ['ZZZ'],
         malformed: [],
+        outOfRange: [],
         sample: [],
         conflicts: [],
       },
     });
     renderWizard();
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.type(screen.getByLabelText(/weightage/i), '30');
     await userEvent.type(screen.getByLabelText(/max marks/i), '50');
     await userEvent.click(screen.getByRole('button', { name: /next/i }));
@@ -295,6 +377,7 @@ describe('ImportExternalAssessmentsWizard', () => {
         ok: true,
         unresolved: [],
         malformed: [],
+        outOfRange: [],
         sample: [{ studentName: 'Alice', grades: { Midterm: 20 } }],
         conflicts: [
           {
@@ -324,14 +407,16 @@ describe('ImportExternalAssessmentsWizard', () => {
     });
     render(
       <ImportExternalAssessmentsWizard
-        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
+        existingAssessments={[
+          { name: 'Midterm', maximumGrade: 50, weightage: 30 },
+        ]}
         onClose={jest.fn()}
         open
         weightedViewEnabled
       />,
     );
     // Step 1: 'Midterm' matches existing → max/weightage locked; just Next.
-    await userEvent.type(screen.getByLabelText(/component name/i), 'Midterm');
+    await userEvent.type(componentNameInput(), 'Midterm');
     await userEvent.click(screen.getByRole('button', { name: /next/i }));
     await userEvent.upload(
       screen.getByLabelText(/upload/i),
@@ -372,7 +457,9 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('clicking an existing chip inserts a locked row pre-filled with correct max and weight', async () => {
     render(
       <ImportExternalAssessmentsWizard
-        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
+        existingAssessments={[
+          { name: 'Midterm', maximumGrade: 50, weightage: 30 },
+        ]}
         onClose={jest.fn()}
         open
         weightedViewEnabled
@@ -395,7 +482,9 @@ describe('ImportExternalAssessmentsWizard', () => {
   it('hides a chip once the corresponding external has been added to the component list', async () => {
     render(
       <ImportExternalAssessmentsWizard
-        existingAssessments={[{ name: 'Midterm', maximumGrade: 50, weightage: 30 }]}
+        existingAssessments={[
+          { name: 'Midterm', maximumGrade: 50, weightage: 30 },
+        ]}
         onClose={jest.fn()}
         open
         weightedViewEnabled
@@ -403,7 +492,9 @@ describe('ImportExternalAssessmentsWizard', () => {
     );
     await userEvent.click(screen.getByRole('button', { name: 'Midterm' }));
     // After clicking, chip disappears (already in the list)
-    expect(screen.queryByRole('button', { name: 'Midterm' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Midterm' }),
+    ).not.toBeInTheDocument();
   });
 
   it('does not render the From existing section when there are no existing externals', () => {
@@ -416,5 +507,45 @@ describe('ImportExternalAssessmentsWizard', () => {
       />,
     );
     expect(screen.queryByText(/from existing/i)).not.toBeInTheDocument();
+  });
+
+  it('warns about out-of-range grades at Verify without blocking import (Q2)', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
+      data: {
+        ok: true,
+        unresolved: [],
+        malformed: [],
+        outOfRange: ['S1 — Midterms: 105 (exceeds 100)'],
+        sample: [{ studentName: 'S1', grades: { Midterms: 105 } }],
+        conflicts: [],
+      },
+    });
+    renderWizard({ weightedViewEnabled: true });
+    await advanceToVerifyStep();
+    expect(screen.getByText(/105 \(exceeds 100\)/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/capped or floored in the weighted total/i),
+    ).toBeInTheDocument();
+    // non-blocking: Confirm import still enabled
+    expect(
+      screen.getByRole('button', { name: /Confirm import/i }),
+    ).toBeEnabled();
+  });
+
+  it('omits the weighted-total wording when weighted view is off (Q2/Q5)', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
+      data: {
+        ok: true,
+        unresolved: [],
+        malformed: [],
+        outOfRange: ['S1 — Midterms: 105 (exceeds 100)'],
+        sample: [{ studentName: 'S1', grades: { Midterms: 105 } }],
+        conflicts: [],
+      },
+    });
+    renderWizard({ weightedViewEnabled: false });
+    await advanceToVerifyStep();
+    expect(screen.getByText(/105 \(exceeds 100\)/)).toBeInTheDocument();
+    expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
   });
 });

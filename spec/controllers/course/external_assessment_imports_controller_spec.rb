@@ -75,6 +75,16 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
+        it 'returns out-of-range cells in the preview payload' do
+          out_of_range_params = base_params.merge(
+            components: [name: 'Midterm', weightage: 30, maximumGrade: 50],
+            csvData: "External ID,Midterm\nA001,105\n"
+          )
+          post :preview, params: out_of_range_params, format: :json
+          body = JSON.parse(response.body)
+          expect(body['outOfRange']).to be_present
+        end
+
         it 'resolves by email when identifierMode is email' do
           post :preview, params: base_params.merge(
             identifierMode: 'email',

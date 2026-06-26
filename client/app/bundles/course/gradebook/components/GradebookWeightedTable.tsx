@@ -190,6 +190,8 @@ interface Props {
   canManageWeights: boolean;
   courseTitle: string;
   courseId: number;
+  /** Optional action rendered in the toolbar, left of the column picker. */
+  toolbarAction?: JSX.Element;
 }
 
 // How many decimal places a single value needs (0, 1, or 2).
@@ -228,6 +230,7 @@ const GradebookWeightedTable = ({
   canManageWeights,
   courseTitle,
   courseId,
+  toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [configureOpen, setConfigureOpen] = useState(false);
@@ -570,6 +573,7 @@ const GradebookWeightedTable = ({
                 ]}
                 value={displayMode}
               />
+              {toolbarAction}
               {canManageWeights && (
                 <Button
                   onClick={() => setConfigureOpen(true)}
@@ -1058,22 +1062,19 @@ const GradebookWeightedTable = ({
                                       {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
                                       {clamped && (
                                         <Tooltip
-                                          title={t(
-                                            translations.gradeCountsAs,
-                                            { value: eff },
-                                          )}
+                                          title={t(translations.gradeCountsAs, {
+                                            value: eff,
+                                          })}
                                         >
                                           <InfoOutlined
                                             aria-label={
                                               wasCapped
-                                                ? t(
-                                                    translations.gradeCapped,
-                                                    { value: eff },
-                                                  )
-                                                : t(
-                                                    translations.gradeFloored,
-                                                    { value: eff },
-                                                  )
+                                                ? t(translations.gradeCapped, {
+                                                    value: eff,
+                                                  })
+                                                : t(translations.gradeFloored, {
+                                                    value: eff,
+                                                  })
                                             }
                                             fontSize="inherit"
                                             sx={{ ml: 0.5 }}

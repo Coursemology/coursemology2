@@ -8,10 +8,14 @@ import {
   useState,
 } from 'react';
 import { defineMessages } from 'react-intl';
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import {
   Checkbox,
   Chip,
   CircularProgress,
+  IconButton,
   Paper,
   type SxProps,
   Table,
@@ -25,7 +29,9 @@ import {
   type Theme,
   Tooltip,
 } from '@mui/material';
+import { lighten } from '@mui/material/styles';
 import { flexRender } from '@tanstack/react-table';
+import palette from 'theme/palette';
 
 import Link from 'lib/components/core/Link';
 import type {
@@ -72,11 +78,29 @@ const COL_WIDTHS = {
 
 const CHECKBOX_WIDTH = 56;
 
+// Faint blue wash that marks external-assessment columns. Kept very light (4% of
+// info.main) so the band reads as a subtle tint, not a coloured header.
+export const EXTERNAL_ASSESSMENT_BACKGROUND = lighten(palette.info.main, 0.96);
+
 const getColWidth = (id: string): number =>
   COL_WIDTHS[id as keyof typeof COL_WIDTHS] ?? COL_WIDTHS.assessment;
 
 const isLeftAligned = (id: string): boolean =>
   id === 'name' || id === 'email' || id === 'externalId';
+
+// Resolves a column's stable key. TanStack columns identify by `id`, falling back
+// to `of` for plain accessor columns; this single helper keeps that rule in one
+// place instead of repeating the `??` across every column loop.
+const colKey = <T extends object>(c: ColumnTemplate<T>): string =>
+  c.id ?? (c.of as string);
+
+// The two grey separator weights used across the table. `gridLine` is the hairline
+// cell grid; `seamLine` is the heavier 1px edge that bounds the frozen header/column
+// block (a full pixel survives sticky-scroll compositing where 0.5px can drop out).
+const gridLine = (theme: Theme): string =>
+  `0.5px solid ${theme.palette.grey[200]}`;
+const seamLine = (theme: Theme): string =>
+  `1px solid ${theme.palette.grey[200]}`;
 
 const translations = defineMessages({
   searchStudents: {
@@ -127,15 +151,34 @@ const translations = defineMessages({
   },
   gradeSaveError: {
     id: 'course.gradebook.GradebookTable.gradeSaveError',
-    defaultMessage: 'Could not save the {title} grade for {name}. Please try again.',
+    defaultMessage:
+      'Could not save the {title} grade for {name}. Please try again.',
   },
-  externalMaxAria: {
-    id: 'course.gradebook.GradebookTable.externalMaxAria',
-    defaultMessage: '{title} max marks',
+  gradeExceedsMax: {
+    id: 'course.gradebook.GradebookTable.gradeExceedsMax',
+    defaultMessage: 'This grade exceeds the maximum of {max}.',
   },
-  maxSaveError: {
-    id: 'course.gradebook.GradebookTable.maxSaveError',
-    defaultMessage: 'Could not save the max marks. Please try again.',
+  gradeExceedsMaxWeighted: {
+    id: 'course.gradebook.GradebookTable.gradeExceedsMaxWeighted',
+    defaultMessage:
+      'This grade exceeds the maximum of {max}; its contribution to the weighted total is capped at {max}.',
+  },
+  gradeBelowZero: {
+    id: 'course.gradebook.GradebookTable.gradeBelowZero',
+    defaultMessage: 'This grade is below 0.',
+  },
+  gradeBelowZeroWeighted: {
+    id: 'course.gradebook.GradebookTable.gradeBelowZeroWeighted',
+    defaultMessage:
+      'This grade is below 0; it is floored to 0 in the weighted total.',
+  },
+  acceptEdit: {
+    id: 'course.gradebook.GradebookTable.acceptEdit',
+    defaultMessage: 'Accept',
+  },
+  revertEdit: {
+    id: 'course.gradebook.GradebookTable.revertEdit',
+    defaultMessage: 'Revert',
   },
 });
 
@@ -206,16 +249,24 @@ HeaderLabel.displayName = 'HeaderLabel';
 
 const ExternalGradeCell = ({
   assessmentId,
+  capAtMaximum,
+  floorAtZero,
+  maxGrade,
   studentId,
   studentName,
   title,
   value,
+  weightedViewEnabled,
 }: {
   assessmentId: number;
+  capAtMaximum: boolean;
+  floorAtZero: boolean;
+  maxGrade: number;
   studentId: number;
   studentName: string;
   title: string;
   value: number | null | undefined;
+  weightedViewEnabled: boolean;
 }): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -245,27 +296,83 @@ const ExternalGradeCell = ({
     }
   };
 
+  const cancel = (): void => setEditing(false);
+
+  const exceedsMax =
+    capAtMaximum && localValue != null && localValue > maxGrade;
+  const belowZero = floorAtZero && localValue != null && localValue < 0;
+
+  const exceedsMsg = weightedViewEnabled
+    ? translations.gradeExceedsMaxWeighted
+    : translations.gradeExceedsMax;
+  const belowMsg = weightedViewEnabled
+    ? translations.gradeBelowZeroWeighted
+    : translations.gradeBelowZero;
+
   if (editing) {
     return (
-      <TextField
-        autoFocus
-        inputProps={{
-          'aria-label': t(translations.externalGradeAria, {
-            title,
-            name: studentName,
-          }),
-          style: { textAlign: 'right' },
+      <span
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: 2,
+          width: '100%',
+          minWidth: 0,
+          overflow: 'hidden',
         }}
-        onBlur={commit}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') commit();
-          if (e.key === 'Escape') setEditing(false);
-        }}
-        size="small"
-        value={text}
-        variant="standard"
-      />
+      >
+        <TextField
+          autoFocus
+          inputProps={{
+            'aria-label': t(translations.externalGradeAria, {
+              title,
+              name: studentName,
+            }),
+            style: { textAlign: 'right' },
+          }}
+          onBlur={commit}
+          onChange={(e) => {
+            const next = e.target.value;
+            if (next === '' || /^-?\d{0,3}(\.\d{0,2})?$/.test(next))
+              setText(next);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') commit();
+            if (e.key === 'Escape') cancel();
+          }}
+          size="small"
+          sx={{
+            width: 72,
+            '& .MuiInputBase-root': {
+              width: 72,
+            },
+          }}
+          value={text}
+          variant="standard"
+        />
+        {/* onMouseDown preventDefault keeps focus so the input's onBlur=commit
+            does not fire before onClick — critical for Revert (a blur-commit
+            would save the very edit we are discarding). */}
+        <IconButton
+          aria-label={t(translations.acceptEdit)}
+          onClick={commit}
+          onMouseDown={(e) => e.preventDefault()}
+          size="small"
+          sx={{ flexShrink: 0 }}
+        >
+          <Check fontSize="small" />
+        </IconButton>
+        <IconButton
+          aria-label={t(translations.revertEdit)}
+          onClick={cancel}
+          onMouseDown={(e) => e.preventDefault()}
+          size="small"
+          sx={{ flexShrink: 0 }}
+        >
+          <Close fontSize="small" />
+        </IconButton>
+      </span>
     );
   }
 
@@ -276,8 +383,6 @@ const ExternalGradeCell = ({
         setEditing(true);
       }}
       role="button"
-      // Fill the cell so the whole editable column band is the click target,
-      // not just the digits at the right edge.
       style={{
         cursor: 'pointer',
         display: 'flex',
@@ -285,73 +390,30 @@ const ExternalGradeCell = ({
         justifyContent: 'flex-end',
         gap: 4,
         width: '100%',
+        height: '100%',
       }}
       tabIndex={0}
     >
+      {exceedsMax && (
+        <Tooltip title={t(exceedsMsg, { max: maxGrade })}>
+          <InfoOutlined
+            aria-label={t(exceedsMsg, { max: maxGrade })}
+            color="warning"
+            fontSize="small"
+          />
+        </Tooltip>
+      )}
+      {belowZero && (
+        <Tooltip title={t(belowMsg)}>
+          <InfoOutlined
+            aria-label={t(belowMsg)}
+            color="warning"
+            fontSize="small"
+          />
+        </Tooltip>
+      )}
       {saving && <CircularProgress size={12} />}
       <span>{localValue == null ? '—' : localValue}</span>
-    </span>
-  );
-};
-
-const ExternalMaxCell = ({
-  assessmentId,
-  title,
-  value,
-}: {
-  assessmentId: number;
-  title: string;
-  value: number;
-}): JSX.Element => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const [editing, setEditing] = useState(false);
-  const [text, setText] = useState('');
-
-  const commit = async (): Promise<void> => {
-    setEditing(false);
-    const next = Number(text.trim());
-    if (text.trim() === '' || Number.isNaN(next) || next < 0) return;
-    if (next === value) return;
-    try {
-      await dispatch(updateExternalMaxGrade(assessmentId, next));
-    } catch {
-      toast.error(t(translations.maxSaveError));
-    }
-  };
-
-  if (editing) {
-    return (
-      <TextField
-        autoFocus
-        inputProps={{
-          'aria-label': t(translations.externalMaxAria, { title }),
-          style: { textAlign: 'right' },
-        }}
-        onBlur={commit}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') commit();
-          if (e.key === 'Escape') setEditing(false);
-        }}
-        size="small"
-        value={text}
-        variant="standard"
-      />
-    );
-  }
-
-  return (
-    <span
-      onClick={() => {
-        setText(String(value));
-        setEditing(true);
-      }}
-      role="button"
-      style={{ cursor: 'pointer' }}
-      tabIndex={0}
-    >
-      {`/${value}`}
     </span>
   );
 };
@@ -376,6 +438,7 @@ interface GradebookTableProps {
   courseTitle: string;
   courseId: number;
   gamificationEnabled: boolean;
+  weightedViewEnabled: boolean;
   /** Optional action rendered in the toolbar, left of the column picker. */
   toolbarAction?: JSX.Element;
 }
@@ -389,6 +452,7 @@ const GradebookTable = ({
   courseTitle,
   courseId,
   gamificationEnabled,
+  weightedViewEnabled,
   toolbarAction,
 }: GradebookTableProps): JSX.Element => {
   const { t } = useTranslation();
@@ -516,10 +580,14 @@ const GradebookTable = ({
             return (
               <ExternalGradeCell
                 assessmentId={asn.id}
+                capAtMaximum={asn.capAtMaximum ?? false}
+                floorAtZero={asn.floorAtZero ?? false}
+                maxGrade={asn.maxGrade}
                 studentId={row.studentId}
                 studentName={row.name}
                 title={asn.title}
                 value={row.grades[asn.id]}
+                weightedViewEnabled={weightedViewEnabled}
               />
             );
           }
@@ -540,7 +608,13 @@ const GradebookTable = ({
       });
     });
     return cols;
-  }, [assessments, gamificationEnabled, hasExternalIds, t]);
+  }, [
+    assessments,
+    gamificationEnabled,
+    hasExternalIds,
+    t,
+    weightedViewEnabled,
+  ]);
 
   const assessmentMaxGrades = useMemo(
     () => new Map(assessments.map((a) => [a.id, a.maxGrade])),
@@ -552,6 +626,16 @@ const GradebookTable = ({
       ...assessments.map((a) => buildAssessmentColumnId(a.id)),
       ...GAMIFICATION_COL_IDS,
     ],
+    [assessments],
+  );
+
+  const externalAssessmentColumnIds = useMemo(
+    () =>
+      new Set(
+        assessments
+          .filter((assessment) => assessment.external)
+          .map((assessment) => buildAssessmentColumnId(assessment.id)),
+      ),
     [assessments],
   );
 
@@ -635,9 +719,7 @@ const GradebookTable = ({
 
   const visibility = toolbar?.getColumnVisibility?.() ?? {};
   const isColVisible = (id: string): boolean => visibility[id] ?? true;
-  const visibleCols = columns.filter((c) =>
-    isColVisible(c.id ?? (c.of as string)),
-  );
+  const visibleCols = columns.filter((c) => isColVisible(colKey(c)));
 
   const sortByColId = new Map(
     (header?.headers ?? []).map(
@@ -668,7 +750,9 @@ const GradebookTable = ({
           ...toolbar.columnPicker,
           directExportLabel,
           directExportTooltip:
-            selectedCount === 0 ? t(translations.exportAllTooltip) : undefined,
+            selectedCount === 0
+              ? t(translations.exportAllTooltip)
+              : undefined,
         },
       }),
     }
@@ -677,10 +761,7 @@ const GradebookTable = ({
   const totalWidth = useMemo(
     () =>
       CHECKBOX_WIDTH +
-      visibleCols.reduce((sum, c) => {
-        const id = c.id ?? (c.of as string);
-        return sum + getColWidth(id);
-      }, 0),
+      visibleCols.reduce((sum, c) => sum + getColWidth(colKey(c)), 0),
     [visibleCols],
   );
 
@@ -689,10 +770,7 @@ const GradebookTable = ({
   const toggleAllRows = (): void => body.toggleAllFiltered?.();
 
   const hasVisibleAssessments = useMemo(
-    () =>
-      visibleCols.some(
-        (c) => parseAssessmentColumnId(c.id ?? (c.of as string)) !== null,
-      ),
+    () => visibleCols.some((c) => parseAssessmentColumnId(colKey(c)) !== null),
     [visibleCols],
   );
 
@@ -714,7 +792,7 @@ const GradebookTable = ({
     () =>
       new Map(
         visibleCols.map((c) => {
-          const id = c.id ?? (c.of as string);
+          const id = colKey(c);
           return [id, (f: boolean): void => onSingleLine(id, f)];
         }),
       ),
@@ -749,14 +827,14 @@ const GradebookTable = ({
                   border: 0,
 
                   // Draws the cell grid without relying on collapsed borders.
-                  borderBottom: `0.5px solid ${theme.palette.grey[200]}`,
+                  borderBottom: gridLine(theme),
                 },
               })}
             >
               <colgroup>
                 <col style={{ width: CHECKBOX_WIDTH }} />
                 {visibleCols.map((c) => {
-                  const id = c.id ?? (c.of as string);
+                  const id = colKey(c);
                   return <col key={id} style={{ width: getColWidth(id) }} />;
                 })}
               </colgroup>
@@ -782,7 +860,7 @@ const GradebookTable = ({
                       // compositing where 0.5px can drop and let the body show
                       // through the row1/row2 seam.
                       '&&': {
-                        borderBottom: `1px solid ${theme.palette.grey[200]}`,
+                        borderBottom: seamLine(theme),
                       },
                     })}
                   >
@@ -794,17 +872,36 @@ const GradebookTable = ({
                     />
                   </TableCell>
                   {visibleCols.map((c) => {
-                    const id = c.id ?? (c.of as string);
+                    const id = colKey(c);
                     const label = typeof c.title === 'string' ? c.title : id;
                     const isLeft = isLeftAligned(id);
                     const fits = headerFits[id] ?? false;
                     const sort = sortByColId.get(id);
-                    const asnId = parseAssessmentColumnId(id);
-                    const isExternalCol =
-                      asnId !== null &&
-                      assessments.find((a) => a.id === asnId)?.external ===
-                      true;
-                    const labelNode = (
+                    const isExternalCol = externalAssessmentColumnIds.has(id);
+                    // Wrap a header label in the clickable sort control (or leave
+                    // it bare when the column isn't sortable). `extraSx` lets the
+                    // external variant flip the sort arrow to the label's left.
+                    const withSort = (
+                      inner: JSX.Element,
+                      extraSx?: Record<string, unknown>,
+                    ): JSX.Element =>
+                      sort ? (
+                        <TableSortLabel
+                          active={sort.sorted}
+                          direction={sort.direction || 'asc'}
+                          onClick={sort.onClickSort}
+                          sx={{
+                            maxWidth: '100%',
+                            '& .MuiTableSortLabel-icon': { flexShrink: 0 },
+                            ...extraSx,
+                          }}
+                        >
+                          {inner}
+                        </TableSortLabel>
+                      ) : (
+                        inner
+                      );
+                    const sortedLabel = withSort(
                       <Tooltip title={label}>
                         <span>
                           <HeaderLabel
@@ -812,18 +909,26 @@ const GradebookTable = ({
                             text={label}
                           />
                         </span>
-                      </Tooltip>
+                      </Tooltip>,
                     );
-                    const sortedLabel = sort ? (
-                      <TableSortLabel
-                        active={sort.sorted}
-                        direction={sort.direction || 'asc'}
-                        onClick={sort.onClickSort}
-                      >
-                        {labelNode}
-                      </TableSortLabel>
-                    ) : (
-                      labelNode
+                    const externalSortedLabel = withSort(
+                      <Tooltip title={label}>
+                        <span
+                          style={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            display: 'block',
+                          }}
+                        >
+                          {label}
+                        </span>
+                      </Tooltip>,
+                      {
+                        display: 'inline-flex',
+                        flexDirection: 'row-reverse',
+                        justifyContent: 'flex-start',
+                      },
                     );
                     return (
                       <TableCell
@@ -840,24 +945,36 @@ const GradebookTable = ({
                             // bottom seam. `&&` (0,2,0) is needed to beat the
                             // table's `& th` border rule (0,1,1).
                             '&&': {
-                              borderRight: `1px solid ${theme.palette.grey[200]}`,
-                              borderBottom: `1px solid ${theme.palette.grey[200]}`,
+                              borderRight: seamLine(theme),
+                              borderBottom: seamLine(theme),
                             },
+                          }),
+                          // The header stays the neutral grey of every other
+                          // column header. Tinting it here put a blue cell next to
+                          // grey neighbours, which read as a coloured header; the
+                          // "External" chip and the tinted body cells mark the
+                          // column instead. Kept opaque so rows don't bleed through
+                          // on sticky scroll.
+                          ...(isExternalCol && {
+                            bgcolor: 'grey.100',
                           }),
                         })}
                       >
                         {isExternalCol ? (
                           <span
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'flex-end',
+                              gap: 4,
+                              width: '100%',
                             }}
                           >
-                            {sortedLabel}
+                            {externalSortedLabel}
                             <Chip
                               label={t(translations.externalBadge)}
                               size="small"
-                              sx={{ ml: 0.5 }}
+                              sx={{ height: 20 }}
                             />
                           </span>
                         ) : (
@@ -878,8 +995,8 @@ const GradebookTable = ({
                       // body never shows through on scroll. `& .MuiTableCell-root`
                       // (0,2,0) outranks the table's `& th` rule (0,1,1).
                       '& .MuiTableCell-root': {
-                        borderTop: `1px solid ${theme.palette.grey[200]}`,
-                        borderBottom: `1px solid ${theme.palette.grey[200]}`,
+                        borderTop: seamLine(theme),
+                        borderBottom: seamLine(theme),
                       },
                     })}
                   >
@@ -897,23 +1014,11 @@ const GradebookTable = ({
                       }}
                     />
                     {visibleCols.map((c) => {
-                      const id = c.id ?? (c.of as string);
+                      const id = colKey(c);
                       const asnId = parseAssessmentColumnId(id);
-                      const asn =
-                        asnId !== null
-                          ? assessments.find((a) => a.id === asnId)
-                          : undefined;
                       let cellNode: React.ReactNode = '';
                       if (id === 'name') cellNode = t(translations.maxMarks);
-                      else if (asn?.external) {
-                        cellNode = (
-                          <ExternalMaxCell
-                            assessmentId={asn.id}
-                            title={asn.title}
-                            value={asn.maxGrade}
-                          />
-                        );
-                      } else if (asnId !== null) {
+                      else if (asnId !== null) {
                         const maxGrade = assessmentMaxGrades.get(asnId);
                         cellNode = maxGrade != null ? `/${maxGrade}` : '';
                       }
@@ -929,8 +1034,8 @@ const GradebookTable = ({
                               zIndex: 3,
                               // Continue the frozen region's right edge.
                               '&&': {
-                                borderTop: `1px solid ${theme.palette.grey[200]}`,
-                                borderRight: `1px solid ${theme.palette.grey[200]}`,
+                                borderTop: seamLine(theme),
+                                borderRight: seamLine(theme),
                               },
                             }),
                           })}
@@ -969,10 +1074,7 @@ const GradebookTable = ({
                           // layer and always paints. Row 0's top edge is already
                           // the header cell's (higher z-index) bottom border.
                           borderBottom: 'none',
-                          borderTop:
-                            idx === 0
-                              ? undefined
-                              : `0.5px solid ${theme.palette.grey[200]}`,
+                          borderTop: idx === 0 ? undefined : gridLine(theme),
                         })}
                       >
                         <Checkbox
@@ -985,6 +1087,9 @@ const GradebookTable = ({
                         .getVisibleCells()
                         .filter((cell) => cell.column.id !== 'rowSelector')
                         .map((cell) => {
+                          const isExternalCol = externalAssessmentColumnIds.has(
+                            cell.column.id,
+                          );
                           // Sticky cover for the frozen `name` column, mirroring
                           // the checkbox cell above. Declared as a directly-typed
                           // const so the callback is contextually typed (a ternary
@@ -998,28 +1103,28 @@ const GradebookTable = ({
                             // the separator as the lower row's `borderTop`, not a
                             // covered `borderBottom`.
                             borderBottom: 'none',
-                            borderTop:
-                              idx === 0
-                                ? undefined
-                                : `0.5px solid ${theme.palette.grey[200]}`,
+                            borderTop: idx === 0 ? undefined : gridLine(theme),
                             // Continue the frozen region's right edge down the data
                             // rows. `&&` (0,2,0) beats the table's `& td` border
                             // rule (0,1,1).
                             '&&': {
-                              borderRight: `1px solid ${theme.palette.grey[200]}`,
+                              borderRight: seamLine(theme),
                             },
                           });
+                          let cellSx: SxProps<Theme> | undefined;
+                          if (cell.column.id === 'name') cellSx = nameCellSx;
+                          else if (isExternalCol)
+                            // bgcolor is the faint external-column tint.
+                            cellSx = {
+                              bgcolor: EXTERNAL_ASSESSMENT_BACKGROUND,
+                            };
                           return (
                             <TableCell
                               key={cell.id}
                               align={
                                 isLeftAligned(cell.column.id) ? 'left' : 'right'
                               }
-                              sx={
-                                cell.column.id === 'name'
-                                  ? nameCellSx
-                                  : undefined
-                              }
+                              sx={cellSx}
                             >
                               {flexRender(
                                 cell.column.columnDef.cell,

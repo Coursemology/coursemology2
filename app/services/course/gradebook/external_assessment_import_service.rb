@@ -27,7 +27,8 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
       unresolved: resolution[:unresolved],
       malformed: resolution[:malformed],
       sample: sample(resolution[:resolved]),
-      conflicts: conflicts(resolution[:resolved])
+      conflicts: conflicts(resolution[:resolved]),
+      out_of_range: out_of_range(resolution[:resolved])
     }
   end
 
@@ -138,6 +139,28 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     true
   rescue ArgumentError, TypeError
     false
+  end
+
+  # Advisory: grades outside [0, max]. Reported but never blocks the import.
+  def out_of_range(resolved)
+    cells = []
+    resolved.each do |row|
+      @components.each do |component|
+        grade = row[:grades][component[:name]]
+        next if grade.nil?
+
+        max = component[:maximum_grade]
+        next unless grade < 0 || grade > max
+        cells << {
+          identifier: row[:identifier],
+          component: component[:name],
+          grade: grade,
+          max: max,
+          kind: grade < 0 ? 'below' : 'above'
+        }
+      end
+    end
+    cells
   end
 
   def sample(resolved)

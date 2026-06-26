@@ -41,7 +41,11 @@ import { getStudents } from '../../selectors';
 
 import { commitImport, previewImport } from '../../operations';
 
-import { downloadTemplate, identifierHeader, readFileText } from './buildTemplate';
+import {
+  downloadTemplate,
+  identifierHeader,
+  readFileText,
+} from './buildTemplate';
 import ExternalGradeConflictPrompt from './ExternalGradeConflictPrompt';
 
 const translations = defineMessages({
@@ -132,6 +136,15 @@ const translations = defineMessages({
     id: 'course.gradebook.ImportWizard.malformed',
     defaultMessage: 'These cells are not valid numbers: {cells}',
   },
+  outOfRange: {
+    id: 'course.gradebook.ImportWizard.outOfRange',
+    defaultMessage: 'Some grades are outside their valid range: {cells}',
+  },
+  outOfRangeWeighted: {
+    id: 'course.gradebook.ImportWizard.outOfRangeWeighted',
+    defaultMessage:
+      'These will be capped or floored in the weighted total when imported.',
+  },
   committed: {
     id: 'course.gradebook.ImportWizard.committed',
     defaultMessage: 'Import complete.',
@@ -183,7 +196,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
   const [components, setComponents] = useState<
     (ImportComponent & { id: number })[]
   >([blankComponent()]);
-  const [mode, setMode] = useState<IdentifierMode>('student_id');
+  const [mode, setMode] = useState<IdentifierMode>('external_id');
   const [file, setFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState('');
   const [preview, setPreview] = useState<ImportPreviewResult | null>(null);
@@ -196,6 +209,9 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
     [students],
   );
   const identifierReady = mode === 'email' || missingStudents.length === 0;
+  const identifierModeLabel = t(
+    mode === 'email' ? translations.email : translations.externalId,
+  );
 
   useEffect(() => {
     if (!open) {
@@ -235,7 +251,12 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
     rowId += 1;
     setComponents((cs) => [
       ...cs,
-      { id: rowId, name: a.name, weightage: a.weightage, maximumGrade: a.maximumGrade },
+      {
+        id: rowId,
+        name: a.name,
+        weightage: a.weightage,
+        maximumGrade: a.maximumGrade,
+      },
     ]);
   };
 
@@ -327,7 +348,9 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
 
             {components.map((c, i) => {
               const locked = isExisting(c.name);
-              const existing = locked ? existingMap.get(c.name.trim()) : undefined;
+              const existing = locked
+                ? existingMap.get(c.name.trim())
+                : undefined;
               return (
                 <div key={c.id} className="mb-2 flex items-center gap-2">
                   <TextField
@@ -352,7 +375,9 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                       }
                       size="small"
                       type="number"
-                      value={locked && existing ? existing.weightage : c.weightage}
+                      value={
+                        locked && existing ? existing.weightage : c.weightage
+                      }
                     />
                   )}
                   <TextField
@@ -366,7 +391,11 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                     }
                     size="small"
                     type="number"
-                    value={locked && existing ? existing.maximumGrade : c.maximumGrade}
+                    value={
+                      locked && existing
+                        ? existing.maximumGrade
+                        : c.maximumGrade
+                    }
                   />
                   {locked && (
                     <span className="text-sm text-neutral-500">
@@ -401,35 +430,41 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                 ariaLabel={t(translations.identifierMode)}
                 onChange={setMode}
                 options={[
-                  { value: 'student_id' as IdentifierMode, label: t(translations.externalId) },
-                  { value: 'email' as IdentifierMode, label: t(translations.email) },
+                  {
+                    value: 'external_id' as IdentifierMode,
+                    label: t(translations.externalId),
+                  },
+                  {
+                    value: 'email' as IdentifierMode,
+                    label: t(translations.email),
+                  },
                 ]}
                 value={mode}
               />
             </div>
 
-            {mode === 'student_id' && (
+            {mode === 'external_id' && (
               <Alert
                 severity={identifierReady ? 'info' : 'warning'}
                 sx={{ mt: 2 }}
               >
                 {identifierReady
                   ? t(translations.externalIdHint, {
-                      link: (chunks) => (
-                        <MuiLink href={`/courses/${courseId}/users`}>
-                          {chunks}
-                        </MuiLink>
-                      ),
-                    })
+                    link: (chunks) => (
+                      <MuiLink href={`/courses/${courseId}/users`}>
+                        {chunks}
+                      </MuiLink>
+                    ),
+                  })
                   : t(translations.externalIdBlocked, {
-                      name: missingStudents[0]?.name ?? '',
-                      count: missingStudents.length,
-                      link: (chunks) => (
-                        <MuiLink href={`/courses/${courseId}/users`}>
-                          {chunks}
-                        </MuiLink>
-                      ),
-                    })}
+                    name: missingStudents[0]?.name ?? '',
+                    count: missingStudents.length,
+                    link: (chunks) => (
+                      <MuiLink href={`/courses/${courseId}/users`}>
+                        {chunks}
+                      </MuiLink>
+                    ),
+                  })}
               </Alert>
             )}
           </>
@@ -499,11 +534,20 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                 })}
               </Alert>
             )}
+            {preview.outOfRange.length > 0 && (
+              <Alert severity="warning" sx={{ mb: 1 }}>
+                {t(translations.outOfRange, {
+                  cells: preview.outOfRange.join('; '),
+                })}
+                {weightedViewEnabled &&
+                  ` ${t(translations.outOfRangeWeighted)}`}
+              </Alert>
+            )}
             {preview.ok && (
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t(translations.componentName)}</TableCell>
+                    <TableCell>{identifierModeLabel}</TableCell>
                     {components.map((c) => (
                       <TableCell key={c.name}>{c.name}</TableCell>
                     ))}

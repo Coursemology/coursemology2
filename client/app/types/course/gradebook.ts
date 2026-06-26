@@ -68,7 +68,7 @@ export interface ExternalAssessmentNode {
 
 export interface ExternalAssessmentUpdate {
   assessment: AssessmentData;
-  tab: Pick<TabData, 'id' | 'title' | 'categoryId'>;
+  tab: Pick<TabData, 'id' | 'title' | 'categoryId' | 'gradebookWeight'>;
 }
 
 export interface ExternalGradePayload {
@@ -77,7 +77,7 @@ export interface ExternalGradePayload {
   grade: number | null;
 }
 
-export type IdentifierMode = 'email' | 'student_id';
+export type IdentifierMode = 'email' | 'external_id';
 
 export interface ImportComponent {
   name: string;
@@ -97,20 +97,43 @@ export interface ImportPreviewRequest {
   csvData: string;
 }
 
-export interface ImportConflict {
-  component: string;
+export interface ConflictCell {
+  existing: number | null;
+  inFile: number | null;
+  changed: boolean;
+}
+
+export interface ConflictRow {
+  identifier: string;
   studentName: string;
-  existingGrade: number;
-  inFileGrade: number;
-  identifierMismatch: boolean;
+  cells: Record<string, ConflictCell>;
+}
+
+export interface ReassignedIdentifier {
+  // Advisory: this identifier was previously imported as the binding key for a
+  // grade now owned by a DIFFERENT student (e.g. an External ID recycled). The
+  // grade is still matched by the current student; this flags it for confirmation.
+  identifier: string;
+  currentStudent: string;
+  previousStudents: string[];
 }
 
 export interface ImportPreviewResult {
   ok: boolean;
   unresolved: string[];
   malformed: string[];
-  sample: { studentName: string; grades: Record<string, number | null> }[];
-  conflicts: ImportConflict[];
+  outOfRange: {
+    identifier: string;
+    component: string;
+    grade: number;
+    max: number;
+    kind: 'below' | 'above';
+  }[];
+  sample: { identifier: string; grades: Record<string, number | null> }[];
+  conflictRows: ConflictRow[];
+  reassignments: ReassignedIdentifier[];
+  totalRows: number;
+  columnOrder: string[];
 }
 
 export interface ImportCommitSummary {

@@ -119,6 +119,25 @@ RSpec.describe Course::Gradebook::ExternalAssessmentImportService, type: :servic
       end
     end
 
+    describe '#preview out-of-range detection' do
+      let(:oor_components) { [name: 'Midterms', maximum_grade: 100, weightage: 0] }
+      let!(:charlie) { create(:course_student, course: course, external_id: 'S123') }
+
+      it 'lists grades below 0 or above the component max without failing the preview' do
+        csv = "External ID,Midterms\nS123,105\n"
+        result = service(csv_data: csv, components: oor_components).preview
+        expect(result[:ok]).to be(true) # out-of-range is advisory, not a block
+        expect(result[:out_of_range]).to include(a_string_matching(/Midterms: 105.* exceeds 100/))
+      end
+
+      it 'flags grades below 0' do
+        csv = "External ID,Midterms\nS123,-2\n"
+        result = service(csv_data: csv, components: oor_components).preview
+        expect(result[:ok]).to be(true)
+        expect(result[:out_of_range]).to include(a_string_matching(/Midterms: -2.* below 0/))
+      end
+    end
+
     describe '#commit (fresh import)' do
       let(:components) { [name: 'Midterm', weightage: 30, maximum_grade: 50] }
 

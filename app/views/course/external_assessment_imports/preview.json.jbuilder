@@ -13,3 +13,4 @@ json.conflicts @result[:conflicts] do |c|
   json.inFileGrade c[:inFileGrade]
   json.identifierMismatch c[:identifierMismatch]
 end
+json.outOfRange @result[:out_of_range]
