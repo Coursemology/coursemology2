@@ -9427,5 +9427,197 @@
   },
   "course.gradebook.WeightedViewHint.settingsLink": {
     "defaultMessage": "Gradebook settings"
+  },
+  "course.gradebook.AddExternalColumnPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.AddExternalColumnPrompt.create": {
+    "defaultMessage": "Create"
+  },
+  "course.gradebook.AddExternalColumnPrompt.error": {
+    "defaultMessage": "Could not create the external assessment."
+  },
+  "course.gradebook.AddExternalColumnPrompt.maxLabel": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.AddExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.AddExternalColumnPrompt.success": {
+    "defaultMessage": "External assessment created."
+  },
+  "course.gradebook.AddExternalColumnPrompt.title": {
+    "defaultMessage": "Add external assessment"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.body": {
+    "defaultMessage": "Delete \"{title}\"? This permanently removes the column and every student grade in it. This cannot be undone."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.confirm": {
+    "defaultMessage": "Delete"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.error": {
+    "defaultMessage": "Could not delete the external assessment."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.title": {
+    "defaultMessage": "Delete external assessment"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.body": {
+    "defaultMessage": "These students already have a grade for these components. Keep their existing grades, or replace them with the values from your file? New students and blank cells are unaffected."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.goBack": {
+    "defaultMessage": "Go Back"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.keepExisting": {
+    "defaultMessage": "Keep Existing"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.replace": {
+    "defaultMessage": "Replace"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.title": {
+    "defaultMessage": "Resolve grade conflicts"
+  },
+  "course.gradebook.ExternalGradeConflictTable.component": {
+    "defaultMessage": "Component"
+  },
+  "course.gradebook.ExternalGradeConflictTable.existing": {
+    "defaultMessage": "Existing grade"
+  },
+  "course.gradebook.ExternalGradeConflictTable.inFile": {
+    "defaultMessage": "In-file grade"
+  },
+  "course.gradebook.ExternalGradeConflictTable.mismatch": {
+    "defaultMessage": "This identifier now resolves to a different student than the existing grade was imported under."
+  },
+  "course.gradebook.ExternalGradeConflictTable.student": {
+    "defaultMessage": "Student"
+  },
+  "course.gradebook.GradebookIndex.addExternal": {
+    "defaultMessage": "Add external assessment"
+  },
+  "course.gradebook.GradebookTable.delete": {
+    "defaultMessage": "Delete"
+  },
+  "course.gradebook.GradebookTable.externalBadge": {
+    "defaultMessage": "External"
+  },
+  "course.gradebook.GradebookTable.externalGradeAria": {
+    "defaultMessage": "{title} grade for {name}"
+  },
+  "course.gradebook.GradebookTable.externalMaxAria": {
+    "defaultMessage": "{title} max marks"
+  },
+  "course.gradebook.GradebookTable.gradeSaveError": {
+    "defaultMessage": "Could not save the grade. Please try again."
+  },
+  "course.gradebook.GradebookTable.manageAria": {
+    "defaultMessage": "manage {title}"
+  },
+  "course.gradebook.GradebookTable.maxSaveError": {
+    "defaultMessage": "Could not save the max marks. Please try again."
+  },
+  "course.gradebook.GradebookTable.rename": {
+    "defaultMessage": "Rename"
+  },
+  "course.gradebook.GradebookWeightedTable.displayMode": {
+    "defaultMessage": "Display mode"
+  },
+  "course.gradebook.ImportExternalAssessmentsButton.label": {
+    "defaultMessage": "Import external assessments"
+  },
+  "course.gradebook.ImportWizard.addComponent": {
+    "defaultMessage": "Add component"
+  },
+  "course.gradebook.ImportWizard.back": {
+    "defaultMessage": "Back"
+  },
+  "course.gradebook.ImportWizard.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.ImportWizard.commitError": {
+    "defaultMessage": "Import failed. Nothing was saved."
+  },
+  "course.gradebook.ImportWizard.committed": {
+    "defaultMessage": "Import complete."
+  },
+  "course.gradebook.ImportWizard.componentName": {
+    "defaultMessage": "Component name"
+  },
+  "course.gradebook.ImportWizard.continue": {
+    "defaultMessage": "Confirm import"
+  },
+  "course.gradebook.ImportWizard.downloadTemplate": {
+    "defaultMessage": "Download template"
+  },
+  "course.gradebook.ImportWizard.email": {
+    "defaultMessage": "Email"
+  },
+  "course.gradebook.ImportWizard.identifierMode": {
+    "defaultMessage": "Match students by"
+  },
+  "course.gradebook.ImportWizard.malformed": {
+    "defaultMessage": "These cells are not valid numbers: {cells}"
+  },
+  "course.gradebook.ImportWizard.maxMarks": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.ImportWizard.next": {
+    "defaultMessage": "Next"
+  },
+  "course.gradebook.ImportWizard.previewError": {
+    "defaultMessage": "Could not verify the file. Please try again."
+  },
+  "course.gradebook.ImportWizard.stepDefine": {
+    "defaultMessage": "Define components"
+  },
+  "course.gradebook.ImportWizard.stepUpload": {
+    "defaultMessage": "Template & upload"
+  },
+  "course.gradebook.ImportWizard.stepVerify": {
+    "defaultMessage": "Verify"
+  },
+  "course.gradebook.ImportWizard.studentId": {
+    "defaultMessage": "Student ID"
+  },
+  "course.gradebook.ImportWizard.studentIdHint": {
+    "defaultMessage": "Matching uses each student's current Student ID. Keep Student IDs up to date in Manage Users."
+  },
+  "course.gradebook.ImportWizard.title": {
+    "defaultMessage": "Import external assessments"
+  },
+  "course.gradebook.ImportWizard.unresolved": {
+    "defaultMessage": "These identifiers were not found in the course: {ids}"
+  },
+  "course.gradebook.ImportWizard.updatesExisting": {
+    "defaultMessage": "Updates existing — managed in the gradebook"
+  },
+  "course.gradebook.ImportWizard.upload": {
+    "defaultMessage": "Upload filled CSV"
+  },
+  "course.gradebook.ImportWizard.verify": {
+    "defaultMessage": "Verify"
+  },
+  "course.gradebook.ImportWizard.weightage": {
+    "defaultMessage": "Weightage"
+  },
+  "course.gradebook.ProjectedTotalHint.policy": {
+    "defaultMessage": "Totals count ungraded assessments as 0."
+  },
+  "course.gradebook.RenameExternalColumnPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.error": {
+    "defaultMessage": "Could not rename the external assessment."
+  },
+  "course.gradebook.RenameExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.save": {
+    "defaultMessage": "Save"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.title": {
+    "defaultMessage": "Rename external assessment"
   }
 }

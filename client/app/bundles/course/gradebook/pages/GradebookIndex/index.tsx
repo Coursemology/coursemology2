@@ -2,7 +2,7 @@ import { FC, useEffect, useState, useTransition } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleAlt } from '@mui/icons-material';
-import { Tab, Tabs, Typography } from '@mui/material';
+import { Button, Tab, Tabs, Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -11,9 +11,11 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useCourseContext } from '../../../container/CourseLoader';
+import AddExternalColumnPrompt from '../../components/AddExternalColumnPrompt';
 import GradebookTable from '../../components/GradebookTable';
 import GradebookWeightedTable from '../../components/GradebookWeightedTable';
 import GradeLinkHint from '../../components/GradeLinkHint';
+import ImportExternalAssessmentsButton from '../../components/import/ImportExternalAssessmentsButton';
 import WeightedViewHint from '../../components/WeightedViewHint';
 import fetchGradebook from '../../operations';
 import {
@@ -52,6 +54,10 @@ const translations = defineMessages({
     id: 'course.gradebook.GradebookIndex.byWeight',
     defaultMessage: 'Weighted total',
   },
+  addExternal: {
+    id: 'course.gradebook.GradebookIndex.addExternal',
+    defaultMessage: 'Add external assessment',
+  },
 });
 
 const GradebookIndex: FC = () => {
@@ -66,6 +72,7 @@ const GradebookIndex: FC = () => {
     searchParams.get('view') === 'weighted' ? 'weighted' : 'all',
   );
   const [isPending, startTransition] = useTransition();
+  const [addOpen, setAddOpen] = useState(false);
 
   const assessments = useAppSelector(getAssessments);
   const categories = useAppSelector(getCategories);
@@ -149,6 +156,22 @@ const GradebookIndex: FC = () => {
       {!isLoading &&
         students.length > 0 &&
         !(weightedViewEnabled && viewMode === 'weighted') && <GradeLinkHint />}
+      {!isLoading && canManageWeights && students.length > 0 && (
+        <div className="flex justify-end gap-2 px-5 pt-3">
+          <ImportExternalAssessmentsButton />
+          <Button
+            onClick={() => setAddOpen(true)}
+            size="small"
+            variant="outlined"
+          >
+            {t(translations.addExternal)}
+          </Button>
+        </div>
+      )}
+      <AddExternalColumnPrompt
+        onClose={() => setAddOpen(false)}
+        open={addOpen}
+      />
       <div className="relative">
         {isPending && (
           <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">

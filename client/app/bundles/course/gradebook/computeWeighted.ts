@@ -4,6 +4,7 @@ import {
   StudentData,
   SubmissionData,
   TabData,
+  UpdateWeightsPayload,
 } from 'types/course/gradebook';
 
 type GradeEntry = Pick<SubmissionData, 'studentId' | 'assessmentId' | 'grade'>;
@@ -40,6 +41,19 @@ type GradeLookup = Map<string, number>;
 const gradeKey = (studentId: number, assessmentId: number): string =>
   `${studentId}:${assessmentId}`;
 
+// Per-assessment grade bounding (external assessments only). Applied at READ time
+// so the toggles stay reversible and the stored grade is never mutated. Native
+// assessments leave both flags undefined → passthrough (unchanged behaviour).
+export const effectiveGrade = (
+  grade: number,
+  a: Pick<AssessmentData, 'maxGrade' | 'floorAtZero' | 'capAtMaximum'>,
+): number => {
+  let g = grade;
+  if (a.floorAtZero && g < 0) g = 0;
+  if (a.capAtMaximum && g > a.maxGrade) g = a.maxGrade;
+  return g;
+};
+
 // Index submissions by (student, assessment) once: O(submissions).
 const buildGradeLookup = (submissions: GradeEntry[]): GradeLookup => {
   const lookup: GradeLookup = new Map();
@@ -75,7 +89,7 @@ const equalSubtotal = (
   if (included.length === 0) return null;
   const ratios = included.map((a) => {
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
-    return grade != null ? grade / a.maxGrade : 0;
+    return grade != null ? effectiveGrade(grade, a) / a.maxGrade : 0;
   });
   return ratios.reduce((acc, r) => acc + r, 0) / ratios.length;
 };
@@ -97,7 +111,8 @@ const customSubtotal = (
     if (a.gradebookExcluded) return;
     const grade = gradeLookup.get(gradeKey(studentId, a.id));
     const assessmentWeight = a.gradebookWeight ?? 0;
-    if (grade != null) numerator += (grade / a.maxGrade) * assessmentWeight;
+    if (grade != null)
+      numerator += (effectiveGrade(grade, a) / a.maxGrade) * assessmentWeight;
     hasContributing = true;
   });
   return hasContributing ? numerator / tabWeight : null;
@@ -194,7 +209,7 @@ export const computeStudentBreakdown = ({
     const contributions = list.map((a) => {
       const excluded = !!a.gradebookExcluded;
       const grade = gradeLookup.get(gradeKey(studentId, a.id)) ?? null;
-      const ratio = grade != null ? grade / a.maxGrade : 0;
+      const ratio = grade != null ? effectiveGrade(grade, a) / a.maxGrade : 0;
       let points: number;
       let effectiveWeight: number;
       if (excluded) {
@@ -310,3 +325,22 @@ export const resolveTabWeights = (
       : tab,
   );
 };
+
+// When the table is showing the equal-split default (usingDefaultWeights), setting
+// a real weight on one tab would disengage the fallback and collapse every other
+// tab to its stored 0. To prevent that, freeze the currently-displayed equal split
+// into a real weights-update payload for the populated tabs, so a caller can persist
+// it BEFORE applying the new weight. Mode is always 'equal' (the split is an equal
+// default); empty tabs carry no weight and are omitted. External tabs keep their
+// negative store id, which `Contribution.bulk_update` routes by sign.
+export const materializedDefaultWeights = (
+  tabs: TabData[],
+  assessments: Pick<AssessmentData, 'tabId'>[],
+): UpdateWeightsPayload['weights'] =>
+  resolveTabWeights(tabs, assessments)
+    .filter((tab) => (tab.gradebookWeight ?? 0) > 0)
+    .map((tab) => ({
+      tabId: tab.id,
+      weight: tab.gradebookWeight as number,
+      weightMode: tab.weightMode ?? 'equal',
+    }));

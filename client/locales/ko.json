@@ -9412,5 +9412,203 @@
   },
   "course.gradebook.WeightedViewHint.settingsLink": {
     "defaultMessage": "성적부 설정"
+  },
+  "course.gradebook.AddExternalColumnPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.AddExternalColumnPrompt.create": {
+    "defaultMessage": "만들기"
+  },
+  "course.gradebook.AddExternalColumnPrompt.error": {
+    "defaultMessage": "외부 평가를 생성할 수 없습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.maxLabel": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.AddExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.AddExternalColumnPrompt.success": {
+    "defaultMessage": "외부 평가가 생성되었습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.title": {
+    "defaultMessage": "외부 평가 추가"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.body": {
+    "defaultMessage": "\"{title}\"을(를) 삭제하시겠습니까? 이 작업은 해당 열과 그 안의 모든 학생 성적을 영구적으로 제거합니다. 이 작업은 되돌릴 수 없습니다."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.confirm": {
+    "defaultMessage": "삭제"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.error": {
+    "defaultMessage": "외부 평가를 삭제할 수 없습니다."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.title": {
+    "defaultMessage": "외부 평가 삭제"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.body": {
+    "defaultMessage": "이 학생들은 이미 해당 구성 요소에 대한 성적이 있습니다. 기존 성적을 유지하시겠습니까, 아니면 파일의 값으로 대체하시겠습니까? 새 학생과 빈 셀은 영향을 받지 않습니다."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.goBack": {
+    "defaultMessage": "돌아가기"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.keepExisting": {
+    "defaultMessage": "기존 항목 유지"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.replace": {
+    "defaultMessage": "대체"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.title": {
+    "defaultMessage": "성적 충돌 해결"
+  },
+  "course.gradebook.ExternalGradeConflictTable.component": {
+    "defaultMessage": "구성 요소"
+  },
+  "course.gradebook.ExternalGradeConflictTable.existing": {
+    "defaultMessage": "기존 성적"
+  },
+  "course.gradebook.ExternalGradeConflictTable.inFile": {
+    "defaultMessage": "파일 내 성적"
+  },
+  "course.gradebook.ExternalGradeConflictTable.mismatch": {
+    "defaultMessage": "이 식별자는 이제 기존 성적을 가져올 때의 학생과 다른 학생으로 확인됩니다."
+  },
+  "course.gradebook.ExternalGradeConflictTable.student": {
+    "defaultMessage": "학생"
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "각 성적은 학생 제출물의 점수 합계입니다. 성적을 클릭하면 해당 제출물을 열고 점수를 조정할 수 있습니다."
+  },
+  "course.gradebook.GradebookIndex.addExternal": {
+    "defaultMessage": "외부 평가 추가"
+  },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "학생이 강좌에 참여하면 여기에 성적이 표시됩니다."
+  },
+  "course.gradebook.GradebookTable.delete": {
+    "defaultMessage": "삭제"
+  },
+  "course.gradebook.GradebookTable.externalBadge": {
+    "defaultMessage": "외부"
+  },
+  "course.gradebook.GradebookTable.externalGradeAria": {
+    "defaultMessage": "{name}의 {title} 성적"
+  },
+  "course.gradebook.GradebookTable.externalMaxAria": {
+    "defaultMessage": "{title} 최대 점수"
+  },
+  "course.gradebook.GradebookTable.gradeSaveError": {
+    "defaultMessage": "성적을 저장할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.GradebookTable.manageAria": {
+    "defaultMessage": "{title} 관리"
+  },
+  "course.gradebook.GradebookTable.maxSaveError": {
+    "defaultMessage": "최대 점수를 저장할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.GradebookTable.rename": {
+    "defaultMessage": "이름 변경"
+  },
+  "course.gradebook.GradebookWeightedTable.displayMode": {
+    "defaultMessage": "표시 모드"
+  },
+  "course.gradebook.ImportExternalAssessmentsButton.label": {
+    "defaultMessage": "외부 평가 가져오기"
+  },
+  "course.gradebook.ImportWizard.addComponent": {
+    "defaultMessage": "구성 요소 추가"
+  },
+  "course.gradebook.ImportWizard.back": {
+    "defaultMessage": "뒤로"
+  },
+  "course.gradebook.ImportWizard.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.ImportWizard.commitError": {
+    "defaultMessage": "가져오기에 실패했습니다. 아무것도 저장되지 않았습니다."
+  },
+  "course.gradebook.ImportWizard.committed": {
+    "defaultMessage": "가져오기가 완료되었습니다."
+  },
+  "course.gradebook.ImportWizard.componentName": {
+    "defaultMessage": "구성 요소 이름"
+  },
+  "course.gradebook.ImportWizard.continue": {
+    "defaultMessage": "가져오기 확인"
+  },
+  "course.gradebook.ImportWizard.downloadTemplate": {
+    "defaultMessage": "템플릿 다운로드"
+  },
+  "course.gradebook.ImportWizard.email": {
+    "defaultMessage": "이메일"
+  },
+  "course.gradebook.ImportWizard.identifierMode": {
+    "defaultMessage": "학생 매칭 기준"
+  },
+  "course.gradebook.ImportWizard.malformed": {
+    "defaultMessage": "다음 셀은 올바른 숫자가 아닙니다: {cells}"
+  },
+  "course.gradebook.ImportWizard.maxMarks": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.ImportWizard.next": {
+    "defaultMessage": "다음"
+  },
+  "course.gradebook.ImportWizard.previewError": {
+    "defaultMessage": "파일을 확인할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.ImportWizard.stepDefine": {
+    "defaultMessage": "구성 요소 정의"
+  },
+  "course.gradebook.ImportWizard.stepUpload": {
+    "defaultMessage": "템플릿 및 업로드"
+  },
+  "course.gradebook.ImportWizard.stepVerify": {
+    "defaultMessage": "확인"
+  },
+  "course.gradebook.ImportWizard.studentId": {
+    "defaultMessage": "학생 ID"
+  },
+  "course.gradebook.ImportWizard.studentIdHint": {
+    "defaultMessage": "매칭에는 각 학생의 현재 학생 ID가 사용됩니다. 사용자 관리에서 학생 ID를 최신 상태로 유지하세요."
+  },
+  "course.gradebook.ImportWizard.title": {
+    "defaultMessage": "외부 평가 가져오기"
+  },
+  "course.gradebook.ImportWizard.unresolved": {
+    "defaultMessage": "다음 식별자를 강좌에서 찾을 수 없습니다: {ids}"
+  },
+  "course.gradebook.ImportWizard.updatesExisting": {
+    "defaultMessage": "기존 항목 업데이트 - 성적부에서 관리됨"
+  },
+  "course.gradebook.ImportWizard.upload": {
+    "defaultMessage": "작성한 CSV 업로드"
+  },
+  "course.gradebook.ImportWizard.verify": {
+    "defaultMessage": "확인"
+  },
+  "course.gradebook.ImportWizard.weightage": {
+    "defaultMessage": "가중치"
+  },
+  "course.gradebook.ProjectedTotalHint.policy": {
+    "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."
+  },
+  "course.gradebook.RenameExternalColumnPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.error": {
+    "defaultMessage": "외부 평가의 이름을 변경할 수 없습니다."
+  },
+  "course.gradebook.RenameExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.save": {
+    "defaultMessage": "저장"
+  },
+  "course.gradebook.RenameExternalColumnPrompt.title": {
+    "defaultMessage": "외부 평가 이름 변경"
   }
 }

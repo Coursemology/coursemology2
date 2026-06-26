@@ -16,6 +16,7 @@ class Course::GradebookController < Course::ComponentController
           student_ids: @students.map(&:user_id),
           assessment_ids: assessment_ids
         )
+        load_externals
       end
     end
   end
@@ -83,11 +84,19 @@ class Course::GradebookController < Course::ComponentController
     [tabs.map(&:category).uniq(&:id), tabs]
   end
 
+  def load_externals
+    @external_assessments = Course::ExternalAssessment.for_course(current_course).
+                            includes(:gradebook_contribution, external_assessment_grades: :course_user).to_a
+    @external_grades = @external_assessments.flat_map(&:external_assessment_grades)
+    @external_contributions = @external_assessments.
+                              index_by(&:id).
+                              transform_values(&:gradebook_contribution)
+  end
+
   def fetch_students
     current_course.levels.to_a
     current_course.course_users.students.without_phantom_users.
-      calculated(:experience_points).includes(:user).to_a.
-      sort_by { |cu| cu.user.name }
+      calculated(:experience_points).includes(user: :emails).to_a
   end
 
   def fetch_published_assessments

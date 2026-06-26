@@ -7,6 +7,7 @@ import {
   resolveTabWeights,
   sumWeights,
   usingDefaultWeights,
+  materializedDefaultWeights,
 } from '../computeWeighted';
 
 const assessments = [
@@ -684,5 +685,46 @@ describe('breakdown — exclusion', () => {
     expect(a.excluded).toBe(false);
     expect(a.effectiveWeight).toBeCloseTo(60);
     expect(a.points).toBeCloseTo(60);
+  });
+});
+
+describe('materializedDefaultWeights', () => {
+  it('freezes the equal split across populated tabs as an equal-mode payload', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1 },
+      { id: 2, title: 'T2', categoryId: 1 },
+    ];
+    const assessments = [{ tabId: 1 }, { tabId: 2 }];
+
+    expect(materializedDefaultWeights(tabs, assessments)).toEqual([
+      { tabId: 1, weight: 50, weightMode: 'equal' },
+      { tabId: 2, weight: 50, weightMode: 'equal' },
+    ]);
+  });
+
+  it('omits tabs with no assessments', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1 },
+      { id: 2, title: 'T2', categoryId: 1 },
+      { id: 3, title: 'Empty', categoryId: 1 },
+    ];
+    const assessments = [{ tabId: 1 }, { tabId: 2 }];
+
+    expect(materializedDefaultWeights(tabs, assessments).map((w) => w.tabId)).toEqual([
+      1, 2,
+    ]);
+  });
+
+  it('routes external tabs by their negative store id (matches bulk_update)', () => {
+    const tabs = [
+      { id: 1, title: 'T1', categoryId: 1 },
+      { id: -5, title: 'Ext', categoryId: -1 },
+    ];
+    const assessments = [{ tabId: 1 }, { tabId: -5 }];
+
+    expect(materializedDefaultWeights(tabs, assessments)).toEqual([
+      { tabId: 1, weight: 50, weightMode: 'equal' },
+      { tabId: -5, weight: 50, weightMode: 'equal' },
+    ]);
   });
 });

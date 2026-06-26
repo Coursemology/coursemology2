@@ -26,3 +26,7 @@ export const getWeightedViewEnabled = (state: AppState): boolean =>
   getLocalState(state).weightedViewEnabled;
 export const getCanManageWeights = (state: AppState): boolean =>
   getLocalState(state).canManageWeights;
+export const getExternalAssessments = (
+  state: AppState,
+): GradebookState['assessments'] =>
+  getLocalState(state).assessments.filter((a) => a.external);
