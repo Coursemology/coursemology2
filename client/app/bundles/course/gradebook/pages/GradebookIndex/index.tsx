@@ -14,6 +14,7 @@ import { useCourseContext } from '../../../container/CourseLoader';
 import GradebookTable from '../../components/GradebookTable';
 import GradebookWeightedTable from '../../components/GradebookWeightedTable';
 import GradeLinkHint from '../../components/GradeLinkHint';
+import ManageExternalAssessmentsButton from '../../components/manage/ManageExternalAssessmentsButton';
 import WeightedViewHint from '../../components/WeightedViewHint';
 import fetchGradebook from '../../operations';
 import {
@@ -108,6 +109,11 @@ const GradebookIndex: FC = () => {
         students={students}
         submissions={submissions}
         tabs={tabs}
+        toolbarAction={
+          canManageWeights ? (
+            <ManageExternalAssessmentsButton size="small" />
+          ) : undefined
+        }
       />
     );
   } else {
@@ -121,6 +127,9 @@ const GradebookIndex: FC = () => {
         students={students}
         submissions={submissions}
         tabs={tabs}
+        toolbarAction={
+          canManageWeights ? <ManageExternalAssessmentsButton /> : undefined
+        }
       />
     );
   }

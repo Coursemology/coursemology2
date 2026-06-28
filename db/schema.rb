@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_23_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_24_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -788,6 +788,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_23_000000) do
     t.datetime "updated_at", null: false
     t.boolean "floor_at_zero", default: true, null: false
     t.boolean "cap_at_maximum", default: true, null: false
+    t.integer "position", null: false
     t.index ["course_id", "title"], name: "index_course_external_assessments_on_course_id_and_title", unique: true
     t.index ["course_id"], name: "fk__course_external_assessments_course_id"
     t.index ["creator_id"], name: "fk__course_external_assessments_creator_id"

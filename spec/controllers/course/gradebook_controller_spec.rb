@@ -531,5 +531,26 @@ RSpec.describe Course::GradebookController, type: :controller do
         end
       end
     end
+
+    describe 'external assessment ordering' do
+      render_views
+      let(:manager) { create(:course_manager, course: course) }
+
+      it 'serializes externals in position order, not creation order' do
+        first = create(:course_external_assessment, course: course, title: 'Zeta')
+        second = create(:course_external_assessment, course: course, title: 'Alpha')
+        # Make Alpha come first by position.
+        Course::ExternalAssessment.reorder!(course: course, ordered_ids: [second.id, first.id])
+
+        controller_sign_in(controller, manager.user)
+        get :index, params: { course_id: course.id, format: :json }
+
+        body = JSON.parse(response.body)
+        external_titles = body['tabs'].
+                          select { |t| t['categoryId'] == Course::ExternalAssessment::SYNTHETIC_CATEGORY_ID }.
+                          map { |t| t['title'] }
+        expect(external_titles).to eq(%w[Alpha Zeta])
+      end
+    end
   end
 end

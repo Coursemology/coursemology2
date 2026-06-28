@@ -124,5 +124,38 @@ RSpec.describe Course::ExternalAssessment, type: :model do
         expect(external.cap_at_maximum).to be(false)
       end
     end
+
+    describe 'positioning' do
+      let(:course) { create(:course) }
+
+      it 'appends new assessments at the end of the course' do
+        first = create(:course_external_assessment, course: course)
+        second = create(:course_external_assessment, course: course)
+        expect([first.reload.position, second.reload.position]).to eq([0, 1])
+      end
+
+      it 'scopes positions per course' do
+        other = create(:course)
+        a = create(:course_external_assessment, course: course)
+        b = create(:course_external_assessment, course: other)
+        expect([a.reload.position, b.reload.position]).to eq([0, 0])
+      end
+
+      describe '.reorder!' do
+        it 'rewrites positions to the given order' do
+          a = create(:course_external_assessment, course: course)
+          b = create(:course_external_assessment, course: course)
+          c = create(:course_external_assessment, course: course)
+          described_class.reorder!(course: course, ordered_ids: [c.id, a.id, b.id])
+          expect([a.reload.position, b.reload.position, c.reload.position]).to eq([1, 2, 0])
+        end
+
+        it 'raises when the id set does not match the course externals' do
+          a = create(:course_external_assessment, course: course)
+          expect { described_class.reorder!(course: course, ordered_ids: [a.id, a.id + 999]) }.
+            to raise_error(ArgumentError)
+        end
+      end
+    end
   end
 end

@@ -177,6 +177,8 @@ interface Props {
   canManageWeights: boolean;
   courseTitle: string;
   courseId: number;
+  /** Optional action rendered in the toolbar, left of the column picker. */
+  toolbarAction?: JSX.Element;
 }
 
 // How many decimal places a single value needs (0, 1, or 2).
@@ -215,6 +217,7 @@ const GradebookWeightedTable = ({
   canManageWeights,
   courseTitle,
   courseId,
+  toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [configureOpen, setConfigureOpen] = useState(false);
@@ -581,6 +584,7 @@ const GradebookWeightedTable = ({
                 ]}
                 value={displayMode}
               />
+              {toolbarAction}
               {canManageWeights && (
                 <Button
                   onClick={() => setConfigureOpen(true)}

@@ -239,6 +239,12 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const effectiveWeight = (tabId: number): number =>
     isAllExcluded(tabId) ? 0 : weights[tabId] ?? 0;
 
+  // Skip a category with no tabs — e.g. the synthetic "External Assessments"
+  // group once its last external is deleted — so no bare header lingers.
+  const visibleCategories = categories.filter((cat) =>
+    tabs.some((tb) => tb.categoryId === cat.id),
+  );
+
   const sum = tabs.reduce((acc, tb) => acc + effectiveWeight(tb.id), 0);
   const hasInvalid =
     Object.values(weights).some((w) => validate(w) !== null) ||
@@ -348,7 +354,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
         ))}
       </ul>
       <Stack spacing={2} sx={{ mt: 2 }}>
-        {categories.map((cat) => (
+        {visibleCategories.map((cat) => (
           <div key={cat.id}>
             <Typography variant="subtitle2">{cat.title}</Typography>
             <Stack spacing={0.5} sx={{ pl: 1, mt: 1 }}>
@@ -360,6 +366,55 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                   const tabAssessments = assessments.filter(
                     (a) => a.tabId === tb.id,
                   );
+                  // An external assessment is always one-per-tab; its tab has
+                  // no internal structure, so render just name + weight (no
+                  // mode toggle, no expand, no per-assessment exclusion).
+                  const isExternal =
+                    tabAssessments.length > 0 &&
+                    tabAssessments.every((a) => a.external);
+                  if (isExternal) {
+                    return (
+                      <div key={tb.id}>
+                        <div className="flex items-center gap-1">
+                          <div className="w-9 shrink-0" />
+                          <Typography className="flex-1" variant="body2">
+                            {tb.title}
+                          </Typography>
+                          <TextField
+                            error={err !== null}
+                            inputProps={{
+                              'aria-label': tb.title,
+                              min: 0,
+                              max: 100,
+                              step: 0.01,
+                            }}
+                            onBlur={() =>
+                              setWeights((prev) => ({
+                                ...prev,
+                                [tb.id]: r2(prev[tb.id] ?? 0),
+                              }))
+                            }
+                            onChange={(e) =>
+                              handleChange(tb.id, e.target.value)
+                            }
+                            size="small"
+                            sx={{ width: 96 }}
+                            type="number"
+                            value={value}
+                          />
+                        </div>
+                        {err && (
+                          <Typography
+                            className="pl-9"
+                            color="error"
+                            variant="caption"
+                          >
+                            {err}
+                          </Typography>
+                        )}
+                      </div>
+                    );
+                  }
                   const mode = modes[tb.id] ?? 'equal';
                   const isExpanded = !!expanded[tb.id];
                   const unbalanced = isUnbalanced(tb.id);

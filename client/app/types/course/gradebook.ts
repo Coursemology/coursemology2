@@ -60,6 +60,17 @@ export interface UpdateWeightsPayload {
   }[];
 }
 
+export interface ExternalAssessmentNode {
+  assessment: AssessmentData;
+  tab: TabData;
+  category: CategoryData;
+}
+
+export interface ExternalAssessmentUpdate {
+  assessment: AssessmentData;
+  tab: Pick<TabData, 'id' | 'title' | 'categoryId' | 'gradebookWeight'>;
+}
+
 export interface ExternalGradePayload {
   studentId: number;
   assessmentId: number;
