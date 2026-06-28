@@ -160,7 +160,9 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   end
 
   def load_externals
-    @external_assessments = Course::ExternalAssessment.for_course(current_course).
+    # Tie-break by id: positions are not unique (no unique index; concurrent
+    # creates can collide on MAX+1), so order(:position) alone is nondeterministic.
+    @external_assessments = Course::ExternalAssessment.for_course(current_course).order(:position, :id).
                             includes(:gradebook_contribution, external_assessment_grades: :course_user).to_a
     @external_grades = @external_assessments.flat_map(&:external_assessment_grades)
     @external_contributions = @external_assessments.
