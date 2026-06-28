@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useTransition } from 'react';
+import { FC, useEffect, useMemo, useState, useTransition } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleAlt } from '@mui/icons-material';
@@ -15,8 +15,10 @@ import GradebookTable from '../../components/GradebookTable';
 import GradebookWeightedTable from '../../components/GradebookWeightedTable';
 import GradeLinkHint from '../../components/GradeLinkHint';
 import ManageExternalAssessmentsButton from '../../components/manage/ManageExternalAssessmentsButton';
+import OutOfRangeAlert from '../../components/OutOfRangeAlert';
 import WeightedViewHint from '../../components/WeightedViewHint';
 import fetchGradebook from '../../operations';
+import { outOfRangeSummary } from '../../outOfRange';
 import {
   getAssessments,
   getCanManageWeights,
@@ -77,6 +79,11 @@ const GradebookIndex: FC = () => {
   const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
   const canManageWeights = useAppSelector(getCanManageWeights);
 
+  const rangeSummary = useMemo(
+    () => outOfRangeSummary(assessments, submissions),
+    [assessments, submissions],
+  );
+
   useEffect(() => {
     dispatch(fetchGradebook())
       .finally(() => setIsLoading(false))
@@ -130,6 +137,7 @@ const GradebookIndex: FC = () => {
         toolbarAction={
           canManageWeights ? <ManageExternalAssessmentsButton /> : undefined
         }
+        weightedViewEnabled={weightedViewEnabled}
       />
     );
   }
@@ -158,6 +166,13 @@ const GradebookIndex: FC = () => {
       {!isLoading &&
         students.length > 0 &&
         !(weightedViewEnabled && viewMode === 'weighted') && <GradeLinkHint />}
+      {!isLoading && students.length > 0 && (
+        <OutOfRangeAlert
+          assessmentNames={rangeSummary.assessmentNames}
+          gradeCount={rangeSummary.gradeCount}
+          weightedViewEnabled={weightedViewEnabled}
+        />
+      )}
       <div className="relative">
         {isPending && (
           <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">

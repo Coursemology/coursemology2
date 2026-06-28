@@ -9435,7 +9435,7 @@
     "defaultMessage": "{title} grade for {name}"
   },
   "course.gradebook.GradebookTable.gradeSaveError": {
-    "defaultMessage": "Could not save the grade. Please try again."
+    "defaultMessage": "Could not save the {title} grade for {name}. Please try again."
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "Grade saved. {title} · {name}: {oldGrade} → {newGrade}"
@@ -9571,5 +9571,38 @@
   },
   "course.gradebook.ProjectedTotalHint.policy": {
     "defaultMessage": "Totals count ungraded assessments as 0."
+  },
+  "course.gradebook.GradebookTable.acceptEdit": {
+    "defaultMessage": "Accept"
+  },
+  "course.gradebook.GradebookTable.revertEdit": {
+    "defaultMessage": "Revert"
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMax": {
+    "defaultMessage": "This grade exceeds the maximum of {max}."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMaxWeighted": {
+    "defaultMessage": "This grade exceeds the maximum of {max}; its contribution to the weighted total is capped at {max}."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZero": {
+    "defaultMessage": "This grade is below 0."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZeroWeighted": {
+    "defaultMessage": "This grade is below 0; it is floored to 0 in the weighted total."
+  },
+  "course.gradebook.GradebookWeightedTable.gradeCapped": {
+    "defaultMessage": "Capped at {value}"
+  },
+  "course.gradebook.GradebookWeightedTable.gradeCountsAs": {
+    "defaultMessage": "Counts as {value}"
+  },
+  "course.gradebook.GradebookWeightedTable.gradeFloored": {
+    "defaultMessage": "Floored to {value}"
+  },
+  "course.gradebook.OutOfRangeAlert.warning": {
+    "defaultMessage": "{gradeCount, plural, one {# grade} other {# grades}} in the external {assessmentCount, plural, one {assessment} other {assessments}} {assessmentNames} {gradeCount, plural, one {is} other {are}} outside their range. Review before exporting."
+  },
+  "course.gradebook.OutOfRangeAlert.warningWeighted": {
+    "defaultMessage": "{gradeCount, plural, one {# grade} other {# grades}} in the external {assessmentCount, plural, one {assessment} other {assessments}} {assessmentNames} {gradeCount, plural, one {is} other {are}} outside their range and {gradeCount, plural, one {is} other {are}} being capped or floored in the weighted total. Review before exporting."
   }
 }

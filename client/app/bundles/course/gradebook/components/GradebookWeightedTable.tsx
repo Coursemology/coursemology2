@@ -44,6 +44,7 @@ import type { AssessmentContribution, WeightedRow } from '../computeWeighted';
 import {
   computeStudentBreakdown,
   computeWeightedRows,
+  effectiveGrade,
   resolveTabWeights,
   usingDefaultWeights,
 } from '../computeWeighted';
@@ -163,6 +164,18 @@ const translations = defineMessages({
   total: {
     id: 'course.gradebook.GradebookWeightedTable.total',
     defaultMessage: 'Total',
+  },
+  gradeCapped: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeCapped',
+    defaultMessage: 'Capped at {value}',
+  },
+  gradeFloored: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeFloored',
+    defaultMessage: 'Floored to {value}',
+  },
+  gradeCountsAs: {
+    id: 'course.gradebook.GradebookWeightedTable.gradeCountsAs',
+    defaultMessage: 'Counts as {value}',
   },
 });
 
@@ -302,6 +315,11 @@ const GradebookWeightedTable = ({
       return next;
     });
 
+  const assessmentsById = useMemo(
+    () => new Map(assessments.map((a) => [a.id, a])),
+    [assessments],
+  );
+
   const breakdownsByStudent = useMemo(
     () =>
       new Map(
@@ -346,24 +364,6 @@ const GradebookWeightedTable = ({
     [categories, categoryTabCounts],
   );
 
-  // A tab whose RIGHT edge is a tab-group (category) boundary — i.e. the last
-  // tab of its category. These boundaries (plus the identity|grades one) get a
-  // 2px separator instead of the 1px sub-column hairline: a 2px line always
-  // covers at least one full device pixel, so unlike a 1px line it can't wash
-  // out at an unlucky fractional column offset on a non-integer DPR. The data
-  // attribute is targeted by the table's `& [data-group-end]` sx rule.
-  const tabIsCategoryEnd = useMemo(
-    () =>
-      resolvedTabs.map(
-        (tab, i) =>
-          i === resolvedTabs.length - 1 ||
-          tab.categoryId !== resolvedTabs[i + 1].categoryId,
-      ),
-    [resolvedTabs],
-  );
-  const groupEndIf = (cond: boolean): { 'data-group-end'?: true } =>
-    cond ? { 'data-group-end': true } : {};
-
   useLayoutEffect(() => {
     const row1 = row1Ref.current;
     const row2 = row2Ref.current;
@@ -374,15 +374,9 @@ const GradebookWeightedTable = ({
     // reflow the header after mount; with a one-shot measurement rows 2–3 keep
     // a stale `top` and stay permanently dislodged from the rows above them.
     const measure = (): void => {
-      // getBoundingClientRect (subpixel) not offsetHeight (integer-rounded):
-      // rows are fractional (32px min + lineHeight content), and a rounded
-      // `top` lands the stuck rows 2-3 a fraction off — opening thin gaps
-      // between header rows (body bleeds through) and overshooting the single
-      // rowSpan=3 frozen-left cell so the right header reads a touch taller.
-      const h1 = row1.getBoundingClientRect().height;
-      const h2 = row2.getBoundingClientRect().height;
+      const h1 = row1.offsetHeight;
       setRow2Top(h1);
-      setRow3Top(h1 + h2);
+      setRow3Top(h1 + row2.offsetHeight);
     };
 
     measure();
@@ -533,11 +527,6 @@ const GradebookWeightedTable = ({
   const visibility = toolbar.getColumnVisibility?.() ?? {};
   const showEmail = (visibility.email ?? false) === true;
   const showExternalId = (visibility.externalId ?? false) === true;
-  // The rightmost visible identity column — its right edge is the
-  // identity|grades group boundary (drawn 2px, like the category boundaries).
-  let lastIdentityField: 'name' | 'email' | 'externalId' = 'name';
-  if (showExternalId) lastIdentityField = 'externalId';
-  else if (showEmail) lastIdentityField = 'email';
 
   const allRowsSelected = body.allFilteredSelected ?? false;
   const someRowsSelected = body.someFilteredSelected ?? false;
@@ -655,76 +644,44 @@ const GradebookWeightedTable = ({
             toolbar — plus the pagination below, so the table fills the
             remaining viewport; shorter classes shrink to fit (no whitespace). */}
           <TableContainer
-            sx={(theme) => ({
-              maxHeight: 'calc(100vh - 22rem)',
-              overflowX: 'auto',
-              // Outer top + left edges of the grid. A static border on the
-              // scroll container sits at the viewport edge and is always
-              // visible — unlike a border on the <table>, which scrolls out
-              // from under the sticky header / frozen column. The cells' own
-              // right + bottom box-shadow insets supply the other two outer
-              // edges (last column / last row). Solid grey (matching the cell
-              // lines), not the translucent `divider` which anti-aliases away
-              // at fractional positions on a non-integer DPR.
-              borderTop: `1px solid ${theme.palette.grey[400]}`,
-              borderLeft: `1px solid ${theme.palette.grey[400]}`,
-            })}
+            sx={{ maxHeight: 'calc(100vh - 22rem)', overflowX: 'auto' }}
           >
             <Table
               size="small"
               stickyHeader
               sx={(theme) => {
-                // Interior grid lines: each cell draws its OWN right + bottom
-                // edge as a box-shadow inset, NOT a `border`. Rationale (this is
-                // a sticky-header table with frozen columns on a fractional DPR):
-                //   (1) A box-shadow is painted inside the cell's own layer, so
-                //       the lines travel with the sticky header rows and frozen
-                //       checkbox/Name columns on scroll. (`border-collapse:
-                //       collapse` paints one grid by the <table> at the cells'
-                //       original positions and leaves it behind when they stick.)
-                //   (2) At a fractional column boundary — a nowrap breakdown
-                //       title widens the Name column to a fractional max-content
-                //       width, cascading fractional offsets across every column —
-                //       a 1px `border` lands between device pixels on a
-                //       non-integer DPR (e.g. 1.33×) and the browser snaps it to
-                //       ZERO width, vanishing (and different browsers drop
-                //       different ones); a box-shadow renders a hairline instead.
-                //   (3) box-shadow sidesteps MUI's `:last-child { border: 0 }`,
-                //       so the last header/body row keeps its lines unaided.
-                // The outer top/left edges live on the TableContainer (a static
-                // frame at the scroll-viewport edge); the cells' right/bottom
-                // insets supply the outer right/bottom (last column / last row).
-                //
-                // The line is a SOLID grey, not the translucent `divider`
-                // (rgba(0,0,0,0.12)). At a fractional column boundary on a
-                // non-integer DPR the 1px line is anti-aliased across two device
-                // pixels at partial coverage; 50%-covered `divider` (→ 0.06)
-                // disappears, but a 50%-covered solid grey is still visibly grey.
-                // This is what keeps the tab-group separators (Missions |
-                // Tutorials | …) reliably visible at every layout.
-                const line = theme.palette.grey[400];
-                const right = `inset -1px 0 0 ${line}`;
-                const bottom = `inset 0 -1px 0 ${line}`;
-                // 2px separator for tab-group boundaries (see `tabIsCategoryEnd`).
-                const groupRight = `inset -2px 0 0 ${line}`;
+                // One definition for every grid line so horizontal and vertical
+                // separators share the same width and colour.
+                const gridLine = `1px solid ${theme.palette.divider}`;
                 return {
                   tableLayout: 'auto',
                   borderCollapse: 'separate',
                   borderSpacing: 0,
+                  // Outer top + left edges. Interior lines come from each cell's
+                  // own bottom + right, so every separator stays a single 1px
+                  // (no doubling) and the whole table reads as one uniform grid.
+                  borderTop: gridLine,
+                  borderLeft: gridLine,
                   '& th, & td': {
                     boxSizing: 'border-box',
                     border: 0,
-                    boxShadow: `${right}, ${bottom}`,
+                    borderBottom: gridLine,
+                    borderRight: gridLine,
                     py: 0.25,
                     px: 1,
                     lineHeight: 1.2,
                     height: 32,
                   },
-                  // Tab-group separators: a 2px right edge that can't wash out
-                  // at a fractional column offset. (0,2,0) outranks the
-                  // `& th, & td` rule (0,1,1), so it wins on the marked cells.
-                  '& [data-group-end]': {
-                    boxShadow: `${groupRight}, ${bottom}`,
+                  // MUI's default `.MuiTableRow-root:last-child th { border: 0 }`
+                  // (specificity 0,2,1, the `:last-child` pseudo-class) outranks
+                  // the `& th` rule above (0,1,1) and silently zeroes ALL borders
+                  // on the weight row — it is the last <tr> in <thead>. Re-assert
+                  // the grid lines with a higher-specificity selector so they
+                  // survive through the "% of grade" row.
+                  '& thead tr:last-of-type th': {
+                    borderTop: gridLine,
+                    borderBottom: gridLine,
+                    borderRight: gridLine,
                   },
                 };
               }}
@@ -755,7 +712,6 @@ const GradebookWeightedTable = ({
                   </TableCell>
                   <TableCell
                     rowSpan={3}
-                    {...groupEndIf(lastIdentityField === 'name')}
                     sx={{
                       position: 'sticky',
                       left: CHECKBOX_WIDTH,
@@ -771,7 +727,6 @@ const GradebookWeightedTable = ({
                   {showEmail && (
                     <TableCell
                       rowSpan={3}
-                      {...groupEndIf(lastIdentityField === 'email')}
                       sx={{ minWidth: 200, verticalAlign: 'middle' }}
                     >
                       {t(tableTranslations.email)}
@@ -780,7 +735,6 @@ const GradebookWeightedTable = ({
                   {showExternalId && (
                     <TableCell
                       rowSpan={3}
-                      {...groupEndIf(lastIdentityField === 'externalId')}
                       sx={{ minWidth: 160, verticalAlign: 'middle' }}
                     >
                       {t(tableTranslations.externalId)}
@@ -791,7 +745,6 @@ const GradebookWeightedTable = ({
                       key={cat.id}
                       align="center"
                       colSpan={categoryTabCounts.get(cat.id) ?? 1}
-                      data-group-end
                       sx={{ fontWeight: 600 }}
                     >
                       {cat.title}
@@ -803,6 +756,10 @@ const GradebookWeightedTable = ({
                     sx={{
                       fontWeight: 600,
                       minWidth: 120,
+                      // Its bottom edge is the row2/row3 boundary, now drawn by
+                      // the row-3 subheader's `borderTop`; drop this one so the
+                      // Total column's separator stays a single 1px.
+                      '&&': { borderBottom: 'none' },
                     }}
                   >
                     <span
@@ -840,14 +797,17 @@ const GradebookWeightedTable = ({
                   sx={{
                     '& .MuiTableCell-stickyHeader': {
                       top: row2Top,
+                      // Separator below this row is now owned by row 3's
+                      // `borderTop` (survives scroll compositing); drop the
+                      // bottom border here so the line stays a single 1px.
+                      borderBottom: 'none',
                     },
                   }}
                 >
-                  {resolvedTabs.map((tab, i) => (
+                  {resolvedTabs.map((tab) => (
                     <TableCell
                       key={tab.id}
                       align="center"
-                      {...groupEndIf(tabIsCategoryEnd[i])}
                       // nowrap keeps each tab title on one line, so its natural
                       // single-line width drives the column. Without it, auto
                       // table-layout shrinks these wrappable cells toward
@@ -867,11 +827,10 @@ const GradebookWeightedTable = ({
                 <TableRow
                   sx={{ '& .MuiTableCell-stickyHeader': { top: row3Top } }}
                 >
-                  {resolvedTabs.map((tab, i) => (
+                  {resolvedTabs.map((tab) => (
                     <TableCell
                       key={tab.id}
                       align="center"
-                      {...groupEndIf(tabIsCategoryEnd[i])}
                       sx={{ bgcolor: 'grey.100' }}
                     >
                       {tabSubheaderLabel(tab)}
@@ -935,7 +894,6 @@ const GradebookWeightedTable = ({
                           />
                         </TableCell>
                         <TableCell
-                          {...groupEndIf(lastIdentityField === 'name')}
                           sx={{
                             position: 'sticky',
                             left: CHECKBOX_WIDTH,
@@ -966,27 +924,15 @@ const GradebookWeightedTable = ({
                           {row.original.name}
                         </TableCell>
                         {showEmail && (
-                          <TableCell
-                            {...groupEndIf(lastIdentityField === 'email')}
-                          >
-                            {row.original.email}
-                          </TableCell>
+                          <TableCell>{row.original.email}</TableCell>
                         )}
                         {showExternalId && (
-                          <TableCell
-                            {...groupEndIf(lastIdentityField === 'externalId')}
-                          >
-                            {row.original.externalId ?? ''}
-                          </TableCell>
+                          <TableCell>{row.original.externalId ?? ''}</TableCell>
                         )}
                         {row.original.subtotals.map((subtotal, i) => {
                           const weight = resolvedTabs[i].gradebookWeight ?? 0;
                           return (
-                            <TableCell
-                              key={resolvedTabs[i].id}
-                              align="right"
-                              {...groupEndIf(tabIsCategoryEnd[i])}
-                            >
+                            <TableCell key={resolvedTabs[i].id} align="right">
                               {fmtDisplay(
                                 tabDisplayValue(subtotal, weight),
                                 columnPrecisions.tabs[i],
@@ -1019,6 +965,24 @@ const GradebookWeightedTable = ({
                                 a.grade === null
                                   ? `—/${a.maxGrade}`
                                   : `${a.grade}/${a.maxGrade}`;
+                              const assessmentData = assessmentsById.get(
+                                a.assessmentId,
+                              );
+                              const eff =
+                                a.grade != null && assessmentData != null
+                                  ? effectiveGrade(a.grade, assessmentData)
+                                  : null;
+                              const wasCapped =
+                                eff != null &&
+                                a.grade != null &&
+                                a.grade > a.maxGrade &&
+                                eff !== a.grade;
+                              const wasFloored =
+                                eff != null &&
+                                a.grade != null &&
+                                a.grade < 0 &&
+                                eff !== a.grade;
+                              const clamped = wasCapped || wasFloored;
                               return (
                                 <TableRow
                                   key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
@@ -1053,9 +1017,6 @@ const GradebookWeightedTable = ({
                                     the expand chevron), signalling these are that
                                     student's assessments. */}
                                   <TableCell
-                                    {...groupEndIf(
-                                      lastIdentityField === 'name',
-                                    )}
                                     sx={{
                                       position: 'sticky',
                                       left: CHECKBOX_WIDTH,
@@ -1094,30 +1055,40 @@ const GradebookWeightedTable = ({
                                       sx={{
                                         display: 'block',
                                         whiteSpace: 'nowrap',
+                                        alignItems: 'center',
                                       }}
                                       variant="caption"
                                     >
                                       {`${gradeText} · ${isExcluded ? t(translations.excluded) : weightText}`}
+                                      {clamped && (
+                                        <Tooltip
+                                          title={t(translations.gradeCountsAs, {
+                                            value: eff,
+                                          })}
+                                        >
+                                          <InfoOutlined
+                                            aria-label={
+                                              wasCapped
+                                                ? t(translations.gradeCapped, {
+                                                    value: eff,
+                                                  })
+                                                : t(translations.gradeFloored, {
+                                                    value: eff,
+                                                  })
+                                            }
+                                            fontSize="inherit"
+                                            sx={{ ml: 0.5 }}
+                                          />
+                                        </Tooltip>
+                                      )}
                                     </Typography>
                                   </TableCell>
                                   {/* One empty cell per visible identity column so
                                     the grid lines stay aligned with the rows above.
                                     These scroll with the table (only checkbox + Name
                                     are frozen), matching the student rows. */}
-                                  {showEmail && (
-                                    <TableCell
-                                      {...groupEndIf(
-                                        lastIdentityField === 'email',
-                                      )}
-                                    />
-                                  )}
-                                  {showExternalId && (
-                                    <TableCell
-                                      {...groupEndIf(
-                                        lastIdentityField === 'externalId',
-                                      )}
-                                    />
-                                  )}
+                                  {showEmail && <TableCell />}
+                                  {showExternalId && <TableCell />}
                                   {resolvedTabs.map((tab, i) => {
                                     const tabCellValue = isExcluded
                                       ? '—'
@@ -1126,11 +1097,7 @@ const GradebookWeightedTable = ({
                                           columnPrecisions.tabs[i],
                                         );
                                     return (
-                                      <TableCell
-                                        key={tab.id}
-                                        align="right"
-                                        {...groupEndIf(tabIsCategoryEnd[i])}
-                                      >
+                                      <TableCell key={tab.id} align="right">
                                         {i === tabIdx ? tabCellValue : ''}
                                       </TableCell>
                                     );
