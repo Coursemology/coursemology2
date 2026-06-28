@@ -4,6 +4,7 @@ import { render, screen, waitFor, within } from 'test-utils';
 import TestApp from 'utilities/TestApp';
 
 import WeightedGradebookTable from '../components/WeightedGradebookTable';
+import { LEVEL_ASSESSMENT_ID, LEVEL_TAB_ID } from '../computeWeighted';
 import type {
   AssessmentData,
   CategoryData,
@@ -957,9 +958,11 @@ describe('WeightedGradebookTable', () => {
       });
       await user.click(screen.getByRole('button', { name: /expand Alice/i }));
 
-      // Synthetic Level breakdown row (tabId -1, assessmentId -1): its
+      // Synthetic Level breakdown row (LEVEL_TAB_ID/LEVEL_ASSESSMENT_ID): its
       // contribution (15) sits under Level Contribution, tab columns stay empty.
-      const levelRow = await screen.findByTestId(breakdownRowId(1, -1, -1));
+      const levelRow = await screen.findByTestId(
+        breakdownRowId(1, LEVEL_TAB_ID, LEVEL_ASSESSMENT_ID),
+      );
       const cells = within(levelRow).getAllByRole('cell');
       expect(cells).toHaveLength(7);
       expect(cells[3]).toHaveTextContent('15'); // Level Contribution
@@ -1764,10 +1767,11 @@ describe('level contribution columns', () => {
     });
     await user.click(screen.getByRole('button', { name: /expand Alice/i }));
     const bdRows = await screen.findAllByTestId(/^breakdown-row-/);
-    // Synthetic level tab uses LEVEL_TAB_ID (-1); its row must come first, before
-    // the real tab (id 10) rows — mirroring the column order.
+    // Synthetic level tab uses LEVEL_TAB_ID (0, disjoint from positive real tab
+    // ids and negative external-assessment pseudo-tab ids); its row must come
+    // first, before the real tab (id 10) rows — mirroring the column order.
     expect(bdRows[0].getAttribute('data-testid')).toMatch(
-      /^breakdown-row-1--1-/,
+      new RegExp(`^breakdown-row-1-${LEVEL_TAB_ID}-${LEVEL_ASSESSMENT_ID}$`),
     );
     expect(
       bdRows.some((r) => r.getAttribute('data-testid')?.includes('-10-')),
@@ -1791,7 +1795,11 @@ describe('level contribution columns', () => {
       submissions: [makeSub(1, 100, 8)],
     });
     await user.click(screen.getByRole('button', { name: /expand Alice/i }));
-    const levelRow = (await screen.findAllByTestId(/^breakdown-row-1--1-/))[0];
+    const levelRow = (
+      await screen.findAllByTestId(
+        new RegExp(`^breakdown-row-1-${LEVEL_TAB_ID}-`),
+      )
+    )[0];
     expect(within(levelRow).getByText(/Level 14/)).toBeInTheDocument();
     // The misleading "14/20" fraction must NOT appear.
     expect(
@@ -1835,7 +1843,11 @@ describe('level contribution columns', () => {
     });
     await user.click(screen.getByRole('radio', { name: /percentage/i }));
     await user.click(screen.getByRole('button', { name: /expand Alice/i }));
-    const levelRow = (await screen.findAllByTestId(/^breakdown-row-1--1-/))[0];
+    const levelRow = (
+      await screen.findAllByTestId(
+        new RegExp(`^breakdown-row-1-${LEVEL_TAB_ID}-`),
+      )
+    )[0];
     // The breakdown's level cell mirrors the summary cell: 15 / 30 → 50%.
     expect(within(levelRow).getByText('50%')).toBeInTheDocument();
   });

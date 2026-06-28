@@ -889,6 +889,60 @@ const lc = (
   ...over,
 });
 
+describe('computeStudentBreakdown - level/external synthetic-id collision', () => {
+  // An external assessment whose primary key is 1 is rendered as a negative-id
+  // pseudo-tab (synthetic_tab_id = -id = -1), with its assessment id likewise
+  // negated (-1). The Level-contribution row historically also used -1 for both
+  // its tabId and assessmentId, so the two collided: indistinguishable by tabId
+  // and producing duplicate `bd-<student>--1--1` React keys/testids.
+  it('keeps the level row distinct from external assessment #1', () => {
+    // External #1 as a pseudo-tab: tabId -1, single assessment id -1.
+    const externalTab = {
+      id: -1,
+      title: 'Midterm (external)',
+      categoryId: 99,
+      gradebookWeight: 20,
+    };
+    const externalAssessment = {
+      id: -1,
+      tabId: -1,
+      maxGrade: 100,
+      title: 'Midterm (external)',
+    };
+
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [externalTab],
+      assessments: [externalAssessment],
+      submissions: subs([{ studentId: 1, assessmentId: -1, grade: 90 }]),
+      level: 15,
+      levelContribution: lc(), // enabled: true
+      levelContributionPoints: 4, // non-null → the level row is pushed
+      courseMaxLevel: 30,
+    });
+
+    // One external pseudo-tab row + one level row = two DISTINCT rows.
+    expect(breakdown).toHaveLength(2);
+
+    // The LEVEL_TAB_ID filter must select exactly the level row — and only it.
+    const levelRows = breakdown.filter((tb) => tb.tabId === LEVEL_TAB_ID);
+    expect(levelRows).toHaveLength(1);
+    expect(levelRows[0].assessments[0].title).toBe('Level');
+
+    // The external row must NOT be classified as the level row.
+    const externalRow = breakdown.find(
+      (tb) => tb.assessments[0]?.title === 'Midterm (external)',
+    )!;
+    expect(externalRow.tabId).not.toBe(LEVEL_TAB_ID);
+
+    // Row identity keys `${tabId}-${assessmentId}` must be unique (no dup React keys).
+    const keys = breakdown.map(
+      (tb) => `${tb.tabId}-${tb.assessments[0].assessmentId}`,
+    );
+    expect(new Set(keys).size).toBe(2);
+  });
+});
+
 describe('computeWeightedRows - level contribution', () => {
   const baseStudent = {
     id: 1,

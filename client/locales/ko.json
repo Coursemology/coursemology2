@@ -9664,5 +9664,143 @@
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "성적이 저장되었습니다. {title} · {name}: {oldGrade} → {newGrade}"
+  },
+  "course.gradebook.AddExternalColumnPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.AddExternalColumnPrompt.create": {
+    "defaultMessage": "만들기"
+  },
+  "course.gradebook.AddExternalColumnPrompt.error": {
+    "defaultMessage": "외부 평가를 생성할 수 없습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.maxLabel": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.AddExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.AddExternalColumnPrompt.success": {
+    "defaultMessage": "외부 평가가 생성되었습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.title": {
+    "defaultMessage": "외부 평가 추가"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.body": {
+    "defaultMessage": "\"{title}\"을(를) 삭제하시겠습니까? 이 작업은 해당 열과 그 안의 모든 학생 성적을 영구적으로 제거합니다. 이 작업은 되돌릴 수 없습니다."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.confirm": {
+    "defaultMessage": "삭제"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.error": {
+    "defaultMessage": "외부 평가를 삭제할 수 없습니다."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.title": {
+    "defaultMessage": "외부 평가 삭제"
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "각 성적은 학생 제출물의 점수 합계입니다. 성적을 클릭하면 해당 제출물을 열고 점수를 조정할 수 있습니다."
+  },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "학생이 강좌에 참여하면 여기에 성적이 표시됩니다."
+  },
+  "course.gradebook.GradebookWeightedTable.displayMode": {
+    "defaultMessage": "표시 모드"
+  },
+  "course.gradebook.ProjectedTotalHint.policy": {
+    "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.capLabel": {
+    "defaultMessage": "최대 점수로 상한 적용"
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorLabel": {
+    "defaultMessage": "0으로 하한 적용"
+  },
+  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
+    "defaultMessage": "가중치"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capLabel": {
+    "defaultMessage": "최대 점수로 상한 적용"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.error": {
+    "defaultMessage": "외부 평가를 저장할 수 없습니다."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorLabel": {
+    "defaultMessage": "0으로 하한 적용"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.maxLabel": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.nameLabel": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.save": {
+    "defaultMessage": "저장"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.title": {
+    "defaultMessage": "외부 평가 편집"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
+    "defaultMessage": "가중치"
+  },
+  "course.gradebook.ManageExternalAssessmentsButton.label": {
+    "defaultMessage": "외부 평가 관리"
+  },
+  "course.gradebook.ManageExternalPanel.actions": {
+    "defaultMessage": "작업"
+  },
+  "course.gradebook.ManageExternalPanel.add": {
+    "defaultMessage": "추가"
+  },
+  "course.gradebook.ManageExternalPanel.bounds": {
+    "defaultMessage": "범위"
+  },
+  "course.gradebook.ManageExternalPanel.capped": {
+    "defaultMessage": "≤ 최대"
+  },
+  "course.gradebook.ManageExternalPanel.close": {
+    "defaultMessage": "닫기"
+  },
+  "course.gradebook.ManageExternalPanel.empty": {
+    "defaultMessage": "아직 외부 평가가 없습니다"
+  },
+  "course.gradebook.ManageExternalPanel.emptyHint": {
+    "defaultMessage": "Coursemology 외부에서 받은 성적을 추적하려면 하나를 추가하세요."
+  },
+  "course.gradebook.ManageExternalPanel.floored": {
+    "defaultMessage": "≥ 0"
+  },
+  "course.gradebook.ManageExternalPanel.max": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.ManageExternalPanel.name": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.ManageExternalPanel.reorderError": {
+    "defaultMessage": "새 순서를 저장할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.gradebook.ManageExternalPanel.title": {
+    "defaultMessage": "외부 평가"
+  },
+  "course.gradebook.ManageExternalPanel.weight": {
+    "defaultMessage": "가중치"
   }
 }

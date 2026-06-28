@@ -55,7 +55,6 @@ import type {
 import {
   computeStudentBreakdown,
   computeWeightedRows,
-  gradeRatio,
   LEVEL_TAB_ID,
   levelOffenders,
   resolveTabWeights,
@@ -239,6 +238,8 @@ interface Props {
   gamificationEnabled: boolean;
   courseMaxLevel: number;
   levelContribution: LevelContributionData;
+  /** Optional action rendered in the toolbar, left of the column picker. */
+  toolbarAction?: JSX.Element;
 }
 
 const r2 = (n: number): number => Math.round(n * 100) / 100;
@@ -288,6 +289,7 @@ const WeightedGradebookTable = ({
   gamificationEnabled,
   courseMaxLevel,
   levelContribution,
+  toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [configureOpen, setConfigureOpen] = useState(false);
@@ -870,6 +872,7 @@ const WeightedGradebookTable = ({
                 ]}
                 value={displayMode}
               />
+              {toolbarAction}
               {canManageWeights && (
                 <Button
                   onClick={() => setConfigureOpen(true)}
