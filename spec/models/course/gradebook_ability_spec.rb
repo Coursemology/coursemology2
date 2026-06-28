@@ -13,6 +13,10 @@ RSpec.describe Course::GradebookAbilityComponent do
       it { is_expected.to be_able_to(:read_gradebook, course) }
       it { is_expected.to be_able_to(:manage_gradebook_weights, course) }
       it { is_expected.to be_able_to(:manage_gradebook_settings, course) }
+      it 'cannot read the gradebook of a different course' do
+        other_course = create(:course)
+        expect(subject).not_to be_able_to(:read_gradebook, other_course)
+      end
     end
 
     context 'when the user is a Course Owner' do
@@ -21,18 +25,30 @@ RSpec.describe Course::GradebookAbilityComponent do
       it { is_expected.to be_able_to(:read_gradebook, course) }
       it { is_expected.to be_able_to(:manage_gradebook_weights, course) }
       it { is_expected.to be_able_to(:manage_gradebook_settings, course) }
+      it 'cannot read the gradebook of a different course' do
+        other_course = create(:course)
+        expect(subject).not_to be_able_to(:read_gradebook, other_course)
+      end
     end
 
     context 'when the user is a Teaching Assistant' do
       let(:course_user) { create(:course_teaching_assistant, course: course) }
       let(:user) { course_user.user }
-      it { is_expected.to be_able_to(:read_gradebook, course) }
+      it { is_expected.not_to be_able_to(:read_gradebook, course) }
       it { is_expected.not_to be_able_to(:manage_gradebook_weights, course) }
       it { is_expected.not_to be_able_to(:manage_gradebook_settings, course) }
     end
 
     context 'when the user is a Course Student' do
       let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
+      it { is_expected.not_to be_able_to(:read_gradebook, course) }
+      it { is_expected.not_to be_able_to(:manage_gradebook_weights, course) }
+      it { is_expected.not_to be_able_to(:manage_gradebook_settings, course) }
+    end
+
+    context 'when the user is a Course Observer' do
+      let(:course_user) { create(:course_observer, course: course) }
       let(:user) { course_user.user }
       it { is_expected.not_to be_able_to(:read_gradebook, course) }
       it { is_expected.not_to be_able_to(:manage_gradebook_weights, course) }
