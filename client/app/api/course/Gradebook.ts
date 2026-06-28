@@ -3,6 +3,9 @@ import {
   ExternalAssessmentUpdate,
   ExternalGradePayload,
   GradebookData,
+  ImportCommitSummary,
+  ImportPreviewRequest,
+  ImportPreviewResult,
   UpdateWeightsPayload,
 } from 'types/course/gradebook';
 
@@ -69,6 +72,24 @@ export default class GradebookAPI extends BaseCourseAPI {
   ): APIResponse<ExternalGradePayload> {
     return this.client.put(
       `${this.#urlPrefix}/external_assessments/${id}/grades`,
+      payload,
+    );
+  }
+
+  importPreview(
+    payload: ImportPreviewRequest,
+  ): APIResponse<ImportPreviewResult> {
+    return this.client.post(
+      `${this.#urlPrefix}/external_assessment_imports/preview`,
+      payload,
+    );
+  }
+
+  importCommit(
+    payload: ImportPreviewRequest & { onConflict: 'keep' | 'replace' },
+  ): APIResponse<ImportCommitSummary> {
+    return this.client.post(
+      `${this.#urlPrefix}/external_assessment_imports`,
       payload,
     );
   }

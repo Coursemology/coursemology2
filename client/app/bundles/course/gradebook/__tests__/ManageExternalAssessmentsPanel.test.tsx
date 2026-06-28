@@ -1,7 +1,7 @@
 import type { DropResult } from '@hello-pangea/dnd';
 import userEvent from '@testing-library/user-event';
 import type { AppDispatch } from 'store';
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor, within } from 'test-utils';
 
 import ManageExternalAssessmentsPanel, {
   handleDragEnd,
@@ -20,6 +20,35 @@ const dropResult = (from: number, to: number | null): DropResult =>
     destination:
       to === null ? null : { index: to, droppableId: 'external-assessments' },
   }) as DropResult;
+
+jest.mock('../components/import/ImportExternalAssessmentsWizard', () => ({
+  __esModule: true,
+  default: ({
+    existingAssessments,
+    onClose,
+    open,
+  }: {
+    existingAssessments: { name: string }[];
+    onClose: () => void;
+    open: boolean;
+  }): JSX.Element | null =>
+    open ? (
+      <div data-testid="import-wizard" role="dialog">
+        <h2>Import external assessments</h2>
+        {existingAssessments.map((assessment) => (
+          <button key={assessment.name} type="button">
+            {assessment.name}
+          </button>
+        ))}
+        <button onClick={onClose} type="button">
+          Cancel
+        </button>
+        <button onClick={onClose} type="button">
+          Confirm import
+        </button>
+      </div>
+    ) : null,
+}));
 
 jest.mock('../operations', () => ({
   __esModule: true,
@@ -127,7 +156,9 @@ it('shows an empty state when there are no externals', async () => {
   });
   expect(await screen.findByText('No external assessments yet')).toBeVisible();
   expect(
-    screen.getByText('Add one to track grades earned outside Coursemology.'),
+    screen.getByText(
+      'Add one manually, or import a CSV of grades earned outside Coursemology.',
+    ),
   ).toBeVisible();
   expect(screen.queryByRole('table')).not.toBeInTheDocument();
 });
@@ -290,6 +321,88 @@ it('hides both bound chips when an external is neither floored nor capped', asyn
   await screen.findByText('Midterm');
   expect(screen.queryByText('≥ 0')).not.toBeInTheDocument();
   expect(screen.queryByText('≤ max')).not.toBeInTheDocument();
+});
+
+it('passes existing external names as chips to the import wizard', async () => {
+  const stateWithExternal = {
+    gradebook: {
+      categories: [],
+      tabs: [{ id: 1, title: 'External', categoryId: 0, gradebookWeight: 30 }],
+      assessments: [
+        {
+          id: -1,
+          title: 'Midterm',
+          tabId: 1,
+          maxGrade: 50,
+          gradebookWeight: 30,
+          external: true,
+        },
+      ],
+      students: [],
+      submissions: [],
+      gamificationEnabled: false,
+      weightedViewEnabled: true,
+      canManageWeights: true,
+    },
+  };
+  render(<ManageExternalAssessmentsPanel onClose={jest.fn()} open />, {
+    state: stateWithExternal,
+  });
+
+  // Open the import wizard
+  await userEvent.click(
+    await screen.findByRole('button', { name: /import csv/i }),
+  );
+
+  // The "Midterm" chip must appear in the define step
+  expect(
+    within(await screen.findByTestId('import-wizard')).getByText('Midterm'),
+  ).toBeInTheDocument();
+});
+
+it('hides the external assessments panel while importing and reopens it on cancel', async () => {
+  render(<ManageExternalAssessmentsPanel onClose={jest.fn()} open />, {
+    state: preloadedState,
+  });
+
+  expect(
+    await screen.findByRole('heading', { name: 'External assessments' }),
+  ).toBeVisible();
+
+  await userEvent.click(
+    await screen.findByRole('button', { name: /import csv/i }),
+  );
+
+  expect(await screen.findByText('Import external assessments')).toBeVisible();
+  await waitFor(() =>
+    expect(screen.queryByText('External assessments')).not.toBeInTheDocument(),
+  );
+
+  await userEvent.click(
+    within(screen.getByTestId('import-wizard')).getByText('Cancel'),
+  );
+
+  expect(
+    await screen.findByRole('heading', { name: 'External assessments' }),
+  ).toBeVisible();
+});
+
+it('reopens the external assessments panel after a successful import', async () => {
+  render(<ManageExternalAssessmentsPanel onClose={jest.fn()} open />, {
+    state: preloadedState,
+  });
+
+  await userEvent.click(
+    await screen.findByRole('button', { name: /import csv/i }),
+  );
+  expect(await screen.findByText('Import external assessments')).toBeVisible();
+  await userEvent.click(
+    within(screen.getByTestId('import-wizard')).getByText('Confirm import'),
+  );
+
+  expect(
+    await screen.findByRole('heading', { name: 'External assessments' }),
+  ).toBeVisible();
 });
 
 it('renders a drag handle per external assessment', async () => {
