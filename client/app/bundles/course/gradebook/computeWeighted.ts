@@ -12,8 +12,8 @@ import { ParsedFormula } from './levelFormula';
 type GradeEntry = Pick<SubmissionData, 'studentId' | 'assessmentId' | 'grade'>;
 
 // Synthetic ids for the Level term — disjoint from real (positive) tab/assessment ids.
-export const LEVEL_TAB_ID = -1;
-export const LEVEL_ASSESSMENT_ID = -1;
+export const LEVEL_TAB_ID = 0;
+export const LEVEL_ASSESSMENT_ID = 0;
 
 export interface WeightedRow {
   studentId: number;

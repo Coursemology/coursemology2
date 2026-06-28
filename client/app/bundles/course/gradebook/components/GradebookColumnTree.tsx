@@ -11,6 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import {
+  EXTERNAL_CATEGORY_ID,
   GAMIFICATION_COL_IDS,
   type GamificationColId,
   STUDENT_INFO_COL_IDS,
@@ -105,6 +106,21 @@ const GradebookColumnTree = ({
     return map;
   }, [tabs, tabAsnIds]);
 
+  const renderLeaf = (id: string, indentLevel: number): JSX.Element | null => {
+    const asnId = parseAssessmentColumnId(id);
+    const asn = asnId !== null ? asnById.get(asnId) : undefined;
+    if (!asn) return null;
+    return (
+      <IndentedCheckbox
+        key={asn.id}
+        checked={isVisible(id)}
+        indentLevel={indentLevel}
+        label={asn.title}
+        onChange={(e) => setVisible(id, e.target.checked)}
+      />
+    );
+  };
+
   return (
     <div>
       <ColumnPickerTreeGroup
@@ -180,34 +196,22 @@ const GradebookColumnTree = ({
               indentLevel={1}
               label={cat.title}
             >
-              {thisCatTabs.map((tab) => {
-                const tabIds = tabAsnIds.get(tab.id) ?? [];
-                return (
-                  <ColumnPickerTreeGroup
-                    key={tab.id}
-                    childIds={tabIds}
-                    context={context}
-                    indentLevel={2}
-                    label={tab.title}
-                  >
-                    {tabIds.map((id) => {
-                      const asnId = parseAssessmentColumnId(id);
-                      const asn =
-                        asnId !== null ? asnById.get(asnId) : undefined;
-                      if (!asn) return null;
-                      return (
-                        <IndentedCheckbox
-                          key={asn.id}
-                          checked={isVisible(id)}
-                          indentLevel={3}
-                          label={asn.title}
-                          onChange={(e) => setVisible(id, e.target.checked)}
-                        />
-                      );
-                    })}
-                  </ColumnPickerTreeGroup>
-                );
-              })}
+              {cat.id === EXTERNAL_CATEGORY_ID
+                ? catIds.map((id) => renderLeaf(id, 2))
+                : thisCatTabs.map((tab) => {
+                    const tabIds = tabAsnIds.get(tab.id) ?? [];
+                    return (
+                      <ColumnPickerTreeGroup
+                        key={tab.id}
+                        childIds={tabIds}
+                        context={context}
+                        indentLevel={2}
+                        label={tab.title}
+                      >
+                        {tabIds.map((id) => renderLeaf(id, 3))}
+                      </ColumnPickerTreeGroup>
+                    );
+                  })}
             </ColumnPickerTreeGroup>
           );
         })}

@@ -9661,5 +9661,143 @@
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "成绩已保存。{title} · {name}：{oldGrade} → {newGrade}"
+  },
+  "course.gradebook.AddExternalColumnPrompt.cancel": {
+    "defaultMessage": "取消"
+  },
+  "course.gradebook.AddExternalColumnPrompt.create": {
+    "defaultMessage": "创建"
+  },
+  "course.gradebook.AddExternalColumnPrompt.error": {
+    "defaultMessage": "无法创建外部评估。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.maxLabel": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.AddExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "名称"
+  },
+  "course.gradebook.AddExternalColumnPrompt.success": {
+    "defaultMessage": "外部评估已创建。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.title": {
+    "defaultMessage": "添加外部评估"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.body": {
+    "defaultMessage": "要删除\"{title}\"吗？这将永久移除该列及其中每位学生的成绩。此操作无法撤销。"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.cancel": {
+    "defaultMessage": "取消"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.confirm": {
+    "defaultMessage": "删除"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.error": {
+    "defaultMessage": "无法删除外部评估。"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.title": {
+    "defaultMessage": "删除外部评估"
+  },
+  "course.gradebook.GradeLinkHint.hint": {
+    "defaultMessage": "每个成绩都是学生提交内容中各项分数的总和。点击任一成绩即可打开该提交内容并调整分数。"
+  },
+  "course.gradebook.GradebookIndex.noStudentsHint": {
+    "defaultMessage": "学生加入课程后，成绩将显示在这里。"
+  },
+  "course.gradebook.GradebookWeightedTable.displayMode": {
+    "defaultMessage": "显示模式"
+  },
+  "course.gradebook.ProjectedTotalHint.policy": {
+    "defaultMessage": "总分会将未评分的评估计为 0。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "计算加权总分时，将超过最高分的成绩按最高分计算。实际成绩保持不变。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.capLabel": {
+    "defaultMessage": "成绩上限设为最高分"
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "计算加权总分时，将负数成绩按 0 计算。实际成绩保持不变。"
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorLabel": {
+    "defaultMessage": "成绩下限设为 0"
+  },
+  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
+    "defaultMessage": "权重"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.cancel": {
+    "defaultMessage": "取消"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "计算加权总分时，将超过最高分的成绩按最高分计算。实际成绩保持不变。"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capLabel": {
+    "defaultMessage": "成绩上限设为最高分"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.error": {
+    "defaultMessage": "无法保存外部评估。"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "计算加权总分时，将负数成绩按 0 计算。实际成绩保持不变。"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorLabel": {
+    "defaultMessage": "成绩下限设为 0"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.maxLabel": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.nameLabel": {
+    "defaultMessage": "名称"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.save": {
+    "defaultMessage": "保存"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.title": {
+    "defaultMessage": "编辑外部评估"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
+    "defaultMessage": "权重"
+  },
+  "course.gradebook.ManageExternalAssessmentsButton.label": {
+    "defaultMessage": "管理外部评估"
+  },
+  "course.gradebook.ManageExternalPanel.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.gradebook.ManageExternalPanel.add": {
+    "defaultMessage": "添加"
+  },
+  "course.gradebook.ManageExternalPanel.bounds": {
+    "defaultMessage": "范围"
+  },
+  "course.gradebook.ManageExternalPanel.capped": {
+    "defaultMessage": "≤ 最高分"
+  },
+  "course.gradebook.ManageExternalPanel.close": {
+    "defaultMessage": "关闭"
+  },
+  "course.gradebook.ManageExternalPanel.empty": {
+    "defaultMessage": "暂无外部评估"
+  },
+  "course.gradebook.ManageExternalPanel.emptyHint": {
+    "defaultMessage": "添加一个以跟踪在 Coursemology 之外获得的成绩。"
+  },
+  "course.gradebook.ManageExternalPanel.floored": {
+    "defaultMessage": "≥ 0"
+  },
+  "course.gradebook.ManageExternalPanel.max": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.ManageExternalPanel.name": {
+    "defaultMessage": "名称"
+  },
+  "course.gradebook.ManageExternalPanel.reorderError": {
+    "defaultMessage": "无法保存新的顺序。请重试。"
+  },
+  "course.gradebook.ManageExternalPanel.title": {
+    "defaultMessage": "外部评估"
+  },
+  "course.gradebook.ManageExternalPanel.weight": {
+    "defaultMessage": "权重"
   }
 }
