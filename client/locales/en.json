@@ -9882,7 +9882,7 @@
     "defaultMessage": "No external assessments yet"
   },
   "course.gradebook.ManageExternalPanel.emptyHint": {
-    "defaultMessage": "Add one to track grades earned outside Coursemology."
+    "defaultMessage": "Add one manually, or import a CSV of grades earned outside Coursemology."
   },
   "course.gradebook.ManageExternalPanel.floored": {
     "defaultMessage": "≥ 0"
@@ -9937,5 +9937,173 @@
   },
   "course.gradebook.OutOfRangeAlert.warningWeighted": {
     "defaultMessage": "{gradeCount, plural, one {# grade} other {# grades}} in the external {assessmentCount, plural, one {assessment} other {assessments}} {assessmentNames} {gradeCount, plural, one {is} other {are}} outside their range and {gradeCount, plural, one {is} other {are}} being capped or floored in the weighted total. Review before exporting."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.body": {
+    "defaultMessage": "Some students already have grades for these components that differ from the values in your file. Replace will overwrite the existing grades with the values from your file. Keep Existing will leave the existing grades unchanged."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.changesSummary": {
+    "defaultMessage": "{changed} of {total} rows have changes"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.goBack": {
+    "defaultMessage": "Go Back"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.keepExisting": {
+    "defaultMessage": "Keep Existing"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.replace": {
+    "defaultMessage": "Replace"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.title": {
+    "defaultMessage": "Resolve grade conflicts"
+  },
+  "course.gradebook.ExternalGradeConflictTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.ImportWizard.addComponent": {
+    "defaultMessage": "Add component"
+  },
+  "course.gradebook.ImportWizard.back": {
+    "defaultMessage": "Back"
+  },
+  "course.gradebook.ImportWizard.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.ImportWizard.commitError": {
+    "defaultMessage": "Import failed. Nothing was saved."
+  },
+  "course.gradebook.ImportWizard.committed": {
+    "defaultMessage": "Import complete."
+  },
+  "course.gradebook.ImportWizard.componentName": {
+    "defaultMessage": "Component name"
+  },
+  "course.gradebook.ImportWizard.continue": {
+    "defaultMessage": "Confirm import"
+  },
+  "course.gradebook.ImportWizard.downloadTemplate": {
+    "defaultMessage": "Download template"
+  },
+  "course.gradebook.ImportWizard.dropzone": {
+    "defaultMessage": "Drag a CSV here, or click to choose a file"
+  },
+  "course.gradebook.ImportWizard.duplicateHeaders": {
+    "defaultMessage": "{count, plural, one {This column appears more than once: {dupes}.} other {These columns appear more than once: {dupes}.}}"
+  },
+  "course.gradebook.ImportWizard.duplicateIdentifier": {
+    "defaultMessage": "The file lists {count, plural, one {an identifier} other {identifiers}} more than once: {ids}. Each student should appear on a single row."
+  },
+  "course.gradebook.ImportWizard.email": {
+    "defaultMessage": "Email"
+  },
+  "course.gradebook.ImportWizard.emptyCsv": {
+    "defaultMessage": "The uploaded file has no data rows. Add at least one student row and try again."
+  },
+  "course.gradebook.ImportWizard.externalId": {
+    "defaultMessage": "External ID"
+  },
+  "course.gradebook.ImportWizard.externalIdBlocked": {
+    "defaultMessage": "{count, plural, =0 {{name} has no External ID} one {{name} and one other student have no External ID} other {{name} and # other students have no External ID}}. Add the missing IDs in <link>Manage Users</link> to import by External ID."
+  },
+  "course.gradebook.ImportWizard.externalIdHint": {
+    "defaultMessage": "Matching uses each student's External ID. Keep External IDs up to date in <link>Manage Users</link>."
+  },
+  "course.gradebook.ImportWizard.fromExisting": {
+    "defaultMessage": "From existing"
+  },
+  "course.gradebook.ImportWizard.headerErrorsClosing": {
+    "defaultMessage": "Correct these in your CSV, then re-upload."
+  },
+  "course.gradebook.ImportWizard.headerErrorsHeading": {
+    "defaultMessage": "These headers need fixing:"
+  },
+  "course.gradebook.ImportWizard.headerSuggestion": {
+    "defaultMessage": "No column named ‘{suggestion}’ — did you mean ‘{expected}’?"
+  },
+  "course.gradebook.ImportWizard.identifierMode": {
+    "defaultMessage": "Match students by"
+  },
+  "course.gradebook.ImportWizard.identifierNotFirst": {
+    "defaultMessage": "‘{identifier}’ must be the first column."
+  },
+  "course.gradebook.ImportWizard.malformed": {
+    "defaultMessage": "These cells do not contain valid numbers:"
+  },
+  "course.gradebook.ImportWizard.malformedMore": {
+    "defaultMessage": "and {count} more"
+  },
+  "course.gradebook.ImportWizard.maxMarks": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.ImportWizard.missingHeaders": {
+    "defaultMessage": "{count, plural, one {Your CSV is missing this column: {missing}.} other {Your CSV is missing these columns: {missing}.}}"
+  },
+  "course.gradebook.ImportWizard.next": {
+    "defaultMessage": "Next"
+  },
+  "course.gradebook.ImportWizard.outOfRangeSubtitle": {
+    "defaultMessage": "Grades will be imported exactly as entered. This is only a warning; you can turn off this warning in Manage External Assessments. If these out-of-range grades are intentional, continue."
+  },
+  "course.gradebook.ImportWizard.outOfRangeTitle": {
+    "defaultMessage": "Some grades are outside their valid range."
+  },
+  "course.gradebook.ImportWizard.outOfRangeWeightedSubtitle": {
+    "defaultMessage": "Grades will be imported exactly as entered. This is only a warning; you can turn off this warning in Manage External Assessments. Out-of-range grades are only floored or capped in the weighted total. If these out-of-range grades are intentional, continue."
+  },
+  "course.gradebook.ImportWizard.previewError": {
+    "defaultMessage": "Could not verify the file. Please try again."
+  },
+  "course.gradebook.ImportWizard.previewFewRows": {
+    "defaultMessage": "Previewing all {totalRows} rows. Check that this preview matches your CSV before continuing."
+  },
+  "course.gradebook.ImportWizard.previewRows": {
+    "defaultMessage": "Previewing the first 5 of {totalRows} rows. Check that this preview matches your CSV before continuing."
+  },
+  "course.gradebook.ImportWizard.reassignmentSubtitle": {
+    "defaultMessage": "These identifiers were previously imported for another student. Grades are matched by the current student, not the identifier — confirm these are the people you intend before importing."
+  },
+  "course.gradebook.ImportWizard.reassignmentTitle": {
+    "defaultMessage": "Some identifiers now match a different student"
+  },
+  "course.gradebook.ImportWizard.requiredHeaders": {
+    "defaultMessage": "Your CSV needs these column headers: {headers}. ‘{identifier}’ must be the first column."
+  },
+  "course.gradebook.ImportWizard.stepDefine": {
+    "defaultMessage": "Define components"
+  },
+  "course.gradebook.ImportWizard.stepUpload": {
+    "defaultMessage": "Template & upload"
+  },
+  "course.gradebook.ImportWizard.stepVerify": {
+    "defaultMessage": "Verify"
+  },
+  "course.gradebook.ImportWizard.title": {
+    "defaultMessage": "Import external assessments"
+  },
+  "course.gradebook.ImportWizard.unrecognizedHeaders": {
+    "defaultMessage": "{count, plural, one {This column isn’t recognized: {unrecognized}.} other {These columns aren’t recognized: {unrecognized}.}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedEmail": {
+    "defaultMessage": "{count, plural, one {This email address was not found in the course: {ids}} other {These email addresses were not found in the course: {ids}}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedExternalId": {
+    "defaultMessage": "{count, plural, one {This external ID was not found in the course: {ids}} other {These external IDs were not found in the course: {ids}}}"
+  },
+  "course.gradebook.ImportWizard.updatesExisting": {
+    "defaultMessage": "Updates existing — managed in the gradebook"
+  },
+  "course.gradebook.ImportWizard.upload": {
+    "defaultMessage": "Upload filled CSV"
+  },
+  "course.gradebook.ImportWizard.verify": {
+    "defaultMessage": "Verify"
+  },
+  "course.gradebook.ImportWizard.weightage": {
+    "defaultMessage": "Weightage"
+  },
+  "course.gradebook.ImportWizard.willChangeExisting": {
+    "defaultMessage": "{count, plural, one {# row contains} other {# rows contain}} changes to existing grades. After checking this preview, click Confirm import to review these conflicts before anything is imported."
+  },
+  "course.gradebook.ManageExternalPanel.import": {
+    "defaultMessage": "Import CSV"
   }
 }

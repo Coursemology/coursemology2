@@ -6,7 +6,7 @@ import {
   Droppable,
   DropResult,
 } from '@hello-pangea/dnd';
-import { Add, Delete, DragIndicator, Edit } from '@mui/icons-material';
+import { Add, Delete, DragIndicator, Edit, Upload } from '@mui/icons-material';
 import {
   Button,
   Chip,
@@ -19,7 +19,10 @@ import {
   Typography,
 } from '@mui/material';
 import type { AppDispatch } from 'store';
-import type { AssessmentData } from 'types/course/gradebook';
+import type {
+  AssessmentData,
+  ExistingExternalAssessment,
+} from 'types/course/gradebook';
 
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -33,6 +36,7 @@ import {
 } from '../../selectors';
 import AddExternalColumnPrompt from '../AddExternalColumnPrompt';
 import DeleteExternalColumnPrompt from '../DeleteExternalColumnPrompt';
+import ImportExternalAssessmentsWizard from '../import/ImportExternalAssessmentsWizard';
 
 import EditExternalAssessmentPrompt from './EditExternalAssessmentPrompt';
 
@@ -44,6 +48,10 @@ const translations = defineMessages({
   add: {
     id: 'course.gradebook.ManageExternalPanel.add',
     defaultMessage: 'Add',
+  },
+  import: {
+    id: 'course.gradebook.ManageExternalPanel.import',
+    defaultMessage: 'Import CSV',
   },
   name: {
     id: 'course.gradebook.ManageExternalPanel.name',
@@ -79,7 +87,8 @@ const translations = defineMessages({
   },
   emptyHint: {
     id: 'course.gradebook.ManageExternalPanel.emptyHint',
-    defaultMessage: 'Add one to track grades earned outside Coursemology.',
+    defaultMessage:
+      'Add one manually, or import a CSV of grades earned outside Coursemology.',
   },
   close: {
     id: 'course.gradebook.ManageExternalPanel.close',
@@ -131,11 +140,19 @@ const ManageExternalAssessmentsPanel: FC<Props> = ({ open, onClose }) => {
   const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
   const dispatch = useAppDispatch();
   const [addOpen, setAddOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editing, setEditing] = useState<AssessmentData | null>(null);
   const [deleting, setDeleting] = useState<AssessmentData | null>(null);
 
   const tabWeights = Object.fromEntries(
     tabs.map((tab) => [tab.id, tab.gradebookWeight ?? 0]),
+  );
+  const existingAssessments: ExistingExternalAssessment[] = externals.map(
+    (a) => ({
+      name: a.title,
+      maximumGrade: a.maxGrade,
+      weightage: tabWeights[a.tabId] ?? 0,
+    }),
   );
 
   const onDragEnd = (result: DropResult): void =>
@@ -156,163 +173,186 @@ const ManageExternalAssessmentsPanel: FC<Props> = ({ open, onClose }) => {
   const reorderable = externals.length > 1;
 
   return (
-    <Dialog fullWidth maxWidth="md" onClose={onClose} open={open}>
-      <DialogTitle>{t(translations.title)}</DialogTitle>
-      <DialogContent>
-        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-          <Button
-            onClick={() => setAddOpen(true)}
-            startIcon={<Add />}
-            variant="contained"
-          >
-            {t(translations.add)}
-          </Button>
-        </Stack>
-
-        {externals.length === 0 ? (
-          <div className="flex flex-col items-center gap-1 py-10 text-center">
-            <Typography color="text.secondary" variant="h6">
-              {t(translations.empty)}
-            </Typography>
-            <Typography color="text.disabled" variant="body2">
-              {t(translations.emptyHint)}
-            </Typography>
-          </div>
-        ) : (
-          <>
-            <div
-              className="grid items-center gap-4 px-[14px] py-3 text-2xl font-medium text-neutral-500"
-              style={{ gridTemplateColumns: gridCols }}
+    <>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        onClose={onClose}
+        open={open && !importOpen}
+      >
+        <DialogTitle>{t(translations.title)}</DialogTitle>
+        <DialogContent>
+          <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+            <Button
+              onClick={() => setAddOpen(true)}
+              startIcon={<Add />}
+              variant="contained"
             >
-              <span />
-              <span>{t(translations.name)}</span>
-              <span>{t(translations.max)}</span>
-              {weightedViewEnabled && <span>{t(translations.weight)}</span>}
-              <span>{t(translations.bounds)}</span>
-              <span>{t(translations.actions)}</span>
+              {t(translations.add)}
+            </Button>
+            <Button
+              onClick={() => setImportOpen(true)}
+              startIcon={<Upload />}
+              variant="outlined"
+            >
+              {t(translations.import)}
+            </Button>
+          </Stack>
+
+          {externals.length === 0 ? (
+            <div className="flex flex-col items-center gap-1 py-10 text-center">
+              <Typography color="text.secondary" variant="h6">
+                {t(translations.empty)}
+              </Typography>
+              <Typography color="text.disabled" variant="body2">
+                {t(translations.emptyHint)}
+              </Typography>
             </div>
+          ) : (
+            <>
+              <div
+                className="grid items-center gap-4 px-[14px] py-3 text-2xl font-medium text-neutral-500"
+                style={{ gridTemplateColumns: gridCols }}
+              >
+                <span />
+                <span>{t(translations.name)}</span>
+                <span>{t(translations.max)}</span>
+                {weightedViewEnabled && <span>{t(translations.weight)}</span>}
+                <span>{t(translations.bounds)}</span>
+                <span>{t(translations.actions)}</span>
+              </div>
 
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="external-assessments">
-                {(dropProvided) => (
-                  <div
-                    ref={dropProvided.innerRef}
-                    {...dropProvided.droppableProps}
-                  >
-                    {externals.map((a, index) => (
-                      <Draggable
-                        key={a.id}
-                        draggableId={String(a.id)}
-                        index={index}
-                        isDragDisabled={!reorderable}
-                      >
-                        {(dragProvided, { isDragging }) => (
-                          <div
-                            ref={dragProvided.innerRef}
-                            {...dragProvided.draggableProps}
-                            className={`grid min-h-[40px] items-center gap-4 border-b border-neutral-200 bg-white px-[14px] text-2xl ${
-                              isDragging ? 'rounded drop-shadow-md' : ''
-                            }`}
-                            style={{
-                              gridTemplateColumns: gridCols,
-                              ...dragProvided.draggableProps.style,
-                            }}
-                          >
-                            {reorderable ? (
-                              <IconButton
-                                {...dragProvided.dragHandleProps}
-                                aria-label={`reorder ${a.title}`}
-                                className="cursor-grab"
-                                size="small"
-                              >
-                                <DragIndicator
-                                  color="disabled"
-                                  fontSize="small"
-                                />
-                              </IconButton>
-                            ) : (
-                              <span aria-hidden />
-                            )}
-                            <span className="min-w-0 truncate" title={a.title}>
-                              {a.title}
-                            </span>
-                            <span>{a.maxGrade}</span>
-                            {weightedViewEnabled && (
-                              <span>{tabWeights[a.tabId] ?? 0}</span>
-                            )}
-                            <span>
-                              <Stack direction="row" spacing={0.5}>
-                                {(a.floorAtZero ?? true) && (
-                                  <Chip
-                                    label={t(translations.floored)}
-                                    size="small"
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="external-assessments">
+                  {(dropProvided) => (
+                    <div
+                      ref={dropProvided.innerRef}
+                      {...dropProvided.droppableProps}
+                    >
+                      {externals.map((a, index) => (
+                        <Draggable
+                          key={a.id}
+                          draggableId={String(a.id)}
+                          index={index}
+                          isDragDisabled={!reorderable}
+                        >
+                          {(dragProvided, { isDragging }) => (
+                            <div
+                              ref={dragProvided.innerRef}
+                              {...dragProvided.draggableProps}
+                              className={`grid min-h-[40px] items-center gap-4 border-b border-neutral-200 bg-white px-[14px] text-2xl ${
+                                isDragging ? 'rounded drop-shadow-md' : ''
+                              }`}
+                              style={{
+                                gridTemplateColumns: gridCols,
+                                ...dragProvided.draggableProps.style,
+                              }}
+                            >
+                              {reorderable ? (
+                                <IconButton
+                                  {...dragProvided.dragHandleProps}
+                                  aria-label={`reorder ${a.title}`}
+                                  className="cursor-grab"
+                                  size="small"
+                                >
+                                  <DragIndicator
+                                    color="disabled"
+                                    fontSize="small"
                                   />
-                                )}
-                                {(a.capAtMaximum ?? true) && (
-                                  <Chip
-                                    label={t(translations.capped)}
-                                    size="small"
-                                  />
-                                )}
-                              </Stack>
-                            </span>
-                            <span className="whitespace-nowrap text-right">
-                              <IconButton
-                                aria-label={`edit ${a.title}`}
-                                onClick={() => setEditing(a)}
-                                size="small"
+                                </IconButton>
+                              ) : (
+                                <span aria-hidden />
+                              )}
+                              <span
+                                className="min-w-0 truncate"
+                                title={a.title}
                               >
-                                <Edit fontSize="small" />
-                              </IconButton>
-                              <IconButton
-                                aria-label={`delete ${a.title}`}
-                                onClick={() => setDeleting(a)}
-                                size="small"
-                              >
-                                <Delete fontSize="small" />
-                              </IconButton>
-                            </span>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {dropProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} variant="outlined">
-          {t(translations.close)}
-        </Button>
-      </DialogActions>
+                                {a.title}
+                              </span>
+                              <span>{a.maxGrade}</span>
+                              {weightedViewEnabled && (
+                                <span>{tabWeights[a.tabId] ?? 0}</span>
+                              )}
+                              <span>
+                                <Stack direction="row" spacing={0.5}>
+                                  {(a.floorAtZero ?? true) && (
+                                    <Chip
+                                      label={t(translations.floored)}
+                                      size="small"
+                                    />
+                                  )}
+                                  {(a.capAtMaximum ?? true) && (
+                                    <Chip
+                                      label={t(translations.capped)}
+                                      size="small"
+                                    />
+                                  )}
+                                </Stack>
+                              </span>
+                              <span className="whitespace-nowrap text-right">
+                                <IconButton
+                                  aria-label={`edit ${a.title}`}
+                                  onClick={() => setEditing(a)}
+                                  size="small"
+                                >
+                                  <Edit fontSize="small" />
+                                </IconButton>
+                                <IconButton
+                                  aria-label={`delete ${a.title}`}
+                                  onClick={() => setDeleting(a)}
+                                  size="small"
+                                >
+                                  <Delete fontSize="small" />
+                                </IconButton>
+                              </span>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {dropProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} variant="outlined">
+            {t(translations.close)}
+          </Button>
+        </DialogActions>
 
-      <AddExternalColumnPrompt
-        onClose={() => setAddOpen(false)}
-        open={addOpen}
-        weightedViewEnabled={weightedViewEnabled}
-      />
-      {editing && (
-        <EditExternalAssessmentPrompt
-          assessment={editing}
-          currentWeight={tabWeights[editing.tabId] ?? 0}
-          onClose={() => setEditing(null)}
-          open={Boolean(editing)}
+        <AddExternalColumnPrompt
+          onClose={() => setAddOpen(false)}
+          open={addOpen}
           weightedViewEnabled={weightedViewEnabled}
         />
-      )}
-      {deleting && (
-        <DeleteExternalColumnPrompt
-          assessmentId={deleting.id}
-          onClose={() => setDeleting(null)}
-          open={Boolean(deleting)}
-          title={deleting.title}
-        />
-      )}
-    </Dialog>
+        {editing && (
+          <EditExternalAssessmentPrompt
+            assessment={editing}
+            currentWeight={tabWeights[editing.tabId] ?? 0}
+            onClose={() => setEditing(null)}
+            open={Boolean(editing)}
+            weightedViewEnabled={weightedViewEnabled}
+          />
+        )}
+        {deleting && (
+          <DeleteExternalColumnPrompt
+            assessmentId={deleting.id}
+            onClose={() => setDeleting(null)}
+            open={Boolean(deleting)}
+            title={deleting.title}
+          />
+        )}
+      </Dialog>
+      <ImportExternalAssessmentsWizard
+        existingAssessments={existingAssessments}
+        onClose={() => setImportOpen(false)}
+        open={open && importOpen}
+        weightedViewEnabled={weightedViewEnabled}
+      />
+    </>
   );
 };
 
