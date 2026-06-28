@@ -9795,7 +9795,7 @@
     "defaultMessage": "아직 외부 평가가 없습니다"
   },
   "course.gradebook.ManageExternalPanel.emptyHint": {
-    "defaultMessage": "Coursemology 외부에서 받은 성적을 추적하려면 하나를 추가하세요."
+    "defaultMessage": "직접 추가하거나, Coursemology 외부에서 받은 성적을 CSV로 가져오세요."
   },
   "course.gradebook.ManageExternalPanel.floored": {
     "defaultMessage": "≥ 0"
@@ -9847,5 +9847,173 @@
   },
   "course.gradebook.OutOfRangeAlert.warningWeighted": {
     "defaultMessage": "외부 평가 {assessmentNames}에서 {gradeCount, plural, other {성적 #개}}이(가) 범위를 벗어나 가중 총점에서 제한되거나 하한 처리됩니다. 내보내기 전에 검토하세요."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.body": {
+    "defaultMessage": "일부 학생은 이미 이 구성요소에 대한 성적이 있으며 파일의 값과 다릅니다. 덮어쓰기를 선택하면 기존 성적이 파일의 값으로 덮어쓰여집니다. 기존 값 유지를 선택하면 기존 성적이 변경되지 않습니다."
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.changesSummary": {
+    "defaultMessage": "전체 {total}개 행 중 {changed}개 행에 변경 사항이 있습니다"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.goBack": {
+    "defaultMessage": "뒤로 가기"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.keepExisting": {
+    "defaultMessage": "기존 값 유지"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.replace": {
+    "defaultMessage": "덮어쓰기"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.title": {
+    "defaultMessage": "성적 충돌 해결"
+  },
+  "course.gradebook.ExternalGradeConflictTable.name": {
+    "defaultMessage": "이름"
+  },
+  "course.gradebook.ImportWizard.addComponent": {
+    "defaultMessage": "구성요소 추가"
+  },
+  "course.gradebook.ImportWizard.back": {
+    "defaultMessage": "뒤로"
+  },
+  "course.gradebook.ImportWizard.cancel": {
+    "defaultMessage": "취소"
+  },
+  "course.gradebook.ImportWizard.commitError": {
+    "defaultMessage": "가져오기에 실패했습니다. 저장된 내용이 없습니다."
+  },
+  "course.gradebook.ImportWizard.committed": {
+    "defaultMessage": "가져오기가 완료되었습니다."
+  },
+  "course.gradebook.ImportWizard.componentName": {
+    "defaultMessage": "구성요소 이름"
+  },
+  "course.gradebook.ImportWizard.continue": {
+    "defaultMessage": "가져오기 확인"
+  },
+  "course.gradebook.ImportWizard.downloadTemplate": {
+    "defaultMessage": "템플릿 다운로드"
+  },
+  "course.gradebook.ImportWizard.dropzone": {
+    "defaultMessage": "여기에 CSV 파일을 끌어다 놓거나 클릭하여 파일을 선택하세요"
+  },
+  "course.gradebook.ImportWizard.duplicateHeaders": {
+    "defaultMessage": "{count, plural, one {다음 열이 두 번 이상 나타납니다: {dupes}.} other {다음 열들이 두 번 이상 나타납니다: {dupes}.}}"
+  },
+  "course.gradebook.ImportWizard.duplicateIdentifier": {
+    "defaultMessage": "파일에 {count, plural, one {식별자가} other {식별자가}} 두 번 이상 나열되어 있습니다: {ids}. 각 학생은 하나의 행에만 나타나야 합니다."
+  },
+  "course.gradebook.ImportWizard.email": {
+    "defaultMessage": "이메일"
+  },
+  "course.gradebook.ImportWizard.emptyCsv": {
+    "defaultMessage": "업로드한 파일에 데이터 행이 없습니다. 학생 행을 하나 이상 추가한 후 다시 시도하세요."
+  },
+  "course.gradebook.ImportWizard.externalId": {
+    "defaultMessage": "외부 ID"
+  },
+  "course.gradebook.ImportWizard.externalIdBlocked": {
+    "defaultMessage": "{count, plural, =0 {{name}에게 외부 ID가 없습니다} one {{name} 및 다른 학생 한 명에게 외부 ID가 없습니다} other {{name} 및 다른 학생 #명에게 외부 ID가 없습니다}}. 외부 ID로 가져오려면 <link>사용자 관리</link>에서 누락된 ID를 추가하세요."
+  },
+  "course.gradebook.ImportWizard.externalIdHint": {
+    "defaultMessage": "각 학생의 외부 ID를 사용하여 매칭합니다. <link>사용자 관리</link>에서 외부 ID를 최신 상태로 유지하세요."
+  },
+  "course.gradebook.ImportWizard.fromExisting": {
+    "defaultMessage": "기존 항목에서"
+  },
+  "course.gradebook.ImportWizard.headerErrorsClosing": {
+    "defaultMessage": "CSV에서 이 항목들을 수정한 후 다시 업로드하세요."
+  },
+  "course.gradebook.ImportWizard.headerErrorsHeading": {
+    "defaultMessage": "다음 헤더를 수정해야 합니다:"
+  },
+  "course.gradebook.ImportWizard.headerSuggestion": {
+    "defaultMessage": "‘{suggestion}’(이)라는 이름의 열이 없습니다 — ‘{expected}’을(를) 의도하셨나요?"
+  },
+  "course.gradebook.ImportWizard.identifierMode": {
+    "defaultMessage": "학생 매칭 기준"
+  },
+  "course.gradebook.ImportWizard.identifierNotFirst": {
+    "defaultMessage": "‘{identifier}’은(는) 첫 번째 열이어야 합니다."
+  },
+  "course.gradebook.ImportWizard.malformed": {
+    "defaultMessage": "다음 셀에는 유효한 숫자가 포함되어 있지 않습니다:"
+  },
+  "course.gradebook.ImportWizard.malformedMore": {
+    "defaultMessage": "외 {count}개"
+  },
+  "course.gradebook.ImportWizard.maxMarks": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.ImportWizard.missingHeaders": {
+    "defaultMessage": "{count, plural, one {CSV에 다음 열이 없습니다: {missing}.} other {CSV에 다음 열들이 없습니다: {missing}.}}"
+  },
+  "course.gradebook.ImportWizard.next": {
+    "defaultMessage": "다음"
+  },
+  "course.gradebook.ImportWizard.outOfRangeSubtitle": {
+    "defaultMessage": "성적은 입력한 그대로 가져옵니다. 이는 경고일 뿐이며, 외부 평가 관리에서 이 경고를 끌 수 있습니다. 이러한 범위를 벗어난 성적이 의도된 것이라면 계속 진행하세요."
+  },
+  "course.gradebook.ImportWizard.outOfRangeTitle": {
+    "defaultMessage": "일부 성적이 유효 범위를 벗어났습니다."
+  },
+  "course.gradebook.ImportWizard.outOfRangeWeightedSubtitle": {
+    "defaultMessage": "성적은 입력한 그대로 가져옵니다. 이는 경고일 뿐이며, 외부 평가 관리에서 이 경고를 끌 수 있습니다. 범위를 벗어난 성적은 가중 총점에서만 하한 또는 상한으로 조정됩니다. 이러한 범위를 벗어난 성적이 의도된 것이라면 계속 진행하세요."
+  },
+  "course.gradebook.ImportWizard.previewError": {
+    "defaultMessage": "파일을 확인할 수 없습니다. 다시 시도하세요."
+  },
+  "course.gradebook.ImportWizard.previewFewRows": {
+    "defaultMessage": "전체 {totalRows}개 행을 미리 봅니다. 계속하기 전에 이 미리보기가 CSV와 일치하는지 확인하세요."
+  },
+  "course.gradebook.ImportWizard.previewRows": {
+    "defaultMessage": "전체 {totalRows}개 행 중 처음 5개 행을 미리 봅니다. 계속하기 전에 이 미리보기가 CSV와 일치하는지 확인하세요."
+  },
+  "course.gradebook.ImportWizard.reassignmentSubtitle": {
+    "defaultMessage": "이 식별자들은 이전에 다른 학생에 대해 가져온 적이 있습니다. 성적은 식별자가 아니라 현재 학생을 기준으로 매칭됩니다 — 가져오기 전에 의도한 사람이 맞는지 확인하세요."
+  },
+  "course.gradebook.ImportWizard.reassignmentTitle": {
+    "defaultMessage": "일부 식별자가 이제 다른 학생과 일치합니다"
+  },
+  "course.gradebook.ImportWizard.requiredHeaders": {
+    "defaultMessage": "CSV에는 다음 열 헤더가 필요합니다: {headers}. ‘{identifier}’은(는) 첫 번째 열이어야 합니다."
+  },
+  "course.gradebook.ImportWizard.stepDefine": {
+    "defaultMessage": "구성요소 정의"
+  },
+  "course.gradebook.ImportWizard.stepUpload": {
+    "defaultMessage": "템플릿 및 업로드"
+  },
+  "course.gradebook.ImportWizard.stepVerify": {
+    "defaultMessage": "확인"
+  },
+  "course.gradebook.ImportWizard.title": {
+    "defaultMessage": "외부 평가 가져오기"
+  },
+  "course.gradebook.ImportWizard.unrecognizedHeaders": {
+    "defaultMessage": "{count, plural, one {다음 열을 인식할 수 없습니다: {unrecognized}.} other {다음 열들을 인식할 수 없습니다: {unrecognized}.}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedEmail": {
+    "defaultMessage": "{count, plural, one {이 이메일 주소를 과목에서 찾을 수 없습니다: {ids}} other {이 이메일 주소들을 과목에서 찾을 수 없습니다: {ids}}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedExternalId": {
+    "defaultMessage": "{count, plural, one {이 외부 ID를 과목에서 찾을 수 없습니다: {ids}} other {이 외부 ID들을 과목에서 찾을 수 없습니다: {ids}}}"
+  },
+  "course.gradebook.ImportWizard.updatesExisting": {
+    "defaultMessage": "기존 항목 업데이트 — 성적표에서 관리됨"
+  },
+  "course.gradebook.ImportWizard.upload": {
+    "defaultMessage": "작성한 CSV 업로드"
+  },
+  "course.gradebook.ImportWizard.verify": {
+    "defaultMessage": "확인"
+  },
+  "course.gradebook.ImportWizard.weightage": {
+    "defaultMessage": "가중치"
+  },
+  "course.gradebook.ImportWizard.willChangeExisting": {
+    "defaultMessage": "{count, plural, one {#개 행에} other {#개 행에}} 기존 성적에 대한 변경 사항이 포함되어 있습니다. 이 미리보기를 확인한 후, 가져오기 확인을 클릭하여 가져오기 전에 이러한 충돌을 검토하세요."
+  },
+  "course.gradebook.ManageExternalPanel.import": {
+    "defaultMessage": "CSV 가져오기"
   }
 }
