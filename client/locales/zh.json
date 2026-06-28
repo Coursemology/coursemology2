@@ -9641,6 +9641,21 @@
   "course.gradebook.WeightedGradebookTable.levelBreakdownDetail": {
     "defaultMessage": "等级 {level}"
   },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeAboveOnly": {
+    "defaultMessage": "部分成绩超过最高值，并在加权总分中被限制为最高值。"
+  },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeBelowOnly": {
+    "defaultMessage": "部分成绩低于 0，并在加权总分中按 0 计算。"
+  },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeBoth": {
+    "defaultMessage": "部分成绩超出有效范围（低于 0 或高于最高值），并会相应地按 0 计算或限制为最高值。"
+  },
+  "course.gradebook.WeightedGradebookTable.externalCellCapped": {
+    "defaultMessage": "由于成绩为 {raw}，已设置为 {max}。"
+  },
+  "course.gradebook.WeightedGradebookTable.externalCellFloored": {
+    "defaultMessage": "由于成绩为 {raw}，已设置为 0。"
+  },
   "course.gradebook.TotalHint.policy": {
     "defaultMessage": "总成绩将未评分的评估按 0 分计算。"
   },
@@ -9657,7 +9672,7 @@
     "defaultMessage": "{name} 的 {title} 成绩"
   },
   "course.gradebook.GradebookTable.gradeSaveError": {
-    "defaultMessage": "无法保存成绩。请重试。"
+    "defaultMessage": "无法保存 {name} 的 {title} 成绩。请重试。"
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "成绩已保存。{title} · {name}：{oldGrade} → {newGrade}"
@@ -9697,12 +9712,6 @@
   },
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "删除外部评估"
-  },
-  "course.gradebook.GradeLinkHint.hint": {
-    "defaultMessage": "每个成绩都是学生提交内容中各项分数的总和。点击任一成绩即可打开该提交内容并调整分数。"
-  },
-  "course.gradebook.GradebookIndex.noStudentsHint": {
-    "defaultMessage": "学生加入课程后，成绩将显示在这里。"
   },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "显示模式"
@@ -9799,5 +9808,38 @@
   },
   "course.gradebook.ManageExternalPanel.weight": {
     "defaultMessage": "权重"
+  },
+  "course.gradebook.GradebookTable.acceptEdit": {
+    "defaultMessage": "接受"
+  },
+  "course.gradebook.GradebookTable.revertEdit": {
+    "defaultMessage": "还原"
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMax": {
+    "defaultMessage": "此成绩超过了最高分 {max}。"
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMaxWeighted": {
+    "defaultMessage": "此成绩超过了最高分 {max}；其对加权总分的贡献被限制为 {max}。"
+  },
+  "course.gradebook.GradebookTable.gradeBelowZero": {
+    "defaultMessage": "此成绩低于 0。"
+  },
+  "course.gradebook.GradebookTable.gradeBelowZeroWeighted": {
+    "defaultMessage": "此成绩低于 0；在加权总分中按 0 计算。"
+  },
+  "course.gradebook.WeightedGradebookTable.gradeCapped": {
+    "defaultMessage": "上限为 {value}"
+  },
+  "course.gradebook.WeightedGradebookTable.gradeCountsAs": {
+    "defaultMessage": "计为 {value}"
+  },
+  "course.gradebook.WeightedGradebookTable.gradeFloored": {
+    "defaultMessage": "下限为 {value}"
+  },
+  "course.gradebook.OutOfRangeAlert.warning": {
+    "defaultMessage": "外部评估 {assessmentNames} 中有 {gradeCount, plural, other {# 个成绩}}超出范围。导出前请检查。"
+  },
+  "course.gradebook.OutOfRangeAlert.warningWeighted": {
+    "defaultMessage": "外部评估 {assessmentNames} 中有 {gradeCount, plural, other {# 个成绩}}超出范围，将在加权总分中被限制或下调。导出前请检查。"
   }
 }

@@ -2,7 +2,12 @@ import userEvent from '@testing-library/user-event';
 import { store as appStore } from 'store';
 import { render, screen, waitFor, within } from 'test-utils';
 
-import GradebookTable from '../components/GradebookTable';
+import CourseAPI from 'api/course';
+import toast from 'lib/hooks/toast';
+
+import GradebookTable, {
+  EXTERNAL_ASSESSMENT_BACKGROUND,
+} from '../components/GradebookTable';
 import type {
   AssessmentData,
   CategoryData,
@@ -10,6 +15,13 @@ import type {
   SubmissionData,
   TabData,
 } from '../types';
+
+jest.mock('api/course');
+
+jest.mock('lib/hooks/toast', () => ({
+  __esModule: true,
+  default: { error: jest.fn(), success: jest.fn() },
+}));
 
 const categories: CategoryData[] = [{ id: 1, title: 'Cat A' }];
 const tabs: TabData[] = [{ id: 10, title: 'Tab 1', categoryId: 1 }];
@@ -82,10 +94,12 @@ const userState = {
 
 interface RenderOptions {
   gamificationEnabled?: boolean;
+  weightedViewEnabled?: boolean;
 }
 
 const renderTable = ({
   gamificationEnabled = true,
+  weightedViewEnabled = false,
 }: RenderOptions = {}): void => {
   render(
     <GradebookTable
@@ -97,6 +111,7 @@ const renderTable = ({
       students={students}
       submissions={submissions}
       tabs={tabs}
+      weightedViewEnabled={weightedViewEnabled}
     />,
     { state: userState },
   );
@@ -145,6 +160,7 @@ describe('GradebookTable', () => {
         students={students}
         submissions={submissions}
         tabs={tabs}
+        weightedViewEnabled={false}
       />,
       { state: userState },
     );
@@ -227,6 +243,33 @@ describe('GradebookTable', () => {
   it('shows the Max Marks header row', async () => {
     renderTableWithAssessmentVisible();
     expect(await screen.findByText('Max Marks')).toBeInTheDocument();
+  });
+
+  it('leaves the Max Marks cell blank under non-assessment columns', async () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ name: true, email: true, 'asn-100': true }),
+    );
+    renderTable();
+    await screen.findByText('Max Marks');
+    // The Max Marks (second header) row has a "/10" under Quiz 1 and the
+    // "Max Marks" label under name, but the email column's cell is empty.
+    // The Max Marks row lives in the TableHead, so its cells are <th>
+    // (role columnheader), not <td>/cell.
+    const maxMarksCell = screen.getByText('Max Marks').closest('th')!;
+    const maxMarksRow = maxMarksCell.closest('tr')!;
+    const cells = within(maxMarksRow as HTMLElement).getAllByRole(
+      'columnheader',
+    );
+    // checkbox spacer | name("Max Marks") | email("") | asn-100("/10")
+    expect(cells[2]).toHaveTextContent('');
+  });
+
+  it('hides the Max Marks header row when all assessment columns are deselected', async () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'asn-100': false }));
+    renderTable();
+    await screen.findByText('Alice');
+    expect(screen.queryByText('Max Marks')).not.toBeInTheDocument();
   });
 
   it('renders row selection checkboxes', async () => {
@@ -414,6 +457,36 @@ describe('GradebookTable', () => {
     });
   });
 
+  describe('no-data-columns hint', () => {
+    it('warns that export is student-info-only, mentioning gamification, when gamification is on', async () => {
+      const user = userEvent.setup();
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ 'asn-100': false, level: false, totalXp: false }),
+      );
+      renderTable({ gamificationEnabled: true });
+      await screen.findByText('Alice');
+      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      expect(
+        await screen.findByText(/no grade or gamification columns selected/i),
+      ).toBeInTheDocument();
+    });
+
+    it('warns that export is student-info-only, no gamification mention, when gamification is off', async () => {
+      const user = userEvent.setup();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'asn-100': false }));
+      renderTable({ gamificationEnabled: false });
+      await screen.findByText('Alice');
+      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      expect(
+        await screen.findByText(/no grade columns selected/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(/gamification columns selected/i),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe('external ID column', () => {
     const studentsWithExtId: StudentData[] = [
       {
@@ -447,6 +520,7 @@ describe('GradebookTable', () => {
           students={studs}
           submissions={[]}
           tabs={tabs}
+          weightedViewEnabled={false}
         />,
         { state: userState },
       );
@@ -520,6 +594,7 @@ describe('GradebookTable', () => {
           students={[students[1], students[0]]}
           submissions={submissions}
           tabs={tabs}
+          weightedViewEnabled={false}
         />,
         { state: userState },
       );
@@ -578,6 +653,7 @@ describe('GradebookTable', () => {
           students={[students[1], students[0]]} // Bob first in raw order
           submissions={submissions}
           tabs={tabs}
+          weightedViewEnabled={false}
         />,
         { state: userState },
       );
@@ -636,6 +712,7 @@ describe('GradebookTable', () => {
           students={[students[1], students[0]]}
           submissions={submissions}
           tabs={tabs}
+          weightedViewEnabled={false}
         />,
         { state: userState },
       );
@@ -685,6 +762,7 @@ describe('GradebookTable', () => {
             students={studs}
             submissions={subs}
             tabs={tabs}
+            weightedViewEnabled={false}
           />,
           { state: userState },
         );
@@ -708,9 +786,7 @@ describe('GradebookTable', () => {
         const user = userEvent.setup();
         renderGrades(mixedStudents, mixedSubmissions);
         await screen.findByText('Alice');
-        // Grade columns sort desc-first, so click twice to reach ascending.
-        await user.click(screen.getByRole('button', { name: /quiz 1/i })); // desc
-        await user.click(screen.getByRole('button', { name: /quiz 1/i })); // asc
+        await user.click(screen.getByRole('button', { name: /quiz 1/i }));
         // Ascending: Bob(3), Alice(8), then the two missing rows last.
         await waitFor(() => expectInOrder(['Bob', 'Alice']));
         expectInOrder(['Alice', 'Carol']);
@@ -721,7 +797,7 @@ describe('GradebookTable', () => {
         const user = userEvent.setup();
         renderGrades(mixedStudents, mixedSubmissions);
         await screen.findByText('Alice');
-        // Grade columns sort desc-first, so a single click yields descending.
+        await user.click(screen.getByRole('button', { name: /quiz 1/i })); // asc
         await user.click(screen.getByRole('button', { name: /quiz 1/i })); // desc
         // Descending: Alice(8), Bob(3), then the two missing rows still last.
         await waitFor(() => expectInOrder(['Alice', 'Bob']));
@@ -739,12 +815,547 @@ describe('GradebookTable', () => {
           ],
         );
         await screen.findByText('Alice');
-        // Grade columns sort desc-first, so click twice to reach ascending.
-        await user.click(screen.getByRole('button', { name: /quiz 1/i })); // desc
-        await user.click(screen.getByRole('button', { name: /quiz 1/i })); // asc
+        await user.click(screen.getByRole('button', { name: /quiz 1/i }));
         // Numeric ascending: 9 (Alice) before 10 (Bob). Lexical would reverse this.
         await waitFor(() => expectInOrder(['Alice', 'Bob']));
       });
+    });
+  });
+
+  describe('assessment grade cell rendering', () => {
+    const renderGradeCells = (subs: SubmissionData[]): void => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, 'asn-100': true }),
+      );
+      render(
+        <GradebookTable
+          assessments={assessments}
+          categories={categories}
+          courseId={1}
+          courseTitle="Test Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={subs}
+          tabs={tabs}
+          weightedViewEnabled={false}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('renders "—" when the student has no submission for an assessment', async () => {
+      renderGradeCells([]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).getByText('—'),
+      ).toBeInTheDocument();
+    });
+
+    it('renders an empty cell (not "—") for a submission with a null grade', async () => {
+      // Alice: submission with null grade → empty; Bob: no submission → '—'
+      renderGradeCells([
+        { submissionId: 1, studentId: 1, assessmentId: 100, grade: null },
+      ]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).queryByText('—'),
+      ).not.toBeInTheDocument();
+      const bobRow = screen.getByText('Bob').closest('tr')!;
+      expect(within(bobRow as HTMLElement).getByText('—')).toBeInTheDocument();
+    });
+
+    it('renders the grade as a link to the submission when submissionId is present', async () => {
+      renderGradeCells([
+        { submissionId: 42, studentId: 1, assessmentId: 100, grade: 7 },
+      ]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).getByRole('link', { name: '7' }),
+      ).toBeInTheDocument();
+    });
+
+    it('renders the grade as plain text (no link) when there is no submissionId', async () => {
+      renderGradeCells([{ studentId: 1, assessmentId: 100, grade: 7 }]);
+      await screen.findByText('Alice');
+      const aliceRow = screen.getByText('Alice').closest('tr')!;
+      expect(
+        within(aliceRow as HTMLElement).getByText('7'),
+      ).toBeInTheDocument();
+      expect(
+        within(aliceRow as HTMLElement).queryByRole('link', { name: '7' }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('external assessment columns', () => {
+    const externalAssessments: AssessmentData[] = [
+      { id: 100, title: 'Quiz 1', tabId: 10, maxGrade: 10 },
+      { id: -5, title: 'Midterm', tabId: 200, maxGrade: 50, external: true },
+    ];
+    const externalTabs: TabData[] = [
+      { id: 10, title: 'Tab 1', categoryId: 1 },
+      { id: 200, title: 'Midterm', categoryId: 2 },
+    ];
+    const externalCategories: CategoryData[] = [
+      { id: 1, title: 'Cat A' },
+      { id: 2, title: 'External Assessments' },
+    ];
+
+    const renderWithExternal = (): void => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, 'asn--5': true, 'asn-100': true }),
+      );
+      render(
+        <GradebookTable
+          assessments={externalAssessments}
+          categories={externalCategories}
+          courseId={1}
+          courseTitle="Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={[{ studentId: 1, assessmentId: -5, grade: 30 }]}
+          tabs={externalTabs}
+          weightedViewEnabled={false}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('renders the External badge in the external column header', async () => {
+      renderWithExternal();
+      expect(await screen.findByText('External')).toBeVisible();
+    });
+
+    it('tints the external assessment body cells with the external background', async () => {
+      renderWithExternal();
+      const gradeCell = (await screen.findByText('30')).closest('td');
+      expect(gradeCell).toHaveStyle({
+        backgroundColor: EXTERNAL_ASSESSMENT_BACKGROUND,
+      });
+    });
+
+    it('keeps the external column header the neutral grey (not the blue tint)', async () => {
+      renderWithExternal();
+      const headerCell = (await screen.findByText('Midterm')).closest('th');
+      // grey[100] — the same opaque neutral every other header cell uses, so the
+      // header reads as a header rather than a coloured band.
+      expect(headerCell).toHaveStyle({ backgroundColor: 'rgb(245, 245, 245)' });
+      expect(headerCell).not.toHaveStyle({
+        backgroundColor: EXTERNAL_ASSESSMENT_BACKGROUND,
+      });
+    });
+
+    it('edits an external grade inline and persists optimistically', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockResolvedValue({
+        data: { studentId: 1, assessmentId: -5, grade: 45 },
+      });
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.setExternalGrade).toHaveBeenCalledWith(5, {
+          studentId: 1,
+          grade: 45,
+        }),
+      );
+      expect(await screen.findByText('45')).toBeVisible();
+    });
+
+    it('rolls back the cell and keeps the old value when the API rejects', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockRejectedValue(
+        new Error('boom'),
+      );
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() => expect(screen.getByText('30')).toBeVisible());
+    });
+
+    it('names the student and assessment in the failure toast', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockRejectedValue(
+        new Error('boom'),
+      );
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() =>
+        expect(toast.error).toHaveBeenCalledWith(
+          expect.stringContaining('Midterm'),
+        ),
+      );
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Alice'),
+      );
+    });
+
+    it('confirms a successful edit with a persistent toast showing the student, assessment, and old → new grade', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockResolvedValue({
+        data: { studentId: 1, assessmentId: -5, grade: 45 },
+      });
+      (toast.success as jest.Mock).mockClear();
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      await waitFor(() => expect(toast.success).toHaveBeenCalled());
+      const [message, options] = (toast.success as jest.Mock).mock.calls[0];
+      expect(message).toEqual(expect.stringContaining('Midterm'));
+      expect(message).toEqual(expect.stringContaining('Alice'));
+      expect(message).toEqual(expect.stringContaining('30'));
+      expect(message).toEqual(expect.stringContaining('45'));
+      // Persistent (no auto-dismiss). The toast is the only in-session record of
+      // the overwritten value and exists to catch a row/column misclick, so it
+      // must wait for the user's attention rather than expire on a timer.
+      expect(options).toEqual(expect.objectContaining({ autoClose: false }));
+    });
+
+    it('does not toast a confirmation when the grade is unchanged', async () => {
+      (toast.success as jest.Mock).mockClear();
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockClear();
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      screen.getByRole('textbox', { name: /midterm grade for alice/i });
+      // Commit without changing the value.
+      await userEvent.tab();
+      expect(CourseAPI.gradebook.setExternalGrade).not.toHaveBeenCalled();
+      expect(toast.success).not.toHaveBeenCalled();
+    });
+
+    it('keeps regular assessment cells read-only (no input on click)', async () => {
+      renderWithExternal();
+      // Alice has no Quiz 1 submission → '—' is rendered (not an ExternalGradeCell).
+      // Clicking the '—' in the Quiz 1 column must NOT produce a textbox.
+      await screen.findByText('Midterm'); // wait for render
+      const dashCells = screen.getAllByText('—');
+      // The first '—' in Alice's row is the Quiz 1 cell (no submission).
+      await userEvent.click(dashCells[0]);
+      expect(
+        screen.queryByRole('textbox', { name: /quiz 1/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('renders the external chip without a manage menu', async () => {
+      renderWithExternal();
+      expect(await screen.findByText('External')).toBeVisible();
+      expect(
+        screen.queryByRole('button', { name: /manage/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('shows an in-flight spinner while the grade save is pending', async () => {
+      let resolveSave: () => void = () => {};
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockReturnValue(
+        new Promise((resolve) => {
+          resolveSave = (): void =>
+            resolve({ data: { studentId: 1, assessmentId: -5, grade: 45 } });
+        }),
+      );
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '45');
+      await userEvent.tab();
+      // Pending: spinner visible, optimistic value already shown.
+      expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+      resolveSave();
+      // Resolved: spinner gone, value remains.
+      await waitFor(() =>
+        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument(),
+      );
+      expect(screen.getByText('45')).toBeInTheDocument();
+    });
+
+    it('caps an external grade at three integer digits (999.99 ceiling)', async () => {
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      // The fourth integer digit is dropped at entry — the DB column maxes at 999.99.
+      await userEvent.type(input, '1000');
+      expect(input).toHaveValue('100');
+    });
+
+    it('accepts up to two decimal places and rejects a third', async () => {
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterm grade for alice/i,
+      });
+      await userEvent.clear(input);
+      // A third decimal digit is rejected at entry — DB column is numeric(_, 2).
+      await userEvent.type(input, '12.345');
+      expect(input).toHaveValue('12.34');
+    });
+
+    it('does not call the API when the cell is committed without a change', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockClear();
+      renderWithExternal();
+      const cell = await screen.findByText('30');
+      await userEvent.click(cell);
+      // Blur without editing → commit() sees an unchanged value and returns early.
+      await userEvent.tab();
+      await waitFor(() => expect(screen.getByText('30')).toBeVisible());
+      expect(CourseAPI.gradebook.setExternalGrade).not.toHaveBeenCalled();
+    });
+
+    const renderCapped = (grade: number): void => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, 'asn--5': true }),
+      );
+      render(
+        <GradebookTable
+          assessments={[
+            {
+              id: -5,
+              title: 'Midterm',
+              tabId: 200,
+              maxGrade: 50,
+              external: true,
+              capAtMaximum: true,
+            },
+          ]}
+          categories={[{ id: 2, title: 'External Assessments' }]}
+          courseId={1}
+          courseTitle="Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={[{ studentId: 1, assessmentId: -5, grade }]}
+          tabs={[{ id: 200, title: 'Midterm', categoryId: 2 }]}
+          weightedViewEnabled={false}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('flags a grade above the maximum on a capped assessment', async () => {
+      renderCapped(60);
+      expect(
+        await screen.findByLabelText(/exceeds the maximum/i),
+      ).toBeInTheDocument();
+    });
+
+    it('does not flag a grade within the maximum', async () => {
+      renderCapped(40);
+      await screen.findByText('40');
+      expect(
+        screen.queryByLabelText(/exceeds the maximum/i),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('ExternalGradeCell — negatives, buttons, tooltip copy', () => {
+    // External assessments use negative IDs on the frontend; the operation
+    // negates them before calling the API (so -(-901) = 901 is sent to the server).
+    const EXT_ASN_ID = -901;
+    const extAssessments: AssessmentData[] = [
+      {
+        id: EXT_ASN_ID,
+        title: 'Midterms',
+        tabId: 300,
+        maxGrade: 100,
+        external: true,
+        floorAtZero: true,
+        capAtMaximum: true,
+      },
+    ];
+    const extTabs: TabData[] = [{ id: 300, title: 'Midterms', categoryId: 3 }];
+    const extCategories: CategoryData[] = [
+      { id: 3, title: 'External Assessments' },
+    ];
+    const aliceStudent: StudentData[] = [
+      {
+        id: 1,
+        name: 'Alice',
+        email: 'alice@example.com',
+        externalId: null,
+        level: 1,
+        totalXp: 0,
+        levelContribution: null,
+      },
+    ];
+
+    beforeEach(() => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockClear();
+    });
+
+    const renderForExternal = ({
+      grade = null,
+      weightedViewEnabled = false,
+    }: {
+      grade?: number | null;
+      weightedViewEnabled?: boolean;
+    } = {}): ReturnType<typeof render> => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ name: true, [`asn-${EXT_ASN_ID}`]: true }),
+      );
+      const subs =
+        grade !== null
+          ? [{ studentId: 1, assessmentId: EXT_ASN_ID, grade }]
+          : [];
+      return render(
+        <GradebookTable
+          assessments={extAssessments}
+          categories={extCategories}
+          courseId={1}
+          courseTitle="Test Course"
+          gamificationEnabled={false}
+          students={aliceStudent}
+          submissions={subs}
+          tabs={extTabs}
+          weightedViewEnabled={weightedViewEnabled}
+        />,
+        { state: userState },
+      );
+    };
+
+    it('accepts a negative grade on entry and commits it', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockResolvedValue({
+        data: { studentId: 1, assessmentId: EXT_ASN_ID, grade: -5 },
+      });
+      renderForExternal({ grade: null });
+      const cell = await screen.findByText('—');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterms grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '-5');
+      await userEvent.keyboard('{Enter}');
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.setExternalGrade).toHaveBeenCalledWith(
+          -EXT_ASN_ID,
+          { studentId: 1, grade: -5 },
+        ),
+      );
+    });
+
+    it('shows the below-zero icon when floored and grade < 0', async () => {
+      renderForExternal({ grade: -5, weightedViewEnabled: true });
+      await screen.findByText('-5');
+      expect(screen.getByLabelText(/below 0/i)).toBeInTheDocument();
+    });
+
+    it('does not show the below-zero icon when the grade is non-negative', async () => {
+      renderForExternal({ grade: 5, weightedViewEnabled: true });
+      await screen.findByText('5');
+      expect(screen.queryByLabelText(/below 0/i)).not.toBeInTheDocument();
+    });
+
+    it('revert button discards the edit without calling the API', async () => {
+      renderForExternal({ grade: 10 });
+      const cell = await screen.findByText('10');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterms grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '20');
+      // userEvent.pointer is used instead of userEvent.click so that the
+      // mousedown fires (and its preventDefault keeps input focus) before the
+      // click, mirroring real-browser behaviour and preventing the onBlur=commit
+      // from firing before the cancel handler runs.
+      const revertBtn = screen.getByRole('button', { name: /revert/i });
+      await userEvent.pointer({ target: revertBtn, keys: '[MouseLeft]' });
+      expect(CourseAPI.gradebook.setExternalGrade).not.toHaveBeenCalled();
+    });
+
+    it('accept button commits the edit via the API', async () => {
+      (CourseAPI.gradebook.setExternalGrade as jest.Mock).mockResolvedValue({
+        data: { studentId: 1, assessmentId: EXT_ASN_ID, grade: 20 },
+      });
+      renderForExternal({ grade: 10 });
+      const cell = await screen.findByText('10');
+      await userEvent.click(cell);
+      const input = screen.getByRole('textbox', {
+        name: /midterms grade for alice/i,
+      });
+      await userEvent.clear(input);
+      await userEvent.type(input, '20');
+      const acceptBtn = screen.getByRole('button', { name: /accept/i });
+      await userEvent.click(acceptBtn);
+      await waitFor(() =>
+        expect(CourseAPI.gradebook.setExternalGrade).toHaveBeenCalledWith(
+          -EXT_ASN_ID,
+          { studentId: 1, grade: 20 },
+        ),
+      );
+    });
+
+    it('over-max tooltip mentions the weighted total only when weighted view is on', async () => {
+      // Weighted: tooltip should mention "weighted total"
+      renderForExternal({ grade: 150, weightedViewEnabled: true });
+      expect(
+        await screen.findByLabelText(
+          /contribution to the weighted total is capped/i,
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it('over-max tooltip does not mention weighted total when weighted view is off', async () => {
+      // Non-weighted: tooltip should just say "exceeds the maximum" without weighted mention
+      renderForExternal({ grade: 150, weightedViewEnabled: false });
+      expect(
+        await screen.findByLabelText(/exceeds the maximum of 100/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByLabelText(/weighted total/i),
+      ).not.toBeInTheDocument();
+    });
+
+    it('below-zero tooltip mentions flooring in the weighted total when weighted view is on', async () => {
+      renderForExternal({ grade: -5, weightedViewEnabled: true });
+      expect(
+        await screen.findByLabelText(/floored to 0 in the weighted total/i),
+      ).toBeInTheDocument();
+    });
+
+    it('below-zero tooltip does not mention the weighted total when weighted view is off', async () => {
+      renderForExternal({ grade: -5, weightedViewEnabled: false });
+      expect(
+        await screen.findByLabelText(/this grade is below 0\./i),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByLabelText(/weighted total/i),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -770,6 +1381,7 @@ describe('GradebookTable', () => {
           students={makeStudents(101)}
           submissions={[]}
           tabs={tabs}
+          weightedViewEnabled={false}
         />,
         { state: userState },
       );
@@ -795,6 +1407,38 @@ describe('GradebookTable', () => {
       expect(
         screen.getByRole('button', { name: /export 1 row/i }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('external assessments', () => {
+    it('shows external assessment columns by default but keeps native ones hidden', async () => {
+      render(
+        <GradebookTable
+          assessments={[
+            { id: 100, title: 'Quiz 1', tabId: 10, maxGrade: 10 },
+            {
+              id: -200,
+              title: 'Olympiad',
+              tabId: -200,
+              maxGrade: 100,
+              external: true,
+              floorAtZero: true,
+              capAtMaximum: true,
+            },
+          ]}
+          categories={categories}
+          courseId={1}
+          courseTitle="Test Course"
+          gamificationEnabled={false}
+          students={students}
+          submissions={submissions}
+          tabs={tabs}
+          weightedViewEnabled={false}
+        />,
+        { state: userState },
+      );
+      expect(await screen.findByText('Olympiad')).toBeInTheDocument();
+      expect(screen.queryByText('Quiz 1')).not.toBeInTheDocument();
     });
   });
 });
