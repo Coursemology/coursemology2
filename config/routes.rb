@@ -510,6 +510,11 @@ Rails.application.routes.draw do
             put 'reorder' => 'external_assessments#reorder'
           end
         end
+        resources :external_assessment_imports, only: [:create] do
+          collection do
+            post 'preview'
+          end
+        end
       end
 
       scope module: :discussion do
