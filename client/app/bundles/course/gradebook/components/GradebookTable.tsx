@@ -1,4 +1,5 @@
 import {
+  cloneElement,
   forwardRef,
   useCallback,
   useLayoutEffect,
@@ -329,6 +330,8 @@ interface GradebookTableProps {
   courseTitle: string;
   courseId: number;
   gamificationEnabled: boolean;
+  /** Optional action rendered in the toolbar, left of the column picker. */
+  toolbarAction?: JSX.Element;
 }
 
 const GradebookTable = ({
@@ -340,6 +343,7 @@ const GradebookTable = ({
   courseTitle,
   courseId,
   gamificationEnabled,
+  toolbarAction,
 }: GradebookTableProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -613,15 +617,25 @@ const GradebookTable = ({
     return t(translations.exportButton);
   }, [selectedCount, rows.length, t]);
 
-  const toolbarWithLabel = toolbar?.columnPicker
+  const toolbarWithLabel = toolbar
     ? {
         ...toolbar,
-        columnPicker: {
-          ...toolbar.columnPicker,
-          directExportLabel,
-          directExportTooltip:
-            selectedCount === 0 ? t(translations.exportAllTooltip) : undefined,
-        },
+        buttons: toolbarAction
+          ? [
+              ...(toolbar.buttons ?? []),
+              cloneElement(toolbarAction, { key: 'toolbar-action' }),
+            ]
+          : toolbar.buttons,
+        ...(toolbar.columnPicker && {
+          columnPicker: {
+            ...toolbar.columnPicker,
+            directExportLabel,
+            directExportTooltip:
+              selectedCount === 0
+                ? t(translations.exportAllTooltip)
+                : undefined,
+          },
+        }),
       }
     : toolbar;
 

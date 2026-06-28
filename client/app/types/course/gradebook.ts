@@ -91,6 +91,17 @@ export interface LevelContributionSaveData extends LevelContributionData {
   formulaAst: FormulaNode | null;
 }
 
+export interface ExternalAssessmentNode {
+  assessment: AssessmentData;
+  tab: TabData;
+  category: CategoryData;
+}
+
+export interface ExternalAssessmentUpdate {
+  assessment: AssessmentData;
+  tab: Pick<TabData, 'id' | 'title' | 'categoryId' | 'gradebookWeight'>;
+}
+
 export interface ExternalGradePayload {
   studentId: number;
   assessmentId: number;
