@@ -340,6 +340,162 @@ describe('computeStudentTotal', () => {
   });
 });
 
+// External assessments are allowed a maxGrade of 0. grade/maxGrade would be
+// NaN (0-grade) or Infinity (positive grade), which must never leak into a
+// subtotal, total or breakdown. The gradeRatio guard coerces the ratio to 0;
+// these lock that in so weighting stays finite.
+describe('0-max external assessment (divide-by-zero safety)', () => {
+  const zeroMaxEqual = [
+    // capped: raw 5 floored/capped to 0 before the ratio
+    {
+      id: 1,
+      tabId: 10,
+      maxGrade: 0,
+      title: 'Zero-cap',
+      external: true,
+      capAtMaximum: true,
+      floorAtZero: true,
+    },
+    // uncapped: raw 5 reaches gradeRatio(5, 0) — the sharper Infinity case
+    {
+      id: 2,
+      tabId: 20,
+      maxGrade: 0,
+      title: 'Zero-raw',
+      external: true,
+      capAtMaximum: false,
+      floorAtZero: false,
+    },
+    { id: 3, tabId: 30, maxGrade: 100, title: 'Normal', external: false },
+  ];
+
+  it('equal-mode subtotal for a 0-max assessment is 0, not NaN', () => {
+    const sub = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 10, title: 'M', categoryId: 0 },
+      assessments: zeroMaxEqual,
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 5 }]),
+    });
+    expect(sub).toBe(0);
+    expect(Number.isNaN(sub as number)).toBe(false);
+  });
+
+  it('averages a 0-max assessment as 0 alongside a normal one (0.8 + 0)/2', () => {
+    const sub = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 10, title: 'M', categoryId: 0 },
+      assessments: [
+        {
+          id: 1,
+          tabId: 10,
+          maxGrade: 0,
+          title: 'Zero',
+          external: true,
+          capAtMaximum: true,
+        },
+        { id: 3, tabId: 10, maxGrade: 100, title: 'Normal', external: false },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 5 },
+        { studentId: 1, assessmentId: 3, grade: 80 },
+      ]),
+    });
+    expect(sub).toBeCloseTo(0.4);
+  });
+
+  it('uncapped 0-max with a positive grade yields 0, not Infinity', () => {
+    const sub = computeTabSubtotal({
+      studentId: 1,
+      tab: { id: 20, title: 'T', categoryId: 0 },
+      assessments: zeroMaxEqual,
+      submissions: subs([{ studentId: 1, assessmentId: 2, grade: 5 }]),
+    });
+    expect(sub).toBe(0);
+    expect(Number.isFinite(sub as number)).toBe(true);
+  });
+
+  it('custom-mode contributes 0 for a 0-max assessment, keeping the subtotal finite', () => {
+    // numerator = ratio(0-max)·40 + ratio(80/100)·60 = 0 + 48; /tabWeight 100 = 0.48
+    const sub = computeTabSubtotal({
+      studentId: 1,
+      tab: {
+        id: 10,
+        title: 'M',
+        categoryId: 0,
+        gradebookWeight: 100,
+        weightMode: 'custom',
+      },
+      assessments: [
+        {
+          id: 1,
+          tabId: 10,
+          maxGrade: 0,
+          title: 'Zero',
+          external: true,
+          capAtMaximum: true,
+          gradebookWeight: 40,
+        },
+        {
+          id: 3,
+          tabId: 10,
+          maxGrade: 100,
+          title: 'Normal',
+          external: false,
+          gradebookWeight: 60,
+        },
+      ],
+      submissions: subs([
+        { studentId: 1, assessmentId: 1, grade: 5 },
+        { studentId: 1, assessmentId: 3, grade: 80 },
+      ]),
+    });
+    expect(sub).toBeCloseTo(0.48);
+    expect(Number.isFinite(sub as number)).toBe(true);
+  });
+
+  it('computeStudentTotal stays finite when a tab holds only a 0-max assessment', () => {
+    const total = computeStudentTotal({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 50 }],
+      assessments: [
+        {
+          id: 1,
+          tabId: 10,
+          maxGrade: 0,
+          title: 'Zero',
+          external: true,
+          capAtMaximum: true,
+        },
+      ],
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 5 }]),
+    });
+    expect(total).toBe(0);
+    expect(Number.isFinite(total as number)).toBe(true);
+  });
+
+  it('breakdown reports ratio 0 and points 0 for a 0-max assessment', () => {
+    const breakdown = computeStudentBreakdown({
+      studentId: 1,
+      tabs: [{ id: 10, title: 'M', categoryId: 0, gradebookWeight: 50 }],
+      assessments: [
+        {
+          id: 1,
+          tabId: 10,
+          maxGrade: 0,
+          title: 'Zero',
+          external: true,
+          capAtMaximum: true,
+        },
+      ],
+      submissions: subs([{ studentId: 1, assessmentId: 1, grade: 5 }]),
+    });
+    const cell = breakdown[0].assessments[0];
+    expect(cell.ratio).toBe(0);
+    expect(cell.points).toBe(0);
+    expect(Number.isNaN(cell.ratio)).toBe(false);
+  });
+});
+
 describe('sumWeights', () => {
   it('returns the sum of all tab weights', () => {
     const tabs = [

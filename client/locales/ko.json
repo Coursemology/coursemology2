@@ -9728,6 +9728,21 @@
   "course.gradebook.WeightedGradebookTable.levelBreakdownDetail": {
     "defaultMessage": "레벨 {level}"
   },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeAboveOnly": {
+    "defaultMessage": "일부 성적이 최댓값을 초과하여 가중 총점에서 최댓값으로 제한됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeBelowOnly": {
+    "defaultMessage": "일부 성적이 0보다 낮아 가중 총점에서 0으로 처리됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.externalOverRangeBoth": {
+    "defaultMessage": "일부 성적이 유효 범위(0 미만 또는 최댓값 초과)를 벗어나 그에 따라 0으로 처리되거나 최댓값으로 제한됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.externalCellCapped": {
+    "defaultMessage": "성적이 {raw}였기 때문에 {max}로 설정되었습니다."
+  },
+  "course.gradebook.WeightedGradebookTable.externalCellFloored": {
+    "defaultMessage": "성적이 {raw}였기 때문에 0으로 설정되었습니다."
+  },
   "course.gradebook.TotalHint.policy": {
     "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."
   },
@@ -9744,7 +9759,7 @@
     "defaultMessage": "{name}의 {title} 성적"
   },
   "course.gradebook.GradebookTable.gradeSaveError": {
-    "defaultMessage": "성적을 저장할 수 없습니다. 다시 시도해 주세요."
+    "defaultMessage": "{name}의 {title} 성적을 저장할 수 없습니다. 다시 시도해 주세요."
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "성적이 저장되었습니다. {title} · {name}: {oldGrade} → {newGrade}"
@@ -9784,12 +9799,6 @@
   },
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "외부 평가 삭제"
-  },
-  "course.gradebook.GradeLinkHint.hint": {
-    "defaultMessage": "각 성적은 학생 제출물의 점수 합계입니다. 성적을 클릭하면 해당 제출물을 열고 점수를 조정할 수 있습니다."
-  },
-  "course.gradebook.GradebookIndex.noStudentsHint": {
-    "defaultMessage": "학생이 강좌에 참여하면 여기에 성적이 표시됩니다."
   },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "표시 모드"
@@ -9886,5 +9895,38 @@
   },
   "course.gradebook.ManageExternalPanel.weight": {
     "defaultMessage": "가중치"
+  },
+  "course.gradebook.GradebookTable.acceptEdit": {
+    "defaultMessage": "적용"
+  },
+  "course.gradebook.GradebookTable.revertEdit": {
+    "defaultMessage": "되돌리기"
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMax": {
+    "defaultMessage": "이 성적은 최대 점수 {max}을(를) 초과합니다."
+  },
+  "course.gradebook.GradebookTable.gradeExceedsMaxWeighted": {
+    "defaultMessage": "이 성적은 최대 점수 {max}을(를) 초과합니다. 가중 총점에 대한 기여도는 {max}(으)로 제한됩니다."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZero": {
+    "defaultMessage": "이 성적은 0보다 작습니다."
+  },
+  "course.gradebook.GradebookTable.gradeBelowZeroWeighted": {
+    "defaultMessage": "이 성적은 0보다 작습니다. 가중 총점에서는 0으로 처리됩니다."
+  },
+  "course.gradebook.WeightedGradebookTable.gradeCapped": {
+    "defaultMessage": "{value}(으)로 상한 처리"
+  },
+  "course.gradebook.WeightedGradebookTable.gradeCountsAs": {
+    "defaultMessage": "{value}(으)로 계산"
+  },
+  "course.gradebook.WeightedGradebookTable.gradeFloored": {
+    "defaultMessage": "{value}(으)로 하한 처리"
+  },
+  "course.gradebook.OutOfRangeAlert.warning": {
+    "defaultMessage": "외부 평가 {assessmentNames}에서 {gradeCount, plural, other {성적 #개}}이(가) 범위를 벗어났습니다. 내보내기 전에 검토하세요."
+  },
+  "course.gradebook.OutOfRangeAlert.warningWeighted": {
+    "defaultMessage": "외부 평가 {assessmentNames}에서 {gradeCount, plural, other {성적 #개}}이(가) 범위를 벗어나 가중 총점에서 제한되거나 하한 처리됩니다. 내보내기 전에 검토하세요."
   }
 }
