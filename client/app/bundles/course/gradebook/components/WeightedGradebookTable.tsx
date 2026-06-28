@@ -56,19 +56,22 @@ import {
   computeStudentBreakdown,
   computeWeightedRows,
   customTabImbalanced,
-  gradeRatio,
+  effectiveGrade,
   LEVEL_TAB_ID,
   levelOffenders,
   resolveTabWeights,
   usingDefaultWeights,
 } from '../computeWeighted';
 import { parseFormula } from '../levelFormula';
+import { externalClamp } from '../outOfRange';
 
 import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import ProjectedTotalHint, {
   projectedTotalPolicyTranslations,
 } from './ProjectedTotalHint';
 import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
+
+const INLINE_FLEX = 'inline-flex';
 
 const translations = defineMessages({
   configureWeights: {
@@ -184,6 +187,18 @@ const translations = defineMessages({
     id: 'course.gradebook.WeightedGradebookTable.weightedTotal',
     defaultMessage: 'Weighted Total',
   },
+  gradeCapped: {
+    id: 'course.gradebook.WeightedGradebookTable.gradeCapped',
+    defaultMessage: 'Capped at {value}',
+  },
+  gradeFloored: {
+    id: 'course.gradebook.WeightedGradebookTable.gradeFloored',
+    defaultMessage: 'Floored to {value}',
+  },
+  gradeCountsAs: {
+    id: 'course.gradebook.WeightedGradebookTable.gradeCountsAs',
+    defaultMessage: 'Counts as {value}',
+  },
   levelHeader: {
     id: 'course.gradebook.WeightedGradebookTable.levelHeader',
     defaultMessage: 'Level',
@@ -228,6 +243,29 @@ const translations = defineMessages({
     id: 'course.gradebook.WeightedGradebookTable.customWeightsUnbalanced',
     defaultMessage:
       'This tab\'s assessment weights don\'t add up to its tab weight. Its total may be understated - open "Configure Weights" to fix.',
+  },
+  externalOverRangeAboveOnly: {
+    id: 'course.gradebook.WeightedGradebookTable.externalOverRangeAboveOnly',
+    defaultMessage:
+      'Some grades exceed the maximum and are capped in the weighted total.',
+  },
+  externalOverRangeBelowOnly: {
+    id: 'course.gradebook.WeightedGradebookTable.externalOverRangeBelowOnly',
+    defaultMessage:
+      'Some grades are below 0 and are floored to 0 in the weighted total.',
+  },
+  externalOverRangeBoth: {
+    id: 'course.gradebook.WeightedGradebookTable.externalOverRangeBoth',
+    defaultMessage:
+      'Some grades are outside the valid range (below 0 or above the maximum) and are floored and capped accordingly.',
+  },
+  externalCellCapped: {
+    id: 'course.gradebook.WeightedGradebookTable.externalCellCapped',
+    defaultMessage: 'Set to {max} because the grade was {raw}.',
+  },
+  externalCellFloored: {
+    id: 'course.gradebook.WeightedGradebookTable.externalCellFloored',
+    defaultMessage: 'Set to 0 because the grade was {raw}.',
   },
 });
 
@@ -310,6 +348,10 @@ const WeightedGradebookTable = ({
   const showingDefaults = useMemo(
     () => usingDefaultWeights(tabs, assessments),
     [tabs, assessments],
+  );
+  const assessmentsById = useMemo(
+    () => new Map(assessments.map((a) => [a.id, a])),
+    [assessments],
   );
 
   const tabDisplayValue = (
@@ -415,6 +457,27 @@ const WeightedGradebookTable = ({
     if (bound === 'unscoreable') return translations.levelCellDivByZero;
     if (bound === 'below') return translations.levelCellCappedBelow;
     return translations.levelCellCappedAbove;
+  };
+  const externalClampState = useMemo(
+    () => externalClamp(assessments, submissions),
+    [assessments, submissions],
+  );
+  // Each external assessment is its own single-assessment tab; map tab -> its
+  // bounded assessment id so a tab column can resolve its clamp state.
+  const externalAssessmentByTab = useMemo(() => {
+    const map = new Map<number, number>();
+    assessments.forEach((a) => {
+      if (a.external) map.set(a.tabId, a.id);
+    });
+    return map;
+  }, [assessments]);
+  const getExternalOverRangeTranslation = (flags: {
+    above: boolean;
+    below: boolean;
+  }): MessageDescriptor => {
+    if (flags.above && flags.below) return translations.externalOverRangeBoth;
+    if (flags.above) return translations.externalOverRangeAboveOnly;
+    return translations.externalOverRangeBelowOnly;
   };
   const tabTotalWeight = resolvedTabs.reduce(
     (acc, tab) =>
@@ -1086,7 +1149,7 @@ const WeightedGradebookTable = ({
                   >
                     <span
                       style={{
-                        display: 'inline-flex',
+                        display: INLINE_FLEX,
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 2,
@@ -1148,7 +1211,7 @@ const WeightedGradebookTable = ({
                             component="span"
                             fontSize="inherit"
                             sx={{
-                              display: 'inline-flex',
+                              display: INLINE_FLEX,
                               alignItems: 'center',
                               gap: 0.25,
                             }}
@@ -1162,30 +1225,64 @@ const WeightedGradebookTable = ({
                       )}
                     </TableCell>
                   )}
-                  {resolvedTabs.map((tab, i) => (
-                    <TableCell
-                      key={tab.id}
-                      align="center"
-                      {...groupEndIf(tabIsCategoryEnd[i])}
-                      sx={{ bgcolor: 'grey.100' }}
-                    >
-                      {customTabImbalanced(tab, assessments) ? (
-                        <Tooltip
-                          title={t(translations.customWeightsUnbalanced)}
+                  {resolvedTabs.map((tab, i) => {
+                    const externalAid = externalAssessmentByTab.get(tab.id);
+                    const clampFlags =
+                      externalAid != null
+                        ? externalClampState.byAssessment.get(externalAid)
+                        : undefined;
+                    const balancedSubheader = customTabImbalanced(
+                      tab,
+                      assessments,
+                    ) ? (
+                      <Tooltip title={t(translations.customWeightsUnbalanced)}>
+                        <Typography
+                          color="warning.main"
+                          component="span"
+                          fontSize="inherit"
                         >
-                          <Typography
-                            color="warning.main"
-                            component="span"
-                            fontSize="inherit"
+                          {tabSubheaderLabel(tab)}
+                        </Typography>
+                      </Tooltip>
+                    ) : (
+                      tabSubheaderLabel(tab)
+                    );
+                    return (
+                      <TableCell
+                        key={tab.id}
+                        align="center"
+                        {...groupEndIf(tabIsCategoryEnd[i])}
+                        sx={{ bgcolor: 'grey.100' }}
+                      >
+                        {clampFlags ? (
+                          <Tooltip
+                            title={t(
+                              getExternalOverRangeTranslation(clampFlags),
+                            )}
                           >
-                            {tabSubheaderLabel(tab)}
-                          </Typography>
-                        </Tooltip>
-                      ) : (
-                        tabSubheaderLabel(tab)
-                      )}
-                    </TableCell>
-                  ))}
+                            <Typography
+                              aria-label={t(
+                                getExternalOverRangeTranslation(clampFlags),
+                              )}
+                              color="warning.main"
+                              component="span"
+                              fontSize="inherit"
+                              sx={{
+                                display: INLINE_FLEX,
+                                alignItems: 'center',
+                                gap: 0.25,
+                              }}
+                            >
+                              {tabSubheaderLabel(tab)}
+                              <WarningAmber fontSize="inherit" />
+                            </Typography>
+                          </Tooltip>
+                        ) : (
+                          balancedSubheader
+                        )}
+                      </TableCell>
+                    );
+                  })}
                   <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
                     {totalWeight === 100 ? (
                       totalWeightHeaderLabel
@@ -1318,7 +1415,7 @@ const WeightedGradebookTable = ({
                                 {info ? (
                                   <span
                                     style={{
-                                      display: 'inline-flex',
+                                      display: INLINE_FLEX,
                                       alignItems: 'center',
                                       justifyContent: 'flex-end',
                                       gap: 2,
@@ -1350,15 +1447,54 @@ const WeightedGradebookTable = ({
                           })()}
                         {row.original.subtotals.map((subtotal, i) => {
                           const weight = resolvedTabs[i].gradebookWeight ?? 0;
+                          const valueText = fmtDisplay(
+                            tabDisplayValue(subtotal, weight),
+                            columnPrecisions.tabs[i],
+                          );
+                          const externalAid = externalAssessmentByTab.get(
+                            resolvedTabs[i].id,
+                          );
+                          const clampInfo =
+                            externalAid != null
+                              ? externalClampState.byStudent.get(
+                                  `${studentId}:${externalAid}`,
+                                )
+                              : undefined;
                           return (
                             <TableCell
                               key={resolvedTabs[i].id}
                               align="right"
                               {...groupEndIf(tabIsCategoryEnd[i])}
                             >
-                              {fmtDisplay(
-                                tabDisplayValue(subtotal, weight),
-                                columnPrecisions.tabs[i],
+                              {clampInfo ? (
+                                <span
+                                  style={{
+                                    display: INLINE_FLEX,
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
+                                    gap: 2,
+                                  }}
+                                >
+                                  <Tooltip
+                                    title={t(
+                                      clampInfo.bound === 'above'
+                                        ? translations.externalCellCapped
+                                        : translations.externalCellFloored,
+                                      {
+                                        max: clampInfo.max,
+                                        raw: clampInfo.raw.toFixed(2),
+                                      },
+                                    )}
+                                  >
+                                    <WarningAmber
+                                      color="warning"
+                                      fontSize="inherit"
+                                    />
+                                  </Tooltip>
+                                  {valueText}
+                                </span>
+                              ) : (
+                                valueText
                               )}
                             </TableCell>
                           );
@@ -1401,6 +1537,28 @@ const WeightedGradebookTable = ({
                             } else if (isDropped) {
                               statusText = t(translations.dropped);
                             }
+                            // A bounded (external) assessment whose raw grade
+                            // fell outside [0, maxGrade] counts as its clamped
+                            // value — surface which bound bit so the instructor
+                            // sees the grade that actually contributes.
+                            const assessmentData = assessmentsById.get(
+                              a.assessmentId,
+                            );
+                            const eff =
+                              a.grade != null && assessmentData != null
+                                ? effectiveGrade(a.grade, assessmentData)
+                                : null;
+                            const wasCapped =
+                              eff != null &&
+                              a.grade != null &&
+                              a.grade > a.maxGrade &&
+                              eff !== a.grade;
+                            const wasFloored =
+                              eff != null &&
+                              a.grade != null &&
+                              a.grade < 0 &&
+                              eff !== a.grade;
+                            const clamped = wasCapped || wasFloored;
                             return (
                               <TableRow
                                 key={`bd-${studentId}-${tb.tabId}-${a.assessmentId}`}
@@ -1488,6 +1646,27 @@ const WeightedGradebookTable = ({
                                     variant="caption"
                                   >
                                     {`${gradeText} · ${statusText}`}
+                                    {clamped && (
+                                      <Tooltip
+                                        title={t(translations.gradeCountsAs, {
+                                          value: eff,
+                                        })}
+                                      >
+                                        <InfoOutlined
+                                          aria-label={
+                                            wasCapped
+                                              ? t(translations.gradeCapped, {
+                                                  value: eff,
+                                                })
+                                              : t(translations.gradeFloored, {
+                                                  value: eff,
+                                                })
+                                          }
+                                          fontSize="inherit"
+                                          sx={{ ml: 0.5 }}
+                                        />
+                                      </Tooltip>
+                                    )}
                                   </Typography>
                                 </TableCell>
                                 {/* One empty cell per visible identity column so

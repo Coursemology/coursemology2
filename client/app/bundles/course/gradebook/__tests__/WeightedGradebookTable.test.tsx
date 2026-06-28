@@ -98,6 +98,7 @@ interface RenderWeightedOptions {
   gamificationEnabled?: boolean;
   courseMaxLevel?: number;
   levelContribution?: typeof defaultLevelContribution;
+  toolbarAction?: JSX.Element;
 }
 
 const renderWeighted = (
@@ -123,6 +124,7 @@ const renderWeighted = (
       students={students}
       submissions={submissions}
       tabs={tabs}
+      toolbarAction={opts.toolbarAction}
     />,
     { state: userState },
   );
@@ -199,6 +201,19 @@ describe('WeightedGradebookTable', () => {
     expect(screen.getByText('/70')).toBeInTheDocument();
   });
 
+  // 3b. Weight subheader switches to "{weight}% of grade" in percent mode
+  it('shows "{weight}% of grade" subheader for each non-excluded tab in percent mode', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 40)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    const thead = document.querySelector('thead')!;
+    const row3 = thead.querySelectorAll('tr')[2] as HTMLElement;
+    expect(within(row3).getByText('60% of grade')).toBeInTheDocument();
+    expect(within(row3).getByText('40% of grade')).toBeInTheDocument();
+  });
+
   // 4a. Total column shows "/100" when sum = 100 (points default)
   it('shows "/100" in total column header when weights sum to 100', () => {
     renderWeighted({
@@ -226,12 +241,14 @@ describe('WeightedGradebookTable', () => {
     expect(screen.queryByText(/99\.999/)).not.toBeInTheDocument();
   });
 
-  // 4b. Total column shows just "/N" on one line when sum ≠ 100
-  it('shows "/N" when weight sum ≠ 100 in total header', () => {
+  // 4b. Total column shows just "/N" on one line when sum ≠ 100 — the explanatory
+  // sentence is no longer an inline second line (it lives in the tooltip instead).
+  it('shows "/N" with no inline warning line when weight sum ≠ 100 in total header', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 30), makeTab(11, 'Tab 2', 1, 30)],
     });
     expect(screen.getByText('/60')).toBeInTheDocument();
+    expect(screen.queryByText(/does not sum to 100/i)).not.toBeInTheDocument();
   });
 
   // 4c. Hovering the warning-coloured total reveals the full message via tooltip
@@ -247,19 +264,19 @@ describe('WeightedGradebookTable', () => {
     );
   });
 
-  // 4b. Total column shows just "/N" on one line when sum ≠ 100
-  it('shows "N% total" when sum ≠ 100 in total header', async () => {
+  // 4d. Percent mode, weights ≠ 100 → total header shows "{weight}% total" warning
+  it('total column header shows "{weight}% total" warning in percent mode when sum ≠ 100', async () => {
     const user = userEvent.setup();
     renderWeighted({
-      tabs: [makeTab(10, 'Tab 1', 1, 30), makeTab(11, 'Tab 2', 1, 30)],
+      tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 20)],
     });
     await user.click(screen.getByRole('radio', { name: /percentage/i }));
     const thead = document.querySelector('thead')!;
     const row3 = thead.querySelectorAll('tr')[2] as HTMLElement;
-    expect(within(row3).getByText('60% total')).toBeInTheDocument();
+    expect(within(row3).getByText('80% total')).toBeInTheDocument();
   });
 
-  // 4d. Percent mode, weights = 100 → total header shows exact "100% total"
+  // 4e. Percent mode, weights = 100 → total header shows exact "100% total"
   it('total column header shows "100% total" in percent mode when sum = 100', async () => {
     const user = userEvent.setup();
     renderWeighted({
@@ -353,7 +370,7 @@ describe('WeightedGradebookTable', () => {
     expect(screen.getAllByText('100.00').length).toBeGreaterThanOrEqual(2);
   });
 
-  // 6a. Tab with no assessments → cell shows "—"
+  // 6. Tab with no assessments → cell shows "—"
   it('shows "—" for a tab with no assessments', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Empty Tab', 1, 100)],
@@ -453,6 +470,20 @@ describe('WeightedGradebookTable', () => {
     expect(screen.getByText(/set your own/i)).toBeInTheDocument();
   });
 
+  // 10e. Showing default weights suppresses the projected-total policy hint
+  it('does not show the projected-total policy banner when default weights are in effect', () => {
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 0), makeTab(11, 'Tab 2', 1, 0)],
+      assessments: [
+        makeAssessment(100, 'Quiz 1', 10, 150),
+        makeAssessment(101, 'Quiz 2', 11, 100),
+      ],
+    });
+    expect(
+      screen.queryByText(/projected totals count ungraded assessments as 0/i),
+    ).not.toBeInTheDocument();
+  });
+
   // 10a. Default split feeds the totals: two tabs → 50/100 each, summing to 100.
   it('applies an equal split (sums to 100) when no weights are configured', () => {
     renderWeighted({
@@ -485,6 +516,18 @@ describe('WeightedGradebookTable', () => {
       assessments: [],
     });
     expect(screen.getByText(/no weights configured/i)).toBeInTheDocument();
+  });
+
+  // 10f. Degenerate + canManageWeights=false → no-access copy
+  it('shows "No tab weights have been configured yet" when canManageWeights is false and no assessments', () => {
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 0)],
+      assessments: [],
+      canManageWeights: false,
+    });
+    expect(
+      screen.getByText(/no tab weights have been configured yet/i),
+    ).toBeInTheDocument();
   });
 
   // 10c. At least one non-zero weight → banner absent
@@ -559,16 +602,15 @@ describe('WeightedGradebookTable', () => {
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
-  // 14c. Typing an email filters student rows when Email column is visible
+  // 14c. Typing an email filters student rows (email column is searchable)
   it('filters student rows when typing an email in the search bar', async () => {
     const user = userEvent.setup();
-
+    // Search only matches visible columns ("search what you see"), and the
+    // Email column is hidden by default — surface it so the email is searchable.
     localStorage.setItem(WEIGHTED_STORAGE_KEY, JSON.stringify({ email: true }));
-
     renderWeighted({
       students: [makeStudent(1, 'Alice'), makeStudent(2, 'Bob')],
     });
-
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
     expect(screen.getByText(ALICE_EMAIL)).toBeInTheDocument();
@@ -578,7 +620,6 @@ describe('WeightedGradebookTable', () => {
     await waitFor(() =>
       expect(screen.queryByText('Bob')).not.toBeInTheDocument(),
     );
-
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
@@ -598,6 +639,39 @@ describe('WeightedGradebookTable', () => {
     });
     // One "select all" header checkbox + one per student row
     expect(screen.getAllByRole('checkbox').length).toBeGreaterThanOrEqual(3);
+  });
+
+  describe('toolbar action slot', () => {
+    it('renders a provided toolbar action', () => {
+      renderWeighted({
+        toolbarAction: <button type="button">Manage external</button>,
+      });
+      expect(
+        screen.getByRole('button', { name: 'Manage external' }),
+      ).toBeInTheDocument();
+    });
+
+    it('places the toolbar action before the Select Columns button', () => {
+      renderWeighted({
+        toolbarAction: <button type="button">Manage external</button>,
+      });
+      const action = screen.getByText('Manage external');
+      const selectColumns = screen.getByRole('button', {
+        name: /select columns/i,
+      });
+      expect(
+        // eslint-disable-next-line no-bitwise
+        action.compareDocumentPosition(selectColumns) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
+
+    it('renders no extra action when toolbarAction is omitted', () => {
+      renderWeighted();
+      expect(
+        screen.queryByRole('button', { name: 'Manage external' }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   describe('column picker', () => {
@@ -681,19 +755,6 @@ describe('WeightedGradebookTable', () => {
       );
     });
 
-    it('lists Email in the picker dialog (no gamification columns)', async () => {
-      const user = userEvent.setup();
-      renderWeighted();
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
-      const dialog = await screen.findByRole('dialog');
-      expect(within(dialog).getByText('Email')).toBeInTheDocument();
-      expect(
-        within(dialog).queryByText('Gamification'),
-      ).not.toBeInTheDocument();
-      expect(within(dialog).queryByText('Level')).not.toBeInTheDocument();
-      expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
-    });
-
     it('puts the select-all checkbox in an indeterminate state on a partial selection', async () => {
       const user = userEvent.setup();
       renderWeighted({
@@ -705,6 +766,19 @@ describe('WeightedGradebookTable', () => {
         // MUI marks the indeterminate checkbox input with data-indeterminate="true"
         expect(checkboxes[0]).toHaveAttribute('data-indeterminate', 'true'),
       );
+    });
+
+    it('lists Email in the picker dialog (no gamification columns)', async () => {
+      const user = userEvent.setup();
+      renderWeighted();
+      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      const dialog = await screen.findByRole('dialog');
+      expect(within(dialog).getByText('Email')).toBeInTheDocument();
+      expect(
+        within(dialog).queryByText('Gamification'),
+      ).not.toBeInTheDocument();
+      expect(within(dialog).queryByText('Level')).not.toBeInTheDocument();
+      expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
     });
   });
 
@@ -1039,6 +1113,27 @@ describe('WeightedGradebookTable', () => {
       ).toBeInTheDocument();
     });
 
+    it('rounds a fractional effective weightage to 2dp in the breakdown', async () => {
+      const user = userEvent.setup();
+      // Tab weight 100 split equally across 3 assessments → 33.333…% → "33.33% of grade"
+      renderWeighted({
+        tabs: [makeTab(10, 'Missions', 1, 100)],
+        assessments: [
+          makeAssessment(1, 'M1', 10, 100),
+          makeAssessment(2, 'M2', 10, 100),
+          makeAssessment(3, 'M3', 10, 100),
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 1, 50)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      expect(
+        within(await screen.findByTestId(breakdownRowId(1, 10, 1))).getByText(
+          /33\.33% of grade/,
+        ),
+      ).toBeInTheDocument();
+    });
+
     it('shows effective weightage as "% of grade" regardless of the points/percentage lens', async () => {
       const user = userEvent.setup();
       renderWeighted(expandable);
@@ -1134,30 +1229,9 @@ describe('WeightedGradebookTable', () => {
         ),
       ).toBeInTheDocument();
     });
-
-    it('rounds a fractional effective weightage to 2dp in the breakdown', async () => {
-      const user = userEvent.setup();
-      // Tab weight 100 split equally across 3 assessments → 33.333…% → "33.33% of grade"
-      renderWeighted({
-        tabs: [makeTab(10, 'Missions', 1, 100)],
-        assessments: [
-          makeAssessment(1, 'M1', 10, 100),
-          makeAssessment(2, 'M2', 10, 100),
-          makeAssessment(3, 'M3', 10, 100),
-        ],
-        students: [makeStudent(1, 'Alice')],
-        submissions: [makeSub(1, 1, 50)],
-      });
-      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
-      expect(
-        within(await screen.findByTestId(breakdownRowId(1, 10, 1))).getByText(
-          /33\.33% of grade/,
-        ),
-      ).toBeInTheDocument();
-    });
   });
 
-  describe('display mode toggle — values', () => {
+  describe('display mode toggle - values', () => {
     // weight 100, one assessment max 100, grade 80 → subtotal 0.8
     // points cell = 80 ; percent cell = 80%
     const singleTab = {
@@ -1198,6 +1272,18 @@ describe('WeightedGradebookTable', () => {
         expect(screen.getAllByText('40%').length).toBeGreaterThanOrEqual(1),
       );
     });
+  });
+
+  describe('display mode toggle - control', () => {
+    it('renders Points and Percentage toggle buttons with Points pressed by default', () => {
+      renderWeighted();
+      const points = screen.getByRole('radio', { name: /points/i });
+      const percent = screen.getByRole('radio', { name: /percentage/i });
+      expect(points).toBeInTheDocument();
+      expect(percent).toBeInTheDocument();
+      expect(points).toHaveAttribute('aria-checked', 'true');
+      expect(percent).toHaveAttribute('aria-checked', 'false');
+    });
 
     it('shows the Points and Percentage explanatory tooltips on hover', async () => {
       renderWeighted();
@@ -1213,18 +1299,6 @@ describe('WeightedGradebookTable', () => {
           screen.getByText(/what fraction of each tab the student earned/i),
         ).toBeInTheDocument(),
       );
-    });
-  });
-
-  describe('display mode toggle — control', () => {
-    it('renders Points and Percentage toggle buttons with Points pressed by default', () => {
-      renderWeighted();
-      const points = screen.getByRole('radio', { name: /points/i });
-      const percent = screen.getByRole('radio', { name: /percentage/i });
-      expect(points).toBeInTheDocument();
-      expect(percent).toBeInTheDocument();
-      expect(points).toHaveAttribute('aria-checked', 'true');
-      expect(percent).toHaveAttribute('aria-checked', 'false');
     });
   });
 
@@ -1280,6 +1354,7 @@ describe('WeightedGradebookTable', () => {
           within(thead as HTMLElement).getByText(EXTERNAL_ID),
         ).toBeInTheDocument();
         expect(screen.getByText('EXT-001')).toBeInTheDocument();
+
         // Bob has no external ID → his External ID cell renders empty, not "null".
         const bobRow = screen.getByText('Bob').closest('tr')!;
         expect(within(bobRow).queryByText('null')).not.toBeInTheDocument();
@@ -1684,6 +1759,124 @@ describe('WeightedGradebookTable', () => {
           /assessment weights don't add up to its tab weight/i,
         ),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('external assessment regression', () => {
+    it('includes an external assessment in its tab subtotal and the projected total', () => {
+      // Regular tab (weight 50): Quiz id=100, max=10, Alice grade=8
+      //   subtotal = 8/10 = 0.8; cell = 0.8 × 50 = 40
+      // External tab (weight 50): Midterm id=-5, max=50, Alice grade=25
+      //   subtotal = 25/50 = 0.5; cell = 0.5 × 50 = 25
+      // Total = 40 + 25 = 65
+      renderWeighted({
+        categories: [
+          makeCategory(1, 'Cat A'),
+          makeCategory(2, 'External Assessments'),
+        ],
+        tabs: [makeTab(10, 'Tab 1', 1, 50), makeTab(200, 'Midterm', 2, 50)],
+        assessments: [
+          makeAssessment(100, 'Quiz 1', 10, 10),
+          {
+            id: -5,
+            title: 'Midterm',
+            tabId: 200,
+            maxGrade: 50,
+            external: true,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, 100, 8), makeSub(1, -5, 25)],
+      });
+
+      // External Assessments category and its tab must appear in the header
+      expect(screen.getByText('External Assessments')).toBeInTheDocument();
+      expect(screen.getByText('Midterm')).toBeInTheDocument();
+
+      // External tab cell = 25 (integer); regular tab cell = 40; total = 65
+      const cells = screen.getAllByRole('cell');
+      const cellTexts = cells.map((c) => c.textContent?.trim());
+      expect(cellTexts).toContain('40');
+      expect(cellTexts).toContain('25');
+      expect(cellTexts).toContain('65');
+    });
+  });
+
+  describe('clamped grade indicator in breakdown', () => {
+    it('marks a capped grade in the breakdown', async () => {
+      const user = userEvent.setup();
+      // Render with an external assessment: maxGrade 100, capAtMaximum true,
+      // and a student grade of 150. Expand the student's breakdown row.
+      renderWeighted({
+        tabs: [makeTab(10, 'Tab 1', 1, 100)],
+        assessments: [
+          {
+            id: -5,
+            title: 'External Test',
+            tabId: 10,
+            maxGrade: 100,
+            external: true,
+            capAtMaximum: true,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, -5, 150)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // Raw grade shown in the breakdown row subtitle (e.g., "150/100")
+      expect(await screen.findByText(/150\/100/)).toBeInTheDocument();
+      // Capped indicator visible with aria-label
+      expect(screen.getByLabelText('Capped at 100')).toBeInTheDocument();
+    });
+
+    it('marks a floored grade in the breakdown', async () => {
+      const user = userEvent.setup();
+      // Render with an external assessment: maxGrade 100, floorAtZero true,
+      // and a student grade of -10. Expand the student's breakdown row.
+      renderWeighted({
+        tabs: [makeTab(10, 'Tab 1', 1, 100)],
+        assessments: [
+          {
+            id: -6,
+            title: 'External Test',
+            tabId: 10,
+            maxGrade: 100,
+            external: true,
+            floorAtZero: true,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, -6, -10)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      // Raw grade shown in the breakdown row subtitle (e.g., "-10/100")
+      expect(await screen.findByText(/-10\/100/)).toBeInTheDocument();
+      // Floored indicator visible with aria-label
+      expect(screen.getByLabelText('Floored to 0')).toBeInTheDocument();
+    });
+
+    it('shows the "Counts as" effective-value tooltip on the clamped indicator', async () => {
+      const user = userEvent.setup();
+      renderWeighted({
+        tabs: [makeTab(10, 'Tab 1', 1, 100)],
+        assessments: [
+          {
+            id: -5,
+            title: 'External Test',
+            tabId: 10,
+            maxGrade: 100,
+            external: true,
+            capAtMaximum: true,
+          },
+        ],
+        students: [makeStudent(1, 'Alice')],
+        submissions: [makeSub(1, -5, 150)],
+      });
+      await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+      await userEvent.hover(await screen.findByLabelText('Capped at 100'));
+      await waitFor(() =>
+        expect(screen.getByText('Counts as 100')).toBeInTheDocument(),
+      );
     });
   });
 });
@@ -2136,5 +2329,93 @@ describe('level contribution columns', () => {
       within(cells[2]).getByTestId('WarningAmberIcon'),
     ).toBeInTheDocument();
     expect(cells[2]).toHaveTextContent('0');
+  });
+});
+
+describe('external assessment clamp warnings', () => {
+  const makeExternal = (
+    id: number,
+    title: string,
+    tabId: number,
+    maxGrade: number,
+  ): AssessmentData => ({
+    id,
+    title,
+    tabId,
+    maxGrade,
+    external: true,
+    floorAtZero: true,
+    capAtMaximum: true,
+  });
+
+  const externalSetup = (
+    grade: number,
+  ): Parameters<typeof renderWeighted>[0] => ({
+    categories: [makeCategory(1, 'External Assessments')],
+    tabs: [makeTab(10, 'Midterm', 1, 100)],
+    assessments: [makeExternal(100, 'Midterm', 10, 25)],
+    students: [makeStudent(1, 'Alice')],
+    submissions: [makeSub(1, 100, grade)],
+  });
+
+  it('flags the external tab subheader when a grade is capped', () => {
+    renderWeighted(externalSetup(28)); // 28 > max 25
+    expect(screen.getByLabelText(/exceed the maximum/i)).toBeInTheDocument();
+  });
+
+  it('flags the external tab subheader when a grade is floored', () => {
+    renderWeighted(externalSetup(-3));
+    expect(screen.getByLabelText(/below 0/i)).toBeInTheDocument();
+  });
+
+  it('does not flag the subheader when every grade is in range', () => {
+    renderWeighted(externalSetup(20));
+    expect(
+      screen.queryByLabelText(
+        /exceed the maximum|below 0|outside the valid range/i,
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows a warning icon on the offending student cell', () => {
+    renderWeighted(externalSetup(28));
+    const row = screen.getByText('Alice').closest('tr')!;
+    expect(within(row).getByTestId('WarningAmberIcon')).toBeInTheDocument();
+  });
+
+  it('shows the cap tooltip with raw and effective values on hover', async () => {
+    renderWeighted(externalSetup(28));
+    const row = screen.getByText('Alice').closest('tr')!;
+    await userEvent.hover(within(row).getByTestId('WarningAmberIcon'));
+    expect(
+      await screen.findByText('Set to 25 because the grade was 28.00.'),
+    ).toBeInTheDocument();
+  });
+
+  it('shows no cell warning when the grade is in range', () => {
+    renderWeighted(externalSetup(20));
+    const row = screen.getByText('Alice').closest('tr')!;
+    expect(
+      within(row).queryByTestId('WarningAmberIcon'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not clamp or warn when the bound toggle is off', () => {
+    renderWeighted({
+      categories: [makeCategory(1, 'External Assessments')],
+      tabs: [makeTab(10, 'Midterm', 1, 100)],
+      assessments: [
+        { ...makeExternal(100, 'Midterm', 10, 25), capAtMaximum: false },
+      ],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 100, 28)],
+    });
+    expect(
+      screen.queryByLabelText(/exceed the maximum/i),
+    ).not.toBeInTheDocument();
+    const row = screen.getByText('Alice').closest('tr')!;
+    expect(
+      within(row).queryByTestId('WarningAmberIcon'),
+    ).not.toBeInTheDocument();
   });
 });
