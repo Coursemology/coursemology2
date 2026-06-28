@@ -3,9 +3,11 @@ import type { AppDispatch } from 'store';
 import CourseAPI from 'api/course';
 
 import fetchGradebook, {
+  commitImport,
   createExternalAssessment,
   deleteExternalAssessment,
   editExternalAssessment,
+  previewImport,
   reorderExternalAssessments,
   setExternalGrade,
   updateGradebookWeights,
@@ -302,6 +304,36 @@ describe('id-negating thunks', () => {
   });
 });
 
+describe('commitImport', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  it('commits, refreshes the gradebook, and returns the commit summary', async () => {
+    const dispatched: { type: string; payload: unknown }[] = [];
+    const dispatch = ((a: { type: string; payload: unknown }) => {
+      dispatched.push(a);
+      return a;
+    }) as unknown as AppDispatch;
+    jest
+      .spyOn(CourseAPI.gradebook, 'importCommit')
+      .mockResolvedValue({ data: { inserted: 2 } } as never);
+    jest
+      .spyOn(CourseAPI.gradebook, 'index')
+      .mockResolvedValue({ data: { refreshed: true } } as never);
+
+    const summary = await commitImport({ onConflict: 'replace' } as never)(
+      dispatch,
+      (() => ({})) as never,
+      {},
+    );
+
+    expect(summary).toEqual({ inserted: 2 });
+    expect(dispatched).toContainEqual({
+      type: 'course/gradebook/SAVE_GRADEBOOK',
+      payload: { refreshed: true },
+    });
+  });
+});
+
 describe('simple pass-through thunks', () => {
   afterEach(() => jest.restoreAllMocks());
 
@@ -393,5 +425,17 @@ describe('simple pass-through thunks', () => {
       payload: { levelContribution: { formulaAst: unknown } };
     };
     expect(action.payload.levelContribution.formulaAst).toEqual(formulaAst);
+  });
+
+  it('previewImport returns the API data without dispatching', async () => {
+    const { dispatched, dispatch, getState } = passHarness();
+    jest
+      .spyOn(CourseAPI.gradebook, 'importPreview')
+      .mockResolvedValue({ data: { conflicts: [] } } as never);
+
+    const result = await previewImport({} as never)(dispatch, getState, {});
+
+    expect(result).toEqual({ conflicts: [] });
+    expect(dispatched).toHaveLength(0);
   });
 });

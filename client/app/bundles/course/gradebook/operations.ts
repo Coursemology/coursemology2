@@ -1,5 +1,8 @@
 import type { Operation } from 'store';
 import type {
+  ImportCommitSummary,
+  ImportPreviewRequest,
+  ImportPreviewResult,
   LevelContributionSaveData,
   UpdateWeightsPayload,
 } from 'types/course/gradebook';
@@ -125,6 +128,24 @@ export const setExternalGrade =
       );
       throw error;
     }
+  };
+
+export const previewImport =
+  (payload: ImportPreviewRequest): Operation<ImportPreviewResult> =>
+  async () => {
+    const response = await CourseAPI.gradebook.importPreview(payload);
+    return response.data;
+  };
+
+export const commitImport =
+  (
+    payload: ImportPreviewRequest & { onConflict: 'keep' | 'replace' },
+  ): Operation<ImportCommitSummary> =>
+  async (dispatch) => {
+    const response = await CourseAPI.gradebook.importCommit(payload);
+    const refreshed = await CourseAPI.gradebook.index();
+    dispatch(actions.saveGradebook(refreshed.data));
+    return response.data;
   };
 
 export default fetchGradebook;
