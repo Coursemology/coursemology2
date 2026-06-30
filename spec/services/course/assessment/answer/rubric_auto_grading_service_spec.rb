@@ -6,6 +6,12 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
   with_tenant(:instance) do
     let(:assessment) { create(:assessment, :published_with_rubric_question) }
     let(:question) { assessment.questions.first.specific }
+    let!(:active_rubric) do
+      Course::Rubric.build_from_v1(question, assessment.course).tap do |rubric|
+        rubric.save!
+        question.acting_as.update_column(:active_rubric_id, rubric.id)
+      end
+    end
     let(:submission) do
       create(:submission, :attempting, assessment: assessment)
     end
@@ -40,36 +46,30 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
     end
 
     describe '#evaluate_answer' do
-      context 'with valid LLM response' do
-        let(:valid_response) do
-          {
-            'category_grades' => [
-              {
-                category_id: question.categories.first.id,
-                criterion_id: question.categories.first.criterions.last.id,
-                grade: question.categories.first.criterions.last.grade,
-                explanation: '1st selection explanation'
-              },
-              {
-                category_id: question.categories.second.id,
-                criterion_id: question.categories.second.criterions.last.id,
-                grade: question.categories.second.criterions.last.grade,
-                explanation: '2nd selection explanation'
-              }
-            ],
-            'feedback' => 'feedback'
-          }
-        end
+      it 'instantiates LLM service and processes its response' do
+        result = subject.send(:evaluate_answer, answer.actable)
+        expect(result).to be_an(Array)
+        expect(result.length).to eq(4) # [correct, grade, messages, feedback]
+        expect(result[0]).to be true
+        expect(result[1]).to be_between(0, question.maximum_grade).inclusive
+        expect(result[2]).to contain_exactly('success')
+        expect(result[3]).to include('Mock feedback')
+      end
 
-        it 'instantiates LLM service and processes its response' do
-          result = subject.send(:evaluate_answer, answer.actable)
-          expect(result).to be_an(Array)
-          expect(result.length).to eq(4) # [correct, grade, messages, feedback]
-          expect(result[0]).to be true
-          expect(result[1]).to be_between(0, question.maximum_grade).inclusive
-          expect(result[2]).to contain_exactly('success')
-          expect(result[3]).to include('Mock feedback')
-        end
+      it 'records a v2 grading evaluation (and an llm evaluation) against the active rubric' do
+        result = subject.send(:evaluate_answer, answer.actable)
+
+        grading = answer.reload.grading_rubric_evaluation
+        expect(grading).to be_present
+        expect(grading.rubric).to eq(active_rubric)
+        expect(grading.selections.map(&:category_id)).to match_array(active_rubric.categories.map(&:id))
+        # Auto-grading records a (hidden) playground evaluation so it does not surface in the playground.
+        expect(answer.rubric_evaluations.playground_types.where(rubric: active_rubric)).to exist
+        expect(answer.rubric_evaluations.playground.where(rubric: active_rubric)).not_to exist
+
+        # The returned grade matches the sum of the selected criterions in the grading evaluation.
+        expected_grade = grading.selections.includes(:criterion).sum { |selection| selection.criterion&.grade.to_i }
+        expect(result[1]).to eq(expected_grade)
       end
     end
   end

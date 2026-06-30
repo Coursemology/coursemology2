@@ -2456,6 +2456,129 @@
   "course.assessment.question.rubricPlayground.comparingRevisions": {
     "defaultMessage": "Comparing {count} revisions"
   },
+  "course.assessment.question.rubricPlayground.applyOnlyActiveRubric": {
+    "defaultMessage": "Only the active rubric revision may be used to apply edits to existing grades."
+  },
+  "course.assessment.question.rubricPlayground.showOnlyLatestAnswers": {
+    "defaultMessage": "Show only current answers"
+  },
+  "course.assessment.question.rubricPlayground.applying": {
+    "defaultMessage": "Applying"
+  },
+  "course.assessment.question.rubricPlayground.deleteRubricFailure": {
+    "defaultMessage": "Could not delete this rubric revision."
+  },
+  "course.assessment.question.rubricPlayground.activeRubric": {
+    "defaultMessage": "Active"
+  },
+  "course.assessment.question.rubricPlayground.latestRubric": {
+    "defaultMessage": "Latest"
+  },
+  "course.assessment.question.rubricPlayground.unsavedRubric": {
+    "defaultMessage": "Unsaved"
+  },
+  "course.assessment.question.rubricPlayground.returnToEditing": {
+    "defaultMessage": "Return to Editing"
+  },
+  "course.assessment.question.rubricPlayground.restartEditing": {
+    "defaultMessage": "Restart Editing from Here"
+  },
+  "course.assessment.question.rubricPlayground.restart": {
+    "defaultMessage": "Restart"
+  },
+  "course.assessment.question.rubricPlayground.discardChanges": {
+    "defaultMessage": "Discard Changes"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesTitle": {
+    "defaultMessage": "Confirm Discard Changes"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesText": {
+    "defaultMessage": "Your unsaved rubric changes will be lost."
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingTitle": {
+    "defaultMessage": "Confirm Restart Editing"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingText": {
+    "defaultMessage": "Your unsaved rubric changes will be replaced with this revision."
+  },
+  "course.assessment.question.rubricPlayground.setAsActive": {
+    "defaultMessage": "Set as Active"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveTitle": {
+    "defaultMessage": "Warning: Setting Incompatible Revision as Active"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveText": {
+    "defaultMessage": "This revision is structurally incompatible with existing grades. We will carry forward grading data, but we strongly recommend double-checking answer grades as some data may be lost. Are you sure you wish to proceed?"
+  },
+  "course.assessment.question.rubricPlayground.applyReplacesSavedResults": {
+    "defaultMessage": "Applying replaces the saved grade and comment of the selected answers with the active rubric's evaluation results."
+  },
+  "course.assessment.question.rubricPlayground.applySelected": {
+    "defaultMessage": "Apply {count} selected"
+  },
+  "course.assessment.question.rubricPlayground.evaluateSelected": {
+    "defaultMessage": "Evaluate {count} selected"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle": {
+    "defaultMessage": "Confirm Direct Application for Answers"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText": {
+    "defaultMessage": "Some of the answers you are applying have not been evaluated against the active rubric yet. We will evaluate them as part of the application process, but evaluating them before applying will allow you to see the results here before affecting real student grades. Are you sure you wish to proceed?"
+  },
+  "course.assessment.question.rubricPlayground.applyRow": {
+    "defaultMessage": "Apply this evaluation to the student"
+  },
+  "course.assessment.question.rubricPlayground.searchByStudentName": {
+    "defaultMessage": "Search by student name"
+  },
+  "course.assessment.question.rubricPlayground.submissionStatus": {
+    "defaultMessage": "Status"
+  },
+  "course.assessment.question.rubricPlayground.currentGrade": {
+    "defaultMessage": "Current Grade"
+  },
+  "course.assessment.question.rubricPlayground.evaluationGrade": {
+    "defaultMessage": "New Grade"
+  },
+  "course.assessment.question.rubricPlayground.evaluationComment": {
+    "defaultMessage": "Feedback"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatus": {
+    "defaultMessage": "Grading Status"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusModified": {
+    "defaultMessage": "Modified"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusIncomplete": {
+    "defaultMessage": "Incomplete"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusStale": {
+    "defaultMessage": "Stale"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusUpToDate": {
+    "defaultMessage": "Up-to-date"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusManuallyGraded": {
+    "defaultMessage": "Manually graded"
+  },
+  "course.assessment.question.rubricPlayground.regradeRow": {
+    "defaultMessage": "Re-evaluate with the active rubric (does not change the grade)"
+  },
+  "course.assessment.question.rubricPlayground.regradeSuccess": {
+    "defaultMessage": "Re-evaluation complete."
+  },
+  "course.assessment.question.rubricPlayground.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades": {
+    "defaultMessage": "Evaluations in this table do not affect the grades assigned to students. You can update existing student grades under the 'Apply' button."
+  },
+  "course.assessment.question.rubricPlayground.addAnswersTitle": {
+    "defaultMessage": "Add Sample Answers"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
+    "defaultMessage": "Add"
+  },
   "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
     "defaultMessage": "Add Sample Answers"
   },
@@ -3979,6 +4102,15 @@
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "Total Grade"
+  },
+  "course.assessment.submission.rubricScores": {
+    "defaultMessage": "Rubric Grades"
+  },
+  "course.assessment.submission.moderation": {
+    "defaultMessage": "Moderation"
+  },
+  "course.assessment.submission.moderationHint": {
+    "defaultMessage": "(Optional) Manual grade adjustment independent of the rubric criteria."
   },
   "course.assessment.submission.type": {
     "defaultMessage": "Type"

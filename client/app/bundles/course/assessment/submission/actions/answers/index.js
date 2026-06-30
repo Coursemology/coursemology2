@@ -626,15 +626,10 @@ export function saveRubricAndGrade(
   published,
   categoryGrades,
   maximumGrade,
+  // Already moderation-inclusive and clamped by the caller; the breakdown sum alone would drop moderation.
+  finalGrade,
 ) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
-
-  const totalGrade = Object.values(categoryGrades).reduce(
-    (acc, category) => acc + category.grade,
-    0,
-  );
-
-  const finalGrade = Math.max(0, Math.min(totalGrade, maximumGrade));
 
   const modifiedAnswerObject = {
     id: answerId,

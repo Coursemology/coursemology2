@@ -2438,6 +2438,129 @@
   "course.assessment.question.rubricPlayground.comparingRevisions": {
     "defaultMessage": "正在比较 {count} 个版本"
   },
+  "course.assessment.question.rubricPlayground.applyOnlyActiveRubric": {
+    "defaultMessage": "只有使用中的评分标准版本才能用于对现有成绩进行修改应用。"
+  },
+  "course.assessment.question.rubricPlayground.showOnlyLatestAnswers": {
+    "defaultMessage": "仅显示每位学生的最新答案"
+  },
+  "course.assessment.question.rubricPlayground.applying": {
+    "defaultMessage": "正在应用"
+  },
+  "course.assessment.question.rubricPlayground.deleteRubricFailure": {
+    "defaultMessage": "无法删除此评分标准版本。"
+  },
+  "course.assessment.question.rubricPlayground.activeRubric": {
+    "defaultMessage": "使用中"
+  },
+  "course.assessment.question.rubricPlayground.latestRubric": {
+    "defaultMessage": "最新"
+  },
+  "course.assessment.question.rubricPlayground.unsavedRubric": {
+    "defaultMessage": "未保存"
+  },
+  "course.assessment.question.rubricPlayground.returnToEditing": {
+    "defaultMessage": "返回编辑"
+  },
+  "course.assessment.question.rubricPlayground.restartEditing": {
+    "defaultMessage": "从此处重新开始编辑"
+  },
+  "course.assessment.question.rubricPlayground.restart": {
+    "defaultMessage": "重新开始"
+  },
+  "course.assessment.question.rubricPlayground.discardChanges": {
+    "defaultMessage": "放弃更改"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesTitle": {
+    "defaultMessage": "确认放弃更改"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesText": {
+    "defaultMessage": "您未保存的评分标准更改将会丢失。"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingTitle": {
+    "defaultMessage": "确认重新开始编辑"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingText": {
+    "defaultMessage": "您未保存的评分标准更改将被此版本替换。"
+  },
+  "course.assessment.question.rubricPlayground.setAsActive": {
+    "defaultMessage": "设为使用中"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveTitle": {
+    "defaultMessage": "警告：将不兼容的版本设为使用中"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveText": {
+    "defaultMessage": "此版本与现有成绩在结构上不兼容。我们会保留评分数据，但强烈建议您仔细核对答案成绩，因为部分数据可能会丢失。您确定要继续吗？"
+  },
+  "course.assessment.question.rubricPlayground.applyReplacesSavedResults": {
+    "defaultMessage": "应用会用使用中的评分标准的评估结果替换所选答案已保存的成绩和评语。"
+  },
+  "course.assessment.question.rubricPlayground.applySelected": {
+    "defaultMessage": "应用所选的 {count} 项"
+  },
+  "course.assessment.question.rubricPlayground.evaluateSelected": {
+    "defaultMessage": "评估所选的 {count} 项"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle": {
+    "defaultMessage": "确认直接应用于答案"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText": {
+    "defaultMessage": "您正在应用的部分答案尚未依据使用中的评分标准进行评估。我们会在应用过程中对它们进行评估，但在应用前先评估可让您在影响真实学生成绩之前于此处查看结果。您确定要继续吗？"
+  },
+  "course.assessment.question.rubricPlayground.applyRow": {
+    "defaultMessage": "将此评估应用于学生"
+  },
+  "course.assessment.question.rubricPlayground.searchByStudentName": {
+    "defaultMessage": "按学生姓名搜索"
+  },
+  "course.assessment.question.rubricPlayground.submissionStatus": {
+    "defaultMessage": "状态"
+  },
+  "course.assessment.question.rubricPlayground.currentGrade": {
+    "defaultMessage": "当前成绩"
+  },
+  "course.assessment.question.rubricPlayground.evaluationGrade": {
+    "defaultMessage": "新成绩"
+  },
+  "course.assessment.question.rubricPlayground.evaluationComment": {
+    "defaultMessage": "反馈"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatus": {
+    "defaultMessage": "评分状态"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusModified": {
+    "defaultMessage": "已修改"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusIncomplete": {
+    "defaultMessage": "未完成"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusStale": {
+    "defaultMessage": "已过时"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusUpToDate": {
+    "defaultMessage": "已是最新"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusManuallyGraded": {
+    "defaultMessage": "手动评分"
+  },
+  "course.assessment.question.rubricPlayground.regradeRow": {
+    "defaultMessage": "使用使用中的评分标准重新评估（不会更改成绩）"
+  },
+  "course.assessment.question.rubricPlayground.regradeSuccess": {
+    "defaultMessage": "重新评估完成。"
+  },
+  "course.assessment.question.rubricPlayground.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades": {
+    "defaultMessage": "此表格中的评估不会影响分配给学生的成绩。您可以在「应用」按钮下更新现有的学生成绩。"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersTitle": {
+    "defaultMessage": "添加示例答案"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
+    "defaultMessage": "添加"
+  },
   "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
     "defaultMessage": "添加示例答案"
   },
@@ -3958,6 +4081,15 @@
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "总成绩"
+  },
+  "course.assessment.submission.rubricScores": {
+    "defaultMessage": "评分标准成绩"
+  },
+  "course.assessment.submission.moderation": {
+    "defaultMessage": "调分"
+  },
+  "course.assessment.submission.moderationHint": {
+    "defaultMessage": "（可选）独立于评分标准之外的手动成绩调整。"
   },
   "course.assessment.submission.type": {
     "defaultMessage": "类型"

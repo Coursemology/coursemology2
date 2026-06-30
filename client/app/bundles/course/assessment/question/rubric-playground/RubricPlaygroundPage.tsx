@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { RubricAnswerEvaluationData } from 'types/course/rubrics';
@@ -25,13 +25,22 @@ import {
   fetchRubricMockAnswerEvaluations,
   initializeMockAnswerEvaluations,
 } from './operations/mockAnswers';
-import { createNewRubric, fetchQuestionRubrics } from './operations/rubric';
+import {
+  createNewRubric,
+  fetchQuestionRubrics,
+  setActiveRubric,
+} from './operations/rubric';
 import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import AnswerEvaluationsTableHeader from './AnswerEvaluationsTableHeader';
 import RubricEditForm from './RubricEditForm';
 import RubricHeader from './RubricHeader';
-import { RubricEditFormData, RubricPlaygroundTab } from './types';
-import { buildSelectedRubricTableData } from './utils';
+import {
+  RubricEditFormData,
+  RubricPlaygroundTab,
+  SliderRevision,
+  UNSAVED_RUBRIC_ID,
+} from './types';
+import { buildSelectedRubricTableData, rubricStateToFormData } from './utils';
 
 const RubricPlaygroundPage = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -62,8 +71,31 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
     activeTab === RubricPlaygroundTab.COMPARE;
   const [compareCount, setCompareCount] = useState(2);
 
+  // The client-only "Unsaved" draft revision, present only while editing. `draftCreatedAt` timestamps
+  // it for the slider, and `editSourceRubricId` is the saved revision editing began from (return target).
+  const [draft, setDraft] = useState<RubricEditFormData | null>(null);
+  const [draftCreatedAt, setDraftCreatedAt] = useState('');
+  const [editSourceRubricId, setEditSourceRubricId] = useState(0);
+
   const { sortedRubrics, selectedRubricData } = useAppSelector(
     getSelectedRubricData(selectedRubricId),
+  );
+
+  const isEditingDraft = selectedRubricId === UNSAVED_RUBRIC_ID;
+
+  // Saved rubrics, plus the unsaved draft appended at the end while editing.
+  const revisions: SliderRevision[] = [
+    ...sortedRubrics.map((rubric) => ({
+      id: rubric.id,
+      createdAt: rubric.createdAt,
+      isActive: rubric.isActive,
+    })),
+    ...(draft
+      ? [{ id: UNSAVED_RUBRIC_ID, createdAt: draftCreatedAt, isUnsaved: true }]
+      : []),
+  ];
+  const selectedRevisionIndex = revisions.findIndex(
+    (revision) => revision.id === selectedRubricId,
   );
 
   const fetchRubricEvaluationsData = async (
@@ -141,30 +173,80 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
     }
   };
 
-  const handleEditFormSubmit: SubmitHandler<RubricEditFormData> = async (
-    formData,
-  ) => {
-    const rubric = await createNewRubric(formData);
+  // Selecting another revision while the unsaved draft is open captures its in-progress form values
+  // first, so sliding back to "Unsaved" resumes exactly where the user left off.
+  const handleSelectRevision = (revisionId: number): void => {
+    if (isEditingDraft && draft) setDraft(editForm.getValues());
+    setSelectedRubricId(revisionId);
+  };
+
+  // First "Edit Rubric" click: seed an Unsaved draft from the currently selected revision and open it.
+  const handleStartEditing = (): void => {
+    setDraft(rubricStateToFormData(selectedRubricData?.state));
+    setDraftCreatedAt(new Date().toISOString());
+    setEditSourceRubricId(selectedRubricId);
+    setActiveTab(RubricPlaygroundTab.EDIT);
+    setSelectedRubricId(UNSAVED_RUBRIC_ID);
+  };
+
+  // From a read-only preview, jump back to the unsaved draft (its captured edits are restored).
+  const handleReturnToEditing = (): void => {
+    setSelectedRubricId(UNSAVED_RUBRIC_ID);
+  };
+
+  // From a read-only preview, replace the draft with a fresh copy of the previewed revision.
+  const handleRestartEditing = (): void => {
+    setDraft(rubricStateToFormData(selectedRubricData?.state));
+    setDraftCreatedAt(new Date().toISOString());
+    setEditSourceRubricId(selectedRubricId);
+    setSelectedRubricId(UNSAVED_RUBRIC_ID);
+  };
+
+  const handleDiscardChanges = (): void => {
+    setDraft(null);
+    setActiveTab(RubricPlaygroundTab.EVALUATE);
+    setSelectedRubricId(editSourceRubricId);
+  };
+
+  // Points the question's active rubric at the selected revision (server + store). Forwarded unconditionally;
+  // the backend rejects an incompatible change with graded answers (409) unless confirmRubricAdvance is set,
+  // which RubricHeader surfaces as a confirmation before retrying. The store updates only on success.
+  const handleSetActive = async (
+    confirmRubricAdvance = false,
+  ): Promise<void> => {
+    await setActiveRubric(selectedRubricId, confirmRubricAdvance);
+    dispatch(questionRubricsActions.setActiveRubric(selectedRubricId));
+  };
+
+  // Persists the draft as a new saved revision. The draft's latest values come from the live form when
+  // it is open, otherwise from the captured draft state. Evaluations are seeded from the source revision.
+  const handleSaveDraft = async (): Promise<void> => {
+    const draftValues = isEditingDraft ? editForm.getValues() : draft;
+    if (!draftValues) return;
+
+    const sourceRubric = rubricState.rubrics[editSourceRubricId];
+    const rubric = await createNewRubric(draftValues);
     await dispatch(
       questionRubricsActions.createNewRubric({
         rubric,
-        selectedRubricId,
+        selectedRubricId: editSourceRubricId,
       }),
     );
     await Promise.all([
       initializeAnswerEvaluations(
         rubric.id,
-        Object.values(selectedRubricData?.state.answerEvaluations ?? []).map(
+        Object.values(sourceRubric?.answerEvaluations ?? {}).map(
           (evaluation) => evaluation.answerId,
         ),
       ),
       initializeMockAnswerEvaluations(
         rubric.id,
-        Object.values(
-          selectedRubricData?.state.mockAnswerEvaluations ?? [],
-        ).map((evaluation) => evaluation.mockAnswerId),
+        Object.values(sourceRubric?.mockAnswerEvaluations ?? {}).map(
+          (evaluation) => evaluation.mockAnswerId,
+        ),
       ),
     ]);
+    setDraft(null);
     setSelectedRubricId(rubric.id);
     setActiveTab(RubricPlaygroundTab.EVALUATE);
   };
@@ -172,62 +254,73 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchPlaygroundData}>
       {() => {
-        if (!selectedRubricData) return <LoadingIndicator />;
+        // The unsaved draft has no store entry, so selectedRubricData is undefined while it is selected.
+        if (!isEditingDraft && !selectedRubricData) return <LoadingIndicator />;
 
-        const {
-          state: selectedRubric,
-          index: selectedRubricIndex,
-          answerCount,
-          answerEvaluatedCount,
-        } = selectedRubricData;
+        const selectedRubric = selectedRubricData?.state;
 
         const compareRubrics =
-          activeTab === RubricPlaygroundTab.COMPARE
+          activeTab === RubricPlaygroundTab.COMPARE && selectedRubricData
             ? sortedRubrics.slice(
-                Math.max(0, selectedRubricIndex - compareCount + 1),
-                selectedRubricIndex + 1,
+                Math.max(0, selectedRubricData.index - compareCount + 1),
+                selectedRubricData.index + 1,
               )
             : undefined;
-        const answerEvaluationTableData = buildSelectedRubricTableData(
-          selectedRubric,
-          rubricState.answers,
-          rubricState.mockAnswers,
-          compareRubrics,
-        );
+        const answerEvaluationTableData = selectedRubric
+          ? buildSelectedRubricTableData(
+              selectedRubric,
+              rubricState.answers,
+              rubricState.mockAnswers,
+              compareRubrics,
+            )
+          : [];
+
+        // In edit mode: the draft is editable, a previewed saved revision is read-only.
+        const editInitialValues =
+          isEditingDraft && draft
+            ? draft
+            : rubricStateToFormData(selectedRubric);
+
         return (
           <>
             <RubricHeader
               activeTab={activeTab}
               compareCount={compareCount}
-              editForm={editForm}
+              onDiscardChanges={handleDiscardChanges}
+              onRestartEditing={handleRestartEditing}
+              onReturnToEditing={handleReturnToEditing}
+              onSaveDraft={handleSaveDraft}
+              onSelectRevision={handleSelectRevision}
+              onSetActive={handleSetActive}
+              onStartEditing={handleStartEditing}
+              revisions={revisions}
+              selectedRevisionIndex={selectedRevisionIndex}
               selectedRubric={selectedRubric}
-              selectedRubricIndex={selectedRubricIndex}
               setActiveTab={setActiveTab}
               setCompareCount={setCompareCount}
-              setSelectedRubricId={setSelectedRubricId}
-              sortedRubrics={sortedRubrics}
             />
 
             {activeTab === RubricPlaygroundTab.EDIT && (
               <RubricEditForm
+                disabled={!isEditingDraft}
                 form={editForm}
-                onSubmit={handleEditFormSubmit}
-                selectedRubric={selectedRubric}
+                formKey={selectedRubricId}
+                initialValues={editInitialValues}
               />
             )}
 
-            {isShowingAnswerEvaluationsTable && (
+            {isShowingAnswerEvaluationsTable && selectedRubricData && (
               <AnswerEvaluationsTableHeader
-                answerCount={answerCount}
-                answerEvaluatedCount={answerEvaluatedCount}
+                answerCount={selectedRubricData.answerCount}
+                answerEvaluatedCount={selectedRubricData.answerEvaluatedCount}
                 answerEvaluationTableData={answerEvaluationTableData}
                 compareCount={compareCount}
                 isComparing={activeTab === RubricPlaygroundTab.COMPARE}
-                selectedRubric={selectedRubric}
+                selectedRubric={selectedRubricData.state}
               />
             )}
 
-            {isShowingAnswerEvaluationsTable && (
+            {isShowingAnswerEvaluationsTable && selectedRubric && (
               <AnswerEvaluationsTable
                 data={answerEvaluationTableData}
                 isComparing={activeTab === RubricPlaygroundTab.COMPARE}

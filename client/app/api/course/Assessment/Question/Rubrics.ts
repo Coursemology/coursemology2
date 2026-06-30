@@ -104,7 +104,22 @@ export default class RubricsAPI extends BaseAssessmentAPI {
     );
   }
 
-  exportEvaluations(rubricId: number): APIResponse<JobStatusResponse> {
-    return this.client.post(`${this.#urlPrefix}/${rubricId}/export`);
+  setActive(rubricId: number, confirmRubricAdvance = false): APIResponse<void> {
+    return this.client.post(`${this.#urlPrefix}/${rubricId}/set_active`, {
+      confirm_rubric_advance: confirmRubricAdvance,
+    });
+  }
+
+  // Sets the official grade of the given answers from this rubric's evaluations (reusing each answer's
+  // existing llm evaluation when present, otherwise evaluating once).
+  applyEvaluations(
+    rubricId: number,
+    answerIds: number[],
+    shouldApplyUnevaluated: boolean,
+  ): APIResponse<JobStatusResponse> {
+    return this.client.post(`${this.#urlPrefix}/${rubricId}/apply`, {
+      answer_ids: answerIds,
+      should_apply_unevaluated: shouldApplyUnevaluated,
+    });
   }
 }

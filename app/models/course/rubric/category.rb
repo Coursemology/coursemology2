@@ -1,5 +1,11 @@
 # frozen_string_literal: true
+# This table contains a DEPRECATED column: "is_bonus_category".
+# v2 rubrics never have bonus categories (the migration and all v2 code build only non-bonus categories),
+# so this column is always false and must NOT be read or written.
+# "moderation" adjustment is now a frontend-only concept (see RubricModerationRow), not a category.
 class Course::Rubric::Category < ApplicationRecord
+  include Course::Rubric::CopyOnWriteConcern
+
   validates :rubric, presence: true
 
   validate :validate_unique_grades_within_category
@@ -19,9 +25,7 @@ class Course::Rubric::Category < ApplicationRecord
 
   accepts_nested_attributes_for :criterions, allow_destroy: true
 
-  default_scope { order(Arel.sql('is_bonus_category ASC')) }
-
-  scope :without_bonus_category, -> { where(is_bonus_category: false) }
+  default_scope { order(:weight) }
 
   def initialize_duplicate(duplicator, other)
     self.criterions = duplicator.duplicate(other.criterions)
@@ -30,9 +34,17 @@ class Course::Rubric::Category < ApplicationRecord
   def self.build_from_v1(v1_category)
     Course::Rubric::Category.new(
       name: v1_category.name,
-      is_bonus_category: v1_category.is_bonus_category,
       criterions: v1_category.criterions.map { |c| Course::Rubric::Category::Criterion.build_from_v1(c) }
     )
+  end
+
+  # Plain content tree for the rubric content_hash; criterions are ordered by grade. Mirrors the
+  # migration's per-category structure (name + criterions), excluding weight.
+  def canonical_content
+    {
+      name: name.to_s,
+      criterions: criterions.sort_by { |criterion| criterion.grade.to_i }.map(&:canonical_content)
+    }
   end
 
   private
@@ -46,14 +58,14 @@ class Course::Rubric::Category < ApplicationRecord
 
   def validate_at_least_one_grade
     existing_criterions = criterions.reject(&:marked_for_destruction?)
-    return nil if is_bonus_category || !existing_criterions.empty?
+    return nil unless existing_criterions.empty?
 
     errors.add(:criterions, :at_least_one_grade)
   end
 
   def validate_grade_zero_exists
     all_criterions = criterions.reject(&:marked_for_destruction?).map(&:grade)
-    return nil if is_bonus_category || all_criterions.include?(0)
+    return nil if all_criterions.include?(0)
 
     errors.add(:criterions, :grade_zero_missing)
   end

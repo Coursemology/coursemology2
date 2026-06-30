@@ -610,6 +610,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.category',
     defaultMessage: 'Category',
   },
+  moderation: {
+    id: 'course.assessment.submission.moderation',
+    defaultMessage: 'Moderation',
+  },
+  moderationHint: {
+    id: 'course.assessment.submission.moderationHint',
+    defaultMessage:
+      '(Optional) Manual grade adjustment independent of the rubric criteria.',
+  },
   explanation: {
     id: 'course.assessment.submission.explanation',
     defaultMessage: 'Explanation',

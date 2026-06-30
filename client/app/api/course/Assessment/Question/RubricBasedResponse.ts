@@ -26,10 +26,16 @@ export default class RubricBasedResponseAPI extends BaseAPI {
     return this.client.post(`${this.#urlPrefix}`, data);
   }
 
+  // confirmRubricAdvance lets an incompatible rubric change (which would re-grade existing answers) go
+  // through; without it the backend rolls back and 409s so the frontend can confirm with the user first.
   update(
     id: number,
     data: RubricBasedResponsePostData,
+    confirmRubricAdvance: boolean,
   ): APIResponse<JustRedirect> {
-    return this.client.patch(`${this.#urlPrefix}/${id}`, data);
+    return this.client.patch(`${this.#urlPrefix}/${id}`, {
+      ...data,
+      confirm_rubric_advance: confirmRubricAdvance,
+    });
   }
 }

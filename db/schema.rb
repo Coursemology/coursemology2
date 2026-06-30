@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -479,7 +479,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
     t.boolean "is_low_priority", default: false
     t.string "koditsu_question_id"
     t.boolean "is_synced_with_koditsu", default: false, null: false
+    t.bigint "active_rubric_id"
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
+    t.index ["active_rubric_id"], name: "index_course_assessment_questions_on_active_rubric_id"
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"
   end
@@ -1151,10 +1153,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
 
   create_table "course_rubric_answer_evaluations", force: :cascade do |t|
     t.bigint "answer_id", null: false
-    t.bigint "rubric_id", null: false
+    t.bigint "rubric_id"
     t.uuid "job_id"
     t.text "feedback"
+    t.string "evaluation_type", default: "playground", null: false
+    t.index ["answer_id", "rubric_id"], name: "index_course_rubric_playground_evaluation_on_answer_rubric", unique: true, where: "((evaluation_type)::text = ANY ((ARRAY['playground'::character varying, 'playground_hidden'::character varying])::text[]))"
     t.index ["answer_id"], name: "index_course_rubric_answer_evaluations_on_answer_id"
+    t.index ["answer_id"], name: "index_course_rubric_grading_evaluation_on_answer", unique: true, where: "((evaluation_type)::text = 'grading'::text)"
     t.index ["job_id"], name: "index_course_rubric_answer_evaluations_on_job_id", unique: true
     t.index ["rubric_id"], name: "index_course_rubric_answer_evaluations_on_rubric_id"
   end
@@ -1163,6 +1168,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
     t.bigint "rubric_id", null: false
     t.text "name", null: false
     t.boolean "is_bonus_category", default: false, null: false
+    t.integer "weight", default: 0, null: false
     t.index ["rubric_id"], name: "index_course_rubric_categories_on_rubric_id"
   end
 
@@ -1197,6 +1203,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
     t.datetime "created_at", null: false
     t.text "grading_prompt", default: "", null: false
     t.text "model_answer", default: "", null: false
+    t.string "content_hash", default: "", null: false
     t.index ["course_id"], name: "index_course_rubrics_on_course_id"
   end
 
@@ -1843,6 +1850,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_14_052933) do
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
   add_foreign_key "course_assessment_question_text_response_solution_spreadsheets", "course_assessment_question_text_response_solutions", column: "solution_id"
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
+  add_foreign_key "course_assessment_questions", "course_rubrics", column: "active_rubric_id", on_delete: :nullify
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"
   add_foreign_key "course_assessment_skill_branches", "courses", name: "fk_course_assessment_skill_branches_course_id"

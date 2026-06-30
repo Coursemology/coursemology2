@@ -1,16 +1,10 @@
 import { FC, useEffect } from 'react';
-import {
-  Controller,
-  FormProvider,
-  SubmitHandler,
-  UseFormReturn,
-} from 'react-hook-form';
+import { Controller, FormProvider, UseFormReturn } from 'react-hook-form';
 import { Paper, Typography } from '@mui/material';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { RubricState } from '../../reducers/rubrics';
 import translations from '../translations';
 import { RubricEditFormData } from '../types';
 
@@ -18,42 +12,38 @@ import PlaygroundCategoryManager from './PlaygroundCategoryManager';
 
 interface RubricEditFormProps {
   form: UseFormReturn<RubricEditFormData>;
-  selectedRubric: RubricState;
-  onSubmit: SubmitHandler<RubricEditFormData>;
+  initialValues: RubricEditFormData;
+  // A read-only preview of a saved revision disables every input; the unsaved draft is editable.
+  disabled: boolean;
+  // Re-seeds the form whenever the previewed/edited revision changes (saved revision id or the draft).
+  formKey: number;
 }
 
 const RubricEditForm: FC<RubricEditFormProps> = (props) => {
   const { t } = useTranslation();
-  const { form, selectedRubric, onSubmit } = props;
+  const { form, initialValues, disabled, formKey } = props;
 
   useEffect(() => {
-    form.reset({
-      categories: (selectedRubric?.categories ?? []).map((category) => ({
-        ...category,
-        criterions: category.criterions.map((criterion) => ({
-          ...criterion,
-          draft: false,
-          toBeDeleted: false,
-        })),
-        toBeDeleted: false,
-      })),
-      gradingPrompt: selectedRubric?.gradingPrompt ?? '',
-      modelAnswer: selectedRubric?.modelAnswer ?? '',
-    });
-  }, [selectedRubric.id]);
+    form.reset(initialValues);
+  }, [formKey]);
 
   return (
     <form
       className="flex flex-row space-x-4 pt-4"
       id="rubric-playground-edit-form"
-      onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="w-1/2">
         <Paper className="p-3 space-y-4" variant="outlined">
-          <Typography variant="subtitle2">
+          <Typography
+            className={`${disabled ? 'text-neutral-500' : ''}`}
+            variant="subtitle2"
+          >
             {t(translations.gradingPrompt)}
           </Typography>
-          <Typography variant="caption">
+          <Typography
+            className={`${disabled ? 'text-neutral-500' : ''}`}
+            variant="caption"
+          >
             {t(translations.gradingPromptDescription)}
           </Typography>
           <Controller
@@ -61,7 +51,7 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
             name="gradingPrompt"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
-                disabled={false}
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
                 fullWidth
@@ -69,10 +59,16 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
             )}
           />
 
-          <Typography variant="subtitle2">
+          <Typography
+            className={`${disabled ? 'text-neutral-500' : ''}`}
+            variant="subtitle2"
+          >
             {t(translations.modelAnswer)}
           </Typography>
-          <Typography variant="caption">
+          <Typography
+            className={`${disabled ? 'text-neutral-500' : ''}`}
+            variant="caption"
+          >
             {t(translations.modelAnswerDescription)}
           </Typography>
           <Controller
@@ -80,7 +76,7 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
             name="modelAnswer"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
-                disabled={false}
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
                 fullWidth
@@ -92,7 +88,7 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
 
       <div className="w-1/2">
         <FormProvider {...form}>
-          <PlaygroundCategoryManager disabled={false} />
+          <PlaygroundCategoryManager disabled={disabled} />
         </FormProvider>
       </div>
     </form>

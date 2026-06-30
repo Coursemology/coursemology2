@@ -6,7 +6,6 @@ import {
   SubmissionQuestionBaseData,
 } from 'types/course/assessment/submission/question/types';
 
-import TextField from 'lib/components/core/fields/TextField';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -22,8 +21,13 @@ import { getQuestions } from '../selectors/questions';
 import { getSubmissionFlags } from '../selectors/submissionFlags';
 import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
-import { GradeWithPrefilledStatus } from '../types';
-import { transformRubric } from '../utils/rubrics';
+import {
+  gradeWithModerationPreserved,
+  sumRubricBreakdown,
+  transformRubric,
+} from '../utils/rubrics';
+
+import { SaveRubricGrade } from './useSaveRubricGrade';
 
 interface RubricExplanationProps {
   answerId: number;
@@ -31,11 +35,7 @@ interface RubricExplanationProps {
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
-  updateGrade: (
-    catGrades: Record<number, AnswerRubricGradeData>,
-    qId: number,
-    oldQuestions: Record<number, GradeWithPrefilledStatus>,
-  ) => void;
+  updateGrade: SaveRubricGrade;
 }
 
 const RubricExplanation: FC<RubricExplanationProps> = (props) => {
@@ -80,29 +80,25 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   const handleOnChange = (event): void => {
     const newValue = event.target.value;
 
-    const newCategoryGrades = category.isBonusCategory
-      ? {
-          ...categoryGrades,
-          [category.id]: {
-            ...categoryGrades[category.id],
-            explanation: newValue,
-          },
-        }
-      : {
-          ...categoryGrades,
-          [category.id]: {
-            ...categoryGrades[category.id],
-            gradeId: Number(newValue),
-            grade: categoryIdToGradeMap[Number(newValue)],
-          },
-        };
+    const newCategoryGrades = {
+      ...categoryGrades,
+      [category.id]: {
+        ...categoryGrades[category.id],
+        gradeId: Number(newValue),
+        grade: categoryIdToGradeMap[Number(newValue)],
+      },
+    };
 
-    const totalGrade = Object.values(newCategoryGrades).reduce(
-      (acc, catGrade) => acc + Number(catGrade.grade),
-      0,
+    // Apply the breakdown change while preserving the answer's manual moderation adjustment.
+    const currentGrade =
+      questionWithGrades[questionId]?.grade ??
+      sumRubricBreakdown(categoryGrades);
+    const finalGrade = gradeWithModerationPreserved(
+      categoryGrades,
+      newCategoryGrades,
+      currentGrade,
+      question.maximumGrade,
     );
-
-    const finalGrade = Math.max(0, Math.min(totalGrade, question.maximumGrade));
 
     setIsFirstRendering(false);
 
@@ -110,23 +106,14 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
     dispatch(updateGradeState(questionId, finalGrade, bonusAwarded));
 
     if (isNotGradedAndNotPublished) {
-      updateGrade(newCategoryGrades, questionId, questionWithGrades);
+      updateGrade(
+        newCategoryGrades,
+        questionId,
+        questionWithGrades,
+        finalGrade,
+      );
     }
   };
-
-  if (category.isBonusCategory) {
-    return (
-      <TextField
-        className="w-full"
-        disabled={isAutograding}
-        id={`category-${category.id}`}
-        multiline
-        onChange={handleOnChange}
-        value={categoryGrades[category.id].explanation}
-        variant="outlined"
-      />
-    );
-  }
 
   return (
     <Select
