@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 json.aiGradingEnabled question.ai_grading_enabled? if can_grade
 
-# TODO: Discuss flow to handle autograded rubric based response questions / decide when to auto-publish.
-# For now, this maintains existing behavior where students know answer submitted but not results until manually graded.
 json.autogradable false
 json.templateText question.template_text
 if can_grade || (@assessment.show_rubric_to_students? && answer.submission.published?)
-  json.categories question.categories.each do |category|
+  # Show the categories of the active rubric (Bonus categories no longer exist in v2.)
+  graded_rubric = question.active_rubric
+  rubric_categories = graded_rubric&.categories || []
+  json.categories rubric_categories do |category|
     json.id category.id
     json.name category.name
     json.maximumGrade category.criterions.map(&:grade).compact.max
-    json.isBonusCategory category.is_bonus_category
 
-    json.grades category.criterions.each do |criterion|
+    json.grades category.criterions do |criterion|
       json.id criterion.id
       json.grade criterion.grade
       json.explanation format_ckeditor_rich_text(criterion.explanation)

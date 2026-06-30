@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment::Answer::AutoGradingService # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
     answer.correct, grade, messages, feedback = evaluate_answer(answer.actable)
     answer.auto_grading.result = { messages: messages }
@@ -15,9 +15,12 @@ class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment:
   # @return [Array<(Boolean, Integer, Object, String)>] The correct status, grade, messages to be
   #   assigned to the grading, and feedback for the draft post.
   def evaluate_answer(answer)
+    rubric = answer.question.active_rubric
+    raise ActiveRecord::RecordNotFound, "No active rubric for question #{answer.question_id}" if rubric.nil?
+
     question_adapter = Course::Assessment::Question::QuestionAdapter.new(answer.question)
-    rubric_adapter = Course::Assessment::Question::RubricBasedResponse::RubricAdapter.new(answer.question.actable)
-    answer_adapter = Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer)
+    rubric_adapter = Course::Rubric::RubricAdapter.new(rubric)
+    answer_adapter = Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer, rubric)
 
     llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
     answer_adapter.save_llm_results(llm_response)

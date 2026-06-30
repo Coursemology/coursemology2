@@ -313,6 +313,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           <RubricPanel
             answerCategoryGrades={answerCategoryGrades!}
             answerId={grading.id}
+            currentGrade={grading.grade ?? 0}
             question={question as SubmissionQuestionData<'RubricBasedResponse'>}
             setIsFirstRendering={setIsFirstRendering}
           />

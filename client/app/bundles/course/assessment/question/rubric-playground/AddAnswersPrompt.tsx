@@ -1,6 +1,6 @@
-import { ComponentRef, FC, useRef } from 'react';
+import { ComponentRef, FC, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { RadioGroup } from '@mui/material';
+import { FormControlLabel, RadioGroup, Switch } from '@mui/material';
 import { RubricAnswerData } from 'types/course/rubrics';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -12,6 +12,7 @@ import Table, { ColumnTemplate } from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';
+import { currentAnswersOnly } from './utils';
 
 export enum AddSampleMode {
   SPECIFIC_ANSWER = 'SPECIFIC_ANSWER',
@@ -40,6 +41,11 @@ const AddAnswersPrompt: FC<Props> = (props) => {
   const { answers, onSubmit, onClose, open, maximumGrade } = props;
 
   const tableRef = useRef<ComponentRef<typeof Table>>(null);
+
+  const [showOnlyLatest, setShowOnlyLatest] = useState(true);
+  const displayedAnswers = showOnlyLatest
+    ? currentAnswersOnly(answers)
+    : answers;
 
   const { control, handleSubmit, watch, setValue, reset } = useForm<{
     addMode: AddSampleMode;
@@ -128,26 +134,40 @@ const AddAnswersPrompt: FC<Props> = (props) => {
                 value={AddSampleMode.SPECIFIC_ANSWER}
               />
               {selectedAddMode === AddSampleMode.SPECIFIC_ANSWER && (
-                <Table
-                  ref={tableRef}
-                  className="overflow-x-scroll"
-                  columns={columns}
-                  data={answers}
-                  getRowClassName={(answer): string => `answer_${answer.id}`}
-                  getRowEqualityData={(answer) => answer}
-                  getRowId={(instance): string => instance.id.toString()}
-                  indexing={{ rowSelectable: true }}
-                  pagination={{
-                    rowsPerPage: [5],
-                  }}
-                  search={{
-                    searchPlaceholder: t(translations.searchAnswersPlaceholder),
-                  }}
-                  toolbar={{
-                    show: true,
-                    keepNative: true,
-                  }}
-                />
+                <div className="space-y-2">
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={showOnlyLatest}
+                        onChange={(_, checked) => setShowOnlyLatest(checked)}
+                        size="small"
+                      />
+                    }
+                    label={t(translations.showOnlyLatestAnswers)}
+                  />
+                  <Table
+                    ref={tableRef}
+                    className="overflow-x-scroll"
+                    columns={columns}
+                    data={displayedAnswers}
+                    getRowClassName={(answer): string => `answer_${answer.id}`}
+                    getRowEqualityData={(answer) => answer}
+                    getRowId={(instance): string => instance.id.toString()}
+                    indexing={{ rowSelectable: true }}
+                    pagination={{
+                      rowsPerPage: [5],
+                    }}
+                    search={{
+                      searchPlaceholder: t(
+                        translations.searchAnswersPlaceholder,
+                      ),
+                    }}
+                    toolbar={{
+                      show: true,
+                      keepNative: true,
+                    }}
+                  />
+                </div>
               )}
               <RadioButton
                 className="my-0"

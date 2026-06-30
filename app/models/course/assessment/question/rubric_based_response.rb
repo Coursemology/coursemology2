@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+# This table contains DEPRECATED columns: "custom_prompt" and "model_answer".
+# In the v2 rubric structure, this data has been moved to the rubric itself (see Course::Rubric)
 class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
   include DuplicationStateTrackingConcern
+
   acts_as :question, class_name: 'Course::Assessment::Question'
 
   validate :validate_no_reserved_category_names, unless: :duplicating?
@@ -18,6 +21,10 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     set_duplication_flag
     copy_attributes(other)
 
+    # active_rubric now lives on the polymorphic question; the dup'd acting_as carries the source's
+    # active_rubric_id over, so replace it with a duplicate of the source rubric (these accessors proxy to
+    # acting_as) so the new question owns its own (immutable) v2 rubric instead of sharing the source's.
+    self.active_rubric = duplicator.duplicate(other.active_rubric)
     self.categories = duplicator.duplicate(other.categories)
   end
 

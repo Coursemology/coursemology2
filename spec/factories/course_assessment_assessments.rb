@@ -124,6 +124,20 @@ FactoryBot.define do
           assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
+
+      # Mirror the real create flow: back every rubric question with a v2 Course::Rubric (active_rubric)
+      # built from its categories, so tests exercise questions the way production data looks.
+      after(:create) do |assessment, _evaluator|
+        assessment.questions.reload.each do |question|
+          specific = question.specific
+          next unless specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
+          next if question.active_rubric_id
+
+          rubric = Course::Rubric.build_from_v1(specific, assessment.course)
+          rubric.save!
+          question.update_column(:active_rubric_id, rubric.id)
+        end
+      end
     end
 
     trait :with_all_question_types do

@@ -8,7 +8,8 @@ class Course::Rubric::AnswerEvaluation::Selection < ApplicationRecord
   belongs_to :category,
              class_name: 'Course::Rubric::Category',
              inverse_of: :selections
+  # Optional: a selection for a category the grader/LLM has not yet scored has no criterion (ungraded).
   belongs_to :criterion,
              class_name: 'Course::Rubric::Category::Criterion',
-             inverse_of: :selections
+             inverse_of: :selections, optional: true
 end

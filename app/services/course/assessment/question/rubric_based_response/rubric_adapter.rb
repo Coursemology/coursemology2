@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# DEPRECATED (v1). This class handled the v1 rubric-based response question's rubric content and prompt/model answer.
+# It is superseded by Course::Rubric::RubricAdapter, which handles the v2 rubric content and prompt/model answer.
 class Course::Assessment::Question::RubricBasedResponse::RubricAdapter <
   Course::Rubric::LlmService::RubricAdapter
   def initialize(question)

@@ -65,7 +65,11 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
     @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
-    @answers = @submission.answers.includes(actable: [grades: [question_grade: :category]])
+    # Preload each answer's question and its active_rubric (+ categories) so ensure_rubric_grading_evaluations
+    # and the rubric panel don't N+1 over the parent question now that active_rubric lives there.
+    @answers = @submission.answers.includes(actable: [grades: [question_grade: :category]],
+                                            question: { active_rubric: :categories })
+    ensure_rubric_grading_evaluations
   end
 
   def auto_grade
@@ -322,6 +326,18 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   private
+
+  # When a grader opens a (submitted) submission, make sure every rubric-based answer has a v2 grading
+  # evaluation so the rubric panel is editable and the breakdown persists, even for answers never
+  # auto-graded. Idempotent and grader-only; ungraded answers in an attempting submission are skipped.
+  def ensure_rubric_grading_evaluations
+    return if @submission.attempting? || cannot?(:grade, @submission)
+
+    @answers.each do |answer|
+      actable = answer.actable
+      actable.ensure_grading_evaluation! if actable.is_a?(Course::Assessment::Answer::RubricBasedResponse)
+    end
+  end
 
   def create_params
     { course_user: current_course_user }

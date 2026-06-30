@@ -2,6 +2,10 @@
 
 json.id rubric.id
 json.createdAt rubric.created_at.iso8601
+# Structural fingerprint (category/criterion content, order-independent; excludes prompt/model). Two
+# rubrics with the same contentHash are compatible -- grades carry across them without loss -- so the
+# frontend can warn before making a structurally incompatible revision active. See Course::Rubric.
+json.contentHash rubric.content_hash
 json.questions rubric.questions.map(&:id)
 json.gradingPrompt rubric.grading_prompt
 json.modelAnswer rubric.model_answer
@@ -11,7 +15,6 @@ json.categories rubric.categories.each do |category|
   json.id category.id
   json.name category.name
   json.maximumGrade category.criterions.map(&:grade).compact.max
-  json.isBonusCategory category.is_bonus_category
 
   json.criterions category.criterions.each do |criterion|
     json.id criterion.id

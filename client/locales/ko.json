@@ -2483,6 +2483,129 @@
   "course.assessment.question.rubricPlayground.comparingRevisions": {
     "defaultMessage": "{count}개 개정판 비교 중"
   },
+  "course.assessment.question.rubricPlayground.applyOnlyActiveRubric": {
+    "defaultMessage": "기존 점수 수정 적용에는 사용 중인 루브릭 개정판만 사용할 수 있습니다."
+  },
+  "course.assessment.question.rubricPlayground.showOnlyLatestAnswers": {
+    "defaultMessage": "학생별 최신 답변만 표시"
+  },
+  "course.assessment.question.rubricPlayground.applying": {
+    "defaultMessage": "적용 중"
+  },
+  "course.assessment.question.rubricPlayground.deleteRubricFailure": {
+    "defaultMessage": "이 루브릭 개정판을 삭제할 수 없습니다."
+  },
+  "course.assessment.question.rubricPlayground.activeRubric": {
+    "defaultMessage": "사용 중"
+  },
+  "course.assessment.question.rubricPlayground.latestRubric": {
+    "defaultMessage": "최신"
+  },
+  "course.assessment.question.rubricPlayground.unsavedRubric": {
+    "defaultMessage": "저장되지 않음"
+  },
+  "course.assessment.question.rubricPlayground.returnToEditing": {
+    "defaultMessage": "편집으로 돌아가기"
+  },
+  "course.assessment.question.rubricPlayground.restartEditing": {
+    "defaultMessage": "여기서부터 편집 다시 시작"
+  },
+  "course.assessment.question.rubricPlayground.restart": {
+    "defaultMessage": "다시 시작"
+  },
+  "course.assessment.question.rubricPlayground.discardChanges": {
+    "defaultMessage": "변경 사항 취소"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesTitle": {
+    "defaultMessage": "변경 사항 취소 확인"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesText": {
+    "defaultMessage": "저장하지 않은 루브릭 변경 사항이 사라집니다."
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingTitle": {
+    "defaultMessage": "편집 다시 시작 확인"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingText": {
+    "defaultMessage": "저장하지 않은 루브릭 변경 사항이 이 개정판으로 대체됩니다."
+  },
+  "course.assessment.question.rubricPlayground.setAsActive": {
+    "defaultMessage": "사용 중으로 설정"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveTitle": {
+    "defaultMessage": "경고: 호환되지 않는 개정판을 활성으로 설정"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveText": {
+    "defaultMessage": "이 개정판은 기존 점수와 구조적으로 호환되지 않습니다. 채점 데이터를 이어가지만 일부 데이터가 손실될 수 있으므로 답변 점수를 다시 확인하시기를 강력히 권장합니다. 계속 진행하시겠습니까?"
+  },
+  "course.assessment.question.rubricPlayground.applyReplacesSavedResults": {
+    "defaultMessage": "적용하면 선택한 답변의 저장된 점수와 코멘트가 사용 중인 루브릭의 평가 결과로 대체됩니다."
+  },
+  "course.assessment.question.rubricPlayground.applySelected": {
+    "defaultMessage": "선택한 {count}개 적용"
+  },
+  "course.assessment.question.rubricPlayground.evaluateSelected": {
+    "defaultMessage": "선택한 {count}개 평가"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle": {
+    "defaultMessage": "답변에 직접 적용 확인"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText": {
+    "defaultMessage": "적용하려는 답변 중 일부는 아직 사용 중인 루브릭으로 평가되지 않았습니다. 적용 과정에서 평가하지만, 적용 전에 먼저 평가하면 실제 학생 점수에 영향을 주기 전에 여기서 결과를 확인할 수 있습니다. 계속 진행하시겠습니까?"
+  },
+  "course.assessment.question.rubricPlayground.applyRow": {
+    "defaultMessage": "이 평가를 학생에게 적용"
+  },
+  "course.assessment.question.rubricPlayground.searchByStudentName": {
+    "defaultMessage": "학생 이름으로 검색"
+  },
+  "course.assessment.question.rubricPlayground.submissionStatus": {
+    "defaultMessage": "상태"
+  },
+  "course.assessment.question.rubricPlayground.currentGrade": {
+    "defaultMessage": "현재 점수"
+  },
+  "course.assessment.question.rubricPlayground.evaluationGrade": {
+    "defaultMessage": "새 점수"
+  },
+  "course.assessment.question.rubricPlayground.evaluationComment": {
+    "defaultMessage": "피드백"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatus": {
+    "defaultMessage": "채점 상태"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusModified": {
+    "defaultMessage": "수정됨"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusIncomplete": {
+    "defaultMessage": "미완료"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusStale": {
+    "defaultMessage": "오래됨"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusUpToDate": {
+    "defaultMessage": "최신 상태"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusManuallyGraded": {
+    "defaultMessage": "수동 채점"
+  },
+  "course.assessment.question.rubricPlayground.regradeRow": {
+    "defaultMessage": "사용 중인 루브릭으로 다시 평가 (점수는 변경되지 않음)"
+  },
+  "course.assessment.question.rubricPlayground.regradeSuccess": {
+    "defaultMessage": "재평가 완료."
+  },
+  "course.assessment.question.rubricPlayground.actions": {
+    "defaultMessage": "작업"
+  },
+  "course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades": {
+    "defaultMessage": "이 표의 평가는 학생에게 부여된 점수에 영향을 주지 않습니다. '적용' 버튼에서 기존 학생 점수를 업데이트할 수 있습니다."
+  },
+  "course.assessment.question.rubricPlayground.addAnswersTitle": {
+    "defaultMessage": "샘플 답변 추가"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
+    "defaultMessage": "추가"
+  },
   "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
     "defaultMessage": "샘플 답변 추가"
   },
@@ -3964,6 +4087,15 @@
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "총 등급"
+  },
+  "course.assessment.submission.rubricScores": {
+    "defaultMessage": "루브릭 점수"
+  },
+  "course.assessment.submission.moderation": {
+    "defaultMessage": "조정"
+  },
+  "course.assessment.submission.moderationHint": {
+    "defaultMessage": "(선택 사항) 루브릭 기준과 별개로 하는 수동 점수 조정."
   },
   "course.assessment.submission.type": {
     "defaultMessage": "유형"

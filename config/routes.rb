@@ -275,7 +275,8 @@ Rails.application.routes.draw do
               post 'mock_answer_evaluations/initialize', on: :member, action: 'initialize_mock_answer_evaluations'
               post :mock_answer_evaluations, on: :member, action: 'evaluate_mock_answer'
               delete 'mock_answer_evaluations/:mock_answer_id', on: :member, action: 'delete_mock_answer_evaluations'
-              post :export, on: :member, action: 'export_evaluations'
+              post :apply, on: :member, action: 'apply_evaluations'
+              post :set_active, on: :member
             end
 
             resources :mock_answers, on: :member, only: [:index, :create, :destroy]
@@ -286,9 +287,7 @@ Rails.application.routes.draw do
               post :generate, on: :collection
             end
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
-            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy] do
-              post :migrate_rubric, on: :member
-            end
+            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
               get :codaveri_languages, on: :collection

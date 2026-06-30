@@ -6,86 +6,56 @@ RSpec.describe Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter do
   with_tenant(:instance) do
     let(:assessment) { create(:assessment, :published_with_rubric_question) }
     let(:question) { assessment.questions.first.specific }
-    let(:submission) do
-      create(:submission, :attempting, assessment: assessment)
+    let!(:active_rubric) do
+      Course::Rubric.build_from_v1(question, assessment.course).tap do |rubric|
+        rubric.save!
+        question.acting_as.update_column(:active_rubric_id, rubric.id)
+      end
     end
+    let(:submission) { create(:submission, :attempting, assessment: assessment) }
     let(:answer) do
       create(:course_assessment_answer_rubric_based_response, :submitted,
              question: question.acting_as, submission: submission)
     end
 
-    subject { Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer) }
+    subject(:adapter) { described_class.new(answer, active_rubric) }
 
-    describe '#update_answer_selections' do
-      let(:category_grades) do
-        [
-          {
-            category_id: question.categories.first.id,
-            criterion_id: question.categories.first.criterions.first.id,
-            grade: question.categories.first.criterions.first.grade,
-            explanation: 'selection explanation'
-          }
-        ]
-      end
-      context 'when answer selections do not exist' do
-        before do
-          allow(answer.actable).to receive(:selections).and_return([])
-        end
-        it 'creates category grade instances' do
-          expect(answer.actable).to receive(:create_category_grade_instances)
-          expect(answer.actable).to receive(:reload)
-          subject.send(:update_answer_selections, answer.actable, category_grades)
-        end
-      end
-      context 'when answer selections exist' do
-        let(:selection) do
-          build_stubbed(:course_assessment_answer_rubric_based_response_selection,
-                        category_id: question.categories.first.id)
-        end
-        before do
-          allow(answer.actable).to receive(:selections).and_return([selection])
-        end
-        it 'assigns parameters to existing selections' do
-          expect(answer.actable).to receive(:assign_params).with(
-            hash_including(selections_attributes: array_including(
-              hash_including(
-                id: selection.id,
-                criterion_id: question.categories.first.criterions.first.id,
-                grade: question.categories.first.criterions.first.grade,
-                explanation: 'selection explanation'
-              )
-            ))
-          )
-          subject.send(:update_answer_selections, answer.actable, category_grades)
-        end
+    # One graded selection (criterion of grade 2) per active-rubric category, in the LLM response shape.
+    let(:category_grades) do
+      active_rubric.categories.map do |category|
+        criterion = category.criterions.find { |c| c.grade == 2 }
+        { category_id: category.id, criterion_id: criterion.id, grade: criterion.grade, explanation: 'why' }
       end
     end
+    let(:llm_response) { { 'category_grades' => category_grades, 'feedback' => 'Great work' } }
 
-    describe '#update_answer_grade' do
-      let(:category_grades) do
-        [
-          {
-            category_id: question.categories.first.id,
-            criterion_id: question.categories.first.criterions.first.id,
-            grade: question.categories.first.criterions.last.grade,
-            explanation: '1st selection explanation'
-          },
-          {
-            category_id: question.categories.second.id,
-            criterion_id: question.categories.second.criterions.first.id,
-            grade: question.categories.second.criterions.last.grade,
-            explanation: '2nd selection explanation'
-          }
-        ]
+    describe '#save_llm_results' do
+      it 'writes an llm and a grading evaluation against the active rubric' do
+        adapter.save_llm_results(llm_response)
+
+        llm = answer.acting_as.rubric_evaluations.playground_types.find_by(rubric: active_rubric)
+        grading = answer.acting_as.grading_rubric_evaluation
+
+        [llm, grading].each do |evaluation|
+          expect(evaluation).to be_present
+          expect(evaluation.feedback).to eq('Great work')
+          expect(evaluation.selections.map(&:criterion_id)).
+            to match_array(category_grades.map { |grade| grade[:criterion_id] })
+        end
+        expect(grading.rubric).to eq(active_rubric)
       end
-      it 'updates the answer grade based on category grades' do
-        subject.send(:update_answer_selections, answer.actable, category_grades)
-        total_grade = subject.send(:update_answer_grade, answer.actable, category_grades)
-        expect(total_grade).to eq(
-          question.categories.first.criterions.last.grade +
-          question.categories.second.criterions.last.grade
-        )
-        expect(answer.actable.grade).to eq(total_grade)
+
+      it 'sets the answer grade to the sum of the selected criterions (clamped to maximum)' do
+        adapter.save_llm_results(llm_response)
+
+        expected = category_grades.sum { |grade| grade[:grade] }
+        expect(answer.grade).to eq([expected, question.maximum_grade].min)
+      end
+
+      it 'upserts (does not duplicate) evaluations when graded again' do
+        adapter.save_llm_results(llm_response)
+        expect { adapter.save_llm_results(llm_response) }.
+          not_to change(Course::Rubric::AnswerEvaluation, :count)
       end
     end
   end

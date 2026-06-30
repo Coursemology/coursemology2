@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+# DEPRECATED (v1). This table (course_assessment_question_rubric_based_response_criterions) is no longer in use.
+# This table contained the criteria for the v1 rubric-based response grading rubrics under the categories.
+# DO NOT add new reads/writes - use Course::Rubric::Category::Criterion.
 class Course::Assessment::Question::RubricBasedResponseCriterion < ApplicationRecord
   validates :grade, numericality: { greater_than_or_equal_to: 0, only_integer: true }, presence: true
   validates :category, presence: true
