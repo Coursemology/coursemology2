@@ -1780,6 +1780,71 @@ describe('level contribution columns', () => {
     ).not.toBeInTheDocument();
   });
 
+  // Percent lens: the Level Contribution column is stored in points but, like every
+  // other category column, renders as "% of this component earned" in percent mode —
+  // i.e. contribution / weight × 100, NOT the raw points with a stray "%" suffix.
+  it('renders the level contribution as a percentage of its weight in percent mode', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: { ...levelOn, formula: 'level', weight: 30 },
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 10)],
+      // BE-supplied contribution: 15 pts out of a 30-pt budget.
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 15 },
+      ],
+      submissions: [makeSub(1, 100, 8)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    const aliceRow = screen.getByText('Alice').closest('tr')!;
+    // 15 / 30 → 50%, mirroring how a tab cell shows the fraction of that tab earned.
+    expect(within(aliceRow).getByText('50%')).toBeInTheDocument();
+  });
+
+  it('renders the level breakdown row as a percentage of the weight in percent mode', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      gamificationEnabled: true,
+      levelContribution: { ...levelOn, formula: 'level', weight: 30 },
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 10)],
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 8, levelContribution: 15 },
+      ],
+      submissions: [makeSub(1, 100, 8)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    await user.click(screen.getByRole('button', { name: /expand Alice/i }));
+    const levelRow = (await screen.findAllByTestId(/^breakdown-row-1--1-/))[0];
+    // The breakdown's level cell mirrors the summary cell: 15 / 30 → 50%.
+    expect(within(levelRow).getByText('50%')).toBeInTheDocument();
+  });
+
+  it('lets an over-budget level contribution read past 100% in percent mode', async () => {
+    const user = userEvent.setup();
+    renderWeighted({
+      gamificationEnabled: true,
+      // clamp off + a formula that overshoots: BE supplies the raw 45 pts.
+      levelContribution: {
+        ...levelOn,
+        formula: 'level',
+        weight: 30,
+        clamp: false,
+      },
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Quiz 1', 10, 10)],
+      students: [
+        { ...makeStudent(1, 'Alice'), level: 45, levelContribution: 45 },
+      ],
+      submissions: [makeSub(1, 100, 8)],
+    });
+    await user.click(screen.getByRole('radio', { name: /percentage/i }));
+    const aliceRow = screen.getByText('Alice').closest('tr')!;
+    // 45 / 30 → 150%: the weight is a suggested max, never a cap.
+    expect(within(aliceRow).getByText('150%')).toBeInTheDocument();
+  });
+
   // Over-budget warning: the level weight is a suggested maximum, so a formula can
   // push a student's contribution past it or below 0. The Level Contribution subheader
   // shows a bound-aware message (above-only, below-only, or both).

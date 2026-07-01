@@ -385,8 +385,11 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const effectiveWeight = (tabId: number): number =>
     isAllExcluded(tabId) ? 0 : weights[tabId] ?? 0;
 
-  const parsedLevel: ParsedFormula | null =
-    levelEnabled && levelFormula ? parseFormula(levelFormula) : null;
+  // Parse whenever enabled — including an empty string, which parseFormula reports as
+  // { ok: false, error: 'Enter a formula.' } so Save is blocked and the field flags it.
+  const parsedLevel: ParsedFormula | null = levelEnabled
+    ? parseFormula(levelFormula)
+    : null;
   const levelParseError =
     parsedLevel && !parsedLevel.ok ? parsedLevel.error : null;
   // Students whose contribution falls outside [0, levelWeight], split by bound —

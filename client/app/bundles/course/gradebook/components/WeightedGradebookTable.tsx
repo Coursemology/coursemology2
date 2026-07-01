@@ -309,6 +309,18 @@ const WeightedGradebookTable = ({
     return displayMode === 'percent' ? sub * 100 : sub * weight;
   };
 
+  // The Level Contribution is stored in points (already weight-scaled). Points mode
+  // shows it verbatim; percent mode shows the fraction of the level budget earned
+  // (points / weight × 100), mirroring how a tab cell reads in percent — a value can
+  // exceed 100% since the weight is a suggested max, never a cap. Weight 0 → the
+  // component carries no grade, so there's nothing meaningful to normalise against.
+  const levelDisplayValue = (points: number | null): number | null => {
+    if (points === null) return null;
+    if (displayMode !== 'percent') return points;
+    const weight = levelContribution.weight;
+    return weight > 0 ? (points / weight) * 100 : null;
+  };
+
   const allExcludedTabIds = useMemo(() => {
     const byTab = new Map<number, boolean>();
     assessments.forEach((a) => {
@@ -632,9 +644,11 @@ const WeightedGradebookTable = ({
     return {
       tabs: tabPrecs,
       total: columnPrecision(rows.map((r) => totalDisplayValue(r.total))),
-      level: columnPrecision(rows.map((r) => r.levelContribution ?? null)),
+      level: columnPrecision(
+        rows.map((r) => levelDisplayValue(r.levelContribution ?? null)),
+      ),
     };
-  }, [rows, resolvedTabs, displayMode, totalWeight]);
+  }, [rows, resolvedTabs, displayMode, totalWeight, levelContribution.weight]);
 
   const hasExternalIds = useMemo(
     () => students.some((s) => s.externalId != null && s.externalId !== ''),
@@ -689,9 +703,13 @@ const WeightedGradebookTable = ({
       cols.push({
         id: 'levelContribution',
         title: t(translations.levelContributionHeader),
-        accessorFn: (row) => fmtCsv(row.levelContribution ?? null),
+        accessorFn: (row) =>
+          fmtCsv(levelDisplayValue(row.levelContribution ?? null)),
         cell: (row) =>
-          fmtDisplay(row.levelContribution ?? null, columnPrecisions.level),
+          fmtDisplay(
+            levelDisplayValue(row.levelContribution ?? null),
+            columnPrecisions.level,
+          ),
         csvDownloadable: true,
       });
     }
@@ -1267,7 +1285,9 @@ const WeightedGradebookTable = ({
                         {showLevelContributionCol &&
                           ((): React.JSX.Element => {
                             const valueText = fmtDisplay(
-                              row.original.levelContribution ?? null,
+                              levelDisplayValue(
+                                row.original.levelContribution ?? null,
+                              ),
                               columnPrecisions.level,
                             );
                             const info = levelClampByStudent.get(
@@ -1479,7 +1499,7 @@ const WeightedGradebookTable = ({
                                   <TableCell align="right">
                                     {tb.tabId === LEVEL_TAB_ID
                                       ? fmtDisplay(
-                                          a.points,
+                                          levelDisplayValue(a.points),
                                           columnPrecisions.level,
                                         )
                                       : ''}

@@ -23,6 +23,13 @@ RSpec.describe Course::Gradebook::LevelConfig do
         expect(config).to be_valid
       end
 
+      it 'rejects an enabled config whose formula did not parse (blank ast), erroring on :formula' do
+        config = build(:course_gradebook_level_config, course: course,
+                                                       enabled: true, formula: 'level', formula_ast: nil)
+        expect(config).not_to be_valid
+        expect(config.errors[:formula]).to be_present
+      end
+
       it 'rejects a negative weight' do
         config = build(:course_gradebook_level_config, course: course, weight: -1)
         expect(config).not_to be_valid
@@ -43,7 +50,8 @@ RSpec.describe Course::Gradebook::LevelConfig do
       it 'creates a config from a camelCase-free attrs hash' do
         config = described_class.upsert_for(
           course: course,
-          attrs: { enabled: true, formula: 'min(level, 30) * 0.05', weight: 8, show: true }
+          attrs: { enabled: true, formula: 'min(level, 30) * 0.05',
+                   formula_ast: { 'type' => 'var', 'name' => 'level' }, weight: 8, show: true }
         )
         expect(config.enabled).to eq(true)
         expect(config.formula).to eq('min(level, 30) * 0.05')
@@ -52,7 +60,9 @@ RSpec.describe Course::Gradebook::LevelConfig do
       end
 
       it 'updates the existing singleton on a second call' do
-        described_class.upsert_for(course: course, attrs: { enabled: true, formula: 'level', weight: 2 })
+        described_class.upsert_for(course: course,
+                                   attrs: { enabled: true, formula: 'level',
+                                            formula_ast: { 'type' => 'var', 'name' => 'level' }, weight: 2 })
         described_class.upsert_for(course: course, attrs: { enabled: false, formula: '', weight: 0 })
         expect(described_class.where(course_id: course.id).count).to eq(1)
         expect(course.reload.gradebook_level_config.enabled).to eq(false)
@@ -253,12 +263,21 @@ RSpec.describe Course::Gradebook::LevelConfig do
         expect(config.formula_ast).to eq(valid_ast)
       end
 
-      it 'stores nil formula_ast when not provided' do
+      it 'stores nil formula_ast for a disabled config' do
         config = described_class.upsert_for(
           course: course,
-          attrs: { enabled: true, formula: 'level', weight: 5 }
+          attrs: { enabled: false, formula: '', weight: 0 }
         )
         expect(config.formula_ast).to be_nil
+      end
+
+      it 'raises RecordInvalid when enabled with a formula but no parseable ast' do
+        expect do
+          described_class.upsert_for(
+            course: course,
+            attrs: { enabled: true, formula: 'level', weight: 5 }
+          )
+        end.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it 'raises RecordInvalid for a malformed formula_ast' do

@@ -202,6 +202,19 @@ describe('<ConfigureWeightsPrompt />', () => {
     expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
   });
 
+  it('disables Save and flags the formula when Level contribution is enabled but the formula is cleared', () => {
+    setup({
+      gamificationEnabled: true,
+      levelContribution: enabledLevel(),
+      students,
+    });
+    fireEvent.change(screen.getByLabelText(/formula/i), {
+      target: { value: '' },
+    });
+    expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+    expect(screen.getByText('Enter a formula.')).toBeInTheDocument();
+  });
+
   it('shows the running assessment-weight sum against the tab total', () => {
     setup();
     fireEvent.click(
