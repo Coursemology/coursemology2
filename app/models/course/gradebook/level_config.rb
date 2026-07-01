@@ -4,9 +4,9 @@ class Course::Gradebook::LevelConfig < ApplicationRecord # rubocop:disable Metri
 
   validates :weight, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
   validates :formula, presence: true, if: :enabled
-  validates :formula_ast, presence: true, if: :enabled
   validates :course_id, uniqueness: true
   validate :formula_ast_structure
+  validate :enabled_formula_must_parse
 
   # Upserts the singleton Level config for a course from a normalized attrs hash
   # (symbol keys, snake_case). Raises ActiveRecord::RecordInvalid on validation failure.
@@ -86,6 +86,18 @@ class Course::Gradebook::LevelConfig < ApplicationRecord # rubocop:disable Metri
     return if formula_ast.blank?
 
     errors.add(:formula_ast, 'has an invalid structure') unless self.class.valid_ast?(formula_ast)
+  end
+
+  # An enabled contribution must carry a usable parse. formula_ast is derived client-side
+  # (there is no server-side parser), so a present formula with a blank ast means the formula
+  # did not parse — reject it on :formula (the field the user edits) rather than silently
+  # persisting an enabled config that evaluate_for returns nil for. The blank-formula case is
+  # already covered by the presence validation above, so guard on formula.present? to avoid a
+  # duplicate error.
+  def enabled_formula_must_parse
+    return unless enabled && formula.present?
+
+    errors.add(:formula, 'could not be parsed') if formula_ast.blank?
   end
 
   def evaluate_node(node, level)
