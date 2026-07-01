@@ -22,8 +22,13 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def update_weights
     authorize! :manage_gradebook_weights, current_course
     updates = (update_weights_params[:weights] || []).map { |entry| parse_weight_entry(entry) }
-    Course::Gradebook::TabContribution.bulk_update(course: current_course, updates: updates)
-    level_config = persist_level_contribution
+    level_config = nil
+    # One transaction so a rejected level formula rolls back the tab-weight writes too,
+    # rather than leaving a partial save.
+    ActiveRecord::Base.transaction do
+      Course::Gradebook::TabContribution.bulk_update(course: current_course, updates: updates)
+      level_config = persist_level_contribution
+    end
     response_body = { weights: serialize_weight_updates(updates) }
     response_body[:levelContribution] = serialize_level_contribution(level_config) if level_config
     render json: response_body
