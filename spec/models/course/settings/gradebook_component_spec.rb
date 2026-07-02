@@ -71,5 +71,29 @@ RSpec.describe Course::Settings::GradebookComponent do
         expect(settings.weighted_view_enabled).to eq(false)
       end
     end
+
+    describe '#cap_weighted_total' do
+      it 'returns false by default' do
+        expect(settings.cap_weighted_total).to eq(false)
+      end
+    end
+
+    describe '#cap_weighted_total=' do
+      it 'persists true when set to true' do
+        settings.cap_weighted_total = true
+        course.save!
+        expect(settings.cap_weighted_total).to eq(true)
+      end
+
+      it 'handles string "1" as truthy' do
+        settings.cap_weighted_total = '1'
+        expect(settings.cap_weighted_total).to eq(true)
+      end
+
+      it 'handles string "false" as falsy' do
+        settings.cap_weighted_total = 'false'
+        expect(settings.cap_weighted_total).to eq(false)
+      end
+    end
   end
 end

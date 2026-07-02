@@ -22,6 +22,7 @@ import { outOfRangeSummary } from '../../outOfRange';
 import {
   getAssessments,
   getCanManageWeights,
+  getCapTotal,
   getCategories,
   getCourseMaxLevel,
   getGamificationEnabled,
@@ -82,6 +83,7 @@ const GradebookIndex: FC = () => {
   const canManageWeights = useAppSelector(getCanManageWeights);
   const courseMaxLevel = useAppSelector(getCourseMaxLevel);
   const levelContribution = useAppSelector(getLevelContribution);
+  const capTotal = useAppSelector(getCapTotal);
 
   const rangeSummary = useMemo(
     () => outOfRangeSummary(assessments, submissions),
@@ -114,6 +116,7 @@ const GradebookIndex: FC = () => {
       <WeightedGradebookTable
         assessments={assessments}
         canManageWeights={canManageWeights}
+        capTotal={capTotal}
         categories={categories}
         courseId={courseId}
         courseMaxLevel={courseMaxLevel}

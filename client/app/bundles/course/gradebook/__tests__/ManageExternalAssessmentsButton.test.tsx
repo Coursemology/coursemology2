@@ -20,6 +20,7 @@ const state = {
       show: false,
       clamp: true,
     },
+    capTotal: false,
   },
 };
 

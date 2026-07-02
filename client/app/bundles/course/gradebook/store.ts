@@ -39,6 +39,7 @@ interface GradebookState {
   canManageWeights: boolean;
   levelContribution: LevelContributionData;
   courseMaxLevel: number;
+  capTotal: boolean;
 }
 
 interface SaveGradebookAction {
@@ -89,6 +90,7 @@ const initialState: GradebookState = {
     clamp: true,
   },
   courseMaxLevel: 0,
+  capTotal: false,
 };
 
 const reducer = produce(
@@ -116,6 +118,7 @@ const reducer = produce(
         draft.levelContribution =
           action.payload.levelContribution ?? initialState.levelContribution;
         draft.courseMaxLevel = action.payload.courseMaxLevel ?? 0;
+        draft.capTotal = action.payload.capTotal ?? false;
         break;
       }
       case UPDATE_TAB_WEIGHTS: {
@@ -172,6 +175,9 @@ const reducer = produce(
               student.levelContribution = null;
             });
           }
+        }
+        if (action.payload.capTotal !== undefined) {
+          draft.capTotal = action.payload.capTotal;
         }
         break;
       }

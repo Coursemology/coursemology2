@@ -439,3 +439,36 @@ describe('simple pass-through thunks', () => {
     expect(dispatched).toHaveLength(0);
   });
 });
+
+describe('updateGradebookWeights capTotal', () => {
+  afterEach(() => jest.restoreAllMocks());
+  const UPDATE = 'course/gradebook/UPDATE_TAB_WEIGHTS';
+
+  it('sends capTotal in the request and dispatches the echoed value', async () => {
+    const { dispatched, dispatch, getState } = harness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [], capTotal: true } } as never);
+
+    await updateGradebookWeights([], undefined, true)(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ capTotal: true }),
+    );
+    const updates = dispatched.filter((a) => a.type === UPDATE);
+    expect((updates[0].payload as { capTotal?: boolean }).capTotal).toBe(true);
+  });
+
+  it('omits capTotal from the request when it is not provided', async () => {
+    const { dispatch, getState } = harness();
+    const spy = jest
+      .spyOn(CourseAPI.gradebook, 'updateWeights')
+      .mockResolvedValue({ data: { weights: [] } } as never);
+
+    await updateGradebookWeights([])(dispatch, getState, {});
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.not.objectContaining({ capTotal: expect.anything() }),
+    );
+  });
+});
