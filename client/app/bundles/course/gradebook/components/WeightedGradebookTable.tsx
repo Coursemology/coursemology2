@@ -1,4 +1,11 @@
-import { Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  Fragment,
+  type ReactNode,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { defineMessages, MessageDescriptor } from 'react-intl';
 import {
   Download,
@@ -138,6 +145,10 @@ const translations = defineMessages({
   weightsDoNotSum: {
     id: 'course.gradebook.WeightedGradebookTable.weightsDoNotSum',
     defaultMessage: 'Weights do not sum to 100. Total may be inaccurate.',
+  },
+  totalCapped: {
+    id: 'course.gradebook.WeightedGradebookTable.totalCapped',
+    defaultMessage: 'Capped at 100%',
   },
   searchStudents: {
     id: 'course.gradebook.WeightedGradebookTable.searchStudents',
@@ -283,6 +294,7 @@ interface Props {
   gamificationEnabled: boolean;
   courseMaxLevel: number;
   levelContribution: LevelContributionData;
+  capTotal: boolean;
   /** Optional action rendered in the toolbar, left of the column picker. */
   toolbarAction?: JSX.Element;
 }
@@ -334,6 +346,7 @@ const WeightedGradebookTable = ({
   gamificationEnabled,
   courseMaxLevel,
   levelContribution,
+  capTotal,
   toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
@@ -489,7 +502,14 @@ const WeightedGradebookTable = ({
   );
   const allWeightsZero = totalWeight === 0;
 
-  const totalDisplayValue = (total: number | null): number | null => total;
+  // The cap only does anything when weights exceed 100 (Option A — tied to total
+  // weight, not per-student overflow). Display-only: the stored row.total stays raw.
+  const capActive = capTotal && totalWeight > 100;
+
+  const totalDisplayValue = (total: number | null): number | null => {
+    if (total === null) return null;
+    return capActive ? Math.min(total, 100) : total;
+  };
 
   const fmtDisplay = (v: number | null, prec: 0 | 1 | 2): string => {
     if (v === null) return '—';
@@ -900,6 +920,27 @@ const WeightedGradebookTable = ({
       ? t(translations.percentTotalExact)
       : t(translations.outOfWeight, { weight: totalWeight });
 
+  let totalWeightHeaderContent: ReactNode;
+  if (capActive) {
+    totalWeightHeaderContent = (
+      <Typography color="text.secondary" component="span" fontSize="inherit">
+        {t(translations.totalCapped)}
+      </Typography>
+    );
+  } else if (totalWeight === 100) {
+    totalWeightHeaderContent = totalWeightHeaderLabel;
+  } else {
+    totalWeightHeaderContent = (
+      <Tooltip title={t(translations.weightsDoNotSum)}>
+        <Typography color="warning.main" component="span" fontSize="inherit">
+          {displayMode === 'percent'
+            ? t(translations.percentTotalWarning, { weight: totalWeight })
+            : t(translations.outOfWeight, { weight: totalWeight })}
+        </Typography>
+      </Tooltip>
+    );
+  }
+
   const levelBudgetLabel =
     displayMode === 'percent'
       ? t(translations.percentOfGrade, { weight: levelContribution.weight })
@@ -1284,25 +1325,7 @@ const WeightedGradebookTable = ({
                     );
                   })}
                   <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
-                    {totalWeight === 100 ? (
-                      totalWeightHeaderLabel
-                    ) : (
-                      <Tooltip title={t(translations.weightsDoNotSum)}>
-                        <Typography
-                          color="warning.main"
-                          component="span"
-                          fontSize="inherit"
-                        >
-                          {displayMode === 'percent'
-                            ? t(translations.percentTotalWarning, {
-                                weight: totalWeight,
-                              })
-                            : t(translations.outOfWeight, {
-                                weight: totalWeight,
-                              })}
-                        </Typography>
-                      </Tooltip>
-                    )}
+                    {totalWeightHeaderContent}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -1742,6 +1765,7 @@ const WeightedGradebookTable = ({
       {canManageWeights && (
         <ConfigureWeightsPrompt
           assessments={assessments}
+          capTotal={capTotal}
           categories={categories}
           courseMaxLevel={courseMaxLevel}
           gamificationEnabled={gamificationEnabled}

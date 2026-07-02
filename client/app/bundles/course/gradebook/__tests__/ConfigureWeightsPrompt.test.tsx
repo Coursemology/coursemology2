@@ -64,6 +64,7 @@ const setup = (overrides = {}): ReturnType<typeof render> =>
   render(
     <ConfigureWeightsPrompt
       assessments={assessments}
+      capTotal={false}
       categories={categories}
       courseMaxLevel={10}
       gamificationEnabled={false}
@@ -75,6 +76,12 @@ const setup = (overrides = {}): ReturnType<typeof render> =>
       {...overrides}
     />,
   );
+
+// Weights summing to 140 → the cap toggle is meaningful (enabled).
+const over100Tabs = [
+  { id: 10, title: 'Assignments', categoryId: 1, gradebookWeight: 70 },
+  { id: 11, title: 'Optional', categoryId: 1, gradebookWeight: 70 },
+];
 
 const modeGroup = (tabTitle: string): HTMLElement =>
   screen.getByRole('radiogroup', { name: `${tabTitle} weight mode` });
@@ -279,6 +286,7 @@ describe('<ConfigureWeightsPrompt />', () => {
           },
         ],
         expect.objectContaining({ enabled: false }),
+        false, // capTotal (default off)
       );
     });
   });
@@ -1083,5 +1091,54 @@ describe('level contribution section', () => {
     // ...set the formula field to '100 / level'...
     expect(await screen.findByText(/divides by zero/i)).toBeInTheDocument();
     expect(screen.getByText(/set to 0/i)).toBeInTheDocument();
+  });
+});
+
+describe('<ConfigureWeightsPrompt /> cap-at-100 toggle', () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  const capToggle = (): HTMLElement =>
+    screen.getByRole('checkbox', { name: /cap at 100/i });
+
+  it('is enabled when the weight sum exceeds 100', () => {
+    setup({ tabs: over100Tabs });
+    expect(capToggle()).toBeEnabled();
+  });
+
+  it('is disabled but retains its checked state when the sum is <= 100', () => {
+    setup({ capTotal: true }); // default tabs sum to exactly 100
+    expect(capToggle()).toBeDisabled();
+    expect(capToggle()).toBeChecked();
+  });
+
+  it('hides the weights-do-not-sum alert when the cap is on and sum > 100', () => {
+    setup({ tabs: over100Tabs, capTotal: true });
+    expect(screen.queryByText(/do not sum to 100/i)).not.toBeInTheDocument();
+  });
+
+  it('still warns when the sum exceeds 100 but the cap is off', () => {
+    setup({ tabs: over100Tabs, capTotal: false });
+    expect(screen.getByText(/do not sum to 100/i)).toBeInTheDocument();
+  });
+
+  it('sends the toggled capTotal as the third save argument', async () => {
+    setup({ tabs: over100Tabs });
+    fireEvent.click(capToggle()); // turn the cap on
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(operations.updateGradebookWeights).toHaveBeenCalled(),
+    );
+    const call = (operations.updateGradebookWeights as jest.Mock).mock.calls[0];
+    expect(call[2]).toBe(true);
+  });
+
+  it('opens the info modal when the ⓘ button is clicked', () => {
+    setup({ tabs: over100Tabs });
+    fireEvent.click(
+      screen.getByRole('button', { name: /about capping the total/i }),
+    );
+    expect(
+      screen.getByText(/shown — and exported — as 100%/i),
+    ).toBeInTheDocument();
   });
 });

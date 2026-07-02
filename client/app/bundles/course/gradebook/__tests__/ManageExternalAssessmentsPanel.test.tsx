@@ -99,6 +99,7 @@ const preloadedState = {
       },
       { id: 7, title: 'Native quiz', tabId: 3, maxGrade: 10 },
     ],
+    capTotal: false,
   },
 };
 
@@ -369,6 +370,7 @@ it('passes existing external names as chips to the import wizard', async () => {
         clamp: true,
       },
       courseMaxLevel: 0,
+      capTotal: false,
     },
   };
   render(<ManageExternalAssessmentsPanel onClose={jest.fn()} open />, {

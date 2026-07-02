@@ -98,6 +98,7 @@ interface RenderWeightedOptions {
   gamificationEnabled?: boolean;
   courseMaxLevel?: number;
   levelContribution?: typeof defaultLevelContribution;
+  capTotal?: boolean;
   toolbarAction?: JSX.Element;
 }
 
@@ -115,6 +116,7 @@ const renderWeighted = (
     <WeightedGradebookTable
       assessments={assessments}
       canManageWeights={opts.canManageWeights ?? true}
+      capTotal={opts.capTotal ?? false}
       categories={cats}
       courseId={opts.courseId ?? 1}
       courseMaxLevel={opts.courseMaxLevel ?? 0}
@@ -2181,6 +2183,7 @@ describe('level contribution columns', () => {
       students: [makeStudent(1, 'Alice')],
       submissions: [],
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      capTotal: false,
     };
     const { rerender } = render(
       <WeightedGradebookTable
@@ -2215,6 +2218,7 @@ describe('level contribution columns', () => {
       students: [makeStudent(1, 'Alice')],
       submissions: [],
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      capTotal: false,
     };
     const { rerender } = render(
       <WeightedGradebookTable
@@ -2416,6 +2420,57 @@ describe('external assessment clamp warnings', () => {
     const row = screen.getByText('Alice').closest('tr')!;
     expect(
       within(row).queryByTestId('WarningAmberIcon'),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe('cap the weighted total at 100%', () => {
+  beforeEach(() => localStorage.clear());
+
+  // Two 70-weight tabs → weight sum 140; a perfect student's tab cells read 70
+  // each (uncapped) and the total reads 140, capped to 100.
+  const over100 = {
+    tabs: [makeTab(10, 'Tab 1', 1, 70), makeTab(11, 'Tab 2', 1, 70)],
+    assessments: [
+      makeAssessment(100, 'Q1', 10, 100),
+      makeAssessment(101, 'Q2', 11, 100),
+    ],
+    students: [makeStudent(1, 'Alice')],
+    submissions: [makeSub(1, 100, 100), makeSub(1, 101, 100)],
+  };
+
+  it('caps the displayed total at 100 when capTotal is on and weight > 100', () => {
+    renderWeighted({ ...over100, capTotal: true });
+    expect(screen.getAllByText('100').length).toBeGreaterThanOrEqual(1);
+    expect(screen.queryByText('140')).not.toBeInTheDocument();
+  });
+
+  it('shows the raw total when capTotal is off', () => {
+    renderWeighted({ ...over100, capTotal: false });
+    expect(screen.getByText('140')).toBeInTheDocument();
+  });
+
+  it('does not cap when capTotal is on but weight <= 100', () => {
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 100)],
+      assessments: [makeAssessment(100, 'Q1', 10, 100)],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 100, 90)],
+      capTotal: true,
+    });
+    expect(screen.getAllByText('90').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('shows a calm "Capped at 100%" label and hides the ≠100 warning when active', () => {
+    renderWeighted({ ...over100, capTotal: true });
+    expect(screen.getByText(/capped at 100/i)).toBeInTheDocument();
+    expect(screen.queryByText(/do not sum/i)).not.toBeInTheDocument();
+  });
+
+  it('renders no interactive cap control in the table', () => {
+    renderWeighted({ ...over100, capTotal: true });
+    expect(
+      screen.queryByRole('checkbox', { name: /cap.*100/i }),
     ).not.toBeInTheDocument();
   });
 });

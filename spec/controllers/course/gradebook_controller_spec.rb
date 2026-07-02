@@ -476,6 +476,18 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
 
+        it 'echoes capTotal, persists it, and leaves it untouched when later omitted' do
+          patch :update_weights,
+                params: { course_id: course.id, weights: [], capTotal: true },
+                format: :json
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body['capTotal']).to eq(true)
+
+          # A later save that omits capTotal must not reset the persisted flag.
+          patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
+          expect(response.parsed_body['capTotal']).to eq(true)
+        end
+
         it 'rejects negative with 422 and no partial write' do
           create(:course_gradebook_tab_contribution, tab: tab1, course: course, weight: 10)
           patch :update_weights,

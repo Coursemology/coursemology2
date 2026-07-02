@@ -32,6 +32,8 @@ export const getLevelContribution = (
   getLocalState(state).levelContribution;
 export const getCourseMaxLevel = (state: AppState): number =>
   getLocalState(state).courseMaxLevel;
+export const getCapTotal = (state: AppState): boolean =>
+  getLocalState(state).capTotal;
 export const getExternalAssessments = (
   state: AppState,
 ): GradebookState['assessments'] =>
