@@ -196,6 +196,9 @@ Rails.application.routes.draw do
         get 'leaderboard' => 'leaderboard_settings#edit'
         patch 'leaderboard' => 'leaderboard_settings#update'
 
+        get 'gradebook' => 'gradebook_settings#edit'
+        patch 'gradebook' => 'gradebook_settings#update'
+
         get 'comments' => 'discussion/topic_settings#edit', as: 'topics'
         patch 'comments' => 'discussion/topic_settings#update'
 
@@ -495,6 +498,11 @@ Rails.application.routes.draw do
         get 'groups', as: :group
       end
 
+      resource :gradebook, only: [] do
+        get '/' => 'gradebook#index'
+        patch '/weights' => 'gradebook#update_weights'
+      end
+
       scope module: :discussion do
         resources :topics, path: 'comments', only: [:index] do
           get 'pending', on: :collection
@@ -510,7 +518,6 @@ Rails.application.routes.draw do
       namespace :statistics do
         get '/' => 'statistics#index'
         get 'assessments' => 'aggregate#all_assessments'
-        get 'assessments/download' => 'aggregate#download_score_summary'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'

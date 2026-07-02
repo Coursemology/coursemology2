@@ -873,4 +873,70 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
   end
+
+  describe '.grade_summary' do
+    let(:instance) { Instance.default }
+    with_tenant(:instance) do
+      let(:course) { create(:course) }
+      let(:student) { create(:course_student, course: course) }
+      let(:graded_assessment) { create(:assessment, :with_mcq_question, course: course) }
+
+      it 'returns empty array for empty student_ids' do
+        result = Course::Assessment::Submission.grade_summary(
+          student_ids: [],
+          assessment_ids: [graded_assessment.id]
+        )
+        expect(result).to eq([])
+      end
+
+      it 'returns empty array for empty assessment_ids' do
+        result = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id],
+          assessment_ids: []
+        )
+        expect(result).to eq([])
+      end
+
+      it 'returns grade data for graded submissions' do
+        submission = create(:course_assessment_submission, :graded,
+                            assessment: graded_assessment, creator: student.user)
+        submission.answers.update_all(grade: 5.0, current_answer: true)
+
+        results = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id],
+          assessment_ids: [graded_assessment.id]
+        )
+
+        expect(results.size).to eq(1)
+        expect(results.first.student_id).to eq(student.user_id)
+        expect(results.first.assessment_id).to eq(graded_assessment.id)
+        expect(results.first.grade.to_f).to eq(5.0)
+      end
+
+      it 'excludes attempting submissions' do
+        create(:course_assessment_submission, :attempting,
+               assessment: graded_assessment, creator: student.user)
+
+        results = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id],
+          assessment_ids: [graded_assessment.id]
+        )
+        expect(results).to be_empty
+      end
+
+      it 'only sums answers where current_answer is true' do
+        submission = create(:course_assessment_submission, :graded,
+                            assessment: graded_assessment, creator: student.user)
+        submission.answers.update_all(grade: 3.0, current_answer: true)
+        # Mark all answers as non-current — grade_summary must return nothing
+        submission.answers.update_all(current_answer: false)
+
+        results = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id],
+          assessment_ids: [graded_assessment.id]
+        )
+        expect(results).to be_empty
+      end
+    end
+  end
 end

@@ -7,6 +7,7 @@ import achievementsRouter from './achievements';
 import adminRouter from './admin';
 import assessmentsRouter from './assessments';
 import forumsRouter from './forums';
+import gradebookRouter from './gradebook';
 import groupsRouter from './groups';
 import lessonPlanRouter from './lessonPlan';
 import materialsRouter from './materials';
@@ -41,6 +42,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     adminRouter(t),
     assessmentsRouter(t),
     forumsRouter(t),
+    gradebookRouter(t),
     groupsRouter(t),
     lessonPlanRouter(t),
     materialsRouter(t),

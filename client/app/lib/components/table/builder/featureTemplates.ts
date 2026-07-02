@@ -22,6 +22,7 @@ interface SearchProps<D> {
 export interface CsvDownloadTemplate {
   filename?: string;
   downloadButtonLabel?: string;
+  showDownloadButton?: boolean;
 }
 
 export interface SearchTemplate<D extends Data> {
@@ -48,4 +49,6 @@ export interface ToolbarTemplate<D extends Data> {
 
 export interface SortTemplate {
   initially?: { by: string; order: 'asc' | 'desc' };
+  enableRemoval?: boolean;
+  resetOnHide?: boolean;
 }

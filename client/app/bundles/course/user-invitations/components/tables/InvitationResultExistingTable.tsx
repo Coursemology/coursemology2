@@ -7,7 +7,6 @@ import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
 import {
   DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
-  DEFAULT_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';

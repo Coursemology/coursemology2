@@ -6,6 +6,7 @@ import CommentsAdminAPI from './Comments';
 import ComponentsAdminAPI from './Components';
 import CourseAdminAPI from './Course';
 import ForumsAdminAPI from './Forums';
+import GradebookAdminAPI from './Gradebook';
 import LeaderboardAdminAPI from './Leaderboard';
 import LessonPlanSettingsAPI from './LessonPlan';
 import MaterialsAdminAPI from './Materials';
@@ -28,6 +29,7 @@ const AdminAPI = {
   lessonPlan: new LessonPlanSettingsAPI(),
   materials: new MaterialsAdminAPI(),
   forums: new ForumsAdminAPI(),
+  gradebook: new GradebookAdminAPI(),
   videos: new VideosAdminAPI(),
   notifications: new NotificationsSettingsAPI(),
   codaveri: new CodaveriAdminAPI(),

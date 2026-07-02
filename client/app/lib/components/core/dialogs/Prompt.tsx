@@ -15,6 +15,7 @@ interface BasePromptProps {
   open?: boolean;
   title?: string | ReactNode;
   children?: string | ReactNode;
+  footer?: ReactNode;
   onClose?: () => void;
   onClosed?: () => void;
   disabled?: boolean;
@@ -83,6 +84,8 @@ const Prompt = (props: PromptProps): JSX.Element => {
           )}
         </DialogContent>
       )}
+
+      {props.footer}
 
       <DialogActions className="flex-wrap">
         {!props.cancel ? (

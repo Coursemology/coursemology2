@@ -173,6 +173,10 @@ const translations = defineMessages({
     id: 'lib.translations.table.column.level',
     defaultMessage: 'Level',
   },
+  totalXp: {
+    id: 'lib.translations.table.column.totalXp',
+    defaultMessage: 'Total XP',
+  },
   achievements: {
     id: 'lib.translations.table.column.achievements',
     defaultMessage: 'Achievements',

@@ -137,6 +137,7 @@ export interface CourseAssessment {
 export interface AssessmentsStatistics {
   numStudents: number;
   assessments: CourseAssessment[];
+  gradebookEnabled: boolean;
 }
 
 export interface CourseGetHelpActivity {
