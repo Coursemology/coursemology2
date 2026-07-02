@@ -160,7 +160,7 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   end
 
   def load_externals
-    @external_assessments = Course::ExternalAssessment.for_course(current_course).
+    @external_assessments = Course::ExternalAssessment.for_course(current_course).order(:position).
                             includes(:gradebook_contribution, external_assessment_grades: :course_user).to_a
     @external_grades = @external_assessments.flat_map(&:external_assessment_grades)
     @external_contributions = @external_assessments.

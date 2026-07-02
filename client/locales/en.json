@@ -9676,5 +9676,137 @@
   },
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "Grade saved. {title} · {name}: {oldGrade} → {newGrade}"
+  },
+  "course.gradebook.AddExternalColumnPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The actual grade is unchanged."
+  },
+  "course.gradebook.AddExternalColumnPrompt.capLabel": {
+    "defaultMessage": "Cap grades at max"
+  },
+  "course.gradebook.AddExternalColumnPrompt.create": {
+    "defaultMessage": "Create"
+  },
+  "course.gradebook.AddExternalColumnPrompt.error": {
+    "defaultMessage": "Could not create the external assessment."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The actual grade is unchanged."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorLabel": {
+    "defaultMessage": "Floor grades at 0"
+  },
+  "course.gradebook.AddExternalColumnPrompt.maxLabel": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.AddExternalColumnPrompt.nameLabel": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.AddExternalColumnPrompt.success": {
+    "defaultMessage": "External assessment created."
+  },
+  "course.gradebook.AddExternalColumnPrompt.title": {
+    "defaultMessage": "Add external assessment"
+  },
+  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
+    "defaultMessage": "Weightage"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.body": {
+    "defaultMessage": "Delete \"{title}\"? This permanently removes the column and every student grade in it. This cannot be undone."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.confirm": {
+    "defaultMessage": "Delete"
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.error": {
+    "defaultMessage": "Could not delete the external assessment."
+  },
+  "course.gradebook.DeleteExternalColumnPrompt.title": {
+    "defaultMessage": "Delete external assessment"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total. The actual grade is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capLabel": {
+    "defaultMessage": "Cap grades at max"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.error": {
+    "defaultMessage": "Could not save the external assessment."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "Counts negative grades as 0 when computing the weighted total. The actual grade is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorLabel": {
+    "defaultMessage": "Floor grades at 0"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.maxLabel": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.nameLabel": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.save": {
+    "defaultMessage": "Save"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.title": {
+    "defaultMessage": "Edit external assessment"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
+    "defaultMessage": "Weightage"
+  },
+  "course.gradebook.GradebookWeightedTable.displayMode": {
+    "defaultMessage": "Display mode"
+  },
+  "course.gradebook.ManageExternalAssessmentsButton.label": {
+    "defaultMessage": "Manage external assessments"
+  },
+  "course.gradebook.ManageExternalPanel.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.gradebook.ManageExternalPanel.add": {
+    "defaultMessage": "Add"
+  },
+  "course.gradebook.ManageExternalPanel.bounds": {
+    "defaultMessage": "Bounds"
+  },
+  "course.gradebook.ManageExternalPanel.capped": {
+    "defaultMessage": "≤ max"
+  },
+  "course.gradebook.ManageExternalPanel.close": {
+    "defaultMessage": "Close"
+  },
+  "course.gradebook.ManageExternalPanel.empty": {
+    "defaultMessage": "No external assessments yet"
+  },
+  "course.gradebook.ManageExternalPanel.emptyHint": {
+    "defaultMessage": "Add one to track grades earned outside Coursemology."
+  },
+  "course.gradebook.ManageExternalPanel.floored": {
+    "defaultMessage": "≥ 0"
+  },
+  "course.gradebook.ManageExternalPanel.max": {
+    "defaultMessage": "Max"
+  },
+  "course.gradebook.ManageExternalPanel.name": {
+    "defaultMessage": "Name"
+  },
+  "course.gradebook.ManageExternalPanel.reorderError": {
+    "defaultMessage": "Could not save the new order. Please try again."
+  },
+  "course.gradebook.ManageExternalPanel.title": {
+    "defaultMessage": "External assessments"
+  },
+  "course.gradebook.ManageExternalPanel.weight": {
+    "defaultMessage": "Weight"
+  },
+  "course.gradebook.ProjectedTotalHint.policy": {
+    "defaultMessage": "Totals count ungraded assessments as 0."
   }
 }

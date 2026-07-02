@@ -1,4 +1,6 @@
 import {
+  ExternalAssessmentNode,
+  ExternalAssessmentUpdate,
   ExternalGradePayload,
   GradebookData,
   UpdateWeightsPayload,
@@ -21,6 +23,44 @@ export default class GradebookAPI extends BaseCourseAPI {
     payload: UpdateWeightsPayload,
   ): APIResponse<UpdateWeightsPayload> {
     return this.client.patch(`${this.#urlPrefix}/weights`, payload);
+  }
+
+  createExternal(payload: {
+    title: string;
+    maximumGrade: number;
+    floorAtZero: boolean;
+    capAtMaximum: boolean;
+    weight?: number;
+  }): APIResponse<ExternalAssessmentNode> {
+    return this.client.post(`${this.#urlPrefix}/external_assessments`, payload);
+  }
+
+  // `id` is the positive external id (negate the negative serialized id before calling).
+  updateExternal(
+    id: number,
+    payload: {
+      title?: string;
+      maximumGrade?: number;
+      floorAtZero?: boolean;
+      capAtMaximum?: boolean;
+      weight?: number;
+    },
+  ): APIResponse<ExternalAssessmentUpdate> {
+    return this.client.patch(
+      `${this.#urlPrefix}/external_assessments/${id}`,
+      payload,
+    );
+  }
+
+  deleteExternal(id: number): APIResponse<void> {
+    return this.client.delete(`${this.#urlPrefix}/external_assessments/${id}`);
+  }
+
+  reorderExternals(payload: { orderedIds: number[] }): APIResponse<void> {
+    return this.client.put(
+      `${this.#urlPrefix}/external_assessments/reorder`,
+      payload,
+    );
   }
 
   setExternalGrade(
