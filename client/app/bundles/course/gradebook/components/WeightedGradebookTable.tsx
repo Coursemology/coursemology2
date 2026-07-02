@@ -55,6 +55,7 @@ import type {
 import {
   computeStudentBreakdown,
   computeWeightedRows,
+  customTabImbalanced,
   gradeRatio,
   LEVEL_TAB_ID,
   levelOffenders,
@@ -222,6 +223,11 @@ const translations = defineMessages({
     id: 'course.gradebook.WeightedGradebookTable.levelCellDivByZero',
     defaultMessage:
       'Set to 0 because the formula divides by zero for this level.',
+  },
+  customWeightsUnbalanced: {
+    id: 'course.gradebook.WeightedGradebookTable.customWeightsUnbalanced',
+    defaultMessage:
+      'This tab\'s assessment weights don\'t add up to its tab weight. Its total may be understated - open "Configure Weights" to fix.',
   },
 });
 
@@ -417,13 +423,7 @@ const WeightedGradebookTable = ({
   );
   const allWeightsZero = totalWeight === 0;
 
-  const totalDisplayValue = (total: number | null): number | null => {
-    if (total === null) return null;
-    if (displayMode === 'percent') {
-      return totalWeight > 0 ? (total / totalWeight) * 100 : null;
-    }
-    return total;
-  };
+  const totalDisplayValue = (total: number | null): number | null => total;
 
   const fmtDisplay = (v: number | null, prec: 0 | 1 | 2): string => {
     if (v === null) return '—';
@@ -747,7 +747,6 @@ const WeightedGradebookTable = ({
     hasExternalIds,
     columnPrecisions,
     displayMode,
-    totalWeight,
     showLevelContribution,
     showRawLevel,
     levelContribution.weight,
@@ -1166,7 +1165,21 @@ const WeightedGradebookTable = ({
                       {...groupEndIf(tabIsCategoryEnd[i])}
                       sx={{ bgcolor: 'grey.100' }}
                     >
-                      {tabSubheaderLabel(tab)}
+                      {customTabImbalanced(tab, assessments) ? (
+                        <Tooltip
+                          title={t(translations.customWeightsUnbalanced)}
+                        >
+                          <Typography
+                            color="warning.main"
+                            component="span"
+                            fontSize="inherit"
+                          >
+                            {tabSubheaderLabel(tab)}
+                          </Typography>
+                        </Tooltip>
+                      ) : (
+                        tabSubheaderLabel(tab)
+                      )}
                     </TableCell>
                   ))}
                   <TableCell align="center" sx={{ bgcolor: 'grey.100' }}>
