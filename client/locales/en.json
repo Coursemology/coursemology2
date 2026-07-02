@@ -9644,6 +9644,9 @@
   "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
     "defaultMessage": "Weights do not sum to 100. Total may be inaccurate."
   },
+  "course.gradebook.WeightedGradebookTable.customWeightsUnbalanced": {
+    "defaultMessage": "This tab's assessment weights don't add up to its tab weight. Its total may be understated - open \"Configure Weights\" to fix."
+  },
   "course.gradebook.WeightedGradebookTable.levelHeader": {
     "defaultMessage": "Level"
   },

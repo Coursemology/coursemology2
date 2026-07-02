@@ -9614,6 +9614,9 @@
   "course.gradebook.WeightedGradebookTable.weightsDoNotSum": {
     "defaultMessage": "权重合计不为 100。总成绩可能不准确。"
   },
+  "course.gradebook.WeightedGradebookTable.customWeightsUnbalanced": {
+    "defaultMessage": "此标签页的各评估权重之和不等于其标签页权重。总成绩可能被低估-请点击“配置权重”进行修正。"
+  },
   "course.gradebook.WeightedGradebookTable.levelOverBudgetAboveOnly": {
     "defaultMessage": "部分等级贡献值超出等级权重上限，已被限制。"
   },

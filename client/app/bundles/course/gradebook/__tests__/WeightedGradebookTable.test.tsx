@@ -1179,10 +1179,10 @@ describe('WeightedGradebookTable', () => {
       );
     });
 
-    it('normalizes the total in percent mode when weights do not sum to 100', async () => {
+    it('shows the honest weighted total (not normalized) in percent mode when weights do not sum to 100', async () => {
       const user = userEvent.setup();
       // weight 50, max 100, grade 80 → subtotal 0.8
-      // points total = 40 ; percent total = 40 / 50 * 100 = 80%
+      // points total = 40 ; percent total = 40 (honest sum, same number, with %)
       renderWeighted({
         tabs: [makeTab(10, 'Tab 1', 1, 50)],
         assessments: [makeAssessment(100, 'Q1', 10, 100)],
@@ -1192,7 +1192,7 @@ describe('WeightedGradebookTable', () => {
       expect(screen.getAllByText('40').length).toBeGreaterThanOrEqual(1); // points default
       await user.click(screen.getByRole('radio', { name: /percentage/i }));
       await waitFor(() =>
-        expect(screen.getAllByText('80%').length).toBeGreaterThanOrEqual(1),
+        expect(screen.getAllByText('40%').length).toBeGreaterThanOrEqual(1),
       );
     });
 
@@ -1430,21 +1430,6 @@ describe('WeightedGradebookTable', () => {
       expect(cells[cells.length - 1]).toHaveTextContent('/70');
     });
 
-    it('normalizes the percent-mode total over live weight only', async () => {
-      const user = userEvent.setup();
-      renderWeighted({
-        ...oneTabAllExcluded,
-        students: [makeStudent(1, 'Alice')],
-        submissions: [makeSub(1, 200, 90)], // 0.9 on the only live tab (Quizzes/70)
-      });
-      await user.click(screen.getByRole('radio', { name: /percentage/i }));
-      // Total points = 0.9×70 = 63. Normalized over live weight (70): 63/70 = 90%.
-      // The buggy denominator (100) would render 63%.
-      const aliceRow = screen.getByText('Alice').closest('tr')!;
-      const cells = within(aliceRow).getAllByRole('cell');
-      expect(cells[cells.length - 1]).toHaveTextContent('90%');
-    });
-
     it('renders "—" for the total in percent mode when all live weight is excluded', async () => {
       const user = userEvent.setup();
       renderWeighted({
@@ -1659,6 +1644,43 @@ describe('WeightedGradebookTable', () => {
       const detail = await screen.findByTestId(breakdownRowId(1, 10, 1));
       // a1 = 30/100 = 30% — visible so the instructor sees the dropped grade.
       expect(within(detail).getByText('30%')).toBeInTheDocument();
+    });
+  });
+
+  describe('custom-weight imbalance advisory', () => {
+    const imbalancedTab = {
+      ...makeTab(10, 'Tab 1', 1, 30),
+      weightMode: 'custom' as const,
+    };
+    // 10 + 10 = 20, tab weight 30 → shortfall (an assessment was deleted)
+    const shortAssessments = [
+      { ...makeAssessment(100, 'A', 10, 100), gradebookWeight: 10 },
+      { ...makeAssessment(101, 'B', 10, 100), gradebookWeight: 10 },
+    ];
+
+    it('flags a custom tab whose included weights fall short of the tab weight', () => {
+      renderWeighted({ tabs: [imbalancedTab], assessments: shortAssessments });
+      // MUI Tooltip surfaces its title as an aria-label on the wrapped
+      // subheader, so we can assert it without hovering (and without colliding
+      // with the "/30" that the Total column also shows when weights ≠ 100).
+      expect(
+        screen.getByLabelText(
+          /assessment weights don't add up to its tab weight/i,
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it('does not flag a custom tab whose weights are balanced', () => {
+      const balanced = [
+        { ...makeAssessment(100, 'A', 10, 100), gradebookWeight: 15 },
+        { ...makeAssessment(101, 'B', 10, 100), gradebookWeight: 15 },
+      ];
+      renderWeighted({ tabs: [imbalancedTab], assessments: balanced });
+      expect(
+        screen.queryByLabelText(
+          /assessment weights don't add up to its tab weight/i,
+        ),
+      ).not.toBeInTheDocument();
     });
   });
 });
