@@ -1,10 +1,19 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
+import {
+  InfoOutlined,
+  KeyboardArrowDown,
+  KeyboardArrowRight,
+} from '@mui/icons-material';
 import {
   Alert,
+  Button,
   Checkbox,
   Collapse,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   IconButton,
   Stack,
@@ -105,6 +114,29 @@ const translations = defineMessages({
     id: 'course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum',
     defaultMessage:
       'Weights do not sum to 100. Saving is allowed; Total may be inaccurate.',
+  },
+  capToggle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.capToggle',
+    defaultMessage: 'Cap at 100%',
+  },
+  capInfo: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.capInfo',
+    defaultMessage: 'About capping the total at 100%',
+  },
+  capInfoTitle: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.capInfoTitle',
+    defaultMessage: 'Capping the weighted total at 100%',
+  },
+  capInfoBody: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.capInfoBody',
+    defaultMessage:
+      'When on, any weighted total above 100% is shown — and exported — as 100%. ' +
+      'Per-tab percentages still show what each student earned. Turn this off to ' +
+      'see raw totals, including extra credit. Available only when weights sum above 100%.',
+  },
+  capInfoClose: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.capInfoClose',
+    defaultMessage: 'Got it',
   },
   valueTooLow: {
     id: 'course.gradebook.ConfigureWeightsPrompt.valueTooLow',
@@ -269,6 +301,7 @@ interface Props {
   gamificationEnabled: boolean;
   courseMaxLevel: number;
   levelContribution: LevelContributionData;
+  capTotal: boolean;
   students: StudentData[];
 }
 
@@ -281,6 +314,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   gamificationEnabled,
   courseMaxLevel,
   levelContribution,
+  capTotal,
   students,
 }) => {
   const { t } = useTranslation();
@@ -342,6 +376,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   );
   const [levelShow, setLevelShow] = useState(levelContribution.show);
   const [levelClamp, setLevelClamp] = useState(levelContribution.clamp);
+  const [capEnabled, setCapEnabled] = useState(capTotal);
+  const [capInfoOpen, setCapInfoOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -357,6 +393,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
       setLevelWeight(levelContribution.weight || courseMaxLevel);
       setLevelShow(levelContribution.show);
       setLevelClamp(levelContribution.clamp);
+      setCapEnabled(capTotal);
     }
   }, [open]);
 
@@ -533,6 +570,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
             return entry;
           }),
           lcPayload,
+          capEnabled,
         ),
       );
       onClose();
@@ -1124,14 +1162,45 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           )}
         </div>
       )}
-      <Typography sx={{ mt: 3, fontWeight: 500 }}>
-        {t(translations.total, { sum })}
-      </Typography>
-      {sum !== 100 && (
+      <Stack alignItems="center" direction="row" spacing={1} sx={{ mt: 3 }}>
+        <Typography sx={{ fontWeight: 500 }}>
+          {t(translations.total, { sum })}
+        </Typography>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={capEnabled}
+              disabled={sum <= 100}
+              onChange={(e) => setCapEnabled(e.target.checked)}
+              size="small"
+            />
+          }
+          label={t(translations.capToggle)}
+        />
+        <IconButton
+          aria-label={t(translations.capInfo)}
+          onClick={() => setCapInfoOpen(true)}
+          size="small"
+        >
+          <InfoOutlined fontSize="inherit" />
+        </IconButton>
+      </Stack>
+      {sum !== 100 && !(capEnabled && sum > 100) && (
         <Alert severity="warning" sx={{ mt: 1 }}>
           {t(translations.weightsDoNotSum)}
         </Alert>
       )}
+      <Dialog onClose={() => setCapInfoOpen(false)} open={capInfoOpen}>
+        <DialogTitle>{t(translations.capInfoTitle)}</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2">{t(translations.capInfoBody)}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCapInfoOpen(false)}>
+            {t(translations.capInfoClose)}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Prompt>
   );
 };

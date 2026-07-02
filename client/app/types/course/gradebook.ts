@@ -60,6 +60,9 @@ export interface GradebookData {
   canManageWeights: boolean;
   courseMaxLevel: number;
   levelContribution: LevelContributionData;
+  // Gradebook-wide policy: cap each student's weighted total at 100%.
+  // Optional on the wire; the store defaults it to false when absent.
+  capTotal?: boolean;
 }
 
 export interface UpdateWeightsPayload {
@@ -72,6 +75,7 @@ export interface UpdateWeightsPayload {
     assessmentWeights?: { assessmentId: number; weight: number }[];
   }[];
   levelContribution?: LevelContributionSaveData;
+  capTotal?: boolean;
 }
 
 export type FormulaNode =

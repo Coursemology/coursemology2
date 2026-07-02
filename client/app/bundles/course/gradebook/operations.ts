@@ -20,11 +20,13 @@ export const updateGradebookWeights =
   (
     weights: UpdateWeightsPayload['weights'],
     levelContribution?: LevelContributionSaveData,
+    capTotal?: boolean,
   ): Operation =>
   async (dispatch) => {
-    const response = await CourseAPI.gradebook.updateWeights(
-      levelContribution ? { weights, levelContribution } : { weights },
-    );
+    const payload: UpdateWeightsPayload = { weights };
+    if (levelContribution) payload.levelContribution = levelContribution;
+    if (capTotal !== undefined) payload.capTotal = capTotal;
+    const response = await CourseAPI.gradebook.updateWeights(payload);
     // BE response does not echo formulaAst; merge it back so the store reducer
     // can optimistically recompute per-student levelContribution without a refetch.
     const responseData = { ...response.data };

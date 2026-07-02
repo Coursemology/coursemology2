@@ -28,6 +28,7 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
     level_config = persist_weight_updates(updates)
     response_body = { weights: serialize_weight_updates(updates) }
     response_body[:levelContribution] = serialize_level_contribution(level_config) if level_config
+    response_body[:capTotal] = @settings.cap_weighted_total
     render json: response_body
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
@@ -45,8 +46,18 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
       Course::Gradebook::TabContribution.bulk_update(course: current_course, updates: tab_updates)
       Course::Gradebook::ExternalContribution.bulk_update(course: current_course, updates: external_updates)
       level_config = persist_level_contribution
+      persist_cap_total
     end
     level_config
+  end
+
+  # Persists the gradebook-wide cap-at-100 policy flag. Skipped when the client
+  # didn't send it, so unrelated weight saves leave the setting untouched.
+  def persist_cap_total
+    return unless params.key?(:capTotal)
+
+    @settings.cap_weighted_total = params[:capTotal]
+    current_course.save!
   end
 
   def authorize_read_gradebook!
