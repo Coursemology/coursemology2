@@ -414,6 +414,33 @@ export const computeWeightedRows = ({
 export const sumWeights = (tabs: TabData[]): number =>
   tabs.reduce((acc, t) => acc + (t.gradebookWeight ?? 0), 0);
 
+// A custom-mode tab is "unbalanced" when its INCLUDED assessment weights no
+// longer sum to the tab weight — the exact state ConfigureWeightsPrompt blocks
+// at save (isUnbalanced). It becomes reachable when an assessment is deleted
+// from the tab outside the dialog: the surviving stored weights fall short, so
+// customSubtotal (which divides by the tab weight) makes the tab silently
+// under-contribute to the weighted total. Equal-mode tabs, empty tabs, and
+// balanced custom tabs return false. Compared in integer cents to dodge float
+// noise (grades/weights are stored to 2dp).
+export const customTabImbalanced = (
+  tab: Pick<TabData, 'id' | 'weightMode' | 'gradebookWeight'>,
+  assessments: Pick<
+    AssessmentData,
+    'tabId' | 'gradebookWeight' | 'gradebookExcluded'
+  >[],
+): boolean => {
+  if (tab.weightMode !== 'custom') return false;
+  const included = assessments.filter(
+    (a) => a.tabId === tab.id && !a.gradebookExcluded,
+  );
+  if (included.length === 0) return false;
+  const sumCents = included.reduce(
+    (acc, a) => acc + Math.round((a.gradebookWeight ?? 0) * 100),
+    0,
+  );
+  return sumCents !== Math.round((tab.gradebookWeight ?? 0) * 100);
+};
+
 const r2 = (n: number): number => Math.round(n * 100) / 100;
 
 // Ids of tabs that have at least one assessment — only these are eligible for a

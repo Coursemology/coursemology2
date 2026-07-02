@@ -6,6 +6,7 @@ import {
   computeStudentTotal,
   computeTabSubtotal,
   computeWeightedRows,
+  customTabImbalanced,
   LEVEL_TAB_ID,
   levelOffenders,
   levelOutOfRange,
@@ -1292,5 +1293,78 @@ describe('computeWeightedRows — keepHighest', () => {
       submissions: dropConfig.submissions,
     });
     expect(rows[0].total).toBeCloseTo(60);
+  });
+});
+
+describe('customTabImbalanced', () => {
+  const customTab = {
+    id: 10,
+    title: 'Tab',
+    categoryId: 0,
+    gradebookWeight: 30,
+    weightMode: 'custom' as const,
+  };
+
+  it('returns false for an equal-mode tab (never applies)', () => {
+    const tab = { ...customTab, weightMode: 'equal' as const };
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 5 },
+    ];
+    expect(customTabImbalanced(tab, tabAssessments)).toBe(false);
+  });
+
+  it('returns false for a custom tab with no included assessments', () => {
+    expect(customTabImbalanced(customTab, [])).toBe(false);
+  });
+
+  it('returns false when included weights sum exactly to the tab weight', () => {
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 10 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 20 },
+    ];
+    expect(customTabImbalanced(customTab, tabAssessments)).toBe(false);
+  });
+
+  it('returns true when included weights fall short (assessment deleted)', () => {
+    // was 10/10/10 = 30; one deleted → 10/10 = 20 ≠ 30
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 10 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 10 },
+    ];
+    expect(customTabImbalanced(customTab, tabAssessments)).toBe(true);
+  });
+
+  it('returns true when included weights overflow the tab weight', () => {
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 20 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 20 },
+    ];
+    expect(customTabImbalanced(customTab, tabAssessments)).toBe(true);
+  });
+
+  it('ignores excluded assessments — balanced among the included ones is false', () => {
+    // included 10+20 = 30 = tab weight; the excluded one does not count
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 10 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 20 },
+      {
+        id: 3,
+        tabId: 10,
+        maxGrade: 100,
+        title: 'C',
+        gradebookWeight: 99,
+        gradebookExcluded: true,
+      },
+    ];
+    expect(customTabImbalanced(customTab, tabAssessments)).toBe(false);
+  });
+
+  it('does not flag a decimal-cents balance (float-noise safe)', () => {
+    const tab = { ...customTab, gradebookWeight: 33.33 };
+    const tabAssessments = [
+      { id: 1, tabId: 10, maxGrade: 100, title: 'A', gradebookWeight: 11.11 },
+      { id: 2, tabId: 10, maxGrade: 100, title: 'B', gradebookWeight: 22.22 },
+    ];
+    expect(customTabImbalanced(tab, tabAssessments)).toBe(false);
   });
 });
