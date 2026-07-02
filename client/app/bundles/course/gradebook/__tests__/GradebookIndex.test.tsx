@@ -45,6 +45,7 @@ const emptyState = {
     weightedViewEnabled: false,
     canManageWeights: false,
     courseMaxLevel: 0,
+    capTotal: false,
     levelContribution: {
       enabled: false,
       formula: '',
@@ -66,6 +67,7 @@ const noStudentsState = {
     weightedViewEnabled: false,
     canManageWeights: false,
     courseMaxLevel: 0,
+    capTotal: false,
     levelContribution: {
       enabled: false,
       formula: '',
@@ -99,6 +101,7 @@ const populatedState = {
     weightedViewEnabled: false,
     canManageWeights: false,
     courseMaxLevel: 0,
+    capTotal: false,
     levelContribution: {
       enabled: false,
       formula: '',

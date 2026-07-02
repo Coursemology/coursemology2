@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 json.weightedViewEnabled @weighted_view_enabled
 json.canManageWeights can?(:manage_gradebook_weights, current_course)
+json.capTotal @settings.cap_weighted_total
 
 json.categories do
   json.array!(@categories) do |cat|
