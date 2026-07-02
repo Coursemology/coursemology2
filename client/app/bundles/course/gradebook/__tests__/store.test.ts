@@ -25,6 +25,7 @@ const baseState = {
     show: false,
     clamp: true,
   },
+  capTotal: false,
 };
 
 describe('SAVE_GRADEBOOK reducer', () => {
@@ -47,6 +48,7 @@ describe('SAVE_GRADEBOOK reducer', () => {
         show: false,
         clamp: true,
       },
+      capTotal: false,
     });
   });
 
@@ -70,6 +72,7 @@ describe('SAVE_GRADEBOOK reducer', () => {
           show: false,
           clamp: true,
         },
+        capTotal: true,
       }),
     );
     expect(next.categories).toHaveLength(1);
@@ -79,6 +82,50 @@ describe('SAVE_GRADEBOOK reducer', () => {
     expect(next.gamificationEnabled).toBe(true);
     expect(next.weightedViewEnabled).toBe(true);
     expect(next.canManageWeights).toBe(true);
+    expect(next.capTotal).toBe(true);
+  });
+
+  it('defaults capTotal to false when the payload omits it', () => {
+    const next = reducer(
+      undefined,
+      actions.saveGradebook({
+        categories: [],
+        tabs: [],
+        assessments: [],
+        students: [],
+        submissions: [],
+        gamificationEnabled: false,
+        weightedViewEnabled: true,
+        canManageWeights: true,
+        courseMaxLevel: 0,
+        levelContribution: {
+          enabled: false,
+          formula: '',
+          weight: 0,
+          show: false,
+          clamp: true,
+        },
+      }),
+    );
+    expect(next.capTotal).toBe(false);
+  });
+});
+
+describe('capTotal via UPDATE_TAB_WEIGHTS', () => {
+  it('updates capTotal when the payload carries it', () => {
+    const next = reducer(
+      baseState as never,
+      actions.updateTabWeights({ weights: [], capTotal: true }),
+    );
+    expect(next.capTotal).toBe(true);
+  });
+
+  it('leaves capTotal unchanged when the payload omits it', () => {
+    const next = reducer(
+      { ...baseState, capTotal: true } as never,
+      actions.updateTabWeights({ weights: [] }),
+    );
+    expect(next.capTotal).toBe(true);
   });
 });
 
@@ -629,6 +676,7 @@ describe('external assessment reducers', () => {
       clamp: true,
     },
     courseMaxLevel: 0,
+    capTotal: false,
   };
 
   it('applyCreatedExternal adds category, tab and assessment', () => {

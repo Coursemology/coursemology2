@@ -1,5 +1,8 @@
 import type { Operation } from 'store';
 import type {
+  ImportCommitSummary,
+  ImportPreviewRequest,
+  ImportPreviewResult,
   LevelContributionSaveData,
   UpdateWeightsPayload,
 } from 'types/course/gradebook';
@@ -17,11 +20,13 @@ export const updateGradebookWeights =
   (
     weights: UpdateWeightsPayload['weights'],
     levelContribution?: LevelContributionSaveData,
+    capTotal?: boolean,
   ): Operation =>
   async (dispatch) => {
-    const response = await CourseAPI.gradebook.updateWeights(
-      levelContribution ? { weights, levelContribution } : { weights },
-    );
+    const payload: UpdateWeightsPayload = { weights };
+    if (levelContribution) payload.levelContribution = levelContribution;
+    if (capTotal !== undefined) payload.capTotal = capTotal;
+    const response = await CourseAPI.gradebook.updateWeights(payload);
     // BE response does not echo formulaAst; merge it back so the store reducer
     // can optimistically recompute per-student levelContribution without a refetch.
     const responseData = { ...response.data };
@@ -125,6 +130,24 @@ export const setExternalGrade =
       );
       throw error;
     }
+  };
+
+export const previewImport =
+  (payload: ImportPreviewRequest): Operation<ImportPreviewResult> =>
+  async () => {
+    const response = await CourseAPI.gradebook.importPreview(payload);
+    return response.data;
+  };
+
+export const commitImport =
+  (
+    payload: ImportPreviewRequest & { onConflict: 'keep' | 'replace' },
+  ): Operation<ImportCommitSummary> =>
+  async (dispatch) => {
+    const response = await CourseAPI.gradebook.importCommit(payload);
+    const refreshed = await CourseAPI.gradebook.index();
+    dispatch(actions.saveGradebook(refreshed.data));
+    return response.data;
   };
 
 export default fetchGradebook;

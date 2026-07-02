@@ -9789,7 +9789,7 @@
     "defaultMessage": "暂无外部评估"
   },
   "course.gradebook.ManageExternalPanel.emptyHint": {
-    "defaultMessage": "添加一个以跟踪在 Coursemology 之外获得的成绩。"
+    "defaultMessage": "手动添加，或导入在 Coursemology 之外获得的成绩的 CSV 文件。"
   },
   "course.gradebook.ManageExternalPanel.floored": {
     "defaultMessage": "≥ 0"
@@ -9841,5 +9841,173 @@
   },
   "course.gradebook.OutOfRangeAlert.warningWeighted": {
     "defaultMessage": "外部评估 {assessmentNames} 中有 {gradeCount, plural, other {# 个成绩}}超出范围，将在加权总分中被限制或下调。导出前请检查。"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.body": {
+    "defaultMessage": "部分学生在这些组件上已有成绩，且与您文件中的数值不同。覆盖将用文件中的数值替换现有成绩。保留现有则保持现有成绩不变。"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.changesSummary": {
+    "defaultMessage": "{total} 行中有 {changed} 行发生变更"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.goBack": {
+    "defaultMessage": "返回"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.keepExisting": {
+    "defaultMessage": "保留现有"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.replace": {
+    "defaultMessage": "覆盖"
+  },
+  "course.gradebook.ExternalGradeConflictPrompt.title": {
+    "defaultMessage": "解决成绩冲突"
+  },
+  "course.gradebook.ExternalGradeConflictTable.name": {
+    "defaultMessage": "名称"
+  },
+  "course.gradebook.ImportWizard.addComponent": {
+    "defaultMessage": "添加组件"
+  },
+  "course.gradebook.ImportWizard.back": {
+    "defaultMessage": "返回"
+  },
+  "course.gradebook.ImportWizard.cancel": {
+    "defaultMessage": "取消"
+  },
+  "course.gradebook.ImportWizard.commitError": {
+    "defaultMessage": "导入失败。未保存任何内容。"
+  },
+  "course.gradebook.ImportWizard.committed": {
+    "defaultMessage": "导入完成。"
+  },
+  "course.gradebook.ImportWizard.componentName": {
+    "defaultMessage": "组件名称"
+  },
+  "course.gradebook.ImportWizard.continue": {
+    "defaultMessage": "确认导入"
+  },
+  "course.gradebook.ImportWizard.downloadTemplate": {
+    "defaultMessage": "下载模板"
+  },
+  "course.gradebook.ImportWizard.dropzone": {
+    "defaultMessage": "将 CSV 拖到此处，或点击选择文件"
+  },
+  "course.gradebook.ImportWizard.duplicateHeaders": {
+    "defaultMessage": "{count, plural, one {此列出现多次：{dupes}。} other {以下列出现多次：{dupes}。}}"
+  },
+  "course.gradebook.ImportWizard.duplicateIdentifier": {
+    "defaultMessage": "文件中{count, plural, one {某个标识符} other {标识符}}出现多次：{ids}。每名学生应仅出现在一行中。"
+  },
+  "course.gradebook.ImportWizard.email": {
+    "defaultMessage": "邮箱"
+  },
+  "course.gradebook.ImportWizard.emptyCsv": {
+    "defaultMessage": "上传的文件没有数据行。请至少添加一行学生数据后重试。"
+  },
+  "course.gradebook.ImportWizard.externalId": {
+    "defaultMessage": "外部 ID"
+  },
+  "course.gradebook.ImportWizard.externalIdBlocked": {
+    "defaultMessage": "{count, plural, =0 {{name} 没有外部 ID} one {{name} 和另外一名学生没有外部 ID} other {{name} 和另外 # 名学生没有外部 ID}}。请在<link>用户管理</link>中补充缺失的 ID，以便按外部 ID 导入。"
+  },
+  "course.gradebook.ImportWizard.externalIdHint": {
+    "defaultMessage": "匹配将使用每名学生的外部 ID。请在<link>用户管理</link>中及时更新外部 ID。"
+  },
+  "course.gradebook.ImportWizard.fromExisting": {
+    "defaultMessage": "从现有创建"
+  },
+  "course.gradebook.ImportWizard.headerErrorsClosing": {
+    "defaultMessage": "请在 CSV 中更正这些问题，然后重新上传。"
+  },
+  "course.gradebook.ImportWizard.headerErrorsHeading": {
+    "defaultMessage": "以下表头需要修正："
+  },
+  "course.gradebook.ImportWizard.headerSuggestion": {
+    "defaultMessage": "没有名为 ‘{suggestion}’ 的列 — 您是否想输入 ‘{expected}’？"
+  },
+  "course.gradebook.ImportWizard.identifierMode": {
+    "defaultMessage": "学生匹配方式"
+  },
+  "course.gradebook.ImportWizard.identifierNotFirst": {
+    "defaultMessage": "‘{identifier}’ 必须是第一列。"
+  },
+  "course.gradebook.ImportWizard.malformed": {
+    "defaultMessage": "以下单元格不包含有效数字："
+  },
+  "course.gradebook.ImportWizard.malformedMore": {
+    "defaultMessage": "以及另外 {count} 个"
+  },
+  "course.gradebook.ImportWizard.maxMarks": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.ImportWizard.missingHeaders": {
+    "defaultMessage": "{count, plural, one {您的 CSV 缺少此列：{missing}。} other {您的 CSV 缺少以下列：{missing}。}}"
+  },
+  "course.gradebook.ImportWizard.next": {
+    "defaultMessage": "下一步"
+  },
+  "course.gradebook.ImportWizard.outOfRangeSubtitle": {
+    "defaultMessage": "成绩将完全按输入的内容导入。这只是一条警告；您可以在管理外部评估中关闭此警告。如果这些超出范围的成绩是有意为之，请继续。"
+  },
+  "course.gradebook.ImportWizard.outOfRangeTitle": {
+    "defaultMessage": "部分成绩超出其有效范围。"
+  },
+  "course.gradebook.ImportWizard.outOfRangeWeightedSubtitle": {
+    "defaultMessage": "成绩将完全按输入的内容导入。这只是一条警告；您可以在管理外部评估中关闭此警告。超出范围的成绩仅在加权总分中被取下限或封顶。如果这些超出范围的成绩是有意为之，请继续。"
+  },
+  "course.gradebook.ImportWizard.previewError": {
+    "defaultMessage": "无法验证该文件。请重试。"
+  },
+  "course.gradebook.ImportWizard.previewFewRows": {
+    "defaultMessage": "正在预览全部 {totalRows} 行。请在继续前确认此预览与您的 CSV 一致。"
+  },
+  "course.gradebook.ImportWizard.previewRows": {
+    "defaultMessage": "正在预览 {totalRows} 行中的前 5 行。请在继续前确认此预览与您的 CSV 一致。"
+  },
+  "course.gradebook.ImportWizard.reassignmentSubtitle": {
+    "defaultMessage": "这些标识符此前曾为另一名学生导入。成绩按当前学生匹配，而非按标识符 — 请在导入前确认这些是您想要的人员。"
+  },
+  "course.gradebook.ImportWizard.reassignmentTitle": {
+    "defaultMessage": "部分标识符现在匹配到了另一名学生"
+  },
+  "course.gradebook.ImportWizard.requiredHeaders": {
+    "defaultMessage": "您的 CSV 需要以下列表头：{headers}。‘{identifier}’ 必须是第一列。"
+  },
+  "course.gradebook.ImportWizard.stepDefine": {
+    "defaultMessage": "定义组件"
+  },
+  "course.gradebook.ImportWizard.stepUpload": {
+    "defaultMessage": "模板与上传"
+  },
+  "course.gradebook.ImportWizard.stepVerify": {
+    "defaultMessage": "验证"
+  },
+  "course.gradebook.ImportWizard.title": {
+    "defaultMessage": "导入外部评估"
+  },
+  "course.gradebook.ImportWizard.unrecognizedHeaders": {
+    "defaultMessage": "{count, plural, one {无法识别此列：{unrecognized}。} other {无法识别以下列：{unrecognized}。}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedEmail": {
+    "defaultMessage": "{count, plural, one {在课程中未找到此邮箱地址：{ids}} other {在课程中未找到以下邮箱地址：{ids}}}"
+  },
+  "course.gradebook.ImportWizard.unresolvedExternalId": {
+    "defaultMessage": "{count, plural, one {在课程中未找到此外部 ID：{ids}} other {在课程中未找到以下外部 ID：{ids}}}"
+  },
+  "course.gradebook.ImportWizard.updatesExisting": {
+    "defaultMessage": "更新现有 — 在成绩册中管理"
+  },
+  "course.gradebook.ImportWizard.upload": {
+    "defaultMessage": "上传已填写的 CSV"
+  },
+  "course.gradebook.ImportWizard.verify": {
+    "defaultMessage": "验证"
+  },
+  "course.gradebook.ImportWizard.weightage": {
+    "defaultMessage": "权重"
+  },
+  "course.gradebook.ImportWizard.willChangeExisting": {
+    "defaultMessage": "{count, plural, one {# 行包含} other {# 行包含}}对现有成绩的变更。检查此预览后，点击确认导入以在任何内容导入前查看这些冲突。"
+  },
+  "course.gradebook.ManageExternalPanel.import": {
+    "defaultMessage": "导入 CSV"
   }
 }
