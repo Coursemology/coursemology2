@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import type {
+  ExternalGradePayload,
   GradebookData,
   LevelContributionData,
   UpdateWeightsPayload,
@@ -16,6 +17,7 @@ import type {
 
 const SAVE_GRADEBOOK = 'course/gradebook/SAVE_GRADEBOOK';
 const UPDATE_TAB_WEIGHTS = 'course/gradebook/UPDATE_TAB_WEIGHTS';
+const SET_EXTERNAL_GRADE = 'course/gradebook/SET_EXTERNAL_GRADE';
 
 interface GradebookState {
   categories: CategoryData[];
@@ -40,6 +42,11 @@ interface UpdateTabWeightsAction {
   payload: UpdateWeightsPayload;
 }
 
+interface SetExternalGradeAction {
+  type: typeof SET_EXTERNAL_GRADE;
+  payload: ExternalGradePayload;
+}
+
 const initialState: GradebookState = {
   categories: [],
   tabs: [],
@@ -62,7 +69,10 @@ const initialState: GradebookState = {
 const reducer = produce(
   (
     draft: GradebookState,
-    action: SaveGradebookAction | UpdateTabWeightsAction,
+    action:
+      | SaveGradebookAction
+      | UpdateTabWeightsAction
+      | SetExternalGradeAction,
   ) => {
     switch (action.type) {
       case SAVE_GRADEBOOK: {
@@ -136,6 +146,15 @@ const reducer = produce(
         }
         break;
       }
+      case SET_EXTERNAL_GRADE: {
+        const { studentId, assessmentId, grade } = action.payload;
+        const existing = draft.submissions.find(
+          (s) => s.studentId === studentId && s.assessmentId === assessmentId,
+        );
+        if (existing) existing.grade = grade;
+        else draft.submissions.push({ studentId, assessmentId, grade });
+        break;
+      }
       default:
         break;
     }
@@ -154,6 +173,9 @@ export const actions = {
     type: UPDATE_TAB_WEIGHTS,
     payload,
   }),
+  setExternalGrade: (
+    payload: ExternalGradePayload,
+  ): SetExternalGradeAction => ({ type: SET_EXTERNAL_GRADE, payload }),
 };
 
 export default reducer;
