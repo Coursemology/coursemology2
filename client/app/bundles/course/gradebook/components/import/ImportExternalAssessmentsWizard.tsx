@@ -26,6 +26,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import type {
   ExistingExternalAssessment,
   IdentifierMode,
@@ -84,7 +85,8 @@ const translations = defineMessages({
   },
   updatesExisting: {
     id: 'course.gradebook.ImportWizard.updatesExisting',
-    defaultMessage: 'Updates existing — managed in the gradebook',
+    defaultMessage:
+      'Existing assessment - settings managed in Manage External Assessments',
   },
   fromExisting: {
     id: 'course.gradebook.ImportWizard.fromExisting',
@@ -186,6 +188,16 @@ const translations = defineMessages({
   committed: {
     id: 'course.gradebook.ImportWizard.committed',
     defaultMessage: 'Import complete.',
+  },
+  committedReplaced: {
+    id: 'course.gradebook.ImportWizard.committedReplaced',
+    defaultMessage:
+      'Import complete. {count, plural, one {# existing grade replaced} other {# existing grades replaced}}.',
+  },
+  committedKept: {
+    id: 'course.gradebook.ImportWizard.committedKept',
+    defaultMessage:
+      'Import complete. {count, plural, one {# existing grade kept} other {# existing grades kept}}.',
   },
   headerSuggestion: {
     id: 'course.gradebook.ImportWizard.headerSuggestion',
@@ -308,6 +320,15 @@ const importErrorCode = (
       };
     }
   ).response.data.errors;
+};
+
+// Keep every alert's text at body2 size and black so the error (red) and
+// warning (amber) blocks read identically; the severity icon keeps its color.
+const alertSx: SxProps<Theme> = {
+  mb: 1,
+  color: 'common.black',
+  '& .MuiAlertTitle-root': { typography: 'body2' },
+  '& .MuiAlert-message .MuiTypography-root': { typography: 'body2' },
 };
 
 const ImportExternalAssessmentsWizard: FC<Props> = ({
@@ -448,7 +469,27 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
           onConflict,
         }),
       );
-      toast.success(t(translations.committed));
+      // Count the grade cells that actually differed, so the success toast can
+      // report how many existing grades were replaced vs kept. When nothing
+      // conflicted (the clean-import path also calls doCommit('replace')), fall
+      // back to the plain message so we never claim a replace/keep that never happened.
+      const changedGrades = (preview?.conflictRows ?? []).reduce(
+        (sum, row) =>
+          sum + Object.values(row.cells).filter((cell) => cell.changed).length,
+        0,
+      );
+      if (changedGrades > 0) {
+        toast.success(
+          t(
+            onConflict === 'keep'
+              ? translations.committedKept
+              : translations.committedReplaced,
+            { count: changedGrades },
+          ),
+        );
+      } else {
+        toast.success(t(translations.committed));
+      }
       setConflictOpen(false);
       onClose();
     } catch {
@@ -470,7 +511,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
     return (
       <>
         {includeBlocking && !preview.ok && preview.unresolved.length > 0 && (
-          <Alert severity="error" sx={{ mb: 1 }}>
+          <Alert severity="error" sx={alertSx}>
             <Typography variant="body2">
               {t(
                 mode === 'email'
@@ -486,7 +527,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
         )}
 
         {includeBlocking && !preview.ok && preview.malformed.length > 0 && (
-          <Alert severity="error" sx={{ mb: 1 }}>
+          <Alert severity="error" sx={alertSx}>
             <Typography variant="body2">{t(translations.malformed)}</Typography>
             <ul className="m-0 pl-5">
               {preview.malformed.slice(0, 5).map((cell) => (
@@ -506,7 +547,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
         )}
 
         {preview.outOfRange.length > 0 && (
-          <Alert severity="warning" sx={{ mb: 1 }}>
+          <Alert severity="warning" sx={alertSx}>
             <AlertTitle>{t(translations.outOfRangeTitle)}</AlertTitle>
 
             <ul>
@@ -541,7 +582,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
         )}
 
         {preview.reassignments.length > 0 && (
-          <Alert severity="warning" sx={{ mb: 1 }}>
+          <Alert severity="warning" sx={alertSx}>
             <AlertTitle>{t(translations.reassignmentTitle)}</AlertTitle>
 
             <ul>
@@ -664,7 +705,7 @@ const ImportExternalAssessmentsWizard: FC<Props> = ({
                     }
                   />
                   {locked && (
-                    <span className="text-sm text-neutral-500">
+                    <span className="text-base text-neutral-500">
                       {t(translations.updatesExisting)}
                     </span>
                   )}

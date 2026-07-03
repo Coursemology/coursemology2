@@ -9623,8 +9623,11 @@
   "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
     "defaultMessage": "값은 최소 0이어야 합니다"
   },
-  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
-    "defaultMessage": "가중치 합계가 100이 아닙니다. 저장은 가능하지만 총점이 정확하지 않을 수 있습니다."
+  "course.gradebook.ConfigureWeightsPrompt.weightsOverHundred": {
+    "defaultMessage": "가중치 합계가 100%를 초과하므로 학생 총점이 100%를 넘을 수 있습니다. '100%로 제한'을 켜면 표시 및 내보내기 시 100%로 표시되며, 또는 가중치 합계를 100%로 설정하세요. 저장은 계속 허용됩니다."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsUnderHundred": {
+    "defaultMessage": "가중치 합계가 100% 미만이므로 어떤 학생도 총점 100%에 도달할 수 없습니다. 의도한 것이 아니라면 가중치 합계를 100%로 설정하세요. 저장은 계속 허용됩니다."
   },
   "course.gradebook.GradebookIndex.allAssessments": {
     "defaultMessage": "전체 평가"
@@ -9965,6 +9968,12 @@
   "course.gradebook.ImportWizard.committed": {
     "defaultMessage": "가져오기가 완료되었습니다."
   },
+  "course.gradebook.ImportWizard.committedKept": {
+    "defaultMessage": "가져오기가 완료되었습니다. {count, plural, one {기존 성적 #개가 유지되었습니다} other {기존 성적 #개가 유지되었습니다}}."
+  },
+  "course.gradebook.ImportWizard.committedReplaced": {
+    "defaultMessage": "가져오기가 완료되었습니다. {count, plural, one {기존 성적 #개가 대체되었습니다} other {기존 성적 #개가 대체되었습니다}}."
+  },
   "course.gradebook.ImportWizard.componentName": {
     "defaultMessage": "구성요소 이름"
   },
@@ -10080,7 +10089,7 @@
     "defaultMessage": "{count, plural, one {이 외부 ID를 과목에서 찾을 수 없습니다: {ids}} other {이 외부 ID들을 과목에서 찾을 수 없습니다: {ids}}}"
   },
   "course.gradebook.ImportWizard.updatesExisting": {
-    "defaultMessage": "기존 항목 업데이트 — 성적표에서 관리됨"
+    "defaultMessage": "기존 평가 - 설정은 외부 평가 관리에서 관리됩니다"
   },
   "course.gradebook.ImportWizard.upload": {
     "defaultMessage": "작성한 CSV 업로드"
