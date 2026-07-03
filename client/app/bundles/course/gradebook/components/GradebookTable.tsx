@@ -10,8 +10,10 @@ import {
 import { defineMessages } from 'react-intl';
 import Check from '@mui/icons-material/Check';
 import Close from '@mui/icons-material/Close';
+import Edit from '@mui/icons-material/Edit';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import {
+  Box,
   Checkbox,
   Chip,
   CircularProgress,
@@ -347,7 +349,7 @@ const ExternalGradeCell = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-end',
-          gap: 2,
+          columnGap: 8,
           width: '100%',
           minWidth: 0,
           overflow: 'hidden',
@@ -374,9 +376,9 @@ const ExternalGradeCell = ({
           }}
           size="small"
           sx={{
-            width: 72,
+            width: 56,
             '& .MuiInputBase-root': {
-              width: 72,
+              width: 56,
             },
           }}
           value={text}
@@ -390,7 +392,7 @@ const ExternalGradeCell = ({
           onClick={commit}
           onMouseDown={(e) => e.preventDefault()}
           size="small"
-          sx={{ flexShrink: 0 }}
+          sx={{ flexShrink: 0, p: 0.25 }}
         >
           <Check fontSize="small" />
         </IconButton>
@@ -399,7 +401,7 @@ const ExternalGradeCell = ({
           onClick={cancel}
           onMouseDown={(e) => e.preventDefault()}
           size="small"
-          sx={{ flexShrink: 0 }}
+          sx={{ flexShrink: 0, p: 0.25 }}
         >
           <Close fontSize="small" />
         </IconButton>
@@ -408,7 +410,7 @@ const ExternalGradeCell = ({
   }
 
   return (
-    <span
+    <Box
       aria-label={t(translations.externalGradeAria, {
         title,
         name: studentName,
@@ -425,17 +427,37 @@ const ExternalGradeCell = ({
         }
       }}
       role="button"
-      style={{
+      sx={{
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        gap: 4,
+        gap: 1,
         width: '100%',
         height: '100%',
+        '& .external-grade-cell-edit': {
+          opacity: 0,
+          transition: 'opacity 200ms ease-in-out',
+        },
+        '&:hover .external-grade-cell-edit, &:focus-visible .external-grade-cell-edit':
+          {
+            opacity: 0.5,
+          },
+        '& .external-grade-cell-value': {
+          borderBottom: (theme) => `1px dashed ${theme.palette.divider}`,
+          transition: 'border-bottom-style 200ms ease-in-out',
+        },
+        '&:hover .external-grade-cell-value': {
+          borderBottomStyle: 'solid',
+        },
       }}
       tabIndex={0}
     >
+      <Edit
+        className="external-grade-cell-edit"
+        data-testid="edit-affordance"
+        fontSize="small"
+      />
       {exceedsMax && (
         <Tooltip title={t(exceedsMsg, { max: maxGrade })}>
           <InfoOutlined
@@ -455,8 +477,10 @@ const ExternalGradeCell = ({
         </Tooltip>
       )}
       {saving && <CircularProgress size={12} />}
-      <span>{localValue == null ? '—' : localValue}</span>
-    </span>
+      <Box className="external-grade-cell-value">
+        {localValue == null ? '—' : localValue}
+      </Box>
+    </Box>
   );
 };
 
@@ -693,6 +717,7 @@ const GradebookTable = ({
       ),
       locked: ['name'],
       triggerLabel: t(translations.selectColumns),
+      triggerIconOnly: true,
       dialogTitle: t(translations.dialogTitle),
       getExtraHeaderRows: (colIds): string[][] => {
         const hasAssessments = colIds.some(

@@ -437,6 +437,8 @@ RSpec.describe Course::GradebookController, type: :controller do
     end
 
     describe 'PATCH update_weights' do
+      render_views
+
       let(:manager) { create(:course_manager, course: course) }
       let(:ta) { create(:course_teaching_assistant, course: course) }
       let(:student) { create(:course_student, course: course) }
@@ -486,6 +488,14 @@ RSpec.describe Course::GradebookController, type: :controller do
           # A later save that omits capTotal must not reset the persisted flag.
           patch :update_weights, params: { course_id: course.id, **valid_payload }, format: :json
           expect(response.parsed_body['capTotal']).to eq(true)
+        end
+
+        it 'coerces a null capTotal to false rather than persisting nil' do
+          patch :update_weights,
+                params: { course_id: course.id, weights: [], capTotal: nil },
+                format: :json
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body['capTotal']).to eq(false)
         end
 
         it 'rejects negative with 422 and no partial write' do

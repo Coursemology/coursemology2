@@ -9,6 +9,7 @@ import {
 import { defineMessages, MessageDescriptor } from 'react-intl';
 import {
   Download,
+  FilterList,
   InfoOutlined,
   KeyboardArrowDown,
   KeyboardArrowRight,
@@ -73,7 +74,6 @@ import {
 import { parseFormula } from '../levelFormula';
 import { externalClamp } from '../outOfRange';
 
-import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import ProjectedTotalHint, {
   projectedTotalPolicyTranslations,
 } from './ProjectedTotalHint';
@@ -82,10 +82,6 @@ import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
 const INLINE_FLEX = 'inline-flex';
 
 const translations = defineMessages({
-  configureWeights: {
-    id: 'course.gradebook.WeightedGradebookTable.configureWeights',
-    defaultMessage: 'Configure Weights',
-  },
   noWeightsConfigured: {
     id: 'course.gradebook.WeightedGradebookTable.noWeightsConfigured',
     defaultMessage:
@@ -355,7 +351,6 @@ const WeightedGradebookTable = ({
   toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
-  const [configureOpen, setConfigureOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
 
@@ -1008,14 +1003,18 @@ const WeightedGradebookTable = ({
       {!allWeightsZero && !showingDefaults && <ProjectedTotalHint />}
       <div className="px-5">
         <Paper elevation={0} sx={{ width: 'fit-content', maxWidth: '100%' }}>
-          <div className="flex items-center gap-3 px-2 py-3">
+          <div className="flex flex-wrap items-center gap-3 px-2 py-3">
             <SearchField
               onChangeKeyword={toolbar.onSearchKeywordChange}
               placeholder={toolbar.searchPlaceholder}
-              style={{ flex: 1 }}
+              style={{ flex: 1, minWidth: '12rem' }}
               value={toolbar.searchKeyword ?? ''}
             />
-            <div className="flex items-center gap-3">
+            {/* `shrink-0` keeps each control at its natural width so labels
+                never wrap — a wrapped label would render as a circle under the
+                theme's `rounded-full` buttons. `flex-wrap` (here and on the
+                parent) lets whole controls drop to a new row when narrow. */}
+            <div className="flex flex-wrap items-center gap-3 [&>*]:shrink-0">
               <SegmentedSwitch
                 ariaLabel={t(translations.displayMode)}
                 onChange={setDisplayMode}
@@ -1034,23 +1033,16 @@ const WeightedGradebookTable = ({
                 value={displayMode}
               />
               {toolbarAction}
-              {canManageWeights && (
-                <Button
-                  onClick={() => setConfigureOpen(true)}
+              <Tooltip title={t(translations.selectColumns)}>
+                <IconButton
+                  aria-label={t(translations.selectColumns)}
+                  color="primary"
+                  onClick={() => setPickerOpen(true)}
                   size="small"
-                  variant="outlined"
                 >
-                  {t(translations.configureWeights)}
-                </Button>
-              )}
-              <Button
-                color="primary"
-                onClick={() => setPickerOpen(true)}
-                size="small"
-                variant="outlined"
-              >
-                {t(translations.selectColumns)}
-              </Button>
+                  <FilterList />
+                </IconButton>
+              </Tooltip>
               {toolbar.onDirectExport && (
                 <Tooltip
                   title={
@@ -1815,21 +1807,6 @@ const WeightedGradebookTable = ({
           {pagination && <MuiTablePagination {...pagination} />}
         </Paper>
       </div>
-
-      {canManageWeights && (
-        <ConfigureWeightsPrompt
-          assessments={assessments}
-          capTotal={capTotal}
-          categories={categories}
-          courseMaxLevel={courseMaxLevel}
-          gamificationEnabled={gamificationEnabled}
-          levelContribution={levelContribution}
-          onClose={() => setConfigureOpen(false)}
-          open={configureOpen}
-          students={students}
-          tabs={tabs}
-        />
-      )}
 
       {toolbar.columnPicker && toolbar.commitColumnVisibility && (
         <MuiColumnPickerPrompt

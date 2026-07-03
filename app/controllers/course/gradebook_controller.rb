@@ -24,12 +24,9 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
 
   def update_weights
     authorize! :manage_gradebook_weights, current_course
-    updates = (update_weights_params[:weights] || []).map { |entry| parse_weight_entry(entry) }
-    level_config = persist_weight_updates(updates)
-    response_body = { weights: serialize_weight_updates(updates) }
-    response_body[:levelContribution] = serialize_level_contribution(level_config) if level_config
-    response_body[:capTotal] = @settings.cap_weighted_total
-    render json: response_body
+    @updates = (update_weights_params[:weights] || []).map { |entry| parse_weight_entry(entry) }
+    @level_config = persist_weight_updates(@updates)
+    render 'update_weights'
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
   end
@@ -56,7 +53,13 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def persist_cap_total
     return unless params.key?(:capTotal)
 
-    @settings.cap_weighted_total = params[:capTotal]
+    # cast(nil) is nil, which would defeat the boolean == comparison below (false != nil)
+    # and persist a non-boolean; coerce to a strict boolean so an omitted-but-present
+    # value settles to false instead of forcing a needless write on every request.
+    new_value = ActiveRecord::Type::Boolean.new.cast(params[:capTotal]) || false
+    return if @settings.cap_weighted_total == new_value
+
+    @settings.cap_weighted_total = new_value
     current_course.save!
   end
 
@@ -137,30 +140,6 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
     # default-true fallback applies on omission rather than persisting NULL.
     attrs[:clamp] = permitted[:clamp] if permitted.key?(:clamp)
     attrs
-  end
-
-  def serialize_level_contribution(config)
-    {
-      enabled: config.enabled,
-      formula: config.formula,
-      weight: config.weight.to_f,
-      show: config.show,
-      clamp: config.clamp
-    }
-  end
-
-  def serialize_weight_updates(updates)
-    updates.map do |u|
-      entry = { tabId: u[:tab_id], weight: u[:weight], weightMode: u[:weight_mode].to_s,
-                keepHighest: u[:keep_highest],
-                excludedAssessmentIds: u[:excluded_assessment_ids] }
-      if u[:weight_mode].to_s == 'custom'
-        entry[:assessmentWeights] = u[:assessment_weights].map do |aw|
-          { assessmentId: aw[:assessment_id], weight: aw[:weight] }
-        end
-      end
-      entry
-    end
   end
 
   def component

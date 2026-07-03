@@ -36,6 +36,9 @@ it('saves the edited name and a toggled cap flag', async () => {
   const name = await screen.findByLabelText('Name');
   await userEvent.clear(name);
   await userEvent.type(name, 'Quiz 1');
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   fireEvent.click(screen.getByRole('checkbox', { name: 'Cap grades at max' }));
   fireEvent.click(screen.getByRole('button', { name: 'Save' }));
   await waitFor(() =>
@@ -79,6 +82,9 @@ it('saves a toggled floor flag', async () => {
     />,
   );
   await screen.findByLabelText('Name');
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   fireEvent.click(screen.getByRole('checkbox', { name: 'Floor grades at 0' }));
   fireEvent.click(screen.getByRole('button', { name: 'Save' }));
   await waitFor(() =>
@@ -128,6 +134,9 @@ it('defaults floor and cap switches to checked when the assessment omits them', 
     />,
   );
   await screen.findByLabelText('Name');
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   expect(
     screen.getByRole('checkbox', { name: 'Floor grades at 0' }),
   ).toBeChecked();
@@ -145,77 +154,31 @@ it('explains the floor and cap toggles, explaining the grade is unchanged', asyn
     />,
   );
   await screen.findByLabelText('Name');
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   expect(
     screen.getByLabelText(
-      /Counts negative grades as 0 when computing the weighted total. The actual grade is unchanged./i,
+      /Counts negative grades as 0 when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged./i,
     ),
   ).toBeInTheDocument();
   expect(
     screen.getByLabelText(
-      /Counts grades above the maximum as the maximum when computing the weighted total. The actual grade is unchanged./i,
+      /Counts grades above the maximum as the maximum when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged./i,
     ),
   ).toBeInTheDocument();
 });
 
-it('shows a weightage field seeded from the current weight and includes it when saving (weighted view on)', async () => {
-  render(
-    <EditExternalAssessmentPrompt
-      assessment={assessment}
-      currentWeight={30}
-      onClose={jest.fn()}
-      open
-      weightedViewEnabled
-    />,
-  );
-  const weight = await screen.findByLabelText('Weightage');
-  expect(weight).toHaveValue(30);
-  fireEvent.change(weight, { target: { value: '45' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-  await waitFor(() =>
-    expect(editExternalAssessment).toHaveBeenCalledWith(-3, {
-      title: 'Quiz',
-      maximumGrade: 20,
-      floorAtZero: true,
-      capAtMaximum: true,
-      weight: 45,
-    }),
-  );
-});
-
-it('defaults weightage to 0 when no currentWeight is provided (weighted view on)', async () => {
+it('never renders a weight field (weight lives in the Weights tab)', async () => {
   render(
     <EditExternalAssessmentPrompt
       assessment={assessment}
       onClose={jest.fn()}
       open
-      weightedViewEnabled
-    />,
-  );
-  const weight = await screen.findByLabelText('Weightage');
-  expect(weight).toHaveValue(0);
-  fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-  await waitFor(() =>
-    expect(editExternalAssessment).toHaveBeenCalledWith(-3, {
-      title: 'Quiz',
-      maximumGrade: 20,
-      floorAtZero: true,
-      capAtMaximum: true,
-      weight: 0,
-    }),
-  );
-});
-
-it('omits the weightage field when weighted view is off', async () => {
-  render(
-    <EditExternalAssessmentPrompt
-      assessment={assessment}
-      onClose={jest.fn()}
-      open
-      weightedViewEnabled={false}
     />,
   );
   await screen.findByLabelText('Name');
-  expect(screen.queryByLabelText('Weightage')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('Weight')).not.toBeInTheDocument();
 });
 
 it('disables Save when the name is blank', async () => {
@@ -304,4 +267,32 @@ it('shows an error toast and keeps the dialog open when saving fails', async () 
   fireEvent.click(screen.getByRole('button', { name: 'Save' }));
   await waitFor(() => expect(toast.error).toHaveBeenCalled());
   expect(onClose).not.toHaveBeenCalled();
+});
+
+it('hides floor/cap behind Advanced settings, collapsed by default', async () => {
+  render(
+    <EditExternalAssessmentPrompt
+      assessment={assessment}
+      onClose={jest.fn()}
+      open
+    />,
+  );
+  await screen.findByLabelText('Name');
+  expect(
+    screen.queryByRole('checkbox', { name: /floor grades at 0/i }),
+  ).toBeNull();
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
+  // The Advanced settings accordion expands via a CSS height transition, so
+  // the switch isn't in the accessibility tree on the same tick the click
+  // handler returns. Query by role (as above) rather than toBeVisible() —
+  // MUI's Switch always sets opacity: 0 on its native input by design (the
+  // visible thumb/track are separate sibling elements), so toBeVisible()
+  // never passes for it regardless of the accordion's state.
+  await waitFor(() =>
+    expect(
+      screen.getByRole('checkbox', { name: /floor grades at 0/i }),
+    ).toBeInTheDocument(),
+  );
 });

@@ -9797,6 +9797,72 @@
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "删除外部评估"
   },
+  "course.gradebook.ColumnMappingTable.createNew": {
+    "defaultMessage": "新建"
+  },
+  "course.gradebook.ColumnMappingTable.dontImport": {
+    "defaultMessage": "不导入"
+  },
+  "course.gradebook.ColumnMappingTable.duplicateTitleError": {
+    "defaultMessage": "另一列也会创建同名组件。"
+  },
+  "course.gradebook.ColumnMappingTable.duplicateExistingError": {
+    "defaultMessage": "另一列也映射到了这个现有外部评估。"
+  },
+  "course.gradebook.ColumnMappingTable.helperLine": {
+    "defaultMessage": "成绩列只能包含数字（空白、\"-\" 或 \"N/A\" 表示无成绩）。包含非数值的列不能作为成绩导入——请修正 CSV 或将其设为不导入。"
+  },
+  "course.gradebook.ColumnMappingTable.mapToExisting": {
+    "defaultMessage": "映射到现有项"
+  },
+  "course.gradebook.ColumnMappingTable.matchedHeading": {
+    "defaultMessage": "{count, plural, one {# 列已匹配到现有项} other {# 列已匹配到现有项}}"
+  },
+  "course.gradebook.ColumnMappingTable.maxLabel": {
+    "defaultMessage": "最高分"
+  },
+  "course.gradebook.ColumnMappingTable.needsInputHeading": {
+    "defaultMessage": "需要你的输入"
+  },
+  "course.gradebook.ColumnMappingTable.nonGradeColumnNote": {
+    "defaultMessage": "未找到数值。已作为非成绩列处理。"
+  },
+  "course.gradebook.ColumnMappingTable.nonNumericError": {
+    "defaultMessage": "第 {row} 行的“{value}”不是数字。要导入，请修正 CSV 后重新上传。"
+  },
+  "course.gradebook.ColumnMappingTable.notUsed": {
+    "defaultMessage": "未使用"
+  },
+  "course.gradebook.ColumnMappingTable.skippedHeading": {
+    "defaultMessage": "{count, plural, one {# 列已跳过} other {# 列已跳过}} — 不是成绩列"
+  },
+  "course.gradebook.ColumnMappingTable.skippedTooltip": {
+    "defaultMessage": "看起来像标签，而不是成绩 — 未导入。可更改下拉选项，将其作为成绩导入。"
+  },
+  "course.gradebook.ColumnMappingTable.titleCollisionError": {
+    "defaultMessage": "此名称已被现有外部评估使用。"
+  },
+  "course.gradebook.ColumnMappingTable.titleLabel": {
+    "defaultMessage": "标题"
+  },
+  "course.gradebook.ColumnMappingTable.weightLabel": {
+    "defaultMessage": "权重"
+  },
+  "course.gradebook.ColumnMappingTable.csvHeader": {
+    "defaultMessage": "CSV 表头"
+  },
+  "course.gradebook.ColumnMappingTable.actionLabel": {
+    "defaultMessage": "操作"
+  },
+  "course.gradebook.ColumnMappingTable.selectComponent": {
+    "defaultMessage": "选择组件…"
+  },
+  "course.gradebook.ColumnMappingTable.incompleteHint": {
+    "defaultMessage": "请完成高亮列的映射后继续。"
+  },
+  "course.gradebook.ColumnMappingTable.nothingImportedHint": {
+    "defaultMessage": "请将至少一列设为新建或映射到现有项后继续。"
+  },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "显示模式"
   },
@@ -9814,9 +9880,6 @@
   },
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
     "defaultMessage": "成绩下限设为 0"
-  },
-  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
-    "defaultMessage": "权重"
   },
   "course.gradebook.EditExternalAssessmentPrompt.cancel": {
     "defaultMessage": "取消"
@@ -9848,50 +9911,44 @@
   "course.gradebook.EditExternalAssessmentPrompt.title": {
     "defaultMessage": "编辑外部评估"
   },
-  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
-    "defaultMessage": "权重"
-  },
   "course.gradebook.ManageExternalAssessmentsButton.label": {
     "defaultMessage": "管理外部评估"
   },
-  "course.gradebook.ManageExternalPanel.actions": {
+  "course.gradebook.ManageExternalAssessmentContent.actions": {
     "defaultMessage": "操作"
   },
-  "course.gradebook.ManageExternalPanel.add": {
+  "course.gradebook.ManageExternalAssessmentContent.add": {
     "defaultMessage": "添加"
   },
-  "course.gradebook.ManageExternalPanel.bounds": {
+  "course.gradebook.ManageExternalAssessmentContent.bounds": {
     "defaultMessage": "范围"
   },
-  "course.gradebook.ManageExternalPanel.capped": {
+  "course.gradebook.ManageExternalAssessmentContent.capped": {
     "defaultMessage": "≤ 最高分"
   },
-  "course.gradebook.ManageExternalPanel.close": {
+  "course.gradebook.ManageExternalAssessmentContent.close": {
     "defaultMessage": "关闭"
   },
-  "course.gradebook.ManageExternalPanel.empty": {
+  "course.gradebook.ManageExternalAssessmentContent.empty": {
     "defaultMessage": "暂无外部评估"
   },
-  "course.gradebook.ManageExternalPanel.emptyHint": {
+  "course.gradebook.ManageExternalAssessmentContent.emptyHint": {
     "defaultMessage": "手动添加，或导入在 Coursemology 之外获得的成绩的 CSV 文件。"
   },
-  "course.gradebook.ManageExternalPanel.floored": {
+  "course.gradebook.ManageExternalAssessmentContent.floored": {
     "defaultMessage": "≥ 0"
   },
-  "course.gradebook.ManageExternalPanel.max": {
+  "course.gradebook.ManageExternalAssessmentContent.max": {
     "defaultMessage": "最高分"
   },
-  "course.gradebook.ManageExternalPanel.name": {
+  "course.gradebook.ManageExternalAssessmentContent.name": {
     "defaultMessage": "名称"
   },
-  "course.gradebook.ManageExternalPanel.reorderError": {
+  "course.gradebook.ManageExternalAssessmentContent.reorderError": {
     "defaultMessage": "无法保存新的顺序。请重试。"
   },
-  "course.gradebook.ManageExternalPanel.title": {
+  "course.gradebook.ManageExternalAssessmentContent.title": {
     "defaultMessage": "外部评估"
-  },
-  "course.gradebook.ManageExternalPanel.weight": {
-    "defaultMessage": "权重"
   },
   "course.gradebook.GradebookTable.acceptEdit": {
     "defaultMessage": "接受"
@@ -9974,6 +10031,9 @@
   "course.gradebook.ImportWizard.continue": {
     "defaultMessage": "确认导入"
   },
+  "course.gradebook.ImportWizard.resolveConflicts": {
+    "defaultMessage": "解决冲突"
+  },
   "course.gradebook.ImportWizard.downloadTemplate": {
     "defaultMessage": "下载模板"
   },
@@ -10016,9 +10076,6 @@
   "course.gradebook.ImportWizard.identifierMode": {
     "defaultMessage": "学生匹配方式"
   },
-  "course.gradebook.ImportWizard.identifierNotFirst": {
-    "defaultMessage": "‘{identifier}’ 必须是第一列。"
-  },
   "course.gradebook.ImportWizard.malformed": {
     "defaultMessage": "以下单元格不包含有效数字："
   },
@@ -10059,7 +10116,7 @@
     "defaultMessage": "部分标识符现在匹配到了另一名学生"
   },
   "course.gradebook.ImportWizard.requiredHeaders": {
-    "defaultMessage": "您的 CSV 需要以下列表头：{headers}。‘{identifier}’ 必须是第一列。"
+    "defaultMessage": "您的 CSV 必须包含名为 {headers} 的列以识别学生，该列可位于任意位置。"
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "定义组件"
@@ -10095,9 +10152,9 @@
     "defaultMessage": "权重"
   },
   "course.gradebook.ImportWizard.willChangeExisting": {
-    "defaultMessage": "{count, plural, one {# 行包含} other {# 行包含}}对现有成绩的变更。检查此预览后，点击确认导入以在任何内容导入前查看这些冲突。"
+    "defaultMessage": "{count, plural, one {# 行包含对现有成绩的更改} other {# 行包含对现有成绩的更改}}。检查此预览后，请在导入任何内容之前点击解决冲突以查看这些冲突。"
   },
-  "course.gradebook.ManageExternalPanel.import": {
+  "course.gradebook.ManageExternalAssessmentContent.import": {
     "defaultMessage": "导入 CSV"
   }
 }

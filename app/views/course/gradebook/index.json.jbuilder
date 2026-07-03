@@ -104,11 +104,7 @@ json.courseMaxLevel @course_max_level
 
 json.levelContribution do
   if @weighted_view_enabled && @level_config
-    json.enabled @level_config.enabled
-    json.formula @level_config.formula
-    json.weight @level_config.weight.to_f
-    json.show @level_config.show
-    json.clamp @level_config.clamp
+    json.partial! 'course/gradebook/level_contribution', level_config: @level_config
   else
     json.enabled false
     json.formula ''
