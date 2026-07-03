@@ -26,28 +26,32 @@ class Course::ExternalAssessmentImportsController < Course::ComponentController
 
   def build_service
     permitted_params = import_params
-    weighted_view_enabled = gradebook_settings.weighted_view_enabled
     Service.new(
       course: current_course,
       actor: current_user,
-      components: permitted_params[:components].map do |c|
-        { name: c[:name],
-          weightage: weighted_view_enabled ? c[:weightage].to_i : 0,
-          maximum_grade: c[:maximumGrade].to_f }
-      end,
       identifier_mode: permitted_params[:identifierMode],
-      csv_data: permitted_params[:csvData]
+      identifier_column: permitted_params[:identifierColumn],
+      csv_data: permitted_params[:csvData],
+      mappings: (permitted_params[:mappings] || []).map do |m|
+        { header: m[:header], action: m[:action], target: m[:target],
+          max_grade: m[:maxGrade].presence&.to_f, weight: mapping_weight(m) }
+      end
     )
   end
 
-  def gradebook_settings
-    @gradebook_settings ||= Course::Settings::GradebookComponent.new(component)
+  # Weights only mean anything in the weighted view. Zero any incoming weight when
+  # the view is disabled so a stale request can't write a non-zero weight into a
+  # course that isn't weighting grades.
+  def mapping_weight(mapping)
+    return 0 unless @settings.weighted_view_enabled
+
+    mapping[:weight].presence&.to_f
   end
 
   def import_params
-    @import_params ||= params.slice(:identifierMode, :csvData, :onConflict, :components).permit(
-      :identifierMode, :csvData, :onConflict,
-      components: [:name, :weightage, :maximumGrade]
+    @import_params ||= params.permit(
+      :identifierMode, :identifierColumn, :csvData, :onConflict,
+      mappings: [:header, :action, :target, :maxGrade, :weight]
     )
   end
 end

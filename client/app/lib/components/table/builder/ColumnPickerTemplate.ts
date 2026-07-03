@@ -16,6 +16,9 @@ interface ColumnPickerTemplate {
   /** Toolbar trigger button text, default "Export…". Opens the picker dialog. */
   triggerLabel?: string;
 
+  /** Render the trigger as an icon-only filter button (triggerLabel becomes its tooltip/aria-label). */
+  triggerIconOnly?: boolean;
+
   /** Label for the direct-export button rendered next to the trigger in the toolbar. */
   directExportLabel?: string;
 

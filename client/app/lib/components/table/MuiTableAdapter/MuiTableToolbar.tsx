@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Download } from '@mui/icons-material';
+import { Download, FilterList } from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 
 import SearchField from 'lib/components/core/fields/SearchField';
@@ -62,18 +62,35 @@ const MuiTableToolbar = (props: ToolbarProps): JSX.Element | null => {
         )}
 
         {renderAlternative && props.alternative?.render()}
-        {renderNative && !renderAlternative && props.buttons}
-
-        {renderNative && props.columnPicker && (
-          <Button
-            className="shrink-0"
-            color="primary"
-            onClick={() => setPickerOpen(true)}
-            variant="outlined"
-          >
-            {triggerLabel}
-          </Button>
+        {renderNative && !renderAlternative && props.buttons && (
+          <div className="flex shrink-0 items-center gap-4">
+            {props.buttons}
+          </div>
         )}
+
+        {renderNative &&
+          props.columnPicker &&
+          (props.columnPicker.triggerIconOnly ? (
+            <Tooltip title={triggerLabel}>
+              <IconButton
+                aria-label={triggerLabel}
+                className="shrink-0"
+                color="primary"
+                onClick={() => setPickerOpen(true)}
+              >
+                <FilterList />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Button
+              className="shrink-0"
+              color="primary"
+              onClick={() => setPickerOpen(true)}
+              variant="outlined"
+            >
+              {triggerLabel}
+            </Button>
+          ))}
 
         {renderNative && props.columnPicker && props.onDirectExport && (
           <Tooltip title={props.columnPicker.directExportTooltip ?? ''}>

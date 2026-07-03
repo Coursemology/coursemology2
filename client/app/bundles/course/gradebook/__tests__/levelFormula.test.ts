@@ -141,9 +141,13 @@ describe('parseFormula — plain-language errors', () => {
   });
 
   it('explains too many arguments to min/max with an example', () => {
-    expect(errorOf('min(level, 25, 30)')).toMatch(/min takes exactly two values/i);
+    expect(errorOf('min(level, 25, 30)')).toMatch(
+      /min takes exactly two values/i,
+    );
     expect(errorOf('min(level, 25, 30)')).toMatch(/min\(level, 25\)/);
-    expect(errorOf('max(0, level, 5)')).toMatch(/max takes exactly two values/i);
+    expect(errorOf('max(0, level, 5)')).toMatch(
+      /max takes exactly two values/i,
+    );
     expect(errorOf('max(0, level, 5)')).toMatch(/max\(level, 25\)/);
     // and never falls back to the misleading closing-bracket message
     expect(errorOf('min(level, 25, 30)')).not.toMatch(/closing bracket/i);

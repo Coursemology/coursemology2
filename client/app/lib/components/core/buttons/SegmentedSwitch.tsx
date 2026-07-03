@@ -1,11 +1,6 @@
-import {
-  KeyboardEvent,
-  ReactNode,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { KeyboardEvent, ReactNode, useRef } from 'react';
 import { Box, ButtonBase, Tooltip } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 
 export interface SegmentedSwitchOption<T> {
   value: T;
@@ -47,46 +42,27 @@ const PADDING_X = 1.5;
 const MIN_HEIGHT = 30.75;
 
 /**
- * A compact, peer-state mode switcher: a pill track with the options side by
- * side and a single elevated thumb that slides to the active one.
+ * A compact, peer-state mode switcher: a connected row of segments, the active
+ * one filled in the primary color and the rest outlined. It mirrors the
+ * `ButtonGroup` toggle used elsewhere in the app (e.g. the submission
+ * Timeline/Sequence switch) so the two read as the same control.
  *
  * Unlike a `Switch`, neither option reads as "off" — both are equally valid —
- * and unlike `ToggleButtonGroup` it stays content-width, so it fits a packed
- * toolbar or a dense prompt row. Use it when a binary choice has no default
- * "on" state (e.g. Points vs. Percentage, Equal vs. Custom).
+ * and it stays content-width, so it fits a packed toolbar or a dense prompt
+ * row. Use it when a binary choice has no default "on" state (e.g. Points vs.
+ * Percentage, Equal vs. Custom).
  */
 const SegmentedSwitch = <T extends string | number>(
   props: SegmentedSwitchProps<T>,
 ): JSX.Element => {
   const { value, options, onChange, ariaLabel, disabled, className } = props;
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [thumb, setThumb] = useState<{ left: number; width: number }>({
-    left: 0,
-    width: 0,
-  });
 
   const activeIndex = Math.max(
     0,
     options.findIndex((o) => o.value === value),
   );
-
-  useLayoutEffect(() => {
-    const measure = (): void => {
-      const el = optionRefs.current[activeIndex];
-      const container = containerRef.current;
-      if (!el || !container) return;
-      setThumb({
-        left: el.offsetLeft - container.clientLeft,
-        width: el.offsetWidth,
-      });
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [activeIndex, options.length]);
 
   const select = (index: number): void => {
     const next = options[index];
@@ -111,47 +87,23 @@ const SegmentedSwitch = <T extends string | number>(
 
   return (
     <Box
-      ref={containerRef}
       aria-label={ariaLabel}
       className={className}
       onKeyDown={handleKeyDown}
       role="radiogroup"
-      sx={(theme) => ({
-        position: 'relative',
+      sx={{
         display: 'inline-flex',
         alignItems: 'stretch',
         minHeight: MIN_HEIGHT,
         boxSizing: 'border-box',
-        p: '3px',
-        borderRadius: 999,
-        bgcolor: theme.palette.action.hover,
-        border: `1px solid ${theme.palette.divider}`,
         opacity: disabled ? 0.5 : 1,
         pointerEvents: disabled ? 'none' : 'auto',
-      })}
+      }}
     >
-      <Box
-        aria-hidden
-        sx={(theme) => ({
-          position: 'absolute',
-          top: '3px',
-          bottom: '3px',
-          left: 0,
-          width: thumb.width,
-          borderRadius: 999,
-          bgcolor: theme.palette.background.paper,
-          boxShadow: theme.shadows[1],
-          opacity: thumb.width === 0 ? 0 : 1,
-          transform: `translateX(${thumb.left}px)`,
-          transition: theme.transitions.create(['transform', 'width'], {
-            duration: 260,
-            easing: 'cubic-bezier(0.34, 1.36, 0.64, 1)',
-          }),
-          zIndex: 0,
-        })}
-      />
       {options.map((option, index) => {
         const selected = index === activeIndex;
+        const isFirst = index === 0;
+        const isLast = index === options.length - 1;
         const label =
           option.ariaLabel ??
           (typeof option.label === 'string' ? option.label : undefined);
@@ -166,31 +118,73 @@ const SegmentedSwitch = <T extends string | number>(
             disableRipple
             onClick={() => select(index)}
             role="radio"
-            sx={(theme) => ({
-              position: 'relative',
-              zIndex: 1,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'inherit',
-              fontSize: theme.typography.pxToRem(FONT_PX),
-              height: '100%',
-              fontWeight: selected ? 650 : 550,
-              letterSpacing: '0.01em',
-              color: selected
-                ? theme.palette.text.primary
-                : theme.palette.text.secondary,
-              px: PADDING_X,
-              py: 0,
-              borderRadius: 999,
-              whiteSpace: 'nowrap',
-              transition: theme.transitions.create('color', { duration: 180 }),
-              '&:hover': { color: theme.palette.text.primary },
-              '&:focus-visible': {
-                outline: `2px solid ${theme.palette.primary.main}`,
-                outlineOffset: 2,
-              },
-            })}
+            sx={(theme) => {
+              // Use the `borderRadius` shorthand, never per-corner longhands:
+              // MUI's `ButtonBase` base style sets `border-radius: 0` as a
+              // shorthand, and under `injectFirst` that shorthand wins over
+              // longhand corner overrides — collapsing the corners to 0. A
+              // shorthand from `sx` overrides it reliably. Build it as a string
+              // so `sx` doesn't re-scale it by `theme.shape.borderRadius`.
+              const r = `${theme.shape.borderRadius}px`;
+              const borderRadius =
+                // eslint-disable-next-line no-nested-ternary
+                isFirst && isLast
+                  ? r
+                  : // eslint-disable-next-line no-nested-ternary
+                    isFirst
+                    ? `${r} 0 0 ${r}`
+                    : isLast
+                      ? `0 ${r} ${r} 0`
+                      : 0;
+              return {
+                position: 'relative',
+                // Keep the active (filled) segment's border above its
+                // neighbours' overlapping borders; a focus ring wins over both.
+                zIndex: selected ? 1 : 0,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'inherit',
+                fontSize: theme.typography.pxToRem(FONT_PX),
+                // No explicit `height`: a percentage height would resolve
+                // against the radiogroup's `minHeight` (not a definite height)
+                // and collapse to the text's line height, *and* setting any
+                // height cancels the parent's `alignItems: 'stretch'`. Letting
+                // the segment stretch fills it to `MIN_HEIGHT` and lets it grow
+                // with a taller `self-stretch` neighbour.
+                fontWeight: 600,
+                letterSpacing: '0.01em',
+                px: PADDING_X,
+                py: 0,
+                whiteSpace: 'nowrap',
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderRadius,
+                // Collapse the shared edge between adjacent segments, the way
+                // MUI's `ButtonGroup` does, so the divider stays 1px wide.
+                ml: isFirst ? 0 : '-1px',
+                color: selected
+                  ? theme.palette.primary.contrastText
+                  : theme.palette.primary.main,
+                bgcolor: selected ? theme.palette.primary.main : 'transparent',
+                transition: theme.transitions.create(
+                  ['background-color', 'color'],
+                  { duration: 180 },
+                ),
+                '&:hover': {
+                  bgcolor: selected
+                    ? theme.palette.primary.dark
+                    : alpha(
+                        theme.palette.primary.main,
+                        theme.palette.action.hoverOpacity,
+                      ),
+                },
+                '&:focus-visible': {
+                  outline: `2px solid ${theme.palette.primary.main}`,
+                  outlineOffset: 2,
+                  zIndex: 2,
+                },
+              };
+            }}
             tabIndex={selected ? 0 : -1}
           >
             {option.label}

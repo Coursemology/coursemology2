@@ -172,7 +172,7 @@ describe('GradebookTable', () => {
     renderTableWithAssessmentVisible();
     await screen.findByText('Alice');
     expect(
-      screen.getByRole('button', { name: /select columns/i }),
+      screen.getByRole('button', { name: /columns/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /export/i })).toBeInTheDocument();
   });
@@ -315,7 +315,7 @@ describe('GradebookTable', () => {
       const user = userEvent.setup();
       renderTable({ gamificationEnabled: true });
       const selectColumnsBtn = await screen.findByRole('button', {
-        name: /select columns/i,
+        name: /columns/i,
       });
       await user.click(selectColumnsBtn);
       const dialog = await screen.findByRole('dialog');
@@ -466,7 +466,7 @@ describe('GradebookTable', () => {
       );
       renderTable({ gamificationEnabled: true });
       await screen.findByText('Alice');
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      await user.click(screen.getByRole('button', { name: /columns/i }));
       expect(
         await screen.findByText(/no grade or gamification columns selected/i),
       ).toBeInTheDocument();
@@ -477,7 +477,7 @@ describe('GradebookTable', () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'asn-100': false }));
       renderTable({ gamificationEnabled: false });
       await screen.findByText('Alice');
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      await user.click(screen.getByRole('button', { name: /columns/i }));
       expect(
         await screen.findByText(/no grade columns selected/i),
       ).toBeInTheDocument();
@@ -559,7 +559,7 @@ describe('GradebookTable', () => {
       const user = userEvent.setup();
       renderWith(students);
       const btn = await screen.findByRole('button', {
-        name: /select columns/i,
+        name: /columns/i,
       });
       await user.click(btn);
       const dialog = await screen.findByRole('dialog');
@@ -663,7 +663,7 @@ describe('GradebookTable', () => {
       await waitFor(() => expectInOrder(['Alice', 'Bob'])); // Alice has grade 8, Bob has none
 
       // Hide Quiz 1 via the column picker.
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      await user.click(screen.getByRole('button', { name: /columns/i }));
       const dialog = await screen.findByRole('dialog');
       await user.click(
         within(dialog).getByRole('checkbox', { name: /quiz 1/i }),
@@ -720,7 +720,7 @@ describe('GradebookTable', () => {
       await user.click(screen.getByRole('button', { name: /quiz 1/i })); // asc
       await user.click(screen.getByRole('button', { name: /quiz 1/i })); // desc
 
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      await user.click(screen.getByRole('button', { name: /columns/i }));
       const dialog = await screen.findByRole('dialog');
       await user.click(
         within(dialog).getByRole('checkbox', { name: /quiz 1/i }),
@@ -1360,6 +1360,15 @@ describe('GradebookTable', () => {
       expect(
         screen.queryByLabelText(/weighted total/i),
       ).not.toBeInTheDocument();
+    });
+
+    it('shows an edit affordance (pencil) on an external grade cell', async () => {
+      renderForExternal({ grade: 30 });
+      const value = await screen.findByText('30');
+      const cell = value.closest('[role="button"]');
+      expect(
+        cell?.querySelector('[data-testid="edit-affordance"]'),
+      ).not.toBeNull();
     });
   });
 
