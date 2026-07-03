@@ -545,19 +545,15 @@ describe('WeightedGradebookTable', () => {
     ).not.toBeInTheDocument();
   });
 
-  // 11. canManageWeights === false → no "Configure Weights" button
-  it('does not show Configure Weights button when canManageWeights is false', () => {
-    renderWeighted({ canManageWeights: false });
-    expect(
-      screen.queryByRole('button', { name: /configure weights/i }),
-    ).not.toBeInTheDocument();
-  });
-
-  // 12. canManageWeights === true → "Configure Weights" button present
-  it('shows Configure Weights button when canManageWeights is true', () => {
+  // 11/12. Weights moved into the settings gear: the toolbar no longer has a
+  // standalone Configure Weights button, and the column picker reads "Select Columns".
+  it('has no standalone Configure Weights button and labels the picker "Select Columns"', () => {
     renderWeighted({ canManageWeights: true });
     expect(
-      screen.getByRole('button', { name: /configure weights/i }),
+      screen.queryByRole('button', { name: /configure weights/i }),
+    ).toBeNull();
+    expect(
+      screen.getByRole('button', { name: /^select columns$/i }),
     ).toBeInTheDocument();
   });
 
@@ -653,13 +649,13 @@ describe('WeightedGradebookTable', () => {
       ).toBeInTheDocument();
     });
 
-    it('places the toolbar action before the Select Columns button', () => {
+    it('places the toolbar action before the Columns button', () => {
       renderWeighted({
         toolbarAction: <button type="button">Manage external</button>,
       });
       const action = screen.getByText('Manage external');
       const selectColumns = screen.getByRole('button', {
-        name: /select columns/i,
+        name: /columns/i,
       });
       expect(
         // eslint-disable-next-line no-bitwise
@@ -677,10 +673,10 @@ describe('WeightedGradebookTable', () => {
   });
 
   describe('column picker', () => {
-    it('shows Select Columns and Export buttons', () => {
+    it('shows Columns and Export buttons', () => {
       renderWeighted();
       expect(
-        screen.getByRole('button', { name: /select columns/i }),
+        screen.getByRole('button', { name: /columns/i }),
       ).toBeInTheDocument();
       expect(
         screen.getByRole('button', { name: /export/i }),
@@ -773,7 +769,7 @@ describe('WeightedGradebookTable', () => {
     it('lists Email in the picker dialog (no gamification columns)', async () => {
       const user = userEvent.setup();
       renderWeighted();
-      await user.click(screen.getByRole('button', { name: /select columns/i }));
+      await user.click(screen.getByRole('button', { name: /columns/i }));
       const dialog = await screen.findByRole('dialog');
       expect(within(dialog).getByText('Email')).toBeInTheDocument();
       expect(
@@ -1393,7 +1389,7 @@ describe('WeightedGradebookTable', () => {
         const user = userEvent.setup();
         renderWeighted();
         await user.click(
-          await screen.findByRole('button', { name: /select columns/i }),
+          await screen.findByRole('button', { name: /columns/i }),
         );
         const dialog = await screen.findByRole('dialog');
         expect(

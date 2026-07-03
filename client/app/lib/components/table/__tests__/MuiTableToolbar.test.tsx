@@ -41,6 +41,22 @@ describe('MuiTableToolbar columnPicker trigger', () => {
   });
 });
 
+describe('MuiTableToolbar native buttons', () => {
+  it('wraps native buttons in a non-shrinking container so they are not crushed into their min-width when the toolbar narrows', () => {
+    const props: ToolbarProps = {
+      ...baseToolbar,
+      buttons: [
+        <button key="import" type="button">
+          Import CSV
+        </button>,
+      ],
+    };
+    render(wrap(<MuiTableToolbar {...props} />));
+    const button = screen.getByRole('button', { name: /import csv/i });
+    expect(button.parentElement).toHaveClass('shrink-0');
+  });
+});
+
 describe('MuiTableToolbar direct export button', () => {
   const directExportProps: ToolbarProps = {
     ...baseToolbar,

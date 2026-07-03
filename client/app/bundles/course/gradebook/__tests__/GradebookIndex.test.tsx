@@ -284,9 +284,7 @@ describe('GradebookIndex', () => {
 
   it('shows grade-only hint in column picker when gamification is disabled and no data cols selected', async () => {
     render(<GradebookIndex />, { state: populatedState });
-    fireEvent.click(
-      await screen.findByRole('button', { name: /select columns/i }),
-    );
+    fireEvent.click(await screen.findByRole('button', { name: /columns/i }));
     expect(
       await screen.findByText(
         'No grade columns selected - export will include student info only.',
@@ -296,9 +294,7 @@ describe('GradebookIndex', () => {
 
   it('shows grade-and-gamification hint in column picker after enabling a gamification column with no grade columns selected', async () => {
     render(<GradebookIndex />, { state: populatedStateWithGamification });
-    fireEvent.click(
-      await screen.findByRole('button', { name: /select columns/i }),
-    );
+    fireEvent.click(await screen.findByRole('button', { name: /columns/i }));
     fireEvent.click(
       await screen.findByRole('checkbox', { name: /gamification/i }),
     );
@@ -364,21 +360,23 @@ describe('GradebookIndex', () => {
     const byWeightButton = await screen.findByText(/weighted total/i);
     fireEvent.click(byWeightButton);
     await screen.findByTestId(WEIGHTED_TABLE_TESTID);
-    fireEvent.click(
-      await screen.findByRole('button', { name: /select columns/i }),
-    );
+    fireEvent.click(await screen.findByRole('button', { name: /columns/i }));
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).queryByText('Level')).not.toBeInTheDocument();
     expect(within(dialog).queryByText('Total XP')).not.toBeInTheDocument();
   });
 
-  it('shows the manage button and not the old import/add buttons', async () => {
+  it('shows the settings gear and import button, and drops the old manage button', async () => {
     render(<GradebookIndex />, { state: populatedStateManagerWeightedOff });
     expect(
-      await screen.findByRole('button', {
-        name: 'Manage external assessments',
-      }),
+      await screen.findByRole('button', { name: /gradebook settings/i }),
     ).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: /import csv/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Manage external assessments' }),
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Import external assessments' }),
     ).not.toBeInTheDocument();
@@ -387,21 +385,24 @@ describe('GradebookIndex', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('shows the manage button in the weighted-total view for managers', async () => {
+  it('shows the settings gear in the weighted-total view for managers', async () => {
     render(<GradebookIndex />, { state: populatedStateManagerWeightedOn });
     const byWeightButton = await screen.findByText(/weighted total/i);
     fireEvent.click(byWeightButton);
     await screen.findByTestId(WEIGHTED_TABLE_TESTID);
     expect(
-      screen.getByRole('button', { name: 'Manage external assessments' }),
+      screen.getByRole('button', { name: /gradebook settings/i }),
     ).toBeVisible();
   });
 
-  it('does not show the manage button to staff who cannot manage weights', async () => {
+  it('does not show the settings gear to staff who cannot manage weights', async () => {
     render(<GradebookIndex />, { state: populatedState });
     await screen.findByRole('button', { name: /export/i }); // wait for load
     expect(
-      screen.queryByRole('button', { name: 'Manage external assessments' }),
+      screen.queryByRole('button', { name: /gradebook settings/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /import csv/i }),
     ).not.toBeInTheDocument();
   });
 

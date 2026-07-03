@@ -1,37 +1,31 @@
-import type { IdentifierMode, ImportComponent } from 'types/course/gradebook';
-
-const csvCell = (value: string): string =>
-  /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+import type { IdentifierMode } from 'types/course/gradebook';
 
 export const identifierHeader = (mode: IdentifierMode): string =>
   mode === 'email' ? 'Email' : 'External ID';
 
-// Header-only template: per-mode identifier header + one column per component.
-export const buildTemplateCsv = (
-  components: ImportComponent[],
-  mode: IdentifierMode,
-): string => {
-  const header = [identifierHeader(mode), ...components.map((c) => c.name)]
-    .map(csvCell)
-    .join(',');
-  return `${header}\n`;
+// Sample identifier values per mode for the downloadable/preview template.
+// Mirrors the invite-users dialog convention (A0123456, test1@example.com).
+const SAMPLE_IDENTIFIERS: Record<IdentifierMode, [string, string]> = {
+  external_id: ['A0123456', 'A0123457'],
+  email: ['test1@example.com', 'test2@example.com'],
 };
 
-// Triggers a client-side download of the template.
-export const downloadTemplate = (
-  components: ImportComponent[],
-  mode: IdentifierMode,
-): void => {
-  const blob = new Blob([buildTemplateCsv(components, mode)], {
-    type: 'text/csv;charset=utf-8;',
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'external_assessments_template.csv';
-  link.click();
-  URL.revokeObjectURL(url);
+// The example CSV shown (and downloaded) in the wizard's Upload step: an
+// identifier column plus two illustrative assessment columns.
+export const exampleCsv = (mode: IdentifierMode): string => {
+  const [first, second] = SAMPLE_IDENTIFIERS[mode];
+  return [
+    `${identifierHeader(mode)},Assessment 1,Assessment 2`,
+    `${first},85,90`,
+    `${second},78,88`,
+  ].join('\n');
 };
+
+// A client-side download target for the example CSV. The gradebook import has
+// no server template endpoint (unlike the invite-users flow), so the template
+// is generated inline as a data URI.
+export const templateDataUri = (mode: IdentifierMode): string =>
+  `data:text/csv;charset=utf-8,${encodeURIComponent(`${exampleCsv(mode)}\n`)}`;
 
 // Reads an uploaded File to text (raw CSV; the server parses authoritatively).
 export const readFileText = (file: File): Promise<string> =>
