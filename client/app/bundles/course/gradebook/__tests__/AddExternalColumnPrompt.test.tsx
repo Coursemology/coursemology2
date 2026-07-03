@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor } from 'test-utils';
 
 import AddExternalColumnPrompt from '../components/AddExternalColumnPrompt';
@@ -30,7 +31,6 @@ it('submits with both bound flags on by default', async () => {
       50,
       true,
       true,
-      undefined,
     ),
   );
 });
@@ -44,6 +44,9 @@ it('submits floorAtZero false when the floor toggle is switched off', async () =
   fireEvent.change(screen.getByLabelText('Max marks'), {
     target: { value: '50' },
   });
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   fireEvent.click(screen.getByRole('checkbox', { name: 'Floor grades at 0' }));
   fireEvent.click(screen.getByRole('button', { name: 'Create' }));
   await waitFor(() =>
@@ -52,7 +55,6 @@ it('submits floorAtZero false when the floor toggle is switched off', async () =
       50,
       false,
       true,
-      undefined,
     ),
   );
 });
@@ -66,6 +68,9 @@ it('submits capAtMaximum false when the cap toggle is switched off', async () =>
   fireEvent.change(screen.getByLabelText('Max marks'), {
     target: { value: '50' },
   });
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   fireEvent.click(screen.getByRole('checkbox', { name: 'Cap grades at max' }));
   fireEvent.click(screen.getByRole('button', { name: 'Create' }));
   await waitFor(() =>
@@ -74,7 +79,6 @@ it('submits capAtMaximum false when the cap toggle is switched off', async () =>
       50,
       true,
       false,
-      undefined,
     ),
   );
 });
@@ -144,6 +148,9 @@ it('keeps the dialog open when create fails', async () => {
 it('explains the floor and cap toggles, stressing the grade is unchanged', async () => {
   render(<AddExternalColumnPrompt onClose={jest.fn()} open />);
   await waitFor(() => screen.getByLabelText('Name'));
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
   expect(
     screen.getByLabelText(
       /Counts negative grades as 0 when computing the weighted total. The actual grade is unchanged./i,
@@ -156,40 +163,20 @@ it('explains the floor and cap toggles, stressing the grade is unchanged', async
   ).toBeInTheDocument();
 });
 
-it('passes the typed weightage when weighted view is on', async () => {
-  render(
-    <AddExternalColumnPrompt onClose={jest.fn()} open weightedViewEnabled />,
-  );
-  await waitFor(() => screen.getByLabelText('Name'));
-  fireEvent.change(screen.getByLabelText('Name'), {
-    target: { value: 'Midterm' },
-  });
-  fireEvent.change(screen.getByLabelText('Max marks'), {
-    target: { value: '50' },
-  });
-  fireEvent.change(screen.getByLabelText('Weightage'), {
-    target: { value: '20' },
-  });
-  fireEvent.click(screen.getByRole('button', { name: 'Create' }));
-  await waitFor(() =>
-    expect(createExternalAssessment).toHaveBeenCalledWith(
-      'Midterm',
-      50,
-      true,
-      true,
-      20,
-    ),
-  );
-});
-
-it('hides the weightage field when weighted view is off', async () => {
-  render(
-    <AddExternalColumnPrompt
-      onClose={jest.fn()}
-      open
-      weightedViewEnabled={false}
-    />,
-  );
+it('never renders a weightage field (weight lives in the Weights tab)', async () => {
+  render(<AddExternalColumnPrompt onClose={jest.fn()} open />);
   await waitFor(() => screen.getByLabelText('Name'));
   expect(screen.queryByLabelText('Weightage')).not.toBeInTheDocument();
+});
+
+it('hides floor/cap behind Advanced settings, collapsed by default', async () => {
+  render(<AddExternalColumnPrompt onClose={jest.fn()} open />);
+  await waitFor(() => screen.getByLabelText('Name'));
+  expect(screen.queryByRole('checkbox', { name: /floor grades at 0/i })).toBeNull();
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
+  expect(
+    screen.getByLabelText(/floor grades at 0/i),
+  ).toBeVisible();
 });

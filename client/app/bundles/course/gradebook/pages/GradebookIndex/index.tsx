@@ -13,7 +13,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { useCourseContext } from '../../../container/CourseLoader';
 import GradebookTable from '../../components/GradebookTable';
 import GradeLinkHint from '../../components/GradeLinkHint';
-import ManageExternalAssessmentsButton from '../../components/manage/ManageExternalAssessmentsButton';
+import ImportCsvButton from '../../components/import/ImportCsvButton';
+import GradebookSettingsButton from '../../components/manage/GradebookSettingsButton';
 import OutOfRangeAlert from '../../components/OutOfRangeAlert';
 import WeightedGradebookTable from '../../components/WeightedGradebookTable';
 import WeightedViewHint from '../../components/WeightedViewHint';
@@ -90,6 +91,30 @@ const GradebookIndex: FC = () => {
     [assessments, submissions],
   );
 
+  // Top-level toolbar actions: import CSV + the ⚙ Gradebook settings gear. The
+  // gear hosts weights (when weighted) and external-assessment management. Gated
+  // on manage-weights permission and sized to match the host toolbar.
+  const renderToolbarActions = (
+    size?: 'small' | 'medium',
+  ): JSX.Element | undefined =>
+    canManageWeights ? (
+      <>
+        <ImportCsvButton size={size} weightedViewEnabled={weightedViewEnabled} />
+        <GradebookSettingsButton
+          assessments={assessments}
+          capTotal={capTotal}
+          categories={categories}
+          courseMaxLevel={courseMaxLevel}
+          gamificationEnabled={gamificationEnabled}
+          levelContribution={levelContribution}
+          size={size}
+          students={students}
+          tabs={tabs}
+          weightedViewEnabled={weightedViewEnabled}
+        />
+      </>
+    ) : undefined;
+
   useEffect(() => {
     dispatch(fetchGradebook())
       .finally(() => setIsLoading(false))
@@ -126,11 +151,7 @@ const GradebookIndex: FC = () => {
         students={students}
         submissions={submissions}
         tabs={tabs}
-        toolbarAction={
-          canManageWeights ? (
-            <ManageExternalAssessmentsButton size="small" />
-          ) : undefined
-        }
+        toolbarAction={renderToolbarActions('small')}
       />
     );
   } else {
@@ -144,9 +165,7 @@ const GradebookIndex: FC = () => {
         students={students}
         submissions={submissions}
         tabs={tabs}
-        toolbarAction={
-          canManageWeights ? <ManageExternalAssessmentsButton /> : undefined
-        }
+        toolbarAction={renderToolbarActions()}
         weightedViewEnabled={weightedViewEnabled}
       />
     );

@@ -11,17 +11,29 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
     let!(:alice) { create(:course_student, course: course, external_id: 'A001') }
     let!(:bob) { create(:course_student, course: course, external_id: 'A002') }
 
-    let(:components) { [name: 'Midterm', weightage: 30, maximumGrade: 50] }
+    let(:mappings) do
+      [header: 'Midterm', action: 'create', target: 'Midterm', maxGrade: 50, weight: 30]
+    end
     let(:csv_data) { "External ID,Midterm\nA001,41\n" }
     let(:base_params) do
       { course_id: course.id, format: :json,
-        components: components, identifierMode: 'student_id', csvData: csv_data }
+        mappings: mappings, identifierMode: 'student_id', identifierColumn: 'External ID',
+        csvData: csv_data }
     end
 
     describe '#preview' do
       render_views
       context 'as a manager' do
         before { controller_sign_in(controller, manager.user) }
+
+        it 'previews via mappings' do
+          post :preview, as: :json, params: {
+            course_id: course.id, identifierMode: 'external_id', identifierColumn: 'External ID',
+            csvData: "External ID,Midterm\nS1,80\n",
+            mappings: [header: 'Midterm', action: 'create', target: 'Midterm']
+          }
+          expect(response).to have_http_status(:ok)
+        end
 
         it 'returns ok with a sample and writes nothing' do
           expect { post :preview, params: base_params }.
@@ -48,12 +60,15 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           # Seed an existing grade for alice
           service = Course::Gradebook::ExternalAssessmentImportService.new(
             course: course, actor: manager.user,
-            components: [name: 'Midterm', weightage: 30, maximum_grade: 50],
-            identifier_mode: 'student_id', csv_data: "External ID,Midterm\nA001,10\n"
+            identifier_mode: 'student_id', identifier_column: 'External ID',
+            csv_data: "External ID,Midterm\nA001,10\n",
+            mappings: [header: 'Midterm', action: 'create', target: 'Midterm']
           )
           service.commit(on_conflict: 'replace')
 
-          post :preview, params: base_params.merge(csvData: "External ID,Midterm\nA001,20\n")
+          existing_mappings = [header: 'Midterm', action: 'existing', target: 'Midterm']
+          post :preview, params: base_params.merge(mappings: existing_mappings,
+                                                   csvData: "External ID,Midterm\nA001,20\n")
           data = JSON.parse(response.body)
           expect(data['conflictRows'].size).to eq(1)
           expect(data['conflictRows'].first['studentName']).to eq(alice.name)
@@ -66,20 +81,20 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           expect(data['malformed']).to be_present
         end
 
-        it 'returns 422 on duplicate component names' do
-          dup_components = [{ name: 'Midterm', weightage: 30, maximumGrade: 50 },
-                            { name: 'Midterm', weightage: 20, maximumGrade: 40 }]
+        it 'returns 422 on duplicate create targets' do
+          dup_mappings = [{ header: 'Midterm', action: 'create', target: 'Midterm' },
+                          { header: 'Midterm 2', action: 'create', target: 'Midterm' }]
           post :preview, params: base_params.merge(
-            components: dup_components,
-            csvData: "External ID,Midterm,Midterm\nA001,1,2\n"
+            mappings: dup_mappings,
+            csvData: "External ID,Midterm,Midterm 2\nA001,1,2\n"
           )
-          expect(JSON.parse(response.body)['errors']['message']).to eq('duplicate_component_name')
+          expect(JSON.parse(response.body)['errors']['message']).to eq('duplicate_target')
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'returns out-of-range cells in the preview payload' do
           out_of_range_params = base_params.merge(
-            components: [name: 'Midterm', weightage: 30, maximumGrade: 50],
+            mappings: [header: 'Midterm', action: 'create', target: 'Midterm', maxGrade: 50],
             csvData: "External ID,Midterm\nA001,105\n"
           )
           post :preview, params: out_of_range_params, format: :json
@@ -89,7 +104,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
 
         it 'resolves by email when identifierMode is email' do
           post :preview, params: base_params.merge(
-            identifierMode: 'email',
+            identifierMode: 'email', identifierColumn: 'Email',
             csvData: "Email,Midterm\n#{alice.user.email},41\n"
           )
           data = JSON.parse(response.body)
@@ -132,9 +147,10 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
         it 'commits with onConflict keep and returns updatedComponents' do
           # Seed first
           post :create, params: base_params.merge(onConflict: 'replace')
-          # Re-import with keep
+          # Re-import with keep, referencing the now-existing assessment
+          existing_mappings = [header: 'Midterm', action: 'existing', target: 'Midterm']
           expect do
-            post :create, params: base_params.merge(onConflict: 'keep',
+            post :create, params: base_params.merge(mappings: existing_mappings, onConflict: 'keep',
                                                     csvData: "External ID,Midterm\nA001,99\n")
           end.not_to(change { Course::ExternalAssessmentGrade.count })
           data = JSON.parse(response.body)
@@ -147,7 +163,8 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
 
         it 'overwrites an existing grade when onConflict is replace' do
           post :create, params: base_params.merge(onConflict: 'replace')
-          post :create, params: base_params.merge(onConflict: 'replace',
+          existing_mappings = [header: 'Midterm', action: 'existing', target: 'Midterm']
+          post :create, params: base_params.merge(mappings: existing_mappings, onConflict: 'replace',
                                                   csvData: "External ID,Midterm\nA001,99\n")
           data = JSON.parse(response.body)
           expect(data['updatedComponents']).to eq(1)
@@ -159,13 +176,13 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
           expect(grade.grade).to eq(99)
         end
 
-        it 'returns 422 on duplicate component names' do
-          dup_components = [{ name: 'Midterm', weightage: 30, maximumGrade: 50 },
-                            { name: 'Midterm', weightage: 20, maximumGrade: 40 }]
+        it 'returns 422 on duplicate create targets' do
+          dup_mappings = [{ header: 'Midterm', action: 'create', target: 'Midterm' },
+                          { header: 'Midterm 2', action: 'create', target: 'Midterm' }]
           expect do
             post :create, params: base_params.merge(
-              components: dup_components,
-              csvData: "External ID,Midterm,Midterm\nA001,1,2\n",
+              mappings: dup_mappings,
+              csvData: "External ID,Midterm,Midterm 2\nA001,1,2\n",
               onConflict: 'replace'
             )
           end.not_to(change { Course::ExternalAssessmentGrade.count })

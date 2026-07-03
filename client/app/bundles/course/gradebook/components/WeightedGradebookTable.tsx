@@ -9,6 +9,7 @@ import {
 import { defineMessages, MessageDescriptor } from 'react-intl';
 import {
   Download,
+  FilterList,
   InfoOutlined,
   KeyboardArrowDown,
   KeyboardArrowRight,
@@ -73,7 +74,6 @@ import {
 import { parseFormula } from '../levelFormula';
 import { externalClamp } from '../outOfRange';
 
-import ConfigureWeightsPrompt from './ConfigureWeightsPrompt';
 import ProjectedTotalHint, {
   projectedTotalPolicyTranslations,
 } from './ProjectedTotalHint';
@@ -82,10 +82,6 @@ import WeightedGradebookColumnTree from './WeightedGradebookColumnTree';
 const INLINE_FLEX = 'inline-flex';
 
 const translations = defineMessages({
-  configureWeights: {
-    id: 'course.gradebook.WeightedGradebookTable.configureWeights',
-    defaultMessage: 'Configure Weights',
-  },
   noWeightsConfigured: {
     id: 'course.gradebook.WeightedGradebookTable.noWeightsConfigured',
     defaultMessage:
@@ -355,7 +351,6 @@ const WeightedGradebookTable = ({
   toolbarAction,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
-  const [configureOpen, setConfigureOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<DisplayMode>('points');
 
@@ -1034,23 +1029,16 @@ const WeightedGradebookTable = ({
                 value={displayMode}
               />
               {toolbarAction}
-              {canManageWeights && (
-                <Button
-                  onClick={() => setConfigureOpen(true)}
+              <Tooltip title={t(translations.selectColumns)}>
+                <IconButton
+                  aria-label={t(translations.selectColumns)}
+                  color="primary"
+                  onClick={() => setPickerOpen(true)}
                   size="small"
-                  variant="outlined"
                 >
-                  {t(translations.configureWeights)}
-                </Button>
-              )}
-              <Button
-                color="primary"
-                onClick={() => setPickerOpen(true)}
-                size="small"
-                variant="outlined"
-              >
-                {t(translations.selectColumns)}
-              </Button>
+                  <FilterList />
+                </IconButton>
+              </Tooltip>
               {toolbar.onDirectExport && (
                 <Tooltip
                   title={
@@ -1815,21 +1803,6 @@ const WeightedGradebookTable = ({
           {pagination && <MuiTablePagination {...pagination} />}
         </Paper>
       </div>
-
-      {canManageWeights && (
-        <ConfigureWeightsPrompt
-          assessments={assessments}
-          capTotal={capTotal}
-          categories={categories}
-          courseMaxLevel={courseMaxLevel}
-          gamificationEnabled={gamificationEnabled}
-          levelContribution={levelContribution}
-          onClose={() => setConfigureOpen(false)}
-          open={configureOpen}
-          students={students}
-          tabs={tabs}
-        />
-      )}
 
       {toolbar.columnPicker && toolbar.commitColumnVisibility && (
         <MuiColumnPickerPrompt

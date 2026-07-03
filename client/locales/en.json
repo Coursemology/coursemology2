@@ -5529,7 +5529,7 @@
     "defaultMessage": "Export {count, plural, one {# row} other {# rows}}"
   },
   "course.gradebook.GradebookIndex.selectColumns": {
-    "defaultMessage": "Select Columns"
+    "defaultMessage": "Columns"
   },
   "course.gradebook.GradebookIndex.applyAndExport": {
     "defaultMessage": "Apply and Export"
@@ -5548,6 +5548,24 @@
   },
   "course.gradebook.GradebookIndex.noStudentsHint": {
     "defaultMessage": "Grades will appear here once students join the course."
+  },
+  "course.gradebook.GradebookSettingsButton.label": {
+    "defaultMessage": "Gradebook settings"
+  },
+  "course.gradebook.GradebookSettingsDialog.title": {
+    "defaultMessage": "Gradebook settings"
+  },
+  "course.gradebook.GradebookSettingsDialog.weightsTab": {
+    "defaultMessage": "Weights"
+  },
+  "course.gradebook.GradebookSettingsDialog.externalTab": {
+    "defaultMessage": "External assessments"
+  },
+  "course.gradebook.GradebookSettingsDialog.save": {
+    "defaultMessage": "Save"
+  },
+  "course.gradebook.GradebookSettingsDialog.close": {
+    "defaultMessage": "Close"
   },
   "course.gradebook.GradebookTable.maxMarks": {
     "defaultMessage": "Max Marks"
@@ -9596,9 +9614,6 @@
   "course.gradebook.WeightedGradebookTable.collapseRow": {
     "defaultMessage": "Collapse {name}"
   },
-  "course.gradebook.WeightedGradebookTable.configureWeights": {
-    "defaultMessage": "Configure Weights"
-  },
   "course.gradebook.WeightedGradebookTable.defaultWeights": {
     "defaultMessage": "Showing default weights - every tab counts equally. Click \"Configure Weights\" to set your own."
   },
@@ -9695,6 +9710,9 @@
   "course.gradebook.GradebookTable.gradeSaved": {
     "defaultMessage": "Grade saved. {title} · {name}: {oldGrade} → {newGrade}"
   },
+  "course.gradebook.AddExternalColumnPrompt.advancedLabel": {
+    "defaultMessage": "Advanced settings"
+  },
   "course.gradebook.AddExternalColumnPrompt.cancel": {
     "defaultMessage": "Cancel"
   },
@@ -9728,9 +9746,6 @@
   "course.gradebook.AddExternalColumnPrompt.title": {
     "defaultMessage": "Add external assessment"
   },
-  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
-    "defaultMessage": "Weightage"
-  },
   "course.gradebook.DeleteExternalColumnPrompt.body": {
     "defaultMessage": "Delete \"{title}\"? This permanently removes the column and every student grade in it. This cannot be undone."
   },
@@ -9745,6 +9760,54 @@
   },
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "Delete external assessment"
+  },
+  "course.gradebook.ColumnMappingTable.createNew": {
+    "defaultMessage": "Create new"
+  },
+  "course.gradebook.ColumnMappingTable.dontImport": {
+    "defaultMessage": "Don't import"
+  },
+  "course.gradebook.ColumnMappingTable.duplicateTitleError": {
+    "defaultMessage": "Another column also creates a component with this name — map one to existing instead, or rename it."
+  },
+  "course.gradebook.ColumnMappingTable.helperLine": {
+    "defaultMessage": "Grade columns must contain only numbers (blank, \"-\" or \"N/A\" mean no grade). Columns with non-numeric values can't be imported as grades and are set to Don't import."
+  },
+  "course.gradebook.ColumnMappingTable.mapToExisting": {
+    "defaultMessage": "Map to existing"
+  },
+  "course.gradebook.ColumnMappingTable.matchedHeading": {
+    "defaultMessage": "{count, plural, one {# column matched} other {# columns matched}} to existing"
+  },
+  "course.gradebook.ColumnMappingTable.maxLabel": {
+    "defaultMessage": "Max marks"
+  },
+  "course.gradebook.ColumnMappingTable.needsInputHeading": {
+    "defaultMessage": "Needs your input"
+  },
+  "course.gradebook.ColumnMappingTable.nonNumericError": {
+    "defaultMessage": "Row {row} ‘{value}’ isn't a number — fix the CSV and re-upload, or set this column to Don't import"
+  },
+  "course.gradebook.ColumnMappingTable.notUsed": {
+    "defaultMessage": "Not used"
+  },
+  "course.gradebook.ColumnMappingTable.skippedHeading": {
+    "defaultMessage": "{count, plural, one {# column skipped} other {# columns skipped}} — not grade columns"
+  },
+  "course.gradebook.ColumnMappingTable.skippedTooltip": {
+    "defaultMessage": "Looks like labels, not grades — not imported. Change the dropdown to import it as grades."
+  },
+  "course.gradebook.ColumnMappingTable.titleCollisionError": {
+    "defaultMessage": "This name is already used by an existing component — map to existing instead, or rename it."
+  },
+  "course.gradebook.ColumnMappingTable.titleLabel": {
+    "defaultMessage": "Title"
+  },
+  "course.gradebook.ColumnMappingTable.weightLabel": {
+    "defaultMessage": "Weightage"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.advancedLabel": {
+    "defaultMessage": "Advanced settings"
   },
   "course.gradebook.EditExternalAssessmentPrompt.cancel": {
     "defaultMessage": "Cancel"
@@ -9776,14 +9839,8 @@
   "course.gradebook.EditExternalAssessmentPrompt.title": {
     "defaultMessage": "Edit external assessment"
   },
-  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
-    "defaultMessage": "Weightage"
-  },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "Display mode"
-  },
-  "course.gradebook.ManageExternalAssessmentsButton.label": {
-    "defaultMessage": "Manage external assessments"
   },
   "course.gradebook.ManageExternalPanel.actions": {
     "defaultMessage": "Actions"
@@ -9791,23 +9848,11 @@
   "course.gradebook.ManageExternalPanel.add": {
     "defaultMessage": "Add"
   },
-  "course.gradebook.ManageExternalPanel.bounds": {
-    "defaultMessage": "Bounds"
-  },
-  "course.gradebook.ManageExternalPanel.capped": {
-    "defaultMessage": "≤ max"
-  },
-  "course.gradebook.ManageExternalPanel.close": {
-    "defaultMessage": "Close"
-  },
   "course.gradebook.ManageExternalPanel.empty": {
     "defaultMessage": "No external assessments yet"
   },
   "course.gradebook.ManageExternalPanel.emptyHint": {
     "defaultMessage": "Add one manually, or import a CSV of grades earned outside Coursemology."
-  },
-  "course.gradebook.ManageExternalPanel.floored": {
-    "defaultMessage": "≥ 0"
   },
   "course.gradebook.ManageExternalPanel.max": {
     "defaultMessage": "Max"
@@ -9815,14 +9860,17 @@
   "course.gradebook.ManageExternalPanel.name": {
     "defaultMessage": "Name"
   },
+  "course.gradebook.ManageExternalPanel.noCap": {
+    "defaultMessage": "No cap"
+  },
+  "course.gradebook.ManageExternalPanel.noFloor": {
+    "defaultMessage": "No floor"
+  },
+  "course.gradebook.ManageExternalPanel.remarks": {
+    "defaultMessage": "Remarks"
+  },
   "course.gradebook.ManageExternalPanel.reorderError": {
     "defaultMessage": "Could not save the new order. Please try again."
-  },
-  "course.gradebook.ManageExternalPanel.title": {
-    "defaultMessage": "External assessments"
-  },
-  "course.gradebook.ManageExternalPanel.weight": {
-    "defaultMessage": "Weight"
   },
   "course.gradebook.ProjectedTotalHint.policy": {
     "defaultMessage": "Totals count ungraded assessments as 0."
@@ -9881,8 +9929,8 @@
   "course.gradebook.ExternalGradeConflictTable.name": {
     "defaultMessage": "Name"
   },
-  "course.gradebook.ImportWizard.addComponent": {
-    "defaultMessage": "Add component"
+  "course.gradebook.ImportCsvButton.label": {
+    "defaultMessage": "Import CSV"
   },
   "course.gradebook.ImportWizard.back": {
     "defaultMessage": "Back"
@@ -9893,29 +9941,11 @@
   "course.gradebook.ImportWizard.commitError": {
     "defaultMessage": "Import failed. Nothing was saved."
   },
-  "course.gradebook.ImportWizard.committed": {
-    "defaultMessage": "Import complete."
-  },
-  "course.gradebook.ImportWizard.committedKept": {
-    "defaultMessage": "Import complete. {count, plural, one {# existing grade kept} other {# existing grades kept}}."
-  },
-  "course.gradebook.ImportWizard.committedReplaced": {
-    "defaultMessage": "Import complete. {count, plural, one {# existing grade replaced} other {# existing grades replaced}}."
-  },
-  "course.gradebook.ImportWizard.componentName": {
-    "defaultMessage": "Component name"
-  },
   "course.gradebook.ImportWizard.continue": {
     "defaultMessage": "Confirm import"
   },
-  "course.gradebook.ImportWizard.downloadTemplate": {
-    "defaultMessage": "Download template"
-  },
   "course.gradebook.ImportWizard.dropzone": {
     "defaultMessage": "Drag a CSV here, or click to choose a file"
-  },
-  "course.gradebook.ImportWizard.duplicateHeaders": {
-    "defaultMessage": "{count, plural, one {This column appears more than once: {dupes}.} other {These columns appear more than once: {dupes}.}}"
   },
   "course.gradebook.ImportWizard.duplicateIdentifier": {
     "defaultMessage": "The file lists {count, plural, one {an identifier} other {identifiers}} more than once: {ids}. Each student should appear on a single row."
@@ -9935,35 +9965,20 @@
   "course.gradebook.ImportWizard.externalIdHint": {
     "defaultMessage": "Matching uses each student's External ID. Keep External IDs up to date in <link>Manage Users</link>."
   },
-  "course.gradebook.ImportWizard.fromExisting": {
-    "defaultMessage": "From existing"
-  },
-  "course.gradebook.ImportWizard.headerErrorsClosing": {
-    "defaultMessage": "Correct these in your CSV, then re-upload."
-  },
-  "course.gradebook.ImportWizard.headerErrorsHeading": {
-    "defaultMessage": "These headers need fixing:"
-  },
-  "course.gradebook.ImportWizard.headerSuggestion": {
-    "defaultMessage": "No column named ‘{suggestion}’ — did you mean ‘{expected}’?"
+  "course.gradebook.ImportWizard.identifierColumnLabel": {
+    "defaultMessage": "Identifier column"
   },
   "course.gradebook.ImportWizard.identifierMode": {
     "defaultMessage": "Match students by"
   },
-  "course.gradebook.ImportWizard.identifierNotFirst": {
-    "defaultMessage": "‘{identifier}’ must be the first column."
+  "course.gradebook.ImportWizard.importSuccess": {
+    "defaultMessage": "Imported grades. Created {count, plural, one {# external assessment} other {# external assessments}}."
   },
   "course.gradebook.ImportWizard.malformed": {
     "defaultMessage": "These cells do not contain valid numbers:"
   },
   "course.gradebook.ImportWizard.malformedMore": {
     "defaultMessage": "and {count} more"
-  },
-  "course.gradebook.ImportWizard.maxMarks": {
-    "defaultMessage": "Max marks"
-  },
-  "course.gradebook.ImportWizard.missingHeaders": {
-    "defaultMessage": "{count, plural, one {Your CSV is missing this column: {missing}.} other {Your CSV is missing these columns: {missing}.}}"
   },
   "course.gradebook.ImportWizard.next": {
     "defaultMessage": "Next"
@@ -9993,22 +10008,19 @@
     "defaultMessage": "Some identifiers now match a different student"
   },
   "course.gradebook.ImportWizard.requiredHeaders": {
-    "defaultMessage": "Your CSV needs these column headers: {headers}. ‘{identifier}’ must be the first column."
+    "defaultMessage": "Your CSV's first column must be {headers} to identify students."
   },
-  "course.gradebook.ImportWizard.stepDefine": {
-    "defaultMessage": "Define components"
+  "course.gradebook.ImportWizard.stepMap": {
+    "defaultMessage": "Map columns"
+  },
+  "course.gradebook.ImportWizard.stepPreview": {
+    "defaultMessage": "Preview"
   },
   "course.gradebook.ImportWizard.stepUpload": {
-    "defaultMessage": "Template & upload"
-  },
-  "course.gradebook.ImportWizard.stepVerify": {
-    "defaultMessage": "Verify"
+    "defaultMessage": "Upload"
   },
   "course.gradebook.ImportWizard.title": {
     "defaultMessage": "Import external assessments"
-  },
-  "course.gradebook.ImportWizard.unrecognizedHeaders": {
-    "defaultMessage": "{count, plural, one {This column isn’t recognized: {unrecognized}.} other {These columns aren’t recognized: {unrecognized}.}}"
   },
   "course.gradebook.ImportWizard.unresolvedEmail": {
     "defaultMessage": "{count, plural, one {This email address was not found in the course: {ids}} other {These email addresses were not found in the course: {ids}}}"
@@ -10016,22 +10028,10 @@
   "course.gradebook.ImportWizard.unresolvedExternalId": {
     "defaultMessage": "{count, plural, one {This external ID was not found in the course: {ids}} other {These external IDs were not found in the course: {ids}}}"
   },
-  "course.gradebook.ImportWizard.updatesExisting": {
-    "defaultMessage": "Existing assessment - settings managed in Manage External Assessments"
-  },
   "course.gradebook.ImportWizard.upload": {
     "defaultMessage": "Upload filled CSV"
   },
-  "course.gradebook.ImportWizard.verify": {
-    "defaultMessage": "Verify"
-  },
-  "course.gradebook.ImportWizard.weightage": {
-    "defaultMessage": "Weightage"
-  },
   "course.gradebook.ImportWizard.willChangeExisting": {
     "defaultMessage": "{count, plural, one {# row contains} other {# rows contain}} changes to existing grades. After checking this preview, click Confirm import to review these conflicts before anything is imported."
-  },
-  "course.gradebook.ManageExternalPanel.import": {
-    "defaultMessage": "Import CSV"
   }
 }

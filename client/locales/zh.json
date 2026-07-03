@@ -9734,9 +9734,6 @@
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
     "defaultMessage": "成绩下限设为 0"
   },
-  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
-    "defaultMessage": "权重"
-  },
   "course.gradebook.EditExternalAssessmentPrompt.cancel": {
     "defaultMessage": "取消"
   },
@@ -9766,9 +9763,6 @@
   },
   "course.gradebook.EditExternalAssessmentPrompt.title": {
     "defaultMessage": "编辑外部评估"
-  },
-  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
-    "defaultMessage": "权重"
   },
   "course.gradebook.ManageExternalAssessmentsButton.label": {
     "defaultMessage": "管理外部评估"
@@ -9808,9 +9802,6 @@
   },
   "course.gradebook.ManageExternalPanel.title": {
     "defaultMessage": "外部评估"
-  },
-  "course.gradebook.ManageExternalPanel.weight": {
-    "defaultMessage": "权重"
   },
   "course.gradebook.GradebookTable.acceptEdit": {
     "defaultMessage": "接受"
@@ -9978,7 +9969,7 @@
     "defaultMessage": "部分标识符现在匹配到了另一名学生"
   },
   "course.gradebook.ImportWizard.requiredHeaders": {
-    "defaultMessage": "您的 CSV 需要以下列表头：{headers}。‘{identifier}’ 必须是第一列。"
+    "defaultMessage": "您的 CSV 的第一列必须是 {headers} 以识别学生。"
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "定义组件"

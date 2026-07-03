@@ -1,7 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   Dialog,
   DialogActions,
@@ -11,6 +15,7 @@ import {
   Switch,
   TextField,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import type { AssessmentData } from 'types/course/gradebook';
 
@@ -33,9 +38,9 @@ const translations = defineMessages({
     id: 'course.gradebook.EditExternalAssessmentPrompt.maxLabel',
     defaultMessage: 'Max marks',
   },
-  weightLabel: {
-    id: 'course.gradebook.EditExternalAssessmentPrompt.weightLabel',
-    defaultMessage: 'Weightage',
+  advancedLabel: {
+    id: 'course.gradebook.EditExternalAssessmentPrompt.advancedLabel',
+    defaultMessage: 'Advanced settings',
   },
   floorLabel: {
     id: 'course.gradebook.EditExternalAssessmentPrompt.floorLabel',
@@ -72,23 +77,18 @@ const translations = defineMessages({
 interface Props {
   open: boolean;
   assessment: AssessmentData;
-  weightedViewEnabled?: boolean;
-  currentWeight?: number;
   onClose: () => void;
 }
 
 const EditExternalAssessmentPrompt: FC<Props> = ({
   open,
   assessment,
-  weightedViewEnabled = false,
-  currentWeight = 0,
   onClose,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [name, setName] = useState(assessment.title);
   const [max, setMax] = useState(String(assessment.maxGrade));
-  const [weight, setWeight] = useState(String(currentWeight));
   const [floorAtZero, setFloorAtZero] = useState(
     assessment.floorAtZero ?? true,
   );
@@ -96,6 +96,7 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
     assessment.capAtMaximum ?? true,
   );
   const [saving, setSaving] = useState(false);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -103,7 +104,6 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
       setMax(String(assessment.maxGrade));
       setFloorAtZero(assessment.floorAtZero ?? true);
       setCapAtMaximum(assessment.capAtMaximum ?? true);
-      setWeight(String(currentWeight));
     }
   }, [open, assessment]);
 
@@ -119,7 +119,6 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
           maximumGrade: Number(max),
           floorAtZero,
           capAtMaximum,
-          ...(weightedViewEnabled ? { weight: Number(weight) } : {}),
         }),
       );
       onClose();
@@ -150,52 +149,92 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
           type="number"
           value={max}
         />
-        {weightedViewEnabled && (
-          <TextField
-            fullWidth
-            label={t(translations.weightLabel)}
-            margin="dense"
-            onChange={(e) => setWeight(e.target.value)}
-            type="number"
-            value={weight}
-          />
-        )}
-        <div className="flex items-center">
-          <FormControlLabel
-            control={
-              <Switch
-                checked={floorAtZero}
-                onChange={(e) => setFloorAtZero(e.target.checked)}
-              />
-            }
-            label={t(translations.floorLabel)}
-          />
-          <Tooltip title={t(translations.floorHint)}>
-            <InfoOutlined
-              aria-label={t(translations.floorHint)}
-              color="action"
+        <Accordion
+          disableGutters
+          elevation={0}
+          expanded={advancedOpen}
+          onChange={(_, expanded) => setAdvancedOpen(expanded)}
+          square
+          sx={{ '&:before': { display: 'none' } }}
+        >
+          <AccordionSummary
+            sx={{
+              minHeight: 'auto',
+              px: 0,
+              '& .MuiAccordionSummary-content': {
+                my: 1,
+                alignItems: 'center',
+                gap: 0.5,
+              },
+            }}
+          >
+            <KeyboardArrowRight
               fontSize="small"
+              sx={{
+                // The glyph sits optically inset within its icon box; a small
+                // negative margin pulls the visible arrowhead flush with the
+                // left edge of the text fields above it.
+                ml: '-12px',
+                transform: advancedOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                transition: 'transform 0.15s',
+              }}
             />
-          </Tooltip>
-        </div>
-        <div className="flex items-center">
-          <FormControlLabel
-            control={
-              <Switch
-                checked={capAtMaximum}
-                onChange={(e) => setCapAtMaximum(e.target.checked)}
+            <Typography variant="body1">
+              {t(translations.advancedLabel)}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            className="flex flex-col space-y-2"
+            sx={{ px: 0, pl: 3.5 }}
+          >
+            <div className="flex items-center">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={floorAtZero}
+                    onChange={(e) => setFloorAtZero(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    {t(translations.floorLabel)}
+                  </Typography>
+                }
               />
-            }
-            label={t(translations.capLabel)}
-          />
-          <Tooltip title={t(translations.capHint)}>
-            <InfoOutlined
-              aria-label={t(translations.capHint)}
-              color="action"
-              fontSize="small"
-            />
-          </Tooltip>
-        </div>
+              <Tooltip title={t(translations.floorHint)}>
+                <InfoOutlined
+                  aria-label={t(translations.floorHint)}
+                  color="action"
+                  fontSize="small"
+                />
+              </Tooltip>
+            </div>
+            <div className="flex items-center">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={capAtMaximum}
+                    onChange={(e) => setCapAtMaximum(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    {t(translations.capLabel)}
+                  </Typography>
+                }
+              />
+              <Tooltip title={t(translations.capHint)}>
+                <InfoOutlined
+                  aria-label={t(translations.capHint)}
+                  color="action"
+                  fontSize="small"
+                />
+              </Tooltip>
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </DialogContent>
       <DialogActions>
         <Button disabled={saving} onClick={onClose} variant="outlined">

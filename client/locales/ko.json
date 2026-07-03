@@ -9740,9 +9740,6 @@
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
     "defaultMessage": "0으로 하한 적용"
   },
-  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
-    "defaultMessage": "가중치"
-  },
   "course.gradebook.EditExternalAssessmentPrompt.cancel": {
     "defaultMessage": "취소"
   },
@@ -9772,9 +9769,6 @@
   },
   "course.gradebook.EditExternalAssessmentPrompt.title": {
     "defaultMessage": "외부 평가 편집"
-  },
-  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
-    "defaultMessage": "가중치"
   },
   "course.gradebook.ManageExternalAssessmentsButton.label": {
     "defaultMessage": "외부 평가 관리"
@@ -9814,9 +9808,6 @@
   },
   "course.gradebook.ManageExternalPanel.title": {
     "defaultMessage": "외부 평가"
-  },
-  "course.gradebook.ManageExternalPanel.weight": {
-    "defaultMessage": "가중치"
   },
   "course.gradebook.GradebookTable.acceptEdit": {
     "defaultMessage": "적용"
@@ -9984,7 +9975,7 @@
     "defaultMessage": "일부 식별자가 이제 다른 학생과 일치합니다"
   },
   "course.gradebook.ImportWizard.requiredHeaders": {
-    "defaultMessage": "CSV에는 다음 열 헤더가 필요합니다: {headers}. ‘{identifier}’은(는) 첫 번째 열이어야 합니다."
+    "defaultMessage": "학생을 식별하려면 CSV의 첫 번째 열이 {headers}이어야 합니다."
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "구성요소 정의"

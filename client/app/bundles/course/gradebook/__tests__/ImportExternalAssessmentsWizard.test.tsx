@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitFor, within } from 'test-utils';
-import type { StudentData } from 'types/course/gradebook';
+import type { AssessmentData, StudentData } from 'types/course/gradebook';
 import TestApp from 'utilities/TestApp';
 
 import CourseAPI from 'api/course';
@@ -15,7 +15,6 @@ jest.mock('lib/hooks/toast');
 
 const EXTERNAL_ID = 'External ID';
 const MIDTERM = 'Midterm';
-const MIDTERMS = 'Midterms';
 const A001 = 'A001';
 
 const defaultProps = {
@@ -23,9 +22,6 @@ const defaultProps = {
   onClose: jest.fn(),
   weightedViewEnabled: true,
 };
-
-const componentNameInput = (): HTMLElement =>
-  screen.getByRole('textbox', { name: 'Component name' });
 
 const file = (text: string): File =>
   new File([text], 'marks.csv', { type: 'text/csv' });
@@ -54,43 +50,101 @@ const studentsState = (students: StudentData[]): object => ({
   },
 });
 
+// Like studentsState, but also seeds existing external assessments so
+// useImportMapping's own header-matching (against getExternalAssessments,
+// not the wizard's `existingAssessments` prop) can auto-map a column.
+const assessmentsState = (
+  assessments: AssessmentData[],
+  students: StudentData[] = [],
+): object => ({
+  gradebook: {
+    categories: [],
+    tabs: [],
+    submissions: [],
+    assessments,
+    gamificationEnabled: false,
+    weightedViewEnabled: false,
+    canManageWeights: true,
+    students,
+  },
+});
+
+const okPreview = (over: Partial<Record<string, unknown>> = {}): unknown => ({
+  data: {
+    ok: true,
+    unresolved: [],
+    malformed: [],
+    outOfRange: [],
+    sample: [{ identifier: A001, grades: { Midterm: 41 } }],
+    conflictRows: [],
+    reassignments: [],
+    columnOrder: [MIDTERM],
+    totalRows: 1,
+    ...over,
+  },
+});
+
+const okCommit = (over: Partial<Record<string, unknown>> = {}): unknown => ({
+  data: {
+    createdComponents: 1,
+    updatedComponents: 0,
+    gradesWritten: 1,
+    ...over,
+  },
+});
+
+const okIndex = (): unknown => ({
+  data: {
+    categories: [],
+    tabs: [],
+    assessments: [],
+    students: [],
+    submissions: [],
+    gamificationEnabled: false,
+    weightedViewEnabled: true,
+    canManageWeights: true,
+  },
+});
+
 // Render against an isolated store (not the shared singleton, which a commit
 // test can leave without a students slice and crash getStudents()).
 const renderWizard = (
-  props: Partial<{ weightedViewEnabled: boolean }> = {},
+  props: Partial<{
+    weightedViewEnabled: boolean;
+    existingAssessments: typeof defaultProps.existingAssessments;
+  }> = {},
+  students: StudentData[] = [student({ externalId: A001 })],
 ): void => {
   render(
     <ImportExternalAssessmentsWizard
       {...defaultProps}
+      existingAssessments={props.existingAssessments ?? []}
       open
       weightedViewEnabled={props.weightedViewEnabled ?? true}
     />,
-    { state: studentsState([]) },
+    { state: studentsState(students) },
   );
 };
 
-const advanceToVerifyStep = async (): Promise<void> => {
-  await userEvent.type(componentNameInput(), MIDTERM);
-  await userEvent.click(screen.getByRole('button', { name: /next/i }));
-  await userEvent.upload(
-    screen.getByLabelText(/upload/i),
-    file(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`),
-  );
-  await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-  await screen.findByRole('button', { name: /confirm import/i });
-};
+const nextButton = (): HTMLElement =>
+  screen.getByRole('button', { name: /^next$/i });
 
-const advanceToVerifyFailure = async (csv: string): Promise<void> => {
-  await userEvent.type(componentNameInput(), MIDTERM);
-  await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-  await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-  await userEvent.click(screen.getByRole('button', { name: /next/i }));
+const dropCsv = async (csv: string): Promise<void> => {
   await userEvent.upload(screen.getByLabelText(/upload/i), file(csv));
-  await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+  await waitFor(() => expect(nextButton()).toBeEnabled());
 };
 
-const fillOneComponent = async (): Promise<void> => {
-  await userEvent.type(componentNameInput(), MIDTERM);
+// upload -> map
+const advanceToMap = async (csv: string): Promise<void> => {
+  await dropCsv(csv);
+  await userEvent.click(nextButton());
+};
+
+// upload -> map -> preview
+const advanceToPreview = async (csv: string): Promise<void> => {
+  await advanceToMap(csv);
+  await waitFor(() => expect(nextButton()).toBeEnabled());
+  await userEvent.click(nextButton());
 };
 
 describe('dialog dismissal guards', () => {
@@ -146,57 +200,38 @@ describe('dialog dismissal guards', () => {
 describe('ImportExternalAssessmentsWizard', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('walks define → upload → verify → commit with no conflicts', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: A001, grades: { Midterm: 41 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue({
-      data: { createdComponents: 1, updatedComponents: 0, gradesWritten: 1 },
-    });
-    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue({
-      data: {
-        categories: [],
-        tabs: [],
-        assessments: [],
-        students: [],
-        submissions: [],
-        gamificationEnabled: false,
-        weightedViewEnabled: true,
-        canManageWeights: true,
-      },
-    });
+  it('drops a CSV, advances to Map, and shows the flat mapping table', async () => {
+    renderWizard();
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(MIDTERM)).toBeInTheDocument();
+    // The identifier is a static label now, not a Select — it always reads
+    // headers[0] and shows the active match mode alongside it.
+    expect(
+      screen.getByText(`${EXTERNAL_ID} (${EXTERNAL_ID})`),
+    ).toBeInTheDocument();
+  });
+
+  it('walks upload -> map -> preview -> commit with no conflicts', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
+    );
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit({ createdComponents: 1 }),
+    );
+    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue(okIndex());
 
     renderWizard();
-    // Step 1: type a component
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
 
-    // Step 2: upload
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\nA001,41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    // Step 3: preview shows the sample
     expect(await screen.findByText(A001)).toBeVisible();
     expect(
       screen.getByRole('columnheader', { name: EXTERNAL_ID }),
     ).toBeInTheDocument();
+
     await userEvent.click(
-      screen.getByRole('button', { name: /continue|confirm/i }),
+      screen.getByRole('button', { name: /confirm import/i }),
     );
 
     await waitFor(() =>
@@ -206,306 +241,174 @@ describe('ImportExternalAssessmentsWizard', () => {
       .calls[0][0];
     expect(payload.onConflict).toBe('replace');
     expect(payload.identifierMode).toBe('external_id');
-    expect(payload.components[0]).toMatchObject({
-      name: MIDTERM,
-      weightage: 30,
-      maximumGrade: 50,
+    expect(payload.identifierColumn).toBe(EXTERNAL_ID);
+    expect(payload.mappings).toContainEqual({
+      header: MIDTERM,
+      action: 'create',
+      target: MIDTERM,
+      maxGrade: 100,
+      weight: 0,
     });
 
-    // success side-effects
     await waitFor(() =>
-      expect(toast.success).toHaveBeenCalledWith('Import complete.'),
-    );
-  });
-
-  it('uses singular copy for a single unresolved external ID', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: ['ZZZ'],
-        malformed: [],
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
-    renderWizard();
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\nZZZ,1\n`);
-    expect(
-      await screen.findByText(
-        /This external ID was not found in the course: ZZZ/,
+      expect(toast.success).toHaveBeenCalledWith(
+        'Imported grades. Created 1 external assessment.',
+        { autoClose: false },
       ),
-    ).toBeInTheDocument();
-  });
-
-  it('uses plural copy for multiple unresolved external IDs', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: ['ZZZ', 'YYY'],
-        malformed: [],
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
-    renderWizard();
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\nZZZ,1\nYYY,2\n`);
-    expect(
-      await screen.findByText(
-        /These external IDs were not found in the course: ZZZ, YYY/,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('lists up to five malformed cells then summarises the rest', async () => {
-    const malformed = [
-      'row 2, Midterm: a',
-      'row 3, Midterm: b',
-      'row 4, Midterm: c',
-      'row 5, Midterm: d',
-      'row 6, Midterm: e',
-      'row 7, Midterm: f',
-      'row 8, Midterm: g',
-    ];
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: [],
-        malformed,
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
-    renderWizard();
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\n${A001},a\n`);
-    expect(await screen.findByText('row 2, Midterm: a')).toBeInTheDocument();
-    expect(screen.getByText('row 6, Midterm: e')).toBeInTheDocument();
-    expect(screen.queryByText('row 7, Midterm: f')).not.toBeInTheDocument();
-    expect(screen.getByText('and 2 more')).toBeInTheDocument();
-  });
-
-  it('shows unresolved identifiers and stays on the upload step', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: ['ZZZ'],
-        malformed: [],
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
-    renderWizard();
-
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\nZZZ,1\n`);
-    expect(await screen.findByText(/ZZZ/)).toBeVisible();
-    expect(CourseAPI.gradebook.importCommit).not.toHaveBeenCalled();
-  });
-
-  it('hides weightage field when weightedViewEnabled is false', async () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled={false}
-      />,
     );
-    await userEvent.type(componentNameInput(), MIDTERM);
-    expect(screen.queryByLabelText(/weightage/i)).not.toBeInTheDocument();
-    expect(screen.getByLabelText(/max marks/i)).toBeInTheDocument();
   });
 
-  it('disables Next when component name is empty', () => {
-    renderWizard();
-    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
-  });
-
-  it('labels the identifier toggle "External ID"', () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled={false}
-      />,
+  it('does not toast success when createdComponents is 0', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
     );
-    expect(
-      screen.getByRole('radio', { name: EXTERNAL_ID }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('radio', { name: 'Student ID' }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('keeps the component input label independent of the selected identifier mode', async () => {
-    renderWizard();
-    expect(componentNameInput()).toBeInTheDocument();
-    expect(
-      screen.queryByRole('textbox', { name: EXTERNAL_ID }),
-    ).not.toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
-
-    expect(componentNameInput()).toBeInTheDocument();
-    expect(
-      screen.queryByRole('textbox', { name: 'Email' }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('commits with keep when Keep Existing is clicked on the conflict prompt', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: A001, grades: { Midterm: 20 } }],
-        conflictRows: [
-          {
-            identifier: A001,
-            studentName: 'Alice',
-            cells: { Midterm: { existing: 10, inFile: 20, changed: true } },
-          },
-        ],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue({
-      data: { createdComponents: 0, updatedComponents: 1, gradesWritten: 0 },
-    });
-    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue({
-      data: {
-        categories: [],
-        tabs: [],
-        assessments: [],
-        students: [],
-        submissions: [],
-        gamificationEnabled: false,
-        weightedViewEnabled: true,
-        canManageWeights: true,
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\n${A001},20\n`),
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit({ createdComponents: 0, updatedComponents: 1 }),
     );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue(okIndex());
+
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    await screen.findByText(A001);
     await userEvent.click(
-      await screen.findByRole('button', { name: /confirm import/i }),
+      screen.getByRole('button', { name: /confirm import/i }),
     );
-    expect(
-      await screen.findByText(/1 of 1 rows have changes/i),
-    ).toBeInTheDocument();
-    // The struck old value (10) is unique to the matrix; the new value (20)
-    // also appears in the Verify sample table behind the dialog, so assert
-    // only the header + old value to avoid a multiple-match error.
-    expect(screen.getByText('10')).toBeInTheDocument(); // struck old value
-    await userEvent.click(
-      await screen.findByRole('button', { name: /keep existing/i }),
-    );
+
     await waitFor(() =>
-      expect(
-        (CourseAPI.gradebook.importCommit as jest.Mock).mock.calls[0][0]
-          .onConflict,
-      ).toBe('keep'),
+      expect(CourseAPI.gradebook.importCommit).toHaveBeenCalled(),
+    );
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it('disables Next/Preview on the Map step while a column has a non-numeric grade', async () => {
+    renderWizard({}, [
+      student({ id: 1, externalId: A001 }),
+      student({ id: 2, externalId: 'A002' }),
+    ]);
+    // A numeric first row auto-maps the column to "create"; the second row's
+    // non-numeric cell then trips the mapping's nonNumeric error.
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\nA002,abc\n`);
+
+    expect(nextButton()).toBeDisabled();
+    expect(screen.getByText(/isn.t a number/i)).toBeInTheDocument();
+  });
+
+  it('re-previews when a column mapping dropdown changes', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({ columnOrder: [MIDTERM, 'Finals'] }),
+    );
+    renderWizard();
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM},Finals\n${A001},41,88\n`);
+
+    await waitFor(() =>
+      expect(CourseAPI.gradebook.importPreview).toHaveBeenCalledTimes(1),
+    );
+
+    // Flip "Finals" (currently auto-mapped to create) to "Don't import".
+    const comboboxes = screen.getAllByRole('combobox');
+    const finalsSelect = comboboxes[comboboxes.length - 1];
+    await userEvent.click(finalsSelect);
+    await userEvent.click(
+      screen.getByRole('option', { name: /don't import/i }),
+    );
+
+    await waitFor(() =>
+      expect(CourseAPI.gradebook.importPreview).toHaveBeenCalledTimes(2),
     );
   });
 
-  it('blocks Next in External ID mode while a student has no External ID', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice Lim', externalId: null }),
-        student({ id: 2, name: 'Bob Tan', externalId: 'E2' }),
-      ]),
-    });
-    await fillOneComponent();
+  it('links the External ID hint to the students page, not /users', async () => {
+    renderWizard({}, [student({ id: 1, name: 'Alice', externalId: 'E1' })]);
+    const link = screen.getByRole('link', { name: /manage users/i });
+    expect(link).toHaveAttribute('href', expect.stringContaining('/students'));
+    expect(link).not.toHaveAttribute('href', expect.stringContaining('/users'));
+  });
+
+  it('blocks Next on the Upload step while a student has no External ID', async () => {
+    renderWizard({}, [
+      student({ id: 1, name: 'Alice Lim', externalId: null }),
+      student({ id: 2, name: 'Bob Tan', externalId: 'E2' }),
+    ]);
     expect(
       screen.getByText(/Alice Lim has no External ID/),
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+    await userEvent.upload(
+      screen.getByLabelText(/upload/i),
+      file(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`),
+    );
+    await screen.findByText('marks.csv'); // file parsed
+    expect(nextButton()).toBeDisabled();
   });
 
   it('enables Next once matching by Email instead', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice Lim', externalId: null }),
-      ]),
-    });
-    await fillOneComponent();
+    renderWizard({}, [
+      student({ id: 1, name: 'Alice Lim', externalId: null, email: A001 }),
+    ]);
     await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
-    expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
+    await dropCsv(`Email,${MIDTERM}\n${A001},41\n`);
+    expect(nextButton()).toBeEnabled();
   });
 
-  it('lists the exact required headers on the upload step', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice', externalId: 'E1' }),
-      ]),
-    });
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+  it('states the identifier must be the first column on the upload step, reacting to the toggle', async () => {
+    renderWizard({}, [student({ id: 1, name: 'Alice', externalId: 'E1' })]);
     expect(
-      screen.getByText(
-        /Your CSV needs these column headers: External ID, Midterm/,
-      ),
+      screen.getByText(/first column must be External ID/i),
     ).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+    expect(screen.getByText(/first column must be Email/i)).toBeInTheDocument();
   });
 
-  it('summarises the count when several students lack an External ID', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice Lim', externalId: null }),
-        student({ id: 2, name: 'Bob Tan', externalId: '' }),
-        student({ id: 3, name: 'Carol Low', externalId: '' }),
-      ]),
-    });
-    await fillOneComponent();
-    expect(
-      screen.getByText(/Alice Lim and 2 other students have no External ID/),
-    ).toBeInTheDocument();
-  });
-
-  it('does not show Confirm import button when preview has errors', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: ['ZZZ'],
-        malformed: [],
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
+  it('shows the External ID example template by default with a downloadable CSV', () => {
     renderWizard();
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\nZZZ,1\n`);
-    await screen.findByText(/ZZZ/);
-    expect(
-      screen.queryByRole('button', { name: /confirm import/i }),
-    ).not.toBeInTheDocument();
+
+    const example = screen.getByText(/External ID,Assessment 1,Assessment 2/);
+    expect(example).toHaveTextContent('A0123456,85,90');
+    expect(example).toHaveTextContent('A0123457,78,88');
+
+    const link = screen.getByRole('link', { name: /template file/i });
+    expect(link).toHaveAttribute('download', 'template.csv');
+    expect(link.getAttribute('href')).toMatch(/^data:text\/csv/);
+  });
+
+  it('switches the example template to Email when the identifier toggle flips', async () => {
+    renderWizard();
+
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+
+    const example = screen.getByText(/Email,Assessment 1,Assessment 2/);
+    expect(example).toHaveTextContent('test1@example.com,85,90');
+
+    const link = screen.getByRole('link', { name: /template file/i });
+    expect(decodeURIComponent(link.getAttribute('href') ?? '')).toContain(
+      'test1@example.com,85,90',
+    );
+  });
+
+  // NOTE: this test's original premise — that an unrecognized identifier
+  // header falls through to Map with a blank identifier Select for the user
+  // to fix — no longer applies. The identifier is now always headers[0]
+  // (there is no more Select to pick it from), and detectUploadBlock now
+  // structurally blocks the upload when the first column doesn't match the
+  // selected mode's canonical header. So the equivalent current behavior is
+  // the opposite of "enables Next": Next stays disabled on Upload, gated by
+  // uploadBlock, with the block alert explaining why.
+  it('blocks Next on the Upload step when the identifier header is not first', async () => {
+    renderWizard();
+    // "Student ID" does not case-insensitively match the canonical "External
+    // ID" header for external_id mode.
+    await userEvent.upload(
+      screen.getByLabelText(/upload/i),
+      file(`Student ID,${MIDTERM}\n${A001},41\n`),
+    );
+    await screen.findByText('marks.csv');
+    expect(nextButton()).toBeDisabled();
+    expect(screen.getByText(/but it is .*Student ID/i)).toBeInTheDocument();
   });
 
   it('opens the conflict prompt and commits with keep/replace', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
         sample: [{ identifier: A001, grades: { Midterm: 20 } }],
         conflictRows: [
           {
@@ -514,50 +417,37 @@ describe('ImportExternalAssessmentsWizard', () => {
             cells: { Midterm: { existing: 10, inFile: 20, changed: true } },
           },
         ],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue({
-      data: { createdComponents: 0, updatedComponents: 1, gradesWritten: 1 },
-    });
-    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue({
-      data: {
-        categories: [],
-        tabs: [],
-        assessments: [],
-        students: [],
-        submissions: [],
-        gamificationEnabled: false,
-        weightedViewEnabled: true,
-        canManageWeights: true,
-      },
-    });
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[
-          { name: MIDTERM, maximumGrade: 50, weightage: 30 },
-        ]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
+      }),
     );
-    // Step 1: MIDTERM matches existing → max/weightage locked; just Next.
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\n${A001},20\n`),
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit({ createdComponents: 0, updatedComponents: 1 }),
     );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue(okIndex());
+
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},20\n`);
+    await screen.findByText(A001);
+
+    // The pending-change cue appears before the confirm modal.
+    expect(
+      await screen.findByText(
+        /1 row contains changes to existing grades\. After checking this preview, click Confirm import to review these conflicts before anything is imported\./i,
+      ),
+    ).toBeInTheDocument();
+
     await userEvent.click(
-      await screen.findByRole('button', { name: /continue|confirm/i }),
+      screen.getByRole('button', { name: /confirm import/i }),
     );
-    // conflict prompt
+
+    const dialog = await screen.findByRole('dialog', {
+      name: /resolve grade conflicts/i,
+    });
+    expect(within(dialog).getByText('10')).toHaveStyle(
+      'text-decoration: line-through',
+    );
+
     await userEvent.click(
-      await screen.findByRole('button', { name: /replace/i }),
+      within(dialog).getByRole('button', { name: /replace/i }),
     );
     await waitFor(() =>
       expect(
@@ -567,532 +457,9 @@ describe('ImportExternalAssessmentsWizard', () => {
     );
   });
 
-  it('renders existing external chips in the define step', () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[
-          { name: MIDTERM, maximumGrade: 50, weightage: 30 },
-          { name: 'Finals', maximumGrade: 100, weightage: 70 },
-        ]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
-    );
-    expect(screen.getByRole('button', { name: MIDTERM })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Finals' })).toBeInTheDocument();
-  });
-
-  it('clicking an existing chip inserts a locked row pre-filled with correct max and weight', async () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[
-          { name: MIDTERM, maximumGrade: 50, weightage: 30 },
-        ]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
-    );
-    await userEvent.click(screen.getByRole('button', { name: MIDTERM }));
-
-    // The chip-inserted row's name field is read-only (disabled input)
-    const nameInput = screen.getByDisplayValue(MIDTERM);
-    expect(nameInput).toBeDisabled();
-
-    // Max and weight are pre-filled with the existing values
-    expect(screen.getByDisplayValue('50')).toBeDisabled();
-    expect(screen.getByDisplayValue('30')).toBeDisabled();
-
-    // The "existing assessment" locked-row label is shown
-    expect(screen.getByText(/existing assessment/i)).toBeInTheDocument();
-  });
-
-  it('hides a chip once the corresponding external has been added to the component list', async () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[
-          { name: MIDTERM, maximumGrade: 50, weightage: 30 },
-        ]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
-    );
-    await userEvent.click(screen.getByRole('button', { name: MIDTERM }));
-    // After clicking, chip disappears (already in the list)
-    expect(
-      screen.queryByRole('button', { name: MIDTERM }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('does not render the From existing section when there are no existing externals', () => {
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
-    );
-    expect(screen.queryByText(/from existing/i)).not.toBeInTheDocument();
-  });
-
-  it('warns about out-of-range grades at Verify without blocking import', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [
-          {
-            identifier: 'S1',
-            component: MIDTERM,
-            grade: 105,
-            max: 100,
-            kind: 'above',
-          },
-        ],
-        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    renderWizard({ weightedViewEnabled: true });
-    await advanceToVerifyStep();
-    expect(
-      screen.getByText(/S1 - Midterm: 105 \(max 100\)/),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/floored or capped in the weighted total/i),
-    ).toBeInTheDocument();
-    // non-blocking: Confirm import still enabled
-    expect(
-      screen.getByRole('button', { name: /Confirm import/i }),
-    ).toBeEnabled();
-  });
-
-  it('omits the weighted-total wording when weighted view is off', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [
-          {
-            identifier: 'S1',
-            component: MIDTERM,
-            grade: 105,
-            max: 100,
-            kind: 'above',
-          },
-        ],
-        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    renderWizard({ weightedViewEnabled: false });
-    await advanceToVerifyStep();
-    expect(
-      screen.getByText(/S1 - Midterm: 105 \(max 100\)/),
-    ).toBeInTheDocument();
-    expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
-  });
-
-  it('shows a "did you mean" suggestion for a renamed column, not raw header dumps', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [],
-            unrecognized: [],
-            suggestions: [{ expected: MIDTERMS, didYouMean: MIDTERM }],
-            duplicates: [],
-          },
-        },
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERMS);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\nA001,41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    // Actionable detail is shown (not the generic "Could not verify" toast)
-    expect(
-      await screen.findByText(/did you mean ['‘]Midterms['’]\?/i),
-    ).toBeInTheDocument();
-    // The old eye-diff "Found: …" / "do not match" dump is gone
-    expect(screen.queryByText(/Found:/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/do not match/i)).not.toBeInTheDocument();
-    // Stays on the upload step — no preview/confirm advance
-    expect(
-      screen.queryByRole('button', { name: /confirm import/i }),
-    ).not.toBeInTheDocument();
-  });
-
-  it('shows only the duplicate-header line when duplicates are the only problem', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [],
-            unrecognized: [],
-            suggestions: [],
-            duplicates: [{ name: MIDTERM, count: 2 }],
-          },
-        },
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM},${MIDTERM}\nA001,1,2\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    expect(
-      await screen.findByText(/appears more than once:.*Midterm \(×2\)/i),
-    ).toBeInTheDocument();
-    // No bogus missing/unrecognized lines when every column is present
-    expect(screen.queryByText(/is missing/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/recognized/i)).not.toBeInTheDocument();
-  });
-
-  it('uses singular copy for a single missing / unrecognized / duplicate column', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [MIDTERM],
-            unrecognized: ['Wrong'],
-            suggestions: [],
-            duplicates: [{ name: 'Quiz', count: 2 }],
-          },
-        },
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},Wrong\nA001,41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    expect(
-      await screen.findByText(/is missing this column:.*Midterm\b/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/This column isn['’]t recognized:.*Wrong/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/This column appears more than once:.*Quiz \(×2\)/i),
-    ).toBeInTheDocument();
-  });
-
-  it('uses plural copy for multiple missing / unrecognized / duplicate columns', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [MIDTERM, 'Final Exam'],
-            unrecognized: ['Wrong', 'Extra'],
-            suggestions: [],
-            duplicates: [
-              { name: 'Quiz', count: 2 },
-              { name: 'Project', count: 3 },
-            ],
-          },
-        },
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},Wrong,Extra\nA001,41,5\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    expect(
-      await screen.findByText(
-        /is missing these columns:.*Midterm, Final Exam/i,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/These columns aren['’]t recognized:.*Wrong, Extra/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /These columns appear more than once:.*Quiz \(×2\), Project \(×3\)/i,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('shows preview subtitle with total row count when preview has more than 5 rows', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        totalRows: 6,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [
-          { identifier: A001, grades: { Midterm: 41 } },
-          { identifier: 'A002', grades: { Midterm: 42 } },
-          { identifier: 'A003', grades: { Midterm: 43 } },
-          { identifier: 'A004', grades: { Midterm: 44 } },
-          { identifier: 'A005', grades: { Midterm: 45 } },
-        ],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-      },
-    });
-
-    renderWizard();
-
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(
-        [
-          `${EXTERNAL_ID},${MIDTERM}`,
-          'A001,41',
-          'A002,42',
-          'A003,43',
-          'A004,44',
-          'A005,45',
-          'A006,46',
-        ].join('\n'),
-      ),
-    );
-
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    expect(await screen.findByText(A001)).toBeVisible();
-
-    expect(
-      screen.getByText(
-        /Previewing the first 5 of 6 rows. Check that this preview matches your CSV before continuing./i,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('shows all rows subtitle variant when totalRows is 5 or fewer', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        totalRows: 5,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [
-          { identifier: A001, grades: { Midterm: 41 } },
-          { identifier: 'A002', grades: { Midterm: 42 } },
-          { identifier: 'A003', grades: { Midterm: 43 } },
-          { identifier: 'A004', grades: { Midterm: 44 } },
-          { identifier: 'A005', grades: { Midterm: 45 } },
-        ],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-      },
-    });
-
-    renderWizard();
-
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(
-        [
-          `${EXTERNAL_ID},${MIDTERM}`,
-          'A001,41',
-          'A002,42',
-          'A003,43',
-          'A004,44',
-          'A005,45',
-        ].join('\n'),
-      ),
-    );
-
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-
-    expect(await screen.findByText(A001)).toBeVisible();
-
-    expect(
-      screen.getByText(
-        /Previewing all 5 rows. Check that this preview matches your CSV before continuing./i,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('renders the Verify preview columns in the CSV column order', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: 'A001', grades: { Final: 80, Midterm: 41 } }],
-        conflictRows: [],
-        reassignments: [],
-        totalRows: 1,
-        columnOrder: ['Final', 'Midterm'],
-      },
-    });
-
-    renderWizard();
-    // define Midterm first, then Final (opposite of the CSV order)
-    await userEvent.type(componentNameInput(), 'Midterm');
-    await userEvent.click(
-      screen.getByRole('button', { name: /add component/i }),
-    );
-    const nameInputs = screen.getAllByRole('textbox', {
-      name: 'Component name',
-    });
-    await userEvent.type(nameInputs[1], 'Final');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file('Final,External ID,Midterm\n80,A001,41\n'),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-    await screen.findByRole('button', { name: /confirm import/i });
-
-    const headerCells = screen
-      .getAllByRole('columnheader')
-      .map((c) => c.textContent);
-    // identifier header first, then CSV order Final, Midterm
-    expect(headerCells).toEqual(['External ID', 'Final', 'Midterm']);
-  });
-
-  it('states grades import as-is, with the clamping hint only when weighted view is on', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        conflictRows: [],
-        reassignments: [],
-        totalRows: 1,
-        columnOrder: [MIDTERM],
-        sample: [{ identifier: 'A1', grades: { Midterm: 105 } }],
-        outOfRange: [
-          {
-            identifier: 'A1',
-            component: MIDTERM,
-            grade: 105,
-            max: 100,
-            kind: 'above',
-          },
-        ],
-      },
-    });
-    renderWizard({ weightedViewEnabled: true });
-    await advanceToVerifyStep();
-    expect(
-      screen.getByText(
-        /Grades will be imported exactly as entered\. This is only a warning; you can turn off this warning in Manage External Assessments\. Out-of-range grades are only floored or capped in the weighted total/,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('omits the clamping hint when weighted view is off', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        conflictRows: [],
-        reassignments: [],
-        totalRows: 1,
-        sample: [{ identifier: 'A1', grades: { Midterm: 105 } }],
-        outOfRange: [
-          {
-            identifier: 'A1',
-            component: MIDTERM,
-            grade: 105,
-            max: 100,
-            kind: 'above',
-          },
-        ],
-        columnOrder: [MIDTERM],
-      },
-    });
-    renderWizard({ weightedViewEnabled: false });
-    await advanceToVerifyStep();
-    expect(
-      screen.getByText(
-        'Grades will be imported exactly as entered. This is only a warning; you can turn off this warning in Manage External Assessments. If these out-of-range grades are intentional, continue.',
-      ),
-    ).toBeInTheDocument();
-
-    expect(screen.queryByText(/floored or capped/)).not.toBeInTheDocument();
-  });
-
-  it('wraps the preview table in a horizontally scrollable container', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        conflictRows: [],
-        reassignments: [],
-        outOfRange: [],
-        totalRows: 1,
-        sample: [{ identifier: 'A1', grades: { Midterm: 80 } }],
-        columnOrder: [MIDTERM],
-      },
-    });
-    renderWizard();
-    await advanceToVerifyStep();
-    const table = screen.getByRole('table');
-    expect(table.parentElement).toHaveClass('overflow-x-auto');
-  });
-
-  it('cues the pending change set on the Verify step before the confirm modal', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        columnOrder: [MIDTERM],
+  it('commits with keep when Keep Existing is clicked on the conflict prompt', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
         sample: [{ identifier: A001, grades: { Midterm: 20 } }],
         conflictRows: [
           {
@@ -1101,27 +468,117 @@ describe('ImportExternalAssessmentsWizard', () => {
             cells: { Midterm: { existing: 10, inFile: 20, changed: true } },
           },
         ],
-        reassignments: [],
-        totalRows: 1,
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\n${A001},20\n`),
+      }),
     );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit({ createdComponents: 0, updatedComponents: 1 }),
+    );
+    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue(okIndex());
 
-    // Cue appears on the Verify step, before any confirm click
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},20\n`);
+    await screen.findByText(A001);
+    await userEvent.click(
+      screen.getByRole('button', { name: /confirm import/i }),
+    );
+    const dialog = await screen.findByRole('dialog', {
+      name: /resolve grade conflicts/i,
+    });
+    await userEvent.click(
+      within(dialog).getByRole('button', { name: /keep existing/i }),
+    );
+    await waitFor(() =>
+      expect(
+        (CourseAPI.gradebook.importCommit as jest.Mock).mock.calls[0][0]
+          .onConflict,
+      ).toBe('keep'),
+    );
+  });
+
+  it('does not open the conflict prompt when the preview reports no existing grades', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
+    );
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit(),
+    );
+    (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue(okIndex());
+
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    await screen.findByText(A001);
     expect(
-      await screen.findByText(
-        /1 row contains changes to existing grades\. After checking this preview, click Confirm import to review these conflicts before anything is imported\./i,
-      ),
-    ).toBeInTheDocument();
+      screen.queryByText(/contains? changes to existing grades/i),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /confirm import/i }),
+    );
+
+    expect(
+      screen.queryByRole('dialog', { name: /resolve grade conflicts/i }),
+    ).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(CourseAPI.gradebook.importCommit).toHaveBeenCalled(),
+    );
+    expect(
+      (CourseAPI.gradebook.importCommit as jest.Mock).mock.calls[0][0]
+        .onConflict,
+    ).toBe('replace');
+  });
+
+  it('renders the change matrix: changed cells as old->new, unchanged as-is, missing as em-dash', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        sample: [
+          { identifier: A001, grades: { Midterm: 20, Finals: 88 } },
+          { identifier: 'A002', grades: { Midterm: 30 } },
+        ],
+        conflictRows: [
+          {
+            identifier: A001,
+            studentName: 'Alice',
+            cells: {
+              Midterm: { existing: 10, inFile: 20, changed: true },
+              Finals: { existing: 88, inFile: 88, changed: false },
+            },
+          },
+          {
+            identifier: 'A002',
+            studentName: 'Bob',
+            cells: { Midterm: { existing: 5, inFile: 30, changed: true } },
+          },
+        ],
+        columnOrder: [MIDTERM, 'Finals'],
+        totalRows: 2,
+      }),
+    );
+    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue(
+      okCommit({ createdComponents: 0, updatedComponents: 1 }),
+    );
+
+    renderWizard({}, [
+      student({ id: 1, externalId: A001 }),
+      student({ id: 2, externalId: 'A002' }),
+    ]);
+    await advanceToPreview(
+      `${EXTERNAL_ID},${MIDTERM},Finals\n${A001},20,88\nA002,30,\n`,
+    );
+    await screen.findByText(A001);
+    await userEvent.click(
+      screen.getByRole('button', { name: /confirm import/i }),
+    );
+
+    const dialog = await screen.findByRole('dialog', {
+      name: /resolve grade conflicts/i,
+    });
+    const struck = within(dialog).getByText('10');
+    expect(struck).toHaveStyle('text-decoration: line-through');
+    expect(within(dialog).getByText('20')).toHaveStyle('font-weight: 700');
+    expect(within(dialog).getByText('88')).not.toHaveStyle(
+      'text-decoration: line-through',
+    );
+    expect(within(dialog).getByText('—')).toBeInTheDocument();
   });
 
   it('shows a spinner on Replace while the commit is in flight', async () => {
@@ -1132,477 +589,41 @@ describe('ImportExternalAssessmentsWizard', () => {
       }),
     );
     (CourseAPI.gradebook.index as jest.Mock).mockResolvedValue({ data: {} });
-
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: 'A001', grades: { Midterm: 41 } }],
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
         conflictRows: [
           {
-            identifier: 'A001',
+            identifier: A001,
             studentName: 'student',
-            identifierMismatch: false,
             cells: { Midterm: { existing: 10, inFile: 41, changed: true } },
           },
         ],
-        reassignments: [],
-        totalRows: 1,
-        columnOrder: [MIDTERM],
-      },
-    });
+      }),
+    );
 
     renderWizard();
-    await advanceToVerifyStep();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    await screen.findByText(A001);
     await userEvent.click(
       screen.getByRole('button', { name: /confirm import/i }),
     );
-    // conflict prompt is open
-    const replaceBtn = await screen.findByRole('button', { name: /replace/i });
-    await userEvent.click(replaceBtn);
-
-    // MUI LoadingButton sets aria-disabled and renders a progressbar while loading
-    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
-
-    resolveCommit({
-      data: { createdComponents: 0, updatedComponents: 1, gradesWritten: 1 },
-    });
-  });
-
-  it('renders the diagnostic heading and a single closing instruction', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: ['Quiz 2'],
-            unrecognized: [],
-            suggestions: [],
-            duplicates: [],
-            identifierNotFirst: false,
-          },
-        },
-      },
-    });
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([]),
-    });
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\nA001,41\n`);
-
-    expect(await screen.findByText('These headers need fixing:')).toBeVisible();
-    expect(
-      screen.getByText('Correct these in your CSV, then re-upload.'),
-    ).toBeVisible();
-  });
-
-  it('shows the identifier-first bullet when identifierNotFirst is set', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [],
-            unrecognized: [],
-            suggestions: [],
-            duplicates: [],
-            identifierNotFirst: true,
-          },
-        },
-      },
-    });
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([]),
-    });
-    await advanceToVerifyFailure(`${MIDTERM},${EXTERNAL_ID}\n41,A001\n`);
-
-    expect(
-      await screen.findByText('‘External ID’ must be the first column.'),
-    ).toBeVisible();
-  });
-
-  it('shows a reassignment warning when an identifier now matches a different student', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: A001, grades: { Midterm: 77 } }],
-        conflictRows: [],
-        reassignments: [
-          {
-            identifier: A001,
-            currentStudent: 'Carol',
-            previousStudents: ['Alice'],
-          },
-        ],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([]),
-    });
-    await advanceToVerifyStep();
-
-    expect(
-      await screen.findByText(/now match a different student/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/A001: now Carol \(was Alice\)/),
-    ).toBeInTheDocument();
-  });
-
-  it('shows the External ID matching hint when every student has one', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice', externalId: 'E1' }),
-      ]),
-    });
-    await fillOneComponent();
-    expect(
-      screen.getByText(/Matching uses each student's External ID/),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
-  });
-
-  it('hides the External ID hint when matching by Email', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice', externalId: 'E1' }),
-      ]),
-    });
-    await fillOneComponent();
-    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
-    expect(
-      screen.queryByText(/Matching uses each student's External ID/),
-    ).not.toBeInTheDocument();
-  });
-
-  it('does not cue pending changes when no rows conflict', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: A001, grades: { Midterm: 41 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
-    // Use an isolated store (not the shared singleton, which an earlier commit
-    // test may have left without a students slice).
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([]),
-    });
-    await advanceToVerifyStep();
-    expect(
-      screen.queryByText(/contains? changes to existing grades/i),
-    ).not.toBeInTheDocument();
-  });
-
-  it('renders the change matrix: changed cells as old→new, unchanged as-is, missing as em-dash', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [
-          { identifier: A001, grades: { Midterm: 20, Finals: 88 } },
-          { identifier: 'A002', grades: { Midterm: 30 } },
-        ],
-        conflictRows: [
-          {
-            identifier: A001,
-            studentName: 'Alice',
-            identifierMismatch: false,
-            cells: {
-              Midterm: { existing: 10, inFile: 20, changed: true },
-              Finals: { existing: 88, inFile: 88, changed: false },
-            },
-          },
-          {
-            identifier: 'A002',
-            studentName: 'Bob',
-            identifierMismatch: false,
-            // Finals absent for this row → em-dash in matrix
-            cells: { Midterm: { existing: 5, inFile: 30, changed: true } },
-          },
-        ],
-        reassignments: [],
-        columnOrder: [MIDTERM, 'Finals'],
-        totalRows: 2,
-      },
-    });
-    (CourseAPI.gradebook.importCommit as jest.Mock).mockResolvedValue({
-      data: { createdComponents: 0, updatedComponents: 1, gradesWritten: 2 },
-    });
-    render(
-      <ImportExternalAssessmentsWizard
-        existingAssessments={[
-          { name: MIDTERM, maximumGrade: 50, weightage: 30 },
-          { name: 'Finals', maximumGrade: 100, weightage: 70 },
-        ]}
-        onClose={jest.fn()}
-        open
-        weightedViewEnabled
-      />,
-      { state: studentsState([]) },
-    );
-    // Fill the initial blank row with Midterm (locks it as existing), then add
-    // Finals from its chip — two components, so Next is enabled.
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.click(screen.getByRole('button', { name: 'Finals' }));
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM},Finals\n${A001},20,88\nA002,30,\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-    await userEvent.click(
-      await screen.findByRole('button', { name: /confirm import/i }),
-    );
-
     const dialog = await screen.findByRole('dialog', {
       name: /resolve grade conflicts/i,
     });
-    // changed cell: struck old + bold new
-    const struck = within(dialog).getByText('10');
-    expect(struck).toHaveStyle('text-decoration: line-through');
-    expect(within(dialog).getByText('20')).toHaveStyle('font-weight: 700');
-    // unchanged cell (Finals 88 → 88): shows the stored value, not struck
-    expect(within(dialog).getByText('88')).not.toHaveStyle(
-      'text-decoration: line-through',
-    );
-    // missing Finals cell on A002 → em-dash
-    expect(within(dialog).getByText('—')).toBeInTheDocument();
-  });
-
-  it('formats below-minimum out-of-range grades with a min-0 bound', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [
-          {
-            identifier: 'S1',
-            component: MIDTERM,
-            grade: -5,
-            max: 100,
-            kind: 'below',
-          },
-        ],
-        sample: [{ identifier: 'S1', grades: { Midterm: -5 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
+    const replaceBtn = within(dialog).getByRole('button', {
+      name: /replace/i,
     });
-    renderWizard({ weightedViewEnabled: true });
-    await advanceToVerifyStep();
-    expect(screen.getByText(/S1 - Midterm: -5 \(min 0\)/)).toBeInTheDocument();
-  });
+    await userEvent.click(replaceBtn);
 
-  it('summarises out-of-range cells beyond the first ten', async () => {
-    const outOfRange = Array.from({ length: 12 }, (_, i) => ({
-      identifier: `S${i + 1}`,
-      component: MIDTERM,
-      grade: 105,
-      max: 100,
-      kind: 'above' as const,
-    }));
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange,
-        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 12,
-      },
-    });
-    renderWizard({ weightedViewEnabled: true });
-    await advanceToVerifyStep();
-    expect(
-      screen.getByText(/S10 - Midterm: 105 \(max 100\)/),
-    ).toBeInTheDocument();
-    expect(screen.queryByText(/S11 - Midterm/)).not.toBeInTheDocument();
-    expect(screen.getByText('+2 more')).toBeInTheDocument();
-  });
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
 
-  it('uses email copy for unresolved identifiers when matching by Email', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: false,
-        unresolved: ['nope@x.com'],
-        malformed: [],
-        outOfRange: [],
-        sample: [],
-        conflictRows: [],
-        reassignments: [],
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`Email,${MIDTERM}\nnope@x.com,1\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-    expect(
-      await screen.findByText(
-        /This email address was not found in the course: nope@x.com/,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('disables Next when two components share the same name', async () => {
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(
-      screen.getByRole('button', { name: /add component/i }),
-    );
-    const names = screen.getAllByRole('textbox', { name: 'Component name' });
-    await userEvent.type(names[1], MIDTERM);
-    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
-  });
-
-  it('lists the Email header when matching by Email', async () => {
-    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
-      state: studentsState([
-        student({ id: 1, name: 'Alice', externalId: 'E1' }),
-      ]),
-    });
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(
-      screen.getByText(/Your CSV needs these column headers: Email, Midterm/),
-    ).toBeInTheDocument();
-  });
-
-  it('shows the header mismatch without a suggestion list when none is returned', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: {
-            message: 'bad_header',
-            missing: [MIDTERMS],
-            unrecognized: ['Quiz'],
-            suggestions: [],
-            duplicates: [],
-          },
-        },
-      },
-    });
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERMS);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},Quiz\nA001,41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-    // The header diagnostic lists the mismatched columns, but with no
-    // suggestions returned it omits the "did you mean" line entirely.
-    expect(
-      await screen.findByText('These headers need fixing:'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/This column isn['’]t recognized:.*Quiz/i),
-    ).toBeInTheDocument();
-    expect(screen.queryByText(/did you mean/i)).not.toBeInTheDocument();
-  });
-
-  it('shows a specific error when the CSV has no data rows', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: { data: { errors: { message: 'empty_csv' } } },
-    });
-    renderWizard();
-    await advanceToVerifyFailure(`${EXTERNAL_ID},${MIDTERM}\n`);
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(
-        expect.stringMatching(/no data rows|empty/i),
-      ),
-    );
-  });
-
-  it('shows the duplicated identifiers when a row identifier repeats', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
-      response: {
-        data: {
-          errors: { message: 'duplicate_identifier', identifiers: ['A001'] },
-        },
-      },
-    });
-    renderWizard();
-    await advanceToVerifyFailure(
-      `${EXTERNAL_ID},${MIDTERM}\n${A001},40\n${A001},50\n`,
-    );
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(expect.stringMatching(/A001/)),
-    );
-  });
-
-  it('toasts a generic error when the preview fails without a header diagnosis', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue(
-      new Error('network'),
-    );
-    renderWizard();
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\nA001,41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
-    await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith(
-        'Could not verify the file. Please try again.',
-      ),
-    );
-    // stays on upload step
-    expect(
-      screen.queryByRole('button', { name: /confirm import/i }),
-    ).not.toBeInTheDocument();
+    resolveCommit(okCommit({ createdComponents: 0, updatedComponents: 1 }));
   });
 
   it('toasts failure and stays open when the commit request rejects', async () => {
-    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue({
-      data: {
-        ok: true,
-        unresolved: [],
-        malformed: [],
-        outOfRange: [],
-        sample: [{ identifier: A001, grades: { Midterm: 41 } }],
-        conflictRows: [],
-        reassignments: [],
-        columnOrder: [MIDTERM],
-        totalRows: 1,
-      },
-    });
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
+    );
     (CourseAPI.gradebook.importCommit as jest.Mock).mockRejectedValue(
       new Error('boom'),
     );
@@ -1614,19 +635,12 @@ describe('ImportExternalAssessmentsWizard', () => {
         open
         weightedViewEnabled
       />,
-      { state: studentsState([]) },
+      { state: studentsState([student({ externalId: A001 })]) },
     );
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    await userEvent.upload(
-      screen.getByLabelText(/upload/i),
-      file(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`),
-    );
-    await userEvent.click(screen.getByRole('button', { name: /verify/i }));
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    await screen.findByText(A001);
     await userEvent.click(
-      await screen.findByRole('button', { name: /confirm import/i }),
+      screen.getByRole('button', { name: /confirm import/i }),
     );
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith(
@@ -1636,7 +650,302 @@ describe('ImportExternalAssessmentsWizard', () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it('resets to the define step when reopened after a close', async () => {
+  it('warns about out-of-range grades at Preview without blocking import', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        outOfRange: [
+          {
+            identifier: 'S1',
+            component: MIDTERM,
+            grade: 105,
+            max: 100,
+            kind: 'above',
+          },
+        ],
+        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
+      }),
+    );
+    renderWizard({ weightedViewEnabled: true }, [
+      student({ externalId: 'S1' }),
+    ]);
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\nS1,105\n`);
+    expect(
+      await screen.findByText(/S1 - Midterm: 105 \(max 100\)/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/floored or capped in the weighted total/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Confirm import/i }),
+    ).toBeEnabled();
+  });
+
+  it('omits the weighted-total wording when weighted view is off', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        outOfRange: [
+          {
+            identifier: 'S1',
+            component: MIDTERM,
+            grade: 105,
+            max: 100,
+            kind: 'above',
+          },
+        ],
+        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
+      }),
+    );
+    renderWizard({ weightedViewEnabled: false }, [
+      student({ externalId: 'S1' }),
+    ]);
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\nS1,105\n`);
+    expect(
+      await screen.findByText(/S1 - Midterm: 105 \(max 100\)/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
+  });
+
+  it('formats below-minimum out-of-range grades with a min-0 bound', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        outOfRange: [
+          {
+            identifier: 'S1',
+            component: MIDTERM,
+            grade: -5,
+            max: 100,
+            kind: 'below',
+          },
+        ],
+        sample: [{ identifier: 'S1', grades: { Midterm: -5 } }],
+      }),
+    );
+    renderWizard({ weightedViewEnabled: true }, [
+      student({ externalId: 'S1' }),
+    ]);
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\nS1,-5\n`);
+    expect(
+      await screen.findByText(/S1 - Midterm: -5 \(min 0\)/),
+    ).toBeInTheDocument();
+  });
+
+  it('summarises out-of-range cells beyond the first ten', async () => {
+    const outOfRange = Array.from({ length: 12 }, (_, i) => ({
+      identifier: `S${i + 1}`,
+      component: MIDTERM,
+      grade: 105,
+      max: 100,
+      kind: 'above' as const,
+    }));
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        outOfRange,
+        sample: [{ identifier: 'S1', grades: { Midterm: 105 } }],
+      }),
+    );
+    renderWizard({ weightedViewEnabled: true }, [
+      student({ externalId: 'S1' }),
+    ]);
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\nS1,105\n`);
+    expect(
+      await screen.findByText(/S10 - Midterm: 105 \(max 100\)/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/S11 - Midterm/)).not.toBeInTheDocument();
+    expect(screen.getByText('+2 more')).toBeInTheDocument();
+  });
+
+  it('shows a reassignment warning when an identifier now matches a different student', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        reassignments: [
+          {
+            identifier: A001,
+            currentStudent: 'Carol',
+            previousStudents: ['Alice'],
+          },
+        ],
+      }),
+    );
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    expect(
+      await screen.findByText(/now match a different student/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/A001: now Carol \(was Alice\)/),
+    ).toBeInTheDocument();
+  });
+
+  it('toasts a meaningful message and hides Confirm import when the preview request itself rejects', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockRejectedValue({
+      response: { data: { errors: { message: 'empty_csv' } } },
+    });
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        'The uploaded file has no data rows. Add at least one student row and try again.',
+      ),
+    );
+    expect(
+      screen.queryByRole('button', { name: /confirm import/i }),
+    ).not.toBeInTheDocument();
+    expect(CourseAPI.gradebook.importCommit).not.toHaveBeenCalled();
+  });
+
+  // The client now blocks a CSV identifier with no matching student at the
+  // Upload step, before the server is ever consulted — so an unrecognized
+  // identifier can no longer reach Preview via the client-side path. These
+  // two cases assert that Upload-step block instead (same copy as before).
+  it('blocks Next on the Upload step and shows unresolved external IDs', async () => {
+    renderWizard();
+    await userEvent.upload(
+      screen.getByLabelText(/upload/i),
+      file(`${EXTERNAL_ID},${MIDTERM}\nZZZ,1\n`),
+    );
+    await screen.findByText('marks.csv');
+    expect(nextButton()).toBeDisabled();
+    expect(
+      screen.getByText(/This external ID was not found in the course: ZZZ/),
+    ).toBeInTheDocument();
+    expect(CourseAPI.gradebook.importPreview).not.toHaveBeenCalled();
+  });
+
+  it('uses email copy for unresolved identifiers when matching by Email', async () => {
+    renderWizard();
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+    await userEvent.upload(
+      screen.getByLabelText(/upload/i),
+      file(`Email,${MIDTERM}\nnope@x.com,1\n`),
+    );
+    await screen.findByText('marks.csv');
+    expect(nextButton()).toBeDisabled();
+    expect(
+      screen.getByText(
+        /This email address was not found in the course: nope@x.com/,
+      ),
+    ).toBeInTheDocument();
+    expect(CourseAPI.gradebook.importPreview).not.toHaveBeenCalled();
+  });
+
+  // Backstop: the server preview stays the authoritative check even for an
+  // identifier the client's roster snapshot accepted (e.g. stale client
+  // state, or a server-side rule the client doesn't replicate).
+  it('shows the Preview alert when the server rejects an identifier the client accepted', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({ ok: false, unresolved: [A001], sample: [] }),
+    );
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},1\n`);
+    expect(
+      await screen.findByText(
+        new RegExp(`This external ID was not found in the course: ${A001}`),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /confirm import/i }),
+    ).not.toBeInTheDocument();
+    expect(CourseAPI.gradebook.importCommit).not.toHaveBeenCalled();
+  });
+
+  it('lists up to five malformed cells then summarises the rest', async () => {
+    const malformed = [
+      'row 2, Midterm: a',
+      'row 3, Midterm: b',
+      'row 4, Midterm: c',
+      'row 5, Midterm: d',
+      'row 6, Midterm: e',
+      'row 7, Midterm: f',
+    ];
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({ ok: false, malformed, sample: [] }),
+    );
+    renderWizard();
+    // The mocked server response is what actually reports these cells as
+    // malformed; the local CSV just needs a numeric cell so the column
+    // auto-maps to "create" and Map step's mapping validation passes.
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    expect(await screen.findByText('row 2, Midterm: a')).toBeInTheDocument();
+    expect(screen.getByText('row 6, Midterm: e')).toBeInTheDocument();
+    expect(screen.queryByText('row 7, Midterm: f')).not.toBeInTheDocument();
+    expect(screen.getByText('and 1 more')).toBeInTheDocument();
+  });
+
+  it('shows preview subtitle with total row count when preview has more than 5 rows', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        totalRows: 6,
+        sample: [
+          { identifier: A001, grades: { Midterm: 41 } },
+          { identifier: 'A002', grades: { Midterm: 42 } },
+          { identifier: 'A003', grades: { Midterm: 43 } },
+          { identifier: 'A004', grades: { Midterm: 44 } },
+          { identifier: 'A005', grades: { Midterm: 45 } },
+        ],
+      }),
+    );
+    renderWizard(
+      {},
+      ['A001', 'A002', 'A003', 'A004', 'A005', 'A006'].map((id, i) =>
+        student({ id: i + 1, externalId: id }),
+      ),
+    );
+    await advanceToPreview(
+      [
+        `${EXTERNAL_ID},${MIDTERM}`,
+        'A001,41',
+        'A002,42',
+        'A003,43',
+        'A004,44',
+        'A005,45',
+        'A006,46',
+      ].join('\n'),
+    );
+    expect(await screen.findByText(A001)).toBeVisible();
+    expect(
+      screen.getByText(
+        /Previewing the first 5 of 6 rows. Check that this preview matches your CSV before continuing./i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('shows all rows subtitle variant when totalRows is 5 or fewer', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview({
+        totalRows: 5,
+        sample: [
+          { identifier: A001, grades: { Midterm: 41 } },
+          { identifier: 'A002', grades: { Midterm: 42 } },
+        ],
+      }),
+    );
+    renderWizard({}, [
+      student({ id: 1, externalId: A001 }),
+      student({ id: 2, externalId: 'A002' }),
+    ]);
+    await advanceToPreview(
+      [`${EXTERNAL_ID},${MIDTERM}`, 'A001,41', 'A002,42'].join('\n'),
+    );
+    expect(await screen.findByText(A001)).toBeVisible();
+    expect(
+      screen.getByText(
+        /Previewing all 5 rows. Check that this preview matches your CSV before continuing./i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('wraps the preview table in a horizontally scrollable container', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
+    );
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    const table = await screen.findByRole('table');
+    expect(table.parentElement).toHaveClass('overflow-x-auto');
+  });
+
+  it('resets to the Upload step when reopened after a close', async () => {
     const { rerender } = render(
       <ImportExternalAssessmentsWizard
         existingAssessments={[]}
@@ -1644,15 +953,11 @@ describe('ImportExternalAssessmentsWizard', () => {
         open
         weightedViewEnabled
       />,
+      { state: studentsState([student({ externalId: A001 })]) },
     );
-    await userEvent.type(componentNameInput(), MIDTERM);
-    await userEvent.type(screen.getByLabelText(/weightage/i), '30');
-    await userEvent.type(screen.getByLabelText(/max marks/i), '50');
-    await userEvent.click(screen.getByRole('button', { name: /next/i }));
-    expect(screen.getByLabelText(/upload/i)).toBeInTheDocument(); // on step 1
-    // rerender re-renders the root element directly, so re-wrap in TestApp to
-    // keep the Redux provider; reusing the singleton store keeps the same store
-    // instance, exercising the open-prop reset effect rather than a remount.
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    expect(screen.getByRole('table')).toBeInTheDocument(); // on Map
+
     rerender(
       <TestApp>
         <ImportExternalAssessmentsWizard
@@ -1673,8 +978,100 @@ describe('ImportExternalAssessmentsWizard', () => {
         />
       </TestApp>,
     );
-    // back on define step with a blank component
-    expect(componentNameInput()).toHaveValue('');
-    expect(screen.queryByLabelText(/upload/i)).not.toBeInTheDocument();
+
+    // back on the Upload step with no file and a blank identifier column
+    expect(screen.getByLabelText(/upload/i)).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.getByText(/Drag a CSV here/)).toBeInTheDocument();
+  });
+
+  it('preserves the dropped file and identifier mode when Back returns from Map to Upload', async () => {
+    renderWizard({}, [student({ email: A001 })]);
+    await userEvent.click(screen.getByRole('radio', { name: 'Email' }));
+    await advanceToMap(`Email,${MIDTERM}\n${A001},41\n`);
+    expect(screen.getByRole('table')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /^back$/i }));
+
+    // Back on Upload: the previously dropped file and the Email toggle are
+    // still there — Back must not reset either.
+    expect(screen.getByText('marks.csv')).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Email' })).toBeChecked();
+    // Next re-enables immediately: the file's already-parsed headers were
+    // not thrown away either.
+    expect(nextButton()).toBeEnabled();
+  });
+
+  it("re-drops a new file and reseeds column mappings from that file's own headers, not the previous file's", async () => {
+    renderWizard({}, [
+      student({ id: 1, externalId: A001 }),
+      student({ id: 2, externalId: 'A002' }),
+    ]);
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+
+    // Flip Midterm away from its auto-detected "create" default.
+    const midtermSelect = screen.getAllByRole('combobox').at(-1)!;
+    await userEvent.click(midtermSelect);
+    await userEvent.click(
+      screen.getByRole('option', { name: /don't import/i }),
+    );
+    // With the only column set to "Don't import", the flat table's footer
+    // hint switches to the nothing-imported variant.
+    expect(screen.getByText(/set at least one column/i)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /^back$/i }));
+    await dropCsv(`${EXTERNAL_ID},${MIDTERM}\nA002,55\n`);
+    await userEvent.click(nextButton());
+
+    // A fresh parseFile re-seeds Midterm's default action ("create") from
+    // the new file's own data; the earlier "Don't import" override for the
+    // old file must not leak across files.
+    expect(screen.getByText(MIDTERM)).toBeInTheDocument();
+    expect(
+      screen.queryByText(/set at least one column/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders the Map step with the flat table and no footer hint when every column is already mapped', async () => {
+    render(<ImportExternalAssessmentsWizard {...defaultProps} open />, {
+      state: assessmentsState(
+        [{ id: 1, title: MIDTERM, tabId: 1, maxGrade: 100, external: true }],
+        [student({ externalId: A001 })],
+      ),
+    });
+
+    await advanceToMap(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+
+    // Still on Map — a fully-mapped column does not auto-skip to Preview;
+    // it just renders in the (always-visible) flat table with no
+    // incomplete/nothing-imported footer hint.
+    expect(
+      screen.getByText(`${EXTERNAL_ID} (${EXTERNAL_ID})`),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(
+      screen.queryByText(/finish mapping|set at least one column/i),
+    ).not.toBeInTheDocument();
+    expect(nextButton()).toBeEnabled();
+  });
+
+  it('preserves column mappings and the identifier column when Back returns from Preview to Map', async () => {
+    (CourseAPI.gradebook.importPreview as jest.Mock).mockResolvedValue(
+      okPreview(),
+    );
+    renderWizard();
+    await advanceToPreview(`${EXTERNAL_ID},${MIDTERM}\n${A001},41\n`);
+    expect(await screen.findByText(A001)).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: /^back$/i }));
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByText(MIDTERM)).toBeInTheDocument();
+    expect(
+      screen.getByText(`${EXTERNAL_ID} (${EXTERNAL_ID})`),
+    ).toBeInTheDocument();
+    // canPreview was already satisfied before Back — Next re-enables without
+    // the user having to redo any mapping.
+    expect(nextButton()).toBeEnabled();
   });
 });

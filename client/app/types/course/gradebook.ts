@@ -114,10 +114,14 @@ export interface ExternalGradePayload {
 
 export type IdentifierMode = 'email' | 'external_id';
 
-export interface ImportComponent {
-  name: string;
-  weightage: number;
-  maximumGrade: number;
+export type ImportColumnAction = 'existing' | 'create';
+
+export interface ImportColumnMapping {
+  header: string;
+  action: ImportColumnAction;
+  target: string;      // existing assessment title, or the new component's title (create)
+  maxGrade?: number;   // create only; prefilled 100
+  weight?: number;     // create only, weighted view; prefilled 0
 }
 
 export interface ExistingExternalAssessment {
@@ -127,9 +131,10 @@ export interface ExistingExternalAssessment {
 }
 
 export interface ImportPreviewRequest {
-  components: ImportComponent[];
   identifierMode: IdentifierMode;
+  identifierColumn: string;
   csvData: string;
+  mappings: ImportColumnMapping[];   // excludes "Don't import" columns
 }
 
 export interface ConflictCell {

@@ -1,0 +1,163 @@
+import {
+  classifyColumns,
+  type ColumnConfig,
+  detectUploadBlock,
+  unknownIdentifiers,
+} from '../importValidation';
+
+const existing = [
+  { name: 'Final', maximumGrade: 80, weightage: 20 },
+  { name: 'Other', maximumGrade: 50, weightage: 5 },
+];
+
+const cfg = (over: Partial<ColumnConfig>): ColumnConfig => ({
+  header: 'H',
+  action: 'create',
+  newTitle: 'H',
+  newMaxGrade: 100,
+  newWeight: 0,
+  existingTarget: '',
+  ...over,
+});
+
+describe('classifyColumns', () => {
+  it('marks an ignore column ok', () => {
+    const [c] = classifyColumns([cfg({ action: 'ignore' })], [], existing);
+    expect(c.status).toBe('ok');
+  });
+
+  it('marks a create column with an empty title incomplete, not error', () => {
+    const [c] = classifyColumns([cfg({ newTitle: '  ' })], [], existing);
+    expect(c.status).toBe('incomplete');
+    expect(c.error).toBeUndefined();
+  });
+
+  it('flags a create title colliding with an existing component', () => {
+    const [c] = classifyColumns([cfg({ newTitle: 'final' })], [], existing);
+    expect(c.status).toBe('error');
+    expect(c.error).toBe('titleCollision');
+  });
+
+  it('flags two create columns sharing a title (case-insensitive)', () => {
+    const [a, b] = classifyColumns(
+      [cfg({ header: 'A', newTitle: 'Quiz' }), cfg({ header: 'B', newTitle: 'quiz' })],
+      [],
+      existing,
+    );
+    expect(a.error).toBe('duplicateTitle');
+    expect(b.error).toBe('duplicateTitle');
+  });
+
+  it('marks an existing column with no target incomplete', () => {
+    const [c] = classifyColumns([cfg({ action: 'existing', existingTarget: '' })], [], existing);
+    expect(c.status).toBe('incomplete');
+  });
+
+  it('marks a mapped existing column ok', () => {
+    const [c] = classifyColumns(
+      [cfg({ action: 'existing', existingTarget: 'Final' })],
+      [],
+      existing,
+    );
+    expect(c.status).toBe('ok');
+    expect(c.error).toBeUndefined();
+  });
+
+  it('flags non-numeric cells in an imported column and records the first bad cell', () => {
+    const rows = [{ H: '80' }, { H: 'absnt' }];
+    const [c] = classifyColumns([cfg({})], rows, existing);
+    expect(c.error).toBe('nonNumeric');
+    expect(c.badCells).toEqual([{ row: 2, value: 'absnt' }]);
+  });
+
+  it('treats blank / dash / N/A as no-grade, not bad', () => {
+    const rows = [{ H: '-' }, { H: 'N/A' }, { H: '' }, { H: '80' }];
+    const [c] = classifyColumns([cfg({})], rows, existing);
+    expect(c.status).toBe('ok');
+    expect(c.badCells).toEqual([]);
+  });
+});
+
+describe('detectUploadBlock', () => {
+  const rows = [{ 'External ID': 'S1', Midterm: '80' }];
+  const roster = [{ externalId: 'S1' }];
+
+  it('blocks an unreadable file with no headers', () => {
+    expect(detectUploadBlock([], [], 'external_id', roster)).toEqual({ kind: 'unreadable' });
+  });
+
+  it('blocks duplicate headers (case-insensitive)', () => {
+    expect(
+      detectUploadBlock(['External ID', 'Quiz', 'quiz'], rows, 'external_id', roster),
+    ).toMatchObject({ kind: 'duplicateHeaders' });
+  });
+
+  it('blocks when the first column is not the identifier for the chosen mode', () => {
+    expect(
+      detectUploadBlock(['Name', 'External ID', 'Midterm'], rows, 'external_id', roster),
+    ).toEqual({ kind: 'identifierNotFirst', expected: 'External ID', found: 'Name' });
+  });
+
+  it('accepts a first column matching the mode case-insensitively', () => {
+    expect(detectUploadBlock(['external id', 'Midterm'], rows, 'external_id', roster)).toBeNull();
+    expect(detectUploadBlock(['Email', 'Midterm'], rows, 'email', roster)).toBeNull();
+  });
+
+  it('blocks a file with only the identifier column', () => {
+    expect(detectUploadBlock(['External ID'], rows, 'external_id', roster)).toEqual({
+      kind: 'noGradeColumns',
+    });
+  });
+
+  it('blocks a file with headers but zero data rows', () => {
+    expect(detectUploadBlock(['External ID', 'Midterm'], [], 'external_id', roster)).toEqual({
+      kind: 'noDataRows',
+    });
+    // a trailing all-empty parsed row does not count as data
+    expect(
+      detectUploadBlock(['External ID', 'Midterm'], [{ 'External ID': '', Midterm: '' }], 'external_id', roster),
+    ).toEqual({ kind: 'noDataRows' });
+  });
+
+  it('returns null for a well-formed file', () => {
+    expect(detectUploadBlock(['External ID', 'Midterm'], rows, 'external_id', roster)).toBeNull();
+  });
+
+  it('blocks CSV identifiers with no matching student in the course', () => {
+    expect(
+      detectUploadBlock(
+        ['External ID', 'Midterm'],
+        [
+          { 'External ID': 'S1', Midterm: '80' },
+          { 'External ID': 'S999', Midterm: '90' },
+        ],
+        'external_id',
+        roster,
+      ),
+    ).toEqual({ kind: 'unknownIdentifiers', ids: ['S999'] });
+  });
+});
+
+describe('unknownIdentifiers', () => {
+  const roster = [
+    { externalId: 'S1', email: 'a@x.com' },
+    { externalId: 'S2', email: 'b@x.com' },
+  ];
+
+  it('returns identifiers not in the roster, de-duplicated, ignoring blanks', () => {
+    const rows = [
+      { ID: 'S1' }, { ID: 'S999' }, { ID: '' }, { ID: 'S999' }, { ID: 'S3' },
+    ];
+    expect(unknownIdentifiers(rows, 'ID', 'external_id', roster)).toEqual([
+      'S999',
+      'S3',
+    ]);
+  });
+
+  it('matches emails case-insensitively', () => {
+    const rows = [{ ID: 'A@X.COM' }, { ID: 'zzz@x.com' }];
+    expect(unknownIdentifiers(rows, 'ID', 'email', roster)).toEqual([
+      'zzz@x.com',
+    ]);
+  });
+});

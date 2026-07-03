@@ -26,11 +26,9 @@ import type {
 } from 'types/course/gradebook';
 
 import SegmentedSwitch from 'lib/components/core/buttons/SegmentedSwitch';
-import Prompt from 'lib/components/core/dialogs/Prompt';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
-import formTranslations from 'lib/translations/form';
 
 import type { LevelOffender } from '../computeWeighted';
 import {
@@ -47,10 +45,6 @@ import {
 import { updateGradebookWeights } from '../operations';
 
 const translations = defineMessages({
-  promptTitle: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.promptTitle',
-    defaultMessage: 'Configure weights',
-  },
   descriptionIntro: {
     id: 'course.gradebook.ConfigureWeightsPrompt.descriptionIntro',
     defaultMessage:
@@ -285,9 +279,7 @@ const distributeEqual = (
   return result;
 };
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
+export interface ConfigureWeightsContentProps {
   categories: CategoryData[];
   tabs: TabData[];
   assessments: AssessmentData[];
@@ -296,11 +288,13 @@ interface Props {
   levelContribution: LevelContributionData;
   capTotal: boolean;
   students: StudentData[];
+  // Called after a successful save-and-close.
+  onSaved: () => void;
+  // Lets the host wire its footer Save button to this body's save handler.
+  registerSave: (fn: () => Promise<void>, canSave: boolean) => void;
 }
 
-const ConfigureWeightsPrompt: FC<Props> = ({
-  open,
-  onClose,
+const ConfigureWeightsContent: FC<ConfigureWeightsContentProps> = ({
   categories,
   tabs,
   assessments,
@@ -309,6 +303,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   levelContribution,
   capTotal,
   students,
+  onSaved,
+  registerSave,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -370,24 +366,6 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const [levelShow, setLevelShow] = useState(levelContribution.show);
   const [levelClamp, setLevelClamp] = useState(levelContribution.clamp);
   const [capEnabled, setCapEnabled] = useState(capTotal);
-
-  useEffect(() => {
-    if (open) {
-      setWeights(seedWeights());
-      setModes(seedModes());
-      setAssessmentWeights(seedAssessmentWeights());
-      setExcluded(seedExclusions());
-      setKeepHighest(seedKeepHighest());
-      setKeepOn(seedKeepOn());
-      setExpanded({});
-      setLevelEnabled(levelContribution.enabled);
-      setLevelFormula(levelContribution.formula || seedLevelFormula);
-      setLevelWeight(levelContribution.weight || courseMaxLevel);
-      setLevelShow(levelContribution.show);
-      setLevelClamp(levelContribution.clamp);
-      setCapEnabled(capTotal);
-    }
-  }, [open]);
 
   const tabAssessmentIds = (tabId: number): number[] =>
     assessments.filter((a) => a.tabId === tabId).map((a) => a.id);
@@ -519,6 +497,9 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const toggleExpanded = (tabId: number): void =>
     setExpanded((prev) => ({ ...prev, [tabId]: !prev[tabId] }));
 
+  const canSave =
+    !submitting && !hasInvalid && !hasUnbalanced && !levelParseError;
+
   const handleSave = async (): Promise<void> => {
     if (hasInvalid || hasUnbalanced || !!levelParseError) return;
     setSubmitting(true);
@@ -565,7 +546,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           capEnabled,
         ),
       );
-      onClose();
+      onSaved();
     } catch {
       toast.error(t(translations.saveError));
     } finally {
@@ -573,17 +554,14 @@ const ConfigureWeightsPrompt: FC<Props> = ({
     }
   };
 
+  // Expose the save handler and its validity so the host dialog's single footer
+  // can drive this body's save.
+  useEffect(() => {
+    registerSave(handleSave, canSave);
+  }, [handleSave, canSave]);
+
   return (
-    <Prompt
-      onClickPrimary={handleSave}
-      onClose={onClose}
-      open={open}
-      primaryDisabled={
-        submitting || hasInvalid || hasUnbalanced || !!levelParseError
-      }
-      primaryLabel={t(formTranslations.save)}
-      title={t(translations.promptTitle)}
-    >
+    <>
       {showingDefaults && (
         <Alert severity="info" sx={{ mb: 2 }}>
           {t(translations.defaultsHint)}
@@ -650,9 +628,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                                 [tb.id]: r2(prev[tb.id] ?? 0),
                               }))
                             }
-                            onChange={(e) =>
-                              handleChange(tb.id, e.target.value)
-                            }
+                            onChange={(e) => handleChange(tb.id, e.target.value)}
                             size="small"
                             sx={{ width: 96 }}
                             type="number"
@@ -822,10 +798,9 @@ const ConfigureWeightsPrompt: FC<Props> = ({
                               <TextField
                                 error={keepErr !== null}
                                 inputProps={{
-                                  'aria-label': t(
-                                    translations.keepHighestAria,
-                                    { tab: tb.title },
-                                  ),
+                                  'aria-label': t(translations.keepHighestAria, {
+                                    tab: tb.title,
+                                  }),
                                   min: 1,
                                   step: 1,
                                 }}
@@ -1037,9 +1012,7 @@ const ConfigureWeightsPrompt: FC<Props> = ({
               }}
               onBlur={() => setLevelWeight((prev) => r2(prev))}
               onChange={(e) =>
-                setLevelWeight(
-                  e.target.value === '' ? 0 : Number(e.target.value),
-                )
+                setLevelWeight(e.target.value === '' ? 0 : Number(e.target.value))
               }
               size="small"
               sx={{ width: 96 }}
@@ -1185,8 +1158,8 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           )}
         </Alert>
       )}
-    </Prompt>
+    </>
   );
 };
 
-export default ConfigureWeightsPrompt;
+export default ConfigureWeightsContent;
