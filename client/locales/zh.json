@@ -9620,8 +9620,11 @@
   "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
     "defaultMessage": "数值至少为 0"
   },
-  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
-    "defaultMessage": "权重合计不为 100。仍可保存；总成绩可能不准确。"
+  "course.gradebook.ConfigureWeightsPrompt.weightsOverHundred": {
+    "defaultMessage": "权重总和超过 100%，因此学生总分可能超过 100%。开启“限制为 100%”可在显示和导出时将其显示为 100%，或将权重总和设为 100%。仍允许保存。"
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsUnderHundred": {
+    "defaultMessage": "权重总和低于 100%，因此没有学生可以达到 100% 的总分。如果这不是预期结果，请将权重总和设为 100%。仍允许保存。"
   },
   "course.gradebook.GradebookIndex.allAssessments": {
     "defaultMessage": "全部评估"
@@ -9959,6 +9962,12 @@
   "course.gradebook.ImportWizard.committed": {
     "defaultMessage": "导入完成。"
   },
+  "course.gradebook.ImportWizard.committedKept": {
+    "defaultMessage": "导入完成。{count, plural, one {已保留 # 个现有成绩} other {已保留 # 个现有成绩}}。"
+  },
+  "course.gradebook.ImportWizard.committedReplaced": {
+    "defaultMessage": "导入完成。{count, plural, one {已替换 # 个现有成绩} other {已替换 # 个现有成绩}}。"
+  },
   "course.gradebook.ImportWizard.componentName": {
     "defaultMessage": "组件名称"
   },
@@ -10074,7 +10083,7 @@
     "defaultMessage": "{count, plural, one {在课程中未找到此外部 ID：{ids}} other {在课程中未找到以下外部 ID：{ids}}}"
   },
   "course.gradebook.ImportWizard.updatesExisting": {
-    "defaultMessage": "更新现有 — 在成绩册中管理"
+    "defaultMessage": "现有评估 - 设置在管理外部评估中管理"
   },
   "course.gradebook.ImportWizard.upload": {
     "defaultMessage": "上传已填写的 CSV"

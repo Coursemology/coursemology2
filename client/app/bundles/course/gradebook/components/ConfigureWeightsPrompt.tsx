@@ -7,17 +7,13 @@ import {
 } from '@mui/icons-material';
 import {
   Alert,
-  Button,
   Checkbox,
   Collapse,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControlLabel,
   IconButton,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import type {
@@ -110,10 +106,15 @@ const translations = defineMessages({
     id: 'course.gradebook.ConfigureWeightsPrompt.total',
     defaultMessage: 'Total: {sum}%',
   },
-  weightsDoNotSum: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum',
+  weightsOverHundred: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.weightsOverHundred',
     defaultMessage:
-      'Weights do not sum to 100. Saving is allowed; Total may be inaccurate.',
+      "Weights sum to more than 100%, so student totals can exceed 100%. Turn on 'Cap at 100%' to show and export them as 100%, or set weights to sum to 100%. Saving is still allowed.",
+  },
+  weightsUnderHundred: {
+    id: 'course.gradebook.ConfigureWeightsPrompt.weightsUnderHundred',
+    defaultMessage:
+      'Weights sum to less than 100%, so no student can reach a 100% total. Set weights to sum to 100% if that is unintended. Saving is still allowed.',
   },
   capToggle: {
     id: 'course.gradebook.ConfigureWeightsPrompt.capToggle',
@@ -123,20 +124,12 @@ const translations = defineMessages({
     id: 'course.gradebook.ConfigureWeightsPrompt.capInfo',
     defaultMessage: 'About capping the total at 100%',
   },
-  capInfoTitle: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.capInfoTitle',
-    defaultMessage: 'Capping the weighted total at 100%',
-  },
   capInfoBody: {
     id: 'course.gradebook.ConfigureWeightsPrompt.capInfoBody',
     defaultMessage:
-      'When on, any weighted total above 100% is shown — and exported — as 100%. ' +
+      'When on, any weighted total above 100% is shown and exported as 100%. ' +
       'Per-tab percentages still show what each student earned. Turn this off to ' +
-      'see raw totals, including extra credit. Available only when weights sum above 100%.',
-  },
-  capInfoClose: {
-    id: 'course.gradebook.ConfigureWeightsPrompt.capInfoClose',
-    defaultMessage: 'Got it',
+      'see raw totals.',
   },
   valueTooLow: {
     id: 'course.gradebook.ConfigureWeightsPrompt.valueTooLow',
@@ -377,7 +370,6 @@ const ConfigureWeightsPrompt: FC<Props> = ({
   const [levelShow, setLevelShow] = useState(levelContribution.show);
   const [levelClamp, setLevelClamp] = useState(levelContribution.clamp);
   const [capEnabled, setCapEnabled] = useState(capTotal);
-  const [capInfoOpen, setCapInfoOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -1170,37 +1162,29 @@ const ConfigureWeightsPrompt: FC<Props> = ({
           control={
             <Checkbox
               checked={capEnabled}
-              disabled={sum <= 100}
               onChange={(e) => setCapEnabled(e.target.checked)}
               size="small"
             />
           }
           label={t(translations.capToggle)}
         />
-        <IconButton
-          aria-label={t(translations.capInfo)}
-          onClick={() => setCapInfoOpen(true)}
-          size="small"
-        >
-          <InfoOutlined fontSize="inherit" />
-        </IconButton>
+        <Tooltip title={t(translations.capInfoBody)}>
+          <InfoOutlined
+            aria-label={t(translations.capInfo)}
+            color="action"
+            fontSize="small"
+          />
+        </Tooltip>
       </Stack>
       {sum !== 100 && !(capEnabled && sum > 100) && (
         <Alert severity="warning" sx={{ mt: 1 }}>
-          {t(translations.weightsDoNotSum)}
+          {t(
+            sum > 100
+              ? translations.weightsOverHundred
+              : translations.weightsUnderHundred,
+          )}
         </Alert>
       )}
-      <Dialog onClose={() => setCapInfoOpen(false)} open={capInfoOpen}>
-        <DialogTitle>{t(translations.capInfoTitle)}</DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">{t(translations.capInfoBody)}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCapInfoOpen(false)}>
-            {t(translations.capInfoClose)}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Prompt>
   );
 };
