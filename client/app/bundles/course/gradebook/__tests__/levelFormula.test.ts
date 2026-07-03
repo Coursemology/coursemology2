@@ -42,6 +42,16 @@ describe('parseFormula', () => {
     expect(evalOk('round(level / 3)', 5)).toBe(2); // 1.66 -> 2
   });
 
+  // round must round halves AWAY FROM ZERO to match Ruby's Float#round on the
+  // backend (evaluate_for). JS Math.round rounds halves toward +Infinity, so a
+  // negative x.5 would diverge: the value shown after save (FE) would differ
+  // from the value re-derived on reload (BE). Positive halves already agree.
+  it('rounds negative halves away from zero, matching the backend', () => {
+    expect(evalOk('round(0.5 - level)', 1)).toBe(-1); // round(-0.5) -> -1, not 0
+    expect(evalOk('round(1.5 - level)', 3)).toBe(-2); // round(-1.5) -> -2, not -1
+    expect(evalOk('round(level - 0.5)', 1)).toBe(1); // positive half unchanged
+  });
+
   it('supports unary minus', () => {
     expect(evalOk('-level + 10', 3)).toBe(7);
   });
@@ -128,6 +138,15 @@ describe('parseFormula — plain-language errors', () => {
 
   it('explains a missing closing bracket', () => {
     expect(errorOf('min(level, 20')).toMatch(/closing bracket/i);
+  });
+
+  it('explains too many arguments to min/max with an example', () => {
+    expect(errorOf('min(level, 25, 30)')).toMatch(/min takes exactly two values/i);
+    expect(errorOf('min(level, 25, 30)')).toMatch(/min\(level, 25\)/);
+    expect(errorOf('max(0, level, 5)')).toMatch(/max takes exactly two values/i);
+    expect(errorOf('max(0, level, 5)')).toMatch(/max\(level, 25\)/);
+    // and never falls back to the misleading closing-bracket message
+    expect(errorOf('min(level, 25, 30)')).not.toMatch(/closing bracket/i);
   });
 
   it('explains a stray symbol', () => {

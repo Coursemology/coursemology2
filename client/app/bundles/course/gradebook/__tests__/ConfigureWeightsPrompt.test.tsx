@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor, within } from 'test-utils';
 
 import toast from 'lib/hooks/toast';
@@ -99,7 +100,9 @@ describe('<ConfigureWeightsPrompt />', () => {
   it('shows Total: 100% with no warning when sum = 100', () => {
     setup();
     expect(screen.getByText(/Total:\s*100%/)).toBeInTheDocument();
-    expect(screen.queryByText(/do not sum to 100/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/weights sum to (?:more|less) than 100/i),
+    ).not.toBeInTheDocument();
   });
 
   it('shows Total: 100% (not the raw float) when 2dp weights sum to 100', () => {
@@ -121,7 +124,9 @@ describe('<ConfigureWeightsPrompt />', () => {
     setup({ tabs: sevenTabs, assessments: sevenAssessments });
     expect(screen.getByText(/Total:\s*100%/)).toBeInTheDocument();
     expect(screen.queryByText(/99\.999/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/do not sum to 100/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/weights sum to (?:more|less) than 100/i),
+    ).not.toBeInTheDocument();
   });
 
   it('shows warning when sum != 100', () => {
@@ -130,7 +135,9 @@ describe('<ConfigureWeightsPrompt />', () => {
       target: { value: '30' },
     });
     expect(screen.getByText(/Total:\s*80%/)).toBeInTheDocument();
-    expect(screen.getByText(/do not sum to 100/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/weights sum to less than 100/i),
+    ).toBeInTheDocument();
   });
 
   it('shows inline error for tab total > 100', () => {
@@ -1105,20 +1112,27 @@ describe('<ConfigureWeightsPrompt /> cap-at-100 toggle', () => {
     expect(capToggle()).toBeEnabled();
   });
 
-  it('is disabled but retains its checked state when the sum is <= 100', () => {
+  it('stays enabled and checked when the sum is <= 100', () => {
+    // The cap is a course policy, not a reaction to the weight sum: extra credit
+    // can push a total past 100 even when weights sum to exactly 100, so the
+    // toggle must remain usable regardless of the sum.
     setup({ capTotal: true }); // default tabs sum to exactly 100
-    expect(capToggle()).toBeDisabled();
+    expect(capToggle()).toBeEnabled();
     expect(capToggle()).toBeChecked();
   });
 
   it('hides the weights-do-not-sum alert when the cap is on and sum > 100', () => {
     setup({ tabs: over100Tabs, capTotal: true });
-    expect(screen.queryByText(/do not sum to 100/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/weights sum to (?:more|less) than 100/i),
+    ).not.toBeInTheDocument();
   });
 
   it('still warns when the sum exceeds 100 but the cap is off', () => {
     setup({ tabs: over100Tabs, capTotal: false });
-    expect(screen.getByText(/do not sum to 100/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/weights sum to more than 100/i),
+    ).toBeInTheDocument();
   });
 
   it('sends the toggled capTotal as the third save argument', async () => {
@@ -1132,13 +1146,11 @@ describe('<ConfigureWeightsPrompt /> cap-at-100 toggle', () => {
     expect(call[2]).toBe(true);
   });
 
-  it('opens the info modal when the ⓘ button is clicked', () => {
+  it('explains the cap in a hover tooltip on the ⓘ icon', async () => {
     setup({ tabs: over100Tabs });
-    fireEvent.click(
-      screen.getByRole('button', { name: /about capping the total/i }),
-    );
+    await userEvent.hover(screen.getByLabelText(/about capping the total/i));
     expect(
-      screen.getByText(/shown — and exported — as 100%/i),
+      await screen.findByText(/shown and exported as 100%/i),
     ).toBeInTheDocument();
   });
 });

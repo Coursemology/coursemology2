@@ -2450,7 +2450,7 @@ describe('cap the weighted total at 100%', () => {
     expect(screen.getByText('140')).toBeInTheDocument();
   });
 
-  it('does not cap when capTotal is on but weight <= 100', () => {
+  it('caps but shows no indicator when nothing exceeds 100 (weight = 100)', () => {
     renderWeighted({
       tabs: [makeTab(10, 'Tab 1', 1, 100)],
       assessments: [makeAssessment(100, 'Q1', 10, 100)],
@@ -2459,12 +2459,59 @@ describe('cap the weighted total at 100%', () => {
       capTotal: true,
     });
     expect(screen.getAllByText('90').length).toBeGreaterThanOrEqual(1);
+    expect(screen.queryByLabelText(/shown as 100%/i)).not.toBeInTheDocument();
   });
 
-  it('shows a calm "Capped at 100%" label and hides the ≠100 warning when active', () => {
+  // Weights sum to exactly 100, but an uncapped assessment scored 150/100 pushes
+  // Alice's total to 130 — the overflow a weight-sum gate would miss.
+  const extraCredit = {
+    tabs: [makeTab(10, 'Tab 1', 1, 60), makeTab(11, 'Tab 2', 1, 40)],
+    assessments: [
+      makeAssessment(100, 'Q1', 10, 100),
+      makeAssessment(101, 'Q2', 11, 100),
+    ],
+    students: [makeStudent(1, 'Alice')],
+    submissions: [makeSub(1, 100, 150), makeSub(1, 101, 100)],
+  };
+
+  it('caps and flags an extra-credit total that exceeds 100 at weight = 100', () => {
+    renderWeighted({ ...extraCredit, capTotal: true });
+    expect(screen.getAllByText('100').length).toBeGreaterThanOrEqual(1); // total 130 → 100
+    expect(screen.queryByText('130')).not.toBeInTheDocument();
+    expect(screen.getByText('/100')).toBeInTheDocument(); // scale label stays neutral
+    expect(screen.getByLabelText(/shown as 100%/i)).toBeInTheDocument();
+  });
+
+  it('marks a capped cell and exposes the raw total', () => {
+    renderWeighted({ ...extraCredit, capTotal: true });
+    const capped = document.querySelector('[aria-label*="capped to"]');
+    expect(capped?.getAttribute('aria-label')).toMatch(
+      /actual 130, capped to 100/i,
+    ); // raw total exposed
+    expect(capped?.querySelector('sup')?.textContent).toBe('*'); // visible marker
+  });
+
+  it('keeps the weight-scale label and surfaces the cap as an info tooltip when clamping', () => {
     renderWeighted({ ...over100, capTotal: true });
-    expect(screen.getByText(/capped at 100/i)).toBeInTheDocument();
-    expect(screen.queryByText(/do not sum/i)).not.toBeInTheDocument();
+    expect(screen.getByText('/140')).toBeInTheDocument(); // scale label not replaced
+    expect(screen.getByLabelText(/shown as 100%/i)).toBeInTheDocument();
+  });
+
+  it('shows the scale label but no cap indicator when the cap cannot bite (weight < 100)', () => {
+    // Tabs 50 + 30 → total weight 80, distinct from every tab subheader so the
+    // "/80" total label is unambiguous.
+    renderWeighted({
+      tabs: [makeTab(10, 'Tab 1', 1, 50), makeTab(11, 'Tab 2', 1, 30)],
+      assessments: [
+        makeAssessment(100, 'Q1', 10, 100),
+        makeAssessment(101, 'Q2', 11, 100),
+      ],
+      students: [makeStudent(1, 'Alice')],
+      submissions: [makeSub(1, 100, 50), makeSub(1, 101, 50)],
+      capTotal: true,
+    });
+    expect(screen.getByText('/80')).toBeInTheDocument();
+    expect(screen.queryByLabelText(/shown as 100%/i)).not.toBeInTheDocument();
   });
 
   it('renders no interactive cap control in the table', () => {

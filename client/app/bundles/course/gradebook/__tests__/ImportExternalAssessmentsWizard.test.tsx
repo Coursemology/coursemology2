@@ -604,8 +604,8 @@ describe('ImportExternalAssessmentsWizard', () => {
     expect(screen.getByDisplayValue('50')).toBeDisabled();
     expect(screen.getByDisplayValue('30')).toBeDisabled();
 
-    // "Updates existing" label is shown
-    expect(screen.getByText(/updates existing/i)).toBeInTheDocument();
+    // The "existing assessment" locked-row label is shown
+    expect(screen.getByText(/existing assessment/i)).toBeInTheDocument();
   });
 
   it('hides a chip once the corresponding external has been added to the component list', async () => {

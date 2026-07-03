@@ -20,6 +20,7 @@ import {
   Checkbox,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -146,9 +147,13 @@ const translations = defineMessages({
     id: 'course.gradebook.WeightedGradebookTable.weightsDoNotSum',
     defaultMessage: 'Weights do not sum to 100. Total may be inaccurate.',
   },
-  totalCapped: {
-    id: 'course.gradebook.WeightedGradebookTable.totalCapped',
-    defaultMessage: 'Capped at 100%',
+  totalCappedTooltip: {
+    id: 'course.gradebook.WeightedGradebookTable.totalCappedTooltip',
+    defaultMessage: 'Totals above 100% are shown as 100%.',
+  },
+  totalCappedCell: {
+    id: 'course.gradebook.WeightedGradebookTable.totalCappedCell',
+    defaultMessage: 'Actual {raw}, capped to {max}.',
   },
   searchStudents: {
     id: 'course.gradebook.WeightedGradebookTable.searchStudents',
@@ -502,13 +507,9 @@ const WeightedGradebookTable = ({
   );
   const allWeightsZero = totalWeight === 0;
 
-  // The cap only does anything when weights exceed 100 (Option A — tied to total
-  // weight, not per-student overflow). Display-only: the stored row.total stays raw.
-  const capActive = capTotal && totalWeight > 100;
-
   const totalDisplayValue = (total: number | null): number | null => {
     if (total === null) return null;
-    return capActive ? Math.min(total, 100) : total;
+    return capTotal ? Math.min(total, 100) : total;
   };
 
   const fmtDisplay = (v: number | null, prec: 0 | 1 | 2): string => {
@@ -739,6 +740,36 @@ const WeightedGradebookTable = ({
     };
   }, [rows, resolvedTabs, displayMode, totalWeight, levelContribution.weight]);
 
+  // Renders a student's weighted-total cell. When the cap is on and the raw total
+  // exceeds 100, the displayed 100 is indistinguishable from a genuine 100 — so
+  // mark it and expose the raw value on hover: quiet by default (no alert),
+  // detail on demand, and it keeps a wrong-maxGrade anomaly (a raw 300%)
+  // discoverable rather than silently flattened.
+  const renderTotalCell = (raw: number | null): ReactNode => {
+    const display = fmtDisplay(totalDisplayValue(raw), columnPrecisions.total);
+    if (!capTotal || raw === null || raw <= 100) return display;
+    const rawPrec = Number.isInteger(raw) ? 0 : 2;
+    const cappedLabel = t(translations.totalCappedCell, {
+      raw: fmtDisplay(raw, rawPrec),
+      max: fmtDisplay(100, 0),
+    });
+    return (
+      <Tooltip title={cappedLabel}>
+        <span aria-label={cappedLabel} style={{ cursor: 'help' }}>
+          <span>{display}</span>
+          <Typography
+            aria-hidden
+            color="text.secondary"
+            component="sup"
+            sx={{ fontSize: '0.7em', ml: '1px' }}
+          >
+            *
+          </Typography>
+        </span>
+      </Tooltip>
+    );
+  };
+
   const hasExternalIds = useMemo(
     () => students.some((s) => s.externalId != null && s.externalId !== ''),
     [students],
@@ -920,17 +951,23 @@ const WeightedGradebookTable = ({
       ? t(translations.percentTotalExact)
       : t(translations.outOfWeight, { weight: totalWeight });
 
-  let totalWeightHeaderContent: ReactNode;
-  if (capActive) {
-    totalWeightHeaderContent = (
-      <Typography color="text.secondary" component="span" fontSize="inherit">
-        {t(translations.totalCapped)}
+  // Two independent facts share this header. The weight-sum label (neutral at
+  // 100, warning otherwise) is primary and always shows — it is the scale totals
+  // are read on, which matters even under the cap (weights summing to 80 still
+  // top out at 80, so "Capped at 100%" alone would mislead). The cap is secondary
+  // metadata: an info affordance shown only when it actually cuts a total down
+  // (some raw total > 100), so it never claims "capped" on a column where nothing
+  // reaches 100 — and it does surface in the extra-credit case, where weights sum
+  // to exactly 100 yet a total still exceeds it.
+  const capClamping =
+    capTotal && rows.some((r) => r.total !== null && r.total > 100);
+
+  const weightLabelContent: ReactNode =
+    totalWeight === 100 ? (
+      <Typography component="span" fontSize="inherit">
+        {totalWeightHeaderLabel}
       </Typography>
-    );
-  } else if (totalWeight === 100) {
-    totalWeightHeaderContent = totalWeightHeaderLabel;
-  } else {
-    totalWeightHeaderContent = (
+    ) : (
       <Tooltip title={t(translations.weightsDoNotSum)}>
         <Typography color="warning.main" component="span" fontSize="inherit">
           {displayMode === 'percent'
@@ -939,7 +976,27 @@ const WeightedGradebookTable = ({
         </Typography>
       </Tooltip>
     );
-  }
+
+  const totalWeightHeaderContent: ReactNode = capClamping ? (
+    <Stack
+      alignItems="center"
+      component="span"
+      direction="row"
+      justifyContent="center"
+      spacing={1}
+    >
+      {weightLabelContent}
+      <Tooltip title={t(translations.totalCappedTooltip)}>
+        <InfoOutlined
+          aria-label={t(translations.totalCappedTooltip)}
+          color="action"
+          fontSize="inherit"
+        />
+      </Tooltip>
+    </Stack>
+  ) : (
+    weightLabelContent
+  );
 
   const levelBudgetLabel =
     displayMode === 'percent'
@@ -1523,10 +1580,7 @@ const WeightedGradebookTable = ({
                           );
                         })}
                         <TableCell align="right">
-                          {fmtDisplay(
-                            totalDisplayValue(row.original.total),
-                            columnPrecisions.total,
-                          )}
+                          {renderTotalCell(row.original.total)}
                         </TableCell>
                       </TableRow>
                       {isExpanded &&
