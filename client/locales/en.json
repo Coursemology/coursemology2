@@ -9662,8 +9662,11 @@
   "course.gradebook.ConfigureWeightsPrompt.valueTooLow": {
     "defaultMessage": "Value must be at least 0"
   },
-  "course.gradebook.ConfigureWeightsPrompt.weightsDoNotSum": {
-    "defaultMessage": "Weights do not sum to 100. Saving is allowed; Total may be inaccurate."
+  "course.gradebook.ConfigureWeightsPrompt.weightsOverHundred": {
+    "defaultMessage": "Weights sum to more than 100%, so student totals can exceed 100%. Turn on 'Cap at 100%' to show and export them as 100%, or set weights to sum to 100%. Saving is still allowed."
+  },
+  "course.gradebook.ConfigureWeightsPrompt.weightsUnderHundred": {
+    "defaultMessage": "Weights sum to less than 100%, so no student can reach a 100% total. Set weights to sum to 100% if that is unintended. Saving is still allowed."
   },
   "course.gradebook.GradebookIndex.allAssessments": {
     "defaultMessage": "All Assessments"
@@ -9974,6 +9977,12 @@
   "course.gradebook.ImportWizard.committed": {
     "defaultMessage": "Import complete."
   },
+  "course.gradebook.ImportWizard.committedKept": {
+    "defaultMessage": "Import complete. {count, plural, one {# existing grade kept} other {# existing grades kept}}."
+  },
+  "course.gradebook.ImportWizard.committedReplaced": {
+    "defaultMessage": "Import complete. {count, plural, one {# existing grade replaced} other {# existing grades replaced}}."
+  },
   "course.gradebook.ImportWizard.componentName": {
     "defaultMessage": "Component name"
   },
@@ -10089,7 +10098,7 @@
     "defaultMessage": "{count, plural, one {This external ID was not found in the course: {ids}} other {These external IDs were not found in the course: {ids}}}"
   },
   "course.gradebook.ImportWizard.updatesExisting": {
-    "defaultMessage": "Updates existing — managed in the gradebook"
+    "defaultMessage": "Existing assessment - settings managed in Manage External Assessments"
   },
   "course.gradebook.ImportWizard.upload": {
     "defaultMessage": "Upload filled CSV"

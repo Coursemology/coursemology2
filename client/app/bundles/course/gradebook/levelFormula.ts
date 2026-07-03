@@ -26,10 +26,17 @@ interface Scope {
   level: number;
 }
 
+// Ruby's Float#round (used by the backend's evaluate_for) rounds halves away
+// from zero, whereas JS Math.round rounds them toward +Infinity — they diverge
+// on negative x.5. Match Ruby so the value shown right after save equals the
+// value re-derived on the next page load.
+const roundHalfAwayFromZero = (x: number): number =>
+  Math.sign(x) * Math.round(Math.abs(x));
+
 const FUNCTIONS_1: Record<string, (x: number) => number> = {
   floor: Math.floor,
   ceil: Math.ceil,
-  round: Math.round,
+  round: roundHalfAwayFromZero,
 };
 const FUNCTIONS_2: Record<string, (a: number, b: number) => number> = {
   min: Math.min,
@@ -193,6 +200,10 @@ const buildAst = (tokens: Token[]): FormulaNode => {
           const a = parseExpr();
           expect('comma');
           const b = parseExpr();
+          if (peek()?.type === 'comma')
+            throw new Error(
+              `${name} takes exactly two values - for example ${name}(level, 25).`,
+            );
           expect('rparen');
           return { type: 'call2', fn: name as 'min' | 'max', a, b };
         }
