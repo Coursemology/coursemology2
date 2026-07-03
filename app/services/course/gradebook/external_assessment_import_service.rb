@@ -11,14 +11,21 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     end
   end
 
-  HEADER_SUGGESTION_MAX_DISTANCE = 2
+  BLANKISH = ['', '-', '–', '—'].freeze
 
-  def initialize(course:, actor:, components:, identifier_mode:, csv_data:)
+  # rubocop:disable Metrics/ParameterLists -- mirrors the controller's request shape; named kwargs are clearer than a struct
+  def initialize(course:, actor:, identifier_mode:, identifier_column:, csv_data:, mappings:)
     @course = course
     @actor = actor
-    @components = components.map(&:symbolize_keys)
     @identifier_mode = identifier_mode.to_s
+    @identifier_column = identifier_column.to_s
     @csv_data = csv_data
+    @mappings = mappings.map(&:symbolize_keys)
+  end
+  # rubocop:enable Metrics/ParameterLists
+
+  def targets
+    @mappings.map { |m| m[:target] }
   end
 
   def preview
@@ -54,48 +61,71 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
   private
 
   def write_components(summary, resolved, on_conflict)
-    @components.each do |component|
-      external = existing_external(component[:name])
-      if external
+    @mappings.each do |mapping|
+      if mapping[:action] == 'existing'
+        external = existing_external(mapping[:target])
         summary[:updatedComponents] += 1
-        summary[:gradesWritten] += upsert_grades(external, component, resolved,
+        summary[:gradesWritten] += upsert_grades(external, mapping, resolved,
                                                  on_conflict: on_conflict)
       else
         summary[:createdComponents] += 1
-        summary[:gradesWritten] += create_component(component, resolved)
+        summary[:gradesWritten] += create_component(mapping, resolved)
       end
     end
   end
 
   def parsed_rows
-    guard_no_duplicate_components!
     table = CSV.parse(@csv_data.to_s, headers: true)
     guard_header!(table.headers)
+    guard_targets!
     guard_not_empty!(table)
     guard_unique_identifiers!(table)
     table
   end
 
-  def guard_no_duplicate_components!
-    names = @components.map { |c| c[:name] }
-    return if names.uniq.length == names.length
-
-    raise ImportError, { message: 'duplicate_component_name' }
+  def guard_header!(headers)
+    present = headers.compact
+    guard_identifier_column_present!(present)
+    guard_mapped_headers_present!(present)
+    guard_no_duplicate_headers!(present)
   end
 
-  def guard_header!(headers)
-    expected = [identifier_header] + @components.map { |c| c[:name] }
-    identifier_not_first = headers.include?(identifier_header) &&
-                           headers.compact.first != identifier_header
-    return if headers.tally == expected.tally && !identifier_not_first
+  def guard_identifier_column_present!(present)
+    return if present.include?(@identifier_column)
 
-    suggestions = header_suggestions(expected, headers)
-    raise ImportError, { message: 'bad_header',
-                         missing: missing_headers(expected, headers, suggestions),
-                         unrecognized: unrecognized_headers(expected, headers, suggestions),
-                         suggestions: suggestions,
-                         duplicates: duplicate_headers(headers),
-                         identifierNotFirst: identifier_not_first }
+    raise ImportError, { message: 'bad_header', missing: [@identifier_column] }
+  end
+
+  def guard_mapped_headers_present!(present)
+    missing = @mappings.map { |m| m[:header] }.reject { |h| present.include?(h) }
+    raise ImportError, { message: 'bad_header', missing: missing } if missing.any?
+  end
+
+  def guard_no_duplicate_headers!(present)
+    mapped_or_identifier = present.select { |h| h == @identifier_column || @mappings.any? { |m| m[:header] == h } }
+    dupes = duplicate_headers(mapped_or_identifier)
+    raise ImportError, { message: 'bad_header', duplicates: dupes } if dupes.any?
+  end
+
+  # Defensive backend counterpart to the frontend's own collision guards: two
+  # "create" mappings cannot share a target, nor may a "create" target collide
+  # with an existing assessment's title (both case-insensitive).
+  def guard_targets!
+    create_targets = @mappings.select { |m| m[:action] == 'create' }.map { |m| m[:target] }
+    dupes = duplicate_targets(create_targets)
+    collisions = colliding_targets(create_targets)
+    return if dupes.empty? && collisions.empty?
+
+    raise ImportError, { message: 'duplicate_target', duplicates: dupes, collisions: collisions }
+  end
+
+  def duplicate_targets(create_targets)
+    create_targets.group_by(&:downcase).select { |_key, group| group.size > 1 }.keys
+  end
+
+  def colliding_targets(create_targets)
+    existing_titles = Course::ExternalAssessment.for_course(@course).pluck(:title)
+    create_targets.select { |target| existing_titles.any? { |title| title.casecmp?(target) } }
   end
 
   def guard_not_empty!(table)
@@ -106,7 +136,7 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
 
   def guard_unique_identifiers!(table)
     keys = table.filter_map do |row|
-      key = lookup_key(row[identifier_header].to_s.strip)
+      key = lookup_key(row[@identifier_column].to_s.strip)
       key unless key.empty?
     end
     duplicates = keys.tally.select { |_key, count| count > 1 }.keys
@@ -119,80 +149,6 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
   def duplicate_headers(headers)
     headers.compact.tally.select { |_name, count| count > 1 }.
       map { |name, count| { name: name, count: count } }
-  end
-
-  # Expected columns absent from the upload. A column we can pair to a likely
-  # typo'd upload is reported via suggestions ("did you mean"), not here.
-  def missing_headers(expected, headers, suggestions)
-    (expected - headers) - suggestions.map { |s| s[:expected] }
-  end
-
-  # Uploaded columns that are not expected. The upload side of a typo pair is
-  # reported via suggestions, so it is excluded here.
-  def unrecognized_headers(expected, headers, suggestions)
-    (headers.compact.uniq - expected) - suggestions.map { |s| s[:didYouMean] }
-  end
-
-  # For each expected header absent from the uploaded file, suggest the closest
-  # *unused* uploaded header within HEADER_SUGGESTION_MAX_DISTANCE edits (catches
-  # typos and singular/plural, e.g. required "Midterms" vs uploaded "Midterm").
-  def header_suggestions(expected, got)
-    available = (got - expected).compact
-    (expected - got).filter_map do |want|
-      near = available.min_by { |have| levenshtein(want, have) }
-      next if near.nil? || levenshtein(want, near) > HEADER_SUGGESTION_MAX_DISTANCE
-
-      available.delete(near) # never suggest the same uploaded column twice
-      { expected: want, didYouMean: near }
-    end
-  end
-
-  def levenshtein(source, target)
-    return target.length if source.empty?
-    return source.length if target.empty?
-
-    distances = (0..target.length).to_a
-
-    source.each_char.with_index(1) do |source_char, source_index|
-      distances = next_levenshtein_row(
-        distances,
-        target,
-        source_char,
-        source_index
-      )
-    end
-
-    distances[target.length]
-  end
-
-  def next_levenshtein_row(previous, target, source_char, source_index)
-    current = [source_index]
-
-    target.each_char.with_index(1) do |target_char, target_index|
-      current << levenshtein_cell(
-        previous,
-        current,
-        source_char,
-        target_char,
-        target_index
-      )
-    end
-
-    current
-  end
-
-  def levenshtein_cell(previous, current, source_char, target_char, target_index)
-    substitution_cost = (source_char == target_char) ? 0 : 1
-
-    [
-      previous[target_index] + 1,
-      current[target_index - 1] + 1,
-      previous[target_index - 1] + substitution_cost
-    ].min
-  end
-
-  def identifier_header
-    (@identifier_mode == 'email') ? 'Email' : 'External ID'
   end
 
   def roster_lookup
@@ -213,7 +169,7 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     unresolved = []
     malformed = []
     table.each_with_index do |row, idx|
-      identifier = row[identifier_header].to_s.strip
+      identifier = row[@identifier_column].to_s.strip
       course_user = roster_lookup[lookup_key(identifier)]
       if course_user.nil?
         unresolved << identifier
@@ -235,17 +191,23 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
   def parse_grades(row, row_idx)
     grades = {}
     malformed = []
-    @components.each do |component|
-      raw = row[component[:name]]
-      if raw.nil? || raw.to_s.strip.empty?
-        grades[component[:name]] = nil
+    @mappings.each do |m|
+      raw = row[m[:header]]
+      key = m[:target]
+      if blankish?(raw)
+        grades[key] = nil
       elsif numeric?(raw)
-        grades[component[:name]] = Float(raw)
+        grades[key] = Float(raw)
       else
-        malformed << "row #{row_idx + 2}, #{component[:name]}: #{raw}"
+        malformed << "row #{row_idx + 2}, #{m[:header]}: #{raw}"
       end
     end
     [grades, malformed]
+  end
+
+  def blankish?(raw)
+    s = raw.to_s.strip
+    raw.nil? || BLANKISH.include?(s) || s.match?(/\An\/?a\z/i)
   end
 
   def numeric?(value)
@@ -257,25 +219,24 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
 
   # Advisory: grades outside [0, max]. Reported but never blocks the import.
   def out_of_range(resolved)
-    cells = []
-    resolved.each do |row|
-      @components.each do |component|
-        grade = row[:grades][component[:name]]
-        next if grade.nil?
-
-        max = component[:maximum_grade]
-        next unless grade < 0 || grade > max
-
-        cells << {
-          identifier: row[:identifier],
-          component: component[:name],
-          grade: grade,
-          max: max,
-          kind: (grade < 0) ? 'below' : 'above'
-        }
-      end
+    resolved.each_with_object([]) do |row, cells|
+      @mappings.each { |m| out_of_range_cell(row, m)&.tap { |cell| cells << cell } }
     end
-    cells
+  end
+
+  def mapping_max(mapping)
+    (mapping[:action] == 'existing') ? existing_external(mapping[:target]).maximum_grade : (mapping[:max_grade] || 100)
+  end
+
+  def out_of_range_cell(row, mapping)
+    grade = row[:grades][mapping[:target]]
+    return if grade.nil?
+
+    max = mapping_max(mapping)
+    return unless grade < 0 || grade > max
+
+    { identifier: row[:identifier], component: mapping[:target], grade: grade, max: max,
+      kind: (grade < 0) ? 'below' : 'above' }
   end
 
   # A row is "reassigned" when its CSV identifier was previously imported as the
@@ -338,32 +299,35 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     end
   end
 
-  # Component column headers in the order they appear in the uploaded CSV,
-  # with the identifier header removed. guard_header! has already ensured the
-  # header set matches @components, so the remainder are exactly the component
-  # names in CSV order.
-  def column_order(table)
-    table.headers.compact - [identifier_header]
+  # Mapping targets, one per mapping, in the order the mappings were given.
+  # The frontend builds mappings in the order columns appear in the uploaded
+  # CSV, so this is effectively the CSV column order restricted to mapped
+  # (non-ignored) columns. We key by target (the gradebook component name), not
+  # the CSV header, so the preview labels match the gradebook and align with the
+  # grades/conflict hashes (both keyed by target) — a header-keyed order renders
+  # renamed columns blank.
+  def column_order(_table)
+    @mappings.map { |m| m[:target] }
   end
 
   def conflict_rows(resolved)
-    grades_by_component = @components.to_h do |component|
-      external = existing_external(component[:name])
+    grades_by_target = @mappings.to_h do |m|
+      external = existing_external(m[:target])
       grades = external ? external.external_assessment_grades.index_by(&:course_user_id) : {}
-      [component[:name], grades]
+      [m[:target], grades]
     end
 
-    resolved.filter_map { |row| build_conflict_row(row, grades_by_component) }
+    resolved.filter_map { |row| build_conflict_row(row, grades_by_target) }
   end
 
-  def build_conflict_row(row, grades_by_component)
+  def build_conflict_row(row, grades_by_target)
     cells = {}
     changed_any = false
 
-    @components.each do |component|
-      cell, changed = conflict_cell(component, row, grades_by_component)
+    @mappings.each do |m|
+      cell, changed = conflict_cell(m, row, grades_by_target)
       changed_any ||= changed
-      cells[component[:name]] = cell
+      cells[m[:target]] = cell
     end
 
     return nil unless changed_any
@@ -371,10 +335,10 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     { identifier: row[:identifier], studentName: row[:course_user].name, cells: cells }
   end
 
-  def conflict_cell(component, row, grades_by_component)
-    name = component[:name]
-    in_file = row[:grades][name]
-    existing_record = grades_by_component[name][row[:course_user].id]
+  def conflict_cell(mapping, row, grades_by_target)
+    target = mapping[:target]
+    in_file = row[:grades][target]
+    existing_record = grades_by_target[target][row[:course_user].id]
     existing = existing_record&.grade
     changed = grade_changed?(existing, in_file)
     [{ existing: existing&.to_f, inFile: in_file, changed: changed }, changed]
@@ -393,23 +357,23 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     @existing_externals[name] ||= Course::ExternalAssessment.for_course(@course).find_by(title: name)
   end
 
-  def create_component(component, resolved)
+  def create_component(mapping, resolved)
     external = User.with_stamper(@actor) do
       Course::ExternalAssessment.create_for_course!(
-        course: @course, title: component[:name],
-        maximum_grade: component[:maximum_grade], weight: component[:weightage]
+        course: @course, title: mapping[:target],
+        maximum_grade: mapping[:max_grade] || 100, weight: mapping[:weight] || 0
       )
     end
     rows = resolved.filter_map do |r|
-      build_grade(external, r) unless r[:grades][component[:name]].nil?
+      build_grade(external, r) unless r[:grades][mapping[:target]].nil?
     end
     bulk_insert(rows)
     rows.size
   end
 
-  def upsert_grades(external, component, resolved, on_conflict:)
+  def upsert_grades(external, mapping, resolved, on_conflict:)
     inserts, upserts = partition_grade_writes(
-      external, component[:name], resolved, on_conflict
+      external, mapping[:target], resolved, on_conflict
     )
 
     bulk_insert(inserts)
@@ -418,10 +382,10 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     inserts.size + upserts.size
   end
 
-  def partition_grade_writes(external, component_name, resolved, on_conflict)
+  def partition_grade_writes(external, target, resolved, on_conflict)
     context = {
       external: external,
-      component_name: component_name,
+      component_name: target,
       existing_by_cu: external.external_assessment_grades.index_by(&:course_user_id)
     }
 

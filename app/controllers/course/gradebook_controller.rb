@@ -54,7 +54,10 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def persist_cap_total
     return unless params.key?(:capTotal)
 
-    @settings.cap_weighted_total = params[:capTotal]
+    new_value = ActiveRecord::Type::Boolean.new.cast(params[:capTotal])
+    return if @settings.cap_weighted_total == new_value
+
+    @settings.cap_weighted_total = new_value
     current_course.save!
   end
 

@@ -9722,6 +9722,72 @@
   "course.gradebook.DeleteExternalColumnPrompt.title": {
     "defaultMessage": "외부 평가 삭제"
   },
+  "course.gradebook.ColumnMappingTable.createNew": {
+    "defaultMessage": "새로 만들기"
+  },
+  "course.gradebook.ColumnMappingTable.dontImport": {
+    "defaultMessage": "가져오지 않음"
+  },
+  "course.gradebook.ColumnMappingTable.duplicateTitleError": {
+    "defaultMessage": "다른 열도 이 이름으로 구성 요소를 생성합니다."
+  },
+  "course.gradebook.ColumnMappingTable.duplicateExistingError": {
+    "defaultMessage": "다른 열도 이 기존 외부 평가에 매핑되어 있습니다."
+  },
+  "course.gradebook.ColumnMappingTable.helperLine": {
+    "defaultMessage": "성적 열에는 숫자만 포함되어야 합니다(빈칸, \"-\" 또는 \"N/A\"는 성적 없음 의미). 숫자가 아닌 값이 있는 열은 성적으로 가져올 수 없으며 가져오지 않음으로 설정됩니다."
+  },
+  "course.gradebook.ColumnMappingTable.mapToExisting": {
+    "defaultMessage": "기존 항목에 매핑"
+  },
+  "course.gradebook.ColumnMappingTable.matchedHeading": {
+    "defaultMessage": "{count, plural, one {#개 열이 기존 항목에 매칭됨} other {#개 열이 기존 항목에 매칭됨}}"
+  },
+  "course.gradebook.ColumnMappingTable.maxLabel": {
+    "defaultMessage": "최대 점수"
+  },
+  "course.gradebook.ColumnMappingTable.needsInputHeading": {
+    "defaultMessage": "입력이 필요함"
+  },
+  "course.gradebook.ColumnMappingTable.nonGradeColumnNote": {
+    "defaultMessage": "숫자 값이 없습니다. 성적이 아닌 열로 처리됩니다."
+  },
+  "course.gradebook.ColumnMappingTable.nonNumericError": {
+    "defaultMessage": "{row}행의 ‘{value}’은(는) 숫자가 아닙니다. 가져오려면 CSV를 수정한 후 다시 업로드하세요."
+  },
+  "course.gradebook.ColumnMappingTable.notUsed": {
+    "defaultMessage": "사용되지 않음"
+  },
+  "course.gradebook.ColumnMappingTable.skippedHeading": {
+    "defaultMessage": "{count, plural, one {#개 열 건너뜀} other {#개 열 건너뜀}} — 성적 열이 아님"
+  },
+  "course.gradebook.ColumnMappingTable.skippedTooltip": {
+    "defaultMessage": "성적이 아니라 라벨로 보입니다 — 가져오지 않았습니다. 성적으로 가져오려면 드롭다운을 변경하세요."
+  },
+  "course.gradebook.ColumnMappingTable.titleCollisionError": {
+    "defaultMessage": "이 이름은 이미 기존 외부 평가에서 사용 중입니다."
+  },
+  "course.gradebook.ColumnMappingTable.titleLabel": {
+    "defaultMessage": "제목"
+  },
+  "course.gradebook.ColumnMappingTable.weightLabel": {
+    "defaultMessage": "가중치"
+  },
+  "course.gradebook.ColumnMappingTable.csvHeader": {
+    "defaultMessage": "CSV 헤더"
+  },
+  "course.gradebook.ColumnMappingTable.actionLabel": {
+    "defaultMessage": "작업"
+  },
+  "course.gradebook.ColumnMappingTable.selectComponent": {
+    "defaultMessage": "구성 요소 선택…"
+  },
+  "course.gradebook.ColumnMappingTable.incompleteHint": {
+    "defaultMessage": "계속하려면 강조 표시된 열의 매핑을 완료하세요."
+  },
+  "course.gradebook.ColumnMappingTable.nothingImportedHint": {
+    "defaultMessage": "계속하려면 하나 이상의 열을 새로 만들기 또는 기존 항목에 매핑으로 설정하세요."
+  },
   "course.gradebook.GradebookWeightedTable.displayMode": {
     "defaultMessage": "표시 모드"
   },
@@ -9739,9 +9805,6 @@
   },
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
     "defaultMessage": "0으로 하한 적용"
-  },
-  "course.gradebook.AddExternalColumnPrompt.weightLabel": {
-    "defaultMessage": "가중치"
   },
   "course.gradebook.EditExternalAssessmentPrompt.cancel": {
     "defaultMessage": "취소"
@@ -9773,50 +9836,44 @@
   "course.gradebook.EditExternalAssessmentPrompt.title": {
     "defaultMessage": "외부 평가 편집"
   },
-  "course.gradebook.EditExternalAssessmentPrompt.weightLabel": {
-    "defaultMessage": "가중치"
-  },
   "course.gradebook.ManageExternalAssessmentsButton.label": {
     "defaultMessage": "외부 평가 관리"
   },
-  "course.gradebook.ManageExternalPanel.actions": {
+  "course.gradebook.ManageExternalAssessmentContent.actions": {
     "defaultMessage": "작업"
   },
-  "course.gradebook.ManageExternalPanel.add": {
+  "course.gradebook.ManageExternalAssessmentContent.add": {
     "defaultMessage": "추가"
   },
-  "course.gradebook.ManageExternalPanel.bounds": {
+  "course.gradebook.ManageExternalAssessmentContent.bounds": {
     "defaultMessage": "범위"
   },
-  "course.gradebook.ManageExternalPanel.capped": {
+  "course.gradebook.ManageExternalAssessmentContent.capped": {
     "defaultMessage": "≤ 최대"
   },
-  "course.gradebook.ManageExternalPanel.close": {
+  "course.gradebook.ManageExternalAssessmentContent.close": {
     "defaultMessage": "닫기"
   },
-  "course.gradebook.ManageExternalPanel.empty": {
+  "course.gradebook.ManageExternalAssessmentContent.empty": {
     "defaultMessage": "아직 외부 평가가 없습니다"
   },
-  "course.gradebook.ManageExternalPanel.emptyHint": {
+  "course.gradebook.ManageExternalAssessmentContent.emptyHint": {
     "defaultMessage": "직접 추가하거나, Coursemology 외부에서 받은 성적을 CSV로 가져오세요."
   },
-  "course.gradebook.ManageExternalPanel.floored": {
+  "course.gradebook.ManageExternalAssessmentContent.floored": {
     "defaultMessage": "≥ 0"
   },
-  "course.gradebook.ManageExternalPanel.max": {
+  "course.gradebook.ManageExternalAssessmentContent.max": {
     "defaultMessage": "최대 점수"
   },
-  "course.gradebook.ManageExternalPanel.name": {
+  "course.gradebook.ManageExternalAssessmentContent.name": {
     "defaultMessage": "이름"
   },
-  "course.gradebook.ManageExternalPanel.reorderError": {
+  "course.gradebook.ManageExternalAssessmentContent.reorderError": {
     "defaultMessage": "새 순서를 저장할 수 없습니다. 다시 시도해 주세요."
   },
-  "course.gradebook.ManageExternalPanel.title": {
+  "course.gradebook.ManageExternalAssessmentContent.title": {
     "defaultMessage": "외부 평가"
-  },
-  "course.gradebook.ManageExternalPanel.weight": {
-    "defaultMessage": "가중치"
   },
   "course.gradebook.GradebookTable.acceptEdit": {
     "defaultMessage": "적용"
@@ -9898,6 +9955,9 @@
   },
   "course.gradebook.ImportWizard.continue": {
     "defaultMessage": "가져오기 확인"
+  },
+  "course.gradebook.ImportWizard.resolveConflicts": {
+    "defaultMessage": "충돌 해결"
   },
   "course.gradebook.ImportWizard.downloadTemplate": {
     "defaultMessage": "템플릿 다운로드"
@@ -9984,7 +10044,7 @@
     "defaultMessage": "일부 식별자가 이제 다른 학생과 일치합니다"
   },
   "course.gradebook.ImportWizard.requiredHeaders": {
-    "defaultMessage": "CSV에는 다음 열 헤더가 필요합니다: {headers}. ‘{identifier}’은(는) 첫 번째 열이어야 합니다."
+    "defaultMessage": "학생을 식별하려면 CSV의 첫 번째 열이 {headers}이어야 합니다."
   },
   "course.gradebook.ImportWizard.stepDefine": {
     "defaultMessage": "구성요소 정의"
@@ -10020,9 +10080,9 @@
     "defaultMessage": "가중치"
   },
   "course.gradebook.ImportWizard.willChangeExisting": {
-    "defaultMessage": "{count, plural, one {#개 행에} other {#개 행에}} 기존 성적에 대한 변경 사항이 포함되어 있습니다. 이 미리보기를 확인한 후, 가져오기 확인을 클릭하여 가져오기 전에 이러한 충돌을 검토하세요."
+    "defaultMessage": "{count, plural, one {#개 행에 기존 성적 변경 사항이 포함되어 있습니다} other {#개 행에 기존 성적 변경 사항이 포함되어 있습니다}}. 이 미리보기를 확인한 후, 항목을 가져오기 전에 충돌 해결을 클릭하여 이러한 충돌을 검토하세요."
   },
-  "course.gradebook.ManageExternalPanel.import": {
+  "course.gradebook.ManageExternalAssessmentContent.import": {
     "defaultMessage": "CSV 가져오기"
   }
 }
