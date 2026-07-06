@@ -13,6 +13,13 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   has_many :post_packs, class_name: 'Course::Assessment::Answer::ForumPost',
                         dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
 
+  # Rubric grading calls the LLM, so it must run in a background job (like RBR) rather than block the request.
+  # This also routes re-evaluation through the async grade-refresh path, which resets the grade (and thus the
+  # moderation) to the autograder's result. Default grading has no autograder, so it stays inline.
+  def grade_inline?
+    !question.grading_mode_rubric?
+  end
+
   def assign_params(params)
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]

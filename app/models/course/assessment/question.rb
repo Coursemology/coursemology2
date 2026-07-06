@@ -1,11 +1,21 @@
 # frozen_string_literal: true
-class Course::Assessment::Question < ApplicationRecord
+class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Course::SanitizeDescriptionConcern
 
   actable optional: true
   has_many_attachments
 
+  # How this question is graded. 'default' = the question type's own grading; 'rubric' = graded against
+  # active_rubric via the v2 pipeline. String-backed + prefixed so future modes need no schema change and
+  # predicates read as grading_mode_rubric? etc.
+  enum :grading_mode, { default: 'default', rubric: 'rubric' }, prefix: true
+
+  # New questions default to their type's first supported mode (so e.g. RBR becomes 'rubric' on create,
+  # regardless of the column default) unless the caller already set a supported mode.
+  before_validation :apply_default_grading_mode, on: :create
+
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
+  validate :validate_grading_mode_supported
   validates :title, length: { maximum: 255 }, allow_nil: true
   validates :maximum_grade, numericality: { greater_than_or_equal_to: 0, less_than: 1000 }, presence: true
   validates :creator, presence: true
@@ -64,6 +74,20 @@ class Course::Assessment::Question < ApplicationRecord
     raise NotImplementedError unless auto_gradable? && actable.self_respond_to?(:auto_grader)
 
     actable.auto_grader || (raise NotImplementedError)
+  end
+
+  # The grading modes this question's type supports (see grading_mode).
+  # Defaults to ['default'], which covers grading modes that don't fit a specific method yet.
+  # A type with a single supported mode has a fixed grading_mode (the frontend renders no switch).
+  def supported_grading_modes
+    actable&.self_respond_to?(:supported_grading_modes) ? actable.supported_grading_modes : ['default']
+  end
+
+  # Builds the answer adapter that writes rubric auto-grading results for +answer+ against +rubric+.
+  # Delegates to the actable type -- each rubric-gradable type supplies its own (they differ only in the
+  # text handed to the LLM). Only called for rubric-graded questions (see RubricAutoGradingService).
+  def rubric_answer_adapter(answer, rubric)
+    actable.rubric_answer_adapter(answer, rubric)
   end
 
   # Attempts the given question in the submission. This builds a new answer for the current
@@ -153,5 +177,19 @@ class Course::Assessment::Question < ApplicationRecord
     # a Koditsu assessment
     self.koditsu_question_id = nil
     self.is_synced_with_koditsu = false
+  end
+
+  private
+
+  def apply_default_grading_mode
+    return if supported_grading_modes.include?(grading_mode)
+
+    self.grading_mode = supported_grading_modes.first
+  end
+
+  def validate_grading_mode_supported
+    return if supported_grading_modes.include?(grading_mode)
+
+    errors.add(:grading_mode, :unsupported)
   end
 end

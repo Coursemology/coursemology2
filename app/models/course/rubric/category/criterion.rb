@@ -26,6 +26,15 @@ class Course::Rubric::Category::Criterion < ApplicationRecord
     )
   end
 
+  # Builds an (unsaved) v2 criterion straight from edit-page params (used by question types that configure
+  # their rubric directly in v2, e.g. forum-post questions).
+  def self.build_from_params(criterion_params)
+    Course::Rubric::Category::Criterion.new(
+      grade: criterion_params[:grade],
+      explanation: criterion_params[:explanation]
+    )
+  end
+
   # Plain content tree for the rubric content_hash. Mirrors the migration's per-criterion structure.
   def canonical_content
     { grade: grade.to_i, explanation: explanation.to_s }

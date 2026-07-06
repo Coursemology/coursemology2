@@ -605,12 +605,12 @@ export function updateGrade(id, grade, bonusAwarded) {
   };
 }
 
-export function updateRubric(id, categoryGrades) {
+export function updateRubric(questionId, categoryGrades) {
   return (dispatch) => {
     dispatch({
       type: actionTypes.UPDATE_RUBRIC,
       payload: {
-        id,
+        questionId,
         categoryGrades,
       },
     });

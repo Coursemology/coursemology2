@@ -20,15 +20,17 @@ export const getClientVersionForAnswerId = (
   return getLocalState(state).clientVersionByAnswerId[answerId];
 };
 
+// Rubric category grades now live in the gradingResults slice (keyed by question id) alongside the other
+// auto grading results, not in the answers slice.
 export const getRubricCategoryGrades = (
   state: AppState,
 ): Record<number, CategoryGradeType[]> => {
-  return getLocalState(state).categoryGrades;
+  return state.assessments.submission.gradingResults.categoryGrades;
 };
 
-export const getRubricCategoryGradesForAnswerId = (
+export const getRubricCategoryGradesForQuestionId = (
   state: AppState,
-  answerId: number,
-): CategoryGradeType[] => {
-  return getLocalState(state).categoryGrades[answerId];
+  questionId: number,
+): CategoryGradeType[] | undefined => {
+  return state.assessments.submission.gradingResults.categoryGrades[questionId];
 };

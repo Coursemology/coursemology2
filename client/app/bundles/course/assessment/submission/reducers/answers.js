@@ -9,7 +9,6 @@ import {
 const initialState = {
   initial: {},
   clientVersionByAnswerId: {},
-  categoryGrades: {},
 };
 
 export default function (state = initialState, action) {
@@ -55,14 +54,6 @@ export default function (state = initialState, action) {
         draft.clientVersionByAnswerId = buildInitialClientVersion(
           action.payload.answers,
         );
-
-        draft.categoryGrades = answers.reduce(
-          (previousObj, answer) => ({
-            ...previousObj,
-            [answer.id]: answer.categoryGrades,
-          }),
-          {},
-        );
       });
     }
 
@@ -79,13 +70,6 @@ export default function (state = initialState, action) {
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
       return state;
-    }
-    case actions.AUTOGRADE_RUBRIC_SUCCESS:
-    case actions.UPDATE_RUBRIC: {
-      const { id: answerId, categoryGrades } = action.payload;
-      return produce(state, (draft) => {
-        draft.categoryGrades[answerId] = categoryGrades;
-      });
     }
     default:
       return state;

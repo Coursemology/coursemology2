@@ -20,7 +20,8 @@ class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment:
 
     question_adapter = Course::Assessment::Question::QuestionAdapter.new(answer.question)
     rubric_adapter = Course::Rubric::RubricAdapter.new(rubric)
-    answer_adapter = Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer, rubric)
+    # Each rubric-gradable question type supplies its own answer adapter (they differ only in #answer_text).
+    answer_adapter = answer.question.rubric_answer_adapter(answer, rubric)
 
     llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
     answer_adapter.save_llm_results(llm_response)

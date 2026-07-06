@@ -4,6 +4,27 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
 
   validates :max_posts, presence: true, numericality: { only_integer: true }
   validate :allowable_max_post_count
+  validate :validate_active_rubric_for_rubric_mode
+
+  # Forum post questions can be graded either the default way or against a rubric (grading_mode). More than
+  # one supported mode, so the frontend renders a grading-mode switch.
+  def supported_grading_modes
+    ['default', 'rubric']
+  end
+
+  # Only rubric-graded forum questions with AI grading enabled are auto-gradable, and only once they have a
+  # rubric to grade against. They run through the shared rubric auto-grader (same pipeline as RBR).
+  def auto_gradable?
+    grading_mode_rubric? && ai_grading_enabled? && active_rubric.present?
+  end
+
+  def auto_grader
+    Course::Assessment::Answer::RubricAutoGradingService.new
+  end
+
+  def rubric_answer_adapter(answer, rubric)
+    Course::Assessment::Answer::ForumPostResponse::AnswerAdapter.new(answer, rubric)
+  end
 
   def question_type
     'ForumPostResponse'
@@ -37,6 +58,15 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
     return if (1..max_posts_allowed).include?(max_posts)
 
     errors.add(:max_posts, "has to be between 1 and #{max_posts_allowed}")
+  end
+
+  # Rubric grading needs a rubric to grade against; require a present, valid active rubric. (grading_mode and
+  # active_rubric live on the acting_as question and are reached here through the acts_as proxy.)
+  def validate_active_rubric_for_rubric_mode
+    return unless grading_mode_rubric?
+    return if active_rubric.present? && active_rubric.valid?
+
+    errors.add(:active_rubric, active_rubric.present? ? :invalid : :blank)
   end
 
   def csv_downloadable?

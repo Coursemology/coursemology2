@@ -943,6 +943,31 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricBasedResponses.rubric',
     defaultMessage: 'Rubric',
   },
+  gradingModeHeader: {
+    id: 'course.assessment.question.gradingMode.header',
+    defaultMessage: 'Grading mode',
+  },
+  gradingModeHint: {
+    id: 'course.assessment.question.gradingMode.hint',
+    defaultMessage: 'Choose how submissions to this question are graded.',
+  },
+  gradingModeDefaultName: {
+    id: 'course.assessment.question.gradingMode.defaultName',
+    defaultMessage: 'Default',
+  },
+  gradingModeDefaultDescription: {
+    id: 'course.assessment.question.gradingMode.defaultDescription',
+    defaultMessage: 'Graders assign a single numerical grade to each student answer.',
+  },
+  gradingModeRubricName: {
+    id: 'course.assessment.question.gradingMode.rubricName',
+    defaultMessage: 'Rubric-based',
+  },
+  gradingModeRubricDescription: {
+    id: 'course.assessment.question.gradingMode.rubricDescription',
+    defaultMessage:
+      'Graders assign categorical grades based on a predefined rubric, with optional AI assistance.',
+  },
   categoryName: {
     id: 'course.assessment.question.rubricBasedResponses.categoryName',
     defaultMessage: 'Category Name',

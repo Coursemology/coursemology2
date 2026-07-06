@@ -64,7 +64,6 @@ export type QuestionsState = Record<
 export interface AnswerState {
   initial: Record<number, AnswerData>;
   clientVersionByAnswerId: Record<number, number>;
-  categoryGrades: Record<number, CategoryGradeType[]>;
 }
 
 export interface CategoryGradeType {

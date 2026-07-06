@@ -25,13 +25,6 @@ export interface RubricBasedResponseAnswerData extends AnswerBaseData {
     path?: string;
   };
   latestAnswer?: RubricBasedResponseAnswerData;
-  categoryGrades?: {
-    id: number | null | undefined;
-    categoryId: number;
-    grade: number;
-    gradeId: number;
-    explanation: string | null;
-  }[];
 }
 
 // FE Data Type

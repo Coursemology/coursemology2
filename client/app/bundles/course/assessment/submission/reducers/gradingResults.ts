@@ -1,17 +1,21 @@
 // Reducer covering additional auto grading results on top of the grade itself
-// (e.g. solution evaluation results for text response questions)
+// (e.g. solution evaluation results for text response questions, and the rubric category breakdown for
+// rubric-graded questions -- both keyed by question id).
 
-// TODO: Fold other auto grading results into this one
-// (testCases for programming questions, categoryGrades for rubric-based response questions)
+// TODO: Fold remaining auto grading results into this one (testCases for programming questions).
 import { createReducer } from '@reduxjs/toolkit';
 import { QuestionType } from 'types/course/assessment/question';
 import { AnswerData } from 'types/course/assessment/submission/answer';
 import { TextResponseSolutionResult } from 'types/course/assessment/submission/answer/textResponse';
 
 import actions from '../constants';
+import { CategoryGradeType } from '../types';
 
 interface GradingResultsState {
   solutionResults: Record<string, TextResponseSolutionResult[]>;
+  // Rubric grade breakdown keyed by question id (consistent with solutionResults). Present for any
+  // rubric-graded answer; its presence drives the rubric UI in the submission view, regardless of type.
+  categoryGrades: Record<number, CategoryGradeType[]>;
 }
 
 interface AnswerDataArrayAction {
@@ -38,6 +42,13 @@ interface AnswerDataAction {
   payload: AnswerData;
 }
 
+// UPDATE_RUBRIC (grader edits a category) / AUTOGRADE_RUBRIC_SUCCESS carry the affected question's id + its
+// refreshed category breakdown.
+interface RubricUpdateAction {
+  type: typeof actions.UPDATE_RUBRIC | typeof actions.AUTOGRADE_RUBRIC_SUCCESS;
+  payload: { questionId: number; categoryGrades: CategoryGradeType[] };
+}
+
 interface QuestionIdAction {
   type: typeof actions.REEVALUATE_FAILURE | typeof actions.AUTOGRADE_FAILURE;
   questionId: number;
@@ -49,6 +60,7 @@ interface UnknownAction {
     | AnswerDataArrayAction['type']
     | AnswerDataAction['type']
     | QuestionIdAction['type']
+    | RubricUpdateAction['type']
   >;
 }
 
@@ -56,11 +68,13 @@ type Action =
   | AnswerDataArrayAction
   | AnswerDataAction
   | QuestionIdAction
+  | RubricUpdateAction
   | UnknownAction;
 
 export default createReducer<GradingResultsState>(
   {
     solutionResults: {},
+    categoryGrades: {},
   },
   (builder) => {
     builder.addMatcher(
@@ -79,6 +93,7 @@ export default createReducer<GradingResultsState>(
       (state, action) => {
         const newSolutionResults: Record<string, TextResponseSolutionResult[]> =
           {};
+        const newCategoryGrades: Record<number, CategoryGradeType[]> = {};
         action.payload.answers.forEach((answer) => {
           if (
             answer.questionType === QuestionType.TextResponse &&
@@ -86,8 +101,12 @@ export default createReducer<GradingResultsState>(
           ) {
             newSolutionResults[answer.questionId] = answer.solutionResults;
           }
+          if (answer.categoryGrades) {
+            newCategoryGrades[answer.questionId] = answer.categoryGrades;
+          }
         });
         state.solutionResults = newSolutionResults;
+        state.categoryGrades = newCategoryGrades;
       },
     );
 
@@ -108,6 +127,22 @@ export default createReducer<GradingResultsState>(
         ) {
           state.solutionResults[answer.questionId] = answer.solutionResults;
         }
+        if (answer.categoryGrades) {
+          state.categoryGrades[answer.questionId] = answer.categoryGrades;
+        }
+      },
+    );
+
+    builder.addMatcher(
+      (action: Action): action is RubricUpdateAction => {
+        return [
+          actions.UPDATE_RUBRIC,
+          actions.AUTOGRADE_RUBRIC_SUCCESS,
+        ].includes(action.type);
+      },
+      (state, action) => {
+        state.categoryGrades[action.payload.questionId] =
+          action.payload.categoryGrades;
       },
     );
 

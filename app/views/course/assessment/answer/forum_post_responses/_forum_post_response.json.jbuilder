@@ -15,6 +15,12 @@ end
 
 last_attempt = last_attempt(answer)
 
+# Only rubric-graded forum questions carry a categoryGrades breakdown; default-graded answers are graded by
+# the plain grade field, so emitting an (empty) breakdown would misroute their save through the rubric path.
+if answer.question.grading_mode_rubric?
+  json.partial! 'course/assessment/answer/rubric_category_grades', answer: answer, can_grade: can_grade
+end
+
 if answer.can_read_grade?(current_ability)
   json.explanation do
     json.correct last_attempt&.correct
