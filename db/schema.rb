@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_10_235000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -310,6 +310,21 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
   create_table "course_assessment_question_forum_post_responses", force: :cascade do |t|
     t.boolean "has_text_response", default: false
     t.integer "max_posts", limit: 2, null: false
+    t.boolean "ai_grading_enabled", default: true, null: false
+  end
+
+  create_table "course_assessment_question_grading_contexts", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.string "context_type", null: false
+    t.string "source_type"
+    t.bigint "source_id"
+    t.string "identifier", null: false
+    t.jsonb "options", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id", "identifier"], name: "index_grading_contexts_on_question_and_identifier", unique: true
+    t.index ["question_id"], name: "idx_on_question_id_46e914c3d4"
+    t.index ["source_type", "source_id"], name: "index_course_assessment_question_grading_contexts_on_source"
   end
 
   create_table "course_assessment_question_groups", force: :cascade do |t|
@@ -317,6 +332,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
     t.bigint "assessment_id", null: false
     t.integer "weight", null: false
     t.index ["assessment_id"], name: "index_course_assessment_question_groups_on_assessment_id"
+  end
+
+  create_table "course_assessment_question_mock_answer_grading_contexts", force: :cascade do |t|
+    t.bigint "mock_answer_id", null: false
+    t.bigint "grading_context_id", null: false
+    t.text "content", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grading_context_id"], name: "idx_on_grading_context_id_dda5f396e5"
+    t.index ["mock_answer_id", "grading_context_id"], name: "index_mock_answer_grading_contexts_on_mock_and_context", unique: true
+    t.index ["mock_answer_id"], name: "idx_on_mock_answer_id_9d10a6d25b"
   end
 
   create_table "course_assessment_question_mock_answers", force: :cascade do |t|
@@ -480,6 +506,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
     t.string "koditsu_question_id"
     t.boolean "is_synced_with_koditsu", default: false, null: false
     t.bigint "active_rubric_id"
+    t.string "grading_mode", default: "default", null: false
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
     t.index ["active_rubric_id"], name: "index_course_assessment_questions_on_active_rubric_id"
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
@@ -1834,7 +1861,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
   add_foreign_key "course_assessment_question_bundle_questions", "course_assessment_question_bundles", column: "bundle_id"
   add_foreign_key "course_assessment_question_bundle_questions", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_question_bundles", "course_assessment_question_groups", column: "group_id"
+  add_foreign_key "course_assessment_question_grading_contexts", "course_assessment_questions", column: "question_id", on_delete: :cascade
   add_foreign_key "course_assessment_question_groups", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_question_mock_answer_grading_contexts", "course_assessment_question_grading_contexts", column: "grading_context_id", on_delete: :cascade
+  add_foreign_key "course_assessment_question_mock_answer_grading_contexts", "course_assessment_question_mock_answers", column: "mock_answer_id", on_delete: :cascade
   add_foreign_key "course_assessment_question_mock_answers", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_question_multiple_response_options", "course_assessment_question_multiple_responses", column: "question_id", name: "fk_course_assessment_question_multiple_response_options_questio"
   add_foreign_key "course_assessment_question_programming", "jobs", column: "import_job_id", name: "fk_course_assessment_question_programming_import_job_id", on_delete: :nullify

@@ -60,6 +60,23 @@ class Course::Rubric < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  # Builds (unsaved) v2 categories straight from edit-page params (each with nested criterions_attributes),
+  # skipping any marked for destruction, in the order given. Used by question types that configure their
+  # rubric directly in v2 (e.g. forum-post questions) instead of via the deprecated v1 category tables.
+  def self.categories_from_params(categories_params)
+    nested_param_values(categories_params).
+      reject { |category_params| ActiveRecord::Type::Boolean.new.cast(category_params[:_destroy]) }.
+      map { |category_params| Course::Rubric::Category.build_from_params(category_params) }
+  end
+
+  # Rails nested-attributes params arrive either as an array or as a hash keyed by index (e.g.
+  # { '0' => {...}, '1' => {...} }); normalise both to a plain array of the child param hashes.
+  def self.nested_param_values(nested_params)
+    return [] if nested_params.nil?
+
+    nested_params.respond_to?(:values) ? nested_params.values : nested_params.to_a
+  end
+
   # Copy-on-write entry point: returns +self+ when nothing changed, otherwise a newly persisted rubric
   # carrying the same question links. Categories default to a deep copy of the current ones (e.g. when only
   # the prompt changes); pass +categories+ to replace them wholesale. Because the content_hash no longer

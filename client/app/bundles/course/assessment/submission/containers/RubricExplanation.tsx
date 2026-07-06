@@ -30,7 +30,6 @@ import {
 import { SaveRubricGrade } from './useSaveRubricGrade';
 
 interface RubricExplanationProps {
-  answerId: number;
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
@@ -40,7 +39,6 @@ interface RubricExplanationProps {
 
 const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   const {
-    answerId,
     questionId,
     category,
     categoryGrades,
@@ -102,7 +100,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
 
     setIsFirstRendering(false);
 
-    dispatch(updateRubric(answerId, transformRubric(newCategoryGrades)));
+    dispatch(updateRubric(questionId, transformRubric(newCategoryGrades)));
     dispatch(updateGradeState(questionId, finalGrade, bonusAwarded));
 
     if (isNotGradedAndNotPublished) {

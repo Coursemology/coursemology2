@@ -28,10 +28,16 @@ export default class ForumPostResponseAPI extends BaseAPI {
     return this.client.post(`${this.#urlPrefix}`, data);
   }
 
+  // confirmRubricAdvance lets an incompatible rubric change (which would re-grade existing answers) go
+  // through; without it the backend rolls back and 409s so the frontend can confirm with the user first.
   updateForumPostResponse(
     id: number,
     data: ForumPostResponsePostData,
+    confirmRubricAdvance = false,
   ): APIResponse<JustRedirect> {
-    return this.client.patch(`${this.#urlPrefix}/${id}`, data);
+    return this.client.patch(`${this.#urlPrefix}/${id}`, {
+      ...data,
+      confirm_rubric_advance: confirmRubricAdvance,
+    });
   }
 }

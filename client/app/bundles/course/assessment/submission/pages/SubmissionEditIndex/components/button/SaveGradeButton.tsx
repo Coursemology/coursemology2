@@ -32,12 +32,15 @@ const SaveGradeButton: FC = () => {
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
 
+  // categoryGrade is keyed by question id; saveAllGrades keys its payload by answer id, so map each
+  // question's breakdown onto its answer id (questionWithGrades[questionId].id is the answer id).
   const categoryGrade = useAppSelector(getRubricCategoryGrades);
-  const categoryGradeDetail = JSON.parse(JSON.stringify(categoryGrade));
+  const categoryGradeDetail: Record<number, unknown> = {};
 
-  Object.keys(categoryGrade).forEach((answerId) => {
-    if (categoryGrade[answerId]) {
-      categoryGradeDetail[answerId] = categoryGrade[answerId].reduce(
+  Object.entries(questionWithGrades).forEach(([questionId, grade]) => {
+    const categories = categoryGrade[Number(questionId)];
+    if (categories) {
+      categoryGradeDetail[grade.id] = categories.reduce(
         (obj, category) => ({
           ...obj,
           [category.categoryId]: {
@@ -49,8 +52,6 @@ const SaveGradeButton: FC = () => {
         }),
         {},
       );
-    } else {
-      categoryGradeDetail[answerId] = null;
     }
   });
 

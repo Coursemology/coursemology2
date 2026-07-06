@@ -171,5 +171,29 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
         expect(answer2.compare_answer(answer_with_parent2)).to be_falsey
       end
     end
+
+    describe '#grading_context_text' do
+      it 'joins each selected post (prefixed with its parent) and the text response' do
+        answer = described_class.new(answer_text: '<p>My reflection</p>')
+        answer.post_packs.build(post_text: 'First body', parent_text: 'Parent body')
+        answer.post_packs.build(post_text: 'Second body')
+
+        text = answer.grading_context_text
+
+        expect(text).to include('In reply to: Parent body')
+        expect(text).to include('First body')
+        expect(text).to include('Second body')
+        expect(text).to include('My reflection')
+        # Only the first post has a parent, so only it is prefixed.
+        expect(text.scan('In reply to:').length).to eq(1)
+      end
+
+      it 'omits a blank text response' do
+        answer = described_class.new(answer_text: '')
+        answer.post_packs.build(post_text: 'Only body')
+
+        expect(answer.grading_context_text).to eq('Only body')
+      end
+    end
   end
 end

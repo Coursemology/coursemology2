@@ -36,6 +36,15 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     Course::Assessment::Answer::RubricAutoGradingService.new
   end
 
+  def rubric_answer_adapter(answer, rubric)
+    Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer, rubric)
+  end
+
+  # RBR is defined by rubric grading -- it is always graded against its active rubric.
+  def supported_grading_modes
+    ['rubric']
+  end
+
   def question_type
     'RubricBasedResponse'
   end

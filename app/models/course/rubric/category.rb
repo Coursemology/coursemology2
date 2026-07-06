@@ -38,6 +38,18 @@ class Course::Rubric::Category < ApplicationRecord
     )
   end
 
+  # Builds an (unsaved) v2 category (with its criterions) straight from edit-page params, skipping any marked
+  # for destruction. Copy-on-write rebuilds categories wholesale, so ids are ignored. Used by question types
+  # that configure their rubric directly in v2 (e.g. forum-post questions).
+  def self.build_from_params(category_params)
+    criterions_params = Course::Rubric.nested_param_values(category_params[:criterions_attributes])
+    Course::Rubric::Category.new(
+      name: category_params[:name],
+      criterions: criterions_params.reject { |c| ActiveRecord::Type::Boolean.new.cast(c[:_destroy]) }.
+                  map { |c| Course::Rubric::Category::Criterion.build_from_params(c) }
+    )
+  end
+
   # Plain content tree for the rubric content_hash; criterions are ordered by grade. Mirrors the
   # migration's per-category structure (name + criterions), excluding weight.
   def canonical_content

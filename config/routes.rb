@@ -267,6 +267,7 @@ Rails.application.routes.draw do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
             resources :rubrics, on: :member, only: [:index, :create, :destroy, :show] do
               get :answers, on: :collection, action: 'rubric_answers'
+              get :grading_contexts, on: :collection, action: 'grading_contexts'
               get :answer_evaluations, on: :member, action: 'fetch_answer_evaluations'
               post 'answer_evaluations/initialize', on: :member, action: 'initialize_answer_evaluations'
               post :answer_evaluations, on: :member, action: 'evaluate_answer'

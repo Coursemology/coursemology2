@@ -18,7 +18,7 @@ import { workflowStates } from '../constants';
 import ReevaluateButton from '../pages/SubmissionEditIndex/components/button/ReevaluateButton';
 import { computeExp } from '../reducers/grading';
 import { QuestionGradeData } from '../reducers/grading/types';
-import { getRubricCategoryGradesForAnswerId } from '../selectors/answers';
+import { getRubricCategoryGradesForQuestionId } from '../selectors/answers';
 import { getAssessment } from '../selectors/assessments';
 import {
   getBasePoints,
@@ -75,8 +75,8 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const basePoints = useAppSelector(getBasePoints);
   const expMultiplier = useAppSelector(getExpMultiplier);
   const maximumGrade = useAppSelector(getMaximumGrade);
-  const answerCategoryGradesFromStore = useAppSelector((state) =>
-    grading ? getRubricCategoryGradesForAnswerId(state, grading.id) : [],
+  const answerCategoryGradesFromStore = useAppSelector(
+    (state) => getRubricCategoryGradesForQuestionId(state, question.id) ?? [],
   );
 
   const attempting = workflowState === workflowStates.Attempting;
@@ -93,8 +93,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   const isRubricBasedResponse =
     question.type === QuestionType.RubricBasedResponse;
+  // The rubric UI renders whenever the answer carries a category breakdown (RBR, forum-post rubric, ...),
+  // subject to the usual grader/published visibility rules -- keyed off the data, not the question type.
   const isRubricVisible =
-    isRubricBasedResponse &&
+    answerCategoryGradesFromStore.length > 0 &&
     (graderView || (published && assessment.showRubricToStudents));
   const isRubricBasedResponseAndAutogradable =
     isRubricBasedResponse &&
@@ -326,17 +328,20 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
             <ReevaluateButton questionId={questionId} />
           )}
 
-        {editable && isRubricBasedResponseAndAutogradable && (
-          <div className="flex flex-row items-center">
-            <ReevaluateButton questionId={questionId} />
-            <div className="flex-1" />
-            <AIGradingPlaygroundAlert
-              answerId={grading.id}
-              className="w-fit text-right py-0 mb-2"
-              questionId={questionId}
-            />
-          </div>
-        )}
+        {/* Rubric-graded types (RBR, forum post) also link to the AI grading playground. */}
+        {editable &&
+          (isRubricBasedResponseAndAutogradable ||
+            isForumPostResponseAndAutogradable) && (
+            <div className="flex flex-row items-center">
+              <ReevaluateButton questionId={questionId} />
+              <div className="flex-1" />
+              <AIGradingPlaygroundAlert
+                answerId={grading.id}
+                className="w-fit text-right py-0 mb-2"
+                questionId={questionId}
+              />
+            </div>
+          )}
 
         <Paper
           className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${

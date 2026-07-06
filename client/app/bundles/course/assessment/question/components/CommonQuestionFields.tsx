@@ -16,6 +16,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
+import GradingModeField from './GradingModeField';
 import SkillsAutocomplete from './SkillsAutocomplete';
 
 export const commonQuestionFieldsInitialValues: QuestionFormData = {
@@ -45,6 +46,9 @@ interface CommonQuestionFieldsProps<T extends FieldValues>
   disableSettingMaxGrade?: boolean;
   control?: Control<T>;
   name?: FieldPath<T>;
+  // When a question type supports more than one grading mode, its list is passed here to render the
+  // grading-mode switch inside the Grading section (see GradingModeField). Omitted for single-mode types.
+  supportedGradingModes?: string[];
 }
 
 const CommonQuestionFields = <T extends FieldValues>(
@@ -56,6 +60,7 @@ const CommonQuestionFields = <T extends FieldValues>(
     control,
     availableSkills,
     skillsUrl,
+    supportedGradingModes,
   } = props;
 
   const { t } = useTranslation();
@@ -130,6 +135,13 @@ const CommonQuestionFields = <T extends FieldValues>(
             />
           )}
         />
+
+        {supportedGradingModes && supportedGradingModes.length > 1 && (
+          <GradingModeField
+            disabled={submitting}
+            supportedGradingModes={supportedGradingModes}
+          />
+        )}
       </Section>
 
       <Section
