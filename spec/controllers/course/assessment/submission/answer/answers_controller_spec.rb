@@ -132,5 +132,66 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
         end
       end
     end
+
+    context 'when a text-response answer with a rubric is shown to the student' do
+      let(:course) { create(:course, :enrollable) }
+      let(:submitter) { create(:course_student, course: course).user }
+      let(:assessment) do
+        create(:assessment, :published_with_text_response_question, course: course,
+                                                                    show_rubric_to_students: true)
+      end
+      let(:submission) { create(:submission, :published, assessment: assessment, creator: submitter) }
+      let(:answer) { submission.answers.first }
+
+      before do
+        grading = answer.auto_grading || answer.build_auto_grading
+        grading.update!(result: auto_grading_result)
+        controller_sign_in(controller, submitter)
+      end
+
+      describe '#show' do
+        render_views
+        subject do
+          get :show, format: :json, params: {
+            course_id: course, assessment_id: assessment, submission_id: submission, id: answer.id
+          }
+        end
+
+        # Answers graded before spreadsheet formula autograding (commit b6da95a4ad) stored an
+        # auto_grading result without the `evaluation_results` key. Reading it unconditionally
+        # raised a NoMethodError (nil.index_by) when the rubric was shown to students.
+        context 'when the stored result predates evaluation_results' do
+          let(:auto_grading_result) { { 'messages' => [] } }
+
+          it 'renders successfully and omits the solution breakdown' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['fields']).to be_present
+            expect(json_result).not_to have_key('solutionResults')
+          end
+        end
+
+        context 'when the stored result includes evaluation_results' do
+          let(:auto_grading_result) do
+            {
+              'messages' => [],
+              'evaluation_results' => answer.question.specific.solutions.map do |solution|
+                { 'solution_id' => solution.id, 'grade' => solution.grade }
+              end
+            }
+          end
+
+          it 'renders the solution breakdown' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['solutionResults']).to be_present
+            expect(json_result['solutionResults'].map { |result| result['id'] }).
+              to match_array(answer.question.specific.solutions.map(&:id))
+          end
+        end
+      end
+    end
   end
 end
