@@ -8,6 +8,8 @@ import {
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
 
+import { adaptGradingContextsPostData } from '../commons/gradingContexts';
+
 export const fetchNewForumPostResponse = async (): Promise<
   ForumPostResponseFormData<'new'>
 > => {
@@ -47,6 +49,7 @@ const rubricAttributes = (
     })),
     ai_grading_custom_prompt: data.aiGradingCustomPrompt,
     ai_grading_model_answer: data.aiGradingModelAnswer,
+    grading_contexts: adaptGradingContextsPostData(data.gradingContexts),
   };
 };
 

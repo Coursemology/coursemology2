@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller # rubocop:disable Metrics/ClassLength
   include Course::Assessment::Question::RubricBasedResponseControllerConcern
+  include Course::Assessment::Question::GradingContextParamsConcern
 
   build_and_authorize_new_question :rubric_based_response_question,
                                    class: Course::Assessment::Question::RubricBasedResponse, only: [:new, :create]
@@ -18,6 +19,7 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
 
       if success
         sync_active_rubric
+        sync_grading_contexts(@rubric_based_response_question, grading_contexts_params)
         render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
       else
         head :bad_request
@@ -99,6 +101,7 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
         needs_confirmation = true
         raise ActiveRecord::Rollback
       end
+      sync_grading_contexts(@rubric_based_response_question, grading_contexts_params)
       true
     end
 
@@ -134,6 +137,12 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     ]
 
     params.require(:question_rubric_based_response).permit(*permitted_params)
+  end
+
+  # Grading contexts pulled into the rubric grading prompt (see GradingContext); replaced on every save.
+  def grading_contexts_params
+    params.require(:question_rubric_based_response).
+      permit(grading_contexts: [:id, :context_type, :source_id, :identifier])[:grading_contexts]
   end
 
   def load_question_assessment

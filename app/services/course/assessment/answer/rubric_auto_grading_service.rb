@@ -23,7 +23,9 @@ class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment:
     # Each rubric-gradable question type supplies its own answer adapter (they differ only in #answer_text).
     answer_adapter = answer.question.rubric_answer_adapter(answer, rubric)
 
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
+    context = Course::Assessment::Question::GradingContext::Resolver.new(answer.question, answer.submission).resolve
+    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).
+                   evaluate(context: context)
     answer_adapter.save_llm_results(llm_response)
 
     # Currently no support for correctness in rubric-based questions

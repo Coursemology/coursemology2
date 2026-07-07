@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { GradingContextSourceOption } from 'types/course/assessment/question/grading-contexts';
 import { RubricBasedResponseFormData } from 'types/course/assessment/question/rubric-based-responses';
 
 import ExperimentalChip from 'lib/components/core/ExperimentalChip';
@@ -11,16 +12,26 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 import AIGradingPlaygroundAlert from '../../components/AIGradingPlaygroundAlert';
+import GradingContextManager from '../../components/GradingContextManager';
 
 interface AIGradingFieldsProps {
   disabled?: boolean;
   questionId?: number;
+  // When provided (and non-empty), the grading-context editor is rendered as a subsection here. Passed by
+  // question types that can pull grading context (RBR, forum post); omitted otherwise.
+  availableGradingContextTypes?: string[];
+  contextSourceOptions?: GradingContextSourceOption[];
 }
 
 export const AI_GRADING_SECTION_ID = 'ai-grading-fields' as const;
 
 const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
-  const { disabled, questionId } = props;
+  const {
+    disabled,
+    questionId,
+    availableGradingContextTypes,
+    contextSourceOptions,
+  } = props;
   const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
   const { control, watch } = useFormContext<RubricBasedResponseFormData>();
@@ -88,6 +99,20 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
 
         {questionId && <AIGradingPlaygroundAlert questionId={questionId} />}
       </Subsection>
+
+      {availableGradingContextTypes &&
+        availableGradingContextTypes.length > 0 && (
+          <Subsection
+            subtitle={t(translations.gradingContextHint)}
+            title={t(translations.gradingContext)}
+          >
+            <GradingContextManager
+              availableGradingContextTypes={availableGradingContextTypes}
+              contextSourceOptions={contextSourceOptions ?? []}
+              disabled={disabled}
+            />
+          </Subsection>
+        )}
     </Section>
   );
 };

@@ -8,6 +8,8 @@ import {
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
 
+import { adaptGradingContextsPostData } from '../commons/gradingContexts';
+
 export const fetchNewRubricBasedResponse =
   async (): Promise<RubricBasedResponseFormData> => {
     const response =
@@ -49,6 +51,7 @@ const adaptPostData = (
     ai_grading_enabled: data.aiGradingEnabled,
     ai_grading_custom_prompt: data.aiGradingCustomPrompt,
     ai_grading_model_answer: data.aiGradingModelAnswer,
+    grading_contexts: adaptGradingContextsPostData(data.gradingContexts),
   },
 });
 

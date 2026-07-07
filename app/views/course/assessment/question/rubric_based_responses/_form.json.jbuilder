@@ -8,3 +8,5 @@ json.aiGradingCustomPrompt question.ai_grading_custom_prompt
 json.aiGradingModelAnswer question.ai_grading_model_answer
 
 json.partial! 'category_details', question: question
+
+json.partial! 'course/assessment/question/grading_context_fields', question: question, assessment: assessment

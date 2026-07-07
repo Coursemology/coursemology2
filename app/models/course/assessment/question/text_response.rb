@@ -53,6 +53,11 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     end
   end
 
+  # A text response's answer text can feed another rubric-graded question's grading (sibling-answer context).
+  def provides_grading_context?
+    true
+  end
+
   def question_type
     if file_upload_question?
       'FileUpload'

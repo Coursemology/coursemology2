@@ -39,7 +39,10 @@ const SaveGradeButton: FC = () => {
 
   Object.entries(questionWithGrades).forEach(([questionId, grade]) => {
     const categories = categoryGrade[Number(questionId)];
-    if (categories) {
+    // Only rubric-graded answers (a non-empty breakdown) go through the rubric save path -- matching the
+    // rubric panel's visibility gate. An empty breakdown (e.g. a default-graded forum answer) must fall
+    // through to the plain grade save, or saveAllGrades would recompute its grade from nothing (0).
+    if (categories && categories.length > 0) {
       categoryGradeDetail[grade.id] = categories.reduce(
         (obj, category) => ({
           ...obj,

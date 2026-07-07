@@ -957,7 +957,8 @@ const translations = defineMessages({
   },
   gradingModeDefaultDescription: {
     id: 'course.assessment.question.gradingMode.defaultDescription',
-    defaultMessage: 'Graders assign a single numerical grade to each student answer.',
+    defaultMessage:
+      'Graders assign a single numerical grade to each student answer.',
   },
   gradingModeRubricName: {
     id: 'course.assessment.question.gradingMode.rubricName',
@@ -967,6 +968,61 @@ const translations = defineMessages({
     id: 'course.assessment.question.gradingMode.rubricDescription',
     defaultMessage:
       'Graders assign categorical grades based on a predefined rubric, with optional AI assistance.',
+  },
+  gradingContext: {
+    id: 'course.assessment.question.gradingContext.title',
+    defaultMessage: 'Grading Context',
+  },
+  gradingContextHint: {
+    id: 'course.assessment.question.gradingContext.hint',
+    defaultMessage:
+      "Pull extra material from other sources into the AI grading custom prompt. If needed, each context can be referenced by its identifier in the rubric or custom prompt (e.g. \"This answer is a follow_up of '{'previous_question_answer'}'.\").",
+  },
+  addGradingContext: {
+    id: 'course.assessment.question.gradingContext.add',
+    defaultMessage: 'Add context',
+  },
+  gradingContextType: {
+    id: 'course.assessment.question.gradingContext.type',
+    defaultMessage: 'Type',
+  },
+  gradingContextTypePlaceholder: {
+    id: 'course.assessment.question.gradingContext.typePlaceholder',
+    defaultMessage: 'Select a context type',
+  },
+  gradingContextTypeSiblingQuestionAnswer: {
+    id: 'course.assessment.question.gradingContext.typeSiblingQuestionAnswer',
+    defaultMessage: 'Sibling Question Answer',
+  },
+  gradingContextTypeForumThread: {
+    id: 'course.assessment.question.gradingContext.typeForumThread',
+    defaultMessage: 'Forum Post Response Thread',
+  },
+  gradingContextTypeSiblingQuestionAnswerHint: {
+    id: 'course.assessment.question.gradingContext.typeSiblingQuestionAnswerHint',
+    defaultMessage:
+      "Context is pulled from the same student's answer to another question in this assessment.",
+  },
+  gradingContextTypeForumThreadHint: {
+    id: 'course.assessment.question.gradingContext.typeForumThreadHint',
+    defaultMessage:
+      'Context is pulled from the root post of the thread containing the post(s) the student has selected.',
+  },
+  gradingContextSource: {
+    id: 'course.assessment.question.gradingContext.source',
+    defaultMessage: 'Source',
+  },
+  gradingContextThisQuestion: {
+    id: 'course.assessment.question.gradingContext.thisQuestion',
+    defaultMessage: '(This question)',
+  },
+  gradingContextIdentifier: {
+    id: 'course.assessment.question.gradingContext.identifier',
+    defaultMessage: 'Identifier',
+  },
+  removeGradingContext: {
+    id: 'course.assessment.question.gradingContext.remove',
+    defaultMessage: 'Remove context',
   },
   categoryName: {
     id: 'course.assessment.question.rubricBasedResponses.categoryName',

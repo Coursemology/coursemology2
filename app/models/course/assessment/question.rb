@@ -47,6 +47,15 @@ class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics
   has_many :mock_answers, class_name: 'Course::Assessment::Question::MockAnswer',
                           dependent: :destroy, inverse_of: :question
 
+  # Context sources this question pulls into its rubric grading prompt. On the polymorphic question so any
+  # rubric-graded type can carry them; deleting the consumer question cascades these (DB FK).
+  has_many :grading_contexts, class_name: 'Course::Assessment::Question::GradingContext',
+                              dependent: :destroy, foreign_key: :question_id, inverse_of: :question
+
+  # A polymorphic source has no DB FK, so when a question that OTHER questions reference as a context source
+  # is destroyed, clear those dangling context rows app-side.
+  after_destroy :clear_dependent_grading_contexts
+
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable
   delegate :question_type_readable, to: :actable
@@ -81,6 +90,18 @@ class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics
   # A type with a single supported mode has a fixed grading_mode (the frontend renders no switch).
   def supported_grading_modes
     actable&.self_respond_to?(:supported_grading_modes) ? actable.supported_grading_modes : ['default']
+  end
+
+  # Whether this question's answers can serve as grading context for OTHER questions (the sibling-answer
+  # provider). True for types that expose meaningful answer text (see Answer#grading_context_text).
+  def provides_grading_context?
+    actable&.self_respond_to?(:provides_grading_context?) ? actable.provides_grading_context? : false
+  end
+
+  # The grading-context provider kinds selectable on THIS question's edit page (see GradingContext). Empty
+  # for types that cannot pull context. Delegated to the actable type.
+  def available_grading_context_types
+    actable&.self_respond_to?(:available_grading_context_types) ? actable.available_grading_context_types : []
   end
 
   # Builds the answer adapter that writes rubric auto-grading results for +answer+ against +rubric+.
@@ -191,5 +212,9 @@ class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics
     return if supported_grading_modes.include?(grading_mode)
 
     errors.add(:grading_mode, :unsupported)
+  end
+
+  def clear_dependent_grading_contexts
+    Course::Assessment::Question::GradingContext.where(source: self).delete_all
   end
 end

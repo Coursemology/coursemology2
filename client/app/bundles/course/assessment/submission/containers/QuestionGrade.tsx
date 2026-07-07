@@ -102,6 +102,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     isRubricBasedResponse &&
     (question as SubmissionQuestionData<QuestionType.RubricBasedResponse>)
       .aiGradingEnabled;
+  // Forum-post questions are auto-gradable only under rubric grading (with a rubric + AI grading enabled),
+  // which the backend already resolves into `autogradable`.
+  const isForumPostResponseAndAutogradable =
+    question.type === QuestionType.ForumPostResponse && question.autogradable;
 
   const handleSaveGrade = (
     newGrade: string | number | null,
@@ -324,7 +328,9 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
         )}
 
         {editable &&
-          (isProgrammingQuestion || isTextResponseAndAutogradable) && (
+          (isProgrammingQuestion ||
+            isForumPostResponseAndAutogradable ||
+            isTextResponseAndAutogradable) && (
             <ReevaluateButton questionId={questionId} />
           )}
 
