@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ruby '3.3.5'
 
 # These gems are included in Ruby defaults for now,
-# but they will have to be included separately in future versions.
+# but they will have to be included separately in future versions (Ruby 3.4+).
 gem 'ostruct'
 gem 'csv'
 
@@ -187,7 +187,7 @@ gem 'http_accept_language'
 gem 'devise', '4.9.4'
 gem 'devise-multi_email'
 gem 'keycloak'
-gem 'jwt'
+gem 'jwt', '~> 2.10.3'
 
 # Use cancancan for authorization
 gem 'cancancan'
@@ -201,7 +201,7 @@ gem 'mini_magick'
 # Library for reading and writing zip files
 gem 'rubyzip', '~> 3.3', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
-gem 'nokogiri', '>= 1.19.3'
+gem 'nokogiri', '>= 1.19.4'
 
 # Polyglot support
 gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'

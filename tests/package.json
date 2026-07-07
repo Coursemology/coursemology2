@@ -6,7 +6,11 @@
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.2",
+    "istanbul-lib-processinfo": "^3.0.1",
     "nyc": "^18.0.0"
+  },
+  "resolutions": {
+    "istanbul-lib-processinfo": "^3.0.1"
   },
   "scripts": {
     "clean-install": "yarn install --force --frozen-lockfile",
