@@ -82,6 +82,8 @@ class Course::Assessment < ApplicationRecord
   has_one :gradebook_assessment_contribution,
           class_name: 'Course::Gradebook::AssessmentContribution',
           dependent: :destroy, inverse_of: :assessment
+  has_one :marketplace_listing, class_name: 'Course::Assessment::Marketplace::Listing',
+                                inverse_of: :assessment, dependent: :destroy
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
   has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
