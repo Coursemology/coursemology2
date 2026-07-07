@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_25_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -268,6 +268,39 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_25_000000) do
     t.index ["assessment_id"], name: "index_course_assessment_live_feedbacks_on_assessment_id"
     t.index ["creator_id"], name: "index_course_assessment_live_feedbacks_on_creator_id"
     t.index ["question_id"], name: "index_course_assessment_live_feedbacks_on_question_id"
+  end
+
+  create_table "course_assessment_marketplace_adoptions", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "destination_course_id", null: false
+    t.bigint "duplicated_assessment_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "fk__cama_creator_id"
+    t.index ["destination_course_id"], name: "fk__cama_destination_course_id"
+    t.index ["duplicated_assessment_id"], name: "fk__cama_duplicated_assessment_id", unique: true
+    t.index ["listing_id", "destination_course_id"], name: "index_cama_on_listing_id_and_destination_course_id"
+    t.index ["listing_id"], name: "fk__course_assessment_marketplace_adoptions_listing_id"
+    t.index ["updater_id"], name: "fk__cama_updater_id"
+  end
+
+  create_table "course_assessment_marketplace_listings", force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.boolean "published", default: false, null: false
+    t.datetime "first_published_at"
+    t.datetime "last_published_at"
+    t.bigint "publisher_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assessment_id"], name: "fk__course_assessment_marketplace_listings_assessment_id", unique: true
+    t.index ["creator_id"], name: "fk__course_assessment_marketplace_listings_creator_id"
+    t.index ["published"], name: "index_course_assessment_marketplace_listings_on_published"
+    t.index ["publisher_id"], name: "fk__course_assessment_marketplace_listings_publisher_id"
+    t.index ["updater_id"], name: "fk__course_assessment_marketplace_listings_updater_id"
   end
 
   create_table "course_assessment_plagiarism_checks", force: :cascade do |t|
@@ -1918,6 +1951,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_25_000000) do
   add_foreign_key "course_assessment_live_feedbacks", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_live_feedbacks", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_live_feedbacks", "users", column: "creator_id"
+  add_foreign_key "course_assessment_marketplace_adoptions", "course_assessment_marketplace_listings", column: "listing_id", name: "fk_course_assessment_marketplace_adoptions_listing_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_adoptions", "course_assessments", column: "duplicated_assessment_id", name: "fk_cama_duplicated_assessment_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_adoptions", "courses", column: "destination_course_id", name: "fk_cama_destination_course_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "creator_id", name: "fk_course_assessment_marketplace_adoptions_creator_id"
+  add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "updater_id", name: "fk_course_assessment_marketplace_adoptions_updater_id"
+  add_foreign_key "course_assessment_marketplace_listings", "course_assessments", column: "assessment_id", name: "fk_course_assessment_marketplace_listings_assessment_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_listings", "users", column: "creator_id", name: "fk_course_assessment_marketplace_listings_creator_id"
+  add_foreign_key "course_assessment_marketplace_listings", "users", column: "publisher_id", name: "fk_course_assessment_marketplace_listings_publisher_id"
+  add_foreign_key "course_assessment_marketplace_listings", "users", column: "updater_id", name: "fk_course_assessment_marketplace_listings_updater_id"
   add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
   add_foreign_key "course_assessment_plagiarism_checks", "jobs", name: "fk_course_assessment_plagiarism_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
