@@ -23,13 +23,14 @@ class Course::Rubric::LlmService
   # Calls the LLM service to evaluate the answer.
   #
   # @return [Hash] The LLM's evaluation response.
-  def evaluate
+  def evaluate(context: '')
     formatted_system_prompt = self.class.system_prompt.format(
       question_title: @question_adapter.question_title,
       question_description: @question_adapter.question_description,
       rubric_categories: @rubric_adapter.formatted_rubric_categories,
       custom_prompt: @rubric_adapter.grading_prompt,
-      model_answer: @rubric_adapter.model_answer
+      model_answer: @rubric_adapter.model_answer,
+      context: context
     )
     formatted_user_prompt = self.class.user_prompt.format(
       answer_text: @answer_adapter.answer_text

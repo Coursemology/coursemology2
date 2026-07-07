@@ -20,6 +20,10 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
     acting_as
   end
 
+  def grading_context_text
+    answer_text
+  end
+
   def assign_params(params)
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]

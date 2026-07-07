@@ -19,6 +19,10 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     answer_text.strip.encode(universal_newline: true)
   end
 
+  def grading_context_text
+    answer_text
+  end
+
   # If text response grading requires formula evaluation, it should be graded in a job.
   def grade_inline?
     question.actable.solutions.all? { |solution| !solution.spreadsheet_formula? }

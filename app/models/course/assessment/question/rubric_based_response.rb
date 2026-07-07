@@ -45,6 +45,16 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     ['rubric']
   end
 
+  # RBR answer text can feed another question's grading (as a sibling-answer context).
+  def provides_grading_context?
+    true
+  end
+
+  # RBR is rubric-graded, so it can pull sibling answers into its grading prompt.
+  def available_grading_context_types
+    ['sibling_question_answer']
+  end
+
   def question_type
     'RubricBasedResponse'
   end

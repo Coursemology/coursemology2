@@ -5,21 +5,9 @@
 # student's forum contributions.
 class Course::Assessment::Answer::ForumPostResponse::AnswerAdapter <
   Course::Assessment::Answer::RubricGrading::AnswerAdapter
+  # Same assembled text (selected posts + the student's response) used when this answer feeds another
+  # question's grading, so the two paths never drift.
   def answer_text
-    segments = []
-    @answer.post_packs.each_with_index do |pack, index|
-      segments << format_post_pack(pack, index + 1)
-    end
-    segments << @answer.answer_text unless @answer.answer_text.blank?
-    segments.join("\n\n")
-  end
-
-  private
-
-  def format_post_pack(pack, position)
-    lines = []
-    lines << "In reply to: #{pack.parent_text}" if pack.parent_text.present?
-    lines << pack.post_text
-    lines.join("\n")
+    @answer.grading_context_text
   end
 end

@@ -1,5 +1,11 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
+import {
+  GradingContextEntity,
+  GradingContextFormData,
+  GradingContextPostData,
+} from './grading-contexts';
+
 export interface RubricBasedResponseData {
   question: QuestionFormData;
   templateText: string | null;
@@ -8,6 +14,9 @@ export interface RubricBasedResponseData {
   aiGradingEnabled: boolean;
   aiGradingCustomPrompt: string;
   aiGradingModelAnswer: string;
+  gradingContexts: GradingContextEntity[];
+  availableGradingContextTypes: GradingContextFormData['availableGradingContextTypes'];
+  contextSourceOptions: GradingContextFormData['contextSourceOptions'];
 }
 
 export interface CategoryData {
@@ -71,5 +80,6 @@ export interface RubricBasedResponsePostData {
     ai_grading_enabled?: RubricBasedResponseData['aiGradingEnabled'];
     ai_grading_custom_prompt?: RubricBasedResponseData['aiGradingCustomPrompt'];
     ai_grading_model_answer?: RubricBasedResponseData['aiGradingModelAnswer'];
+    grading_contexts?: GradingContextPostData[];
   };
 }

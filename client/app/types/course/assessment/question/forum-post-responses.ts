@@ -1,5 +1,10 @@
 import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
+import {
+  GradingContextEntity,
+  GradingContextFormData,
+  GradingContextPostData,
+} from './grading-contexts';
 import { CategoryEntity } from './rubric-based-responses';
 
 export interface ForumPostResponseData<T extends 'new' | 'edit' = 'edit'> {
@@ -14,6 +19,9 @@ export interface ForumPostResponseData<T extends 'new' | 'edit' = 'edit'> {
   aiGradingEnabled: boolean;
   aiGradingCustomPrompt: string;
   aiGradingModelAnswer: string;
+  gradingContexts: GradingContextEntity[];
+  availableGradingContextTypes: GradingContextFormData['availableGradingContextTypes'];
+  contextSourceOptions: GradingContextFormData['contextSourceOptions'];
 }
 
 export type ForumPostResponseFormData<T extends 'new' | 'edit' = 'edit'> =
@@ -47,5 +55,6 @@ export interface ForumPostResponsePostData {
     ai_grading_enabled?: ForumPostResponseData['aiGradingEnabled'];
     ai_grading_custom_prompt?: ForumPostResponseData['aiGradingCustomPrompt'];
     ai_grading_model_answer?: ForumPostResponseData['aiGradingModelAnswer'];
+    grading_contexts?: GradingContextPostData[];
   };
 }

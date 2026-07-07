@@ -160,6 +160,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
     aiGradingEnabled: data.aiGradingEnabled ?? true,
     aiGradingCustomPrompt: data.aiGradingCustomPrompt ?? '',
     aiGradingModelAnswer: data.aiGradingModelAnswer ?? '',
+    gradingContexts: data.gradingContexts ?? [],
   };
 
   const handleSubmit = async (rawData: typeof initialValues): Promise<void> => {
@@ -169,6 +170,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
       aiGradingEnabled,
       aiGradingCustomPrompt,
       aiGradingModelAnswer,
+      gradingContexts,
       ...question
     } = rawData;
 
@@ -176,6 +178,9 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
       question,
       gradingMode,
       supportedGradingModes: data.supportedGradingModes,
+      gradingContexts,
+      availableGradingContextTypes: data.availableGradingContextTypes,
+      contextSourceOptions: data.contextSourceOptions,
       categories,
       aiGradingEnabled,
       aiGradingCustomPrompt,

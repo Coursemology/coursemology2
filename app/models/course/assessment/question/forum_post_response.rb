@@ -12,6 +12,17 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
     ['default', 'rubric']
   end
 
+  # A forum-post answer can feed another question's grading (as a sibling-answer context).
+  def provides_grading_context?
+    true
+  end
+
+  # When rubric-graded, a forum-post question can pull sibling answers and its own forum thread into its
+  # grading prompt. (The frontend only surfaces the context editor under rubric grading mode.)
+  def available_grading_context_types
+    ['sibling_question_answer', 'forum_thread']
+  end
+
   # Only rubric-graded forum questions with AI grading enabled are auto-gradable, and only once they have a
   # rubric to grade against. They run through the shared rubric auto-grader (same pipeline as RBR).
   def auto_gradable?

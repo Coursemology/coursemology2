@@ -47,6 +47,9 @@ const RubricBasedResponseForm = (
       aiGradingEnabled: rawData.aiGradingEnabled,
       aiGradingCustomPrompt: rawData.aiGradingCustomPrompt,
       aiGradingModelAnswer: rawData.aiGradingModelAnswer,
+      gradingContexts: rawData.gradingContexts,
+      availableGradingContextTypes: data.availableGradingContextTypes,
+      contextSourceOptions: data.contextSourceOptions,
     };
 
     setSubmitting(true);
@@ -100,6 +103,8 @@ const RubricBasedResponseForm = (
               />
             </Section>
             <AIGradingFields
+              availableGradingContextTypes={data.availableGradingContextTypes}
+              contextSourceOptions={data.contextSourceOptions}
               disabled={submitting}
               questionId={data.parentQuestionId}
             />

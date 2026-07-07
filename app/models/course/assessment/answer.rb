@@ -97,6 +97,12 @@ class Course::Assessment::Answer < ApplicationRecord
     end
   end
 
+  # The plain-text representation of this answer used when it feeds another question's rubric grading prompt
+  # (see Course::Assessment::Question::GradingContext). Nil for answer types that expose no meaningful text.
+  def grading_context_text
+    actable&.self_respond_to?(:grading_context_text) ? actable.grading_context_text : nil
+  end
+
   # Resets the answer by modifying the answer to the default.
   #
   # @return [Course::Assessment::Answer] The reset answer corresponding to the question. It is
