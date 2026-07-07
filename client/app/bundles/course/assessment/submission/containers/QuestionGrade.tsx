@@ -83,6 +83,8 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const published = workflowState === workflowStates.Published;
 
   const isProgrammingQuestion = question.type === QuestionType.Programming;
+  const isTextResponseAndAutogradable =
+    question.type === QuestionType.TextResponse && question.autogradable;
   const editable = !attempting && graderView;
 
   const isNotGradedAndNotPublished =
@@ -319,9 +321,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           />
         )}
 
-        {editable && isProgrammingQuestion && (
-          <ReevaluateButton questionId={questionId} />
-        )}
+        {editable &&
+          (isProgrammingQuestion || isTextResponseAndAutogradable) && (
+            <ReevaluateButton questionId={questionId} />
+          )}
 
         {editable && isRubricBasedResponseAndAutogradable && (
           <div className="flex flex-row items-center">

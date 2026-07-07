@@ -51,7 +51,7 @@ end
 
 if (
   can_grade || (@assessment.show_rubric_to_students? && @submission.published?)
-) && last_attempt&.auto_grading&.result
+) && last_attempt&.auto_grading&.result&.dig('evaluation_results')
   graded_solutions =
     last_attempt.auto_grading.result['evaluation_results'].index_by do |result|
       result['solution_id']
