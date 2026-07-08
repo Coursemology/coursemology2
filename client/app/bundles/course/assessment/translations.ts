@@ -2043,6 +2043,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.liveFeedbackNotSupported',
     defaultMessage: 'Get Help is not supported for {languageName}.',
   },
+  importAssessments: {
+    id: 'course.assessment.AssessmentsIndex.importAssessments',
+    defaultMessage: 'Import Assessments',
+  },
 });
 
 export default translations;

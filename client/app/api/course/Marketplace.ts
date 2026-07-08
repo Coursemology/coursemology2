@@ -1,5 +1,7 @@
 import { AxiosResponse } from 'axios';
 
+import { MarketplaceListing } from 'course/marketplace/types';
+
 import BaseCourseAPI from './Base';
 
 export default class MarketplaceAPI extends BaseCourseAPI {
@@ -17,5 +19,11 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     return this.client.delete(
       `/courses/${this.courseId}/assessments/${assessmentId}/marketplace_listing`,
     );
+  }
+
+  index(): Promise<
+    AxiosResponse<{ listings: MarketplaceListing[]; canAccess: boolean }>
+  > {
+    return this.client.get(this.#urlPrefix);
   }
 }

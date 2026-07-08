@@ -1493,6 +1493,9 @@
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "평가 마감 알림 이메일이 성공적으로 발송되었습니다."
   },
+  "course.assessment.AssessmentsIndex.importAssessments": {
+    "defaultMessage": "평가 가져오기"
+  },
   "course.assessment.create.createAsDraft": {
     "defaultMessage": "드래프트로 생성"
   },
@@ -4304,6 +4307,9 @@
   "course.componentTitles.course_announcements_component": {
     "defaultMessage": "공지 사항"
   },
+  "course.componentTitles.course_assessment_marketplace_component": {
+    "defaultMessage": "평가 마켓플레이스"
+  },
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "평가"
   },
@@ -4561,6 +4567,9 @@
   },
   "course.courses.SidebarItem.admin.duplication": {
     "defaultMessage": "데이터 복제"
+  },
+  "course.courses.SidebarItem.admin.marketplace": {
+    "defaultMessage": "평가 마켓플레이스"
   },
   "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
     "defaultMessage": "타임라인 디자이너"
@@ -6049,6 +6058,39 @@
   },
   "course.marketplace.deleteWarning": {
     "defaultMessage": "이 평가는 평가 마켓플레이스에 있습니다. 삭제하면 마켓플레이스에서 제거되고 채택 기록도 삭제됩니다. 다른 강좌의 기존 복사본은 영향을 받지 않습니다."
+  },
+  "course.marketplace.pageTitle": {
+    "defaultMessage": "평가 마켓플레이스"
+  },
+  "course.marketplace.colTitle": {
+    "defaultMessage": "제목"
+  },
+  "course.marketplace.colQuestions": {
+    "defaultMessage": "문제"
+  },
+  "course.marketplace.colAdoptions": {
+    "defaultMessage": "채택"
+  },
+  "course.marketplace.colActions": {
+    "defaultMessage": "작업"
+  },
+  "course.marketplace.previewAction": {
+    "defaultMessage": "미리보기"
+  },
+  "course.marketplace.searchPlaceholder": {
+    "defaultMessage": "제목으로 검색"
+  },
+  "course.marketplace.sortLabel": {
+    "defaultMessage": "정렬 기준"
+  },
+  "course.marketplace.sortMostAdopted": {
+    "defaultMessage": "가장 많이 채택됨"
+  },
+  "course.marketplace.sortNewest": {
+    "defaultMessage": "최신순"
+  },
+  "course.marketplace.duplicateN": {
+    "defaultMessage": "{n}개 평가 복제"
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "다운로드에 실패했습니다. 나중에 다시 시도하세요."
