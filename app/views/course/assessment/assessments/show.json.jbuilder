@@ -77,7 +77,11 @@ json.permissions do
   json.canManage can_manage
   json.canObserve can_observe
   json.canInviteToKoditsu can?(:invite_to_koditsu, assessment)
+  json.canPublishToMarketplace((can?(:publish_to_marketplace, @assessment) && current_user&.administrator?) || false)
 end
+
+json.isPublishedToMarketplace @assessment.marketplace_listing&.published? || false
+json.marketplaceListingUrl course_assessment_marketplace_listing_path(current_course, @assessment)
 
 unless can_attempt
   not_started_for_user = assessment_not_started(assessment.time_for(current_course_user))

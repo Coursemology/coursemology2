@@ -18,6 +18,7 @@ import LeaderboardAPI from './Leaderboard';
 import LearningMapAPI from './LearningMap';
 import LessonPlanAPI from './LessonPlan';
 import LevelAPI from './Level';
+import MarketplaceAPI from './Marketplace';
 import MaterialFoldersAPI from './MaterialFolders';
 import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
@@ -55,6 +56,7 @@ const CourseAPI = {
   learningMap: new LearningMapAPI(),
   lessonPlan: new LessonPlanAPI(),
   level: new LevelAPI(),
+  marketplace: new MarketplaceAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
   personalTimes: new PersonalTimesAPI(),

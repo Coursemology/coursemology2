@@ -286,6 +286,8 @@ Rails.application.routes.draw do
             resources :mock_answers, on: :member, only: [:index, :create, :destroy]
           end
 
+          resource :marketplace_listing, only: [:create, :destroy]
+
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
