@@ -29,4 +29,31 @@ class Course::Duplication::BaseService
   def initialize_duplicator(*)
     raise NotImplementedError, 'To be implemented by specific duplication service.'
   end
+
+  # Hands every duplicated assessment its own copy so it can record a marketplace adoption. Copies
+  # made outside +Course::Assessment::Marketplace::DuplicationJob+ -- selected object duplications
+  # and full course duplications that happen to carry a listed assessment along -- are adoptions
+  # too, and the listing has to know about them to reach every course holding a copy.
+  #
+  # This sweep lives in the duplication service rather than in a model's +after_duplicate_save+
+  # hook because that hook only runs for the top-level objects of an object duplication, and never
+  # at all during a course duplication -- both of which are paths this has to cover. The per-copy
+  # rule itself belongs to the assessment: see +Course::Assessment#record_marketplace_adoption+.
+  #
+  # Must be called inside the duplication transaction, after the duplicates have been saved.
+  def record_marketplace_adoptions
+    destination_course = @options[:destination_course] || duplicator.options[:destination_course]
+    return unless destination_course
+
+    duplicated_assessment_pairs.each do |source, duplicate|
+      source.record_marketplace_adoption(duplicate, destination_course, @options[:current_user])
+    end
+  end
+
+  # @return [Hash] Source-to-duplicate pairs for every assessment this duplication produced.
+  def duplicated_assessment_pairs
+    duplicator.duplicated_objects.select do |source, duplicate|
+      source.is_a?(Course::Assessment) && duplicate&.persisted?
+    end
+  end
 end

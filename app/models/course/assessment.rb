@@ -250,6 +250,28 @@ class Course::Assessment < ApplicationRecord
     questions.any?(&:csv_downloadable?)
   end
 
+  # Records +duplicate+, a copy of this assessment, as an adoption of this assessment's marketplace
+  # listing. Every copy of a listed assessment is an adoption, whichever duplication path produced
+  # it, so this is called by the duplication services rather than by the marketplace's own job.
+  #
+  # The listing itself is never carried over -- +initialize_duplicate+ below does not duplicate the
+  # +marketplace_listing+ association -- so a copy always starts out unlisted.
+  #
+  # @param [Course::Assessment] duplicate The saved copy of this assessment.
+  # @param [Course] destination_course The course the copy was duplicated into.
+  # @param [User] current_user The user who triggered the duplication.
+  def record_marketplace_adoption(duplicate, destination_course, current_user)
+    return unless marketplace_listing&.published?
+
+    Course::Assessment::Marketplace::Adoption.create!(
+      listing: marketplace_listing,
+      destination_course: destination_course,
+      duplicated_assessment: duplicate,
+      creator: current_user,
+      updater: current_user
+    )
+  end
+
   def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     copy_attributes(other, duplicator)
     target_tab = initialize_duplicate_tab(duplicator, other)
