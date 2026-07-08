@@ -19,9 +19,33 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
     end
   end
 
+  def duplicate
+    listings = authorized_listings
+    job = Course::Assessment::Marketplace::DuplicationJob.perform_later(
+      listings.map(&:id), current_course, duplicate_params[:destination_tab_id].to_i,
+      current_user: current_user
+    ).job
+    render partial: 'jobs/submitted', locals: { job: job }
+  end
+
   private
 
   def authorize_access!
     authorize!(:access_marketplace, current_course)
+  end
+
+  def authorized_listings
+    listings = ActsAsTenant.without_tenant do
+      Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).includes(:assessment)
+    end
+    raise CanCan::AccessDenied if listings.empty?
+
+    listings.each { |listing| authorize!(:duplicate_from_marketplace, listing.assessment) }
+    authorize!(:duplicate_to, current_course)
+    listings
+  end
+
+  def duplicate_params
+    params.permit(:destination_tab_id, listing_ids: [])
   end
 end
