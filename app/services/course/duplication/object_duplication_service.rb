@@ -45,6 +45,9 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
       duplicated = duplicator.duplicate(objects)
       before_save(objects, duplicated)
       save_success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
+      # Recorded before `after_save` so that a failure here rolls the transaction back before the
+      # models' post-duplication callbacks have run, rather than undoing their work afterwards.
+      record_marketplace_adoptions if save_success
       after_save_success = save_success && after_save(objects, duplicated)
       raise ActiveRecord::Rollback unless after_save_success
 

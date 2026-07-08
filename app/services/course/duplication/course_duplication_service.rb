@@ -73,6 +73,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
 
         update_course_settings(new_course, source_course)
         update_sidebar_settings(duplicator, new_course, source_course)
+        record_marketplace_adoptions
 
         # As per carrierwave v2.1.0, carrierwave image mounter that retains uploaded file as a cache
         # is reset upon reload (in our case it is new_course.reload).

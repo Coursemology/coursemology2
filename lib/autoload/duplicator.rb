@@ -2,6 +2,12 @@
 class Duplicator
   attr_reader :options, :mode
 
+  # @!attribute [r] duplicated_objects
+  #   Maps each duplicated source object to its duplicate, or to +nil+ if the source was excluded.
+  #   Duplication services use this to run bookkeeping over everything a duplication produced.
+  #   @return [Hash]
+  attr_reader :duplicated_objects
+
   # Create an instance of Duplicator to track duplicated objects.
   #
   # Options are used to store information that persists across duplication of objects.
