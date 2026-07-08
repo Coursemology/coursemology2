@@ -9319,5 +9319,86 @@
   },
   "lib.translations.table.column.newExternalId": {
     "defaultMessage": "新外部编号"
+  },
+  "course.assessment.question.forumPostResponse.confirmAdvanceCancel": {
+    "defaultMessage": "Cancel"
+  },
+  "course.assessment.question.forumPostResponse.confirmAdvancePrimary": {
+    "defaultMessage": "Save"
+  },
+  "course.assessment.question.forumPostResponse.confirmAdvanceText": {
+    "defaultMessage": "Your changes make the rubric structurally incompatible with existing grades. We will carry forward grading data, but we strongly recommend double-checking answer grades as some data may be lost. Are you sure you wish to proceed?"
+  },
+  "course.assessment.question.forumPostResponse.confirmAdvanceTitle": {
+    "defaultMessage": "Warning: Saving Incompatible Rubric"
+  },
+  "course.assessment.question.gradingContext.add": {
+    "defaultMessage": "Add context"
+  },
+  "course.assessment.question.gradingContext.hint": {
+    "defaultMessage": "Pull extra material from other sources into the AI grading custom prompt. If needed, each context can be referenced by its identifier in the rubric or custom prompt (e.g. \"This answer is a follow_up of '{'previous_question_answer'}'.\")."
+  },
+  "course.assessment.question.gradingContext.identifier": {
+    "defaultMessage": "Identifier"
+  },
+  "course.assessment.question.gradingContext.remove": {
+    "defaultMessage": "Remove context"
+  },
+  "course.assessment.question.gradingContext.source": {
+    "defaultMessage": "Source"
+  },
+  "course.assessment.question.gradingContext.thisQuestion": {
+    "defaultMessage": "(This question)"
+  },
+  "course.assessment.question.gradingContext.title": {
+    "defaultMessage": "Grading Context"
+  },
+  "course.assessment.question.gradingContext.type": {
+    "defaultMessage": "Type"
+  },
+  "course.assessment.question.gradingContext.typeForumThread": {
+    "defaultMessage": "Forum Post Response Thread"
+  },
+  "course.assessment.question.gradingContext.typeForumThreadHint": {
+    "defaultMessage": "Context is pulled from the root post of the thread containing the post(s) the student has selected."
+  },
+  "course.assessment.question.gradingContext.typePlaceholder": {
+    "defaultMessage": "Select a context type"
+  },
+  "course.assessment.question.gradingContext.typeSiblingQuestionAnswer": {
+    "defaultMessage": "Sibling Question Answer"
+  },
+  "course.assessment.question.gradingContext.typeSiblingQuestionAnswerHint": {
+    "defaultMessage": "Context is pulled from the same student's answer to another question in this assessment."
+  },
+  "course.assessment.question.gradingMode.defaultDescription": {
+    "defaultMessage": "Graders assign a single numerical grade to each student answer."
+  },
+  "course.assessment.question.gradingMode.defaultName": {
+    "defaultMessage": "Default"
+  },
+  "course.assessment.question.gradingMode.header": {
+    "defaultMessage": "Grading mode"
+  },
+  "course.assessment.question.gradingMode.hint": {
+    "defaultMessage": "Choose how submissions to this question are graded."
+  },
+  "course.assessment.question.gradingMode.rubricDescription": {
+    "defaultMessage": "Graders assign categorical grades based on a predefined rubric, with optional AI assistance."
+  },
+  "course.assessment.question.gradingMode.rubricName": {
+    "defaultMessage": "Rubric-based"
+  },
+  "course.assessment.question.rubricPlayground.mockContextHeading": {
+    "defaultMessage": "{identifier}: context"
+  },
+  "course.assessment.question.rubricPlayground.mockContextHeadingForumThread": {
+    "defaultMessage": "{identifier}: Conversation root of answer post"
+  },
+  "course.assessment.question.rubricPlayground.mockContextHeadingSibling": {
+    "defaultMessage": "{identifier}: answer to \"{title}\""
+  },
+  "course.assessment.question.rubricPlayground.mockContextPlaceholder": {
+    "defaultMessage": "Content the grader would see for this context"
   }
 }

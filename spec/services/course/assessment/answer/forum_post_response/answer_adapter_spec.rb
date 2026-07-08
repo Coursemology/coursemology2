@@ -8,11 +8,11 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse::AnswerAdapter do
     it 'delegates to the answer\'s grading context text (posts + response), shared with sibling context' do
       answer = instance_double(
         Course::Assessment::Answer::ForumPostResponse,
-        grading_context_text: "In reply to: Parent body\nFirst body\n\nMy reflection"
+        grading_context_text: "First body\n\nMy reflection"
       )
 
       expect(described_class.new(answer, rubric).answer_text).
-        to eq("In reply to: Parent body\nFirst body\n\nMy reflection")
+        to eq("First body\n\nMy reflection")
     end
   end
 end

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import {
   RubricAnswerData,
+  RubricGradingContextData,
   RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
@@ -8,11 +9,28 @@ import CourseAPI from 'api/course';
 
 export const createQuestionMockAnswer = async (
   answerText: string,
+  gradingContexts: { gradingContextId: number; content: string }[] = [],
 ): Promise<number> => {
   try {
-    const response =
-      await CourseAPI.assessment.question.mockAnswers.create(answerText);
+    const response = await CourseAPI.assessment.question.mockAnswers.create(
+      answerText,
+      gradingContexts,
+    );
     return response.data.id;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const fetchQuestionRubricGradingContexts = async (): Promise<
+  RubricGradingContextData[]
+> => {
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.gradingContexts();
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
 

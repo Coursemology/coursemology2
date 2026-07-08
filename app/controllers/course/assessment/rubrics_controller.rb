@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 class Course::Assessment::RubricsController < Course::Assessment::QuestionsController # rubocop:disable Metrics/ClassLength
-  load_resource :rubric, class: 'Course::Rubric', through: :question, except: [:index, :rubric_answers]
+  load_resource :rubric, class: 'Course::Rubric', through: :question,
+                         except: [:index, :rubric_answers, :grading_contexts]
 
   def index
-    head :not_found and return unless @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
+    head :not_found and return unless rubric_graded_question?
 
-    if @question.rubrics.empty?
+    # Legacy RBR questions may not have a v2 rubric yet; forum-post rubrics are always built directly as v2.
+    if @question.rubrics.empty? && @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
       v2_rubric = Course::Rubric.build_from_v1(@question.specific, current_course)
       v2_rubric.save!
     end
@@ -54,9 +56,17 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   end
 
   def rubric_answers
-    head :not_found and return unless @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
+    head :not_found and return unless rubric_graded_question?
 
     @answers = @question.answers.without_attempting_state.includes({ submission: { creator: :course_users } })
+  end
+
+  # The question's grading contexts, so the playground's "write a custom answer" flow can capture the
+  # author-supplied content for each (a mock answer has no submission to resolve context from).
+  def grading_contexts
+    head :not_found and return unless rubric_graded_question?
+
+    @grading_contexts = @question.grading_contexts
   end
 
   def fetch_answer_evaluations
@@ -118,7 +128,9 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     rubric_adapter = Course::Rubric::RubricAdapter.new(@rubric)
     answer_adapter = Course::Assessment::Question::MockAnswer::AnswerAdapter.new(mock_answer, @mock_answer_evaluation)
 
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
+    # Mock answers have no submission, so their context is the author-supplied content on the mock answer.
+    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).
+                   evaluate(context: mock_answer.grading_context_prompt)
     answer_adapter.save_llm_results(llm_response)
 
     render partial: 'course/rubrics/mock_answer_evaluation', locals: { answer_evaluation: @mock_answer_evaluation }
@@ -126,7 +138,7 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
 
   def evaluate_answer
     answer = @question.answers.find(params.permit(:answer_id)[:answer_id])
-    head :bad_request and return unless answer&.specific.is_a?(Course::Assessment::Answer::RubricBasedResponse)
+    head :bad_request and return unless rubric_graded_question?
 
     # Reuse (and un-hide) the existing playground evaluation for this (answer, rubric) if one exists, else
     # start a fresh one. Re-evaluating a dismissed answer brings it back into the table.
@@ -137,7 +149,9 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     rubric_adapter = Course::Rubric::RubricAdapter.new(@rubric)
     answer_adapter = Course::Assessment::Answer::RubricPlaygroundAnswerAdapter.new(answer, @answer_evaluation)
 
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
+    # The playground mirrors real grading, so it sees the same resolved context (from the answer's submission).
+    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).
+                   evaluate(context: resolved_context(answer))
     answer_adapter.save_llm_results(llm_response)
 
     render partial: 'course/rubrics/answer_evaluation', locals: { answer_evaluation: @answer_evaluation }
@@ -186,6 +200,17 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   end
 
   private
+
+  # The playground is available for any rubric-graded question (RBR, forum post, ...), not just RBR.
+  def rubric_graded_question?
+    @question.grading_mode_rubric?
+  end
+
+  # The grading contexts resolved from the answer's own submission, so the playground sees what real grading
+  # would (empty string when the question has no contexts).
+  def resolved_context(answer)
+    Course::Assessment::Question::GradingContext::Resolver.new(answer.question, answer.submission).resolve
+  end
 
   # Repoints active_rubric_id (on the polymorphic question) at @rubric and advances graded answers to it.
   # Rolls the whole change back and returns :advance_required when the change is incompatible with graded

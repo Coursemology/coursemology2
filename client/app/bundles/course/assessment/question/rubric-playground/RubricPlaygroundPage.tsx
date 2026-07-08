@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import { RubricAnswerEvaluationData } from 'types/course/rubrics';
+import {
+  RubricAnswerEvaluationData,
+  RubricGradingContextData,
+} from 'types/course/rubrics';
 import { getIdFromUnknown } from 'utilities';
 
 import CourseAPI from 'api/course';
@@ -21,6 +24,7 @@ import {
   initializeAnswerEvaluations,
 } from './operations/answers';
 import {
+  fetchQuestionRubricGradingContexts,
   fetchQuestionRubricMockAnswers,
   fetchRubricMockAnswerEvaluations,
   initializeMockAnswerEvaluations,
@@ -56,6 +60,9 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
   );
 
   const [selectedRubricId, setSelectedRubricId] = useState(0);
+  const [gradingContexts, setGradingContexts] = useState<
+    RubricGradingContextData[]
+  >([]);
   const [activeTab, setActiveTab] = useState<RubricPlaygroundTab>(
     RubricPlaygroundTab.EVALUATE,
   );
@@ -149,6 +156,8 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
 
       const mockAnswers = await fetchQuestionRubricMockAnswers();
       dispatch(questionRubricsActions.loadMockAnswers(mockAnswers));
+
+      setGradingContexts(await fetchQuestionRubricGradingContexts());
 
       const answerEvaluations =
         await fetchRubricEvaluationsData(mostRecentRubricId);
@@ -315,6 +324,7 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
                 answerEvaluatedCount={selectedRubricData.answerEvaluatedCount}
                 answerEvaluationTableData={answerEvaluationTableData}
                 compareCount={compareCount}
+                gradingContexts={gradingContexts}
                 isComparing={activeTab === RubricPlaygroundTab.COMPARE}
                 selectedRubric={selectedRubricData.state}
               />

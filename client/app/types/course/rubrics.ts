@@ -77,6 +77,16 @@ export interface RubricMockAnswerEvaluationData {
   jobUrl?: string;
 }
 
+// A question's grading context, used by the playground's "write a custom answer" flow to capture
+// author-supplied content per context.
+export interface RubricGradingContextData {
+  id: number;
+  identifier: string;
+  contextType: string;
+  // The sibling source question's title (for the field heading); null for intrinsic providers (forum thread).
+  sourceTitle: string | null;
+}
+
 export interface RubricAnswerData {
   id: number;
   title: string;

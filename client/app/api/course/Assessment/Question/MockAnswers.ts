@@ -13,9 +13,18 @@ export default class MockAnswersAPI extends BaseAssessmentAPI {
     return this.client.get(this.#urlPrefix);
   }
 
-  create(answerText: string): APIResponse<{ id: number }> {
+  create(
+    answerText: string,
+    gradingContexts: { gradingContextId: number; content: string }[] = [],
+  ): APIResponse<{ id: number }> {
     return this.client.post(this.#urlPrefix, {
-      mock_answer: { answer_text: answerText },
+      mock_answer: {
+        answer_text: answerText,
+        grading_contexts_attributes: gradingContexts.map((context) => ({
+          grading_context_id: context.gradingContextId,
+          content: context.content,
+        })),
+      },
     });
   }
 
