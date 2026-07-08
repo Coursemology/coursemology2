@@ -13,6 +13,8 @@ import {
   AssessmentDeleteResult,
 } from 'types/course/assessment/assessments';
 
+import PublishToMarketplaceButton from 'course/marketplace/components/PublishToMarketplaceButton';
+import marketplaceTranslations from 'course/marketplace/translations';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -37,6 +39,9 @@ const AssessmentShowHeader = (
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
   const [inviting, setInviting] = useState(false);
+  const [publishedToMarketplace, setPublishedToMarketplace] = useState(
+    assessment.isPublishedToMarketplace,
+  );
   const navigate = useNavigate();
 
   const handleDelete = (): Promise<void> => {
@@ -72,7 +77,14 @@ const AssessmentShowHeader = (
           onClick={handleDelete}
           title={t(translations.sureDeletingAssessment)}
         >
-          <PromptText>{t(translations.deletingThisAssessment)}</PromptText>
+          <PromptText>
+            {t(translations.deletingThisAssessment)}
+            {assessment.isPublishedToMarketplace && (
+              <PromptText>
+                {t(marketplaceTranslations.deleteWarning)}
+              </PromptText>
+            )}
+          </PromptText>
           <PromptText className="italic">{assessment.title}</PromptText>
           <PromptText>{t(translations.deleteAssessmentWarning)}</PromptText>
         </DeleteButton>
@@ -145,6 +157,16 @@ const AssessmentShowHeader = (
             </IconButton>
           </Tooltip>
         )}
+
+      {assessment.permissions.canPublishToMarketplace && (
+        <PublishToMarketplaceButton
+          assessment={{
+            ...assessment,
+            isPublishedToMarketplace: publishedToMarketplace,
+          }}
+          onChange={setPublishedToMarketplace}
+        />
+      )}
 
       {assessment.actionButtonUrl && (
         <Link
