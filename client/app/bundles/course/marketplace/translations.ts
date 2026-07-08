@@ -40,4 +40,40 @@ export default defineMessages({
     defaultMessage:
       'This assessment is in the Assessment Marketplace. Deleting it removes it from the marketplace and deletes its adoption history. Existing copies in other courses are unaffected.',
   },
+  pageTitle: {
+    id: 'course.marketplace.pageTitle',
+    defaultMessage: 'Assessment Marketplace',
+  },
+  colTitle: { id: 'course.marketplace.colTitle', defaultMessage: 'Title' },
+  colQuestions: {
+    id: 'course.marketplace.colQuestions',
+    defaultMessage: 'Questions',
+  },
+  colAdoptions: {
+    id: 'course.marketplace.colAdoptions',
+    defaultMessage: 'Adoptions',
+  },
+  colActions: {
+    id: 'course.marketplace.colActions',
+    defaultMessage: 'Actions',
+  },
+  preview: {
+    id: 'course.marketplace.previewAction',
+    defaultMessage: 'Preview',
+  },
+  searchPlaceholder: {
+    id: 'course.marketplace.searchPlaceholder',
+    defaultMessage: 'Search by title',
+  },
+  sortLabel: { id: 'course.marketplace.sortLabel', defaultMessage: 'Sort by' },
+  sortMostAdopted: {
+    id: 'course.marketplace.sortMostAdopted',
+    defaultMessage: 'Most adopted',
+  },
+  sortNewest: { id: 'course.marketplace.sortNewest', defaultMessage: 'Newest' },
+  duplicateN: {
+    id: 'course.marketplace.duplicateN',
+    defaultMessage:
+      '{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}',
+  },
 });

@@ -10,6 +10,7 @@ import forumsRouter from './forums';
 import gradebookRouter from './gradebook';
 import groupsRouter from './groups';
 import lessonPlanRouter from './lessonPlan';
+import marketplaceRouter from './marketplace';
 import materialsRouter from './materials';
 import plagiarismRouter from './plagiarism';
 import scholaisticRouter from './scholaistic';
@@ -45,6 +46,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     gradebookRouter(t),
     groupsRouter(t),
     lessonPlanRouter(t),
+    marketplaceRouter(t),
     materialsRouter(t),
     plagiarismRouter(t),
     statisticsRouter(t),

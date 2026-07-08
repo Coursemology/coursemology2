@@ -51,6 +51,14 @@ const translations = defineMessages({
     id: 'course.componentTitles.course_announcements_component',
     defaultMessage: 'Announcements',
   },
+  course_assessment_marketplace_component: {
+    id: 'course.componentTitles.course_assessment_marketplace_component',
+    defaultMessage: 'Assessment Marketplace',
+  },
+  admin_marketplace: {
+    id: 'course.courses.SidebarItem.admin.marketplace',
+    defaultMessage: 'Assessment Marketplace',
+  },
   course_assessments_component: {
     id: 'course.componentTitles.course_assessments_component',
     defaultMessage: 'Assessments',

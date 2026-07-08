@@ -612,6 +612,13 @@ Rails.application.routes.draw do
         get 'learn_settings', to: 'stories#learn_settings'
         get 'mission_control', to: 'stories#mission_control'
       end
+
+      scope module: 'assessment/marketplace' do
+        get 'marketplace' => 'listings#index', as: :marketplace
+        resources :listings, only: [:show], path: 'marketplace/listings' do
+          post 'duplicate', on: :collection
+        end
+      end
     end
   end
 

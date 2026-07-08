@@ -9,6 +9,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import { fetchAssessments } from '../../operations/assessments';
 
 import AssessmentsTable from './AssessmentsTable';
+import ImportAssessmentsButton from './ImportAssessmentsButton';
 import NewAssessmentFormButton from './NewAssessmentFormButton';
 
 const AssessmentsIndex = (): JSX.Element => {
@@ -30,17 +31,23 @@ const AssessmentsIndex = (): JSX.Element => {
         <Page
           actions={
             data.display.canCreateAssessments && (
-              <NewAssessmentFormButton
-                key={data.display.tabId}
-                // @ts-ignore: component is still written in JSX
-                canManageMonitor={data.display.canManageMonitor}
-                categoryId={data.display.category.id}
-                gamified={data.display.isGamified}
-                isKoditsuExamEnabled={data.display.isKoditsuExamEnabled}
-                monitoringEnabled={data.display.isMonitoringEnabled}
-                randomizationAllowed={data.display.allowRandomization}
-                tabId={data.display.tabId}
-              />
+              <>
+                <ImportAssessmentsButton
+                  canImport={data.display.canCreateAssessments}
+                  tabId={data.display.tabId}
+                />
+                <NewAssessmentFormButton
+                  key={data.display.tabId}
+                  // @ts-ignore: component is still written in JSX
+                  canManageMonitor={data.display.canManageMonitor}
+                  categoryId={data.display.category.id}
+                  gamified={data.display.isGamified}
+                  isKoditsuExamEnabled={data.display.isKoditsuExamEnabled}
+                  monitoringEnabled={data.display.isMonitoringEnabled}
+                  randomizationAllowed={data.display.allowRandomization}
+                  tabId={data.display.tabId}
+                />
+              </>
             )
           }
           title={data.display.category.title}
