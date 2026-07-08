@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+class Course::AssessmentMarketplaceComponent < SimpleDelegator
+  include Course::ControllerComponentHost::Component
+
+  def sidebar_items
+    return [] unless can?(:access_marketplace, current_course)
+
+    [
+      {
+        key: :admin_marketplace,
+        icon: :marketplace,
+        type: :admin,
+        weight: 6,
+        path: course_marketplace_path(current_course)
+      }
+    ]
+  end
+end
