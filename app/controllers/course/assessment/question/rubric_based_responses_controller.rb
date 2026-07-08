@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller
-  include Course::Assessment::Question::RubricBasedResponseQuestionConcern
+class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller # rubocop:disable Metrics/ClassLength
   include Course::Assessment::Question::RubricBasedResponseControllerConcern
 
   build_and_authorize_new_question :rubric_based_response_question,
@@ -18,6 +17,7 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
       success = add_bonus_category_to_rubric_based_question
 
       if success
+        sync_active_rubric
         render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
       else
         head :bad_request
@@ -41,9 +41,12 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
   end
 
   def update
-    update_skill_ids_if_params_present(rubric_based_response_question_params[:question_assessment])
-
-    if update_rubric_based_response_question
+    case update_rubric_based_response_question
+    when :needs_confirmation
+      # The rubric changed incompatibly and there are graded answers: nothing was saved. The frontend
+      # confirms with the user and re-submits the same update with confirm_rubric_advance: true.
+      render json: { error: 'rubric_advance_confirmation_required' }, status: :conflict
+    when :synced
       render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
       render json: { errors: @rubric_based_response_question.errors.messages.values.flatten.to_sentence },
@@ -60,12 +63,6 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
       error = @rubric_based_response_question.errors.messages.values.flatten.to_sentence
       render json: { errors: error }, status: :bad_request
     end
-  end
-
-  def migrate_rubric
-    v2_rubric = Course::Rubric.build_from_v1(@rubric_based_response_question, current_course)
-    v2_rubric.save!
-    render partial: 'course/rubrics/rubric', locals: { rubric: v2_rubric }, status: :created
   end
 
   private
@@ -89,17 +86,42 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     end
   end
 
+  # Updates the v1 question and syncs the v2 active rubric. Returns :synced on success, :failed on a
+  # validation error, or :needs_confirmation when an incompatible rubric change with graded answers needs
+  # the user's confirmation -- in which case the entire transaction is rolled back (nothing is saved) so the
+  # user can confirm on the still-open edit page and re-submit with confirm_rubric_advance: true.
   def update_rubric_based_response_question
-    ActiveRecord::Base.transaction do
-      existing_category_ids = @rubric_based_response_question.categories.pluck(:id)
-      raise ActiveRecord::Rollback unless @rubric_based_response_question.update(
-        rubric_based_response_question_params.except(:question_assessment)
-      )
+    needs_confirmation = false
+    saved = ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback unless apply_question_update
 
-      new_category_ids = @rubric_based_response_question.reload.categories.pluck(:id) - existing_category_ids
-      create_new_category_grade_instances(new_category_ids) if new_category_ids.present?
-      update_all_submission_answer_grades
+      if sync_active_rubric(confirm_advance: confirm_rubric_advance?) == :advance_required
+        needs_confirmation = true
+        raise ActiveRecord::Rollback
+      end
+      true
     end
+
+    return :needs_confirmation if needs_confirmation
+
+    saved ? :synced : :failed
+  end
+
+  # Updates the v1 question (skills + attributes) and re-clamps grades when the maximum changed. Returns
+  # whether the question itself saved.
+  def apply_question_update
+    update_skill_ids_if_params_present(rubric_based_response_question_params[:question_assessment])
+    previous_maximum_grade = @rubric_based_response_question.maximum_grade
+    return false unless @rubric_based_response_question.update(
+      rubric_based_response_question_params.except(:question_assessment)
+    )
+
+    clamp_answer_grades_to_maximum if @rubric_based_response_question.maximum_grade != previous_maximum_grade
+    true
+  end
+
+  def confirm_rubric_advance?
+    ActiveRecord::Type::Boolean.new.cast(params[:confirm_rubric_advance])
   end
 
   def rubric_based_response_question_params

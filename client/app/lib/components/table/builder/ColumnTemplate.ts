@@ -23,6 +23,7 @@ interface ColumnTemplate<D extends Data> {
   title: StringOrTemplateHeader<D, unknown>;
   cell: (datum: D) => ReactNode;
   of?: keyof D;
+  accessorFn?: (datum: D) => unknown;
   id?: string;
   unless?: boolean;
   sortable?: boolean;
@@ -36,6 +37,7 @@ interface ColumnTemplate<D extends Data> {
   className?: string;
   colSpan?: (datum: D) => number;
   cellUnless?: (datum: D) => boolean;
+  defaultVisible?: boolean;
 }
 
 export default ColumnTemplate;

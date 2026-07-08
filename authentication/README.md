@@ -59,18 +59,29 @@ The local setup requires the authentication provider container to connect to the
 
   ```
 
-To ensure the smoothness in signing-in to Coursemology, you must ensure that the configuration for `KEYCLOAK_BE_CLIENT_SECRET` inside `.env` matches with the settings inside Keycloak. To do so, you can simply do the following instructions:
+For certain operations within Coursemology (such as adding/editing instances), you must ensure that the client_secret defined in the Rails credentials matches with the settings inside Keycloak. To do so, you can simply do the following instructions:
 
-1. Sign-in to authentication pages by inputting the following credentials:
+1. Sign-in to the Keycloak admin authentication page
 
-> Username: `admin` (whatever defined in KEYCLOAK_ADMIN inside ./.env)
+> Username: `admin` (defined in `KEYCLOAK_ADMIN` inside ./.env)
 >
-> Password: `password` (whatever defined in KEYCLOAK_ADMIN_PASSWORD inside ./.env)
+> Password: `password` (defined in `KEYCLOAK_ADMIN_PASSWORD` inside ./.env)
 
-2. Navigate to coursemology realm by choosing Coursemology in the top-left dropdown box, or simply access Coursemology [realm](http://localhost:8443/admin/master/console/#/coursemology)
+2. Navigate to [the Coursemology realm](http://localhost:8443/admin/master/console/#/coursemology), or by choosing `coursemology` in the top-left dropdown box
 
-3. Navigate to Client, then click on the Client ID in which name is `coursemology-backend`
+3. Navigate to Clients, then click on the Client ID named `coursemology-backend`
 
-4. Over there, navigate to Credentials and you will see the Client Secret. If whatever is defined there does not match with the Client Secret defined in your environment setup, simply copy-paste the client secret inside the page (you can possibly regenerate it if you want), then copy-paste it to `KEYCLOAK_BE_CLIENT_SECRET` inside `../.env`
+4. Navigate to Credentials and you will see the Client Secret. Regenerate it if necessary.
+
+Following the instructions in the [Rails credentials config](../config/credentials/README.md), copy-paste the client secret in the appropriate section:
+```yaml
+...
+keycloak:
+  ...
+  backend:
+    client_id: <value from Keycloak configuration>
+    client_secret: <value from Keycloak configuration>
+...
+```
 
 5. Finally, your Keycloak setup for Coursemology is finished and you are safe to proceed to the next step inside the Coursemology setup guide.

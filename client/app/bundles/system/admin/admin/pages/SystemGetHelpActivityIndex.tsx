@@ -8,7 +8,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/getHelp';
 
 import SystemGetHelpFilter, {
-  GetHelpFilter,
+  SystemGetHelpFilterFields,
 } from '../components/misc/SystemGetHelpFilter';
 import SystemGetHelpActivityTable from '../components/tables/SystemGetHelpActivityTable';
 import { fetchSystemGetHelpActivity } from '../operations';
@@ -23,13 +23,13 @@ const getDefaultDateRange = (): { startDate: string; endDate: string } => {
   };
 };
 
-const defaultFilter: GetHelpFilter = {
+const defaultFilter: SystemGetHelpFilterFields = {
   course: null,
   user: null,
   ...getDefaultDateRange(),
 };
 const getDateValidationError = (
-  filter: GetHelpFilter,
+  filter: SystemGetHelpFilterFields,
   t: (message: MessageDescriptor) => string,
 ): string => {
   const { startDate, endDate } = filter;
@@ -38,7 +38,14 @@ const getDateValidationError = (
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  if (end < start) return t(translations.invalidDateSelection);
+  if (
+    start.getTime() <= 0 ||
+    end.getTime() <= 0 ||
+    Number.isNaN(start.getTime()) ||
+    Number.isNaN(end.getTime())
+  )
+    return t(translations.invalidDateSelection);
+  if (end < start) return t(translations.endDateBeforeStartDate);
 
   const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
   return dayDiff > 365 ? t(translations.exceedDateRange) : '';
@@ -49,9 +56,9 @@ const SystemGetHelpActivityIndex: FC = () => {
   const [data, setData] = useState<SystemGetHelpActivity[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] =
-    useState<GetHelpFilter>(defaultFilter);
+    useState<SystemGetHelpFilterFields>(defaultFilter);
   const [appliedFilter, setAppliedFilter] =
-    useState<GetHelpFilter>(defaultFilter);
+    useState<SystemGetHelpFilterFields>(defaultFilter);
 
   // Track the last fetched date range
   const lastFetchedDateRange = useRef<{ startDate: string; endDate: string }>({
@@ -59,7 +66,7 @@ const SystemGetHelpActivityIndex: FC = () => {
     endDate: '',
   });
 
-  const fetchData = useCallback(async (filter: GetHelpFilter) => {
+  const fetchData = useCallback(async (filter: SystemGetHelpFilterFields) => {
     setIsLoading(true);
     const params = {
       start_at: filter.startDate,
@@ -78,7 +85,7 @@ const SystemGetHelpActivityIndex: FC = () => {
     };
   }, []);
 
-  const handleApplyFilter = (filter: GetHelpFilter): void => {
+  const handleApplyFilter = (filter: SystemGetHelpFilterFields): void => {
     const validationError = getDateValidationError(filter, t);
     if (validationError) {
       // Don't apply the filter if there's a validation error

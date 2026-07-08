@@ -15,6 +15,7 @@ const RubricBasedResponseDetails = (
       <RubricPanel
         answerCategoryGrades={answer.categoryGrades}
         answerId={answer.id}
+        currentGrade={answer.grading?.grade ?? 0}
         question={question}
         readOnly
         setIsFirstRendering={() => {}} // Placeholder function since RubricPanel is not editable here

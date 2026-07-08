@@ -44,7 +44,11 @@ RSpec.describe Course::EnrolRequest, type: :model do
       end
 
       context 'when a request is already approved' do
-        let!(:approved_request) { create(:course_enrol_request, :approved, course: course, user: user) }
+        before do
+          allow_any_instance_of(Course::EnrolRequest).to receive(:send_enrol_request_notifications)
+        end
+
+        let(:approved_request) { create(:course_enrol_request, :approved, course: course, user: user) }
         subject { approved_request.destroy }
 
         it 'can be destroyed' do
@@ -54,7 +58,11 @@ RSpec.describe Course::EnrolRequest, type: :model do
       end
 
       context 'when a request is already rejected' do
-        let!(:rejected_request) { create(:course_enrol_request, :rejected, course: course, user: user) }
+        before do
+          allow_any_instance_of(Course::EnrolRequest).to receive(:send_enrol_request_notifications)
+        end
+
+        let(:rejected_request) { create(:course_enrol_request, :rejected, course: course, user: user) }
         subject { rejected_request.destroy }
 
         it 'can be destroyed' do
@@ -64,7 +72,11 @@ RSpec.describe Course::EnrolRequest, type: :model do
       end
 
       context 'when a request is still pending' do
-        let!(:pending_request) { create(:course_enrol_request, :pending, course: course, user: user) }
+        before do
+          allow_any_instance_of(Course::EnrolRequest).to receive(:send_enrol_request_notifications)
+        end
+
+        let(:pending_request) { create(:course_enrol_request, :pending, course: course, user: user) }
         subject { pending_request.destroy }
 
         it 'can be destroyed' do

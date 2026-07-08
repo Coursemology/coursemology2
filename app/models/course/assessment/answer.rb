@@ -59,6 +59,9 @@ class Course::Assessment::Answer < ApplicationRecord
                          dependent: :destroy, inverse_of: :answer, autosave: true
   has_many :rubric_evaluations, class_name: 'Course::Rubric::AnswerEvaluation',
                                 dependent: :destroy, inverse_of: :answer
+  # The single official grade-bearing evaluation (its rubric is the answer's graded rubric).
+  has_one :grading_rubric_evaluation, -> { grading },
+          class_name: 'Course::Rubric::AnswerEvaluation', foreign_key: :answer_id, inverse_of: :answer
 
   accepts_nested_attributes_for :actable
 
@@ -121,7 +124,7 @@ class Course::Assessment::Answer < ApplicationRecord
       (submission.assessment.autograded? && !submission.assessment.allow_partial_submission) ||
       (
         submission.assessment.autograded? &&
-        actable_type == Course::Assessment::Question::MultipleResponse.name &&
+        actable_type == Course::Assessment::Answer::MultipleResponse.name &&
         submission.assessment.show_mcq_answer
       )
   end

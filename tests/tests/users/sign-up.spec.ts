@@ -1,7 +1,8 @@
-import { expect, getLastSentEmail, manufacture, test } from 'helpers';
+import { expect, expectLastSentEmail, manufacture, test } from 'helpers';
+import { servers } from '../../package.json';
 
 const getHrefURLFromString = (string: string): string | undefined =>
-  string.match(/href="(.*(?="))/)?.[1];
+  string.match(/href="(.*(?="))/)?.[1].replace(servers.serverURL, servers.clientURL);
 
 test.describe('unregistered user', () => {
   test('can sign up', async ({ signUpPage: page }) => {
@@ -19,15 +20,15 @@ test.describe('unregistered user', () => {
     await expect.soft(page.getByText(email)).toBeVisible();
     await expect(page.getByText('check your email')).toBeVisible();
 
-    const confirmationEmail = await getLastSentEmail();
-    expect(confirmationEmail).not.toBeNull();
+    const confirmationEmail = await expectLastSentEmail((confirmationEmail) => 
+      confirmationEmail &&
+      confirmationEmail.recipient === email &&
+      confirmationEmail.body.includes('confirmation_token'));
 
-    expect.soft(confirmationEmail!.recipient).toEqual(email);
-    expect(confirmationEmail!.body).toContain('confirmation_token');
-
-    const confirmationURL = getHrefURLFromString(confirmationEmail!.body);
+    const confirmationURL = getHrefURLFromString(confirmationEmail.body);
     expect(confirmationURL).toBeTruthy();
 
+    console.log('Confirmation URL:', confirmationURL);
     await page.goto(confirmationURL!);
 
     await expect.soft(page.getByText(email)).toBeVisible();
@@ -126,13 +127,12 @@ test.describe('user invited to 2 courses', () => {
     await expect.soft(page.getByText(email)).toBeVisible();
     await expect(page.getByText('check your email')).toBeVisible();
 
-    const confirmationEmail = await getLastSentEmail();
-    expect(confirmationEmail).not.toBeNull();
+    const confirmationEmail = await expectLastSentEmail((confirmationEmail) => 
+      confirmationEmail &&
+      confirmationEmail.recipient === email &&
+      confirmationEmail.body.includes('confirmation_token'));
 
-    expect.soft(confirmationEmail!.recipient).toEqual(email);
-    expect(confirmationEmail!.body).toContain('confirmation_token');
-
-    const confirmationURL = getHrefURLFromString(confirmationEmail!.body);
+    const confirmationURL = getHrefURLFromString(confirmationEmail.body);
     expect(confirmationURL).toBeTruthy();
 
     await page.goto(confirmationURL!);

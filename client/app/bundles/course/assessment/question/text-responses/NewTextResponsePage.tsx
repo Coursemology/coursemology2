@@ -4,7 +4,7 @@ import {
   AttachmentType,
   INITIAL_MAX_ATTACHMENT_SIZE,
   INITIAL_MAX_ATTACHMENTS,
-  TextResponseData,
+  TextResponseEditableFormData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
@@ -22,7 +22,7 @@ import TextResponseForm, {
 } from './components/TextResponseForm';
 import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
 
-const NEW_TEXT_RESPONSE_VALUE = {
+const NEW_TEXT_RESPONSE_VALUE: TextResponseFormData['question'] = {
   ...commonQuestionFieldsInitialValues,
   hideText: false,
   templateText: null,
@@ -32,7 +32,7 @@ const NEW_TEXT_RESPONSE_VALUE = {
   isAttachmentRequired: false,
 };
 
-const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
+const NEW_FILE_UPLOAD_RESPONSE_VALUE: TextResponseFormData['question'] = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
   templateText: null,
@@ -42,9 +42,9 @@ const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   isAttachmentRequired: true,
 };
 
-type Fetcher = () => Promise<TextResponseFormData<'new'>>;
-type Form = ElementType<TextResponseFormProps<'new'>>;
-type FormInitialValue = TextResponseData['question'];
+type Fetcher = () => Promise<Omit<TextResponseFormData, 'question'>>;
+type Form = ElementType<TextResponseFormProps>;
+type FormInitialValue = TextResponseFormData['question'];
 
 type Adapter = [Fetcher, Form, FormInitialValue];
 
@@ -78,7 +78,9 @@ const NewTextResponsePage = (): JSX.Element => {
   const [fetchData, FormComponent, initialFormValue] =
     newTextResponseAdapter[type];
 
-  const handleSubmit = async (data: TextResponseData): Promise<void> => {
+  const handleSubmit = async (
+    data: TextResponseEditableFormData,
+  ): Promise<void> => {
     const { redirectUrl } = await create(data);
     toast.success(t(translations.questionCreated));
     window.location.href = redirectUrl;
@@ -87,8 +89,12 @@ const NewTextResponsePage = (): JSX.Element => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchData}>
       {(data): JSX.Element => {
-        data.question = initialFormValue;
-        return <FormComponent onSubmit={handleSubmit} with={data} />;
+        return (
+          <FormComponent
+            onSubmit={handleSubmit}
+            with={{ ...data, question: initialFormValue }}
+          />
+        );
       }}
     </Preload>
   );

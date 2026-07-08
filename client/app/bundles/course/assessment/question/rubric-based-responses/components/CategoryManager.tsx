@@ -64,7 +64,6 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
     name: '',
     maximumGrade: 0,
     grades: [newQuestionRubricGradeObject(levelId)],
-    isBonusCategory: false,
     draft: true,
   });
 

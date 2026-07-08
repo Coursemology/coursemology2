@@ -1,9 +1,11 @@
 import { Operation } from 'store';
 import {
+  ExternalIdResolution,
   InvitationFileEntity,
   InvitationPostData,
   InvitationResult,
   InvitationsPostData,
+  PendingExternalIdConflict,
 } from 'types/course/userInvitations';
 
 import CourseAPI from 'api/course';
@@ -21,24 +23,32 @@ const formatInvitations = (invitations: InvitationPostData[]): FormData => {
   const payload = new FormData();
 
   invitations.forEach((invite, index) => {
-    ['name', 'email', 'role', 'phantom', 'timelineAlgorithm'].forEach(
-      (field) => {
-        if (invite[field] !== undefined && invite[field] !== null) {
-          let fieldName = field;
-          let value = invite[field];
-          if (field === 'timelineAlgorithm') {
-            fieldName = 'timeline_algorithm';
-          }
-          if (field === 'phantom') {
-            value = value ? 1 : 0;
-          }
-          payload.append(
-            `course[invitations_attributes][${index}][${fieldName}]`,
-            value,
-          );
+    [
+      'name',
+      'email',
+      'role',
+      'phantom',
+      'timelineAlgorithm',
+      'externalId',
+    ].forEach((field) => {
+      if (invite[field] !== undefined && invite[field] !== null) {
+        let fieldName = field;
+        let value = invite[field];
+        if (field === 'timelineAlgorithm') {
+          fieldName = 'timeline_algorithm';
         }
-      },
-    );
+        if (field === 'externalId') {
+          fieldName = 'external_id';
+        }
+        if (field === 'phantom') {
+          value = value ? 1 : 0;
+        }
+        payload.append(
+          `course[invitations_attributes][${index}][${fieldName}]`,
+          value,
+        );
+      }
+    });
   });
   return payload;
 };
@@ -67,25 +77,50 @@ export function fetchPermissionsAndSharedData(): Operation {
 
 export function inviteUsersFromFile(
   fileEntity: InvitationFileEntity,
-): Operation<InvitationResult> {
+  resolution?: ExternalIdResolution,
+): Operation<InvitationResult | { conflict: PendingExternalIdConflict }> {
   return async (dispatch) =>
-    CourseAPI.userInvitations.invite(fileEntity).then((response) => {
-      const data = response.data;
-      dispatch(actions.updateInvitationCounts(data.newInvitations));
-      return JSON.parse(data.invitationResult);
-    });
+    CourseAPI.userInvitations
+      .invite(fileEntity, resolution)
+      .then((response) => {
+        const data = response.data;
+        if ('pendingInvitationUpdates' in data) {
+          return {
+            conflict: {
+              pendingInvitationUpdates: data.pendingInvitationUpdates,
+              pendingCourseUserUpdates: data.pendingCourseUserUpdates,
+            },
+          };
+        }
+        dispatch(actions.updateInvitationCounts(data.newInvitations));
+        return {
+          ...(JSON.parse(data.invitationResult) as InvitationResult),
+          blankHeaderWarning: data.blankHeaderWarning ?? false,
+        };
+      });
 }
 
 export function inviteUsersFromForm(
   postData: InvitationsPostData,
-): Operation<InvitationResult> {
+  resolution?: ExternalIdResolution,
+): Operation<InvitationResult | { conflict: PendingExternalIdConflict }> {
   const formattedData = formatInvitations(postData.invitations);
   return async (dispatch) =>
-    CourseAPI.userInvitations.invite(formattedData).then((response) => {
-      const data = response.data;
-      dispatch(actions.updateInvitationCounts(data.newInvitations));
-      return JSON.parse(data.invitationResult);
-    });
+    CourseAPI.userInvitations
+      .invite(formattedData, resolution)
+      .then((response) => {
+        const data = response.data;
+        if ('pendingInvitationUpdates' in data) {
+          return {
+            conflict: {
+              pendingInvitationUpdates: data.pendingInvitationUpdates,
+              pendingCourseUserUpdates: data.pendingCourseUserUpdates,
+            },
+          };
+        }
+        dispatch(actions.updateInvitationCounts(data.newInvitations));
+        return JSON.parse(data.invitationResult) as InvitationResult;
+      });
 }
 
 export function resendAllInvitations(): Operation {

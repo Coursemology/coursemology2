@@ -15,7 +15,6 @@ export interface CategoryData {
   name: string;
   maximumGrade: number;
   grades: QuestionRubricGradeEntity[];
-  isBonusCategory: boolean;
 }
 
 export interface CategoryEntity extends CategoryData {

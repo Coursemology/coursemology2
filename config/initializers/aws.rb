@@ -8,8 +8,11 @@ if Rails.env.production?
   # TODO: move this bucket to the proper staging/prod AWS account,
   # so it can reuse the instance profile credentials used by other AWS operations
   S3_CLIENT = Aws::S3::Client.new({
-    region: ENV.fetch('AWS_REGION', nil),
-    credentials: Aws::Credentials.new(ENV.fetch('AWS_ACCESS_KEY_ID', nil), ENV.fetch('AWS_SECRET_ACCESS_KEY', nil))
+    region: Rails.application.credentials.aws.s3_file_bucket.region,
+    credentials: Aws::Credentials.new(
+      Rails.application.credentials.aws.s3_file_bucket.access_key_id,
+      Rails.application.credentials.aws.s3_file_bucket.secret_access_key
+    )
   })
 
   # For AWS operations, using client APIs are preferred

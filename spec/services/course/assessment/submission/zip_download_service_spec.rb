@@ -68,7 +68,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
         group
       end
 
-      types = Course::Assessment::Submission::ZipDownloadService::COURSE_USERS
+      types = Course::COURSE_USER_TYPES
 
       before do
         submission1
@@ -80,7 +80,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
       context 'when downloading submissions by my students' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@course_users, types[:my_students])
+          service.instance_variable_set(:@course_user_type, types[:my_students])
           subject
 
           file_names = Dir.entries(dir)
@@ -94,7 +94,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
       context 'when downloading submissions by my students (incl phantom)' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@course_users, types[:my_students_w_phantom])
+          service.instance_variable_set(:@course_user_type, types[:my_students_w_phantom])
           subject
 
           file_names = Dir.entries(dir)
@@ -121,7 +121,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
       context 'when downloading submissions including phantom students' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@course_users, types[:students_w_phantom])
+          service.instance_variable_set(:@course_user_type, types[:students_w_phantom])
           subject
 
           file_names = Dir.entries(dir)
@@ -135,7 +135,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
       context 'when downloading submissions by staff' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@course_users, types[:staff])
+          service.instance_variable_set(:@course_user_type, types[:staff])
           subject
 
           file_names = Dir.entries(dir)
@@ -149,7 +149,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
       context 'when downloading submissions by staff' do
         it 'downloads the correct submissions' do
-          service.instance_variable_set(:@course_users, types[:staff_w_phantom])
+          service.instance_variable_set(:@course_user_type, types[:staff_w_phantom])
           subject
 
           file_names = Dir.entries(dir)

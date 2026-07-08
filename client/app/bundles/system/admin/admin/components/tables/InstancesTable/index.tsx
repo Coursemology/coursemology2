@@ -45,7 +45,7 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
         <InstanceField
           field="host"
           for={instance}
-          link={`//${instance.host}/admin/instances`}
+          link={`${instance.redirectUri}/admin/instances`}
         />
       ),
     },

@@ -7,7 +7,7 @@ module Course::UsersControllerManagementConcern
 
   included do
     before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
-    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff, :assign_timeline]
+    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff, :assign_timeline, :suspend, :unsuspend]
 
     signals :enrol_requests, after: [:students]
   end
@@ -35,7 +35,7 @@ module Course::UsersControllerManagementConcern
   def students
     respond_to do |format|
       format.json do
-        @course_users = @course_users.students.includes(:groups, user: :emails).order_alphabetically
+        @course_users = @course_users.students.includes(user: :primary_email).order_alphabetically
       end
     end
   end
@@ -44,7 +44,7 @@ module Course::UsersControllerManagementConcern
     respond_to do |format|
       format.json do
         @student_options = @course_users.students.order_alphabetically.pluck(:id, :name, :role)
-        @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
+        @course_users = @course_users.staff.includes(user: :primary_email).order_alphabetically
       end
     end
   end
@@ -81,6 +81,40 @@ module Course::UsersControllerManagementConcern
     head :bad_request
   end
 
+  def suspend
+    course_user_ids = suspend_params[:ids]
+
+    ActiveRecord::Base.transaction do
+      to_suspend = current_course.course_users.where(id: course_user_ids).includes(user: :primary_email)
+      return head :bad_request unless to_suspend.size == course_user_ids.size
+
+      to_notify = to_suspend.reject(&:is_suspended?)
+      to_suspend.update_all(is_suspended: true)
+      to_notify.each { |cu| Course::Mailer.user_suspended_email(cu).deliver_later }
+
+      head :ok
+    end
+  rescue StandardError
+    head :bad_request
+  end
+
+  def unsuspend
+    course_user_ids = unsuspend_params[:ids]
+
+    ActiveRecord::Base.transaction do
+      to_unsuspend = current_course.course_users.where(id: course_user_ids).includes(user: :primary_email)
+      return head :bad_request unless to_unsuspend.size == course_user_ids.size
+
+      to_notify = to_unsuspend.select(&:is_suspended?)
+      to_unsuspend.update_all(is_suspended: false)
+      to_notify.each { |cu| Course::Mailer.user_unsuspended_email(cu).deliver_later }
+
+      head :ok
+    end
+  rescue StandardError
+    head :bad_request
+  end
+
   private
 
   def should_update_personalized_timeline
@@ -89,7 +123,7 @@ module Course::UsersControllerManagementConcern
 
   def course_user_params
     @course_user_params ||= params.require(:course_user).permit(
-      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id
+      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id, :external_id
     )
   end
 
@@ -100,6 +134,14 @@ module Course::UsersControllerManagementConcern
 
   def assign_timeline_params
     params.require(:course_users).permit(:reference_timeline_id, ids: [])
+  end
+
+  def suspend_params
+    params.require(:course_users).permit(ids: [])
+  end
+
+  def unsuspend_params
+    params.require(:course_users).permit(ids: [])
   end
 
   def load_resource
@@ -178,7 +220,8 @@ module Course::UsersControllerManagementConcern
         render '_user_list_data', locals: {
           course_user: @course_user,
           should_show_timeline: true,
-          should_show_phantom: true
+          should_show_phantom: true,
+          groups: nil
         }, status: :ok
       end
     end

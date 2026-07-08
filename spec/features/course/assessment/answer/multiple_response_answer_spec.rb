@@ -51,7 +51,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
       scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button('Finalise Submission')
+        find('button[data-testid="FinaliseButton"]').click
         accept_confirm_dialog do
           wait_for_job
         end

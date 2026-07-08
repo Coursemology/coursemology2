@@ -3,8 +3,9 @@ import { CourseUserMiniEntity } from 'types/course/courseUsers';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
-import BulkAssignTimelineButton from './BulkAssignTimelineButton';
-import translations from './translations';
+import translations from '../../../translations';
+
+import BulkActionsButton from './BulkActionsButton';
 
 interface ActiveTableToolbarProps {
   selectedRows: CourseUserMiniEntity[];
@@ -20,14 +21,10 @@ const ActiveTableToolbar = (props: ActiveTableToolbarProps): JSX.Element => {
         {t(translations.selectedNUsers, { n: props.selectedRows.length })}
       </Typography>
 
-      {props.timelinesMap && (
-        <BulkAssignTimelineButton
-          getSelectedIds={(): number[] =>
-            props.selectedRows.map((user) => user.id)
-          }
-          timelinesMap={props.timelinesMap}
-        />
-      )}
+      <BulkActionsButton
+        selectedRows={props.selectedRows}
+        timelinesMap={props.timelinesMap}
+      />
     </div>
   );
 };

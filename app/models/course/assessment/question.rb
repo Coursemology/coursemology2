@@ -30,6 +30,10 @@ class Course::Assessment::Question < ApplicationRecord
   has_many :question_rubrics, class_name: 'Course::Assessment::Question::QuestionRubric',
                               dependent: :destroy, inverse_of: :question
   has_many :rubrics, through: :question_rubrics, class_name: 'Course::Rubric', source: :rubric
+  # The v2 Course::Rubric this question is currently graded against (copy-on-write target). Lives on the
+  # polymorphic question -- not the RubricBasedResponse actable -- so rubric grading can extend to other
+  # question types; null for questions without an active rubric (e.g. every non-RBR question).
+  belongs_to :active_rubric, class_name: 'Course::Rubric', optional: true, inverse_of: false
   has_many :mock_answers, class_name: 'Course::Assessment::Question::MockAnswer',
                           dependent: :destroy, inverse_of: :question
 

@@ -31,6 +31,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
     Coursemology::Polyglot::Language::Python::Python3Point10 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point12 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point13 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point14 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point4 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point5 => '.py',
     Coursemology::Polyglot::Language::Python::Python3Point6 => '.py',
@@ -137,7 +138,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
     answer_partitions = partition_answers_by_size(answer_size_hash)
     @zip_files = answer_partitions.map.with_index do |partition, index|
       output_file = "#{@base_dir}_#{index}.zip"
-      Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
+      Zip::File.open(output_file, create: true) do |zip_file|
         partition.each do |answer_dir|
           Dir["#{answer_dir}/**/**"].each do |file|
             zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)

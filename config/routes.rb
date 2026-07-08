@@ -158,6 +158,9 @@ Rails.application.routes.draw do
         patch '/' => 'admin#update'
         delete '/' => 'admin#destroy'
 
+        patch 'suspend' => 'admin#suspend'
+        patch 'unsuspend' => 'admin#unsuspend'
+
         get 'time_zones' => 'admin#time_zones'
 
         get 'components' => 'component_settings#edit'
@@ -272,7 +275,8 @@ Rails.application.routes.draw do
               post 'mock_answer_evaluations/initialize', on: :member, action: 'initialize_mock_answer_evaluations'
               post :mock_answer_evaluations, on: :member, action: 'evaluate_mock_answer'
               delete 'mock_answer_evaluations/:mock_answer_id', on: :member, action: 'delete_mock_answer_evaluations'
-              post :export, on: :member, action: 'export_evaluations'
+              post :apply, on: :member, action: 'apply_evaluations'
+              post :set_active, on: :member
             end
 
             resources :mock_answers, on: :member, only: [:index, :create, :destroy]
@@ -283,9 +287,7 @@ Rails.application.routes.draw do
               post :generate, on: :collection
             end
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
-            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy] do
-              post :migrate_rubric, on: :member
-            end
+            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
               get :codaveri_languages, on: :collection
@@ -389,7 +391,6 @@ Rails.application.routes.draw do
       end
 
       resources :enrol_requests, only: [:index, :create, :destroy] do
-        post :create_unauthenticated, on: :collection
         patch 'approve', on: :member
         patch 'reject', on: :member
       end
@@ -455,6 +456,8 @@ Rails.application.routes.draw do
         patch 'manage_email_subscription' => 'user_email_subscriptions#update'
 
         patch 'assign_timeline', on: :collection
+        patch 'suspend', on: :collection
+        patch 'unsuspend', on: :collection
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students

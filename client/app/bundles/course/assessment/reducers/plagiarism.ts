@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   AssessmentPlagiarism,
   AssessmentPlagiarismState,
-  AssessmentPlagiarismStatus,
 } from 'types/course/plagiarism';
 
 import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';

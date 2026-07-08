@@ -3,7 +3,7 @@
 # Start a HTTP listener on worker containers to capture AWS SQS events
 # (e.g. health check, or jobs configured in cron.yaml EB configuration)
 
-if Rails.env.production? && !ENV['IS_RAILS_WORKER'].nil?
+if Rails.env.production? && defined?(Sidekiq) && Sidekiq.server?
   require './app/services/sidekiq_api_service'
   SIDEKIQ_API_SERVICE = SidekiqApiService.new
   HTTP_LISTENER_PORT = 8080

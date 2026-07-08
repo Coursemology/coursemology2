@@ -19,6 +19,11 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     answer_text.strip.encode(universal_newline: true)
   end
 
+  # If text response grading requires formula evaluation, it should be graded in a job.
+  def grade_inline?
+    question.actable.solutions.all? { |solution| !solution.spreadsheet_formula? }
+  end
+
   def download(dir)
     download_answer(dir) unless question.actable.file_upload_question?
     attachments.each { |a| download_attachment(a, dir) }

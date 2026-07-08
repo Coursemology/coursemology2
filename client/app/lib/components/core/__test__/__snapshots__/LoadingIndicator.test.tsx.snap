@@ -27,7 +27,11 @@ exports[`<LoadingIndicator /> matches the snapshot 1`] = `
         </svg>
       </span>
     </div>
-    <div
+    <section
+      aria-atomic="false"
+      aria-label="Notifications Alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
       class="Toastify"
     />
   </div>

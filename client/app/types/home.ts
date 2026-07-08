@@ -1,5 +1,5 @@
 import { InstanceUserRoles } from './system/instance/users';
-import { UserRoles } from './users';
+import { UserSystemRoles } from './users';
 
 interface HomeLayoutUserData {
   id: number;
@@ -7,7 +7,7 @@ interface HomeLayoutUserData {
   primaryEmail: string;
   url: string;
   avatarUrl: string;
-  role: UserRoles;
+  role: UserSystemRoles;
   instanceRole: InstanceUserRoles;
   canCreateNewCourse: boolean;
 }

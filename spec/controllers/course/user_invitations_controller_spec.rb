@@ -65,8 +65,188 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           it 'sets the course errors property' do
             subject
             expect(controller.current_course.errors.count).not_to eq(0)
-            expect(controller.current_course.errors[:invitations_file].length).not_to eq(0)
+            expect(controller.current_course.errors[:base].length).not_to eq(0)
           end
+        end
+
+        context 'when uploading a CSV with external ID updates and no resolution param' do
+          render_views
+
+          let(:existing_user) { create(:user) }
+          let!(:existing_course_user) do
+            create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+          end
+          let(:csv_content) do
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
+          end
+          let(:csv_file) do
+            file = Tempfile.new(['invite', '.csv'])
+            file.write(csv_content)
+            file.rewind
+            Rack::Test::UploadedFile.new(file.path, 'text/csv').tap { file.close }
+          end
+
+          subject do
+            post :create, format: :json, params: { course_id: course, course: { invitations_file: csv_file } }
+          end
+
+          it 'returns 200 with pendingCourseUserUpdates' do
+            subject
+            expect(response).to have_http_status(:ok)
+            json = JSON.parse(response.body)
+            expect(json.keys).to include('pendingCourseUserUpdates')
+            expect(json['pendingCourseUserUpdates']).not_to be_empty
+          end
+
+          it 'does not change external_id in the database' do
+            expect { subject }.not_to(change { existing_course_user.reload.external_id })
+          end
+        end
+
+        context 'when uploading with resolution=keep_existing' do
+          render_views
+
+          let(:existing_user) { create(:user) }
+          let!(:existing_course_user) do
+            create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+          end
+          let(:csv_content) do
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
+          end
+          let(:csv_file) do
+            file = Tempfile.new(['invite', '.csv'])
+            file.write(csv_content)
+            file.rewind
+            Rack::Test::UploadedFile.new(file.path, 'text/csv').tap { file.close }
+          end
+
+          subject do
+            post :create, format: :json, params: {
+              course_id: course,
+              course: { invitations_file: csv_file },
+              external_id_resolution: 'keep_existing'
+            }
+          end
+
+          it 'returns 200 with invitationResult' do
+            subject
+            expect(response).to have_http_status(:ok)
+            json = JSON.parse(response.body)
+            expect(json).to have_key('invitationResult')
+          end
+
+          it 'does not change the external_id' do
+            expect { subject }.not_to(change { existing_course_user.reload.external_id })
+          end
+        end
+
+        context 'when uploading with resolution=replace_all' do
+          render_views
+
+          let(:existing_user) { create(:user) }
+          let!(:existing_course_user) do
+            create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+          end
+          let(:csv_content) do
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
+          end
+          let(:csv_file) do
+            file = Tempfile.new(['invite', '.csv'])
+            file.write(csv_content)
+            file.rewind
+            Rack::Test::UploadedFile.new(file.path, 'text/csv').tap { file.close }
+          end
+
+          subject do
+            post :create, format: :json, params: {
+              course_id: course,
+              course: { invitations_file: csv_file },
+              external_id_resolution: 'replace_all'
+            }
+          end
+
+          it 'returns 200 with invitationResult' do
+            subject
+            expect(response).to have_http_status(:ok)
+            json = JSON.parse(response.body)
+            expect(json).to have_key('invitationResult')
+          end
+
+          it 'updates the external_id to the new value' do
+            subject
+            expect(existing_course_user.reload.external_id).to eq('NEW001')
+          end
+        end
+
+        context 'when uploading with an unrecognized resolution value' do
+          render_views
+
+          let(:existing_user) { create(:user) }
+          let!(:existing_course_user) do
+            create(:course_student, course: course, user: existing_user, external_id: 'OLD001')
+          end
+          let(:csv_content) do
+            "Name,Email,External ID,Role,Phantom,Personal Timeline\n" \
+              "#{existing_user.name},#{existing_user.email},NEW001,student,false,"
+          end
+          let(:csv_file) do
+            file = Tempfile.new(['invite', '.csv'])
+            file.write(csv_content)
+            file.rewind
+            Rack::Test::UploadedFile.new(file.path, 'text/csv').tap { file.close }
+          end
+
+          subject do
+            post :create, format: :json, params: {
+              course_id: course,
+              course: { invitations_file: csv_file },
+              external_id_resolution: 'anything_at_all'
+            }
+          end
+
+          it 'treats the invalid resolution as nil and returns pendingCourseUserUpdates' do
+            subject
+            expect(response).to have_http_status(:ok)
+            json = JSON.parse(response.body)
+            expect(json.keys).to include('pendingCourseUserUpdates')
+          end
+
+          it 'does not overwrite the external_id' do
+            expect { subject }.not_to(change { existing_course_user.reload.external_id })
+          end
+        end
+      end
+
+      context 'when inviting a user who already has a non-retryable (failed) invitation' do
+        render_views
+
+        let!(:course_manager) { create(:course_manager, course: course, user: user) }
+        let!(:failed_invitation) do
+          create(:course_user_invitation, course: course, is_retryable: false)
+        end
+        let(:invite_params) do
+          invitation = { name: failed_invitation.name, email: failed_invitation.email }
+          invitations = { generate(:nested_attribute_new_id) => invitation }
+          { invitations_attributes: invitations }
+        end
+        subject { post :create, as: :json, params: { course_id: course, course: invite_params } }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'includes isRetryable in existingInvitations of the result' do
+          subject
+          body = JSON.parse(response.body)
+          raw_result = body['invitationResult']
+          result = raw_result.is_a?(String) ? JSON.parse(raw_result) : raw_result
+          existing = result['existingInvitations']
+          expect(existing.length).to eq(1)
+          expect(existing.first['isRetryable']).to be(false)
         end
       end
 
@@ -94,7 +274,20 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           replace_with_erroneous_course
           subject
           current_course = controller.current_course
-          expect(current_course.errors[:invitations_file]).not_to be_empty
+          expect(current_course.errors[:base]).not_to be_empty
+        end
+      end
+
+      context 'when a form invite has errors' do
+        subject do
+          controller.send(:propagate_errors)
+          controller
+        end
+
+        it 'propagates each error individually to :base' do
+          replace_with_erroneous_course
+          subject
+          expect(controller.current_course.errors[:base]).not_to be_empty
         end
       end
     end
@@ -114,6 +307,75 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
           subject
           # Expect 2 errors from user invitations
           expect(controller.send(:aggregate_errors).count).to eq(2)
+        end
+      end
+
+      context 'when the CSV has an external ID already taken by an existing course user' do
+        let!(:existing_user) { create(:course_student, course: course, external_id: 'EXT_DUPE') }
+        let(:invite_params) do
+          { invitations_file: fixture_file_upload('course/invitation_duplicate_external_id.csv') }
+        end
+        subject { post :create, params: { course_id: course, course: invite_params }, format: :json }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'does not surface the conflict in aggregate_errors' do
+          subject
+          errors = controller.send(:aggregate_errors)
+          expect(errors.none? { |e| e.include?('EXT_DUPE') }).to be(true)
+        end
+      end
+
+      context 'when a CourseUser has an already-enrolled error' do
+        before { replace_with_erroneous_course }
+
+        it 'surfaces an already enrolled error message' do
+          errors = controller.send(:aggregate_errors)
+          expect(errors.any? { |e| e.include?('already enrolled') }).to be(true)
+        end
+      end
+
+      context 'when an invitation has a pending invitation for the same email' do
+        let(:course_with_dup_invitation) do
+          create(:course, :enrollable).tap do |c|
+            c.invitations.create!(name: 'Alice', email: 'pending@example.com')
+            c.invitations.build(name: 'Alice 2', email: 'pending@example.com')
+          end
+        end
+
+        before do
+          dup_course = course_with_dup_invitation
+          controller.define_singleton_method(:current_course) { dup_course }
+        end
+
+        it 'surfaces a duplicate invitation error message' do
+          errors = controller.send(:aggregate_errors)
+          expect(errors.any? { |e| e.include?('pending invitation') }).to be(true)
+        end
+      end
+
+      context 'when a form invite has a duplicate external ID' do
+        let!(:existing_user) { create(:course_student, course: course, external_id: 'FORM_DUPE') }
+        let(:invite_params) do
+          invitations = { generate(:nested_attribute_new_id) =>
+                          { name: generate(:name), email: generate(:email),
+                            role: :student, phantom: false, external_id: 'FORM_DUPE' } }
+          { invitations_attributes: invitations }
+        end
+        subject { post :create, params: { course_id: course, course: invite_params }, format: :json }
+
+        it 'returns success' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'does not surface the conflict in aggregate_errors' do
+          subject
+          errors = controller.send(:aggregate_errors)
+          expect(errors.none? { |e| e.include?('FORM_DUPE') }).to be(true)
         end
       end
     end

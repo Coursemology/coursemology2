@@ -60,7 +60,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
       render={<LoadingIndicator />}
       while={fetchAnswerDetailsAndComments}
     >
-      {({ answer, comments }: LastAttemptData): JSX.Element => {
+      {({ answer, comments }): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
           answer.grading?.grade,
           answer.question.maximumGrade,

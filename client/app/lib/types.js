@@ -24,11 +24,3 @@ export const achievementTypesConditionAttributes = PropTypes.shape({
     }),
   ),
 });
-
-export const typeMaterial = PropTypes.arrayOf(
-  PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    updated_at: PropTypes.string,
-  }),
-);

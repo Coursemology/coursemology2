@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 
-import actionTypes, { duplicationModes } from 'course/duplication/constants';
+import actionTypes from 'course/duplication/constants';
 import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';
 
 const initialState = {
@@ -9,12 +9,12 @@ const initialState = {
   destinationCourseId: null,
   destinationCourses: [],
   destinationInstances: {},
-  duplicationMode: duplicationModes.COURSE,
+  duplicationMode: 'COURSE',
   currentItemSelectorPanel: null,
 
   metadata: {
-    canDuplicateToAnotherInstance: false,
     currentInstanceId: 0,
+    currentInstanceHost: '',
   },
 
   currentHost: '',

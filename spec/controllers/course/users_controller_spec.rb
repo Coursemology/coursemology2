@@ -190,6 +190,148 @@ RSpec.describe Course::UsersController, type: :controller do
       end
     end
 
+    describe '#suspend' do
+      before { controller_sign_in(controller, user) }
+      subject do
+        patch :suspend, as: :json, params: { course_id: course, course_users: { ids: target_ids } }
+      end
+
+      let!(:active_student)    { create(:course_student, course: course) }
+      let!(:already_suspended) { create(:course_student, :suspended, course: course) }
+      let(:target_ids) { [active_student.id, already_suspended.id] }
+
+      context 'when the user is a manager' do
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        it 'suspends all targeted users' do
+          subject
+          expect(active_student.reload.is_suspended).to be true
+          expect(already_suspended.reload.is_suspended).to be true
+        end
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'only emails users whose suspension status changed', type: :mailer do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(active_student.user.email)
+        end
+
+        context 'when all targeted users are already suspended' do
+          let(:target_ids) { [already_suspended.id] }
+
+          it 'sends no emails', type: :mailer do
+            expect { subject }.not_to(change { ActionMailer::Base.deliveries.count })
+          end
+        end
+
+        context 'when an id does not exist' do
+          let(:target_ids) { [active_student.id, -1] }
+
+          it { is_expected.to have_http_status(:bad_request) }
+
+          it 'makes no changes', type: :mailer do
+            expect { subject }.to \
+              not_change { active_student.reload.is_suspended }.
+              and(not_change { ActionMailer::Base.deliveries.count })
+          end
+        end
+
+        context 'when an id belongs to a different course' do
+          let!(:other_course_user) { create(:course_student) }
+          let(:target_ids) { [active_student.id, other_course_user.id] }
+
+          it { is_expected.to have_http_status(:bad_request) }
+
+          it 'makes no changes', type: :mailer do
+            expect { subject }.to \
+              not_change { active_student.reload.is_suspended }.
+              and(not_change { other_course_user.reload.is_suspended }).
+              and(not_change { ActionMailer::Base.deliveries.count })
+          end
+        end
+      end
+
+      context 'when the user is a student' do
+        let!(:course_user) { create(:course_student, course: course, user: user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the user is not registered' do
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
+    describe '#unsuspend' do
+      before { controller_sign_in(controller, user) }
+      subject do
+        patch :unsuspend, as: :json, params: { course_id: course, course_users: { ids: target_ids } }
+      end
+
+      let!(:suspended_student) { create(:course_student, :suspended, course: course) }
+      let!(:active_student)    { create(:course_student, course: course) }
+      let(:target_ids) { [suspended_student.id, active_student.id] }
+
+      context 'when the user is a manager' do
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        it 'unsuspends all targeted users' do
+          subject
+          expect(suspended_student.reload.is_suspended).to be false
+          expect(active_student.reload.is_suspended).to be false
+        end
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'only emails users whose suspension status changed', type: :mailer do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(suspended_student.user.email)
+        end
+
+        context 'when all targeted users are already active' do
+          let(:target_ids) { [active_student.id] }
+
+          it 'sends no emails', type: :mailer do
+            expect { subject }.not_to(change { ActionMailer::Base.deliveries.count })
+          end
+        end
+
+        context 'when an id does not exist' do
+          let(:target_ids) { [suspended_student.id, -1] }
+
+          it { is_expected.to have_http_status(:bad_request) }
+
+          it 'makes no changes', type: :mailer do
+            expect { subject }.to \
+              not_change { suspended_student.reload.is_suspended }.
+              and(not_change { ActionMailer::Base.deliveries.count })
+          end
+        end
+
+        context 'when an id belongs to a different course' do
+          let!(:other_course_user) { create(:course_student, :suspended) }
+          let(:target_ids) { [suspended_student.id, other_course_user.id] }
+
+          it { is_expected.to have_http_status(:bad_request) }
+
+          it 'makes no changes', type: :mailer do
+            expect { subject }.to \
+              not_change { suspended_student.reload.is_suspended }.
+              and(not_change { other_course_user.reload.is_suspended }).
+              and(not_change { ActionMailer::Base.deliveries.count })
+          end
+        end
+      end
+
+      context 'when the user is a student' do
+        let!(:course_user) { create(:course_student, course: course, user: user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the user is not registered' do
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
     describe '#upgrade_to_staff' do
       before { controller_sign_in(controller, user) }
       subject do
@@ -220,6 +362,77 @@ RSpec.describe Course::UsersController, type: :controller do
 
         it 'updates the role' do
           expect(staff_to_be.reload.role).to eq('teaching_assistant')
+        end
+      end
+    end
+    describe '#show' do
+      render_views
+
+      let(:student) { create(:course_student, course: course) }
+
+      before { controller_sign_in(controller, user) }
+
+      subject do
+        get :show, as: :json, params: { course_id: course, id: student }
+      end
+
+      context 'when the viewer is a staff member' do
+        let!(:viewer) { create(:course_manager, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is a system administrator' do
+        let(:user) { create(:administrator) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is a teaching assistant' do
+        let!(:viewer) { create(:course_teaching_assistant, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is an instance administrator' do
+        let(:user) { create(:instance_administrator, instance: instance).user }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is an observer' do
+        let!(:viewer) { create(:course_observer, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is a student' do
+        let!(:viewer) { create(:course_student, course: course, user: user) }
+
+        it 'does not include userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data).not_to have_key('userId')
         end
       end
     end

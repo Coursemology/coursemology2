@@ -221,8 +221,8 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
     # @return [String]
     def get_test_case_metadata(attribute_name)
       attribute = @test_case.search("./attributes/attribute[@name=#{attribute_name.inspect}]")
-      if attribute.present? && attribute.children[1]
-        attribute.children[1].text
+      if attribute.present? && attribute.children[1] && attribute.children[1].text.present?
+        attribute.children[1].text.gsub('&#10;', "\n").gsub('&amp;', '&')
       else
         ''
       end
@@ -234,7 +234,7 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
   # @param [String] report The report XML to parse.
   # rubocop: disable Lint/MissingSuper
   def initialize(report)
-    report = report.gsub("\n", '&#10;') if report
+    report = report.gsub('&', '&amp;').gsub("\n", '&#10;') if report
     @report = Nokogiri::XML::DocumentFragment.parse(report)
   end
   # rubocop: enable Lint/MissingSuper

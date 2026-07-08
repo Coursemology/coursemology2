@@ -1,0 +1,4 @@
+Name,Email,External ID,Role,Phantom,Personal Timeline
+Alice,alice@example.com,EXT001,student,false,fixed
+Bob,bob@example.com,EXT002,teaching_assistant,false,fomo
+Charlie,charlie@example.com,,,,

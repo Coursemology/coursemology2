@@ -57,12 +57,34 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           end
         end
       end
+
+      context 'when the course is not enrollable' do
+        let(:course) { create(:course) }
+
+        it 'denies the request' do
+          expect { subject }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when the course has auto-approve enabled' do
+        let(:course) { create(:course, :enrollable, enrol_auto_approve: true) }
+
+        it 'auto-approves the request and creates a CourseUser' do
+          subject
+          is_expected.to have_http_status(:ok)
+
+          enrol_request = Course::EnrolRequest.find_by(course: course, user: user)
+          expect(enrol_request.workflow_state).to eq('approved')
+          expect(CourseUser.find_by(course: course, user: user)).to be_present
+        end
+      end
     end
 
     describe '#destroy' do
       subject { delete :destroy, params: { course_id: course, id: request } }
 
       context 'when a user cancels an enrolment request' do
+        before { allow(Course::Mailer).to receive(:user_added_email).and_return(double(deliver_later: nil)) }
         let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
         it 'redirects and sets the proper success flash message' do
           subject
@@ -71,6 +93,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       end
 
       context 'when a user cancels a processed enrolment request' do
+        before { allow(Course::Mailer).to receive(:user_added_email).and_return(double(deliver_later: nil)) }
         let!(:request) { create(:course_enrol_request, :approved, course: course, user: user) }
         it 'redirects and sets the proper message' do
           subject
@@ -82,11 +105,12 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
     describe '#approve' do
       before { controller_sign_in(controller, admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
+      let(:course_user_params) { { name: "#{user.name}-override", role: 'student', phantom: false } }
 
       subject do
         patch :approve, params: { course_id: course,
                                   id: request,
-                                  course_user: { name: user.name, role: 'student', phantom: false },
+                                  course_user: course_user_params,
                                   format: 'json' }
       end
 
@@ -99,6 +123,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           expect(request.workflow_state).to eq('approved')
           course_user = course.course_users.find_by(user_id: request.user.id)
           expect(course_user).to be_present
+          expect(course_user.name).to eq(course_user_params[:name])
         end
 
         it 'sends an acceptance email notification', type: :mailer do
@@ -106,7 +131,9 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
+          # When enrol request is created, 2 emails are sent (one to enrollee and one to course staff).
+          # When enrol request is approved, 1 email is sent to enrollee.
+          expect(ActionMailer::Base.deliveries.count).to eq(3)
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_added_email.subject')
         end
@@ -118,6 +145,9 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           subject
           expect(subject).to have_http_status(:bad_request)
           expect(JSON.parse(subject.body)['errors']).not_to be_nil
+          expect(course.course_users.where(user: user).count).to eq(1)
+          request.reload
+          expect(request.workflow_state).to eq('pending')
         end
       end
     end
@@ -148,7 +178,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
+          expect(ActionMailer::Base.deliveries.count).to eq(3)
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_rejected_email.subject')
         end

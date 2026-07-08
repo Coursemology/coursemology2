@@ -34,4 +34,12 @@ export default class CourseAdminAPI extends BaseAdminAPI {
   delete(): Promise<AxiosResponse> {
     return this.client.delete(this.urlPrefix);
   }
+
+  suspend(): Promise<AxiosResponse> {
+    return this.client.patch(`${this.urlPrefix}/suspend`);
+  }
+
+  unsuspend(): Promise<AxiosResponse> {
+    return this.client.patch(`${this.urlPrefix}/unsuspend`);
+  }
 }

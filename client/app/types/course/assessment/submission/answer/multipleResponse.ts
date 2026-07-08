@@ -15,7 +15,7 @@ export interface MultipleResponseFieldData extends AnswerFieldBaseData {
 export interface MultipleResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.MultipleResponse;
   fields: MultipleResponseFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean | null;
     explanations?: string[];
   };
@@ -29,7 +29,7 @@ export interface MultipleChoiceFieldData extends AnswerFieldBaseData {
 export interface MultipleChoiceAnswerData extends AnswerBaseData {
   questionType: QuestionType.MultipleChoice;
   fields: MultipleChoiceFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean | null;
     explanations?: string[];
   };

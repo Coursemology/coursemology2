@@ -80,6 +80,83 @@ RSpec.describe Course::Statistics::AssessmentsScoreSummaryDownloadService do
           expect(third_student_record[4]).to eq('')
         end
       end
+
+      context 'when students have no external_id set (backwards compatibility)' do
+        let!(:filepath) { subject }
+        let!(:csv_lines) { CSV.open(filepath, 'r').readlines }
+
+        it 'CSV has same column count as before (no external_id column)' do
+          expect(csv_lines[0].size).to eq(5)
+        end
+
+        it 'CSV header does NOT include external_id header' do
+          expect(csv_lines[0]).not_to include('external_id')
+        end
+
+        it 'existing columns (name, email, type, scores) are at same indices' do
+          header = csv_lines[0]
+          expect(header[0]).to eq(I18n.t('csv.score_summary.headers.name'))
+          expect(header[1]).to eq(I18n.t('csv.score_summary.headers.email'))
+          expect(header[2]).to eq(I18n.t('csv.score_summary.headers.type'))
+          expect(header[3]).to eq(assessment1.title)
+          expect(header[4]).to eq(assessment2.title)
+        end
+      end
+
+      context 'when some students have external_id set' do
+        let!(:student_with_ext_id) { create(:course_user, course: course, name: 'Student 4', external_id: 'EXT001') }
+        let!(:student_without_ext_id) { create(:course_user, course: course, name: 'Student 5') }
+
+        let!(:submission_a1) do
+          create(:submission, :published, assessment: assessment1, creator: student_with_ext_id.user)
+        end
+        let!(:submission_a2) do
+          create(:submission, :published, assessment: assessment2, creator: student_with_ext_id.user)
+        end
+        let!(:submission_b1) do
+          create(:submission, :published, assessment: assessment1, creator: student_without_ext_id.user)
+        end
+        let!(:submission_b2) do
+          create(:submission, :published, assessment: assessment2, creator: student_without_ext_id.user)
+        end
+
+        let(:assessment_ids_list) { [assessment1.id, assessment2.id] }
+        let(:service) { described_class.new(course, assessment_ids_list, file_name) }
+        let!(:filepath) { service.generate }
+        let!(:csv_lines) { CSV.open(filepath, 'r').readlines }
+
+        it 'CSV header includes external_id column' do
+          expect(csv_lines[0].size).to eq(6)
+          expect(csv_lines[0]).to include(I18n.t('csv.score_summary.headers.external_id'))
+        end
+
+        it 'CSV header has external_id before assessment scores' do
+          header = csv_lines[0]
+          ext_id_index = header.index(I18n.t('csv.score_summary.headers.external_id'))
+          first_score_index = header.index(assessment1.title)
+          expect(ext_id_index).to be < first_score_index
+        end
+
+        it 'student with external_id has it before assessment scores' do
+          fourth_student_record = csv_lines[4]
+          expect(fourth_student_record[0]).to eq(student_with_ext_id.name)
+          expect(fourth_student_record[1]).to eq(student_with_ext_id.user.email)
+          expect(fourth_student_record[2]).to eq(student_with_ext_id.phantom? ? 'phantom' : 'normal')
+          expect(fourth_student_record[3]).to eq('EXT001')
+          expect(fourth_student_record[4]).to eq(submission_a1.grade.to_s)
+          expect(fourth_student_record[5]).to eq(submission_a2.grade.to_s)
+        end
+
+        it 'student without external_id has empty string in external_id column before scores' do
+          fifth_student_record = csv_lines[5]
+          expect(fifth_student_record[0]).to eq(student_without_ext_id.name)
+          expect(fifth_student_record[1]).to eq(student_without_ext_id.user.email)
+          expect(fifth_student_record[2]).to eq(student_without_ext_id.phantom? ? 'phantom' : 'normal')
+          expect(fifth_student_record[3]).to eq('')
+          expect(fifth_student_record[4]).to eq(submission_b1.grade.to_s)
+          expect(fifth_student_record[5]).to eq(submission_b2.grade.to_s)
+        end
+      end
     end
   end
 end

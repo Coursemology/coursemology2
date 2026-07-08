@@ -59,6 +59,52 @@ RSpec.describe Course::ObjectDuplicationsController do
           expect(instance_ids).to contain_exactly(instance.id)
         end
       end
+
+      context 'when a course manager without any instance role fetches the destination data' do
+        let(:course_manager_user) { create(:course_manager, course: course).user }
+        before do
+          controller_sign_in(controller, course_manager_user)
+          subject
+        end
+
+        it 'returns no destination instances' do
+          instance_ids = json_response['destinationInstances'].map { |inst| inst['id'] }
+          expect(instance_ids).to be_empty
+        end
+      end
+
+      context 'when a user who is instructor only in another instance fetches the destination data' do
+        let(:other_instance_instructor_user) do
+          user = create(:user)
+          ActsAsTenant.with_tenant(other_instance) { create(:instance_user, :instructor, user: user) }
+          create(:course_manager, course: course, user: user)
+          user
+        end
+        before do
+          controller_sign_in(controller, other_instance_instructor_user)
+          subject
+        end
+
+        it 'includes only the other instance where user is instructor' do
+          instance_ids = json_response['destinationInstances'].map { |inst| inst['id'] }
+          expect(instance_ids).to contain_exactly(other_instance.id)
+        end
+      end
+
+      context 'when fetching the metadata' do
+        before do
+          controller_sign_in(controller, user)
+          subject
+        end
+
+        it 'includes currentInstanceHost in metadata' do
+          expect(json_response['metadata']['currentInstanceHost']).to eq(instance.host)
+        end
+
+        it 'does not include canDuplicateToAnotherInstance in metadata' do
+          expect(json_response['metadata']).not_to have_key('canDuplicateToAnotherInstance')
+        end
+      end
     end
 
     describe '#create' do

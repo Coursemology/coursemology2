@@ -97,6 +97,7 @@ const SignUpPage = (): JSX.Element => {
         validatedData.password,
         captchaResponse,
         invitation?.token,
+        enrolRequestCourse?.enrolCourseId,
       );
 
       if (!result.id) {
@@ -118,14 +119,6 @@ const SignUpPage = (): JSX.Element => {
         );
 
         return;
-      }
-
-      if (enrolRequestCourse) {
-        await CourseAPI.courses.submitUnauthenticatedEnrolRequest(
-          `/courses/${enrolRequestCourse.enrolCourseId}/enrol_requests/create_unauthenticated`,
-          result.id,
-          captchaResponse,
-        );
       }
 
       if (!result.confirmed) {

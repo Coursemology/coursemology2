@@ -47,6 +47,14 @@ export default {
         warning: palette.warning.main,
         info: palette.info.main,
       },
+      zIndex: {
+        base: '1',
+        badge: '3',
+        sticky: '100',
+        overlay: '110',
+        dropdown: '1000',
+        modal: '9999',
+      },
     },
   },
   corePlugins: {
@@ -68,9 +76,15 @@ export default {
       );
     }),
     containerQueries,
-    // Backported from Tailwind v4, should be removed when we upgrade.
     plugin(({ addUtilities }) => {
+      addUtilities({ '.w-144': { width: '36rem' } });
+      // Backports from Tailwind v4, should be removed when we upgrade.
       addUtilities({ '.wrap-anywhere': { 'overflow-wrap': 'anywhere' } });
+      addUtilities({
+        '.justify-center-safe': {
+          'justify-content': 'safe center',
+        },
+      });
     }),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(

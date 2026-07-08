@@ -1,0 +1,9 @@
+- host = @course.instance.host
+- time = Time.use_zone(@recipient.time_zone) { @video.end_at.to_formatted_s(:long) }
+
+= simple_format(t('.message', video: link_to(@video.title, course_video_url(@course, @video, host: host)),
+                              time: time))
+
+br
+= render partial: 'layouts/manage_email_subscription',
+         locals: { course: @course, recipient: @recipient, component: 'videos', category_id: nil, setting: 'closing_reminder' }

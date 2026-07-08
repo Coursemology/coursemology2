@@ -6,12 +6,38 @@ import {
   RubricDataWithEvaluations,
 } from 'types/course/rubrics';
 
+import { RubricState } from '../reducers/rubrics';
+
 import { AnswerTableEntry } from './AnswerEvaluationsTable/types';
 import { answerDataToTableEntry } from './AnswerEvaluationsTable/utils';
 import { RubricCategoryEntity, RubricEditFormData } from './types';
 
 export const generateNewElementId = (elements: { id: number }[]): number =>
   1 + Math.max(-1, ...elements.map((element) => element.id));
+
+// Keeps only each student's latest (current) answer -- the same notion of "latest" the past-answers views
+// use (the `current_answer` flag), rather than a recency heuristic.
+export const currentAnswersOnly = <T extends { currentAnswer: boolean }>(
+  items: T[],
+): T[] => items.filter((item) => item.currentAnswer);
+
+// Converts a saved rubric (store shape) into editable form values, seeding the per-row draft/delete
+// flags. Used to initialise the edit draft and to render read-only previews of saved revisions.
+export const rubricStateToFormData = (
+  rubric?: RubricState,
+): RubricEditFormData => ({
+  categories: (rubric?.categories ?? []).map((category) => ({
+    ...category,
+    criterions: category.criterions.map((criterion) => ({
+      ...criterion,
+      draft: false,
+      toBeDeleted: false,
+    })),
+    toBeDeleted: false,
+  })),
+  gradingPrompt: rubric?.gradingPrompt ?? '',
+  modelAnswer: rubric?.modelAnswer ?? '',
+});
 
 const markGradeForDeletion = (
   categories: RubricCategoryEntity[],

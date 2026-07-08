@@ -14,4 +14,10 @@ class Course::Assessment::LiveFeedback::Message < ApplicationRecord
   validates :content, exclusion: { in: [nil] }
   validates :creator_id, presence: true
   validates :created_at, presence: true
+
+  before_save :sanitize_text
+
+  def sanitize_text
+    self.content = ApplicationController.helpers.sanitize_ckeditor_rich_text(content)
+  end
 end

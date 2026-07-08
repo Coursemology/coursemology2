@@ -37,7 +37,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers', js: true
 
         expect(page).to have_selector('.ace_editor')
 
-        click_button 'Finalise Submission'
+        find('button[data-testid="FinaliseButton"]').click
         click_button 'Continue'
 
         expect(page).not_to have_selector('.ace_editor')

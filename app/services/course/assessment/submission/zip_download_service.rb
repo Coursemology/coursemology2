@@ -1,23 +1,16 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
-
-  # @param [CourseUser] course_user The course user downloading the submissions.
+  # @param [CourseUser|nil] current_course_user The course user downloading the submissions.
   # @param [Course::Assessment] assessment The assessments to download submissions from.
-  # @param [String|nil] course_users The subset of course users whose submissions to download.
+  # @param [String|nil] course_user_type The subset of course users whose submissions to download.
   # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
   #   'staff', 'staff_w_phantom'
-  def initialize(course_user, assessment, course_users)
+  def initialize(current_course_user, assessment, course_user_type)
     super()
-    @course_user = course_user
+    @current_course_user = current_course_user
     @assessment = assessment
     @questions = assessment.questions.to_h { |q| [q.id, q] }
-    @course_users = course_users
+    @course_user_type = course_user_type
   end
 
   private
@@ -44,21 +37,8 @@ class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::S
     end
   end
 
-  def course_user_ids # rubocop:disable Metrics/AbcSize
-    @course_user_ids ||=
-      case @course_users
-      when COURSE_USERS[:my_students]
-        @course_user.my_students.without_phantom_users
-      when COURSE_USERS[:my_students_w_phantom]
-        @course_user.my_students
-      when COURSE_USERS[:students_w_phantom]
-        @assessment.course.course_users.students
-      when COURSE_USERS[:staff]
-        @assessment.course.course_users.staff.without_phantom_users
-      when COURSE_USERS[:staff_w_phantom]
-        @assessment.course.course_users.staff
-      else
-        @assessment.course.course_users.students.without_phantom_users
-      end.select(:user_id)
+  def course_user_ids
+    source_course = @current_course_user&.course || @assessment.course
+    @course_user_ids ||= source_course.course_users_by_type(@course_user_type, @current_course_user).select(:user_id)
   end
 end

@@ -123,6 +123,22 @@ const createAppRouter = (router: RouteObject[]): RouteObject[] => [
             },
           },
           {
+            path: 'suspended',
+            lazy: async () => {
+              const ErrorPage = (
+                await import(
+                  /* webpackChunkName: "ErrorPage" */
+                  'bundles/common/ErrorPage'
+                )
+              ).default;
+
+              return {
+                Component: ErrorPage.Suspended,
+                loader: ErrorPage.Suspended.loader,
+              };
+            },
+          },
+          {
             path: '*',
             lazy: async () => {
               const ErrorPage = (

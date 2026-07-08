@@ -3,6 +3,8 @@ module Course::Statistics::TimesConcern
   private
 
   def duration_statistics_hash
+    return {} if @assessments.empty? || @all_students.empty?
+
     durations_info = ActiveRecord::Base.connection.execute("
       SELECT ca.assessment_id AS id, AVG(ca.duration) AS avg, STDDEV(ca.duration) AS stdev
       FROM (

@@ -1,7 +1,12 @@
-import { ComponentRef, useMemo, useRef, useState } from 'react';
+import { ComponentRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Typography } from '@mui/material';
+import moment from 'moment';
 import { TimelineData } from 'types/course/referenceTimelines';
 
+import {
+  DAY_WIDTH_PIXELS,
+  getDaysFromSeconds,
+} from 'course/reference-timelines/utils';
 import BetaChip from 'lib/components/core/BetaChip';
 import SearchField from 'lib/components/core/fields/SearchField';
 import useItems from 'lib/hooks/items/useItems';
@@ -25,6 +30,7 @@ const DayView = (): JSX.Element => {
 
   const calendarRef = useRef<ComponentRef<typeof DayCalendar>>(null);
   const contentsRef = useRef<HTMLDivElement>(null);
+  const isInitialScrollDone = useRef(false);
 
   const { processedItems: filteredItems, handleSearch } = useItems(items, [
     'title',
@@ -40,14 +46,40 @@ const DayView = (): JSX.Element => {
     return timelines.filter((timeline) => !hiddenTimelineIds.has(timeline.id));
   }, [hiddenTimelineIds, timelines]);
 
+  const scrollToToday = (): void => {
+    const todayIndex = getDaysFromSeconds(moment().startOf('day').unix()) + 1;
+
+    calendarRef.current?.scrollToItem(todayIndex);
+    contentsRef.current?.scrollTo({
+      left: todayIndex * DAY_WIDTH_PIXELS,
+    });
+  };
+
+  // Default scroll is yet to come to react-window v2.x
+  // https://github.com/bvaughn/react-window/blob/main/lib/core/useVirtualizer.ts#L101
+  useEffect(() => {
+    if (
+      !isInitialScrollDone.current &&
+      calendarRef.current &&
+      contentsRef.current
+    ) {
+      scrollToToday();
+      isInitialScrollDone.current = true;
+    }
+  }, [calendarRef.current, contentsRef.current]);
+
   return (
     <main className="relative flex h-[calc(100vh_-_4rem)] overflow-hidden">
       <DayCalendar
         ref={calendarRef}
         className="ml-[32rem] border-0 border-l border-solid border-neutral-200"
-        onScroll={(offset): void => {
-          if (contentsRef.current) contentsRef.current.scrollLeft = offset;
+        onScroll={(event): void => {
+          if (contentsRef.current)
+            contentsRef.current.scrollTo({
+              left: event.currentTarget.scrollLeft,
+            });
         }}
+        scrollToToday={scrollToToday}
       />
 
       <SubmitIndicator className="absolute right-36 top-0 h-12" />
@@ -72,9 +104,12 @@ const DayView = (): JSX.Element => {
           <ItemsSidebar
             className="w-[32rem]"
             for={filteredItems}
-            onRequestFocus={(index): void =>
-              calendarRef.current?.scrollToItem(index)
-            }
+            onRequestFocus={(index): void => {
+              calendarRef.current?.scrollToItem(index + 1);
+              contentsRef.current?.scrollTo({
+                left: (index + 1) * DAY_WIDTH_PIXELS,
+              });
+            }}
             within={visibleTimelines}
           />
 

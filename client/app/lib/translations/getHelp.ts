@@ -80,7 +80,11 @@ const translations = defineMessages({
   },
   invalidDateSelection: {
     id: 'lib.components.getHelp.validation.invalidDateSelection',
-    defaultMessage: 'End Date must be after or equal to Start Date',
+    defaultMessage: 'Invalid date',
+  },
+  endDateBeforeStartDate: {
+    id: 'lib.components.getHelp.validation.endDateBeforeStartDate',
+    defaultMessage: 'End date must be after or equal to Start date',
   },
   exceedDateRange: {
     id: 'lib.components.getHelp.validation.exceedDateRange',

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Authentication::KeycloakVerificationService < Authentication::VerificationService
-  KEYCLOAK_INSTROPECTION_URL = ENV['KEYCLOAK_AUTH_INSTROPECTION_URL'].freeze
   class << self
     delegate :validate_token, to: :new
   end
@@ -21,12 +20,24 @@ class Authentication::KeycloakVerificationService < Authentication::Verification
 
   private
 
+  def client_id
+    Rails.application.credentials.dig(:keycloak, :backend, :client_id)
+  end
+
+  def client_secret
+    Rails.application.credentials.dig(:keycloak, :backend, :client_secret)
+  end
+
+  def introspection_url
+    Rails.application.credentials.dig(:keycloak, :introspection_url)
+  end
+
   def introspect_token(access_token)
     instropection_response = \
       Keycloak::Client.get_token_introspection(access_token,
-                                               ENV['KEYCLOAK_BE_CLIENT_ID'],
-                                               ENV['KEYCLOAK_BE_CLIENT_SECRET'],
-                                               KEYCLOAK_INSTROPECTION_URL)
+                                               client_id,
+                                               client_secret,
+                                               introspection_url)
 
     JSON.parse(instropection_response.to_s)
   end

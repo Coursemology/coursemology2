@@ -10,7 +10,11 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
       >
         An error.
       </p>
-      <div
+      <section
+        aria-atomic="false"
+        aria-label="Notifications Alt+T"
+        aria-live="polite"
+        aria-relevant="additions text"
         class="Toastify"
       />
     </div>
@@ -21,7 +25,11 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
     >
       An error.
     </p>
-    <div
+    <section
+      aria-atomic="false"
+      aria-label="Notifications Alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
       class="Toastify"
     />
   </div>,
@@ -94,7 +102,11 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
       >
         Another error.
       </p>
-      <div
+      <section
+        aria-atomic="false"
+        aria-label="Notifications Alt+T"
+        aria-live="polite"
+        aria-relevant="additions text"
         class="Toastify"
       />
     </div>
@@ -110,7 +122,11 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
     >
       Another error.
     </p>
-    <div
+    <section
+      aria-atomic="false"
+      aria-label="Notifications Alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
       class="Toastify"
     />
   </div>,

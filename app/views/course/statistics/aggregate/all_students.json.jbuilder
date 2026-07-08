@@ -6,6 +6,7 @@ can_analyze_videos = can?(:analyze_videos, current_course)
 is_course_gamified = current_course.gamified?
 no_group_managers = @service.no_group_managers?
 has_my_students = false
+has_external_ids = current_course.course_users.students.where.not(external_id: [nil, '']).exists?
 
 json.students @all_students do |student|
   is_my_student = false
@@ -13,6 +14,7 @@ json.students @all_students do |student|
   json.name student.name
   json.nameLink course_user_path(current_course, student)
   json.email student.user.email
+  json.externalId student.external_id
   json.studentType student.phantom? ? 'Phantom' : 'Normal'
 
   unless no_group_managers
@@ -48,6 +50,7 @@ json.metadata do
   json.courseVideoCount course_video_count
   json.hasGroupManagers !no_group_managers
   json.hasMyStudents has_my_students
+  json.hasExternalIds has_external_ids
   json.showRedirectToMissionControl current_course.component_enabled?(Course::StoriesComponent) &&
                                     can?(:access_mission_control, current_course)
 end

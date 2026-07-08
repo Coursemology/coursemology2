@@ -15,8 +15,15 @@ ko:
           owner: '소유자'
           phantom: '팬텀'
       user_invitations:
-        duplicate_user: '%{user}가 제출물에 여러 번 나타납니다.'
-        invalid_email: '%{email}이(가) 유효하지 않습니다: %{message}.'
+        already_enrolled: '%{email}을(를) 처리할 수 없습니다: 이미 이 과정에 등록되어 있습니다.'
+        duplicate_invitation: '%{email}을(를) 처리할 수 없습니다: 이미 대기 중인 초대가 있습니다.'
+        invalid_email: '%{email}을(를) 처리할 수 없습니다: 유효하지 않은 이메일: %{message}.'
+        duplicate_external_id: '%{email}을(를) 처리할 수 없습니다: 외부 ID "%{external_id}"는 이미 사용 중입니다.'
+        other_error: '%{email}을(를) 처리할 수 없습니다: %{message}.'
+        invalid_headers: '인식되지 않는 CSV 헤더: %{headers}. 허용되는 헤더: %{accepted}.'
+        missing_required_headers: 'CSV에는 "이름"과 "이메일" 열이 모두 포함되어야 합니다.'
+        duplicate_headers: '중복된 CSV 열: "%{column}". 각 열은 한 번만 나타나야 합니다.'
+        no_valid_rows: 'CSV 파일에 초대할 행이 없습니다.'
       user_registrations:
         invalid_code: '잘못된 초대 코드를 입력하셨습니다.'
         code_taken: >
@@ -58,6 +65,12 @@ ko:
                 generic_error: >
                   오류가 발생했습니다. 서버가 바쁠 수 있으니 몇 분 후에 다시 시도해 보세요. 동일한 문제가
                   계속되면, coursemology 관리자에게 문의하고 이 페이지의 URL을 제공하며 다음 오류를 함께 제공해주세요: '"%{error}"
+        text_response_auto_grading:
+          grade:
+            regex_timeout: >
+              정규식 평가 시간이 초과되었습니다.
+            evaluation_failed: >
+              평가 중 오류가 발생했습니다.
         live_feedback:
           thread:
             only_one_active_thread: '제출 질문당 활성화된 스레드는 하나만 존재할 수 있습니다'

@@ -73,7 +73,7 @@ export interface ProgrammingFieldData extends AnswerFieldBaseData {
 export interface ProgrammingAnswerData extends AnswerBaseData {
   questionType: QuestionType.Programming;
   fields: ProgrammingFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean;
     explanation: string[];
     failureType: TestCaseType;

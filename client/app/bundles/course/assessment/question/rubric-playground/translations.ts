@@ -12,6 +12,55 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.savedRubric',
     defaultMessage: 'Saved Rubric, {date}',
   },
+  activeRubric: {
+    id: 'course.assessment.question.rubricPlayground.activeRubric',
+    defaultMessage: 'Active',
+  },
+  latestRubric: {
+    id: 'course.assessment.question.rubricPlayground.latestRubric',
+    defaultMessage: 'Latest',
+  },
+  unsavedRubric: {
+    id: 'course.assessment.question.rubricPlayground.unsavedRubric',
+    defaultMessage: 'Unsaved',
+  },
+  returnToEditing: {
+    id: 'course.assessment.question.rubricPlayground.returnToEditing',
+    defaultMessage: 'Return to Editing',
+  },
+  restartEditing: {
+    id: 'course.assessment.question.rubricPlayground.restartEditing',
+    defaultMessage: 'Restart Editing from Here',
+  },
+  restart: {
+    id: 'course.assessment.question.rubricPlayground.restart',
+    defaultMessage: 'Restart',
+  },
+  discardChanges: {
+    id: 'course.assessment.question.rubricPlayground.discardChanges',
+    defaultMessage: 'Discard Changes',
+  },
+  deleteRubricFailure: {
+    id: 'course.assessment.question.rubricPlayground.deleteRubricFailure',
+    defaultMessage: 'Could not delete this rubric revision.',
+  },
+  confirmDiscardChangesTitle: {
+    id: 'course.assessment.question.rubricPlayground.confirmDiscardChangesTitle',
+    defaultMessage: 'Confirm Discard Changes',
+  },
+  confirmDiscardChangesText: {
+    id: 'course.assessment.question.rubricPlayground.confirmDiscardChangesText',
+    defaultMessage: 'Your unsaved rubric changes will be lost.',
+  },
+  confirmRestartEditingTitle: {
+    id: 'course.assessment.question.rubricPlayground.confirmRestartEditingTitle',
+    defaultMessage: 'Confirm Restart Editing',
+  },
+  confirmRestartEditingText: {
+    id: 'course.assessment.question.rubricPlayground.confirmRestartEditingText',
+    defaultMessage:
+      'Your unsaved rubric changes will be replaced with this revision.',
+  },
   viewEditRubric: {
     id: 'course.assessment.question.rubricPlayground.viewEditRubric',
     defaultMessage: 'View / Edit Rubric',
@@ -27,6 +76,28 @@ const translations = defineMessages({
   apply: {
     id: 'course.assessment.question.rubricPlayground.apply',
     defaultMessage: 'Apply',
+  },
+  applyOnlyActiveRubric: {
+    id: 'course.assessment.question.rubricPlayground.applyOnlyActiveRubric',
+    defaultMessage:
+      'Only the active rubric revision may be used to apply edits to existing grades.',
+  },
+  showOnlyLatestAnswers: {
+    id: 'course.assessment.question.rubricPlayground.showOnlyLatestAnswers',
+    defaultMessage: 'Show only current answers',
+  },
+  setAsActive: {
+    id: 'course.assessment.question.rubricPlayground.setAsActive',
+    defaultMessage: 'Set as Active',
+  },
+  confirmSetActiveTitle: {
+    id: 'course.assessment.question.rubricPlayground.confirmSetActiveTitle',
+    defaultMessage: 'Warning: Setting Incompatible Revision as Active',
+  },
+  confirmSetActiveText: {
+    id: 'course.assessment.question.rubricPlayground.confirmSetActiveText',
+    defaultMessage:
+      'This revision is structurally incompatible with existing grades. We will carry forward grading data, but we strongly recommend double-checking answer grades as some data may be lost. Are you sure you wish to proceed?',
   },
   confirmAIGradingApplication: {
     id: 'course.assessment.question.rubricPlayground.confirmAIGradingApplication',
@@ -53,6 +124,89 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.applyWillGradeAllAnswers',
     defaultMessage:
       'Applying this rubric will assign grades to all student answers, including the ones not yet evaluated on this page.',
+  },
+  applyReplacesSavedResults: {
+    id: 'course.assessment.question.rubricPlayground.applyReplacesSavedResults',
+    defaultMessage:
+      "Applying replaces the saved grade and comment of the selected answers with the active rubric's evaluation results.",
+  },
+  applySelected: {
+    id: 'course.assessment.question.rubricPlayground.applySelected',
+    defaultMessage: 'Apply {count} selected',
+  },
+  evaluateSelected: {
+    id: 'course.assessment.question.rubricPlayground.evaluateSelected',
+    defaultMessage: 'Evaluate {count} selected',
+  },
+  confirmApplyUnevaluatedTitle: {
+    id: 'course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle',
+    defaultMessage: 'Confirm Direct Application for Answers',
+  },
+  confirmApplyUnevaluatedText: {
+    id: 'course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText',
+    defaultMessage:
+      'Some of the answers you are applying have not been evaluated against the active rubric yet. We will evaluate them as part of the application process, but evaluating them before applying will allow you to see the results here before affecting real student grades. Are you sure you wish to proceed?',
+  },
+  applyRow: {
+    id: 'course.assessment.question.rubricPlayground.applyRow',
+    defaultMessage: 'Apply this evaluation to the student',
+  },
+  searchByStudentName: {
+    id: 'course.assessment.question.rubricPlayground.searchByStudentName',
+    defaultMessage: 'Search by student name',
+  },
+  submissionStatus: {
+    id: 'course.assessment.question.rubricPlayground.submissionStatus',
+    defaultMessage: 'Status',
+  },
+  currentGrade: {
+    id: 'course.assessment.question.rubricPlayground.currentGrade',
+    defaultMessage: 'Current Grade',
+  },
+  evaluationGrade: {
+    id: 'course.assessment.question.rubricPlayground.evaluationGrade',
+    defaultMessage: 'New Grade',
+  },
+  evaluationComment: {
+    id: 'course.assessment.question.rubricPlayground.evaluationComment',
+    defaultMessage: 'Feedback',
+  },
+  gradingStatus: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatus',
+    defaultMessage: 'Grading Status',
+  },
+  gradingStatusModified: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatusModified',
+    defaultMessage: 'Modified',
+  },
+  gradingStatusIncomplete: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatusIncomplete',
+    defaultMessage: 'Incomplete',
+  },
+  gradingStatusStale: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatusStale',
+    defaultMessage: 'Stale',
+  },
+  gradingStatusUpToDate: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatusUpToDate',
+    defaultMessage: 'Up-to-date',
+  },
+  gradingStatusManuallyGraded: {
+    id: 'course.assessment.question.rubricPlayground.gradingStatusManuallyGraded',
+    defaultMessage: 'Manually graded',
+  },
+  regradeRow: {
+    id: 'course.assessment.question.rubricPlayground.regradeRow',
+    defaultMessage:
+      'Re-evaluate with the active rubric (does not change the grade)',
+  },
+  regradeSuccess: {
+    id: 'course.assessment.question.rubricPlayground.regradeSuccess',
+    defaultMessage: 'Re-evaluation complete.',
+  },
+  actions: {
+    id: 'course.assessment.question.rubricPlayground.actions',
+    defaultMessage: 'Actions',
   },
   confirmProceed: {
     id: 'course.assessment.question.rubricPlayground.confirmProceed',
@@ -83,6 +237,11 @@ const translations = defineMessages({
   comparingRevisions: {
     id: 'course.assessment.question.rubricPlayground.comparingRevisions',
     defaultMessage: 'Comparing {count} revisions',
+  },
+  evaluationsDoNotAffectGrades: {
+    id: 'course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades',
+    defaultMessage:
+      "Evaluations in this table do not affect the grades assigned to students. You can update existing student grades under the 'Apply' button.",
   },
 
   // AddAnswersPrompt
@@ -152,6 +311,10 @@ const translations = defineMessages({
   evaluating: {
     id: 'course.assessment.question.rubricPlayground.evaluating',
     defaultMessage: 'Evaluating',
+  },
+  applying: {
+    id: 'course.assessment.question.rubricPlayground.applying',
+    defaultMessage: 'Applying',
   },
   categoryHeading: {
     id: 'course.assessment.question.rubricPlayground.categoryHeading',

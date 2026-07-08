@@ -23,6 +23,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
       before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
       context 'when an exact match is present' do
+        let(:question_traits) { :exact_match_solution }
         let(:answer_traits) { :exact_match }
 
         it 'matches the entire answer' do
@@ -52,6 +53,19 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :multiline_windows }
 
         it 'treats different answer and question newlines as equivalent' do
+          subject.grade(answer)
+          expect(answer).to be_correct
+          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(grading.result['messages']).to \
+            contain_exactly(question.solutions.exact_match.first.explanation)
+        end
+      end
+
+      context 'when both an exact match and a keyword apply' do
+        let(:question_traits) { :exact_match_with_keyword }
+
+        it 'returns only the exact match result' do
+          answer.actable.answer_text = 'hello keyword world'
           subject.grade(answer)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
@@ -95,6 +109,29 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
           subject.grade(answer)
           expect(answer.grade).to eq(0)
           expect(grading.result['messages']).to be_empty
+        end
+      end
+
+      context 'when a regex solution is present' do
+        let(:question_traits) { :regex_solution }
+
+        context 'when the answer matches the regex' do
+          it 'grades the answer' do
+            answer.actable.answer_text = 'hello123'
+            subject.grade(answer)
+            expect(answer).not_to be_correct
+            expect(answer.grade).to eq(question.solutions.regex.first.grade)
+            expect(grading.result['messages']).to \
+              contain_exactly(question.solutions.regex.first.explanation)
+          end
+        end
+
+        context 'when the answer does not match the regex' do
+          it 'matches nothing' do
+            subject.grade(answer)
+            expect(answer.grade).to eq(0)
+            expect(grading.result['messages']).to be_empty
+          end
         end
       end
     end

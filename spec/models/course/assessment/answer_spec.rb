@@ -285,6 +285,86 @@ RSpec.describe Course::Assessment::Answer do
       end
     end
 
+    describe '#can_read_grade?' do
+      let(:ability) { instance_double(Ability) }
+      let(:answer) { create(:course_assessment_answer) }
+      let(:submission) { answer.submission }
+      let(:assessment) { submission.assessment }
+      let(:show_mcq_answer) { false }
+
+      before do
+        allow(ability).to receive(:can?).with(:grade, submission).and_return(false)
+        allow(submission).to receive(:published?).and_return(false)
+        allow(assessment).to receive(:autograded?).and_return(false)
+        allow(assessment).to receive(:allow_partial_submission).and_return(false)
+        allow(assessment).to receive(:show_mcq_answer).and_return(show_mcq_answer)
+      end
+
+      context 'when the submission is graded and grades are published' do
+        before { allow(submission).to receive(:published?).and_return(true) }
+
+        it 'returns true' do
+          expect(answer.can_read_grade?(ability)).to be(true)
+        end
+      end
+
+      context 'when the ability can grade the submission' do
+        before { allow(ability).to receive(:can?).with(:grade, submission).and_return(true) }
+
+        it 'returns true' do
+          expect(answer.can_read_grade?(ability)).to be(true)
+        end
+      end
+
+      context 'when the assessment is autograded' do
+        before { allow(assessment).to receive(:autograded?).and_return(true) }
+
+        context 'and does not allow partial submission' do
+          before { allow(assessment).to receive(:allow_partial_submission).and_return(false) }
+
+          it 'returns true regardless of answer type' do
+            expect(answer.can_read_grade?(ability)).to be(true)
+          end
+        end
+
+        context 'and allows partial submission' do
+          before { allow(assessment).to receive(:allow_partial_submission).and_return(true) }
+
+          context 'and the answer is a MultipleResponse with show_mcq_answer enabled' do
+            let(:answer) { create(:course_assessment_answer_multiple_response) }
+            let(:show_mcq_answer) { true }
+
+            it 'returns true' do
+              expect(answer.can_read_grade?(ability)).to be(true)
+            end
+          end
+
+          context 'and the answer is a MultipleResponse with show_mcq_answer disabled' do
+            let(:answer) { create(:course_assessment_answer_multiple_response) }
+
+            it 'returns false' do
+              expect(answer.can_read_grade?(ability)).to be(false)
+            end
+          end
+
+          context 'and the answer is not a MultipleResponse' do
+            let(:answer) { create(:course_assessment_answer_text_response) }
+            let(:show_mcq_answer) { true }
+
+            it 'returns false' do
+              expect(answer.can_read_grade?(ability)).to be(false)
+            end
+          end
+        end
+      end
+
+      context 'when no conditions are met' do
+        it 'returns false' do
+          expect(answer.can_read_grade?(ability)).to be(false)
+        end
+      end
+    end
+
     describe '#retrieve_codaveri_code_feedback' do
       subject { answer.reset_answer }
 

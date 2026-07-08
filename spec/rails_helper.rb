@@ -1,19 +1,7 @@
 # frozen_string_literal: true
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 
-# Env variables for rspec
 ENV['RAILS_ENV'] ||= 'test'
-ENV['KEYCLOAK_AUTH_SERVER_URL'] ||= 'http://localhost:8443/'
-ENV['KEYCLOAK_AUTH_JWKS_URL'] ||= 'http://localhost:8443/realms/coursemology_test/protocol/openid-connect/certs'
-ENV['KEYCLOAK_AUTH_INSTROPECTION_URL'] ||= 'http://localhost:8443/realms/coursemology_test/protocol/openid-connect/token/introspect'
-ENV['KEYCLOAK_ISS'] ||= 'http://localhost:8443/realms/coursemology_test'
-ENV['KEYCLOAK_AUD'] ||= 'account'
-ENV['KEYCLOAK_REALM'] ||= 'coursemology_test'
-# All the codaveri endpoints are mocked, so this URL should never be called
-# We use a dummy value since leaving it as null raises an error, and potentially
-# in the future we can use it in stub logic to differentiate from other external APIs.
-ENV['CODAVERI_URL'] ||= 'http://localhost:53896'
-ENV['SSID_URL'] ||= 'http://localhost:53897'
 
 require 'spec_helper'
 require 'rspec/rails'

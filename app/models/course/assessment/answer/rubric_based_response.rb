@@ -4,6 +4,9 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
 
   after_initialize :set_default
   before_validation :strip_whitespace
+  # Grade-selection edits target the v2 grading evaluation, which is not a nested attribute on this
+  # record, so they are stashed during #assign_params and persisted once the answer itself saves.
+  after_save :persist_grading_selections, if: -> { @pending_grading_selections.present? }
 
   has_many :selections, class_name: 'Course::Assessment::Answer::RubricBasedResponseSelection',
                         dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
@@ -21,19 +24,21 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]
 
-    assign_grade_params(params)
+    @pending_grading_selections = params[:selections_attributes]
   end
 
-  def assign_grade_params(params)
-    params[:selections_attributes]&.each do |selection_attribute|
-      selection = selections.find { |s| s.id == selection_attribute[:id].to_i }
-      if selection_attribute[:criterion_id]
-        selection.criterion_id = selection_attribute[:criterion_id].to_i
-      else
-        selection.grade = selection_attribute[:grade].to_i
+  # Applies stashed grade-selection edits to the answer's grading evaluation (v2). Each row carries the
+  # grading selection's id and the chosen criterion (blank clears it, i.e. ungrades the category).
+  def persist_grading_selections
+    grading = acting_as.grading_rubric_evaluation
+    if grading
+      selections_by_id = grading.selections.index_by(&:id)
+      @pending_grading_selections.each do |attribute|
+        selection = selections_by_id[attribute[:id].to_i]
+        selection&.update!(criterion_id: attribute[:criterion_id].presence&.to_i)
       end
-      selection.explanation = selection_attribute[:explanation]
     end
+    @pending_grading_selections = nil
   end
 
   # Rubric based responses should be graded in a job.
@@ -49,6 +54,32 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
     return false unless other_answer.is_a?(Course::Assessment::Answer::RubricBasedResponse)
 
     answer_text == other_answer.answer_text
+  end
+
+  # Ensures the answer has a v2 grading evaluation so a grader can edit category selections (and so the
+  # breakdown persists) even before any auto-grading has run. Creates a blank one -- a null-criterion
+  # selection per active-rubric category, i.e. every category starts ungraded. No-op when one already
+  # exists or the question has no active rubric. Uses #exists? so the +grading_rubric_evaluation+ has_one
+  # is never cached as nil before the record is created.
+  #
+  # The grading evaluation's +rubric_id+ is left NULL here: an evaluation created this way is graded by hand
+  # without AI prefill ("manually graded"). Auto-grading / applying from the playground set rubric_id to
+  # record which rubric the grade was evaluated against. The selections still belong to the active rubric's
+  # categories, so the breakdown displays against it.
+  def ensure_grading_evaluation!
+    existing = acting_as.rubric_evaluations.find_by(evaluation_type: :grading)
+    return existing if existing
+
+    rubric = question.active_rubric
+    return unless rubric
+
+    Course::Rubric::AnswerEvaluation.transaction do
+      grading = Course::Rubric::AnswerEvaluation.create!(
+        answer: acting_as, rubric: nil, evaluation_type: :grading
+      )
+      rubric.categories.each { |category| grading.selections.create!(category_id: category.id) }
+      grading
+    end
   end
 
   def create_category_grade_instances

@@ -2,6 +2,7 @@
 json.id instance.id
 json.name instance.name
 json.host instance.host
+json.redirectUri instance.redirect_uri
 json.activeUserCount instance.active_user_count
 json.userCount instance.user_count
 json.activeCourseCount instance.active_course_count

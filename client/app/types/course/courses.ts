@@ -40,6 +40,10 @@ export interface CourseData extends CourseListData {
   // ---
   notifications: NotificationData[];
   permissions: CourseDataPermissions;
+  isSuspendedUser?: boolean;
+  userSuspensionMessage?: string;
+  isSuspended: boolean;
+  courseSuspensionMessage?: string;
 }
 
 export interface CourseMiniEntity {
@@ -68,6 +72,11 @@ export interface CourseEntity extends CourseMiniEntity {
   // ---
   notifications: NotificationData[];
   permissions: CourseDataPermissions;
+  isSuspendedUser?: boolean;
+  userSuspensionMessage?: string;
+  isSuspended: boolean;
+  courseSuspensionMessage?: string;
+  canSuspendCourse: boolean;
 }
 
 export interface NewCourseFormData {

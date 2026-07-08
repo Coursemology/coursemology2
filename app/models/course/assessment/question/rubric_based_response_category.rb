@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+# DEPRECATED (v1). This table (course_assessment_question_rubric_based_response_categories) is no longer in use.
+# This table contained the categories for the v1 rubric-based response grading rubrics.
+# DO NOT add new reads/writes - use Course::Rubric::Category.
 class Course::Assessment::Question::RubricBasedResponseCategory < ApplicationRecord
   validates :question, presence: true
 

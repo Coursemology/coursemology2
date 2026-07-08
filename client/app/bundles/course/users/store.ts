@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import {
   CourseUserBasicListData,
-  CourseUserData,
   CourseUserListData,
+  CourseUserMiniEntity,
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
@@ -185,7 +185,9 @@ export const actions = {
     };
   },
 
-  saveUser: (user: CourseUserData): SaveUserAction => {
+  saveUser: (
+    user: Partial<CourseUserMiniEntity> & { id: number },
+  ): SaveUserAction => {
     return {
       type: SAVE_USER,
       user,

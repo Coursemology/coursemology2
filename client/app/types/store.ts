@@ -1,4 +1,4 @@
-interface EntityMetadata {
+export interface EntityMetadata {
   // The timestamp at which the entity was last updated, in number of milliseconds since UTC.
   lastUpdate: number;
   // The timestamp at which the full entity was last updated, in number of milliseconds since UTC.

@@ -42,7 +42,7 @@ class Course::Assessment::Submission::BaseZipDownloadService
   #
   # @return [String] The path to the zip file.
   def zip_base_dir
-    Zip::File.open(zip_file_path, Zip::File::CREATE) do |zip_file|
+    Zip::File.open(zip_file_path, create: true) do |zip_file|
       Dir["#{@base_dir}/**/**"].each do |file|
         zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)
       end

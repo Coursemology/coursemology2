@@ -7,7 +7,11 @@ import {
   ChartData,
   ChartOptions,
   Color,
+  LinearScale,
+  LineElement,
+  PointElement,
   PointStyle,
+  TimeScale,
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import palette from 'theme/palette';
@@ -16,6 +20,8 @@ import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import moment from 'lib/moment';
+
+import 'chartjs-adapter-moment';
 
 import translations from '../../../translations';
 import { select } from '../selectors';
@@ -30,7 +36,7 @@ const ALIVE_PERIOD_COLOR = 'rgba(69, 184, 128, 0.2)';
 const LATE_PERIOD_COLOR = palette.warning.main;
 const MISSING_PERIOD_COLOR = palette.error.main;
 
-ChartJS.register(zoomPlugin);
+ChartJS.register(LinearScale, LineElement, PointElement, TimeScale, zoomPlugin);
 
 interface HeartbeatsTimelineChartProps {
   in: HeartbeatDetail[];
@@ -127,7 +133,7 @@ const HeartbeatsTimelineChart = (
    * Generally, there's no reason why `options` will need to dynamically change.
    * @see https://github.com/chartjs/chartjs-plugin-zoom/discussions/589
    */
-  const options: ChartOptions<'line'> = useMemo(
+  const options: ChartOptions<'line'> = useMemo<ChartOptions<'line'>>(
     () => ({
       parsing: {
         xAxisKey: 'timestamp',

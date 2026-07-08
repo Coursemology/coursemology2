@@ -20,7 +20,18 @@ interface AuthProviderProps {
 
 export const INVALID_GRANT_ERROR = 'invalid_grant';
 
+const RECOVERY_ATTEMPTED_KEY = 'oidc_recovery_attempted';
+
+const getCleanCallbackUrl = (): string => {
+  const url = new URL(window.location.href);
+  ['code', 'state', 'session_state', 'iss'].forEach((p) =>
+    url.searchParams.delete(p),
+  );
+  return url.toString();
+};
+
 const onSigninCallback = (_user: User | void): void => {
+  sessionStorage.removeItem(RECOVERY_ATTEMPTED_KEY);
   const url = new URL(window.location.pathname, window.location.origin);
   url.searchParams.set('from', 'auth');
   window.history.replaceState({}, document.title, url.toString());
@@ -40,18 +51,29 @@ export const AUTH_USER_MANAGER = new UserManager(oidcConfig);
 /**
  * Recovers from auth errors that occur during the signin callback, typically
  * caused by a stale or mismatched `state` param (e.g. a bookmarked callback
- * URL, or localStorage cleared between redirect and return). Clears the stale
- * OIDC state and returns the user to the home page to start a fresh login.
+ * URL, or localStorage cleared between redirect and return).
+ *
+ * Clears the stale OIDC state and attempts to re-authenticate the user.
+ * If re-authentication fails again, returns the user to the home page to start a fresh login.
  */
 const AuthErrorRecovery = (): null => {
-  const { error, clearStaleState } = useAuth();
+  const { error, clearStaleState, signinRedirect } = useAuth();
 
   useEffect(() => {
     if (error?.source !== 'signinCallback') return;
-    clearStaleState().finally(() =>
-      window.location.replace(window.location.origin),
-    );
-  }, [error, clearStaleState]);
+
+    const alreadyAttempted = sessionStorage.getItem(RECOVERY_ATTEMPTED_KEY);
+
+    clearStaleState().finally(() => {
+      if (alreadyAttempted) {
+        sessionStorage.removeItem(RECOVERY_ATTEMPTED_KEY);
+        window.location.replace(window.location.origin);
+      } else {
+        sessionStorage.setItem(RECOVERY_ATTEMPTED_KEY, '1');
+        signinRedirect({ redirect_uri: getCleanCallbackUrl() });
+      }
+    });
+  }, [error, clearStaleState, signinRedirect]);
 
   return null;
 };

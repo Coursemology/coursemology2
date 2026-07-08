@@ -1,0 +1,2 @@
+Name,Email,External ID,Role,Phantom
+Alice,alice_ext_dupe1@example.com,EXT_DUPE,student,false

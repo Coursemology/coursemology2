@@ -3,14 +3,14 @@ require 'csv'
 class Course::Assessment::Submission::CsvDownloadService
   include TmpCleanupHelper
 
-  # @param [CourseUser] current_course_user The course user downloading the submissions.
+  # @param [CourseUser|nil] current_course_user The course user downloading the submissions.
   # @param [Course::Assessment] assessment The assessments to download submissions from.
-  # @param [String|nil] course_users_type The subset of course users whose submissions to download.
+  # @param [String|nil] course_user_type The subset of course users whose submissions to download.
   # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
   #   'staff', 'staff_w_phantom'
-  def initialize(current_course_user, assessment, course_users_type)
+  def initialize(current_course_user, assessment, course_user_type)
     @current_course_user = current_course_user
-    @course_users_type = course_users_type
+    @course_user_type = course_user_type
     @assessment = assessment
 
     @question_assessments = Course::QuestionAssessment.where(assessment_id: assessment.id).
@@ -46,13 +46,6 @@ class Course::Assessment::Submission::CsvDownloadService
     end
     csv_file_path
   end
-
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
 
   private
 
@@ -113,21 +106,10 @@ class Course::Assessment::Submission::CsvDownloadService
     answer.specific.csv_download
   end
 
-  def course_users # rubocop:disable Metrics/AbcSize
-    @course_users ||=
-      case @course_users_type
-      when COURSE_USERS[:my_students]
-        @current_course_user.my_students.without_phantom_users
-      when COURSE_USERS[:my_students_w_phantom]
-        @current_course_user.my_students
-      when COURSE_USERS[:students_w_phantom]
-        @assessment.course.course_users.students
-      when COURSE_USERS[:staff]
-        @assessment.course.course_users.staff.without_phantom_users
-      when COURSE_USERS[:staff_w_phantom]
-        @assessment.course.course_users.staff
-      else
-        @assessment.course.course_users.students.without_phantom_users
-      end.order_phantom_user.order_alphabetically.includes(user: :emails)
+  def course_users
+    # We cannot use ORDER BY because it conflicts with the selection
+    source_course = @current_course_user&.course || @assessment.course
+    @course_users ||= source_course.course_users_by_type(@course_user_type, @current_course_user).
+                      includes(user: :emails).sort_by { |cu| [cu.phantom? ? 0 : 1, cu.name] }
   end
 end

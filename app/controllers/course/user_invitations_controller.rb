@@ -15,11 +15,24 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create
     result = invite
-    if result
+    case result
+    when Array
       create_invitation_success(result)
+    when :pending_conflict
+      respond_to do |format|
+        format.json do
+          render partial: 'pending_external_id_data',
+                 locals: {
+                   pending_invitation_updates: @pending_conflict.pending_invitation_updates,
+                   pending_course_user_updates: @pending_conflict.pending_course_user_updates
+                 },
+                 status: :ok
+        end
+      end
     else
       propagate_errors
-      render json: { errors: current_course.errors.full_messages.to_sentence }, status: :bad_request
+      errors = current_course.errors[:base]
+      render json: { errors: errors }, status: :bad_request
     end
   end
 
@@ -59,7 +72,8 @@ class Course::UserInvitationsController < Course::ComponentController
     @course_user_invitation_params ||= begin
       params[:course] = { invitations_attributes: {} } unless params.key?(:course)
       params.require(:course).permit(:invitations_file, :registration_key,
-                                     invitations_attributes: [:name, :email, :role, :phantom, :timeline_algorithm])
+                                     invitations_attributes: [:name, :email, :role, :phantom,
+                                                              :timeline_algorithm, :external_id])
     end
   end
 
@@ -114,14 +128,25 @@ class Course::UserInvitationsController < Course::ComponentController
     invitation_params.is_a?(Tempfile)
   end
 
+  VALID_EXTERNAL_ID_RESOLUTIONS = %w[keep_existing replace_all].freeze
+  private_constant :VALID_EXTERNAL_ID_RESOLUTIONS
+
   # Invites the users via the service object.
   #
-  # @return [Boolean] True if the invitation was successful.
+  # @return [Array] On success.
+  # @return [Symbol] :pending_conflict when external ID updates require resolution.
+  # @return [Boolean] false on failure.
   def invite
-    invitation_service.invite(invitation_params)
+    resolution = params[:external_id_resolution]
+    resolution = nil unless VALID_EXTERNAL_ID_RESOLUTIONS.include?(resolution)
+    invitation_service.invite(invitation_params,
+                              external_id_resolution: resolution)
   rescue CSV::MalformedCSVError => e
-    current_course.errors.add(:invitations_file, e.message)
+    current_course.errors.add(:base, e.message)
     false
+  rescue Course::UserInvitationService::PendingExternalIdUpdates => e
+    @pending_conflict = e
+    :pending_conflict
   end
 
   # Creates a user invitation service object for this object.
@@ -135,15 +160,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [void]
   def propagate_errors
-    propagate_errors_to_file if invite_by_file?
-  end
-
-  # Propagates errors from the generated records to the file.
-  #
-  # @return [void]
-  def propagate_errors_to_file
-    errors = aggregate_errors
-    current_course.errors.add(:invitations_file, errors.to_sentence) unless errors.empty?
+    aggregate_errors.each { |msg| current_course.errors.add(:base, msg) }
   end
 
   # Aggregates errors from all the known sources of failure.
@@ -157,9 +174,24 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Array<String>]
   def invalid_course_user_errors
-    invalid_course_users.map do |course_user|
-      user = self.class.helpers.display_course_user(course_user)
-      t('errors.course.user_invitations.duplicate_user', user: user)
+    invalid_course_users.flat_map do |course_user|
+      email = course_user.user&.email || course_user.name
+      errors = []
+      if course_user.errors.of_kind?(:external_id, :taken)
+        errors << t('errors.course.user_invitations.duplicate_external_id',
+                    email: email, external_id: course_user.external_id)
+      end
+      if course_user.errors.of_kind?(:user, :taken) || course_user.errors.of_kind?(:course, :taken)
+        errors << t('errors.course.user_invitations.already_enrolled', email: email)
+      end
+      other_errors = course_user.errors.reject { |e| %w[external_id user course].include?(e.attribute.to_s) }
+      # .any? is intentional: this is a catch-all for unrecognised errors; all messages are forwarded verbatim
+      if other_errors.any?
+        message = other_errors.map { |e| course_user.errors.full_message(e.attribute, e.message) }.
+                  to_sentence
+        errors << t('errors.course.user_invitations.other_error', email: email, message: message)
+      end
+      errors
     end
   end
 
@@ -174,9 +206,29 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Array<String>]
   def invalid_invitation_email_errors
-    invalid_invitations.map do |invitation|
-      message = invitation.errors.full_messages.to_sentence
-      t('errors.course.user_invitations.invalid_email', email: invitation.email, message: message)
+    invalid_invitations.flat_map do |invitation|
+      email = invitation.email
+      errors = []
+      if invitation.errors.of_kind?(:external_id, :taken)
+        errors << t('errors.course.user_invitations.duplicate_external_id',
+                    email: email, external_id: invitation.external_id)
+      end
+      # .any? is intentional: invalid_email is a broad wrapper; the actual messages are forwarded in `message`
+      if invitation.errors[:email].any?
+        message = invitation.errors[:email].to_sentence
+        errors << t('errors.course.user_invitations.invalid_email', email: email, message: message)
+      end
+      if invitation.errors.of_kind?(:base, :existing_invitation)
+        errors << t('errors.course.user_invitations.duplicate_invitation', email: email)
+      end
+      other_errors = invitation.errors.reject { |e| %w[external_id email base].include?(e.attribute.to_s) }
+      # .any? is intentional: this is a catch-all for unrecognised errors; all messages are forwarded verbatim
+      if other_errors.any?
+        message = other_errors.map { |e| invitation.errors.full_message(e.attribute, e.message) }.
+                  to_sentence
+        errors << t('errors.course.user_invitations.other_error', email: email, message: message)
+      end
+      errors
     end
   end
 
@@ -189,12 +241,16 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Returns the invitation response based on file or entry invitation.
   def parse_invitation_result(new_invitations, existing_invitations, new_course_users,
-                              existing_course_users, duplicate_users)
-    render_to_string(partial: 'invitation_result_data', locals: { new_invitations: new_invitations,
-                                                                  existing_invitations: existing_invitations,
-                                                                  new_course_users: new_course_users,
-                                                                  existing_course_users: existing_course_users,
-                                                                  duplicate_users: duplicate_users })
+                              existing_course_users, failed_users,
+                              updated_invitations, updated_course_users)
+    render_to_string(partial: 'invitation_result_data',
+                     locals: { new_invitations: new_invitations,
+                               existing_invitations: existing_invitations,
+                               new_course_users: new_course_users,
+                               existing_course_users: existing_course_users,
+                               failed_users: failed_users,
+                               updated_invitations: updated_invitations,
+                               updated_course_users: updated_course_users })
   end
 
   # Enables or disables registration codes in the given course.
@@ -254,7 +310,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def destroy_invitation_failure
     respond_to do |format|
-      format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
+      format.json { render json: { errors: @invitation.errors.full_messages }, status: :bad_request }
     end
   end
 
@@ -263,7 +319,8 @@ class Course::UserInvitationsController < Course::ComponentController
       format.json do
         render json: {
           newInvitations: result[0].length,
-          invitationResult: parse_invitation_result(*result)
+          invitationResult: parse_invitation_result(*result),
+          blankHeaderWarning: invitation_service.blank_header_warning
         }, status: :ok
       end
     end

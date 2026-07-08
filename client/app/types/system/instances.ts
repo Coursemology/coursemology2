@@ -1,5 +1,7 @@
 import { Permissions } from 'types';
 
+import { InstanceUserRoles } from './instance/users';
+
 export type InstancePermissions = Permissions<
   'canCreateInstances' | 'canCreateAnnouncement'
 >;
@@ -12,6 +14,8 @@ export interface InstanceBasicListData {
   id: number;
   name: string;
   host: string;
+  redirectUri: string;
+  instanceRole?: InstanceUserRoles;
 }
 
 export interface InstanceListData extends InstanceBasicListData {
@@ -26,6 +30,8 @@ export interface InstanceBasicMiniEntity {
   id: number;
   name: string;
   host: string;
+  redirectUri: string;
+  instanceRole?: InstanceUserRoles;
 }
 
 export interface InstanceMiniEntity extends InstanceBasicMiniEntity {

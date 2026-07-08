@@ -12,6 +12,7 @@ import {
 } from '../reducers/answerFlags';
 import { historyActions } from '../reducers/history';
 import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
+import { scribingActions } from '../reducers/scribing';
 import translations from '../translations';
 
 import { buildErrorMessage, formatAnswers } from './utils';
@@ -93,6 +94,7 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
             questions: data.questions,
           }),
         );
+        dispatch(scribingActions.initialize({ answers: data.answers }));
         dispatch(initiateAnswerFlagsForAnswers({ answers: data.answers }));
         dispatch(
           initiateLiveFeedbackChatPerQuestion({

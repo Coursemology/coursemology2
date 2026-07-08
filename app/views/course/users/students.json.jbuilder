@@ -3,10 +3,16 @@ should_show_timeline = current_course.show_personalized_timeline_features? &&
                        can?(:manage_personal_times, current_course)
 should_show_phantom = can?(:manage_users, current_course)
 
+course_user_groups_hash =
+  current_course.groups.includes(:group_users).each_with_object(Hash.new { |h, k| h[k] = [] }) do |group, hash|
+    group.group_users.each { |gu| hash[gu.course_user_id] << group }
+  end
+
 json.users @course_users do |course_user|
   json.partial! 'user_list_data', course_user: course_user,
                                   should_show_phantom: should_show_phantom,
                                   should_show_timeline: should_show_timeline
+  json.groups course_user_groups_hash.fetch(course_user.id, []).map(&:name)
 end
 
 json.permissions do

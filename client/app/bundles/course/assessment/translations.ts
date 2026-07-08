@@ -933,8 +933,7 @@ const translations = defineMessages({
   },
   solutionsHint: {
     id: 'course.assessment.question.textResponses.solutionsHint',
-    defaultMessage:
-      'Adding solutions allows the answer to be autograded. Students can only input plain text.',
+    defaultMessage: 'Adding solutions allows the answer to be autograded.',
   },
   solutionWillBeDeleted: {
     id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
@@ -1034,11 +1033,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.solutionType',
     defaultMessage: 'Type of Solution',
   },
-  solutionTypeExplanation: {
-    id: 'course.assessment.question.textResponses.solutionTypeExplanation',
-    defaultMessage:
-      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
-  },
   exactMatch: {
     id: 'course.assessment.question.textResponses.exactMatch',
     defaultMessage: 'Exact Match',
@@ -1046,6 +1040,145 @@ const translations = defineMessages({
   keyword: {
     id: 'course.assessment.question.textResponses.keyword',
     defaultMessage: 'Keyword',
+  },
+  regex: {
+    id: 'course.assessment.question.textResponses.regex',
+    defaultMessage: 'Regular Expression',
+  },
+  invalidRegex: {
+    id: 'course.assessment.question.textResponses.invalidRegex',
+    defaultMessage: 'Invalid regular expression',
+  },
+  spreadsheetFormula: {
+    id: 'course.assessment.question.textResponses.spreadsheetFormula',
+    defaultMessage: 'Spreadsheet Formula',
+  },
+  testSpreadsheet: {
+    id: 'course.assessment.question.textResponses.testSpreadsheet',
+    defaultMessage: 'Test spreadsheet',
+  },
+  testSpreadsheetDescription: {
+    id: 'course.assessment.question.textResponses.testSpreadsheetDescription',
+    defaultMessage:
+      'A test spreadsheet is required to auto grade the student answer.',
+  },
+  testSpreadsheetRequired: {
+    id: 'course.assessment.question.textResponses.testSpreadsheetRequired',
+    defaultMessage: 'Please upload a test spreadsheet file.',
+  },
+  spreadsheetAdvancedOptions: {
+    id: 'course.assessment.question.textResponses.spreadsheetAdvancedOptions',
+    defaultMessage: 'Advanced Options',
+  },
+  spreadsheetRandomization: {
+    id: 'course.assessment.question.textResponses.spreadsheetRandomization',
+    defaultMessage: 'Enable randomization',
+  },
+  spreadsheetRandomizationDescription: {
+    id: 'course.assessment.question.textResponses.spreadsheetRandomizationDescription',
+    defaultMessage:
+      'If enabled, some spreadsheet values will be randomly adjusted when autograding. This is useful to ensure the formula actually computes the right answer instead of a preset value.',
+  },
+  numberOfRandomTests: {
+    id: 'course.assessment.question.textResponses.numberOfRandomTests',
+    defaultMessage: 'Number of random tests',
+  },
+  fixedRandomSeed: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed',
+    defaultMessage: 'Fixed random seed',
+  },
+  fixedRandomSeedDescription: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription',
+    defaultMessage:
+      'If checked, randomization will produce the same results every time. This affects both spreadsheet value randomization and random functions in the spreadsheet (RAND, RANDBETWEEN, etc.).',
+  },
+  fixedTimestamp: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp',
+    defaultMessage: 'Fixed date and time',
+  },
+  fixedTimestampDescription: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription',
+    defaultMessage:
+      'If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead.',
+  },
+  randomizationMode: {
+    id: 'course.assessment.question.textResponses.randomizationMode',
+    defaultMessage: 'Autograding Value Configuration',
+  },
+  randomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.randomizationModeDescription',
+    defaultMessage:
+      'Click on any cell to configure how its value should be replaced/randomized during autograding.',
+  },
+  randomizationModeClearAll: {
+    id: 'course.assessment.question.textResponses.randomizationModeClearAll',
+    defaultMessage: 'Clear All',
+  },
+  randomizationModeRestoreDefaults: {
+    id: 'course.assessment.question.textResponses.randomizationModeRestoreDefaults',
+    defaultMessage: 'Restore Defaults',
+  },
+  randomizationModePopoverTitle: {
+    id: 'course.assessment.question.textResponses.randomizationModePopoverTitle',
+    defaultMessage: 'During autograding...',
+  },
+  noRandomizationMode: {
+    id: 'course.assessment.question.textResponses.noRandomizationMode',
+    defaultMessage: 'Keep original value',
+  },
+  overrideRandomizationMode: {
+    id: 'course.assessment.question.textResponses.overrideRandomizationMode',
+    defaultMessage: 'Override with specified value',
+  },
+  overrideRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.overrideRandomizationModeDescription',
+    defaultMessage: 'Values starting with "=" are treated as formulas.',
+  },
+  overrideValue: {
+    id: 'course.assessment.question.textResponses.overrideValue',
+    defaultMessage: 'Value',
+  },
+  numericRandomizationMode: {
+    id: 'course.assessment.question.textResponses.numericRandomizationMode',
+    defaultMessage: 'Use random numeric value',
+  },
+  stringRandomizationMode: {
+    id: 'course.assessment.question.textResponses.stringRandomizationMode',
+    defaultMessage: 'Randomize characters in value',
+  },
+  stringRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.stringRandomizationModeDescription',
+    defaultMessage:
+      'Each character class to be randomized may be replaced with different character(s) from the same class.',
+  },
+  randomizeDigits: {
+    id: 'course.assessment.question.textResponses.randomizeDigits',
+    defaultMessage: 'Randomize digits (0-9)',
+  },
+  randomizeLetters: {
+    id: 'course.assessment.question.textResponses.randomizeLetters',
+    defaultMessage: 'Randomize letters (a-z)',
+  },
+  shuffleRandomizationMode: {
+    id: 'course.assessment.question.textResponses.shuffleRandomizationMode',
+    defaultMessage: 'Shuffle value with other cells',
+  },
+  shuffleRandomizationModeDescription: {
+    id: 'course.assessment.question.textResponses.shuffleRandomizationModeDescription',
+    defaultMessage:
+      'The values of each cell marked "Shuffle" will be randomly rearranged. The overall distribution remains the same, but each value may end up in a different cell.',
+  },
+  dateRandomizationMode: {
+    id: 'course.assessment.question.textResponses.dateRandomizationMode',
+    defaultMessage: 'Use random date value',
+  },
+  roundToInteger: {
+    id: 'course.assessment.question.textResponses.roundToInteger',
+    defaultMessage: 'Round down to nearest integer',
+  },
+  roundToDay: {
+    id: 'course.assessment.question.textResponses.roundToDay',
+    defaultMessage: 'Round down to day start (00:00)',
   },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
@@ -1055,28 +1188,30 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.deleteSolution',
     defaultMessage: 'Delete solution',
   },
-  mustSpecifyGrade: {
-    id: 'course.assessment.question.textResponses.mustSpecifyGrade',
-    defaultMessage: 'You must specify a valid number for grade.',
-  },
-  mustSpecifySolution: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolution',
-    defaultMessage: 'You must specify a valid solution title.',
-  },
-  textResponseNote: {
-    id: 'course.assessment.question.textResponses.textResponseNote',
+  noSolutionsNote: {
+    id: 'course.assessment.question.textResponses.noSolutionsNote',
     defaultMessage:
-      'Note: If no solutions are provided, the autograder will always award the maximum grade.',
+      'If no solutions are provided, the autograder will always award the maximum grade.',
+  },
+  atLeastOneSolutionNote: {
+    id: 'course.assessment.question.textResponses.atLeastOneSolutionNote',
+    defaultMessage:
+      'If at least one solution is provided, students will only be able to input plain text.',
+  },
+  exactMatchSolutionNote: {
+    id: 'course.assessment.question.textResponses.exactMatchSolutionNote',
+    defaultMessage:
+      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct. If such a match is found, the autograder will award the specified grade without considering other solutions.',
+  },
+  solutionGradesExceedMaximumGradeNote: {
+    id: 'course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote',
+    defaultMessage:
+      "If the student answer satisfies multiple solutions, the autograder will award the sum of those solutions' grades, up to the question's maximum grade.",
   },
   fileUploadNote: {
     id: 'course.assessment.question.textResponses.fileUploadNote',
     defaultMessage:
       'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.',
-  },
-  mustSpecifySolutionType: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolutionType',
-    defaultMessage:
-      'You must choose either exact match or keyword as solution type.',
   },
   validAttachmentSettingValues: {
     id: 'course.assessment.question.textResponses.validAttachmentSettingValues',

@@ -14,12 +14,20 @@
 # Ignore user-specific VSCode project files
 .vscode
 
+# Ignore credentials files which may contain sensitive information
+/config/credentials/*.crt
+/config/credentials/*.key
+/config/credentials/*.yml.enc
+!/config/credentials/test.key
+!/config/credentials/test.yml.enc
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+/log/*.log.[0-9]*
 /tmp
 
 # Ignore ruby-version file

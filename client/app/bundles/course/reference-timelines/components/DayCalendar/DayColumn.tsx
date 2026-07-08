@@ -1,18 +1,12 @@
-import { CSSProperties, memo } from 'react';
-import { areEqual } from 'react-window';
+import { CellComponentProps } from 'react-window';
 import { Typography } from '@mui/material';
 
 import moment from 'lib/moment';
 
 import { getSecondsFromDays, isToday, isWeekend } from '../../utils';
 
-interface DayProps {
-  index: number;
-  style: CSSProperties;
-}
-
-const DayColumn = (props: DayProps): JSX.Element => {
-  const day = moment.unix(getSecondsFromDays(props.index));
+const DayColumn = (props: CellComponentProps): JSX.Element => {
+  const day = moment.unix(getSecondsFromDays(props.columnIndex));
 
   return (
     <div
@@ -41,4 +35,4 @@ const DayColumn = (props: DayProps): JSX.Element => {
   );
 };
 
-export default memo(DayColumn, areEqual);
+export default DayColumn;
