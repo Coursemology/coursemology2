@@ -6086,6 +6086,21 @@
   "course.marketplace.duplicateN": {
     "defaultMessage": "复制 {n} 个评估"
   },
+  "course.marketplace.duplicateTitle": {
+    "defaultMessage": "要将 {n} 个评估复制到你的课程吗？"
+  },
+  "course.marketplace.duplicateBody": {
+    "defaultMessage": "{n, plural, one {此评估将被复制到你的课程。} other {这 {n} 个评估将被复制到你的课程。}}"
+  },
+  "course.marketplace.duplicateConfirm": {
+    "defaultMessage": "复制"
+  },
+  "course.marketplace.duplicateStarted": {
+    "defaultMessage": "{n, plural, one {评估复制} other {评估复制}}已开始。"
+  },
+  "course.marketplace.duplicateFailed": {
+    "defaultMessage": "{n, plural, one {评估复制} other {评估复制}}失败。"
+  },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "下载失败。请稍后再试。"
   },

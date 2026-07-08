@@ -6128,6 +6128,21 @@
   "course.marketplace.duplicateN": {
     "defaultMessage": "{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}"
   },
+  "course.marketplace.duplicateTitle": {
+    "defaultMessage": "Duplicate assessment{n, plural, one {} other {s}} to your course?"
+  },
+  "course.marketplace.duplicateBody": {
+    "defaultMessage": "{n, plural, one {This assessment will be copied to your course.} other {These {n} assessments will be copied to your course.}}"
+  },
+  "course.marketplace.duplicateConfirm": {
+    "defaultMessage": "Duplicate"
+  },
+  "course.marketplace.duplicateStarted": {
+    "defaultMessage": "{n, plural, one {Duplicating assessment} other {Duplicating assessments}} started."
+  },
+  "course.marketplace.duplicateFailed": {
+    "defaultMessage": "{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed."
+  },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "Download has failed. Please try again later."
   },

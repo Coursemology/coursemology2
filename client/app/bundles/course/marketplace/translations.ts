@@ -76,4 +76,28 @@ export default defineMessages({
     defaultMessage:
       '{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}',
   },
+  duplicateTitle: {
+    id: 'course.marketplace.duplicateTitle',
+    defaultMessage:
+      'Duplicate assessment{n, plural, one {} other {s}} to your course?',
+  },
+  duplicateBody: {
+    id: 'course.marketplace.duplicateBody',
+    defaultMessage:
+      '{n, plural, one {This assessment will be copied to your course.} other {These assessments will be copied to your course.}}',
+  },
+  duplicateConfirm: {
+    id: 'course.marketplace.duplicateConfirm',
+    defaultMessage: 'Duplicate',
+  },
+  duplicateStarted: {
+    id: 'course.marketplace.duplicateStarted',
+    defaultMessage:
+      '{n, plural, one {Duplicating assessment} other {Duplicating assessments}} started.',
+  },
+  duplicateFailed: {
+    id: 'course.marketplace.duplicateFailed',
+    defaultMessage:
+      '{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed.',
+  },
 });
