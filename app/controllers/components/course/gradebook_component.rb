@@ -2,10 +2,6 @@
 class Course::GradebookComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.display_name
-    'Gradebook'
-  end
-
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end
