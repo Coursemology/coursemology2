@@ -14,6 +14,9 @@ class Course::Assessment::MockAnswersController < Course::Assessment::QuestionsC
   private
 
   def mock_answer_params
-    params.require(:mock_answer).permit(:answer_text)
+    params.require(:mock_answer).permit(
+      :answer_text,
+      grading_contexts_attributes: [:grading_context_id, :content]
+    )
   end
 end

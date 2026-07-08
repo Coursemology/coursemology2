@@ -3,6 +3,7 @@ import { Add, PlayArrow, Refresh } from '@mui/icons-material';
 import { Alert, Button, Typography } from '@mui/material';
 import sampleSize from 'lodash-es/sampleSize';
 import { dispatch } from 'store';
+import { RubricGradingContextData } from 'types/course/rubrics';
 
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -31,6 +32,7 @@ const AnswerEvaluationsTableHeader: FC<{
   answerEvaluatedCount: number;
   answerEvaluationTableData: AnswerTableEntry[];
   compareCount: number;
+  gradingContexts: RubricGradingContextData[];
   isComparing: boolean;
   selectedRubric: RubricState;
 }> = (props) => {
@@ -40,6 +42,7 @@ const AnswerEvaluationsTableHeader: FC<{
     answerEvaluatedCount,
     answerEvaluationTableData,
     compareCount,
+    gradingContexts,
     isComparing,
     selectedRubric,
   } = props;
@@ -89,6 +92,10 @@ const AnswerEvaluationsTableHeader: FC<{
       case AddSampleMode.CUSTOM_ANSWER: {
         const mockAnswerId = await createQuestionMockAnswer(
           data.addMockAnswerText,
+          gradingContexts.map((context, index) => ({
+            gradingContextId: context.id,
+            content: data.mockAnswerContexts?.[index]?.content ?? '',
+          })),
         );
         dispatch(
           questionRubricsActions.initializeMockAnswer({
@@ -173,6 +180,7 @@ const AnswerEvaluationsTableHeader: FC<{
 
       <AddAnswersPrompt
         answers={selectableAnswers}
+        gradingContexts={gradingContexts}
         maximumGrade={maximumGrade ?? 0}
         onClose={() => setIsAddingAnswers(false)}
         onSubmit={async (data: AddSampleAnswersFormData): Promise<void> => {

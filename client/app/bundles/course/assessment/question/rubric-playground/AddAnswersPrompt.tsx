@@ -1,7 +1,15 @@
 import { ComponentRef, FC, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormControlLabel, RadioGroup, Switch } from '@mui/material';
-import { RubricAnswerData } from 'types/course/rubrics';
+import {
+  FormControlLabel,
+  FormHelperText,
+  RadioGroup,
+  Switch,
+} from '@mui/material';
+import {
+  RubricAnswerData,
+  RubricGradingContextData,
+} from 'types/course/rubrics';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Prompt from 'lib/components/core/dialogs/Prompt';
@@ -26,6 +34,8 @@ export interface AddSampleAnswersFormData {
   addRandomAnswerCount: number;
   addMockAnswerTitle: string;
   addMockAnswerText: string;
+  // Author-supplied content per grading context, index-aligned with the question's grading contexts.
+  mockAnswerContexts: { content: string }[];
 }
 
 interface Props {
@@ -33,12 +43,14 @@ interface Props {
   onClose: () => void;
   open: boolean;
   answers: RubricAnswerData[];
+  gradingContexts: RubricGradingContextData[];
   maximumGrade: number;
 }
 
 const AddAnswersPrompt: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { answers, onSubmit, onClose, open, maximumGrade } = props;
+  const { answers, gradingContexts, onSubmit, onClose, open, maximumGrade } =
+    props;
 
   const tableRef = useRef<ComponentRef<typeof Table>>(null);
 
@@ -53,6 +65,7 @@ const AddAnswersPrompt: FC<Props> = (props) => {
     addRandomAnswerCount: number;
     addMockAnswerTitle: '';
     addMockAnswerText: '';
+    mockAnswerContexts: { content: string }[];
   }>({
     defaultValues: {
       addMode: AddSampleMode.SPECIFIC_ANSWER,
@@ -60,6 +73,7 @@ const AddAnswersPrompt: FC<Props> = (props) => {
       addRandomAnswerCount: 1,
       addMockAnswerTitle: '',
       addMockAnswerText: '',
+      mockAnswerContexts: [],
     },
   });
 
@@ -97,6 +111,23 @@ const AddAnswersPrompt: FC<Props> = (props) => {
   ];
 
   const selectedAddMode = watch('addMode');
+
+  const contextHeading = (context: RubricGradingContextData): string => {
+    if (context.contextType === 'forum_thread') {
+      return t(translations.mockContextHeadingForumThread, {
+        identifier: context.identifier,
+      });
+    }
+    if (context.contextType === 'sibling_question_answer') {
+      return t(translations.mockContextHeadingSibling, {
+        identifier: context.identifier,
+        title: context.sourceTitle ?? '',
+      });
+    }
+    return t(translations.mockContextHeading, {
+      identifier: context.identifier,
+    });
+  };
 
   return (
     <Prompt
@@ -208,21 +239,44 @@ const AddAnswersPrompt: FC<Props> = (props) => {
               />
 
               {selectedAddMode === AddSampleMode.CUSTOM_ANSWER && (
-                <Controller
-                  control={control}
-                  name="addMockAnswerText"
-                  render={({ field, fieldState }): JSX.Element => (
-                    <FormRichTextField
-                      disabled={false}
-                      disableMargins
-                      field={field}
-                      fieldState={fieldState}
-                      fullWidth
-                      placeholder={t(translations.writeAnswerPlaceholder)}
-                      variant="outlined"
-                    />
-                  )}
-                />
+                <div className="space-y-4">
+                  <Controller
+                    control={control}
+                    name="addMockAnswerText"
+                    render={({ field, fieldState }): JSX.Element => (
+                      <FormRichTextField
+                        disabled={false}
+                        disableMargins
+                        field={field}
+                        fieldState={fieldState}
+                        fullWidth
+                        placeholder={t(translations.writeAnswerPlaceholder)}
+                        variant="outlined"
+                      />
+                    )}
+                  />
+
+                  {gradingContexts.map((context, index) => (
+                    <div key={context.id} className="space-y-1">
+                      <FormHelperText className="font-medium">
+                        {contextHeading(context)}
+                      </FormHelperText>
+                      <Controller
+                        control={control}
+                        name={`mockAnswerContexts.${index}.content`}
+                        render={({ field }): JSX.Element => (
+                          <textarea
+                            className="w-full resize-y rounded border border-solid border-neutral-400 p-2 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-blue-600"
+                            placeholder={t(translations.mockContextPlaceholder)}
+                            rows={3}
+                            {...field}
+                            value={field.value ?? ''}
+                          />
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
             </RadioGroup>
           )}

@@ -9,10 +9,10 @@ class Course::Assessment::Answer::RubricPlaygroundAnswerAdapter <
     @answer_evaluation = answer_evaluation
   end
 
+  # Exactly "what the LLM sees" when grading this answer -- the assembled grading text (RBR: the response;
+  # forum post: the selected posts + parent context + response). Blank for answer types with no rubric text.
   def answer_text
-    return '' unless @answer.specific.is_a?(Course::Assessment::Answer::RubricBasedResponse)
-
-    @answer.specific.answer_text
+    @answer.grading_context_text || ''
   end
 
   def save_llm_results(llm_response)

@@ -10,7 +10,7 @@ json.array! @answers do |answer|
   json.submissionId answer.submission_id
   json.submissionStatus answer.submission.workflow_state
   json.grade answer.grade.to_f if answer.evaluated? || answer.graded?
-  if answer.actable_type == Course::Assessment::Answer::RubricBasedResponse.name
-    json.answerText answer.actable.answer_text
-  end
+  # Show exactly what the LLM sees when grading (RBR: the response; forum post: the assembled posts + parent
+  # context + response), so the playground tables mirror actual grading.
+  json.answerText answer.grading_context_text
 end

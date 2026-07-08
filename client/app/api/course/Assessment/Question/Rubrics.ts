@@ -2,6 +2,7 @@ import {
   RubricAnswerData,
   RubricAnswerEvaluationData,
   RubricData,
+  RubricGradingContextData,
   RubricMockAnswerEvaluationData,
   RubricPostRequestData,
 } from 'types/course/rubrics';
@@ -22,6 +23,10 @@ export default class RubricsAPI extends BaseAssessmentAPI {
 
   answers(): APIResponse<RubricAnswerData[]> {
     return this.client.get(`${this.#urlPrefix}/answers`);
+  }
+
+  gradingContexts(): APIResponse<RubricGradingContextData[]> {
+    return this.client.get(`${this.#urlPrefix}/grading_contexts`);
   }
 
   create(data: RubricPostRequestData): APIResponse<RubricData> {

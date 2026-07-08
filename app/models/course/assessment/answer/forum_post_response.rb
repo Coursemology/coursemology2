@@ -42,11 +42,12 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     end
   end
 
-  # Plain-text representation for grading: each selected post (prefixed with the parent it replies to, for
-  # context) followed by the student's own text response, if any. Used both to grade this answer against a
-  # rubric and to feed it as context into another question's grading.
+  # Plain-text representation for grading: each selected post's text, followed by the student's own text
+  # response, if any. Used both to grade this answer against a rubric and to feed it as context into another
+  # question's grading. (Parent/thread context is intentionally excluded for now; it can be reintroduced via
+  # a grading-context provider when needed.)
   def grading_context_text
-    segments = post_packs.map { |pack| format_post_pack_for_grading(pack) }
+    segments = post_packs.map(&:post_text)
     segments << answer_text unless answer_text.blank?
     segments.join("\n\n")
   end
@@ -79,13 +80,6 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   end
 
   private
-
-  def format_post_pack_for_grading(pack)
-    lines = []
-    lines << "In reply to: #{pack.parent_text}" if pack.parent_text.present?
-    lines << pack.post_text
-    lines.join("\n")
-  end
 
   def stripped_answer_to_array
     post_packs.map do |post|

@@ -285,6 +285,22 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.writeAnswerPlaceholder',
     defaultMessage: 'Write the answer here',
   },
+  mockContextHeading: {
+    id: 'course.assessment.question.rubricPlayground.mockContextHeading',
+    defaultMessage: '{identifier}: context',
+  },
+  mockContextHeadingForumThread: {
+    id: 'course.assessment.question.rubricPlayground.mockContextHeadingForumThread',
+    defaultMessage: '{identifier}: Conversation root of answer post',
+  },
+  mockContextHeadingSibling: {
+    id: 'course.assessment.question.rubricPlayground.mockContextHeadingSibling',
+    defaultMessage: '{identifier}: answer to "{title}"',
+  },
+  mockContextPlaceholder: {
+    id: 'course.assessment.question.rubricPlayground.mockContextPlaceholder',
+    defaultMessage: 'Content the grader would see for this context',
+  },
 
   // AnswerEvaluationsTable
   dismiss: {
