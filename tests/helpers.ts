@@ -88,7 +88,7 @@ export const test = base.extend<TestFixtures>({
         await page.getByRole('button', { name: 'Sign in' }).click();
         try {
           await page.waitForURL(/\?from=auth/, { timeout: 1000 });
-          await page.waitForURL(/^(?!.*\?from=auth)/);
+          await page.waitForURL(/^(?!.*\?from=auth)/, { timeout: 1000 });
         } catch {}
       },
     } satisfies Omit<Page, keyof BasePage>);
@@ -179,7 +179,7 @@ interface EmailPayload {
   body: string;
 }
 
-export const getLastSentEmail = async (): Promise<EmailPayload | null> => {
+const getLastSentEmail = async (): Promise<EmailPayload | null> => {
   const response = await apiContext.get('/test/last_sent_email');
   const payload = await response.json();
   if (!payload) return null;
@@ -191,6 +191,20 @@ export const getLastSentEmail = async (): Promise<EmailPayload | null> => {
     body: payload.body.raw_source,
   };
 };
+
+export const expectLastSentEmail = async (
+  predicate: (email: EmailPayload | null) => boolean | null
+): Promise<EmailPayload> => {
+  let email : EmailPayload | null = null;
+  await expect.poll(async() => {
+    email = await getLastSentEmail();
+    return predicate(email);
+  }, {
+    intervals: [500, 1_000, 2_000, 5_000, 10_000],
+    timeout: 15_000,
+  }).toBeTruthy();
+  return email!;
+}
 
 export const clearEmails = () => apiContext.delete('/test/clear_emails');
 

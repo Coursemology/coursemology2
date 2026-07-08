@@ -19,6 +19,12 @@ FactoryBot.define do
       grade { 2 }
     end
 
+    trait :regex do
+      solution_type { :regex }
+      solution { 'hello\d+' }
+      grade { 1 }
+    end
+
     trait :multiline_windows do
       solution_type { :exact_match }
       solution { "hello world\r\nsecond line" }

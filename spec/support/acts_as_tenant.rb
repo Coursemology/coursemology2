@@ -3,7 +3,7 @@
 module ActsAsTenant::TestGroupHelpers
   def self.build_host(instance)
     if (port = Application::Application.config.x.client_port)
-      "http://#{instance.host}:#{port}"
+      "http://#{instance.host.gsub(/:\d+$/, '')}:#{port}"
     else
       "http://#{instance.host}"
     end

@@ -90,11 +90,11 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
 const HomeSidebarItem = (props: { to: string }): JSX.Element => {
   return (
     <SidebarItem
-      exact
       of={{
         key: 'sidebar_home',
         icon: 'home',
         path: props.to,
+        exact: true,
       }}
     />
   );

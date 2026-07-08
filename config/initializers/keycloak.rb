@@ -7,9 +7,9 @@ Keycloak.generate_request_exception = true
 # controller that manage the user session
 Keycloak.keycloak_controller = 'session'
 # realm name (only if the installation file is not present)
-Keycloak.realm = ENV['KEYCLOAK_REALM'] || 'coursemology'
+Keycloak.realm = Rails.application.credentials.dig(:keycloak, :realm) || 'coursemology'
 # realm url (only if the installation file is not present)
-Keycloak.auth_server_url = ENV['KEYCLOAK_AUTH_SERVER_URL'] || 'http://localhost:8443'
+Keycloak.auth_server_url = Rails.application.credentials.dig(:keycloak, :auth_server_url) || 'http://localhost:8443'
 # The introspect of the token will be executed every time the Keycloak::Client.has_role? method is invoked,
 # if this setting is set to true.
 Keycloak.validate_token_when_call_has_role = false

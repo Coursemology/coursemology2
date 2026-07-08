@@ -62,7 +62,6 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
     id,
     name: '',
     criterions: [newCategoryCriterionObject(0, 0)],
-    isBonusCategory: false,
     draft: true,
     toBeDeleted: false,
   });
@@ -91,7 +90,10 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
 
   return (
     <Paper className="p-3 space-y-4" variant="outlined">
-      <Typography variant="subtitle2">
+      <Typography
+        className={`${disabled ? 'text-neutral-500' : ''}`}
+        variant="subtitle2"
+      >
         {t(translations.gradingCategories)}
       </Typography>
       <Button

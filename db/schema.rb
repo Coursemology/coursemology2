@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_10_232505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -432,6 +432,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.index ["point_id"], name: "fk__course_assessment_text_response_compre_solution_point"
   end
 
+  create_table "course_assessment_question_text_response_solution_spreadsheets", force: :cascade do |t|
+    t.bigint "solution_id", null: false
+    t.boolean "is_randomization_enabled", default: false, null: false
+    t.boolean "is_random_seed_fixed", default: false, null: false
+    t.integer "test_random_seed"
+    t.boolean "is_timestamp_fixed", default: false, null: false
+    t.datetime "test_timestamp"
+    t.integer "num_random_tests", default: 2, null: false
+    t.jsonb "variables", default: [], null: false
+    t.index ["solution_id"], name: "idx_on_solution_id_1073150e65"
+  end
+
   create_table "course_assessment_question_text_response_solutions", id: :serial, force: :cascade do |t|
     t.integer "question_id", null: false
     t.integer "solution_type", default: 0, null: false
@@ -467,7 +479,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.boolean "is_low_priority", default: false
     t.string "koditsu_question_id"
     t.boolean "is_synced_with_koditsu", default: false, null: false
+    t.bigint "active_rubric_id"
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
+    t.index ["active_rubric_id"], name: "index_course_assessment_questions_on_active_rubric_id"
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"
   end
@@ -1139,10 +1153,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
 
   create_table "course_rubric_answer_evaluations", force: :cascade do |t|
     t.bigint "answer_id", null: false
-    t.bigint "rubric_id", null: false
+    t.bigint "rubric_id"
     t.uuid "job_id"
     t.text "feedback"
+    t.string "evaluation_type", default: "playground", null: false
+    t.index ["answer_id", "rubric_id"], name: "index_course_rubric_playground_evaluation_on_answer_rubric", unique: true, where: "((evaluation_type)::text = ANY ((ARRAY['playground'::character varying, 'playground_hidden'::character varying])::text[]))"
     t.index ["answer_id"], name: "index_course_rubric_answer_evaluations_on_answer_id"
+    t.index ["answer_id"], name: "index_course_rubric_grading_evaluation_on_answer", unique: true, where: "((evaluation_type)::text = 'grading'::text)"
     t.index ["job_id"], name: "index_course_rubric_answer_evaluations_on_job_id", unique: true
     t.index ["rubric_id"], name: "index_course_rubric_answer_evaluations_on_rubric_id"
   end
@@ -1151,6 +1168,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.bigint "rubric_id", null: false
     t.text "name", null: false
     t.boolean "is_bonus_category", default: false, null: false
+    t.integer "weight", default: 0, null: false
     t.index ["rubric_id"], name: "index_course_rubric_categories_on_rubric_id"
   end
 
@@ -1185,6 +1203,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.datetime "created_at", null: false
     t.text "grading_prompt", default: "", null: false
     t.text "model_answer", default: "", null: false
+    t.string "content_hash", default: "", null: false
     t.index ["course_id"], name: "index_course_rubrics_on_course_id"
   end
 
@@ -1333,9 +1352,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.boolean "phantom", default: false, null: false
     t.integer "timeline_algorithm"
     t.boolean "is_retryable", default: true, null: false
+    t.string "external_id"
     t.index "lower((email)::text)", name: "index_course_user_invitations_on_email"
     t.index ["confirmer_id"], name: "fk__course_user_invitations_confirmer_id"
     t.index ["course_id", "email"], name: "index_course_user_invitations_on_course_id_and_email", unique: true
+    t.index ["course_id", "external_id"], name: "index_course_user_invitations_on_course_id_and_external_id", unique: true, where: "((external_id IS NOT NULL) AND (confirmed_at IS NULL))"
     t.index ["course_id"], name: "fk__course_user_invitations_course_id"
     t.index ["creator_id"], name: "fk__course_user_invitations_creator_id"
     t.index ["invitation_key"], name: "index_course_user_invitations_on_invitation_key", unique: true
@@ -1356,6 +1377,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.bigint "reference_timeline_id"
     t.integer "timeline_algorithm", default: 0, null: false
     t.datetime "deleted_at"
+    t.boolean "is_suspended", default: false, null: false
+    t.string "external_id"
+    t.index ["course_id", "external_id"], name: "index_course_users_on_course_id_and_external_id", unique: true, where: "(external_id IS NOT NULL)"
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"
@@ -1479,6 +1503,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
     t.string "koditsu_workspace_id"
     t.uuid "ssid_folder_id"
     t.boolean "enrol_auto_approve", default: false, null: false
+    t.text "user_suspension_message"
+    t.boolean "is_suspended", default: false, null: false
+    t.text "course_suspension_message"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
@@ -1821,7 +1848,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_095446) do
   add_foreign_key "course_assessment_question_text_response_compre_groups", "course_assessment_question_text_responses", column: "question_id"
   add_foreign_key "course_assessment_question_text_response_compre_points", "course_assessment_question_text_response_compre_groups", column: "group_id"
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
+  add_foreign_key "course_assessment_question_text_response_solution_spreadsheets", "course_assessment_question_text_response_solutions", column: "solution_id"
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
+  add_foreign_key "course_assessment_questions", "course_rubrics", column: "active_rubric_id", on_delete: :nullify
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"
   add_foreign_key "course_assessment_skill_branches", "courses", name: "fk_course_assessment_skill_branches_course_id"

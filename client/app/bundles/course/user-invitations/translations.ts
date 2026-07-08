@@ -22,6 +22,10 @@ const translations = defineMessages({
     id: 'course.userInvitations.UserInvitationsTable.noInvitations',
     defaultMessage: 'There are no invitations.',
   },
+  searchText: {
+    id: 'course.userInvitations.UserInvitationsTable.searchText',
+    defaultMessage: 'Search by name, email or external ID',
+  },
   pending: {
     id: 'course.userInvitations.UserInvitationsTable.pending',
     defaultMessage: 'Pending',

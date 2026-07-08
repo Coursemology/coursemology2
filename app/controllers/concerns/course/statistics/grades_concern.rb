@@ -3,6 +3,8 @@ module Course::Statistics::GradesConcern
   private
 
   def grade_statistics_hash
+    return {} if @assessments.empty? || @all_students.empty?
+
     grades_info = ActiveRecord::Base.connection.execute("
       SELECT ca.assessment_id AS id, AVG(ca.grade) AS avg, STDDEV(ca.grade) AS stdev
       FROM (
@@ -21,6 +23,8 @@ module Course::Statistics::GradesConcern
   end
 
   def max_grade_statistics_hash
+    return {} if @assessments.empty?
+
     max_grades = Course::Assessment.find_by_sql(<<-SQL.squish
       SELECT assessment_id, SUM(maximum_grade) AS maximum_grade
       FROM (

@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Add, PlayArrow, Refresh } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import sampleSize from 'lodash-es/sampleSize';
 import { dispatch } from 'store';
 
@@ -157,6 +157,14 @@ const AnswerEvaluationsTableHeader: FC<{
           </Button>
         )}
       </div>
+      <Alert
+        className="mb-3 px-2 py-0"
+        icon={false}
+        severity="info"
+        variant="outlined"
+      >
+        {t(translations.evaluationsDoNotAffectGrades)}
+      </Alert>
       {isComparing && (
         <Typography variant="body2">
           {t(translations.comparingRevisions, { count: compareCount })}

@@ -28,6 +28,10 @@ declare module '*.png?url' {
 declare const FIRST_BUILD_YEAR: string;
 declare const LATEST_BUILD_YEAR: string;
 
+declare function buildContextOptions(
+  store?: unknown,
+): import('enzyme').MountRendererProps;
+
 declare module '*.md' {
   const markdown: string;
   export default markdown;

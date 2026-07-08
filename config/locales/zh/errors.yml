@@ -15,8 +15,15 @@ zh:
           owner: '拥有者'
           phantom: '虚拟用户'
       user_invitations:
-        duplicate_user: '%{user}在提交中出现了多次。'
-        invalid_email: '%{email}无效：%{message}。'
+        already_enrolled: '%{email}无法处理：已加入该课程。'
+        duplicate_invitation: '%{email}无法处理：已有待处理的邀请。'
+        invalid_email: '%{email}无法处理：邮箱无效：%{message}。'
+        duplicate_external_id: '%{email}无法处理：外部编号"%{external_id}"已被使用。'
+        other_error: '%{email}无法处理：%{message}。'
+        invalid_headers: '无法识别的 CSV 标题：%{headers}。接受的标题：%{accepted}。'
+        missing_required_headers: 'CSV 必须包含"姓名"和"电子邮件"列。'
+        duplicate_headers: '重复的 CSV 列："%{column}"。每一列只能出现一次。'
+        no_valid_rows: 'CSV 文件中没有可邀请的行。'
       user_registrations:
         invalid_code: '你输入了一个无效的邀请码。'
         code_taken: >
@@ -57,6 +64,12 @@ zh:
                 generic_error: >
                   发生错误。可能是由于服务器繁忙，请在几分钟后重试。如果问题仍然存在，请联系 coursemology 管理员，
                   并提供此页面的 URL，引用以下错误："%{error}"
+        text_response_auto_grading:
+          grade:
+            regex_timeout: >
+              正则表达式执行超时。
+            evaluation_failed: >
+              评估过程中发生错误。
         live_feedback:
           thread:
             only_one_active_thread: '每个提交问题只能有一个活动线程'

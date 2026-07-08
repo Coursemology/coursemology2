@@ -1,4 +1,9 @@
-import { EntitySelection, EntityStore, SelectionKey } from 'types/store';
+import {
+  EntityMetadata,
+  EntitySelection,
+  EntityStore,
+  SelectionKey,
+} from 'types/store';
 
 interface WithId {
   id: number;
@@ -48,7 +53,7 @@ export function removeAllFromStore<M extends WithId, E extends M = M>(
  */
 export function saveEntityToStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
-  entity: E,
+  entity: Partial<E> & WithId,
   isDetailed = true,
 ): void {
   const existing = store.byId[entity.id] ?? { lastFullUpdate: 0 };
@@ -68,7 +73,7 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
     ...entity,
     lastUpdate: Date.now(),
     lastFullUpdate: isDetailed ? Date.now() : existing.lastFullUpdate,
-  };
+  } as M & Partial<E> & EntityMetadata;
 }
 
 /**
@@ -80,7 +85,9 @@ export function saveListToStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
   list: M[],
 ): void {
-  list.forEach((entity) => saveEntityToStore(store, entity, false));
+  list.forEach((entity) =>
+    saveEntityToStore(store, entity as unknown as Partial<E> & WithId, false),
+  );
 }
 
 /**

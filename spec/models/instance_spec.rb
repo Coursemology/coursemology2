@@ -117,6 +117,99 @@ RSpec.describe Instance do
     end
   end
 
+  describe '#redirect_uri' do
+    around do |example|
+      orig_default_host = Application::Application.config.x.default_host
+      orig_use_http = ENV.fetch('RAILS_USE_HTTP', nil)
+      example.run
+    ensure
+      Application::Application.config.x.default_host = orig_default_host
+      orig_use_http.nil? ? ENV.delete('RAILS_USE_HTTP') : (ENV['RAILS_USE_HTTP'] = orig_use_http)
+    end
+
+    context 'when the instance is the default instance' do
+      subject(:instance) { Instance.default }
+
+      context 'when config.x.default_host is "coursemology.org"' do
+        before { Application::Application.config.x.default_host = 'coursemology.org' }
+
+        it 'returns https://coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://coursemology.org')
+        end
+      end
+
+      context 'when config.x.default_host is "staging.coursemology.org"' do
+        before { Application::Application.config.x.default_host = 'staging.coursemology.org' }
+
+        it 'returns https://staging.coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://staging.coursemology.org')
+        end
+      end
+
+      context 'when config.x.default_host is "lvh.me:8080"' do
+        before { Application::Application.config.x.default_host = 'lvh.me:8080' }
+
+        it 'returns https://lvh.me:8080' do
+          expect(instance.redirect_uri).to eq('https://lvh.me:8080')
+        end
+      end
+    end
+
+    context 'when the instance has host "tenant.coursemology.org"' do
+      subject(:instance) { build(:instance, host: 'tenant.coursemology.org') }
+
+      context 'when config.x.default_host is "coursemology.org"' do
+        before { Application::Application.config.x.default_host = 'coursemology.org' }
+
+        it 'preserves the subdomain' do
+          expect(instance.redirect_uri).to eq('https://tenant.coursemology.org')
+        end
+      end
+
+      context 'when config.x.default_host is "staging.coursemology.org"' do
+        before { Application::Application.config.x.default_host = 'staging.coursemology.org' }
+
+        it 'maps the subdomain to the staging host' do
+          expect(instance.redirect_uri).to eq('https://tenant.staging.coursemology.org')
+        end
+      end
+    end
+
+    describe 'protocol selection' do
+      subject(:instance) { Instance.default }
+
+      before { Application::Application.config.x.default_host = nil }
+
+      context 'in a non-development environment' do
+        it 'uses https' do
+          expect(instance.redirect_uri).to start_with('https://')
+        end
+      end
+
+      context 'in development without RAILS_USE_HTTP' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+          ENV.delete('RAILS_USE_HTTP')
+        end
+
+        it 'uses https' do
+          expect(instance.redirect_uri).to start_with('https://')
+        end
+      end
+
+      context 'in development with RAILS_USE_HTTP set' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+          ENV['RAILS_USE_HTTP'] = '1'
+        end
+
+        it 'uses http' do
+          expect(instance.redirect_uri).to start_with('http://')
+        end
+      end
+    end
+  end
+
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.active_course_count' do

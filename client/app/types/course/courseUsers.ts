@@ -39,6 +39,7 @@ export interface CourseUserShape {
 
 export interface CourseUserBasicListData {
   id: number;
+  userId?: number;
   name: string;
   userUrl?: string;
   imageUrl?: string;
@@ -49,11 +50,14 @@ export interface CourseUserListData extends CourseUserBasicListData {
   email: string;
   role: CourseUserRole;
   phantom?: boolean;
+  isSuspended?: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
+  externalId?: string | null;
 }
 
 export interface CourseUserBasicMiniEntity {
   id: CourseUserBasicListData['id'];
+  userId?: CourseUserBasicListData['userId'];
   name: CourseUserBasicListData['name'];
   userUrl?: CourseUserBasicListData['userUrl'];
   imageUrl?: CourseUserBasicListData['userUrl'];
@@ -62,9 +66,11 @@ export interface CourseUserBasicMiniEntity {
 
 export interface CourseUserMiniEntity extends CourseUserBasicMiniEntity {
   phantom?: CourseUserListData['phantom'];
+  isSuspended?: CourseUserListData['isSuspended'];
   email: CourseUserListData['email'];
   role: CourseUserListData['role'];
   timelineAlgorithm?: CourseUserListData['timelineAlgorithm'];
+  externalId?: CourseUserListData['externalId'];
   referenceTimelineId?: number | null;
   groups?: string[];
 }
@@ -114,6 +120,7 @@ export interface UpdateCourseUserPatchData {
     timeline_algorithm?: TimelineAlgorithm;
     reference_timeline_id?: number | null;
     role?: CourseUserRole;
+    external_id?: string | null;
   };
 }
 
@@ -127,6 +134,7 @@ export interface ManageCourseUsersSharedData {
   requestsCount: number;
   invitationsCount: number;
   defaultTimelineAlgorithm: TimelineAlgorithm;
+  showPersonalizedTimelineFeatures?: boolean;
 }
 
 export interface LearningRateRecordsData {

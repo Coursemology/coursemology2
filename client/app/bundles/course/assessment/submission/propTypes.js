@@ -162,48 +162,6 @@ export const annotationShape = PropTypes.shape({
   postIds: PropTypes.arrayOf(PropTypes.number),
 });
 
-export const scribbleShape = PropTypes.shape({
-  content: PropTypes.string,
-});
-
-export const scribingAnswerShape = PropTypes.shape({
-  scribbles: PropTypes.arrayOf(scribbleShape),
-  image_url: PropTypes.string,
-  user_id: PropTypes.number,
-  answer_id: PropTypes.number,
-});
-
-export const scribingShape = PropTypes.shape({
-  answer: scribingAnswerShape,
-  layers: PropTypes.arrayOf(scribbleShape),
-  selectedTool: PropTypes.string,
-  selectedShape: PropTypes.string,
-  imageWidth: PropTypes.number,
-  imageHeight: PropTypes.number,
-  fontFamily: PropTypes.string,
-  fontSize: PropTypes.number,
-  colors: PropTypes.object,
-  lineStyles: PropTypes.object,
-  thickness: PropTypes.object,
-  activeObject: PropTypes.object,
-  cursor: PropTypes.string,
-  currentStateIndex: PropTypes.number,
-  // eslint-disable-next-line react/forbid-prop-types
-  canvasStates: PropTypes.array,
-  canvasZoom: PropTypes.number,
-  canvasWidth: PropTypes.number,
-  canvasHeight: PropTypes.number,
-  canvasMaxWidth: PropTypes.number,
-  isCanvasLoaded: PropTypes.bool,
-  isDrawingMode: PropTypes.bool,
-  isChangeTool: PropTypes.bool,
-  isDelete: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  isSaving: PropTypes.bool,
-  isSaved: PropTypes.bool,
-  hasError: PropTypes.bool,
-});
-
 export const forumPostShape = PropTypes.shape({
   id: PropTypes.number,
   text: PropTypes.string,

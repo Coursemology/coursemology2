@@ -38,7 +38,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         fill_in_react_ck react_ck_selector, ''
         fill_in_react_ck react_ck_selector, 'Testing Finalising'
         expect(page).to have_text('Testing Finalising')
-        click_button('Finalise Submission')
+        find('button[data-testid="FinaliseButton"]').click
         accept_confirm_dialog do
           wait_for_job
         end
@@ -115,7 +115,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         find('div.topic-card').click
         find('div.forum-post-option').click
         find('button.select-posts-button').click
-        click_button('Finalise Submission')
+        find('button[data-testid="FinaliseButton"]').click
         accept_confirm_dialog do
           wait_for_job
         end

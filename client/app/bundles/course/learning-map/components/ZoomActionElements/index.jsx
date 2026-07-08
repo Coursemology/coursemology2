@@ -16,7 +16,6 @@ const styles = {
     position: 'absolute',
     right: 20,
     width: '100%',
-    zIndex: 999,
   },
 };
 
@@ -24,7 +23,7 @@ const ZoomActionElements = (props) => {
   const { zoomIn, zoomOut } = props;
 
   return (
-    <div style={styles.wrapper}>
+    <div className="z-dropdown" style={styles.wrapper}>
       <Button
         className="btn-submit"
         color="primary"

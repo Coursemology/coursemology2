@@ -19,6 +19,7 @@ json.assessment do
   # If submitting with incorrect answers is not allowed, we must show the answer to students regardless
   json.showMcqAnswer !@assessment.allow_partial_submission || @assessment.show_mcq_answer
   json.showEvaluation @assessment.show_evaluation
+  json.blockStudentViewingAfterSubmitted @assessment.block_student_viewing_after_submitted
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?

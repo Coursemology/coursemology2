@@ -55,6 +55,90 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe 'external_id uniqueness' do
+      let(:other_course) { create(:course, creator: owner, updater: owner) }
+
+      it 'allows multiple course users with nil external_id in the same course' do
+        create(:course_student, course: course, external_id: nil)
+        new_student = build(:course_student, course: course, external_id: nil)
+        expect(new_student).to be_valid
+      end
+
+      it 'normalizes blank external_id to nil' do
+        student = create(:course_student, course: course, external_id: '')
+        expect(student.reload.external_id).to be_nil
+      end
+
+      it 'is valid when external_id is unique in the course' do
+        student = build(:course_student, course: course, external_id: 'unique-id')
+        expect(student).to be_valid
+      end
+
+      context 'when another course user in the same course has the same external_id' do
+        let!(:existing) { create(:course_student, course: course, external_id: 'dup-id') }
+
+        it 'is invalid' do
+          student = build(:course_student, course: course, external_id: 'dup-id')
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+      end
+
+      context 'when a course user in a different course has the same external_id' do
+        let!(:existing) { create(:course_student, course: other_course, external_id: 'some-id') }
+
+        it 'is valid' do
+          student = build(:course_student, course: course, external_id: 'some-id')
+          expect(student).to be_valid
+        end
+      end
+
+      context 'when a pending invitation in the same course has the same external_id' do
+        let!(:invitation) { create(:course_user_invitation, course: course, external_id: 'pending-id') }
+
+        it 'is invalid for a new record' do
+          student = build(:course_student, course: course, external_id: 'pending-id')
+          expect(student).not_to be_valid
+        end
+
+        it 'is invalid when updating an existing course user to match the pending invitation ext id' do
+          student = create(:course_student, course: course, external_id: nil)
+          expect(student.update(external_id: 'pending-id')).to be(false)
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+
+        it 'is invalid even when the course user DB id happens to equal the pending invitation DB id' do
+          # Regression guard: validate_unique_external_id_within_course mistakenly applied
+          # where.not(id: self.id) to the invitations query as well as the course_user query,
+          # rather than just the course_user query ("don't compare me against myself").
+          # So if a pending invitation claimed the same external_id, the check would
+          # accidentally exclude it and incorrectly allow the external_id through.
+          # This test ensures that collision is still caught when the IDs happen to match.
+          student = create(:course_student, course: course, external_id: nil)
+          allow(student).to receive(:id).and_return(invitation.id)
+
+          student.external_id = 'pending-id'
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+      end
+
+      context 'when only a confirmed invitation in the same course has the same external_id' do
+        let!(:invitation) { create(:course_user_invitation, :confirmed, course: course, external_id: 'confirmed-id') }
+
+        # The uniqueness check (UniqueExternalIdConcern) only queries unconfirmed invitations.
+        # A confirmed invitation means the user has already joined the course, so their external_id
+        # is now on the CourseUser record. The invitation row is no longer an active claim on the id.
+        it 'is valid' do
+          student = build(:course_student, course: course, external_id: 'confirmed-id')
+          expect(student).to be_valid
+        end
+      end
+    end
+
     describe '.staff' do
       it 'returns teaching assistant, manager and owner' do
         expect(course.course_users.staff).to contain_exactly(teaching_assistant, manager,
@@ -334,6 +418,67 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#suspended_from_course?' do
+      def ability_for(course_user)
+        Ability.new(course_user.user, course, course_user)
+      end
+
+      context 'when the course is not suspended' do
+        it 'returns false for an active student' do
+          expect(student.suspended_from_course?(ability_for(student))).to be false
+        end
+
+        it 'returns true for an individually suspended student' do
+          student.update!(is_suspended: true)
+          expect(student.suspended_from_course?(ability_for(student))).to be true
+        end
+
+        it 'returns false for an individually suspended manager' do
+          manager.update!(is_suspended: true)
+          expect(manager.suspended_from_course?(ability_for(manager))).to be false
+        end
+
+        it 'returns false for an individually suspended owner' do
+          course_owner.update!(is_suspended: true)
+          expect(course_owner.suspended_from_course?(ability_for(course_owner))).to be false
+        end
+
+        it 'returns true for an individually suspended teaching assistant' do
+          teaching_assistant.update!(is_suspended: true)
+          expect(teaching_assistant.suspended_from_course?(ability_for(teaching_assistant))).to be true
+        end
+
+        it 'returns true for an individually suspended observer' do
+          observer.update!(is_suspended: true)
+          expect(observer.suspended_from_course?(ability_for(observer))).to be true
+        end
+      end
+
+      context 'when the course is suspended' do
+        before { course.update!(is_suspended: true) }
+
+        it 'returns true for an active student' do
+          expect(student.suspended_from_course?(ability_for(student))).to be true
+        end
+
+        it 'returns false for a manager' do
+          expect(manager.suspended_from_course?(ability_for(manager))).to be false
+        end
+
+        it 'returns false for an owner' do
+          expect(course_owner.suspended_from_course?(ability_for(course_owner))).to be false
+        end
+
+        it 'returns false for a teaching assistant' do
+          expect(teaching_assistant.suspended_from_course?(ability_for(teaching_assistant))).to be false
+        end
+
+        it 'returns false for an observer' do
+          expect(observer.suspended_from_course?(ability_for(observer))).to be false
+        end
+      end
+    end
+
     describe '#latest_learning_rate_record' do
       it 'returns the latest learning rate record' do
         create(:learning_rate_record, course_user: student, learning_rate: 1)
@@ -346,15 +491,25 @@ RSpec.describe CourseUser, type: :model do
 
     context 'when there are students in groups' do
       let(:group_owner) { create(:course_manager, course: course) }
-      before do
-        group = create(:course_group, course: course)
-        create(:course_group_user, course: course, group: group, course_user: student)
-        create(:course_group_manager, course: course, group: group, course_user: group_owner)
+      let!(:group) do
+        grp = create(:course_group, course: course)
+        create(:course_group_user, course: course, group: grp, course_user: student)
+        create(:course_group_manager, course: course, group: grp, course_user: group_owner)
+        grp
       end
 
       describe '#my_students' do
-        it 'returns all the normal users in the group' do
+        it 'returns all the normal students in the group' do
           expect(group_owner.my_students).to contain_exactly(student)
+        end
+
+        context 'when a non-student is a normal member of the group' do
+          let!(:group_ta) { create(:course_teaching_assistant, course: course) }
+          before { create(:course_group_user, course: course, group: group, course_user: group_ta) }
+
+          it 'does not include the non-student' do
+            expect(group_owner.my_students).not_to include(group_ta)
+          end
         end
       end
 

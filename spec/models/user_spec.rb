@@ -193,6 +193,20 @@ RSpec.describe User do
       end
     end
 
+    describe '#build_course_user_from_invitation' do
+      let(:course) { create(:course) }
+      let(:user) { create(:user) }
+
+      context 'when invitation has a blank external_id' do
+        let(:invitation) { build(:course_user_invitation, course: course, external_id: '') }
+
+        it 'sets external_id to nil on the built CourseUser' do
+          user.build_course_user_from_invitation(invitation)
+          expect(user.course_users.last.external_id).to be_nil
+        end
+      end
+    end
+
     describe '#send_reset_password_instructions' do
       subject { create(:user) }
 
@@ -200,6 +214,20 @@ RSpec.describe User do
         it 'sends email with ActiveJob queue' do
           expect { subject.send_reset_password_instructions }.to \
             have_enqueued_job.on_queue('highest')
+        end
+      end
+
+      context 'with a non-default instance tenant' do
+        let(:instance) { create(:instance) }
+
+        with_tenant(:instance) do
+          before { ActionMailer::Base.deliveries.clear }
+
+          it 'uses the current tenant host in the reset password URL' do
+            subject.send_reset_password_instructions
+            email = ActionMailer::Base.deliveries.last
+            expect(email.body.encoded).to include(instance.host)
+          end
         end
       end
     end

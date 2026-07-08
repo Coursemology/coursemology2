@@ -34,7 +34,7 @@ export interface ForumPostResponseFieldData extends AnswerFieldBaseData {
 export interface ForumPostResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.ForumPostResponse;
   fields: ForumPostResponseFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

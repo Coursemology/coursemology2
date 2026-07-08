@@ -62,3 +62,14 @@ ko:
         name: '이름'
         type: '학생 유형'
         email: '이메일'
+        external_id: '외부 ID'
+
+    # Course user invitations CSV header terms (parser source of truth)
+    course_user_invitations:
+      headers:
+        name: "이름"
+        email: "이메일"
+        external_id: "외부 ID"
+        role: "역할"
+        phantom: "팬텀"
+        personal_timeline: "개인 타임라인"

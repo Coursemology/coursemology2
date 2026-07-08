@@ -20,19 +20,14 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   # edited or updated.
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
+  after_action :publish_cikgo_task_completion, only: [:edit]
+
   signals :assessment_submissions, after: [:unsubmit, :delete]
   signals :assessment_submissions, after: [:update], if: -> { @submission.saved_change_to_workflow_state? }
 
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
-
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
 
   def index
     authorize!(:view_all_submissions, @assessment)
@@ -70,7 +65,11 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
     @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
-    @answers = @submission.answers.includes(actable: [grades: [question_grade: :category]])
+    # Preload each answer's question and its active_rubric (+ categories) so ensure_rubric_grading_evaluations
+    # and the rubric panel don't N+1 over the parent question now that active_rubric lives there.
+    @answers = @submission.answers.includes(actable: [grades: [question_grade: :category]],
+                                            question: { active_rubric: :categories })
+    ensure_rubric_grading_evaluations
   end
 
   def auto_grade
@@ -86,7 +85,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     return head :bad_request if @answer.nil?
 
     job = @answer.auto_grade!(redirect_to_path: nil, reduce_priority: true)
-    render partial: 'jobs/submitted', locals: { job: job.job }
+    if job.nil?
+      @answer.reload
+      render @answer
+    else
+      render partial: 'jobs/submitted', locals: { job: job.job }
+    end
   end
 
   def generate_feedback
@@ -323,6 +327,18 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   private
 
+  # When a grader opens a (submitted) submission, make sure every rubric-based answer has a v2 grading
+  # evaluation so the rubric panel is editable and the breakdown persists, even for answers never
+  # auto-graded. Idempotent and grader-only; ungraded answers in an attempting submission are skipped.
+  def ensure_rubric_grading_evaluations
+    return if @submission.attempting? || cannot?(:grade, @submission)
+
+    @answers.each do |answer|
+      actable = answer.actable
+      actable.ensure_grading_evaluation! if actable.is_a?(Course::Assessment::Answer::RubricBasedResponse)
+    end
+  end
+
   def create_params
     { course_user: current_course_user }
   end
@@ -400,26 +416,18 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     end
   end
 
-  def course_user_ids # rubocop:disable Metrics/AbcSize
-    @course_user_ids ||= case params[:course_users]
-                         when COURSE_USERS[:my_students]
-                           current_course_user.my_students.without_phantom_users
-                         when COURSE_USERS[:my_students_w_phantom]
-                           current_course_user.my_students
-                         when COURSE_USERS[:students_w_phantom]
-                           @assessment.course.course_users.students
-                         when COURSE_USERS[:staff]
-                           @assessment.course.course_users.staff.without_phantom_users
-                         when COURSE_USERS[:staff_w_phantom]
-                           @assessment.course.course_users.staff
-                         else
-                           @assessment.course.course_users.students.without_phantom_users
-                         end.select(:user_id)
+  def course_user_ids
+    @course_user_ids ||=
+      current_course.course_users_by_type(params[:course_users], current_course_user).select(:user_id)
   end
 
   def user_ids_without_submission
     existing_submissions = @assessment.submissions.by_users(course_user_ids.pluck(:user_id))
     user_ids_with_submission = existing_submissions.pluck(:creator_id)
     course_user_ids.pluck(:user_id) - user_ids_with_submission
+  end
+
+  def publish_cikgo_task_completion
+    @submission.publish_task_completion if @submission.should_publish_task_completion?
   end
 end

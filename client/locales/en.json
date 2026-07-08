@@ -59,6 +59,15 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "Check if you've typed the correct address, try again later, or <home>go back home</home>."
   },
+  "app.ErrorPage.userSuspended": {
+    "defaultMessage": "Your access to this course has been suspended."
+  },
+  "app.ErrorPage.suspendedSubtitle": {
+    "defaultMessage": "Please contact your instructors or the course staff."
+  },
+  "app.ErrorPage.courseSuspended": {
+    "defaultMessage": "This course is suspended."
+  },
   "app.Footer.contactUs": {
     "defaultMessage": "Contact Us"
   },
@@ -513,8 +522,7 @@
     "defaultMessage": "The AI model used by Codaveri to generate help conversations with students for programming questions."
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptDescription": {
-    "defaultMessage":
-      "You may customize the behavior of the Codaveri model by providing instructions here. {br} When assisting students, these instructions will be followed in addition to any you have set on the question itself.{br}To reference question-specific details, you may use the following variables within the prompt, writing them with brackets as shown below:"
+    "defaultMessage": "You may customize the behavior of the Codaveri model by providing instructions here. {br} When assisting students, these instructions will be followed in addition to any you have set on the question itself.{br}To reference question-specific details, you may use the following variables within the prompt, writing them with brackets as shown below:"
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine": {
     "defaultMessage": "{problemDescriptionVar} : The full description of the coding problem."
@@ -755,6 +763,45 @@
   },
   "course.admin.CourseSettings.stragglersDescription": {
     "defaultMessage": "Leave no one behind; subsequent closing reference timings will be pushed back if students complete their assessments late."
+  },
+  "course.admin.CourseSettings.suspension": {
+    "defaultMessage": "Access suspension"
+  },
+  "course.admin.CourseSettings.suspendCourse": {
+    "defaultMessage": "Suspend course"
+  },
+  "course.admin.CourseSettings.suspendCourseDescription": {
+    "defaultMessage": "A suspended course is inaccessible to all students. Instructors can still access the course and all student data will be retained."
+  },
+  "course.admin.CourseSettings.unsuspendCourse": {
+    "defaultMessage": "Unsuspend course"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessage": {
+    "defaultMessage": "Course suspension message"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessageDescription": {
+    "defaultMessage": "This message will be shown to users while this course is suspended. Leave blank to show a default message."
+  },
+  "course.admin.CourseSettings.suspendCoursePromptText": {
+    "defaultMessage": "Are you sure you want to suspend this course? All students will not be able to access it until it is unsuspended."
+  },
+  "course.admin.CourseSettings.suspendCourseSuccess": {
+    "defaultMessage": "This course has been suspended."
+  },
+  "course.admin.CourseSettings.suspendCourseFailure": {
+    "defaultMessage": "An error occurred while suspending this course."
+  },
+  "course.admin.CourseSettings.unsuspendCourseSuccess": {
+    "defaultMessage": "This course has been unsuspended."
+  },
+  "course.admin.CourseSettings.unsuspendCourseFailure": {
+    "defaultMessage": "An error occurred while unsuspending this course."
+  },
+  "course.admin.CourseSettings.userSuspensionMessage": {
+    "defaultMessage": "User suspension message"
+  },
+  "course.admin.CourseSettings.userSuspensionMessageDescription": {
+    "defaultMessage": "This message will be shown to individual users whose access to this course has been suspended. Leave blank to show a default message."
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "Time settings"
@@ -2205,20 +2252,23 @@
   "course.assessment.question.textResponses.fileUploadNote": {
     "defaultMessage": "Note: File upload question is not auto-gradable. The autograder will always award the maximum grade."
   },
+  "course.assessment.question.textResponses.noSolutionsNote": {
+    "defaultMessage": "If no solutions are provided, the autograder will always award the maximum grade."
+  },
+  "course.assessment.question.textResponses.atLeastOneSolutionNote": {
+    "defaultMessage": "If at least one solution is provided, students will only be able to input plain text."
+  },
+  "course.assessment.question.textResponses.exactMatchSolutionNote": {
+    "defaultMessage": "If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct. If such a match is found, the autograder will award the specified grade without considering other solutions."
+  },
+  "course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote": {
+    "defaultMessage": "If the student answer satisfies multiple solutions, the autograder will award the sum of those solutions' grades, up to the question's maximum grade."
+  },
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "Grade"
   },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "Keyword"
-  },
-  "course.assessment.question.textResponses.mustSpecifyGrade": {
-    "defaultMessage": "You must specify a valid number for grade."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolution": {
-    "defaultMessage": "You must specify a valid solution title."
-  },
-  "course.assessment.question.textResponses.mustSpecifySolutionType": {
-    "defaultMessage": "You must choose either exact match or keyword as solution type."
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "This is a new solution. It will immediately disappear if you delete before saving it."
@@ -2229,9 +2279,6 @@
   "course.assessment.question.textResponses.solutionType": {
     "defaultMessage": "Type of Solution"
   },
-  "course.assessment.question.textResponses.solutionTypeExplanation": {
-    "defaultMessage": "If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct."
-  },
   "course.assessment.question.textResponses.solutionWillBeDeleted": {
     "defaultMessage": "This solution will be deleted once you save your changes."
   },
@@ -2239,10 +2286,7 @@
     "defaultMessage": "Solutions"
   },
   "course.assessment.question.textResponses.solutionsHint": {
-    "defaultMessage": "Adding solutions allows the answer to be autograded. Students can only input plain text."
-  },
-  "course.assessment.question.textResponses.textResponseNote": {
-    "defaultMessage": "Note: If no solutions are provided, the autograder will always award the maximum grade."
+    "defaultMessage": "Adding solutions allows the answer to be autograded."
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "Undo delete solution"
@@ -2255,6 +2299,105 @@
   },
   "course.assessment.question.textResponses.templateTextDescription": {
     "defaultMessage": "Text that appears in the answer area when students attempt this question for the first time."
+  },
+  "course.assessment.question.textResponses.regex": {
+    "defaultMessage": "Regular Expression"
+  },
+  "course.assessment.question.textResponses.invalidRegex": {
+    "defaultMessage": "Invalid regular expression"
+  },
+  "course.assessment.question.textResponses.spreadsheetFormula": {
+    "defaultMessage": "Spreadsheet Formula"
+  },
+  "course.assessment.question.textResponses.testSpreadsheet": {
+    "defaultMessage": "Test spreadsheet"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetDescription": {
+    "defaultMessage": "A test spreadsheet is required to auto grade the student answer."
+  },
+  "course.assessment.question.textResponses.testSpreadsheetRequired": {
+    "defaultMessage": "Please upload a test spreadsheet file."
+  },
+  "course.assessment.question.textResponses.spreadsheetAdvancedOptions": {
+    "defaultMessage": "Advanced Options"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomization": {
+    "defaultMessage": "Enable randomization"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomizationDescription": {
+    "defaultMessage": "If enabled, some spreadsheet values will be randomly adjusted when autograding. This is useful to ensure the formula actually computes the right answer instead of a preset value."
+  },
+  "course.assessment.question.textResponses.numberOfRandomTests": {
+    "defaultMessage": "Number of random tests"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed": {
+    "defaultMessage": "Fixed random seed"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription": {
+    "defaultMessage": "If checked, randomization will produce the same results every time. This affects both spreadsheet value randomization and random functions in the spreadsheet (RAND, RANDBETWEEN, etc.)."
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp": {
+    "defaultMessage": "Fixed date and time"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
+    "defaultMessage": "If checked, formulas that use the current date/time (NOW, TODAY, etc.) will use this specific date/time instead."
+  },
+  "course.assessment.question.textResponses.randomizationMode": {
+    "defaultMessage": "Autograding Value Configuration"
+  },
+  "course.assessment.question.textResponses.randomizationModeDescription": {
+    "defaultMessage": "Click on any cell to configure how its value should be replaced/randomized during autograding."
+  },
+  "course.assessment.question.textResponses.randomizationModeClearAll": {
+    "defaultMessage": "Clear All"
+  },
+  "course.assessment.question.textResponses.randomizationModeRestoreDefaults": {
+    "defaultMessage": "Restore Defaults"
+  },
+  "course.assessment.question.textResponses.randomizationModePopoverTitle": {
+    "defaultMessage": "During autograding..."
+  },
+  "course.assessment.question.textResponses.noRandomizationMode": {
+    "defaultMessage": "Keep original value"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationMode": {
+    "defaultMessage": "Override with specified value"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationModeDescription": {
+    "defaultMessage": "Values starting with \"=\" are treated as formulas."
+  },
+  "course.assessment.question.textResponses.overrideValue": {
+    "defaultMessage": "Value"
+  },
+  "course.assessment.question.textResponses.numericRandomizationMode": {
+    "defaultMessage": "Use random numeric value"
+  },
+  "course.assessment.question.textResponses.roundToInteger": {
+    "defaultMessage": "Round down to nearest integer"
+  },
+  "course.assessment.question.textResponses.stringRandomizationMode": {
+    "defaultMessage": "Randomize characters in value"
+  },
+  "course.assessment.question.textResponses.stringRandomizationModeDescription": {
+    "defaultMessage": "Each character class to be randomized may be replaced with different character(s) from the same class."
+  },
+  "course.assessment.question.textResponses.randomizeDigits": {
+    "defaultMessage": "Randomize digits (0-9)"
+  },
+  "course.assessment.question.textResponses.randomizeLetters": {
+    "defaultMessage": "Randomize letters (a-z)"
+  },
+  "course.assessment.question.textResponses.dateRandomizationMode": {
+    "defaultMessage": "Use random date value"
+  },
+  "course.assessment.question.textResponses.roundToDay": {
+    "defaultMessage": "Round down to day start (00:00)"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationMode": {
+    "defaultMessage": "Shuffle value with other cells"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationModeDescription": {
+    "defaultMessage": "The values of each cell marked \"Shuffle\" will be randomly rearranged. The overall distribution remains the same, but each value may end up in a different cell."
   },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "Rubric Playground"
@@ -2312,6 +2455,129 @@
   },
   "course.assessment.question.rubricPlayground.comparingRevisions": {
     "defaultMessage": "Comparing {count} revisions"
+  },
+  "course.assessment.question.rubricPlayground.applyOnlyActiveRubric": {
+    "defaultMessage": "Only the active rubric revision may be used to apply edits to existing grades."
+  },
+  "course.assessment.question.rubricPlayground.showOnlyLatestAnswers": {
+    "defaultMessage": "Show only current answers"
+  },
+  "course.assessment.question.rubricPlayground.applying": {
+    "defaultMessage": "Applying"
+  },
+  "course.assessment.question.rubricPlayground.deleteRubricFailure": {
+    "defaultMessage": "Could not delete this rubric revision."
+  },
+  "course.assessment.question.rubricPlayground.activeRubric": {
+    "defaultMessage": "Active"
+  },
+  "course.assessment.question.rubricPlayground.latestRubric": {
+    "defaultMessage": "Latest"
+  },
+  "course.assessment.question.rubricPlayground.unsavedRubric": {
+    "defaultMessage": "Unsaved"
+  },
+  "course.assessment.question.rubricPlayground.returnToEditing": {
+    "defaultMessage": "Return to Editing"
+  },
+  "course.assessment.question.rubricPlayground.restartEditing": {
+    "defaultMessage": "Restart Editing from Here"
+  },
+  "course.assessment.question.rubricPlayground.restart": {
+    "defaultMessage": "Restart"
+  },
+  "course.assessment.question.rubricPlayground.discardChanges": {
+    "defaultMessage": "Discard Changes"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesTitle": {
+    "defaultMessage": "Confirm Discard Changes"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesText": {
+    "defaultMessage": "Your unsaved rubric changes will be lost."
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingTitle": {
+    "defaultMessage": "Confirm Restart Editing"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingText": {
+    "defaultMessage": "Your unsaved rubric changes will be replaced with this revision."
+  },
+  "course.assessment.question.rubricPlayground.setAsActive": {
+    "defaultMessage": "Set as Active"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveTitle": {
+    "defaultMessage": "Warning: Setting Incompatible Revision as Active"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveText": {
+    "defaultMessage": "This revision is structurally incompatible with existing grades. We will carry forward grading data, but we strongly recommend double-checking answer grades as some data may be lost. Are you sure you wish to proceed?"
+  },
+  "course.assessment.question.rubricPlayground.applyReplacesSavedResults": {
+    "defaultMessage": "Applying replaces the saved grade and comment of the selected answers with the active rubric's evaluation results."
+  },
+  "course.assessment.question.rubricPlayground.applySelected": {
+    "defaultMessage": "Apply {count} selected"
+  },
+  "course.assessment.question.rubricPlayground.evaluateSelected": {
+    "defaultMessage": "Evaluate {count} selected"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle": {
+    "defaultMessage": "Confirm Direct Application for Answers"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText": {
+    "defaultMessage": "Some of the answers you are applying have not been evaluated against the active rubric yet. We will evaluate them as part of the application process, but evaluating them before applying will allow you to see the results here before affecting real student grades. Are you sure you wish to proceed?"
+  },
+  "course.assessment.question.rubricPlayground.applyRow": {
+    "defaultMessage": "Apply this evaluation to the student"
+  },
+  "course.assessment.question.rubricPlayground.searchByStudentName": {
+    "defaultMessage": "Search by student name"
+  },
+  "course.assessment.question.rubricPlayground.submissionStatus": {
+    "defaultMessage": "Status"
+  },
+  "course.assessment.question.rubricPlayground.currentGrade": {
+    "defaultMessage": "Current Grade"
+  },
+  "course.assessment.question.rubricPlayground.evaluationGrade": {
+    "defaultMessage": "New Grade"
+  },
+  "course.assessment.question.rubricPlayground.evaluationComment": {
+    "defaultMessage": "Feedback"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatus": {
+    "defaultMessage": "Grading Status"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusModified": {
+    "defaultMessage": "Modified"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusIncomplete": {
+    "defaultMessage": "Incomplete"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusStale": {
+    "defaultMessage": "Stale"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusUpToDate": {
+    "defaultMessage": "Up-to-date"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusManuallyGraded": {
+    "defaultMessage": "Manually graded"
+  },
+  "course.assessment.question.rubricPlayground.regradeRow": {
+    "defaultMessage": "Re-evaluate with the active rubric (does not change the grade)"
+  },
+  "course.assessment.question.rubricPlayground.regradeSuccess": {
+    "defaultMessage": "Re-evaluation complete."
+  },
+  "course.assessment.question.rubricPlayground.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades": {
+    "defaultMessage": "Evaluations in this table do not affect the grades assigned to students. You can update existing student grades under the 'Apply' button."
+  },
+  "course.assessment.question.rubricPlayground.addAnswersTitle": {
+    "defaultMessage": "Add Sample Answers"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
+    "defaultMessage": "Add"
   },
   "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
     "defaultMessage": "Add Sample Answers"
@@ -3571,7 +3837,7 @@
     "defaultMessage": "EXP Awarded"
   },
   "course.assessment.submission.finalise": {
-    "defaultMessage": "Finalise Submission"
+    "defaultMessage": "Finalise all answers"
   },
   "course.assessment.submission.forceSubmitConfirmation": {
     "defaultMessage": "There are currently {unattempted} unattempted and {attempting} attempting user(s) ({selectedUsers}) for this assessment. Are you sure you want to force submit all submissions? Doing so will cause all questions to be awarded ZERO marks for non-autograded assessments. NOTE THAT THIS ACTION IS IRREVERSIBLE!"
@@ -3603,8 +3869,11 @@
   "course.assessment.submission.gradePrefilled": {
     "defaultMessage": "Pre-filled"
   },
-  "course.assessment.submission.gradePrefilledHint": {
+  "course.assessment.submission.gradePrefilledFullHint": {
     "defaultMessage": "The maximum grade has been pre-filled for you because it was deemed correct by the autograder."
+  },
+  "course.assessment.submission.gradePrefilledZeroHint": {
+    "defaultMessage": "The grade of 0 has been pre-filled for you because it was deemed incorrect by the autograder."
   },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "Grade Summary"
@@ -3759,11 +4028,14 @@
   "course.assessment.submission.resetConfirmation": {
     "defaultMessage": "Are you sure you want to reset your answer? This action is irreversible and you will lose all your current work for this question."
   },
-  "course.assessment.submission.runCode": {
-    "defaultMessage": "Run Code"
+  "course.assessment.submission.checkAnswer": {
+    "defaultMessage": "Check Answer"
   },
-  "course.assessment.submission.runCodeWithLimit": {
-    "defaultMessage": "Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
+  "course.assessment.submission.checkAnswerWithLimit": {
+    "defaultMessage": "Check Answer ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
+  },
+  "course.assessment.submission.submitWithLimit": {
+    "defaultMessage": "Submit ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
   },
   "course.assessment.submission.saveDraft": {
     "defaultMessage": "Save Draft"
@@ -3811,7 +4083,7 @@
     "defaultMessage": "Submissions: {assessment}"
   },
   "course.assessment.submission.submitConfirmation": {
-    "defaultMessage": "THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? You will no longer be able to amend your submission!"
+    "defaultMessage": "After finalising, you will no longer be able to change your answers for this assessment. THIS ACTION IS IRREVERSIBLE! Are you sure you want to proceed?"
   },
   "course.assessment.submission.submitError": {
     "defaultMessage": "Failure to submit answer. Please check the errors for your answers"
@@ -3831,6 +4103,15 @@
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "Total Grade"
   },
+  "course.assessment.submission.rubricScores": {
+    "defaultMessage": "Rubric Grades"
+  },
+  "course.assessment.submission.moderation": {
+    "defaultMessage": "Moderation"
+  },
+  "course.assessment.submission.moderationHint": {
+    "defaultMessage": "(Optional) Manual grade adjustment independent of the rubric criteria."
+  },
   "course.assessment.submission.type": {
     "defaultMessage": "Type"
   },
@@ -3847,7 +4128,7 @@
     "defaultMessage": "Unsubmit Submission"
   },
   "course.assessment.submission.unsubmitAllConfirmation": {
-    "defaultMessage": "Are you sure you want to UNSUBMIT the submissions for all {users}? All submissions will be unsubmitted and this will reset the submission time and permit the users to change their submissions. NOTE THAT THIS ACTION IS IRREVERSIBLE"
+    "defaultMessage": "Are you sure you want to UNSUBMIT the submissions for all {users}? All submissions will be unsubmitted and this will reset the submission time and permit the users to change their answers. NOTE THAT THIS ACTION IS IRREVERSIBLE"
   },
   "course.assessment.submission.unsubmitAllSubmissionsJobPending": {
     "defaultMessage": "Please wait as the submissions are currently being unsubmitted."
@@ -3856,7 +4137,7 @@
     "defaultMessage": "All submissions above have been successfully unsubmitted."
   },
   "course.assessment.submission.unsubmitConfirmation": {
-    "defaultMessage": "This will reset the submission time and permit the student to change their submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?"
+    "defaultMessage": "This will reset the submission time and permit the student to change their answers. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?"
   },
   "course.assessment.submission.unsubmitSubmissionSuccess": {
     "defaultMessage": "{name}'s submission has been successfully unsubmitted."
@@ -4115,6 +4396,15 @@
   },
   "course.courses.CourseAnnouncements.announcementHeader": {
     "defaultMessage": "Latest announcements"
+  },
+  "course.courses.CourseSuspendedAlert.header": {
+    "defaultMessage": "This course is suspended. Instructors can still access it, but students cannot."
+  },
+  "course.courses.CourseSuspendedAlert.canSuspendMessage": {
+    "defaultMessage": "You can unsuspend it from the {link} page."
+  },
+  "course.courses.CourseSuspendedAlert.cannotSuspendMessage": {
+    "defaultMessage": "If you believe this is a mistake, contact a course manager or owner to have them unsuspend the course."
   },
   "course.courses.CourseDisplay.noCourse": {
     "defaultMessage": "There is no course yet..."
@@ -4470,6 +4760,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "Select Current Course"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.currentInstance": {
+    "defaultMessage": "Select current instance"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
     "defaultMessage": "Destination Instance"
   },
@@ -4569,6 +4862,9 @@
   "course.duplication.Duplication.ItemsSelector.pleaseSelectItems": {
     "defaultMessage": "Please select items to duplicate via the sidebar."
   },
+  "course.duplication.Duplication.cannotDuplicateToNewCourseInThisInstance": {
+    "defaultMessage": "You cannot duplicate to a new course in {instanceHost} because you are not an instructor here. {duplicationLink}"
+  },
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "Duplicate Data"
   },
@@ -4589,6 +4885,9 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "All components with duplicable items are disabled. You may enable them under course settings."
+  },
+  "course.duplication.Duplication.requestInstanceInstructorRole": {
+    "defaultMessage": "Request to be an instructor"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "To"
@@ -5832,7 +6131,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "No checkable questions"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "Not enough submissions"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -6121,7 +6420,7 @@
     "defaultMessage": "Student Statistics"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
-    "defaultMessage": "Search by Student Name or Student Type"
+    "defaultMessage": "Search by Student Name, Student Type or External ID"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "Failed to fetch student data!"
@@ -6829,22 +7128,25 @@
     "defaultMessage": "Close"
   },
   "course.userInvitations.InvitationResultDialog.duplicateInfo": {
-    "defaultMessage": "Duplicate users were found in the invitation. Only the first instance of this user will be invited."
+    "defaultMessage": "Duplicate users were found in the invitation. Only the first instance of each user will be invited."
   },
   "course.userInvitations.InvitationResultDialog.duplicateUsers": {
-    "defaultMessage": "Users with Duplicate Emails ({count})"
+    "defaultMessage": "Duplicate Users ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsers": {
     "defaultMessage": "Existing Course Users ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsersInfo": {
-    "defaultMessage": "Existing course users with this email were found in the invitation. They were not invited."
+    "defaultMessage": "These users are already enrolled in this course. They were not re-enrolled."
+  },
+  "course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo": {
+    "defaultMessage": "External IDs were updated where specified."
   },
   "course.userInvitations.InvitationResultDialog.existingInvitations": {
     "defaultMessage": "Existing Invitations ({count})"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitationsInfo": {
-    "defaultMessage": "Existing invitations for these users with this email already exist. They were not invited."
+    "defaultMessage": "These users already have a pending invitation. They were not re-invited."
   },
   "course.userInvitations.InvitationResultDialog.header": {
     "defaultMessage": "Invitation Summary"
@@ -6854,6 +7156,57 @@
   },
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "New Invitations ({count})"
+  },
+  "course.userInvitations.InvitationResultDialog.actionableTitle": {
+    "defaultMessage": "Failed ({count})"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitations": {
+    "defaultMessage": "Failed to Send ({count})"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitationsInfo": {
+    "defaultMessage": "Error occurred when sending invitation email, please try again."
+  },
+  "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
+    "defaultMessage": "{count} updated · shown first"
+  },
+  "course.userInvitations.InvitationResultDialog.blankHeaderWarning": {
+    "defaultMessage": "One or more columns had no header - their data was ignored."
+  },
+  "course.userInvitations.InvitationResultDialog.summary": {
+    "defaultMessage": "{newInvitations} new {newInvitations, plural, one {invitation} other {invitations}} sent, {newEnrollments} directly enrolled, {alreadyInCourse} already in course."
+  },
+  "course.userInvitations.InvitationResultDialog.summaryFailed": {
+    "defaultMessage": "{count} failed."
+  },
+  "course.userInvitations.InvitationResultDialog.failedRowsSubtitle": {
+    "defaultMessage": "{count} {count, plural, one {row} other {rows}} highlighted in red could not be sent"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateEmailInFile": {
+    "defaultMessage": "Duplicate email in uploaded CSV"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateExternalIdInFile": {
+    "defaultMessage": "Duplicate external ID in uploaded CSV"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTaken": {
+    "defaultMessage": "External ID is taken by another course member"
+  },
+  "course.userInvitations.InvitationResultFailedTable.failedToSend": {
+    "defaultMessage": "Failed to send invitation email, please try again - if failures persist, contact us for assistance"
+  },
+  "course.userInvitations.InvitationResultFailedTable.missingEmail": {
+    "defaultMessage": "Missing email"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.no": {
+    "defaultMessage": "No"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.previouslyLabel": {
+    "defaultMessage": "Previously: {value}"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.yes": {
+    "defaultMessage": "Yes"
+  },
+  "course.userInvitations.InvitationResultExistingTable.previouslyLabel": {
+    "defaultMessage": "Previously: {value}"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "Accepted Invitations"
@@ -6885,11 +7238,23 @@
   "course.userInvitations.InviteUsersFileUpload.failure": {
     "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly - {error}"
   },
+  "course.userInvitations.InviteUsersFileUpload.failureGeneric": {
+    "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly."
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "Name,Email[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "Name,Email,External ID,Role,Phantom{br}John,test1@example.com,A0123456,student,y{br}Mary,test2@example.com,A0123457,teaching_assistant,n"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "Name,Email[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "Name,Email,External ID,Role,Phantom,Personal Timeline{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired": {
+    "defaultMessage": "The CSV must include both a \"Name\" and \"Email\" column. All other columns are optional."
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
+    "defaultMessage": "Each invitation must use a unique email address within the course. Duplicate emails will be skipped."
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
+    "defaultMessage": "If external IDs are provided, they must be unique within the course."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "Upload a .csv file with the following format:"
@@ -6902,6 +7267,12 @@
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "Roles can be <code>[student, observer, teaching_assistant, manager, owner]</code>, and defaults to student if omitted. Teaching assistants can only invite users as students."
+  },
+  "course.userInvitations.InviteUsersFileUpload.importInProgress": {
+    "defaultMessage": "Importing users, please wait…"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileRequired": {
+    "defaultMessage": "Please select a CSV file to upload."
   },
   "course.userInvitations.InviteUsersFileUpload.template": {
     "defaultMessage": "(Template File)"
@@ -6921,6 +7292,9 @@
   "course.userInvitations.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
   },
+  "course.userInvitations.InvitationActionButtons.deletionFailureGeneric": {
+    "defaultMessage": "Failed to delete user."
+  },
   "course.userInvitations.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "Invitation for {name} was deleted."
   },
@@ -6928,7 +7302,7 @@
     "defaultMessage": "Delete Invitation"
   },
   "course.userInvitations.InvitationActionButtons.resendFailure": {
-    "defaultMessage": "Failed to resend invitation - {error}"
+    "defaultMessage": "Failed to resend invitation."
   },
   "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "Resent email invitation to {email}!"
@@ -7003,16 +7377,31 @@
     "defaultMessage": "There are no users"
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "Search by name or email"
+    "defaultMessage": "Search by name, email or external ID"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "Assign to timeline"
+  },
+  "course.users.ManageUsersTable.bulkActions": {
+    "defaultMessage": "Bulk Actions"
   },
   "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
     "defaultMessage": "Failed to update {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
   },
   "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
     "defaultMessage": "Updated {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
+  },
+  "course.users.ManageUsersTable.bulkSuspendFailure": {
+    "defaultMessage": "Failed to suspend {n, plural, =1 {# student} other {# students}}."
+  },
+  "course.users.ManageUsersTable.bulkSuspendSuccess": {
+    "defaultMessage": "Suspended {n, plural, =1 {# student} other {# students}} successfully."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendFailure": {
+    "defaultMessage": "Failed to unsuspend {n, plural, =1 {# student} other {# students}}."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendSuccess": {
+    "defaultMessage": "Unsuspended {n, plural, =1 {# student} other {# students}} successfully."
   },
   "course.users.ManageUsersTable.changeAlgorithmFailure": {
     "defaultMessage": "Failed to update {name}'s timeline algorithm to {timeline}."
@@ -7040,6 +7429,24 @@
   },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {is now a phantom user} other {is now a normal user} }."
+  },
+  "course.users.ManageUsersTable.addIdFailure": {
+    "defaultMessage": "Failed to set External ID to {newId}"
+  },
+  "course.users.ManageUsersTable.addIdSuccess": {
+    "defaultMessage": "External ID set to {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdFailure": {
+    "defaultMessage": "Failed to change ID from {oldId} to {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdSuccess": {
+    "defaultMessage": "ID was changed from {oldId} to {newId}"
+  },
+  "course.users.ManageUsersTable.deleteIdFailure": {
+    "defaultMessage": "Failed to delete External ID"
+  },
+  "course.users.ManageUsersTable.deleteIdSuccess": {
+    "defaultMessage": "External ID deleted"
   },
   "course.users.ManageUsersTable.renameFailure": {
     "defaultMessage": "Failed to rename {oldName} to {newName}"
@@ -7158,14 +7565,35 @@
   "course.users.UpgradeToStaff.upgradeSuccess": {
     "defaultMessage": "{count, plural, =0 {No users were} one {# new user has} other {# new users have}} been upgraded to {role}"
   },
-  "course.users.UserManagementButtons.deletionConfirm": {
+  "course.users.ManageUsersTable.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete {role} {name} ({email})?"
   },
-  "course.users.UserManagementButtons.deletionFailure": {
+  "course.users.ManageUsersTable.deletionFailure": {
     "defaultMessage": "Failed to delete user."
   },
-  "course.users.UserManagementButtons.deletionSuccess": {
+  "course.users.ManageUsersTable.deletionScheduled": {
+    "defaultMessage": "{role} {name} ({email}) has been scheduled for deletion."
+  },
+  "course.users.ManageUsersTable.deletionSuccess": {
     "defaultMessage": "User was deleted."
+  },
+  "course.users.ManageUsersTable.suspend": {
+    "defaultMessage": "Suspend"
+  },
+  "course.users.ManageUsersTable.suspendFailure": {
+    "defaultMessage": "Failed to suspend {name}."
+  },
+  "course.users.ManageUsersTable.suspendSuccess": {
+    "defaultMessage": "{name} is now suspended. They cannot access this course until they are unsuspended."
+  },
+  "course.users.ManageUsersTable.unsuspend": {
+    "defaultMessage": "Unsuspend"
+  },
+  "course.users.ManageUsersTable.unsuspendFailure": {
+    "defaultMessage": "Failed to unsuspend {name}."
+  },
+  "course.users.ManageUsersTable.unsuspendSuccess": {
+    "defaultMessage": "{name} is no longer suspended. They can now access the course."
   },
   "course.users.UserManagementTabs.enrolRequestsTitle": {
     "defaultMessage": "Enrol Requests"
@@ -7768,10 +8196,31 @@
     "defaultMessage": "Instance"
   },
   "lib.components.getHelp.validation.invalidDateSelection": {
-    "defaultMessage": "End Date must be after or equal to Start Date"
+    "defaultMessage": "Invalid date"
+  },
+  "lib.components.getHelp.validation.endDateBeforeStartDate": {
+    "defaultMessage": "End date must be after or equal to Start date"
   },
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "Date range cannot exceed 365 days"
+  },
+  "lib.components.table.MuiColumnPickerDialog.apply": {
+    "defaultMessage": "Apply to view"
+  },
+  "lib.components.table.MuiColumnPickerDialog.cancel": {
+    "defaultMessage": "Cancel"
+  },
+  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+    "defaultMessage": "Select columns"
+  },
+  "lib.components.table.MuiColumnPickerDialog.export": {
+    "defaultMessage": "Apply and Export"
+  },
+  "lib.components.table.MuiTableToolbar.directExport": {
+    "defaultMessage": "Export"
+  },
+  "lib.components.table.MuiTableToolbar.exportTrigger": {
+    "defaultMessage": "Export…"
   },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "Failed to fetch users."
@@ -7894,7 +8343,7 @@
     "defaultMessage": "Invalid Date"
   },
   "lib.translations.form.validation.numeric": {
-    "defaultMessage": "Enter a number"
+    "defaultMessage": "Enter a valid number"
   },
   "lib.translations.form.validation.required": {
     "defaultMessage": "Required"
@@ -7904,6 +8353,15 @@
   },
   "lib.translations.form.validation.startEndDateValidationError": {
     "defaultMessage": "Must be after Start Date"
+  },
+  "lib.translations.instance.users.roles.normal": {
+    "defaultMessage": "Normal"
+  },
+  "lib.translations.instance.users.roles.instructor": {
+    "defaultMessage": "Instructor"
+  },
+  "lib.translations.instance.users.roles.administrator": {
+    "defaultMessage": "Administrator"
   },
   "lib.translations.messages.fetchingError": {
     "defaultMessage": "An error occurred when loading your data. Please reload and try again."
@@ -7959,6 +8417,9 @@
   "lib.translations.table.column.email": {
     "defaultMessage": "Email"
   },
+  "lib.translations.table.column.externalId": {
+    "defaultMessage": "External ID"
+  },
   "lib.translations.table.column.endAt": {
     "defaultMessage": "End At"
   },
@@ -8009,6 +8470,9 @@
   },
   "lib.translations.table.column.name": {
     "defaultMessage": "Name"
+  },
+  "lib.translations.table.column.optional": {
+    "defaultMessage": "Optional"
   },
   "lib.translations.table.column.organization": {
     "defaultMessage": "Organization"
@@ -8840,5 +9304,32 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "Trouble signing in?"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.title": {
+    "defaultMessage": "Confirm External ID Updates"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.body": {
+    "defaultMessage": "These users are already enrolled or have pending invitations. No new invitation emails will be sent to them. Would you like to keep their current External IDs, or replace them with the values from your file?"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingInvitationUpdates": {
+    "defaultMessage": "Pending Invitation Updates ({count})"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingCourseUserUpdates": {
+    "defaultMessage": "Pending Course Member Updates ({count})"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.goBack": {
+    "defaultMessage": "Go Back"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.keepExisting": {
+    "defaultMessage": "Keep Existing"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.replace": {
+    "defaultMessage": "Replace"
+  },
+  "lib.translations.table.column.currentExternalId": {
+    "defaultMessage": "Current External ID"
+  },
+  "lib.translations.table.column.newExternalId": {
+    "defaultMessage": "New External ID"
   }
 }

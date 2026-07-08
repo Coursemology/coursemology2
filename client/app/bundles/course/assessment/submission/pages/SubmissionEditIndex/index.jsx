@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Lock } from '@mui/icons-material';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import {
   Card,
@@ -158,16 +159,35 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { isSubmissionBlocked, isLoading } = this.props;
+    const { assessment, isSubmissionBlocked, isLoading, submission } =
+      this.props;
 
     if (isLoading) return <LoadingIndicator />;
     if (isSubmissionBlocked) return <BlockedSubmission />;
+
+    const isBlockedInStudentView =
+      !submission.graderView &&
+      assessment.blockStudentViewingAfterSubmitted &&
+      submission.workflowState !== workflowStates.Attempting &&
+      submission.workflowState !== workflowStates.Published;
+
     return (
       <Page className="space-y-5">
         {this.renderTimeLimitBanner()}
         {this.renderAssessment()}
-        {this.renderProgress()}
-        {this.renderContent()}
+        {isBlockedInStudentView ? (
+          <div className="flex flex-col items-center py-16">
+            <Lock className="text-9xl" />
+            <Typography>
+              <FormattedMessage {...translations.submissionBlocked} />
+            </Typography>
+          </div>
+        ) : (
+          <>
+            {this.renderProgress()}
+            {this.renderContent()}
+          </>
+        )}
       </Page>
     );
   }

@@ -7,6 +7,7 @@ import {
 } from 'course/assessment/submission/constants';
 import Comments from 'course/assessment/submission/containers/Comments';
 import QuestionGrade from 'course/assessment/submission/containers/QuestionGrade';
+import SolutionResultView from 'course/assessment/submission/containers/SolutionResultView';
 import TestCaseView from 'course/assessment/submission/containers/TestCaseView';
 import { getAssessment } from 'course/assessment/submission/selectors/assessments';
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
@@ -36,6 +37,9 @@ const QuestionContent: FC<Props> = (props) => {
   const questions = useAppSelector(getQuestions);
   const topics = useAppSelector(getTopics);
   const submissionFlags = useAppSelector(getSubmissionFlags);
+  const gradingResults = useAppSelector(
+    (state) => state.assessments.submission.gradingResults,
+  );
 
   const {
     formState: { errors },
@@ -55,6 +59,9 @@ const QuestionContent: FC<Props> = (props) => {
   const submissionErrors = errors as unknown as ErrorStruct[];
 
   const isProgrammingQuestion = type === questionTypes.Programming;
+  const isSolutionResultsVisible =
+    type === questionTypes.TextResponse &&
+    gradingResults.solutionResults[questionId]?.length;
 
   const allErrors = answerId
     ? submissionErrors[answerId]?.errorTypes ?? []
@@ -83,6 +90,9 @@ const QuestionContent: FC<Props> = (props) => {
       )}
       <AutogradingErrorPanel questionId={questionId} />
       {isProgrammingQuestion && <TestCaseView questionId={questionId} />}
+      {isSolutionResultsVisible && (
+        <SolutionResultView questionId={questionId} />
+      )}
       <QuestionGrade isSaving={isSaving} questionId={questionId} />
       <Comments topic={topic} />
     </>

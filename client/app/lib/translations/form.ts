@@ -25,6 +25,14 @@ const formTranslations = defineMessages({
     id: 'lib.translations.form.endAt',
     defaultMessage: 'End At',
   },
+  minimum: {
+    id: 'lib.translations.form.minimum',
+    defaultMessage: 'Minimum',
+  },
+  maximum: {
+    id: 'lib.translations.form.maximum',
+    defaultMessage: 'Maximum',
+  },
   ok: {
     id: 'lib.translations.form.buttons.ok',
     defaultMessage: 'OK',
@@ -108,7 +116,7 @@ const formTranslations = defineMessages({
   },
   numeric: {
     id: 'lib.translations.form.validation.numeric',
-    defaultMessage: 'Enter a number',
+    defaultMessage: 'Enter a valid number',
   },
   email: {
     id: 'lib.translations.form.validation.email',

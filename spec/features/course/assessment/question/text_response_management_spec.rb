@@ -24,10 +24,10 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
             new_course_assessment_question_text_response_path(course, assessment, { file_upload: true })
           )
           question_attributes = attributes_for(:course_assessment_question_text_response)
-          fill_in 'title', with: question_attributes[:title]
-          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
-          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
-          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
+          fill_in 'question.title', with: question_attributes[:title]
+          fill_in_react_ck 'textarea[name="question.description"]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name="question.staffOnlyComments"]', question_attributes[:staff_only_comments]
+          fill_in 'question.maximumGrade', with: question_attributes[:maximum_grade]
 
           find_field('Skills').click
 
@@ -56,10 +56,10 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           expect(page).to have_current_path(file_upload_path)
 
           question_attributes = attributes_for(:course_assessment_question_text_response)
-          fill_in 'title', with: question_attributes[:title]
-          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
-          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
-          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
+          fill_in 'question.title', with: question_attributes[:title]
+          fill_in_react_ck 'textarea[name="question.description"]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name="question.staffOnlyComments"]', question_attributes[:staff_only_comments]
+          fill_in 'question.maximumGrade', with: question_attributes[:maximum_grade]
 
           click_button 'Save changes'
           expect(page).to have_current_path(course_assessment_path(course, assessment))
@@ -91,10 +91,10 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         staff_only_comments = 'No comments from staff'
         maximum_grade = 999.9
 
-        fill_in 'title', with: title
-        fill_in_react_ck 'textarea[name=description]', description
-        fill_in_react_ck 'textarea[name=staffOnlyComments]', staff_only_comments
-        fill_in 'maximumGrade', with: maximum_grade
+        fill_in 'question.title', with: title
+        fill_in_react_ck 'textarea[name="question.description"]', description
+        fill_in_react_ck 'textarea[name="question.staffOnlyComments"]', staff_only_comments
+        fill_in 'question.maximumGrade', with: maximum_grade
 
         click_button 'Save changes'
 
@@ -107,28 +107,30 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
         visit edit_path
 
-        solutions.each do |solution|
+        solutions.each_with_index do |solution, index|
           click_button 'Add a new solution'
 
-          within find_all('section', text: 'solution').last do
-            fill_in 'solution', with: solution[:solution]
-            fill_in_react_ck 'textarea[name=explanation]', solution[:explanation]
-            fill_in 'grade', with: solution[:grade]
+          fill_in "solutions.#{index}.solution", with: solution[:solution]
+          fill_in_react_ck "textarea[name=\"solutions.#{index}.explanation\"]", solution[:explanation]
+          fill_in "solutions.#{index}.grade", with: solution[:grade]
 
-            solution_type = find('#solution-type', visible: :all)
-            if solution[:exact_match]
-              solution_type.find('option[value="exact_match"]', visible: :all).select_option
-            else
-              solution_type.find('option[value="keyword"]', visible: :all).select_option
-            end
-          end
+          solution_type = find("select[name=\"solutions.#{index}.solutionType\"]", visible: :all)
+          solution_type.find("option[value=\"#{solution[:solution_type]}\"]", visible: :all).select_option
         end
 
         click_button 'Save changes'
 
         expect(page).to have_current_path(course_assessment_path(course, assessment))
-        expect(question.reload.max_attachments).to eq(max_attachment_default_text_response)
-        expect(question.reload.solutions.count).to eq(solutions.count)
+        question.reload
+        expect(question.max_attachments).to eq(max_attachment_default_text_response)
+        expect(question.solutions.count).to eq(solutions.count)
+        solutions.each_with_index do |solution, index|
+          question_solution = question.solutions[index]
+          expect(question_solution.solution).to eq(solution[:solution])
+          expect(question_solution.explanation).to include(solution[:explanation])
+          expect(question_solution.grade).to eq(solution[:grade])
+          expect(question_solution.solution_type.to_sym).to eq(solution[:solution_type])
+        end
 
         # Delete all solutions from question
         visit edit_path

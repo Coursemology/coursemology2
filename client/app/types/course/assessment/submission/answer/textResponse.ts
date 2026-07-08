@@ -1,4 +1,5 @@
 import { QuestionType } from '../../question';
+import { TextResponseSolutionType } from '../question/types';
 
 import {
   AnswerBaseData,
@@ -12,15 +13,32 @@ export interface TextResponseFieldData extends AnswerFieldBaseData {
   answer_text: string;
 }
 
+export interface TextResponseSolutionResult {
+  id: number;
+  grade?: number;
+  maximumGrade: number;
+  solution: string;
+  solutionType: TextResponseSolutionType;
+  tests?: {
+    identifier: string;
+    output?: string;
+    expected?: string;
+    correct: boolean;
+    outputError?: string;
+    expectedError?: string;
+  }[];
+}
+
 export interface TextResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.TextResponse;
   fields: TextResponseFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
   latestAnswer?: TextResponseAnswerData;
+  solutionResults?: TextResponseSolutionResult[];
 }
 
 export interface FileUploadFieldData extends AnswerFieldBaseData {}
@@ -29,7 +47,7 @@ export interface FileUploadAnswerData extends AnswerBaseData {
   questionType: QuestionType.FileUpload;
   fields: FileUploadFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

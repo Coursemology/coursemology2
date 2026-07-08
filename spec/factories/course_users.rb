@@ -11,6 +11,10 @@ FactoryBot.define do
       phantom { true }
     end
 
+    trait :suspended do
+      is_suspended { true }
+    end
+
     factory :course_student, parent: :course_user do
       sequence(:name) { |n| "student #{n}" }
     end

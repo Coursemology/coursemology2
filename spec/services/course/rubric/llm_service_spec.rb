@@ -6,7 +6,13 @@ RSpec.describe Course::Rubric::LlmService do
   with_tenant(:instance) do
     let(:assessment) { create(:assessment, :published_with_rubric_question) }
     let(:question) { assessment.questions.first.specific }
-    let(:categories) { question.categories.without_bonus_category.includes(:criterions) }
+    let!(:active_rubric) do
+      Course::Rubric.build_from_v1(question, assessment.course).tap do |rubric|
+        rubric.save!
+        question.acting_as.update_column(:active_rubric_id, rubric.id)
+      end
+    end
+    let(:categories) { active_rubric.categories }
     let(:submission) do
       create(:submission, :attempting, assessment: assessment)
     end
@@ -16,8 +22,10 @@ RSpec.describe Course::Rubric::LlmService do
     end
 
     let(:question_adapter) { Course::Assessment::Question::QuestionAdapter.new(question.acting_as) }
-    let(:rubric_adapter) { Course::Assessment::Question::RubricBasedResponse::RubricAdapter.new(question) }
-    let(:answer_adapter) { Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer) }
+    let(:rubric_adapter) { Course::Rubric::RubricAdapter.new(active_rubric) }
+    let(:answer_adapter) do
+      Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer, active_rubric)
+    end
     subject { Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter) }
 
     describe '#evaluate' do

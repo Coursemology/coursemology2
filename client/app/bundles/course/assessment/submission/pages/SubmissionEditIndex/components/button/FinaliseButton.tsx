@@ -57,6 +57,7 @@ const FinaliseButton: FC = () => {
         <Button
           className="mb-2 mr-2"
           color="secondary"
+          data-testid="FinaliseButton"
           disabled={isSaving}
           onClick={() => setFinaliseConfirmation(true)}
           variant="contained"

@@ -1,8 +1,12 @@
-import { FC, ReactNode } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FC, ReactNode, useRef, useState } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
-import { InvitationResult } from 'types/course/userInvitations';
+import {
+  InvitationFileEntity,
+  InvitationResult,
+  PendingExternalIdConflict,
+} from 'types/course/userInvitations';
 
 import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
@@ -11,6 +15,8 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
+import ExternalIdConflictPrompt from '../../components/misc/ExternalIdConflictPrompt';
+import useInviteErrorHandler from '../../hooks/useInviteErrorHandler';
 import { inviteUsersFromFile } from '../../operations';
 import {
   getManageCourseUserPermissions,
@@ -27,6 +33,11 @@ const translations = defineMessages({
   fileUploadInfo: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfo',
     defaultMessage: 'Upload a .csv file with the following format:',
+  },
+  fileUploadInfoRequired: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired',
+    defaultMessage:
+      'The CSV must include both a "Name" and "Email" column. All other columns are optional.',
   },
   fileUploadInfoRole: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole',
@@ -52,6 +63,16 @@ const translations = defineMessages({
       'Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>,\
       with course default: {defaultTimelineAlgorithm} if omitted.',
   },
+  fileUploadInfoEmail: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail',
+    defaultMessage:
+      'Each invitation must use a unique email address within the course. Duplicate emails will be skipped.',
+  },
+  fileUploadInfoExternalId: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId',
+    defaultMessage:
+      'If external IDs are provided, they must be unique within the course.',
+  },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
     defaultMessage: 'Example ',
@@ -63,61 +84,136 @@ const translations = defineMessages({
   fileUploadExample: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExample',
     defaultMessage:
-      'Name,Email[,Role,Phantom]' +
-      '{br}John,test1@example.org[,student,y]' +
-      '{br}Mary,test2@example.org[,teaching_assistant,n]',
+      'Name,Email,External ID,Role,Phantom' +
+      '{br}John,test1@example.com,A0123456,student,y' +
+      '{br}Mary,test2@example.com,A0123457,teaching_assistant,n',
   },
   fileUploadExamplePersonalTimeline: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline',
     defaultMessage:
-      'Name,Email[,Role,Phantom,PersonalTimeline]' +
-      '{br}John,test1@example.org[,student,y,otot]' +
-      '{br}Mary,test2@example.org[,teaching_assistant,n,fixed]',
+      'Name,Email,External ID,Role,Phantom,Personal Timeline' +
+      '{br}John,test1@example.com,A0123456,student,y,otot' +
+      '{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed',
   },
   failure: {
     id: 'course.userInvitations.InviteUsersFileUpload.failure',
     defaultMessage:
       'Failed to invite users. Please ensure your data is formatted correctly - {error}',
   },
+  failureGeneric: {
+    id: 'course.userInvitations.InviteUsersFileUpload.failureGeneric',
+    defaultMessage:
+      'Failed to invite users. Please ensure your data is formatted correctly.',
+  },
+  importInProgress: {
+    id: 'course.userInvitations.InviteUsersFileUpload.importInProgress',
+    defaultMessage: 'Importing users, please wait…',
+  },
+  fileRequired: {
+    id: 'course.userInvitations.InviteUsersFileUpload.fileRequired',
+    defaultMessage: 'Please select a CSV file to upload.',
+  },
 });
 
 const InviteUsersFileUpload: FC<Props> = (props) => {
   const { open, onClose, openResultDialog } = props;
   const { t } = useTranslation();
+  const intl = useIntl();
   const dispatch = useAppDispatch();
+
+  const fileRef = useRef<InvitationFileEntity | null>(null);
+  const [conflictData, setConflictData] =
+    useState<PendingExternalIdConflict | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
 
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
+  const handleError = useInviteErrorHandler(
+    translations.failure,
+    translations.failureGeneric,
+  );
 
-  if (!open) {
+  if (!open && !conflictData) {
     return null;
   }
 
-  const onSubmit = (data): Promise<void> => {
-    return dispatch(inviteUsersFromFile(data.file))
+  // Drives all imports (initial submit + conflict resolution). The conflict
+  // prompt is kept mounted until the server responds; clearing it eagerly would
+  // flip the FileUploadForm back open (open && !conflictData) mid-import.
+  const submitWithResolution = (
+    fileEntity: InvitationFileEntity,
+    resolution?: 'keep_existing' | 'replace_all',
+  ): Promise<void> => {
+    // Not loadingToast(): this flow dismisses the spinner on every outcome
+    // (success → result dialog, conflict → prompt, error → useInviteErrorHandler's
+    // persistent parsed toast) rather than morphing it into success/error.
+    const toastId = toast.loading(t(translations.importInProgress));
+    setIsResolving(true);
+    return dispatch(inviteUsersFromFile(fileEntity, resolution))
       .then((response) => {
-        onClose();
-        openResultDialog(response);
+        toast.dismiss(toastId);
+        if ('conflict' in response) {
+          setConflictData(response.conflict);
+        } else {
+          setConflictData(null);
+          onClose();
+          openResultDialog(response as InvitationResult);
+        }
       })
       .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
-        toast.error(
-          t(translations.failure, {
-            error: errorMessage,
-          }),
-          { autoClose: false },
-        );
-      });
+        toast.dismiss(toastId);
+        setConflictData(null);
+        handleError(error);
+      })
+      .finally(() => setIsResolving(false));
+  };
+
+  const onSubmit = (data: { file: InvitationFileEntity }): Promise<void> => {
+    // The form's submit unlocks once the field is dirty, which a select-then-remove
+    // leaves true with no file. Surface that as a toast rather than firing an empty import.
+    if (!data.file?.file) {
+      toast.error(t(translations.fileRequired));
+      return Promise.resolve();
+    }
+    fileRef.current = data.file;
+    return submitWithResolution(data.file);
+  };
+
+  const handleKeepExisting = (): void => {
+    if (fileRef.current) submitWithResolution(fileRef.current, 'keep_existing');
+  };
+
+  const handleReplaceAll = (): void => {
+    if (fileRef.current) submitWithResolution(fileRef.current, 'replace_all');
+  };
+
+  const handleCancel = (): void => {
+    if (isResolving) return;
+    setConflictData(null);
+    fileRef.current = null;
   };
 
   const formSubtitle = (
     <>
       <Typography variant="body2">{t(translations.fileUploadInfo)}</Typography>
-      <ul>
+      <ul className="m-0 mt-2 pl-6">
+        <li>
+          <Typography variant="body2">
+            {t(translations.fileUploadInfoRequired)}
+          </Typography>
+        </li>
+        <li>
+          <Typography variant="body2">
+            {t(translations.fileUploadInfoEmail)}
+          </Typography>
+        </li>
+        <li>
+          <Typography variant="body2">
+            <FormattedMessage {...translations.fileUploadInfoExternalId} />
+          </Typography>
+        </li>
         <li>
           <Typography variant="body2">
             <FormattedMessage {...translations.fileUploadInfoRole} />
@@ -146,7 +242,10 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         <strong>{t(translations.exampleHeader)}</strong>
         <Link
           download="template.csv"
-          href={getCourseUserInviteTemplatePath()}
+          href={getCourseUserInviteTemplatePath(
+            permissions.canManagePersonalTimes,
+            intl.locale,
+          )}
           opensInNewTab
           style={{ textDecoration: 'none', cursor: 'pointer' }}
         >
@@ -170,12 +269,24 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   );
 
   return (
-    <FileUploadForm
-      formSubtitle={formSubtitle}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      open={open}
-    />
+    <>
+      {conflictData && (
+        <ExternalIdConflictPrompt
+          disabled={isResolving}
+          onCancel={handleCancel}
+          onKeepExisting={handleKeepExisting}
+          onReplaceAll={handleReplaceAll}
+          pendingCourseUserUpdates={conflictData.pendingCourseUserUpdates}
+          pendingInvitationUpdates={conflictData.pendingInvitationUpdates}
+        />
+      )}
+      <FileUploadForm
+        formSubtitle={formSubtitle}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        open={open && !conflictData}
+      />
+    </>
   );
 };
 

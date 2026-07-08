@@ -59,6 +59,15 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "检查你输入的地址是否正确，请重试或者<home>返回主页</home>。"
   },
+  "app.ErrorPage.userSuspended": {
+    "defaultMessage": "您访问此课程的权限已被暂停。"
+  },
+  "app.ErrorPage.suspendedSubtitle": {
+    "defaultMessage": "请联系您的讲师或课程工作人员。"
+  },
+  "app.ErrorPage.courseSuspended": {
+    "defaultMessage": "此课程已暂停。"
+  },
   "app.Footer.contactUs": {
     "defaultMessage": "联系我们"
   },
@@ -754,6 +763,45 @@
   },
   "course.admin.CourseSettings.stragglersDescription": {
     "defaultMessage": "不让任何人掉队；如果学生延迟完成测验，随后的关闭参考时间将被推迟。"
+  },
+  "course.admin.CourseSettings.suspension": {
+    "defaultMessage": "访问暂停"
+  },
+  "course.admin.CourseSettings.suspendCourse": {
+    "defaultMessage": "暂停课程"
+  },
+  "course.admin.CourseSettings.suspendCourseDescription": {
+    "defaultMessage": "被暂停的课程对所有学生不可访问。讲师仍可访问课程，所有学生数据将被保留。"
+  },
+  "course.admin.CourseSettings.unsuspendCourse": {
+    "defaultMessage": "解除课程暂停"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessage": {
+    "defaultMessage": "课程暂停消息"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessageDescription": {
+    "defaultMessage": "此消息将在课程暂停期间显示给用户。留空以显示默认消息。"
+  },
+  "course.admin.CourseSettings.suspendCoursePromptText": {
+    "defaultMessage": "确定要暂停此课程吗？所有学生将无法访问，直到暂停被解除。"
+  },
+  "course.admin.CourseSettings.suspendCourseSuccess": {
+    "defaultMessage": "此课程已被暂停。"
+  },
+  "course.admin.CourseSettings.suspendCourseFailure": {
+    "defaultMessage": "暂停课程时发生错误。"
+  },
+  "course.admin.CourseSettings.unsuspendCourseSuccess": {
+    "defaultMessage": "此课程的暂停已解除。"
+  },
+  "course.admin.CourseSettings.unsuspendCourseFailure": {
+    "defaultMessage": "解除课程暂停时发生错误。"
+  },
+  "course.admin.CourseSettings.userSuspensionMessage": {
+    "defaultMessage": "用户暂停消息"
+  },
+  "course.admin.CourseSettings.userSuspensionMessageDescription": {
+    "defaultMessage": "此消息将显示给访问此课程的权限已被暂停的个别用户。留空以显示默认消息。"
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "时间设置"
@@ -2186,20 +2234,23 @@
   "course.assessment.question.textResponses.fileUploadNote": {
     "defaultMessage": "注意：无法自动评分文件上传题，将始终给出最高分。"
   },
+  "course.assessment.question.textResponses.noSolutionsNote": {
+    "defaultMessage": "如果没有提供答案，自动打分器将始终给出最高分。"
+  },
+  "course.assessment.question.textResponses.atLeastOneSolutionNote": {
+    "defaultMessage": "如果提供了至少一个答案，学生只能输入纯文本。"
+  },
+  "course.assessment.question.textResponses.exactMatchSolutionNote": {
+    "defaultMessage": "如果选择\"精确匹配\"，多行答案必须与学生答案完全匹配，才能被评为正确。如果找到匹配，自动打分器将给出指定分数，不再考虑其他答案。"
+  },
+  "course.assessment.question.textResponses.solutionGradesExceedMaximumGradeNote": {
+    "defaultMessage": "如果学生答案满足多个答案条件，自动打分器将给出这些答案分数的总和，最高不超过题目的最高分。"
+  },
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "得分"
   },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "关键词"
-  },
-  "course.assessment.question.textResponses.mustSpecifyGrade": {
-    "defaultMessage": "您必须设定一个有效成绩分数。"
-  },
-  "course.assessment.question.textResponses.mustSpecifySolution": {
-    "defaultMessage": "你必须设定一个有效的答案标题"
-  },
-  "course.assessment.question.textResponses.mustSpecifySolutionType": {
-    "defaultMessage": "你必须选择精确匹配或关键词作为答案类型。"
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "这是一个新答案。如果在保存前删除，它会立即消失。"
@@ -2210,9 +2261,6 @@
   "course.assessment.question.textResponses.solutionType": {
     "defaultMessage": "答案类型"
   },
-  "course.assessment.question.textResponses.solutionTypeExplanation": {
-    "defaultMessage": "如果选择\"完全匹配\"，多行答案必须与学生答案完全匹配，答案才能被评为正确。"
-  },
   "course.assessment.question.textResponses.solutionWillBeDeleted": {
     "defaultMessage": "保存更改后，该答案将被删除。"
   },
@@ -2220,10 +2268,7 @@
     "defaultMessage": "答案"
   },
   "course.assessment.question.textResponses.solutionsHint": {
-    "defaultMessage": "添加答案以启用自动打分。学生只能输入纯文本。"
-  },
-  "course.assessment.question.textResponses.textResponseNote": {
-    "defaultMessage": "注：如果不提供答案，自动打分器将始终给出最高分。"
+    "defaultMessage": "添加答案以启用自动打分。"
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "撤销删除答案"
@@ -2236,6 +2281,105 @@
   },
   "course.assessment.question.textResponses.templateTextDescription": {
     "defaultMessage": "学生第一次尝试此题时，答题区域中出现的文字。"
+  },
+  "course.assessment.question.textResponses.regex": {
+    "defaultMessage": "正则表达式"
+  },
+  "course.assessment.question.textResponses.invalidRegex": {
+    "defaultMessage": "无效的正则表达式"
+  },
+  "course.assessment.question.textResponses.spreadsheetFormula": {
+    "defaultMessage": "电子表格公式"
+  },
+  "course.assessment.question.textResponses.testSpreadsheet": {
+    "defaultMessage": "测试电子表格"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetDescription": {
+    "defaultMessage": "需要上传测试电子表格以自动评分学生答案。"
+  },
+  "course.assessment.question.textResponses.testSpreadsheetRequired": {
+    "defaultMessage": "请上传测试电子表格文件。"
+  },
+  "course.assessment.question.textResponses.spreadsheetAdvancedOptions": {
+    "defaultMessage": "高级选项"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomization": {
+    "defaultMessage": "启用随机化"
+  },
+  "course.assessment.question.textResponses.spreadsheetRandomizationDescription": {
+    "defaultMessage": "启用后，自动评分时将随机调整部分电子表格数值。这有助于确保公式确实计算出正确答案，而不是预设值。"
+  },
+  "course.assessment.question.textResponses.numberOfRandomTests": {
+    "defaultMessage": "随机测试次数"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed": {
+    "defaultMessage": "固定随机种子"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeedDescription": {
+    "defaultMessage": "勾选后，随机化将每次产生相同结果。这会影响电子表格数值随机化和电子表格中的随机函数（RAND、RANDBETWEEN 等）。"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestamp": {
+    "defaultMessage": "固定日期和时间"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.fixedTimestampDescription": {
+    "defaultMessage": "勾选后，使用当前日期/时间的公式（NOW、TODAY 等）将改用此特定日期/时间。"
+  },
+  "course.assessment.question.textResponses.randomizationMode": {
+    "defaultMessage": "自动评分值配置"
+  },
+  "course.assessment.question.textResponses.randomizationModeDescription": {
+    "defaultMessage": "点击任意单元格以配置在自动评分时如何替换或随机化其值。"
+  },
+  "course.assessment.question.textResponses.randomizationModeClearAll": {
+    "defaultMessage": "全部清除"
+  },
+  "course.assessment.question.textResponses.randomizationModeRestoreDefaults": {
+    "defaultMessage": "恢复默认值"
+  },
+  "course.assessment.question.textResponses.randomizationModePopoverTitle": {
+    "defaultMessage": "在自动评分时..."
+  },
+  "course.assessment.question.textResponses.noRandomizationMode": {
+    "defaultMessage": "保留原始值"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationMode": {
+    "defaultMessage": "覆盖为指定值"
+  },
+  "course.assessment.question.textResponses.overrideRandomizationModeDescription": {
+    "defaultMessage": "以\"=\"开头的值将被视为公式。"
+  },
+  "course.assessment.question.textResponses.overrideValue": {
+    "defaultMessage": "值"
+  },
+  "course.assessment.question.textResponses.numericRandomizationMode": {
+    "defaultMessage": "使用随机数值"
+  },
+  "course.assessment.question.textResponses.roundToInteger": {
+    "defaultMessage": "取整到整数"
+  },
+  "course.assessment.question.textResponses.stringRandomizationMode": {
+    "defaultMessage": "随机化值中的字符"
+  },
+  "course.assessment.question.textResponses.stringRandomizationModeDescription": {
+    "defaultMessage": "要随机化的每个字符类可以用同一类中的不同字符替换。"
+  },
+  "course.assessment.question.textResponses.randomizeDigits": {
+    "defaultMessage": "随机化数字 (0-9)"
+  },
+  "course.assessment.question.textResponses.randomizeLetters": {
+    "defaultMessage": "随机化字母 (a-z)"
+  },
+  "course.assessment.question.textResponses.dateRandomizationMode": {
+    "defaultMessage": "使用随机日期值"
+  },
+  "course.assessment.question.textResponses.roundToDay": {
+    "defaultMessage": "向下取整到整天 (00:00 UTC)"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationMode": {
+    "defaultMessage": "与其他单元格随机排列值"
+  },
+  "course.assessment.question.textResponses.shuffleRandomizationModeDescription": {
+    "defaultMessage": "每个标记为\"随机排列\"的单元格值将被随机重新分配。总体分布保持不变，但每个值可能出现在不同的单元格中。"
   },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "评分标准试验场"
@@ -2293,6 +2437,129 @@
   },
   "course.assessment.question.rubricPlayground.comparingRevisions": {
     "defaultMessage": "正在比较 {count} 个版本"
+  },
+  "course.assessment.question.rubricPlayground.applyOnlyActiveRubric": {
+    "defaultMessage": "只有使用中的评分标准版本才能用于对现有成绩进行修改应用。"
+  },
+  "course.assessment.question.rubricPlayground.showOnlyLatestAnswers": {
+    "defaultMessage": "仅显示每位学生的最新答案"
+  },
+  "course.assessment.question.rubricPlayground.applying": {
+    "defaultMessage": "正在应用"
+  },
+  "course.assessment.question.rubricPlayground.deleteRubricFailure": {
+    "defaultMessage": "无法删除此评分标准版本。"
+  },
+  "course.assessment.question.rubricPlayground.activeRubric": {
+    "defaultMessage": "使用中"
+  },
+  "course.assessment.question.rubricPlayground.latestRubric": {
+    "defaultMessage": "最新"
+  },
+  "course.assessment.question.rubricPlayground.unsavedRubric": {
+    "defaultMessage": "未保存"
+  },
+  "course.assessment.question.rubricPlayground.returnToEditing": {
+    "defaultMessage": "返回编辑"
+  },
+  "course.assessment.question.rubricPlayground.restartEditing": {
+    "defaultMessage": "从此处重新开始编辑"
+  },
+  "course.assessment.question.rubricPlayground.restart": {
+    "defaultMessage": "重新开始"
+  },
+  "course.assessment.question.rubricPlayground.discardChanges": {
+    "defaultMessage": "放弃更改"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesTitle": {
+    "defaultMessage": "确认放弃更改"
+  },
+  "course.assessment.question.rubricPlayground.confirmDiscardChangesText": {
+    "defaultMessage": "您未保存的评分标准更改将会丢失。"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingTitle": {
+    "defaultMessage": "确认重新开始编辑"
+  },
+  "course.assessment.question.rubricPlayground.confirmRestartEditingText": {
+    "defaultMessage": "您未保存的评分标准更改将被此版本替换。"
+  },
+  "course.assessment.question.rubricPlayground.setAsActive": {
+    "defaultMessage": "设为使用中"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveTitle": {
+    "defaultMessage": "警告：将不兼容的版本设为使用中"
+  },
+  "course.assessment.question.rubricPlayground.confirmSetActiveText": {
+    "defaultMessage": "此版本与现有成绩在结构上不兼容。我们会保留评分数据，但强烈建议您仔细核对答案成绩，因为部分数据可能会丢失。您确定要继续吗？"
+  },
+  "course.assessment.question.rubricPlayground.applyReplacesSavedResults": {
+    "defaultMessage": "应用会用使用中的评分标准的评估结果替换所选答案已保存的成绩和评语。"
+  },
+  "course.assessment.question.rubricPlayground.applySelected": {
+    "defaultMessage": "应用所选的 {count} 项"
+  },
+  "course.assessment.question.rubricPlayground.evaluateSelected": {
+    "defaultMessage": "评估所选的 {count} 项"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedTitle": {
+    "defaultMessage": "确认直接应用于答案"
+  },
+  "course.assessment.question.rubricPlayground.confirmApplyUnevaluatedText": {
+    "defaultMessage": "您正在应用的部分答案尚未依据使用中的评分标准进行评估。我们会在应用过程中对它们进行评估，但在应用前先评估可让您在影响真实学生成绩之前于此处查看结果。您确定要继续吗？"
+  },
+  "course.assessment.question.rubricPlayground.applyRow": {
+    "defaultMessage": "将此评估应用于学生"
+  },
+  "course.assessment.question.rubricPlayground.searchByStudentName": {
+    "defaultMessage": "按学生姓名搜索"
+  },
+  "course.assessment.question.rubricPlayground.submissionStatus": {
+    "defaultMessage": "状态"
+  },
+  "course.assessment.question.rubricPlayground.currentGrade": {
+    "defaultMessage": "当前成绩"
+  },
+  "course.assessment.question.rubricPlayground.evaluationGrade": {
+    "defaultMessage": "新成绩"
+  },
+  "course.assessment.question.rubricPlayground.evaluationComment": {
+    "defaultMessage": "反馈"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatus": {
+    "defaultMessage": "评分状态"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusModified": {
+    "defaultMessage": "已修改"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusIncomplete": {
+    "defaultMessage": "未完成"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusStale": {
+    "defaultMessage": "已过时"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusUpToDate": {
+    "defaultMessage": "已是最新"
+  },
+  "course.assessment.question.rubricPlayground.gradingStatusManuallyGraded": {
+    "defaultMessage": "手动评分"
+  },
+  "course.assessment.question.rubricPlayground.regradeRow": {
+    "defaultMessage": "使用使用中的评分标准重新评估（不会更改成绩）"
+  },
+  "course.assessment.question.rubricPlayground.regradeSuccess": {
+    "defaultMessage": "重新评估完成。"
+  },
+  "course.assessment.question.rubricPlayground.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.assessment.question.rubricPlayground.evaluationsDoNotAffectGrades": {
+    "defaultMessage": "此表格中的评估不会影响分配给学生的成绩。您可以在「应用」按钮下更新现有的学生成绩。"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersTitle": {
+    "defaultMessage": "添加示例答案"
+  },
+  "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
+    "defaultMessage": "添加"
   },
   "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
     "defaultMessage": "添加示例答案"
@@ -3558,7 +3825,7 @@
     "defaultMessage": "获得的经验值"
   },
   "course.assessment.submission.finalise": {
-    "defaultMessage": "完成提交"
+    "defaultMessage": "完成所有答案"
   },
   "course.assessment.submission.forceSubmitConfirmation": {
     "defaultMessage": "目前有 {unattempted} 位未尝试和 {attempting} 位尝试此测验的用户 ({selectedUsers})。你确定要强制提交所有吗？这样做会导致所有提交在非自动评分中获得0分。请注意，此操作不可逆！"
@@ -3590,8 +3857,11 @@
   "course.assessment.submission.gradePrefilled": {
     "defaultMessage": "预先填写"
   },
-  "course.assessment.submission.gradePrefilledHint": {
+  "course.assessment.submission.gradePrefilledFullHint": {
     "defaultMessage": "已为你预填最高成绩，因为自动评分器认为它是正确的。"
+  },
+  "course.assessment.submission.gradePrefilledZeroHint": {
+    "defaultMessage": "已为你预填0分，因为自动评分器认为它是不正确的。"
   },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "成绩总结"
@@ -3737,11 +4007,14 @@
   "course.assessment.submission.resetConfirmation": {
     "defaultMessage": "你确定要重置你的答案吗？这个操作是不可逆的，你将失去你当前为这个问题所做的所有工作。"
   },
-  "course.assessment.submission.runCode": {
-    "defaultMessage": "运行代码"
+  "course.assessment.submission.checkAnswer": {
+    "defaultMessage": "检查答案"
   },
-  "course.assessment.submission.runCodeWithLimit": {
-    "defaultMessage": "运行代码（{attemptsLeft, plural, one {# attempt} other {# attempts}} left）"
+  "course.assessment.submission.checkAnswerWithLimit": {
+    "defaultMessage": "检查答案（{attemptsLeft, plural, one {# 次} other {# 次}}剩余）"
+  },
+  "course.assessment.submission.submitWithLimit": {
+    "defaultMessage": "提交（{attemptsLeft, plural, one {# 次} other {# 次}}剩余）"
   },
   "course.assessment.submission.saveDraft": {
     "defaultMessage": "保存草稿"
@@ -3789,7 +4062,7 @@
     "defaultMessage": "提交：{assessment}"
   },
   "course.assessment.submission.submitConfirmation": {
-    "defaultMessage": "此操作不可撤销 你确定要提交吗？你将无法再修改你的提交！"
+    "defaultMessage": "最终提交后，你将无法再更改此评估的答案。此操作不可撤销！你确定要继续吗？"
   },
   "course.assessment.submission.submitError": {
     "defaultMessage": "未能提交答案。请检查你的答案的错误"
@@ -3808,6 +4081,15 @@
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "总成绩"
+  },
+  "course.assessment.submission.rubricScores": {
+    "defaultMessage": "评分标准成绩"
+  },
+  "course.assessment.submission.moderation": {
+    "defaultMessage": "调分"
+  },
+  "course.assessment.submission.moderationHint": {
+    "defaultMessage": "（可选）独立于评分标准之外的手动成绩调整。"
   },
   "course.assessment.submission.type": {
     "defaultMessage": "类型"
@@ -3834,7 +4116,7 @@
     "defaultMessage": "以上所有提交均已成功取消提交。"
   },
   "course.assessment.submission.unsubmitConfirmation": {
-    "defaultMessage": "这将重置提交时间并允许学生更改他们的提交。请注意，此操作无法撤消！你确定要继续吗？"
+    "defaultMessage": "这将重置提交时间并允许学生更改他们的答案。请注意，此操作无法撤消！你确定要继续吗？"
   },
   "course.assessment.submission.unsubmitSubmissionSuccess": {
     "defaultMessage": "{name} 的提交已成功取消提交。"
@@ -4090,6 +4372,15 @@
   },
   "course.courses.CourseAnnouncements.announcementHeader": {
     "defaultMessage": "公告"
+  },
+  "course.courses.CourseSuspendedAlert.header": {
+    "defaultMessage": "此课程已暂停。讲师仍可访问，但学生无法访问。"
+  },
+  "course.courses.CourseSuspendedAlert.canSuspendMessage": {
+    "defaultMessage": "您可以在{link}页面解除暂停。"
+  },
+  "course.courses.CourseSuspendedAlert.cannotSuspendMessage": {
+    "defaultMessage": "如果您认为这是错误，请联系课程管理员或所有者请其解除暂停。"
   },
   "course.courses.CourseDisplay.noCourse": {
     "defaultMessage": "还没有课程..."
@@ -4445,6 +4736,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "选择当前课程"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.currentInstance": {
+    "defaultMessage": "选择当前实例"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
     "defaultMessage": "目标实例"
   },
@@ -4544,6 +4838,9 @@
   "course.duplication.Duplication.ItemsSelector.pleaseSelectItems": {
     "defaultMessage": "请通过边栏选择要复制的项目。"
   },
+  "course.duplication.Duplication.cannotDuplicateToNewCourseInThisInstance": {
+    "defaultMessage": "您无法在 {instanceHost} 中复制到新课程，因为您不是该实例的讲师。{duplicationLink}"
+  },
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "复制数据"
   },
@@ -4564,6 +4861,9 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "所有包含重复项目的组件都被禁用。你可以在课程设置下启用它们。"
+  },
+  "course.duplication.Duplication.requestInstanceInstructorRole": {
+    "defaultMessage": "申请讲师角色"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "到"
@@ -5807,7 +6107,7 @@
   "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
     "defaultMessage": "没有可检查的问题"
   },
-  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": {
     "defaultMessage": "提交数量不足"
   },
   "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
@@ -6096,7 +6396,7 @@
     "defaultMessage": "学生统计"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
-    "defaultMessage": "按学生姓名或学生类型搜索"
+    "defaultMessage": "按学生姓名、学生类型或外部编号搜索"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "获取学生数据失败！"
@@ -6810,22 +7110,25 @@
     "defaultMessage": "关闭"
   },
   "course.userInvitations.InvitationResultDialog.duplicateInfo": {
-    "defaultMessage": "在邀请中发现重复用户。只邀请该用户第一个账号。"
+    "defaultMessage": "在邀请中发现重复用户。只邀请每个用户的第一个实例。"
   },
   "course.userInvitations.InvitationResultDialog.duplicateUsers": {
-    "defaultMessage": "具有重复电子邮件的用户（{count}）"
+    "defaultMessage": "重复用户（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsers": {
     "defaultMessage": "现有课程用户（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingCourseUsersInfo": {
-    "defaultMessage": "在邀请中找到了此邮箱对应的现有课程用户。他们不会收到邮件。"
+    "defaultMessage": "这些用户已在课程中注册。他们未被重新注册。"
+  },
+  "course.userInvitations.InvitationResultDialog.externalIdUpdatedInfo": {
+    "defaultMessage": "如有指定，外部ID已更新。"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitations": {
     "defaultMessage": "现有邀请（{count}）"
   },
   "course.userInvitations.InvitationResultDialog.existingInvitationsInfo": {
-    "defaultMessage": "对于使用此邮箱的用户的邀请已存在。他们不会再次收到邮件。"
+    "defaultMessage": "这些用户已有待处理的邀请。他们未被重新邀请。"
   },
   "course.userInvitations.InvitationResultDialog.header": {
     "defaultMessage": "邀请摘要"
@@ -6835,6 +7138,51 @@
   },
   "course.userInvitations.InvitationResultDialog.newInvitations": {
     "defaultMessage": "新邀请（{count}）"
+  },
+  "course.userInvitations.InvitationResultDialog.actionableTitle": {
+    "defaultMessage": "失败（{count}）"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitations": {
+    "defaultMessage": "发送失败（{count}）"
+  },
+  "course.userInvitations.InvitationResultDialog.failedInvitationsInfo": {
+    "defaultMessage": "发送邀请邮件时出错，请重试。"
+  },
+  "course.userInvitations.InvitationResultDialog.summaryFailed": {
+    "defaultMessage": "{count} 个失败。"
+  },
+  "course.userInvitations.InvitationResultDialog.updatedSubtitle": {
+    "defaultMessage": "{count} 条已更新 · 优先显示"
+  },
+  "course.userInvitations.InvitationResultDialog.blankHeaderWarning": {
+    "defaultMessage": "有一个或多个列缺少标题，其数据已被忽略。"
+  },
+  "course.userInvitations.InvitationResultDialog.summary": {
+    "defaultMessage": "已发出 {newInvitations} 封新邀请，{newEnrollments} 人直接加入，{alreadyInCourse} 人已在课程中。"
+  },
+  "course.userInvitations.InvitationResultDialog.failedRowsSubtitle": {
+    "defaultMessage": "红色高亮显示的 {count} 行发送失败"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateEmailInFile": {
+    "defaultMessage": "上传文件中存在重复的电子邮件地址"
+  },
+  "course.userInvitations.InvitationResultFailedTable.duplicateExternalIdInFile": {
+    "defaultMessage": "上传文件中存在重复的外部编号"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTaken": {
+    "defaultMessage": "该外部编号已分配给另一名课程成员"
+  },
+  "course.userInvitations.InvitationResultFailedTable.failedToSend": {
+    "defaultMessage": "邀请邮件发送失败，请重试 - 如问题持续发生，请联系我们获取帮助"
+  },
+  "course.userInvitations.InvitationResultFailedTable.externalIdTakenEnrolled": {
+    "defaultMessage": "已是课程成员 — 外部编号未能应用（已分配给另一名成员）"
+  },
+  "course.userInvitations.InvitationResultSkippedTable.previouslyLabel": {
+    "defaultMessage": "之前的值：{value}"
+  },
+  "course.userInvitations.InvitationResultExistingTable.previouslyLabel": {
+    "defaultMessage": "之前的值：{value}"
   },
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "已接受邀请"
@@ -6869,11 +7217,23 @@
   "course.userInvitations.InviteUsersFileUpload.failure": {
     "defaultMessage": "邀请用户失败。请确保你的数据格式正确 - {error}"
   },
+  "course.userInvitations.InviteUsersFileUpload.failureGeneric": {
+    "defaultMessage": "邀请用户失败。请确保你的数据格式正确。"
+  },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "姓名,电子邮件,外部编号,角色,旁听学生{br}John,test1@example.com,A0123456,student,y{br}Mary,test2@example.com,A0123457,teaching_assistant,n"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "姓名,电子邮件,外部编号,角色,旁听学生,个人时间线{br}John,test1@example.com,A0123456,student,y,otot{br}Mary,test2@example.com,A0123457,teaching_assistant,n,fixed"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRequired": {
+    "defaultMessage": "CSV 必须同时包含“姓名”和“电子邮件”列。所有其他列均为可选。"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoEmail": {
+    "defaultMessage": "每个邀请在课程内必须使用唯一的电子邮件地址。重复的电子邮件将被跳过。"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileUploadInfoExternalId": {
+    "defaultMessage": "如果提供了外部编号，则这些外部编号在课程内必须唯一。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "上传具有以下格式的 .csv 文件："
@@ -6882,10 +7242,16 @@
     "defaultMessage": "个人时间线可以是<code>[fixed, otot, stragglers, fomo]</code>，若省略则默认为 {defaultTimelineAlgorithm}。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom": {
-    "defaultMessage": "旁听用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
+    "defaultMessage": "旁听学生可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "角色可以是<code>[student, observer, teaching_assistant, manager, owner]</code>，如果省略则默认为学生。用户只能被助教邀请为学生。"
+  },
+  "course.userInvitations.InviteUsersFileUpload.importInProgress": {
+    "defaultMessage": "正在导入用户，请稍候…"
+  },
+  "course.userInvitations.InviteUsersFileUpload.fileRequired": {
+    "defaultMessage": "请选择要上传的 CSV 文件。"
   },
   "course.userInvitations.InviteUsersFileUpload.template": {
     "defaultMessage": "（模板文件）"
@@ -6912,7 +7278,7 @@
     "defaultMessage": "删除邀请"
   },
   "course.userInvitations.InvitationActionButtons.resendFailure": {
-    "defaultMessage": "无法重新发送邀请 - {error}"
+    "defaultMessage": "无法重新发送邀请。"
   },
   "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "向 {email} 重新发送电子邮件邀请！"
@@ -6943,6 +7309,9 @@
   },
   "course.userInvitations.UserInvitationsTable.noInvitations": {
     "defaultMessage": "没有邀请。"
+  },
+  "course.userInvitations.UserInvitationsTable.searchText": {
+    "defaultMessage": "按姓名、电子邮件或外部ID搜索"
   },
   "course.userInvitations.UserInvitationsTable.pending": {
     "defaultMessage": "待处理"
@@ -6987,16 +7356,31 @@
     "defaultMessage": "没有用户"
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "按姓名、电子邮件、角色等搜索。"
+    "defaultMessage": "按姓名、电子邮件或外部ID搜索"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "分配到时间线"
+  },
+  "course.users.ManageUsersTable.bulkActions": {
+    "defaultMessage": "批量操作"
   },
   "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
     "defaultMessage": "未能将 {n} 名学生的参考时间线更新为 {timeline}。"
   },
   "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
     "defaultMessage": "更新了 {n} 个学生的参考时间线为{timeline}。"
+  },
+  "course.users.ManageUsersTable.bulkSuspendFailure": {
+    "defaultMessage": "未能暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkSuspendSuccess": {
+    "defaultMessage": "已成功暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendFailure": {
+    "defaultMessage": "未能取消暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendSuccess": {
+    "defaultMessage": "已成功取消暂停 {n} 名学生。"
   },
   "course.users.ManageUsersTable.changeAlgorithmFailure": {
     "defaultMessage": "未能将 {name} 的时间线算法更新到{timeline}。"
@@ -7024,6 +7408,24 @@
   },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {现在是旁听用户} other {现在是普通用户} }。"
+  },
+  "course.users.ManageUsersTable.addIdFailure": {
+    "defaultMessage": "无法将外部编号设置为 {newId}"
+  },
+  "course.users.ManageUsersTable.addIdSuccess": {
+    "defaultMessage": "外部编号已设置为 {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdFailure": {
+    "defaultMessage": "无法将编号从 {oldId} 更改为 {newId}"
+  },
+  "course.users.ManageUsersTable.changeIdSuccess": {
+    "defaultMessage": "编号已从 {oldId} 更改为 {newId}"
+  },
+  "course.users.ManageUsersTable.deleteIdFailure": {
+    "defaultMessage": "无法删除外部编号"
+  },
+  "course.users.ManageUsersTable.deleteIdSuccess": {
+    "defaultMessage": "外部编号已删除"
   },
   "course.users.ManageUsersTable.renameFailure": {
     "defaultMessage": "无法将 {oldName} 重命名为 {newName}"
@@ -7142,14 +7544,35 @@
   "course.users.UpgradeToStaff.upgradeSuccess": {
     "defaultMessage": "{count, plural, =0 {无用户} one {# 新用户已经} other {# 新用户已经}} 升级到 {role}"
   },
-  "course.users.UserManagementButtons.deletionConfirm": {
+  "course.users.ManageUsersTable.deletionConfirm": {
     "defaultMessage": "你确定要删除{role} {name} ({email}) 吗？"
   },
-  "course.users.UserManagementButtons.deletionFailure": {
+  "course.users.ManageUsersTable.deletionFailure": {
     "defaultMessage": "删除用户失败。"
   },
-  "course.users.UserManagementButtons.deletionSuccess": {
+  "course.users.ManageUsersTable.deletionScheduled": {
+    "defaultMessage": "{role} {name} ({email}) 已计划删除。"
+  },
+  "course.users.ManageUsersTable.deletionSuccess": {
     "defaultMessage": "用户已被删除。"
+  },
+  "course.users.ManageUsersTable.suspend": {
+    "defaultMessage": "暂停"
+  },
+  "course.users.ManageUsersTable.suspendFailure": {
+    "defaultMessage": "无法暂停 {name}。"
+  },
+  "course.users.ManageUsersTable.suspendSuccess": {
+    "defaultMessage": "{name} 现已被暂停。在取消暂停之前，他们无法访问此课程。"
+  },
+  "course.users.ManageUsersTable.unsuspend": {
+    "defaultMessage": "取消暂停"
+  },
+  "course.users.ManageUsersTable.unsuspendFailure": {
+    "defaultMessage": "无法取消暂停 {name}。"
+  },
+  "course.users.ManageUsersTable.unsuspendSuccess": {
+    "defaultMessage": "{name} 不再被暂停。他们现在可以访问课程。"
   },
   "course.users.UserManagementTabs.enrolRequestsTitle": {
     "defaultMessage": "注册请求"
@@ -7752,10 +8175,31 @@
     "defaultMessage": "实例"
   },
   "lib.components.getHelp.validation.invalidDateSelection": {
+    "defaultMessage": "无效日期"
+  },
+  "lib.components.getHelp.validation.endDateBeforeStartDate": {
     "defaultMessage": "结束日期必须大于或等于开始日期"
   },
   "lib.components.getHelp.validation.exceedDateRange": {
     "defaultMessage": "日期范围不能超过365天"
+  },
+  "lib.components.table.MuiColumnPickerDialog.apply": {
+    "defaultMessage": "应用至视图"
+  },
+  "lib.components.table.MuiColumnPickerDialog.cancel": {
+    "defaultMessage": "取消"
+  },
+  "lib.components.table.MuiColumnPickerDialog.defaultTitle": {
+    "defaultMessage": "选择列"
+  },
+  "lib.components.table.MuiColumnPickerDialog.export": {
+    "defaultMessage": "应用并导出"
+  },
+  "lib.components.table.MuiTableToolbar.directExport": {
+    "defaultMessage": "导出"
+  },
+  "lib.components.table.MuiTableToolbar.exportTrigger": {
+    "defaultMessage": "导出…"
   },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "无法获取用户。"
@@ -7878,7 +8322,7 @@
     "defaultMessage": "失效日期"
   },
   "lib.translations.form.validation.numeric": {
-    "defaultMessage": "输入一个数字"
+    "defaultMessage": "请输入有效数字"
   },
   "lib.translations.form.validation.required": {
     "defaultMessage": "必需的"
@@ -7888,6 +8332,15 @@
   },
   "lib.translations.form.validation.startEndDateValidationError": {
     "defaultMessage": "必须在开始日期之后"
+  },
+  "lib.translations.instance.users.roles.normal": {
+    "defaultMessage": "普通用户"
+  },
+  "lib.translations.instance.users.roles.instructor": {
+    "defaultMessage": "教学导师"
+  },
+  "lib.translations.instance.users.roles.administrator": {
+    "defaultMessage": "平台管理员"
   },
   "lib.translations.messages.fetchingError": {
     "defaultMessage": "加载数据时出错。请重新加载并重试。"
@@ -7952,6 +8405,9 @@
   "lib.translations.table.column.email": {
     "defaultMessage": "电子邮件"
   },
+  "lib.translations.table.column.externalId": {
+    "defaultMessage": "外部编号"
+  },
   "lib.translations.table.column.endAt": {
     "defaultMessage": "结束于"
   },
@@ -8002,6 +8458,9 @@
   },
   "lib.translations.table.column.name": {
     "defaultMessage": "姓名"
+  },
+  "lib.translations.table.column.optional": {
+    "defaultMessage": "选填"
   },
   "lib.translations.table.column.organization": {
     "defaultMessage": "组织"
@@ -8833,5 +9292,32 @@
   },
   "users.troubleSigningIn": {
     "defaultMessage": "登录遇到问题？"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.title": {
+    "defaultMessage": "确认外部编号更新"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.body": {
+    "defaultMessage": "这些用户已经注册或有待处理的邀请。不会向他们发送新的邀请邮件。您希望保留其当前的外部编号，还是用文件中的值替换它们？"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingInvitationUpdates": {
+    "defaultMessage": "待处理邀请更新（{count}）"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.pendingCourseUserUpdates": {
+    "defaultMessage": "待处理课程成员更新（{count}）"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.goBack": {
+    "defaultMessage": "返回"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.keepExisting": {
+    "defaultMessage": "保留现有"
+  },
+  "course.userInvitations.ExternalIdConflictPrompt.replace": {
+    "defaultMessage": "替换"
+  },
+  "lib.translations.table.column.currentExternalId": {
+    "defaultMessage": "当前外部编号"
+  },
+  "lib.translations.table.column.newExternalId": {
+    "defaultMessage": "新外部编号"
   }
 }

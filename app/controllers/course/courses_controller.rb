@@ -10,12 +10,15 @@ class Course::CoursesController < Course::Controller
   def show
     head :unauthorized and return unless current_user.present? || current_course.published
 
+    return if current_course_user&.suspended_from_course?(current_ability)
+
     if can?(:manage, current_course) || current_course.user?(current_user)
       @currently_active_announcements = current_course.announcements.currently_active.includes(:creator)
       @activity_feeds = recent_activity_feeds.limit(20).preload(
         activity: [{ object: { topic: { actable: :forum } } }, :actor]
       )
     end
+
     authorize! :read, current_course unless current_course.published
     load_activity_course_users
     load_todos

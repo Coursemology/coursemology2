@@ -15,8 +15,15 @@ en:
           owner: 'Owner'
           phantom: 'Phantom'
       user_invitations:
-        duplicate_user: '%{user} appears more than once in the submission.'
-        invalid_email: '%{email} is invalid: %{message}.'
+        already_enrolled: '%{email} could not be processed: already enrolled in this course.'
+        duplicate_invitation: '%{email} could not be processed: already has a pending invitation.'
+        invalid_email: '%{email} could not be processed: invalid email: %{message}.'
+        duplicate_external_id: '%{email} could not be processed: external ID "%{external_id}" is already taken.'
+        other_error: '%{email} could not be processed: %{message}.'
+        invalid_headers: 'Unrecognized CSV header(s): %{headers}. Accepted headers: %{accepted}.'
+        missing_required_headers: 'CSV must include both a "Name" and "Email" column.'
+        duplicate_headers: 'Duplicate CSV column: "%{column}". Each column must appear only once.'
+        no_valid_rows: 'The CSV file has no rows to invite.'
       user_registrations:
         invalid_code: 'You have entered an invalid invitation code.'
         code_taken: >
@@ -64,6 +71,12 @@ en:
                   you may want to try again in a few minutes. If the same issue persists,
                   please contact coursemology admin, provide the URL of this page and
                   quote the following error: "%{error}"
+        text_response_auto_grading:
+          grade:
+            regex_timeout: >
+              Regular expression evaluation timeout.
+            evaluation_failed: >
+              Error occurred during evaluation.
         live_feedback:
           thread:
             only_one_active_thread: 'There can be only one active thread per submission question'

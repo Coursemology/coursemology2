@@ -11,13 +11,14 @@ import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { getManageCourseUserPermissions } from '../../../selectors';
+import translations from '../../../translations';
 
 import ActiveTableToolbar from './ActiveTableToolbar';
 import AlgorithmMenu from './AlgorithmMenu';
+import ExternalIdField from './ExternalIdField';
 import PhantomSwitch from './PhantomSwitch';
 import RoleMenu from './RoleMenu';
 import TimelineMenu from './TimelineMenu';
-import translations from './translations';
 import UserNameField from './UserNameField';
 
 interface ManageUsersTableProps {
@@ -64,6 +65,14 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       searchable: true,
       title: t(tableTranslations.email),
       cell: (user) => user.email,
+      csvDownloadable: true,
+    },
+    {
+      of: 'externalId',
+      title: t(tableTranslations.externalId),
+      sortable: false,
+      searchable: true,
+      cell: (user) => <ExternalIdField for={user} />,
       csvDownloadable: true,
     },
     {
@@ -161,6 +170,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       title: t(tableTranslations.actions),
       cell: (user) => renderRowActionComponent?.(user),
       unless: !renderRowActionComponent,
+      className: 'text-center',
     },
   ];
 
@@ -185,15 +195,11 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
             if (!user.name && !user.email) return false;
             if (!filterValue?.length) return true;
 
+            const query = filterValue.toLowerCase().trim();
             return (
-              user.name
-                .toLowerCase()
-                .trim()
-                .includes(filterValue.toLowerCase().trim()) ||
-              user.email
-                .toLowerCase()
-                .trim()
-                .includes(filterValue.toLowerCase().trim())
+              user.name.toLowerCase().trim().includes(query) ||
+              user.email.toLowerCase().trim().includes(query) ||
+              (user.externalId?.toLowerCase().trim().includes(query) ?? false)
             );
           },
         },

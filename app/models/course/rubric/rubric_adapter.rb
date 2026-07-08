@@ -6,7 +6,7 @@ class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
   end
 
   def formatted_rubric_categories
-    @rubric.categories.without_bonus_category.includes(:criterions).map do |category|
+    @rubric.categories.includes(:criterions).map do |category|
       max_grade = category.criterions.maximum(:grade) || 0
       criterions = category.criterions.map do |criterion|
         "<BAND id=\"#{criterion.id}\" grade=\"#{criterion.grade}\">#{criterion.explanation}</BAND>"
@@ -33,7 +33,7 @@ class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
     dynamic_schema = JSON.parse(
       File.read('app/services/course/assessment/answer/prompts/rubric_auto_grading_output_format.json')
     )
-    @rubric.categories.without_bonus_category.includes(:criterions).each do |category|
+    @rubric.categories.includes(:criterions).each do |category|
       field_name = "category_#{category.id}"
       dynamic_schema['properties']['category_grades']['properties'][field_name] =
         build_category_schema(category, field_name)

@@ -1,4 +1,5 @@
 import { ComponentRef, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -14,6 +15,8 @@ import {
   deleteCourse,
   fetchCourseSettings,
   fetchTimeZones,
+  suspendCourse,
+  unsuspendCourse,
   updateCourseLogo,
   updateCourseSettings,
 } from './operations';
@@ -28,6 +31,8 @@ const CourseSettings = (): JSX.Element => {
   const formRef = useRef<ComponentRef<typeof CourseSettingsForm>>(null);
   const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const navigate = useNavigate();
 
   const updateForm = (data?: CourseInfo): void => {
     if (!data) return;
@@ -76,11 +81,40 @@ const CourseSettings = (): JSX.Element => {
     deleteCourse()
       .then(() => {
         toast.success(t(translations.deleteCourseSuccess));
-        // TODO: Replace this with useNavigate()('/courses') once SPA
-        window.location.replace('/courses');
+        navigate('/courses');
       })
       .catch(() => {
         toast.error(t(translations.errorOccurredWhenDeletingCourse));
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const handleSuspendCourse = (): void => {
+    setSubmitting(true);
+
+    suspendCourse()
+      .then(() => {
+        formRef.current?.resetByMerging?.({ isSuspended: true });
+        toast.success(t(translations.suspendCourseSuccess));
+        setReloadForm((value) => !value);
+      })
+      .catch(() => {
+        toast.error(t(translations.suspendCourseFailure));
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const handleUnsuspendCourse = (): void => {
+    setSubmitting(true);
+
+    unsuspendCourse()
+      .then(() => {
+        formRef.current?.resetByMerging?.({ isSuspended: false });
+        toast.success(t(translations.unsuspendCourseSuccess));
+        setReloadForm((value) => !value);
+      })
+      .catch(() => {
+        toast.error(t(translations.unsuspendCourseFailure));
       })
       .finally(() => setSubmitting(false));
   };
@@ -98,6 +132,8 @@ const CourseSettings = (): JSX.Element => {
           disabled={submitting}
           onDeleteCourse={handleDeleteCourse}
           onSubmit={handleSubmit}
+          onSuspendCourse={handleSuspendCourse}
+          onUnsuspendCourse={handleUnsuspendCourse}
           onUploadCourseLogo={handleUploadCourseLogo}
           timeZones={timeZones}
         />

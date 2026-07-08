@@ -181,7 +181,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   def construct_live_feedback_response(status, body)
     @response = if status == 201
-                  { feedbackUrl: ENV.fetch('CODAVERI_URL'),
+                  { feedbackUrl: CodaveriAsyncApiService.api_url,
                     threadId: body['thread']['id'],
                     threadStatus: body['thread']['status'],
                     tokenId: body['token']['id'],

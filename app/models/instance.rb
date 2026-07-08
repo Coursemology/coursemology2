@@ -44,7 +44,7 @@ class Instance < ApplicationRecord
     end
   end
 
-  after_commit :push_redirect_uris_to_keycloak
+  after_commit -> { KeycloakAdminService.push_redirect_uris }, unless: -> { Rails.env.test? }
 
   validates :host, hostname: true, if: :should_validate_host?
   validates :name, length: { maximum: 255 }, presence: true
@@ -133,37 +133,23 @@ class Instance < ApplicationRecord
 
   # Replace the hostname of the default instance.
   def host
-    return Application::Application.config.x.default_host if default?
+    default_host = Application::Application.config.x.default_host
+    return default_host if default?
 
-    super
+    read_attribute(:host).gsub('coursemology.org', default_host)
+  end
+
+  def redirect_uri
+    protocol = if Rails.env.development? && ENV['RAILS_USE_HTTP']
+                 'http'
+               else
+                 'https'
+               end
+
+    "#{protocol}://#{host}"
   end
 
   private
-
-  def push_redirect_uris_to_keycloak
-    return if ENV['RAILS_ENV'] == 'test'
-
-    client_id = ENV.fetch('KEYCLOAK_BE_CLIENT_ID', nil)
-    client_secret = ENV.fetch('KEYCLOAK_BE_CLIENT_SECRET', nil)
-    credentials = Keycloak::Client.get_token_by_client_credentials(client_id, client_secret)
-    access_token = JSON.parse(credentials)['access_token']
-    service = "clients/#{ENV.fetch('KEYCLOAK_FE_CLIENT_UUID', nil)}"
-
-    hosts = Instance.all.pluck(:host)
-    redirect_uris = hosts.map { |h| convert_host_to_redirect_uri(h) }
-    Keycloak::Admin.generic_put(service, nil, { redirectUris: redirect_uris }, access_token)
-  end
-
-  def convert_host_to_redirect_uri(host)
-    default_host = (ENV['RAILS_ENV'] == 'development') ? 'localhost:8080' : ENV.fetch('RAILS_HOSTNAME', nil)
-
-    host = if host == '*'
-             default_host
-           else
-             host.gsub('coursemology.org', default_host)
-           end
-    (ENV['RACK_ENV'] == 'development') ? "http://#{host}/*" : "https://#{host}/*"
-  end
 
   def should_validate_host?
     new_record? || changed_attributes.keys.include?('host')

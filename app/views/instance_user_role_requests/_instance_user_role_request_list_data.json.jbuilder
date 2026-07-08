@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 json.id role_request.id
+json.userId role_request.user.id
 json.name role_request.user.name
 json.email role_request.user.email
 json.organization role_request.organization

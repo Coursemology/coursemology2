@@ -69,9 +69,15 @@ export const create = async (
   }
 };
 
+// Thrown when the update is rejected because the rubric change is incompatible with existing grades and
+// the caller has not confirmed re-grading. The page catches this to confirm, then retries with
+// confirmRubricAdvance = true. (The backend rolls back, so nothing is saved until confirmed.)
+export class RubricAdvanceConfirmationError extends Error {}
+
 export const update = async (
   id: number,
   data: RubricBasedResponseData,
+  confirmRubricAdvance = false,
 ): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
@@ -80,10 +86,16 @@ export const update = async (
       await CourseAPI.assessment.question.rubricBasedResponse.update(
         id,
         adaptedData,
+        confirmRubricAdvance,
       );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) {
+      // 409 Conflict signals an incompatible rubric change awaiting confirmation.
+      if (error.response?.status === 409)
+        throw new RubricAdvanceConfirmationError();
+      throw error.response?.data.errors;
+    }
     throw error;
   }
 };

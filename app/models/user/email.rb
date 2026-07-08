@@ -27,15 +27,23 @@ class User::Email < ApplicationRecord
   def accept_all_pending_invitations
     return unless confirmed?
 
-    all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
+    ActsAsTenant.without_tenant do
+      all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
 
-    all_unconfirmed_invitations.each do |unconfirmed_invitation|
-      if enrolled_course_ids.include?(unconfirmed_invitation.course_id)
-        unconfirmed_invitation.confirm!(confirmer: user)
-        next
+      all_unconfirmed_invitations.each do |unconfirmed_invitation|
+        if enrolled_course_ids.include?(unconfirmed_invitation.course_id)
+          unconfirmed_invitation.confirm!(confirmer: user)
+          next
+        end
+        # Confirm the invitation before saving the CourseUser so that the
+        # UniqueExternalIdConcern validation doesn't reject the new CourseUser
+        # for sharing an external_id with what is now a confirmed invitation.
+        CourseUser.transaction(requires_new: true) do
+          unconfirmed_invitation.confirm!(confirmer: user)
+          user.build_course_user_from_invitation(unconfirmed_invitation)
+          raise ActiveRecord::Rollback unless user.save && user.persisted?
+        end
       end
-      user.build_course_user_from_invitation(unconfirmed_invitation)
-      unconfirmed_invitation.confirm!(confirmer: user) if user.save && user.persisted?
     end
   end
 

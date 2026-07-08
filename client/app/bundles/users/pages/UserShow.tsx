@@ -1,11 +1,13 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Avatar, Grid, Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 
 import CoursesTable from '../components/tables/CoursesTable';
 import InstancesTable from '../components/tables/InstancesTable';
@@ -16,8 +18,6 @@ import {
   getAllInstanceMiniEntities,
   getUserEntity,
 } from '../selectors';
-
-interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   currentCourses: {
@@ -41,8 +41,9 @@ const styles = {
   },
 };
 
-const UserShow: FC<Props> = (props) => {
-  const { intl } = props;
+const UserShow: FC = () => {
+  const { t } = useTranslation();
+
   const [isLoading, setIsLoading] = useState(true);
 
   const { userId } = useParams();
@@ -66,6 +67,7 @@ const UserShow: FC<Props> = (props) => {
   return (
     <Page>
       <Grid
+        alignItems="center"
         className="global-user-profile"
         container
         direction="row"
@@ -84,37 +86,50 @@ const UserShow: FC<Props> = (props) => {
           <Avatar src={user.imageUrl} style={styles.image} />
         </Grid>
         <Grid
-          alignItems="center"
           container
           direction="row"
           item
           justifyContent={{ xs: 'center', sm: 'start' }}
         >
-          <Typography variant="h5">{user.name}</Typography>
+          <Grid
+            alignItems={{ xs: 'center', sm: 'start' }}
+            container
+            direction="column"
+            item
+          >
+            <Typography variant="h5">{user.name}</Typography>
+            {user.instanceRole && (
+              <Typography data-testid="instance-role">
+                <strong>
+                  {t(instanceRoleTranslations[user.instanceRole])}
+                </strong>
+              </Typography>
+            )}
+          </Grid>
         </Grid>
       </Grid>
       {currentCourses.length > 0 && (
         <CoursesTable
           key="current-courses"
           courses={currentCourses}
-          title={intl.formatMessage(translations.currentCourses)}
+          title={t(translations.currentCourses)}
         />
       )}
       {completedCourses.length > 0 && (
         <CoursesTable
           key="completed-courses"
           courses={completedCourses}
-          title={intl.formatMessage(translations.completedCourses)}
+          title={t(translations.completedCourses)}
         />
       )}
       {instances.length > 0 && (
         <InstancesTable
           instances={instances}
-          title={intl.formatMessage(translations.otherInstances)}
+          title={t(translations.otherInstances)}
         />
       )}
     </Page>
   );
 };
 
-export default injectIntl(UserShow);
+export default UserShow;

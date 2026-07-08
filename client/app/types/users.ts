@@ -1,11 +1,16 @@
 import { CourseUserRole } from './course/courseUsers';
+import { EnrolRequestListData } from './course/enrolRequests';
+import { InstanceUserRoles } from './system/instance/users';
 
-export type UserRoles = 'normal' | 'administrator';
+export const USER_SYSTEM_ROLES = ['normal', 'administrator'] as const;
+
+export type UserSystemRoles = (typeof USER_SYSTEM_ROLES)[number];
 
 export interface UserBasicListData {
   id: number;
   name: string;
   imageUrl?: string;
+  instanceRole?: InstanceUserRoles;
 }
 export interface UserListData {
   id: number;
@@ -19,13 +24,14 @@ export interface UserListData {
       title: string;
     }[];
   }[];
-  role: UserRoles;
+  role: UserSystemRoles;
 }
 
 export interface UserBasicMiniEntity {
   id: number;
   name: string;
   imageUrl?: string;
+  instanceRole?: InstanceUserRoles;
 }
 
 export interface UserMiniEntity extends UserBasicMiniEntity {
@@ -38,7 +44,7 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
       title: string;
     }[];
   }[];
-  role: UserRoles;
+  role: UserSystemRoles;
 }
 
 export interface UserData extends UserBasicMiniEntity {
@@ -149,4 +155,10 @@ export interface InvitedSignUpData {
   courseId?: string;
   instanceName?: string;
   instanceHost?: string;
+}
+
+export interface SignUpResponseData {
+  id: number;
+  confirmed: boolean;
+  enrolRequest?: EnrolRequestListData;
 }

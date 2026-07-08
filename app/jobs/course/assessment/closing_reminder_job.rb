@@ -4,8 +4,6 @@ class Course::Assessment::ClosingReminderJob < ApplicationJob
     # Prevent the job from retrying due to deleted records
   end
 
-  protected
-
   def perform(assessment, token)
     instance = Course.unscoped { assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do

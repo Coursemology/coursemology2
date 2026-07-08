@@ -13,6 +13,7 @@ export interface Student {
   name: string;
   nameLink: string;
   email: string;
+  externalId?: string | null;
   studentType: 'Phantom' | 'Normal';
   isMyStudent: boolean;
   groupManagers?: GroupManager[];
@@ -50,6 +51,7 @@ export interface Metadata {
   courseVideoCount: number;
   hasGroupManagers: boolean;
   hasMyStudents: boolean;
+  hasExternalIds: boolean;
   showRedirectToMissionControl: boolean;
 }
 
@@ -123,10 +125,10 @@ export interface CourseAssessment {
   tab: TabInfo;
   category: CategoryInfo;
   maximumGrade: number;
-  averageGrade: number;
-  stdevGrade: number;
-  averageTimeTaken: number;
-  stdevTimeTaken: number;
+  averageGrade?: number;
+  stdevGrade?: number;
+  averageTimeTaken?: number;
+  stdevTimeTaken?: number;
   numSubmitted: number;
   numAttempted: number;
   numLate: number;

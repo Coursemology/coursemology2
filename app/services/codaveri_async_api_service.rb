@@ -3,12 +3,16 @@
 class CodaveriAsyncApiService
   CODAVERI_API_VERSION = 2.1
 
-  def config
-    ENV.fetch('CODAVERI_URL')
+  def self.api_url
+    Rails.application.credentials.dig(:codaveri, :url)
+  end
+
+  def self.api_key
+    Rails.application.credentials.dig(:codaveri, :api_key)
   end
 
   def initialize(api_namespace, payload)
-    url = config
+    url = self.class.api_url
     @api_endpoint = "#{url}/#{api_namespace}"
     @payload = payload
   end
@@ -17,7 +21,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.post(
       headers: {
-        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-key' => self.class.api_key,
         'x-api-version' => CODAVERI_API_VERSION,
         'Content-Type' => 'application/json'
       },
@@ -30,7 +34,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.put(
       headers: {
-        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-key' => self.class.api_key,
         'x-api-version' => CODAVERI_API_VERSION,
         'Content-Type' => 'application/json'
       },
@@ -43,7 +47,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.get(
       headers: {
-        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-key' => self.class.api_key,
         'x-api-version' => CODAVERI_API_VERSION
       },
       query: @payload

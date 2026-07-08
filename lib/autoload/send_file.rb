@@ -47,20 +47,20 @@ module SendFile
     end
 
     signer = Aws::S3::Presigner.new(client: S3_CLIENT)
-    signer.presigned_url(:get_object, bucket: ENV.fetch('AWS_BUCKET', nil), key: s3_key)
+    signer.presigned_url(:get_object, bucket: Rails.application.credentials.aws.s3_file_bucket.bucket, key: s3_key)
   end
 
   def self.s3_single_upload_file(open_file, s3_key)
     S3_CLIENT.put_object({
       body: open_file,
-      bucket: ENV.fetch('AWS_BUCKET', nil),
+      bucket: Rails.application.credentials.aws.s3_file_bucket.bucket,
       key: s3_key
     })
   end
 
   def self.s3_multipart_upload_file(open_file, s3_key)
     upload_id = S3_CLIENT.create_multipart_upload({
-      bucket: ENV.fetch('AWS_BUCKET', nil),
+      bucket: Rails.application.credentials.aws.s3_file_bucket.bucket,
       key: s3_key
     })[:upload_id]
     parts = []
@@ -68,7 +68,7 @@ module SendFile
 
     while (chunk = open_file.read(MULTIPART_CHUNK_SIZE))
       etag = S3_CLIENT.upload_part({
-        bucket: ENV.fetch('AWS_BUCKET', nil),
+        bucket: Rails.application.credentials.aws.s3_file_bucket.bucket,
         key: s3_key,
         body: chunk,
         part_number: part_number,
@@ -84,7 +84,7 @@ module SendFile
     end
 
     complete_response = S3_CLIENT.complete_multipart_upload({
-      bucket: ENV.fetch('AWS_BUCKET', nil),
+      bucket: Rails.application.credentials.aws.s3_file_bucket.bucket,
       key: s3_key,
       upload_id: upload_id,
       multipart_upload: {
@@ -94,7 +94,7 @@ module SendFile
   ensure
     if upload_id.present? && complete_response.nil?
       S3_CLIENT.abort_multipart_upload({
-        bucket: ENV.fetch('AWS_BUCKET', nil),
+        bucket: Rails.application.credentials.aws.s3_file_bucket.bucket,
         key: s3_key,
         upload_id: upload_id
       })

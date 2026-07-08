@@ -48,3 +48,27 @@ export const deleteRubric = async (rubricId: number): Promise<void> => {
     throw error;
   }
 };
+
+// Thrown when setting a structurally incompatible revision active would re-grade existing answers; the
+// backend rolls back and returns 409. The caller confirms with the user and retries with confirmRubricAdvance.
+export class RubricAdvanceConfirmationError extends Error {}
+
+export const setActiveRubric = async (
+  rubricId: number,
+  confirmRubricAdvance = false,
+): Promise<void> => {
+  try {
+    await CourseAPI.assessment.question.rubrics.setActive(
+      rubricId,
+      confirmRubricAdvance,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 409)
+        throw new RubricAdvanceConfirmationError();
+      throw error.response?.data?.errors;
+    }
+
+    throw error;
+  }
+};

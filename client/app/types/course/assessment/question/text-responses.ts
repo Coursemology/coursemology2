@@ -1,11 +1,85 @@
-import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
+import { AvailableSkills, QuestionFormData } from '../questions';
+
+export interface NumericRandomConfig {
+  mode: 'numeric';
+  min: number;
+  max: number;
+  roundToInteger: boolean;
+}
+
+export interface DateRandomConfig {
+  mode: 'date';
+  min: Date;
+  max: Date;
+  roundToDay: boolean;
+}
+
+export interface OverrideRandomConfig {
+  mode: 'override';
+  value: string;
+}
+
+export interface ShuffleRandomConfig {
+  mode: 'shuffle';
+}
+
+export interface StringRandomConfig {
+  mode: 'string';
+  randomizeDigits: boolean;
+  randomizeLetters: boolean;
+}
+
+export interface NoRandomConfig {
+  mode: 'off';
+}
+
+export type CellRandomConfig = (
+  | NumericRandomConfig
+  | DateRandomConfig
+  | OverrideRandomConfig
+  | ShuffleRandomConfig
+  | StringRandomConfig
+  | NoRandomConfig
+) & { cell: string };
+
+export type CellRandomConfigBody<M extends CellRandomConfig['mode']> = Omit<
+  Extract<CellRandomConfig, { mode: M }>,
+  'mode' | 'cell'
+>;
+
+export type SolutionType =
+  | 'exact_match'
+  | 'keyword'
+  | 'regex'
+  | 'spreadsheet_formula';
 
 export interface SolutionData {
   id: number | string;
   solution: string;
-  solutionType: 'exact_match' | 'keyword';
+  solutionType: SolutionType;
   grade: number | string;
   explanation: string;
+  spreadsheet?: {
+    id?: number;
+    isRandomizationEnabled: boolean;
+    isRandomSeedFixed: boolean;
+    randomSeed: number;
+    isTimestampFixed: boolean;
+    testTimestamp: Date | null;
+    numRandomTests: number;
+    file?: {
+      name: string;
+      url: string;
+      file?: File | null;
+    };
+    variables?: CellRandomConfig[];
+  };
+}
+
+export interface ExistingSpreadsheet {
+  filename: string;
+  size: number;
+  id: number;
 }
 
 export interface SolutionEntity extends SolutionData {
@@ -31,19 +105,43 @@ export interface TextResponseQuestionFormData extends QuestionFormData {
   templateText: string | null;
 }
 
-export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
-  solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
+export interface TextResponseFormData extends AvailableSkills {
+  solutions?: SolutionEntity[];
   questionType: 'file_upload' | 'text_response';
   isAssessmentAutograded: boolean;
-  defaultMaxAttachmentSize?: number;
-  defaultMaxAttachments?: number;
-  question: TextResponseQuestionFormData | OptionalIfNew<T>;
+  defaultMaxAttachmentSize: number;
+  defaultMaxAttachments: number;
+  question: TextResponseQuestionFormData;
 }
-
-export type TextResponseFormData<T extends 'new' | 'edit' = 'edit'> =
-  TextResponseData<T> & AvailableSkills;
+export type TextResponseEditableFormData = Pick<
+  TextResponseFormData,
+  'question' | 'solutions'
+>;
 
 type TextResponseFormDataQuestion = TextResponseFormData['question'];
+
+export interface TextResponseSpreadsheetPostData {
+  id?: number;
+  file?: File;
+  is_randomization_enabled?: boolean;
+  is_random_seed_fixed?: boolean;
+  test_random_seed?: number | null;
+  is_timestamp_fixed?: boolean;
+  test_timestamp?: string | null;
+  num_random_tests?: number;
+  variables?: string;
+  _destroy?: boolean;
+}
+
+export interface TextResponseSolutionPostData {
+  id?: SolutionEntity['id'];
+  solution?: SolutionEntity['solution'];
+  solution_type?: SolutionEntity['solutionType'];
+  grade?: SolutionEntity['grade'];
+  explanation?: SolutionEntity['explanation'];
+  _destroy?: SolutionEntity['toBeDeleted'];
+  test_spreadsheet_attributes: TextResponseSpreadsheetPostData | null;
+}
 
 export interface TextResponsePostData {
   question_text_response: {
@@ -59,13 +157,6 @@ export interface TextResponsePostData {
     question_assessment?: {
       skill_ids: TextResponseFormDataQuestion['skillIds'];
     };
-    solutions_attributes?: {
-      id?: SolutionEntity['id'];
-      solution?: SolutionEntity['solution'];
-      solutionType?: SolutionEntity['solutionType'];
-      grade?: SolutionEntity['grade'];
-      explanation?: SolutionEntity['explanation'];
-      _destroy?: SolutionEntity['toBeDeleted'];
-    }[];
+    solutions_attributes: TextResponseSolutionPostData[] | null;
   };
 }

@@ -14,11 +14,13 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../translations';
 import { AnswerDetailsMap } from '../types';
 
+import RubricModerationRow from './RubricModerationRow';
 import RubricPanelRow from './RubricPanelRow';
 
 interface RubricPanelProps {
   answerId: number;
   answerCategoryGrades: AnswerDetailsMap['RubricBasedResponse']['categoryGrades'];
+  currentGrade: number;
   question: SubmissionQuestionData<'RubricBasedResponse'>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
   readOnly?: boolean;
@@ -29,6 +31,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
   const {
     answerId,
     answerCategoryGrades,
+    currentGrade,
     question,
     setIsFirstRendering,
     readOnly,
@@ -99,6 +102,14 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
               setIsFirstRendering={setIsFirstRendering}
             />
           ))}
+          <RubricModerationRow
+            answerId={answerId}
+            categoryGrades={categoryGrades}
+            currentGrade={currentGrade}
+            question={question}
+            readOnly={readOnly}
+            setIsFirstRendering={setIsFirstRendering}
+          />
         </TableBody>
       </Table>
     </div>

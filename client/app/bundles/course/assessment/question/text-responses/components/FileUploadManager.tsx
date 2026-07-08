@@ -2,7 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { InputAdornment, RadioGroup } from '@mui/material';
 import {
   AttachmentType,
-  TextResponseQuestionFormData,
+  TextResponseEditableFormData,
 } from 'types/course/assessment/question/text-responses';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -21,19 +21,20 @@ const FileUploadManager = (props: Props): JSX.Element => {
   const { disabled, isTextResponseQuestion } = props;
   const { t } = useTranslation();
 
-  const { control, watch } = useFormContext<TextResponseQuestionFormData>();
+  const { control, watch } = useFormContext<TextResponseEditableFormData>();
 
   return (
     <>
       <div className="mt-5 mb-5">
         <Controller
           control={control}
-          name="isAttachmentRequired"
+          name="question.isAttachmentRequired"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               disabled={
                 disabled ||
-                watch('attachmentType') === AttachmentType.NO_ATTACHMENT
+                watch('question.attachmentType') ===
+                  AttachmentType.NO_ATTACHMENT
               }
               field={field}
               fieldState={fieldState}
@@ -44,7 +45,7 @@ const FileUploadManager = (props: Props): JSX.Element => {
       </div>
       <Controller
         control={control}
-        name="attachmentType"
+        name="question.attachmentType"
         render={({ field }): JSX.Element => (
           <RadioGroup className="space-y-5" {...field}>
             {isTextResponseQuestion && (
@@ -71,11 +72,12 @@ const FileUploadManager = (props: Props): JSX.Element => {
         )}
       />
 
-      {watch('attachmentType') === AttachmentType.MULTIPLE_ATTACHMENT && (
+      {watch('question.attachmentType') ===
+        AttachmentType.MULTIPLE_ATTACHMENT && (
         <div className="mt-5">
           <Controller
             control={control}
-            name="maxAttachments"
+            name="question.maxAttachments"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
                 className="w-1/2"
@@ -91,11 +93,11 @@ const FileUploadManager = (props: Props): JSX.Element => {
         </div>
       )}
 
-      {watch('attachmentType') !== AttachmentType.NO_ATTACHMENT && (
+      {watch('question.attachmentType') !== AttachmentType.NO_ATTACHMENT && (
         <div className="mt-5">
           <Controller
             control={control}
-            name="maxAttachmentSize"
+            name="question.maxAttachmentSize"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
                 className="w-1/2"

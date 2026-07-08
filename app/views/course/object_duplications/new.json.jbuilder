@@ -24,8 +24,8 @@ json.destinationInstances sorted_destination_instances do |instance|
 end
 
 json.metadata do
-  json.canDuplicateToAnotherInstance can?(:duplicate_across_instances, current_tenant)
   json.currentInstanceId current_tenant.id
+  json.currentInstanceHost current_tenant.host
 end
 
 json.partial! 'course_duplication_data'

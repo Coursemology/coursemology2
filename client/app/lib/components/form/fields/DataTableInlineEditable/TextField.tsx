@@ -19,6 +19,7 @@ interface Props {
   link?: string;
   onUpdate?: (newValue: string) => Promise<void>;
   alwaysEditable?: boolean;
+  allowEmpty?: boolean;
 }
 
 const styles = {
@@ -27,15 +28,14 @@ const styles = {
     width: '100%',
   },
   displayFieldStyle: {
-    ':not(:hover)': {
-      '& button': {
-        opacity: 0,
-      },
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    '& button': {
+      opacity: 0,
     },
-    ':hover': {
-      '& button': {
-        opacity: 1,
-      },
+    ':hover button': {
+      opacity: 1,
     },
   },
   buttonStyle: { padding: '4px 4px', minWidth: '0px', color: 'inherit' },
@@ -52,6 +52,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
     link,
     onUpdate,
     alwaysEditable = false,
+    allowEmpty = false,
     ...custom
   } = props;
   const [controlledVal, setControlledVal] = useState(value);
@@ -68,7 +69,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const handleSave = (): void => {
     setIsSaving(true);
-    if (controlledVal.trim() === '') {
+    if (!allowEmpty && controlledVal.trim() === '') {
       setHelperText('Cannot be empty.');
       setIsSaving(false);
       return;
@@ -104,18 +105,18 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const renderDisplayField = (
     <Box className={className} sx={styles.displayFieldStyle}>
-      <>
+      <span className="min-w-0 flex-1 truncate" title={controlledVal}>
         {link ? <Link href={link}>{controlledVal}</Link> : controlledVal}
+      </span>
 
-        <IconButton
-          className="inline-edit-button"
-          disabled={disabled}
-          onClick={(): void => setIsEditing(true)}
-          sx={styles.buttonStyle}
-        >
-          <Edit />
-        </IconButton>
-      </>
+      <IconButton
+        className="inline-edit-button shrink-0"
+        disabled={disabled}
+        onClick={(): void => setIsEditing(true)}
+        sx={styles.buttonStyle}
+      >
+        <Edit />
+      </IconButton>
     </Box>
   );
 

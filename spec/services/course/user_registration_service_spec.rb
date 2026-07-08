@@ -250,6 +250,22 @@ RSpec.describe Course::UserRegistrationService, type: :service do
           end.to change { course.course_users.reload.count }.by(0)
         end
       end
+
+      context 'when the user is already enrolled and the invitation has an external_id' do
+        let!(:existing_course_user) { create(:course_student, course: course, user: user, external_id: nil) }
+        let!(:invitation_with_ext_id) do
+          create(:course_user_invitation, course: course, email: user.email, external_id: 'stu-001')
+        end
+        let(:registration) do
+          Course::Registration.new(course: course, user: user,
+                                   code: invitation_with_ext_id.invitation_key.dup)
+        end
+
+        it 'does not update the external_id on the existing CourseUser' do
+          subject.send(:claim_registration_code, registration)
+          expect(existing_course_user.reload.external_id).to be_nil
+        end
+      end
     end
 
     describe '#accept_invitation' do

@@ -201,6 +201,135 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    describe Course::CourseUserTypeConcern do
+      let(:course) { create(:course) }
+      let!(:group_manager) { create(:course_manager, course: course) }
+      let!(:student) { create(:course_student, course: course) }
+      let!(:phantom_student) { create(:course_student, :phantom, course: course) }
+      let!(:ta) { create(:course_teaching_assistant, course: course) }
+      let!(:phantom_ta) { create(:course_teaching_assistant, :phantom, course: course) }
+      let!(:group) do
+        grp = create(:course_group, course: course)
+        create(:course_group_manager, course: course, group: grp, course_user: group_manager)
+        create(:course_group_student, course: course, group: grp, course_user: student)
+        create(:course_group_student, course: course, group: grp, course_user: phantom_student)
+        grp
+      end
+
+      describe '.valid_course_user_type?' do
+        it 'returns true for all valid type strings' do
+          %w[students students_w_phantom my_students my_students_w_phantom staff staff_w_phantom].each do |type|
+            expect(Course.valid_course_user_type?(type)).to be true
+          end
+        end
+
+        it 'returns false for nil' do
+          expect(Course.valid_course_user_type?(nil)).to be false
+        end
+
+        it 'returns false for unknown strings' do
+          expect(Course.valid_course_user_type?('invalid')).to be false
+        end
+
+        it 'returns false for symbol versions of valid types' do
+          expect(Course.valid_course_user_type?(:students)).to be false
+        end
+      end
+
+      describe '#course_users_by_type' do
+        context 'when user is a course user' do
+          it "returns non-phantom students for 'students'" do
+            result = course.course_users_by_type('students', group_manager)
+            expect(result).to include(student)
+            expect(result).not_to include(phantom_student, ta)
+          end
+
+          it "returns all students including phantoms for 'students_w_phantom'" do
+            result = course.course_users_by_type('students_w_phantom', group_manager)
+            expect(result).to include(student, phantom_student)
+            expect(result).not_to include(ta)
+          end
+
+          it "returns non-phantom group students for 'my_students'" do
+            result = course.course_users_by_type('my_students', group_manager)
+            expect(result).to include(student)
+            expect(result).not_to include(phantom_student, ta)
+          end
+
+          it "returns all group students including phantoms for 'my_students_w_phantom'" do
+            result = course.course_users_by_type('my_students_w_phantom', group_manager)
+            expect(result).to include(student, phantom_student)
+            expect(result).not_to include(ta)
+          end
+
+          it "returns non-phantom staff for 'staff'" do
+            result = course.course_users_by_type('staff', group_manager)
+            expect(result).to include(ta)
+            expect(result).not_to include(phantom_ta, student)
+          end
+
+          it "returns all staff including phantoms for 'staff_w_phantom'" do
+            result = course.course_users_by_type('staff_w_phantom', group_manager)
+            expect(result).to include(ta, phantom_ta)
+            expect(result).not_to include(student)
+          end
+
+          it 'defaults to non-phantom students for unknown types' do
+            result = course.course_users_by_type(nil, group_manager)
+            expect(result).to include(student)
+            expect(result).not_to include(phantom_student, ta)
+          end
+        end
+
+        # Regression: admins not enrolled in a course have nil as current_course_user,
+        # which previously caused a 500 when the old CourseUser#users_in_course_by_type
+        # was called on nil.
+        context 'when user is nil (e.g. a system administrator not enrolled in the course)' do
+          it "returns non-phantom students for 'students'" do
+            result = course.course_users_by_type('students', nil)
+            expect(result).to include(student)
+            expect(result).not_to include(phantom_student, ta)
+          end
+
+          it "returns all students including phantoms for 'students_w_phantom'" do
+            result = course.course_users_by_type('students_w_phantom', nil)
+            expect(result).to include(student, phantom_student)
+            expect(result).not_to include(ta)
+          end
+
+          it "returns an empty result for 'my_students'" do
+            result = course.course_users_by_type('my_students', nil)
+            expect(result).to be_a(ActiveRecord::Relation)
+            expect(result).to be_empty
+          end
+
+          it "returns an empty result for 'my_students_w_phantom'" do
+            result = course.course_users_by_type('my_students_w_phantom', nil)
+            expect(result).to be_a(ActiveRecord::Relation)
+            expect(result).to be_empty
+          end
+
+          it "returns non-phantom staff for 'staff'" do
+            result = course.course_users_by_type('staff', nil)
+            expect(result).to include(ta)
+            expect(result).not_to include(phantom_ta, student)
+          end
+
+          it "returns all staff including phantoms for 'staff_w_phantom'" do
+            result = course.course_users_by_type('staff_w_phantom', nil)
+            expect(result).to include(ta, phantom_ta)
+            expect(result).not_to include(student)
+          end
+
+          it 'defaults to non-phantom students for unknown types' do
+            result = course.course_users_by_type(nil, nil)
+            expect(result).to include(student)
+            expect(result).not_to include(phantom_student, ta)
+          end
+        end
+      end
+    end
+
     describe 'calculated attributes' do
       let(:course) { create(:course) }
       let!(:course_users) { create_list(:course_user, 2, course: course) }

@@ -24,12 +24,6 @@ interface PromisedToastMessages {
   success?: ReactNode;
 }
 
-type PromisedToaster = <T = unknown>(
-  data: Promise<T>,
-  messages: PromisedToastMessages,
-  options?: ToastOptions,
-) => Promise<T>;
-
 /**
  * `UpdateOptions` also allows for `render` to be a function of type
  * `<P,>(props: ToastContentProps<P>) => ReactNode`. Here, we define
@@ -108,8 +102,16 @@ const loading: Toaster = (message, options?) =>
 const update = (id: Id, options?: NodeOnlyUpdateOptions): void =>
   toastify.update(id, customize(options));
 
-const promise: PromisedToaster = (data, messages, options?) => {
-  return toastify.promise(
+const dismiss = (id?: Id): void => {
+  toastify.dismiss(id);
+};
+
+const promise = <T,>(
+  data: Promise<T>,
+  messages: PromisedToastMessages,
+  options?: ToastOptions<T>,
+): Promise<T> => {
+  return toastify.promise<T>(
     data,
     {
       pending: messages.pending
@@ -141,5 +143,6 @@ export default Object.assign(toast, {
   error,
   loading,
   update,
+  dismiss,
   promise,
 });

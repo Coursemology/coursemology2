@@ -4,8 +4,6 @@ class Course::Survey::ClosingReminderJob < ApplicationJob
     # Prevent the job from retrying due to deleted records
   end
 
-  protected
-
   def perform(survey, token)
     ActsAsTenant.without_tenant do
       Course::Survey::ReminderService.closing_reminder(survey, token)

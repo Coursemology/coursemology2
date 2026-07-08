@@ -1,4 +1,4 @@
-name,email
+Name,Email,External ID,Role,Phantom
 Foo,bar@foo.com
 Blank Email,
 ,blank@name.com

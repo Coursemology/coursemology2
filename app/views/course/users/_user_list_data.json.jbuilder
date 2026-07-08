@@ -3,14 +3,17 @@ should_show_timeline ||= false
 should_show_phantom ||= false
 
 json.id course_user.id if course_user.id
+if current_course_user&.staff? || can?(:manage, course_user) || course_user.user_id == current_user.id
+  json.userId course_user.user_id
+end
 json.name course_user.name.strip
 json.imageUrl user_image(course_user.user)
-json.email course_user.user.email
+json.email course_user.user.primary_email&.email || course_user.user.email
+json.isSuspended course_user.is_suspended
 
 json.referenceTimelineId current_course.reference_timeline_for(course_user)
 json.timelineAlgorithm course_user.timeline_algorithm if should_show_timeline
 
 json.role course_user.role
 json.phantom course_user.phantom? if should_show_phantom
-
-json.groups course_user.groups.map(&:name)
+json.externalId course_user.external_id

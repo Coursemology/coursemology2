@@ -6,7 +6,6 @@ import {
   InvitationStatus,
 } from 'types/course/userInvitations';
 
-import { getManageCourseUserPermissions } from 'course/users/selectors';
 import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import { ColumnTemplate } from 'lib/components/table';
@@ -18,6 +17,7 @@ import { formatMiniDateTime } from 'lib/moment';
 import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
+import { getManageCourseUsersSharedData } from '../../selectors';
 import translations from '../../translations';
 import InvitationActionButtons from '../buttons/InvitationActionButtons';
 import ResendAllInvitationsButton from '../buttons/ResendAllInvitationsButton';
@@ -135,8 +135,14 @@ const FailedChip: FC<{ sentAt: string }> = ({ sentAt }) => {
 const UserInvitationsTable: FC<Props> = (props) => {
   const { invitations } = props;
 
+  const showExternalId = invitations.some(
+    (invitation) => invitation.externalId != null,
+  );
+
   const { t } = useTranslation();
-  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const { showPersonalizedTimelineFeatures } = useAppSelector(
+    getManageCourseUsersSharedData,
+  );
 
   const columns: ColumnTemplate<InvitationRowData>[] = [
     {
@@ -158,6 +164,17 @@ const UserInvitationsTable: FC<Props> = (props) => {
       searchable: true,
       cell: (datum) => datum.email,
     },
+    ...(showExternalId
+      ? [
+          {
+            of: 'externalId',
+            title: t(tableTranslations.externalId),
+            sortable: false,
+            searchable: true,
+            cell: (datum) => datum.externalId ?? null,
+          } satisfies ColumnTemplate<InvitationRowData>,
+        ]
+      : []),
     {
       of: 'role',
       title: t(tableTranslations.role),
@@ -171,7 +188,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         TIMELINE_ALGORITHMS.find(
           (timeline) => timeline.value === datum.timelineAlgorithm,
         )?.label ?? '-',
-      unless: !permissions.canManagePersonalTimes,
+      unless: !showPersonalizedTimelineFeatures,
     },
     {
       id: 'status',
@@ -263,6 +280,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
       data={processedInvitations}
       getRowId={(datum) => datum.id.toString()}
       indexing={{ indices: true }}
+      search={{
+        searchPlaceholder: t(translations.searchText),
+      }}
       sort={{
         initially: { by: 'status', order: 'asc' },
       }}

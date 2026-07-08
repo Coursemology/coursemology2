@@ -5,6 +5,11 @@ export interface RubricData {
   gradingPrompt: string;
   modelAnswer: string;
   summary: string;
+  // Structural fingerprint: revisions with the same contentHash are compatible (grades carry across them
+  // without loss). Used to warn before making a structurally incompatible revision active.
+  contentHash: string;
+  // Whether this rubric is the question's active_rubric. Only populated by the rubrics index endpoint.
+  isActive?: boolean;
 }
 
 export interface RubricDataWithEvaluations extends RubricData {
@@ -29,7 +34,6 @@ export interface RubricCategoryData {
   name: string;
   maximumGrade: number;
   criterions: RubricCategoryCriterionData[];
-  isBonusCategory: boolean;
 }
 
 export interface RubricCategoryCriterionData {
@@ -38,12 +42,23 @@ export interface RubricCategoryCriterionData {
   explanation: string;
 }
 
+export type RubricEvaluationType =
+  | 'grading'
+  | 'playground'
+  | 'playground_hidden';
+
 export interface RubricAnswerEvaluationData {
+  id?: number;
   answerId: number;
+  rubricId?: number;
+  // 'playground' = a rubric version's raw evaluation (playground table); 'grading' = the official applied
+  // grade. ('playground_hidden' is dismissed and is not returned by the fetch.)
+  evaluationType?: RubricEvaluationType;
   selections?: {
     mockAnswerId: number;
     categoryId: number;
-    criterionId: number;
+    // null when the category has not been graded (e.g. a category added after grading).
+    criterionId: number | null;
     grade: number;
   }[];
   feedback?: string;
@@ -65,6 +80,11 @@ export interface RubricMockAnswerEvaluationData {
 export interface RubricAnswerData {
   id: number;
   title: string;
+  // Whether this is the submission's latest (current) attempt -- lets the UI show only the latest answer
+  // per student. Mirrors the `current_answer` flag used by the past-answers views.
+  currentAnswer: boolean;
   grade?: number;
   answerText: string;
+  submissionId?: number;
+  submissionStatus?: string;
 }

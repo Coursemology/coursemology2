@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Rubric::Category::Criterion < ApplicationRecord
+  include Course::Rubric::CopyOnWriteConcern
+
   validates :grade, numericality: { greater_than_or_equal_to: 0, only_integer: true }, presence: true
   validates :category, presence: true
 
@@ -22,6 +24,11 @@ class Course::Rubric::Category::Criterion < ApplicationRecord
       grade: v1_criterion.grade,
       explanation: v1_criterion.explanation
     )
+  end
+
+  # Plain content tree for the rubric content_hash. Mirrors the migration's per-criterion structure.
+  def canonical_content
+    { grade: grade.to_i, explanation: explanation.to_s }
   end
 
   def initialize_duplicate(duplicator, other)

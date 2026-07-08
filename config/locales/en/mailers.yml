@@ -49,6 +49,10 @@ en:
         subject: '%{course}: Your submission for %{assessment} has been graded'
         message: >
           Click %{submission} to view your grade.
+      video_closing_reminder_email:
+        subject: '%{course}: Reminder for %{video}'
+        message: >
+          Please be reminded that %{video} is due on %{time}.
       survey_closing_reminder_email:
         subject: '%{course}: Reminder about %{survey}'
         message: >
@@ -101,6 +105,18 @@ en:
         subject: 'Course enrolment request rejected - %{course}'
         message: >
           Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected.
+      user_suspended_email:
+        subject: 'Suspended from %{course}'
+        message: >
+          Your access to the course %{course} on %{coursemology} has been suspended.
+        default_suspension_message: >
+          Please contact your instructors or the course staff.
+      user_unsuspended_email:
+        subject: 'Suspension lifted for %{course}'
+        message: >
+          Your access to the course %{course} on %{coursemology} has been restored.
+
+          You may now access the course again.
   instance:
     mailer:
       user_added_email:

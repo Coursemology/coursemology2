@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ruby '3.3.5'
 
 # These gems are included in Ruby defaults for now,
-# but they will have to be included separately in future versions.
+# but they will have to be included separately in future versions (Ruby 3.4+).
 gem 'ostruct'
 gem 'csv'
 
@@ -12,7 +12,7 @@ gem 'csv'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.2'
+gem 'rails', '~> 7.2.3'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -108,13 +108,13 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails', '~> 6'
+  gem 'rspec-rails', '~> 8'
 
-  gem 'rubocop', '~> 1.73'
+  gem 'rubocop', '~> 1.86'
 
   # Factory Bot for factories
   # fix for https://github.com/thoughtbot/factory_bot/issues/1690
-  gem 'factory_bot', '~> 6.5.1'
+  gem 'factory_bot', '~> 6.6.0'
   gem 'factory_bot_rails'
 
   # Checks that all translations are used and defined
@@ -151,9 +151,9 @@ group :assets do
   gem 'image_optim_rails'
 end
 
-group :production, :test do
+group :development, :production, :test do
   # Puma will be our app server
-  gem 'puma'
+  gem 'puma', '~> 7.2'
 end
 
 group :production, :test, :ci do
@@ -168,7 +168,7 @@ group :production do
   gem 'fog-aws', '>= 3.19'
   gem 'flamegraph'
   gem 'stackprof'
-  gem 'sidekiq'
+  gem 'sidekiq', '~> 7.3.10'
   gem 'sidekiq-cron'
   gem 'rollbar', '>= 1.5.3'
 
@@ -187,21 +187,21 @@ gem 'http_accept_language'
 gem 'devise', '4.9.4'
 gem 'devise-multi_email'
 gem 'keycloak'
-gem 'jwt'
+gem 'jwt', '~> 2.10.3'
 
 # Use cancancan for authorization
 gem 'cancancan'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave', '~> 3'
+gem 'carrierwave', '~> 3.1.3'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing
 gem 'mini_magick'
 # Library for reading and writing zip files
-gem 'rubyzip', require: 'zip'
+gem 'rubyzip', '~> 3.3', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
-gem 'nokogiri', '>= 1.18.8'
+gem 'nokogiri', '>= 1.19.4'
 
 # Polyglot support
 gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'

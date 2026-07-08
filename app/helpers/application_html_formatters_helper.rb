@@ -145,6 +145,15 @@ module ApplicationHtmlFormattersHelper
     { node_whitelist: [node] }
   end.freeze
 
+  # Collapses runs of more than 3 Unicode combining marks (Zalgo text) down to 3,
+  # preserving legitimate accents (e.g. "Café", "Niño") while blocking vandalism.
+  ZALGO_TEXT_TRANSFORMER = lambda do |env|
+    node = env[:node]
+    return unless node.text?
+
+    node.content = node.content.gsub(/(\p{M}{3})\p{M}+/, '\1')
+  end.freeze
+
   # - Allow whitelisting of base64 encoded images for HTML text.
   # TODO: Remove 'data' from whitelisted protocols once we disable Base64 encoding
   IMAGE_WHITELIST_TRANSFORMER = lambda do |env|
@@ -179,7 +188,7 @@ module ApplicationHtmlFormattersHelper
       'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align',
       'width', 'list-style-type'
     ] }
-    list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER].freeze
+    list[:transformers] |= [ZALGO_TEXT_TRANSFORMER, VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER].freeze
     list
   end.freeze
 

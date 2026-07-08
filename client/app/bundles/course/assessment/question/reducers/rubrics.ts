@@ -78,6 +78,11 @@ export const questionRubricsStore = createSlice({
     deleteRubric: (state, action: PayloadAction<number>) => {
       delete state.rubrics[action.payload];
     },
+    setActiveRubric: (state, action: PayloadAction<number>) => {
+      Object.values(state.rubrics).forEach((rubric) => {
+        rubric.isActive = rubric.id === action.payload;
+      });
+    },
     loadAnswers: (state, action: PayloadAction<RubricAnswerData[]>) => {
       action.payload.forEach((answer) => {
         state.answers[answer.id] = answer;
@@ -100,13 +105,17 @@ export const questionRubricsStore = createSlice({
         action.payload;
       if (!(rubricId in state.rubrics)) return;
 
-      state.rubrics[rubricId].answerEvaluations = answerEvaluations.reduce(
-        (map, evaluation) => {
-          map[evaluation.answerId] = evaluation;
-          return map;
-        },
-        {} as Record<number, RubricAnswerEvaluationData>,
-      );
+      // The fetch returns this rubric's 'playground' evaluations plus every answer's official 'grading'
+      // evaluation; only the playground ones belong in this rubric version's table.
+      state.rubrics[rubricId].answerEvaluations = answerEvaluations
+        .filter((evaluation) => evaluation.evaluationType !== 'grading')
+        .reduce(
+          (map, evaluation) => {
+            map[evaluation.answerId] = evaluation;
+            return map;
+          },
+          {} as Record<number, RubricAnswerEvaluationData>,
+        );
       state.rubrics[rubricId].mockAnswerEvaluations =
         mockAnswerEvaluations.reduce(
           (map, evaluation) => {
@@ -184,6 +193,7 @@ export const questionRubricsStore = createSlice({
       state.mockAnswers[mockAnswerId] = {
         id: mockAnswerId,
         title: '(Mock Answer)',
+        currentAnswer: true,
         answerText,
       };
       state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {

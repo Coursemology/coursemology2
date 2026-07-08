@@ -56,6 +56,8 @@ class User < ApplicationRecord
   # devise-multi_email correctly.
   include UserAuthenticationConcern
 
+  has_one :primary_email, -> { where(primary: true) }, class_name: 'User::Email', inverse_of: :user
+
   has_many :instance_users, dependent: :destroy
   has_many :instances, through: :instance_users
   has_many :identities, dependent: :destroy, class_name: 'User::Identity'
@@ -127,6 +129,7 @@ class User < ApplicationRecord
                        phantom: invitation.phantom,
                        timeline_algorithm: invitation.timeline_algorithm ||
                           invitation.course&.default_timeline_algorithm,
+                       external_id: invitation.external_id.presence,
                        creator: self,
                        updater: self)
   end
