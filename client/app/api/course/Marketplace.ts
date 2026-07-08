@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { JobSubmitted } from 'types/jobs';
 
 import { MarketplaceListing } from 'course/marketplace/types';
 
@@ -25,5 +26,15 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     AxiosResponse<{ listings: MarketplaceListing[]; canAccess: boolean }>
   > {
     return this.client.get(this.#urlPrefix);
+  }
+
+  duplicate(
+    listingIds: number[],
+    destinationTabId: number | null,
+  ): Promise<AxiosResponse<JobSubmitted>> {
+    return this.client.post(`${this.#urlPrefix}/listings/duplicate`, {
+      listing_ids: listingIds,
+      ...(destinationTabId ? { destination_tab_id: destinationTabId } : {}),
+    });
   }
 }
