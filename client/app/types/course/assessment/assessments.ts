@@ -106,7 +106,10 @@ export interface AssessmentData extends AssessmentActionsData {
     canManage: boolean;
     canObserve: boolean;
     canInviteToKoditsu: boolean;
+    canPublishToMarketplace: boolean;
   };
+  isPublishedToMarketplace: boolean;
+  marketplaceListingUrl: string;
   requirements: {
     title: string;
     satisfied?: boolean;
