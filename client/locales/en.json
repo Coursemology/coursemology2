@@ -6081,7 +6081,7 @@
     "defaultMessage": "Publish to Marketplace?"
   },
   "course.marketplace.publishConfirmBody": {
-    "defaultMessage": "This assessment will be browsable by course managers, who can preview and duplicate it. It uses this assessment’s own title and description."
+    "defaultMessage": "This assessment will be browsable by course managers, who can preview and duplicate it. It uses this assessment’s own title."
   },
   "course.marketplace.removeConfirmTitle": {
     "defaultMessage": "Remove from Marketplace?"
@@ -6119,8 +6119,17 @@
   "course.marketplace.colActions": {
     "defaultMessage": "Actions"
   },
+  "course.marketplace.colPublished": {
+    "defaultMessage": "Published at"
+  },
   "course.marketplace.previewAction": {
     "defaultMessage": "Preview"
+  },
+  "course.marketplace.duplicateAssessment": {
+    "defaultMessage": "Duplicate Assessment"
+  },
+  "course.marketplace.viewDetails": {
+    "defaultMessage": "View question details"
   },
   "course.marketplace.searchPlaceholder": {
     "defaultMessage": "Search by title"
@@ -6137,11 +6146,14 @@
   "course.marketplace.duplicateN": {
     "defaultMessage": "{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}"
   },
-  "course.marketplace.duplicateTitle": {
-    "defaultMessage": "Duplicate assessment{n, plural, one {} other {s}} to your course?"
+  "course.marketplace.confirmationQuestion": {
+    "defaultMessage": "Duplicate items?"
   },
-  "course.marketplace.duplicateBody": {
-    "defaultMessage": "{n, plural, one {This assessment will be copied to your course.} other {These # assessments will be copied to your course.}}"
+  "course.marketplace.destinationCourse": {
+    "defaultMessage": "Destination Course"
+  },
+  "course.marketplace.assessmentsHeading": {
+    "defaultMessage": "Assessments"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "Duplicate"
@@ -6151,6 +6163,21 @@
   },
   "course.marketplace.duplicateFailed": {
     "defaultMessage": "{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed."
+  },
+  "course.marketplace.selectToDuplicate": {
+    "defaultMessage": "Select to duplicate"
+  },
+  "course.marketplace.emptyNoListings": {
+    "defaultMessage": "No assessments have been published to the marketplace yet."
+  },
+  "course.marketplace.emptyNoMatch": {
+    "defaultMessage": "No assessments match your search."
+  },
+  "course.marketplace.bonus": {
+    "defaultMessage": "Bonus"
+  },
+  "course.marketplace.noPreviewImage": {
+    "defaultMessage": "The background image for this question cannot be previewed here."
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "Download has failed. Please try again later."

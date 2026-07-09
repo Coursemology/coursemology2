@@ -2,35 +2,62 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 
+import { useCourseContext } from 'course/container/CourseLoader';
 import Page from 'lib/components/core/layouts/Page';
 import Preload from 'lib/components/wrappers/Preload';
 
 import DuplicateConfirmation from '../../components/DuplicateConfirmation';
 import { fetchListings } from '../../operations';
 import translations from '../../translations';
-import { MarketplaceListing } from '../../types';
+import { DestinationTab, MarketplaceListing } from '../../types';
 
 import MarketplaceTable from './MarketplaceTable';
 
 const MarketplaceIndex = (): JSX.Element => {
   const { formatMessage: t } = useIntl();
+  const { courseTitle, courseUrl } = useCourseContext();
   const [params] = useSearchParams();
-  const destinationTabId = parseInt(params.get('from_tab') ?? '', 10) || null;
+  const fromTab = params.get('from_tab');
+  const destinationTabId = parseInt(fromTab ?? '', 10) || null;
   const [pending, setPending] = useState<MarketplaceListing[]>([]);
+
+  const resolveDestination = (
+    tabs: DestinationTab[],
+  ): {
+    category: { id: number; title: string } | null;
+    tab: { id: number; title: string } | null;
+  } => {
+    const match = tabs.find((tab) => tab.id === destinationTabId);
+    if (!match) return { category: null, tab: null };
+    return {
+      category: { id: match.categoryId, title: match.categoryTitle },
+      tab: { id: match.id, title: match.title },
+    };
+  };
 
   return (
     <Preload render={<div />} while={fetchListings}>
-      {(listings): JSX.Element => (
-        <Page title={t(translations.pageTitle)}>
-          <MarketplaceTable listings={listings} onDuplicate={setPending} />
-          <DuplicateConfirmation
-            destinationTabId={destinationTabId}
-            listings={pending}
-            onClose={(): void => setPending([])}
-            open={pending.length > 0}
-          />
-        </Page>
-      )}
+      {({ listings, destinationTabs }): JSX.Element => {
+        const destination = resolveDestination(destinationTabs);
+        return (
+          <Page title={t(translations.pageTitle)}>
+            <MarketplaceTable
+              fromTab={fromTab}
+              listings={listings}
+              onDuplicate={setPending}
+            />
+            <DuplicateConfirmation
+              destinationCategory={destination.category}
+              destinationCourse={{ title: courseTitle, url: courseUrl }}
+              destinationTab={destination.tab}
+              destinationTabId={destinationTabId}
+              listings={pending}
+              onClose={(): void => setPending([])}
+              open={pending.length > 0}
+            />
+          </Page>
+        );
+      }}
     </Preload>
   );
 };
