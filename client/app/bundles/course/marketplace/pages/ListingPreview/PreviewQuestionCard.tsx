@@ -33,7 +33,7 @@ interface Props {
   of: PreviewQuestionSummary;
   index: number;
   listingId: string;
-  fromTab?: string | null;
+  fromTab?: number | null;
 }
 
 const PreviewQuestionCard = ({
@@ -63,12 +63,7 @@ const PreviewQuestionCard = ({
           <Typography>{q.title}</Typography>
 
           <div className="flex space-x-2">
-            <Chip
-              color="info"
-              label={q.type}
-              size="small"
-              variant="outlined"
-            />
+            <Chip color="info" label={q.type} size="small" variant="outlined" />
 
             {q.unautogradable && (
               <Chip

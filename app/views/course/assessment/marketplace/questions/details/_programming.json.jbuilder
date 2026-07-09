@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.languageName question.language&.name
 json.memoryLimit question.memory_limit
 json.timeLimit question.time_limit

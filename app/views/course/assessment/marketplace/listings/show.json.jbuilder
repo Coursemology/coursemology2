@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.id @assessment.id
 json.title @assessment.title
 json.description format_ckeditor_rich_text(@assessment.description)
