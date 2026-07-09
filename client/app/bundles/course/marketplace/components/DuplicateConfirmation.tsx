@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { Card, CardContent, ListSubheader } from '@mui/material';
 import { JobStatus } from 'types/jobs';
 
-import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import DuplicationAssessmentTree from 'course/duplication/components/DuplicationAssessmentTree';
+import Prompt from 'lib/components/core/dialogs/Prompt';
+import Link from 'lib/components/core/Link';
 import { pollJobRequest } from 'lib/helpers/jobHelpers';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { duplicateListings } from '../operations';
 import translations from '../translations';
@@ -15,6 +18,9 @@ const JOB_POLL_INTERVAL_MS = 2000;
 interface Props {
   listings: Pick<MarketplaceListing, 'id' | 'title'>[];
   destinationTabId: number | null;
+  destinationCourse: { title: string; url: string };
+  destinationCategory: { id: number; title: string } | null;
+  destinationTab: { id: number; title: string } | null;
   open: boolean;
   onClose: () => void;
 }
@@ -22,10 +28,13 @@ interface Props {
 const DuplicateConfirmation = ({
   listings,
   destinationTabId,
+  destinationCourse,
+  destinationCategory,
+  destinationTab,
   open,
   onClose,
 }: Props): JSX.Element => {
-  const { formatMessage: t } = useIntl();
+  const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const [jobUrl, setJobUrl] = useState<string | null>(null);
   const pollingRef = useRef(false);
@@ -88,9 +97,30 @@ const DuplicateConfirmation = ({
       onClose={onClose}
       open={open}
       primaryLabel={t(translations.duplicateConfirm)}
-      title={t(translations.duplicateTitle, { n })}
+      title={t(translations.confirmationQuestion)}
     >
-      <PromptText>{t(translations.duplicateBody, { n })}</PromptText>
+      <ListSubheader disableSticky>
+        {t(translations.destinationCourse)}
+      </ListSubheader>
+      <Card>
+        <CardContent>
+          <Link opensInNewTab to={destinationCourse.url} variant="h6">
+            {destinationCourse.title}
+          </Link>
+        </CardContent>
+      </Card>
+
+      <ListSubheader disableSticky>
+        {t(translations.assessmentsHeading)}
+      </ListSubheader>
+      <DuplicationAssessmentTree
+        nodes={[
+          {
+            category: destinationCategory,
+            tabs: [{ tab: destinationTab, assessments: listings }],
+          },
+        ]}
+      />
     </Prompt>
   );
 };
