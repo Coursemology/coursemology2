@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Tooltip } from 'react-tooltip';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -14,6 +15,7 @@ import AchievementsListing from './AchievementsListing';
 import AssessmentsListing from './AssessmentsListing';
 import MaterialsListing from './MaterialsListing';
 import SurveyListing from './SurveyListing';
+import VideosListing from './VideosListing';
 
 const translations = defineMessages({
   confirmationQuestion: {
@@ -40,9 +42,34 @@ const translations = defineMessages({
     id: 'course.duplication.Duplication.DuplicateItemsConfirmation.failureMessage',
     defaultMessage: 'Duplication failed.',
   },
+  itemUnpublished: {
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.itemUnpublished',
+    defaultMessage:
+      'Items are duplicated as unpublished when duplicating to an existing course.',
+  },
 });
 
 class DuplicateItemsConfirmation extends Component {
+  renderListing() {
+    return (
+      <>
+        <p>
+          <FormattedMessage {...translations.confirmationQuestion} />
+        </p>
+        {this.renderdestinationCourseCard()}
+        <AssessmentsListing />
+        <SurveyListing />
+        <AchievementsListing />
+        <MaterialsListing />
+        <VideosListing />
+
+        <Tooltip id="itemUnpublished">
+          <FormattedMessage {...translations.itemUnpublished} />
+        </Tooltip>
+      </>
+    );
+  }
+
   renderdestinationCourseCard() {
     const { destinationCourses, destinationCourseId } = this.props;
     const destinationCourse = destinationCourses.find(

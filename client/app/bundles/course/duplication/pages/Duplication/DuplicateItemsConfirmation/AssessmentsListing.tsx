@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
-import { Card, CardContent, ListSubheader } from '@mui/material';
+import { ListSubheader } from '@mui/material';
 
 import DuplicationAssessmentTree, {
   DuplicationAssessmentTreeNode,
@@ -13,17 +12,6 @@ import {
 import componentTranslations from 'course/translations';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-const translations = defineMessages({
-  defaultCategory: {
-    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.AssessmentsListing.defaultCategory',
-    defaultMessage: 'Default Category',
-  },
-  defaultTab: {
-    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.AssessmentsListing.defaultTab',
-    defaultMessage: 'Default Tab',
-  },
-});
 
 const AssessmentsListing: FC = () => {
   const { assessmentsComponent: categories, selectedItems } = useAppSelector(
@@ -96,10 +84,10 @@ const AssessmentsListing: FC = () => {
   );
 };
 
-type DuplicationCategoryLike = {
+interface DuplicationCategoryLike {
   id: number;
   title: string;
   tabs: DuplicationTabData[];
-};
+}
 
 export default AssessmentsListing;

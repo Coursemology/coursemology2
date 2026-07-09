@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.categories question.categories do |category|
   json.name category.name
   json.isBonus category.is_bonus_category

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { ContentCopy } from '@mui/icons-material';
 import { Button, Chip, Paper } from '@mui/material';
 
@@ -13,7 +13,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DuplicateConfirmation from '../../components/DuplicateConfirmation';
-import { withFromTab } from '../../fromTab';
+import { readFromTab, withFromTab } from '../../fromTab';
 import { fetchListing } from '../../operations';
 import translations from '../../translations';
 import { ListingPreviewData } from '../../types';
@@ -25,11 +25,9 @@ const ListingPreview = (): JSX.Element => {
   const { listingId } = useParams();
   const { t } = useTranslation();
   const { courseTitle, courseUrl } = useCourseContext();
-  const [params] = useSearchParams();
   // `from_tab` rides in from the marketplace index so the duplicate lands in the tab the user came
   // from; null when they reached the preview directly, which DuplicateConfirmation renders fine.
-  const fromTab = params.get('from_tab');
-  const destinationTabId = parseInt(fromTab ?? '', 10) || null;
+  const fromTab = readFromTab(useLocation().search);
   const [duplicating, setDuplicating] = useState(false);
 
   return (
@@ -83,7 +81,7 @@ const ListingPreview = (): JSX.Element => {
             destinationCategory={null}
             destinationCourse={{ title: courseTitle, url: courseUrl }}
             destinationTab={null}
-            destinationTabId={destinationTabId}
+            destinationTabId={fromTab}
             listings={[{ id: listing.id, title: listing.title }]}
             onClose={(): void => setDuplicating(false)}
             open={duplicating}

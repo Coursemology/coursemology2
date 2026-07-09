@@ -4,7 +4,8 @@ class Course::Assessment::Marketplace::QuestionsController < Course::Assessment:
 
   def show
     ActsAsTenant.without_tenant do
-      listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).find_by(id: params[:listing_id])
+      listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).
+                find_by(id: params[:listing_id])
       raise CanCan::AccessDenied unless listing
 
       @assessment = listing.assessment
