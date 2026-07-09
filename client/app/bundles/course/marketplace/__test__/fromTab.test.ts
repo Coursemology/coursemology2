@@ -2,13 +2,13 @@ import { readFromTab, withFromTab } from '../fromTab';
 
 describe('withFromTab', () => {
   it('appends from_tab as the first query param when the path has none', () => {
-    expect(withFromTab('/courses/1/marketplace', '42')).toBe(
+    expect(withFromTab('/courses/1/marketplace', 42)).toBe(
       '/courses/1/marketplace?from_tab=42',
     );
   });
 
   it('appends from_tab with & when the path already has a query string', () => {
-    expect(withFromTab('/p/1?foo=bar', '42')).toBe('/p/1?foo=bar&from_tab=42');
+    expect(withFromTab('/p/1?foo=bar', 42)).toBe('/p/1?foo=bar&from_tab=42');
   });
 
   it('returns the path unchanged when from_tab is null', () => {
@@ -19,11 +19,24 @@ describe('withFromTab', () => {
 });
 
 describe('readFromTab', () => {
-  it('extracts from_tab from a search string', () => {
-    expect(readFromTab('?from_tab=42&x=1')).toBe('42');
+  it('extracts from_tab from a search string as a number', () => {
+    expect(readFromTab('?from_tab=42&x=1')).toBe(42);
   });
 
   it('returns null when from_tab is absent', () => {
     expect(readFromTab('?x=1')).toBeNull();
+  });
+
+  it('returns null when from_tab is not a tab id', () => {
+    expect(readFromTab('?from_tab=abc')).toBeNull();
+    expect(readFromTab('?from_tab=')).toBeNull();
+  });
+
+  // A hand-edited URL is reduced to the leading tab id, so reserved characters (`&`, `=`) can
+  // never survive into a link that `withFromTab` builds from the value.
+  it('strips trailing junk from a hand-edited from_tab', () => {
+    const fromTab = readFromTab('?from_tab=7%26admin%3Dtrue');
+    expect(fromTab).toBe(7);
+    expect(withFromTab('/p/1', fromTab)).toBe('/p/1?from_tab=7');
   });
 });

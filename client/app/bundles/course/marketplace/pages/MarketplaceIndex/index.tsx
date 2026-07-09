@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useCourseContext } from 'course/container/CourseLoader';
 import Page from 'lib/components/core/layouts/Page';
 import Preload from 'lib/components/wrappers/Preload';
 
 import DuplicateConfirmation from '../../components/DuplicateConfirmation';
+import { readFromTab } from '../../fromTab';
 import { fetchListings } from '../../operations';
 import translations from '../../translations';
 import { DestinationTab, MarketplaceListing } from '../../types';
@@ -16,9 +17,7 @@ import MarketplaceTable from './MarketplaceTable';
 const MarketplaceIndex = (): JSX.Element => {
   const { formatMessage: t } = useIntl();
   const { courseTitle, courseUrl } = useCourseContext();
-  const [params] = useSearchParams();
-  const fromTab = params.get('from_tab');
-  const destinationTabId = parseInt(fromTab ?? '', 10) || null;
+  const fromTab = readFromTab(useLocation().search);
   const [pending, setPending] = useState<MarketplaceListing[]>([]);
 
   const resolveDestination = (
@@ -27,7 +26,7 @@ const MarketplaceIndex = (): JSX.Element => {
     category: { id: number; title: string } | null;
     tab: { id: number; title: string } | null;
   } => {
-    const match = tabs.find((tab) => tab.id === destinationTabId);
+    const match = tabs.find((tab) => tab.id === fromTab);
     if (!match) return { category: null, tab: null };
     return {
       category: { id: match.categoryId, title: match.categoryTitle },
@@ -50,7 +49,7 @@ const MarketplaceIndex = (): JSX.Element => {
               destinationCategory={destination.category}
               destinationCourse={{ title: courseTitle, url: courseUrl }}
               destinationTab={destination.tab}
-              destinationTabId={destinationTabId}
+              destinationTabId={fromTab}
               listings={pending}
               onClose={(): void => setPending([])}
               open={pending.length > 0}

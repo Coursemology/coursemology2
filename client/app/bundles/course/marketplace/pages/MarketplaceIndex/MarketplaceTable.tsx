@@ -25,7 +25,7 @@ import { MarketplaceListing } from '../../types';
 type SortMode = 'adoptions' | 'newest';
 
 interface Props {
-  fromTab?: string | null;
+  fromTab?: number | null;
   listings: MarketplaceListing[];
   onDuplicate: (rows: MarketplaceListing[]) => void;
 }
