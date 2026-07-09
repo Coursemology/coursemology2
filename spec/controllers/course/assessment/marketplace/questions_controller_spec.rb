@@ -70,8 +70,13 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
       question = nil
       listing = ActsAsTenant.with_tenant(source_instance) do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
-        create(:course_assessment_question_programming, assessment: assessment,
-               test_case_count: 1, private_test_case_count: 1, evaluation_test_case_count: 1)
+        create(
+          :course_assessment_question_programming,
+          assessment: assessment,
+          test_case_count: 1,
+          private_test_case_count: 1,
+          evaluation_test_case_count: 1
+        )
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
           create(:course_assessment_marketplace_listing, assessment: assessment)

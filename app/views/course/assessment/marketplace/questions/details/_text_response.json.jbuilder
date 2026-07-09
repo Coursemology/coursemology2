@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.hideText question.hide_text
 json.isAttachmentRequired question.is_attachment_required
 json.maxAttachments question.max_attachments

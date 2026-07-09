@@ -2,10 +2,10 @@ import userEvent from '@testing-library/user-event';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import { MarketplaceListing } from '../../../types';
-
 import MarketplaceTable from '../MarketplaceTable';
 
 // Sort keys disagree so order is meaningful: Graph Theory is most-adopted, Recursion newest.
+const GRAPH_THEORY = 'Graph Theory';
 const LISTINGS: MarketplaceListing[] = [
   {
     id: 1,
@@ -20,7 +20,7 @@ const LISTINGS: MarketplaceListing[] = [
   {
     id: 2,
     assessmentId: 11,
-    title: 'Graph Theory',
+    title: GRAPH_THEORY,
     questionCount: 3,
     adoptions: 12,
     firstPublishedAt: '2026-01-01T00:00:00Z',
@@ -54,7 +54,7 @@ it('renders Preview and Duplicate as icon buttons with one-word tooltips/labels'
   // Default sort = adoptions desc → Graph Theory (12) is the first row.
   fireEvent.click(duplicates[0]);
   expect(onDuplicate).toHaveBeenCalledWith([
-    expect.objectContaining({ title: 'Graph Theory' }),
+    expect.objectContaining({ title: GRAPH_THEORY }),
   ]);
 });
 
@@ -76,7 +76,7 @@ it('renders one checkbox per row and no select-all header checkbox', async () =>
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={jest.fn()} />,
   );
-  await page.findByText('Graph Theory');
+  await page.findByText(GRAPH_THEORY);
 
   // Only per-row checkboxes — the select-all header checkbox is removed.
   expect(page.getAllByRole('checkbox')).toHaveLength(LISTINGS.length);
@@ -87,7 +87,7 @@ it('keeps the search bar visible and shows an enabled count button on selection'
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={onDuplicate} />,
   );
-  await page.findByText('Graph Theory');
+  await page.findByText(GRAPH_THEORY);
 
   // Data-row checkboxes follow any header checkbox — click the last one to select a row.
   const checkboxes = page.getAllByRole('checkbox');
@@ -126,7 +126,7 @@ it('shows a no-match message when the search filters everything, keeping the sea
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={jest.fn()} />,
   );
-  await page.findByText('Graph Theory');
+  await page.findByText(GRAPH_THEORY);
 
   // userEvent (not fireEvent) for the search field — React 18 startTransition.
   await userEvent.type(page.getByPlaceholderText('Search by title'), 'zzzzz');
@@ -153,7 +153,7 @@ it('shows the published date, formatted', async () => {
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={jest.fn()} />,
   );
-  await page.findByText('Graph Theory');
+  await page.findByText(GRAPH_THEORY);
   // formatLongDate('2026-06-01T00:00:00Z') under TZ=Asia/Singapore → '01 Jun 2026'.
   expect(page.getByText('01 Jun 2026')).toBeVisible();
   expect(page.getByText('01 Jan 2026')).toBeVisible();
@@ -164,7 +164,7 @@ it('sorts by published date (not adoptions) when Newest is selected', async () =
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={onDuplicate} />,
   );
-  await page.findByText('Graph Theory');
+  await page.findByText(GRAPH_THEORY);
 
   // Drive the MUI select-mode "Sort by" TextField (idiom mirrored from the sibling
   // MarketplaceIndex test): mouseDown the labelled control, then click the option.

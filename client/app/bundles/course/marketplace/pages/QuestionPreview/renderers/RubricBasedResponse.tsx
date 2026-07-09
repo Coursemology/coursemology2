@@ -53,8 +53,8 @@ const RubricBasedResponse = ({ question }: RendererProps): JSX.Element => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {category.criteria.map((criterion, index) => (
-                    <TableRow key={`${category.name}-${index}`}>
+                  {category.criteria.map((criterion) => (
+                    <TableRow key={`${category.name}-grade-${criterion.grade}`}>
                       <TableCell>{criterion.grade}</TableCell>
                       <TableCell>
                         <UserHTMLText html={criterion.explanation} />

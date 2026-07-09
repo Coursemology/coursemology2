@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 
 import DuplicationAssessmentTree from 'course/duplication/components/DuplicationAssessmentTree';
-import Link from 'lib/components/core/Link';
 import Prompt from 'lib/components/core/dialogs/Prompt';
+import Link from 'lib/components/core/Link';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 

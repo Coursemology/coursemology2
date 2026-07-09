@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
-class Course::Statistics::AggregateController < Course::Statistics::Controller
+class Course::Statistics::AggregateController < Course::Statistics::Controller # rubocop:disable Metrics/ClassLength
   before_action :preload_levels, only: [:all_students, :course_performance]
   include Course::Statistics::TimesConcern
   include Course::Statistics::GradesConcern
@@ -169,7 +169,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
         id
     SQL
                                   )
-    query.map { |u| [u.id, u.correctness] }.to_h
+    query.to_h { |u| [u.id, u.correctness] }
   end
 
   def fetch_all_assessment_related_statistics_hash

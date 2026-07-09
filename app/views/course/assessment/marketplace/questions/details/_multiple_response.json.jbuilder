@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.gradingScheme question.grading_scheme
 json.options question.options do |option|
   json.id option.id

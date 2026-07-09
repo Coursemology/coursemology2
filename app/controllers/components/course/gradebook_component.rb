@@ -16,13 +16,11 @@ class Course::GradebookComponent < SimpleDelegator
     return [] unless can?(:read_gradebook, current_course)
 
     [
-      {
-        key: self.class.key,
-        icon: :gradebook,
-        type: :normal,
-        weight: 9,
-        path: course_gradebook_path(current_course)
-      }
+      key: self.class.key,
+      icon: :gradebook,
+      type: :normal,
+      weight: 9,
+      path: course_gradebook_path(current_course)
     ]
   end
 
@@ -30,12 +28,10 @@ class Course::GradebookComponent < SimpleDelegator
     return [] unless can?(:manage_gradebook_settings, current_course)
 
     [
-      {
-        key: self.class.key,
-        type: :settings,
-        weight: 14,
-        path: course_admin_gradebook_path(current_course)
-      }
+      key: self.class.key,
+      type: :settings,
+      weight: 14,
+      path: course_admin_gradebook_path(current_course)
     ]
   end
 end
