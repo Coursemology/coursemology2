@@ -11,3 +11,9 @@ json.listings @listings do |listing|
   json.previewUrl course_listing_path(current_course, listing)
   json.duplicateUrl duplicate_course_listings_path(current_course)
 end
+json.destinationTabs @destination_tabs do |tab|
+  json.id tab[:id]
+  json.title tab[:title]
+  json.categoryId tab[:category_id]
+  json.categoryTitle tab[:category_title]
+end
