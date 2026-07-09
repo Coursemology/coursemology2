@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useIntl } from 'react-intl';
 import { Button } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
 import CourseAPI from 'api/course';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../translations';
 
@@ -21,7 +21,7 @@ const PublishToMarketplaceButton = ({
   assessment,
   onChange,
 }: Props): JSX.Element | null => {
-  const { formatMessage: t } = useIntl();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const listed = assessment.isPublishedToMarketplace;
