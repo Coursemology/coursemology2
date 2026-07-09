@@ -169,7 +169,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
         id
     SQL
                                   )
-    query.map { |u| [u.id, u.correctness] }.to_h
+    query.to_h { |u| [u.id, u.correctness] }
   end
 
   def fetch_all_assessment_related_statistics_hash

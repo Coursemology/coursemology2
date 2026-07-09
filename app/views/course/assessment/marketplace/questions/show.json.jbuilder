@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 detail_partials = {
   'Course::Assessment::Question::MultipleResponse' => 'multiple_response',
   'Course::Assessment::Question::Programming' => 'programming',
