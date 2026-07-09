@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::Marketplace::Controller < Course::ComponentController
+  # display_graded_test_types is defined in Course::Assessment::AssessmentsHelper; the marketplace
+  # preview views reuse it, but Rails only auto-includes a controller's own matching helper.
+  helper Course::Assessment::AssessmentsHelper
+
   private
 
   def component
