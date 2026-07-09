@@ -9,6 +9,7 @@ const buildTanStackColumns = <D extends Data>(
   columns: ColumnTemplate<D>[],
   hasCheckboxes?: boolean | ((datum: D) => boolean),
   hasIndices?: boolean,
+  hideSelectAll?: boolean,
 ): BuiltColumns<D, ColumnDef<D, unknown>> => {
   const initialColumns: ColumnDef<D, unknown>[] = [];
 
@@ -27,11 +28,15 @@ const buildTanStackColumns = <D extends Data>(
       enableSorting: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,
-      header: ({ table }): RowSelector => ({
-        selected: table.getIsAllRowsSelected(),
-        indeterminate: table.getIsSomeRowsSelected(),
-        onChange: table.getToggleAllRowsSelectedHandler(),
-      }),
+      // A non-RowSelector header (null) renders an empty cell, dropping the
+      // select-all checkbox while the per-row `cell` checkboxes remain.
+      header: hideSelectAll
+        ? (): null => null
+        : ({ table }): RowSelector => ({
+            selected: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler(),
+          }),
       cell: ({ row }): RowSelector => ({
         selected: row.getIsSelected(),
         disabled: !row.getCanSelect(),
