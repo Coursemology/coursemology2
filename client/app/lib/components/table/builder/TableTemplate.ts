@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import ColumnPickerTemplate from './ColumnPickerTemplate';
 import ColumnTemplate, { Data } from './ColumnTemplate';
 import {
@@ -17,6 +19,7 @@ interface TableTemplate<D extends Data> {
   getRowClassName?: (datum: D) => string;
   getRowEqualityData?: (datum: D) => unknown;
   className?: string;
+  renderEmpty?: ReactNode;
   pagination?: PaginationTemplate;
   csvDownload?: CsvDownloadTemplate;
   search?: SearchTemplate<D>;
