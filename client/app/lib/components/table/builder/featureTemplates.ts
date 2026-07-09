@@ -33,6 +33,9 @@ export interface SearchTemplate<D extends Data> {
 export interface IndexingTemplate<D extends Data> {
   rowSelectable?: boolean | ((datum: D) => boolean);
   indices?: boolean;
+  // Hides the select-all checkbox in the row-selector column header while
+  // keeping the per-row checkboxes. No effect unless `rowSelectable` is set.
+  hideSelectAll?: boolean;
 }
 
 export interface FilterTemplate {
