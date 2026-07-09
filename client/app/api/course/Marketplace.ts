@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import { MarketplaceListing } from 'course/marketplace/types';
+import { DestinationTab, MarketplaceListing } from 'course/marketplace/types';
 
 import BaseCourseAPI from './Base';
 
@@ -22,7 +22,11 @@ export default class MarketplaceAPI extends BaseCourseAPI {
   }
 
   index(): Promise<
-    AxiosResponse<{ listings: MarketplaceListing[]; canAccess: boolean }>
+    AxiosResponse<{
+      listings: MarketplaceListing[];
+      destinationTabs: DestinationTab[];
+      canAccess: boolean;
+    }>
   > {
     return this.client.get(this.#urlPrefix);
   }
@@ -35,5 +39,15 @@ export default class MarketplaceAPI extends BaseCourseAPI {
       listing_ids: listingIds,
       ...(destinationTabId ? { destination_tab_id: destinationTabId } : {}),
     });
+  }
+
+  fetchListing(id: number): Promise<AxiosResponse> {
+    return this.client.get(`${this.#urlPrefix}/listings/${id}`);
+  }
+
+  fetchQuestion(listingId: number, questionId: number): Promise<AxiosResponse> {
+    return this.client.get(
+      `${this.#urlPrefix}/listings/${listingId}/questions/${questionId}`,
+    );
   }
 }

@@ -10,11 +10,57 @@ beforeEach(() => mock.reset());
 
 const listings = [{ id: 1, title: 'Recursion Drills' }] as never;
 const url = `/courses/${global.courseId}/marketplace/listings/duplicate`;
+const course = { title: 'Enrollable Course', url: '/courses/4' };
+
+it('shows the destination course and assessment tree with real names', async () => {
+  const page = render(
+    <DuplicateConfirmation
+      destinationCategory={{ id: 5, title: 'Missions' }}
+      destinationCourse={course}
+      destinationTab={{ id: 42, title: 'Assignments' }}
+      destinationTabId={42}
+      listings={listings}
+      onClose={jest.fn()}
+      open
+    />,
+  );
+
+  // I18nProvider shows a LoadingIndicator until locale messages async-load;
+  // await the first query to render past it, then the rest are synchronous.
+  expect(await page.findByText('Enrollable Course')).toBeVisible();
+  expect(page.getByText('Missions')).toBeVisible();
+  expect(page.getByText('Assignments')).toBeVisible();
+  expect(page.getByText('Recursion Drills')).toBeVisible();
+  // The old raw-key bug must not recur.
+  expect(
+    page.queryByText('course.marketplace.duplicateTitle'),
+  ).not.toBeInTheDocument();
+});
+
+it('falls back to Default placeholders when entered without a tab', async () => {
+  const page = render(
+    <DuplicateConfirmation
+      destinationCategory={null}
+      destinationCourse={course}
+      destinationTab={null}
+      destinationTabId={null}
+      listings={listings}
+      onClose={jest.fn()}
+      open
+    />,
+  );
+
+  expect(await page.findByText('Default Category')).toBeVisible();
+  expect(page.getByText('Default Tab')).toBeVisible();
+});
 
 it('posts a duplication request with the destination tab on confirm', async () => {
   mock.onPost(url).reply(200, { status: 'submitted', jobUrl: '/jobs/9' });
   const page = render(
     <DuplicateConfirmation
+      destinationCategory={{ id: 5, title: 'Missions' }}
+      destinationCourse={course}
+      destinationTab={{ id: 42, title: 'Assignments' }}
       destinationTabId={42}
       listings={listings}
       onClose={jest.fn()}
@@ -33,6 +79,9 @@ it('omits destination_tab_id when entered without a tab (sidebar entry)', async 
   mock.onPost(url).reply(200, { status: 'submitted', jobUrl: '/jobs/9' });
   const page = render(
     <DuplicateConfirmation
+      destinationCategory={null}
+      destinationCourse={course}
+      destinationTab={null}
       destinationTabId={null}
       listings={listings}
       onClose={jest.fn()}

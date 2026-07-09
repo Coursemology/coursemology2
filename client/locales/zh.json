@@ -6068,6 +6068,12 @@
   "course.marketplace.colActions": {
     "defaultMessage": "操作"
   },
+  "course.marketplace.colPublished": {
+    "defaultMessage": "发布时间"
+  },
+  "course.marketplace.colPublisher": {
+    "defaultMessage": "发布者"
+  },
   "course.marketplace.previewAction": {
     "defaultMessage": "预览"
   },
@@ -6086,11 +6092,14 @@
   "course.marketplace.duplicateN": {
     "defaultMessage": "复制 {n} 个评估"
   },
-  "course.marketplace.duplicateTitle": {
-    "defaultMessage": "要将 {n} 个评估复制到你的课程吗？"
+  "course.marketplace.confirmationQuestion": {
+    "defaultMessage": "复制项目？"
   },
-  "course.marketplace.duplicateBody": {
-    "defaultMessage": "{n, plural, one {此评估将被复制到你的课程。} other {这 {n} 个评估将被复制到你的课程。}}"
+  "course.marketplace.destinationCourse": {
+    "defaultMessage": "目标课程"
+  },
+  "course.marketplace.assessmentsHeading": {
+    "defaultMessage": "评估"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "复制"
@@ -6100,6 +6109,15 @@
   },
   "course.marketplace.duplicateFailed": {
     "defaultMessage": "{n, plural, one {评估复制} other {评估复制}}失败。"
+  },
+  "course.marketplace.selectToDuplicate": {
+    "defaultMessage": "选择评估复制"
+  },
+  "course.marketplace.emptyNoListings": {
+    "defaultMessage": "尚未有评估发布到市场。"
+  },
+  "course.marketplace.emptyNoMatch": {
+    "defaultMessage": "没有符合搜索条件的评估。"
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "下载失败。请稍后再试。"

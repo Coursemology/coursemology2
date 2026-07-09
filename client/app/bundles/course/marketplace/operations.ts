@@ -1,11 +1,20 @@
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/jobHelpers';
 
-import { MarketplaceListing } from './types';
+import {
+  ListingPreviewData,
+  MarketplaceIndexData,
+  QuestionPreviewData,
+} from './types';
 
-export const fetchListings = async (): Promise<MarketplaceListing[]> => {
+export const fetchListings = async (): Promise<MarketplaceIndexData> => {
   const response = await CourseAPI.marketplace.index();
-  return response.data.listings as MarketplaceListing[];
+  return {
+    listings: (response.data.listings ??
+      []) as MarketplaceIndexData['listings'],
+    destinationTabs: (response.data.destinationTabs ??
+      []) as MarketplaceIndexData['destinationTabs'],
+  };
 };
 
 export const duplicateListings = async (
@@ -24,4 +33,20 @@ export const duplicateListings = async (
     onFailure,
     2000,
   );
+};
+
+export const fetchListing = async (id: number): Promise<ListingPreviewData> => {
+  const response = await CourseAPI.marketplace.fetchListing(id);
+  return response.data as ListingPreviewData;
+};
+
+export const fetchQuestion = async (
+  listingId: number,
+  questionId: number,
+): Promise<QuestionPreviewData> => {
+  const response = await CourseAPI.marketplace.fetchQuestion(
+    listingId,
+    questionId,
+  );
+  return response.data as QuestionPreviewData;
 };

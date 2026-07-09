@@ -6,6 +6,13 @@ import CourseAPI from 'api/course';
 
 import MarketplaceIndex from '../index';
 
+jest.mock('../../../../container/CourseLoader', () => ({
+  useCourseContext: (): { courseTitle: string; courseUrl: string } => ({
+    courseTitle: 'Test Course',
+    courseUrl: '/courses/4',
+  }),
+}));
+
 const mock = createMockAdapter(CourseAPI.marketplace.client);
 beforeEach(() => mock.reset());
 
@@ -80,4 +87,33 @@ it('filters rows by the title search', async () => {
     expect(page.queryByText('Recursion Drills')).not.toBeInTheDocument(),
   );
   expect(page.getByText('Graph Theory')).toBeVisible();
+});
+
+it('carries from_tab into the preview links', async () => {
+  mock.onGet(url).reply(200, { listings: LISTINGS, canAccess: true });
+  const page = render(<MarketplaceIndex />, { at: [`${url}?from_tab=7`] });
+  await renderPage(page);
+
+  const previews = page.getAllByLabelText('Preview');
+  expect(previews.map((el) => el.getAttribute('href'))).toEqual(
+    expect.arrayContaining(['/p/1?from_tab=7', '/p/2?from_tab=7']),
+  );
+});
+
+it('opens the confirmation with the resolved destination tab', async () => {
+  mock.onGet(url).reply(200, {
+    listings: LISTINGS,
+    canAccess: true,
+    destinationTabs: [
+      { id: 7, title: 'Assignments', categoryId: 3, categoryTitle: 'Missions' },
+    ],
+  });
+  const page = render(<MarketplaceIndex />, { at: [`${url}?from_tab=7`] });
+  await renderPage(page);
+
+  fireEvent.click(page.getAllByLabelText('Duplicate')[0]);
+
+  expect(await page.findByText('Test Course')).toBeVisible();
+  expect(page.getByText('Missions')).toBeVisible();
+  expect(page.getByText('Assignments')).toBeVisible();
 });
