@@ -20,6 +20,8 @@ const MuiTable = <H, B, C>(props: TableProps<H, B, C>): JSX.Element => {
         </Table>
       </TableContainer>
 
+      {props.body.rows.length === 0 && props.body.renderEmpty}
+
       {props.pagination && <MuiTablePagination {...props.pagination} />}
     </Paper>
   );

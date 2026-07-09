@@ -30,6 +30,7 @@ interface BodyProps<B, C> {
   allFilteredSelected?: boolean;
   someFilteredSelected?: boolean;
   toggleAllFiltered?: () => void;
+  renderEmpty?: ReactNode;
 }
 
 export default BodyProps;
