@@ -1,10 +1,19 @@
 import CourseAPI from 'api/course';
 
-import { MarketplaceListing } from './types';
+import {
+  ListingPreviewData,
+  MarketplaceIndexData,
+  QuestionPreviewData,
+} from './types';
 
-export const fetchListings = async (): Promise<MarketplaceListing[]> => {
+export const fetchListings = async (): Promise<MarketplaceIndexData> => {
   const response = await CourseAPI.marketplace.index();
-  return response.data.listings as MarketplaceListing[];
+  return {
+    listings: (response.data.listings ??
+      []) as MarketplaceIndexData['listings'],
+    destinationTabs: (response.data.destinationTabs ??
+      []) as MarketplaceIndexData['destinationTabs'],
+  };
 };
 
 // Returns the URL of the duplication job to poll. Polling is deliberately left to the caller: it
@@ -19,4 +28,20 @@ export const duplicateListings = async (
     destinationTabId,
   );
   return response.data.jobUrl;
+};
+
+export const fetchListing = async (id: number): Promise<ListingPreviewData> => {
+  const response = await CourseAPI.marketplace.fetchListing(id);
+  return response.data as ListingPreviewData;
+};
+
+export const fetchQuestion = async (
+  listingId: number,
+  questionId: number,
+): Promise<QuestionPreviewData> => {
+  const response = await CourseAPI.marketplace.fetchQuestion(
+    listingId,
+    questionId,
+  );
+  return response.data as QuestionPreviewData;
 };
