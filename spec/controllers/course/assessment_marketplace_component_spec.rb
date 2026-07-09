@@ -21,6 +21,7 @@ RSpec.describe Course::AssessmentMarketplaceComponent do
         item = subject.sidebar_items.find { |i| i[:key] == :admin_marketplace }
         expect(item).to be_present
         expect(item[:type]).to eq(:admin)
+        expect(item[:icon]).to eq(:marketplace)
         expect(item[:path]).to eq(course_marketplace_path(course))
       end
     end
