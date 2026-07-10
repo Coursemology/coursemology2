@@ -270,6 +270,51 @@ RSpec.describe Course::Assessment::Question::Programming do
       end
     end
 
+    describe '#preview_inert_reason' do
+      subject { create(:course_assessment_question_programming, template_package: true) }
+
+      it 'returns nil for a runnable question' do
+        expect(subject.preview_inert_reason).to be_nil
+      end
+
+      context 'when the question is graded by Codaveri' do
+        before { subject.update_column(:is_codaveri, true) }
+
+        it 'returns codaveri' do
+          expect(subject.preview_inert_reason).to eq('codaveri')
+        end
+      end
+
+      context 'when the question has no package attachment' do
+        before { allow(subject).to receive(:attachment).and_return(nil) }
+
+        it 'returns no_package' do
+          expect(subject.preview_inert_reason).to eq('no_package')
+        end
+      end
+
+      context 'when the language has no default evaluator' do
+        before do
+          allow(subject.language).to receive(:default_evaluator_whitelisted?).and_return(false)
+        end
+
+        it 'returns unsupported_language' do
+          expect(subject.preview_inert_reason).to eq('unsupported_language')
+        end
+      end
+
+      context 'when the question is both Codaveri-graded and in an unsupported language' do
+        before do
+          subject.update_column(:is_codaveri, true)
+          allow(subject.language).to receive(:default_evaluator_whitelisted?).and_return(false)
+        end
+
+        it 'prefers the codaveri reason' do
+          expect(subject.preview_inert_reason).to eq('codaveri')
+        end
+      end
+    end
+
     describe '#validate_codaveri_question' do
       let(:subject_evaluator) do
         build(:course_assessment_question_programming, is_codaveri: true, assessment: assessment, language: language)

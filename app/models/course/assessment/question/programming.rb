@@ -161,6 +161,29 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     end
   end
 
+  # The reason this question cannot be attempted in a marketplace preview, or nil when it can be.
+  #
+  # The default evaluator only ships Docker images for Python and Java; every other language is
+  # graded by Codaveri, which the preview deliberately never calls. Without the language check the
+  # attempt payload would offer a Run button that always fails: for Go, R, Rust, TypeScript, C# and
+  # JavaScript 22 the image name resolves to the empty "coursemology/evaluator-image-".
+  #
+  # The frontend forbids non-Codaveri questions in unsupported languages, but only in Yup
+  # validation -- nothing at the model layer does, so imported and duplicated questions can carry
+  # the combination. Marketplace listings are duplicated foreign assessments by definition.
+  #
+  # Precedence is deliberate: a Codaveri question reports 'codaveri' even when its language also
+  # lacks a default evaluator, because that is the more actionable explanation.
+  #
+  # @return [String, nil]
+  def preview_inert_reason
+    return 'codaveri' if is_codaveri
+    return 'no_package' if attachment.nil?
+    return 'unsupported_language' unless language.default_evaluator_whitelisted?
+
+    nil
+  end
+
   def create_or_update_codaveri_problem
     execute_after_commit do
       import_job =
