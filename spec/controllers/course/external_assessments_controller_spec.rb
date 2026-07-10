@@ -88,6 +88,19 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
           expect(json['tab']).not_to have_key('gradebookWeight')
         end
 
+        it 'returns 422 on a non-numeric weight when weighted view is enabled' do
+          context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
+          course.save!
+
+          expect do
+            post :create, as: :json, params: {
+              course_id: course, title: 'Presentation', maximumGrade: 10, weight: 'abc'
+            }
+          end.not_to(change(Course::ExternalAssessment, :count))
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
         it 'returns 422 on a blank title' do
           post :create, params: params.merge(title: '')
           expect(response).to have_http_status(:unprocessable_content)
@@ -228,6 +241,15 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
               course_id: course, id: weighted_external.id, title: 'Renamed'
             }
             expect(response).to be_successful
+            expect(weighted_external.gradebook_contribution.reload.weight).to eq(10)
+          end
+
+          it 'returns 422 on a non-numeric weight and rolls back the attribute update' do
+            patch :update, as: :json, params: {
+              course_id: course, id: weighted_external.id, title: 'Renamed', weight: 'abc'
+            }
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(weighted_external.reload.title).to eq('Final')
             expect(weighted_external.gradebook_contribution.reload.weight).to eq(10)
           end
         end

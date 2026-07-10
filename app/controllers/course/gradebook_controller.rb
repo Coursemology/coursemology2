@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::GradebookController < Course::ComponentController # rubocop:disable Metrics/ClassLength
+  include Course::Gradebook::WeightParsingConcern
+
   before_action :authorize_read_gradebook!
   before_action :preload_levels, only: [:index]
 
@@ -27,7 +29,7 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
     response_body = { weights: serialize_weight_updates(updates) }
     response_body[:levelContribution] = serialize_level_contribution(level_config) if level_config
     render json: response_body
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, ArgumentError => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
   end
 
@@ -76,11 +78,11 @@ class Course::GradebookController < Course::ComponentController # rubocop:disabl
   def parse_weight_entry(entry)
     {
       tab_id: entry[:tabId].to_i,
-      weight: entry[:weight].to_f.round(2),
+      weight: parse_weight(entry[:weight]).round(2),
       weight_mode: entry[:weightMode] || 'equal',
       excluded_assessment_ids: (entry[:excludedAssessmentIds] || []).map(&:to_i),
       assessment_weights: (entry[:assessmentWeights] || []).map do |aw|
-        { assessment_id: aw[:assessmentId].to_i, weight: aw[:weight].to_f.round(2) }
+        { assessment_id: aw[:assessmentId].to_i, weight: parse_weight(aw[:weight]).round(2) }
       end
     }.merge(parse_keep_highest(entry))
   end
