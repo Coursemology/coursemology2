@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::ExternalAssessmentsController < Course::ComponentController
+  include Course::Gradebook::WeightParsingConcern
+
   before_action :load_external_assessment, only: [:update, :destroy, :grades]
 
   def create
@@ -14,17 +16,20 @@ class Course::ExternalAssessmentsController < Course::ComponentController
       cap_at_maximum: bound_flag(:capAtMaximum, default: true)
     )
     render 'create'
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid, ArgumentError => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
   end
 
   def update
     authorize! :manage_gradebook_weights, current_course
     @weighted_view_enabled = gradebook_settings.weighted_view_enabled
-    @external_assessment.update!(update_params_attrs)
-    update_weight if @weighted_view_enabled && params.key?(:weight)
+    # Atomic so an invalid weight can't leave the attribute update half-applied.
+    ActiveRecord::Base.transaction do
+      @external_assessment.update!(update_params_attrs)
+      update_weight if @weighted_view_enabled && params.key?(:weight)
+    end
     render 'update'
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid, ArgumentError => e
     render json: { errors: { base: e.message } }, status: :unprocessable_entity
   end
 
@@ -81,11 +86,11 @@ class Course::ExternalAssessmentsController < Course::ComponentController
   end
 
   def create_weight
-    @weighted_view_enabled ? (create_params[:weight].presence || 0).to_f : 0
+    @weighted_view_enabled ? parse_weight(create_params[:weight]) : 0
   end
 
   def update_weight
-    @external_assessment.gradebook_contribution&.update!(weight: (params[:weight].presence || 0).to_f)
+    @external_assessment.gradebook_contribution&.update!(weight: parse_weight(params[:weight]))
   end
 
   def update_params_attrs
