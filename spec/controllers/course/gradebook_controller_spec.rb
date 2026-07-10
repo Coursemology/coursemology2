@@ -486,6 +486,16 @@ RSpec.describe Course::GradebookController, type: :controller do
           expect(weight_for(tab1)).to eq(10)
         end
 
+        it 'rejects a non-numeric weight with 422 and no partial write' do
+          create(:course_gradebook_tab_contribution, tab: tab1, course: course, weight: 10)
+          patch :update_weights,
+                params: { course_id: course.id,
+                          weights: [{ tabId: tab1.id, weight: 50 }, { tabId: tab2.id, weight: 'abc' }] },
+                format: :json
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(weight_for(tab1)).to eq(10)
+        end
+
         it 'rolls back tab weights when the enabled level formula is invalid' do
           create(:course_gradebook_tab_contribution, tab: tab1, course: course, weight: 10)
           patch :update_weights, params: {
