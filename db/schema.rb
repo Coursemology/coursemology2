@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_11_000001) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_12_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1644,8 +1644,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_11_000001) do
     t.text "user_suspension_message"
     t.boolean "is_suspended", default: false, null: false
     t.text "course_suspension_message"
+    t.boolean "marketplace_container", default: false, null: false
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
+    t.index ["instance_id"], name: "index_courses_on_instance_id_marketplace_container", unique: true, where: "marketplace_container"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
     t.index ["ssid_folder_id"], name: "index_courses_on_ssid_folder_id", unique: true
     t.index ["updater_id"], name: "fk__courses_updater_id"

@@ -121,6 +121,7 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
   scope :publicly_accessible, -> { where(published: true) }
+  scope :not_marketplace_container, -> { where(marketplace_container: false) }
   scope :current, -> { where('end_at > ?', Time.zone.now) }
   scope :completed, -> { where('end_at <= ?', Time.zone.now) }
 
