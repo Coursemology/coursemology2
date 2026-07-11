@@ -3,7 +3,10 @@ json.locale I18n.locale
 json.timeZone ActiveSupport::TimeZone::MAPPING[user_time_zone]
 
 if user_signed_in?
-  my_courses = Course.containing_user(current_user).ordered_by_start_at
+  # The previewer is enrolled in the marketplace preview container as a manager, so it would
+  # otherwise show up in the course switcher. It is never navigable (Course::Controller bounces every
+  # request into it) and must never be offered.
+  my_courses = Course.containing_user(current_user).not_marketplace_container.ordered_by_start_at
   course_last_active_times_hash = CourseUser.for_user(current_user).pluck(:course_id, :last_active_at).to_h
 
   if my_courses.present?

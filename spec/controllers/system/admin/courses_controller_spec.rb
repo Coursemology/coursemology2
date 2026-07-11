@@ -77,5 +77,26 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
+
+    describe '#index with a marketplace container present' do
+      render_views
+
+      let(:admin) { create(:administrator) }
+      let!(:ordinary) { create(:course) }
+      let!(:container) do
+        Course::Assessment::Marketplace::ContainerCourseService.
+          find_or_create!(instance: instance, creator: admin)
+      end
+
+      before { controller_sign_in(controller, admin) }
+
+      it 'omits the marketplace container from the system course list' do
+        get :index, format: :json
+
+        ids = response.parsed_body['courses'].map { |course| course['id'] }
+        expect(ids).to include(ordinary.id)
+        expect(ids).not_to include(container.id)
+      end
+    end
   end
 end

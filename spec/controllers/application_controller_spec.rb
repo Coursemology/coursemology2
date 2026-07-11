@@ -230,4 +230,39 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  describe '#index with a marketplace container present' do
+    render_views
+
+    let(:instance) { Instance.default }
+
+    with_tenant(:instance) do
+      let(:user) { create(:user) }
+      let!(:ordinary) { create(:course, instance: instance) }
+      let!(:container) do
+        Course::Assessment::Marketplace::ContainerCourseService.
+          find_or_create!(instance: instance, creator: create(:administrator))
+      end
+
+      before do
+        controller.singleton_class.define_method(:index) do
+          render template: 'application/index', formats: :json
+        end
+        create(:course_manager, course: ordinary, user: user)
+        # Enrolling the previewer as a manager is exactly what a preview does — and is what would
+        # otherwise put the sandbox in their course switcher.
+        Course::Assessment::Marketplace::PreviewEnrolmentService.
+          ensure_manager!(course: container, user: user)
+        controller_sign_in(controller, user)
+      end
+
+      it 'omits the marketplace container from the user’s own courses' do
+        get :index, format: :json
+
+        ids = response.parsed_body['courses'].map { |course| course['id'] }
+        expect(ids).to include(ordinary.id)
+        expect(ids).not_to include(container.id)
+      end
+    end
+  end
 end

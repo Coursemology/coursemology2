@@ -31,7 +31,8 @@ class System::Admin::CoursesController < System::Admin::Controller
   end
 
   def preload_courses
-    @courses = Course.includes(:instance).search(search_param).calculated(:active_user_count, :user_count)
+    @courses = Course.not_marketplace_container.includes(:instance).
+               search(search_param).calculated(:active_user_count, :user_count)
     @courses = @courses.active_in_past_7_days if ActiveRecord::Type::Boolean.new.cast(params[:active])
 
     @courses = @courses.ordered_by_title

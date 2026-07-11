@@ -4,7 +4,7 @@ class Course::CoursesController < Course::Controller
   skip_authorize_resource :course, only: [:show, :index, :sidebar]
 
   def index
-    @courses = Course.publicly_accessible
+    @courses = Course.publicly_accessible.not_marketplace_container
   end
 
   def show

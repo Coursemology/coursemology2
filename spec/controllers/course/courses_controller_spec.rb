@@ -145,5 +145,35 @@ RSpec.describe Course::CoursesController, type: :controller do
         end
       end
     end
+
+    describe 'GET #index with a marketplace container present' do
+      render_views
+
+      let(:instance) { create(:instance) }
+
+      with_tenant(:instance) do
+        let(:user) { create(:user) }
+        let!(:ordinary) { create(:course, :published, instance: instance) }
+        let!(:container) do
+          Course::Assessment::Marketplace::ContainerCourseService.
+            find_or_create!(instance: instance, creator: create(:administrator))
+        end
+
+        before { controller_sign_in(controller, user) }
+
+        # The container is created unpublished, so `publicly_accessible` already hides it today. This
+        # example pins that shut: `not_marketplace_container` must keep it hidden even if the container
+        # ever gains `published: true` — a component or a seeding script flipping that must not leak it.
+        it 'omits the marketplace container from the public course list' do
+          container.update_column(:published, true)
+
+          get :index, format: :json
+
+          ids = response.parsed_body['courses'].map { |course| course['id'] }
+          expect(ids).to include(ordinary.id)
+          expect(ids).not_to include(container.id)
+        end
+      end
+    end
   end
 end
