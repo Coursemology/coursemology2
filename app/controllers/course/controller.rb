@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Controller < ApplicationController
   load_and_authorize_resource :course
+  before_action :deny_marketplace_container_access!
   before_action :set_last_active_at
   helper name
 
@@ -95,5 +96,32 @@ class Course::Controller < ApplicationController
     return if current_course_user.last_active_at && current_course_user.last_active_at > 1.hour.ago
 
     current_course_user.update_column(:last_active_at, Time.zone.now)
+  end
+
+  # The marketplace preview container is a real course, and the previewer is enrolled in it as a
+  # manager, so ability checks alone would let them browse it. Nothing in it is navigable: the only
+  # requests allowed through are those targeting a preview copy the caller owns — the masked preview
+  # renders the platform's real submission page against exactly those. Everything else (course home,
+  # assessments, gradebook, users) is denied, for everyone. Inspection is console-only (D49).
+  def deny_marketplace_container_access!
+    return unless current_course&.marketplace_container?
+    return if own_preview_copy_request?
+
+    raise CanCan::AccessDenied
+  end
+
+  # Every endpoint the preview needs is nested under /courses/:course_id/assessments/:assessment_id/…
+  # (the attempt action, the submission, its answers, its logs), so `assessment_id` is the whole
+  # discriminator. Deliberately NOT falling back to params[:id]: on a course member route that is a
+  # *course* id, which would then be matched against `previews.assessment_id` — a meaningless
+  # cross-table id comparison that could accidentally let a request through.
+  def own_preview_copy_request?
+    assessment_id = params[:assessment_id]
+    return false if assessment_id.blank? || current_user.nil?
+
+    Course::Assessment::Marketplace::Preview.
+      joins(:course_user).
+      where(assessment_id: assessment_id, course_users: { user_id: current_user.id }).
+      exists?
   end
 end
