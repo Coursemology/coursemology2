@@ -42,6 +42,13 @@ RSpec.describe Course::Assessment::Marketplace::PreviewCleanupJob, type: :job do
         expect(Course::Assessment::Submission.where(assessment_id: copy_id)).not_to exist
       end
 
+      it 'treats a copy whose newest submission is exactly at the TTL boundary as reapable' do
+        cutoff = described_class::TTL.ago
+        marker = make_preview(submission_state: :attempting, last_activity: cutoff)
+
+        expect(described_class.new.send(:reapable_markers, cutoff).map(&:id)).to include(marker.id)
+      end
+
       it 'keeps a copy whose attempting submission was touched within the TTL' do
         marker = make_preview(submission_state: :attempting, last_activity: 1.hour.ago)
         copy_id = marker.assessment_id

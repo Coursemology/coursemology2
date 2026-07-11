@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Marketplace::ContainerCourseService
+  LEGACY_TITLE = 'Marketplace Previews (system)'
   TITLE = '[System] Marketplace Preview Sandbox'
 
   def self.find_or_create!(instance:, creator:)
@@ -16,6 +17,8 @@ class Course::Assessment::Marketplace::ContainerCourseService
       # Keyed on the column, never the title: the title is cosmetic and an admin may change it.
       existing = Course.find_by(instance: @instance, marketplace_container: true)
       next existing if existing
+      legacy = Course.find_by(instance: @instance, title: LEGACY_TITLE)
+      next adopt_legacy!(legacy) if legacy
 
       # Course.new builds the default assessment category (and, through the category, its initial
       # tab) via Course::ModelComponentHost's after_initialize hook. Those nested records take their
@@ -25,6 +28,13 @@ class Course::Assessment::Marketplace::ContainerCourseService
                        description: 'System course hosting marketplace preview attempts.',
                        creator: @creator, updater: @creator)
       end
+    rescue ActiveRecord::RecordNotUnique
+      Course.find_by!(instance: @instance, marketplace_container: true)
     end
+  end
+
+  def adopt_legacy!(legacy)
+    legacy.update!(marketplace_container: true, title: TITLE, updater: @creator)
+    legacy
   end
 end

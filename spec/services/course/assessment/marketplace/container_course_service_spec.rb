@@ -68,6 +68,31 @@ RSpec.describe Course::Assessment::Marketplace::ContainerCourseService do
       end
     end
 
+    it 'adopts a legacy title-keyed container and marks it as the marketplace container' do
+      ActsAsTenant.with_tenant(instance) do
+        legacy = create(:course, instance: instance, title: 'Marketplace Previews (system)')
+
+        expect do
+          expect(described_class.find_or_create!(instance: instance, creator: admin)).to eq(legacy)
+        end.not_to change(Course, :count)
+
+        expect(legacy.reload.marketplace_container).to be(true)
+        expect(legacy.title).to eq('[System] Marketplace Preview Sandbox')
+      end
+    end
+
+    it 'returns the existing container when another request creates it first' do
+      ActsAsTenant.with_tenant(instance) do
+        created = nil
+        allow(Course).to receive(:create!).and_wrap_original do |method, *args|
+          created ||= method.call(*args)
+          raise ActiveRecord::RecordNotUnique, 'duplicate marketplace container'
+        end
+
+        expect(described_class.find_or_create!(instance: instance, creator: admin)).to eq(created)
+      end
+    end
+
     it 'is per-instance — a second instance gets its own container' do
       other_instance = create(:instance)
 

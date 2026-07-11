@@ -18,7 +18,7 @@ class Course::Assessment::Marketplace::PreviewCleanupJob < ApplicationJob
             'course_assessment_marketplace_previews.assessment_id').
       group('course_assessment_marketplace_previews.id').
       having('COALESCE(MAX(course_assessment_submissions.updated_at), ' \
-             'course_assessment_marketplace_previews.updated_at) < ?', cutoff).
+             'course_assessment_marketplace_previews.updated_at) <= ?', cutoff).
       order('course_assessment_marketplace_previews.id').
       limit(BATCH_LIMIT)
   end
