@@ -15,3 +15,9 @@ user_email_database_cleanup_job:
   cron: '0 0 1 * *'
   class: 'UserEmailDatabaseCleanupJob'
   queue: 'default'
+
+# Reap abandoned marketplace preview copies every day at 03:00 UTC.
+marketplace_preview_cleanup_job:
+  cron: '0 3 * * *'
+  class: 'Course::Assessment::Marketplace::PreviewCleanupJob'
+  queue: 'default'
