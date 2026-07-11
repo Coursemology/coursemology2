@@ -3,7 +3,7 @@ import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
-const marketplaceRouter: Translated<RouteObject> = () => ({
+const marketplaceRouter: Translated<RouteObject> = (t) => ({
   path: 'marketplace',
   lazy: async () => ({
     handle: (await import('course/marketplace/handles')).marketplaceHandle,
@@ -28,6 +28,19 @@ const marketplaceRouter: Translated<RouteObject> = () => ({
             Component: (await import('course/marketplace/pages/ListingPreview'))
               .default,
           }),
+        },
+        {
+          path: 'attempt',
+          lazy: async (): Promise<WithRequired<RouteObject, 'loader'>> => {
+            const listingAttemptLoader = (
+              await import(
+                /* webpackChunkName: 'listingAttemptLoader' */
+                'course/marketplace/attemptLoader'
+              )
+            ).default;
+
+            return { loader: listingAttemptLoader(t) };
+          },
         },
         {
           path: 'questions/:questionId',

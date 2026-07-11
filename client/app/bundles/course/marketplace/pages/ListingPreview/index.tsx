@@ -9,6 +9,7 @@ import { useCourseContext } from 'course/container/CourseLoader';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import Link from 'lib/components/core/Link';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -41,12 +42,13 @@ const ListingPreview = (): JSX.Element => {
         <Page
           actions={
             <div className="flex gap-2">
-              {/* A full navigation, not a react-router link: the endpoint is a Rails redirect that
-                  provisions the preview copy and hands off to the real attempt flow. */}
+              {/* Routes to the listing's attempt loader, which provisions the preview copy and
+                  redirects on into the real attempt flow. */}
               <Button
                 color="primary"
-                href={listing.attemptUrl}
+                component={Link}
                 startIcon={<PlayArrow />}
+                to={listing.attemptUrl}
                 variant="outlined"
               >
                 {t(translations.tryItOut)}

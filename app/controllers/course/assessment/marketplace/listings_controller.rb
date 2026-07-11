@@ -48,7 +48,11 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
                   ensure_manager!(course: container, user: current_user)
 
     copy = resume_or_fresh_copy(container, course_user)
-    redirect_to course_assessment_attempt_url(container, copy, host: container.instance.host)
+
+    # Hand the SPA the container copy's own attempt route rather than a submission: its loader calls
+    # Submissions#create, which creates or resumes the submission. That flow is never reimplemented
+    # here. Matches the { redirectUrl: } contract every other attempt endpoint returns.
+    render json: { redirectUrl: course_assessment_attempt_path(container, copy) }
   end
 
   private

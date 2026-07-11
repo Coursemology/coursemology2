@@ -45,6 +45,10 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/listings/${id}`);
   }
 
+  attempt(listingId: number): Promise<AxiosResponse<{ redirectUrl: string }>> {
+    return this.client.get(`${this.#urlPrefix}/listings/${listingId}/attempt`);
+  }
+
   fetchQuestion(listingId: number, questionId: number): Promise<AxiosResponse> {
     return this.client.get(
       `${this.#urlPrefix}/listings/${listingId}/questions/${questionId}`,
