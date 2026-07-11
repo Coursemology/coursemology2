@@ -127,6 +127,8 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         expect(response).to have_http_status(:ok)
         body = response.parsed_body
         expect(body).to include('title', 'gradingMode', 'showMcqMrqSolution', 'showRubricToStudents', 'gradedTestCases')
+        # The "Try it out" button navigates to this; it is a Rails redirect, not an SPA route.
+        expect(body['attemptUrl']).to match(/\/marketplace\/listings\/#{listing.id}\/attempt/)
         # The listing preview reports the human-readable question type, matching the per-question chips.
         readable_type = I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
         expect(body['typeCounts']).to include(readable_type => 1)

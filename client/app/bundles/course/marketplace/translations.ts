@@ -69,6 +69,10 @@ export default defineMessages({
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
   },
+  tryItOut: {
+    id: 'course.marketplace.tryItOut',
+    defaultMessage: 'Try it out',
+  },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
     defaultMessage: 'View question details',

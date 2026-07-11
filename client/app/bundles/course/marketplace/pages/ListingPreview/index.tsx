@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { ContentCopy } from '@mui/icons-material';
+import { ContentCopy, PlayArrow } from '@mui/icons-material';
 import { Button, Chip, Paper } from '@mui/material';
 
 // Reuse the assessment show page's "Questions" heading so wording + locales stay identical.
@@ -40,14 +40,27 @@ const ListingPreview = (): JSX.Element => {
       {(listing): JSX.Element => (
         <Page
           actions={
-            <Button
-              color="primary"
-              onClick={(): void => setDuplicating(true)}
-              startIcon={<ContentCopy />}
-              variant="contained"
-            >
-              {t(translations.duplicateAssessment)}
-            </Button>
+            <div className="flex gap-2">
+              {/* A full navigation, not a react-router link: the endpoint is a Rails redirect that
+                  provisions the preview copy and hands off to the real attempt flow. */}
+              <Button
+                color="primary"
+                href={listing.attemptUrl}
+                startIcon={<PlayArrow />}
+                variant="outlined"
+              >
+                {t(translations.tryItOut)}
+              </Button>
+
+              <Button
+                color="primary"
+                onClick={(): void => setDuplicating(true)}
+                startIcon={<ContentCopy />}
+                variant="contained"
+              >
+                {t(translations.duplicateAssessment)}
+              </Button>
+            </div>
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"

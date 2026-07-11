@@ -47,6 +47,7 @@ it('renders the read-only assessment config', async () => {
     id: 70,
     title: LISTING_TITLE,
     description: '<p>Awesome description 5</p>',
+    attemptUrl: `${url}/attempt`,
     gradingMode: 'manual',
     baseExp: 1000,
     bonusExp: 1000,
@@ -94,6 +95,14 @@ it('renders the read-only assessment config', async () => {
   expect(
     screen.getByRole('link', { name: 'View question details' }),
   ).toHaveAttribute('href', expect.stringContaining('questions/17'));
+
+  // "Try it out" must be an anchor, not a button with an SPA handler: the endpoint is a Rails
+  // redirect that provisions the preview copy and hands off to the real submission flow, so it
+  // needs a full navigation. A react-router link here would try to resolve it as an SPA route.
+  expect(screen.getByRole('link', { name: 'Try it out' })).toHaveAttribute(
+    'href',
+    `${url}/attempt`,
+  );
 });
 
 it('carries from_tab into the per-question detail links', async () => {

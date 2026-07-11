@@ -43,6 +43,8 @@ export interface ListingPreviewData {
   id: number;
   title: string;
   description: string;
+  /** Rails endpoint that provisions a preview copy and redirects into the real attempt flow. */
+  attemptUrl: string;
   gradingMode: 'autograded' | 'manual';
   baseExp: number | null;
   bonusExp: number | null;

@@ -2,6 +2,10 @@ json.id @assessment.id
 json.title @assessment.title
 json.description format_ckeditor_rich_text(@assessment.description)
 
+# Entry point for "Try it out". This is a Rails redirect into the real submission flow, not an SPA
+# route, so the frontend navigates to it rather than routing to it.
+json.attemptUrl attempt_course_listing_path(current_course, @listing)
+
 json.gradingMode @assessment.autograded? ? 'autograded' : 'manual'
 json.baseExp @assessment.base_exp if @assessment.base_exp > 0
 json.bonusExp @assessment.time_bonus_exp if @assessment.time_bonus_exp > 0
