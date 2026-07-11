@@ -1,3 +1,5 @@
+import { resolvePreviewIdentity } from './previewIdentity';
+
 /* Get the given parameter from the URL.
  * e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
  *
@@ -28,8 +30,14 @@ function getCourseIdFromString(str: string): string | null {
 
 /**
  * Get the course id from URL.
+ *
+ * Inside a marketplace preview this reports the *container* course, which the masked URL does not
+ * name — see previewIdentity. Everywhere else it is unchanged.
  */
 function getCourseId(): string | null {
+  const preview = resolvePreviewIdentity();
+  if (preview) return String(preview.courseId);
+
   return getCourseIdFromString(window.location.pathname);
 }
 
@@ -57,6 +65,9 @@ function getAchievementId(): string | null {
  * Get the assessment id from URL.
  */
 function getAssessmentId(): string | null {
+  const preview = resolvePreviewIdentity();
+  if (preview) return String(preview.assessmentId);
+
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/(\d+)/,
   );
@@ -77,6 +88,9 @@ function getQuestionId(): string | null {
  * Get the submission id from URL.
  */
 function getSubmissionId(): string | null {
+  const preview = resolvePreviewIdentity();
+  if (preview) return String(preview.submissionId);
+
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/,
   );
