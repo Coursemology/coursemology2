@@ -45,7 +45,18 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/listings/${id}`);
   }
 
-  attempt(listingId: number): Promise<AxiosResponse<{ redirectUrl: string }>> {
+  // Redirects server-side into the platform's own attempt action (submissions#create), which is what
+  // actually creates or resumes the submission. XHR follows that 302 transparently, so what lands
+  // here is that action's response. The masked preview deliberately ignores `redirectUrl` — it names
+  // the hidden container course — and reads the ids instead.
+  attempt(listingId: number): Promise<
+    AxiosResponse<{
+      redirectUrl: string;
+      courseId: number;
+      assessmentId: number;
+      submissionId: number;
+    }>
+  > {
     return this.client.get(`${this.#urlPrefix}/listings/${listingId}/attempt`);
   }
 

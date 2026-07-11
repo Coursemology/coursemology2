@@ -55,6 +55,10 @@ export interface ListingPreviewData {
   questions: PreviewQuestionSummary[];
 }
 
+export interface PreviewAttemptData {
+  listingTitle: string;
+}
+
 export interface ProgrammingTestCase {
   identifier: string;
   expression: string;

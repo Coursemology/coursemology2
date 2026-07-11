@@ -73,6 +73,20 @@ export default defineMessages({
     id: 'course.marketplace.tryItOut',
     defaultMessage: 'Try it out',
   },
+  previewSandbox: {
+    id: 'course.marketplace.previewSandbox',
+    defaultMessage:
+      'Preview of “{title}” — a sandbox copy. Nothing here is saved to your course, and no one else can see it.',
+  },
+  previewInertGrading: {
+    id: 'course.marketplace.previewInertGrading',
+    defaultMessage:
+      'AI-graded questions (Codaveri, rubric) aren’t auto-graded in a preview — grade them by hand.',
+  },
+  duplicateIntoMyCourse: {
+    id: 'course.marketplace.duplicateIntoMyCourse',
+    defaultMessage: 'Duplicate into my course',
+  },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
     defaultMessage: 'View question details',
