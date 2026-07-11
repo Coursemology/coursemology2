@@ -14,9 +14,10 @@ const translations = defineMessages({
   },
 });
 
-// Provisions the previewer's copy of the listing in the marketplace container course, then hands off
-// to that copy's own attempt route — whose loader creates or resumes the submission the normal way.
-// Two hops, but no part of the real attempt flow is duplicated.
+// Provisions the previewer's copy of the listing in the marketplace container course. The endpoint
+// redirects server-side into the platform's own attempt action, so the response we get back is
+// already that action's { redirectUrl } — the submission itself. One hop from here: the previewer
+// lands directly in the submission, never on an assessments index.
 const listingAttemptLoader: Translated<LoaderFunction> =
   (t) =>
   async ({ params }) => {

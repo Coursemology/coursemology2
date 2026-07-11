@@ -49,10 +49,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
     copy = resume_or_fresh_copy(container, course_user)
 
-    # Hand the SPA the container copy's own attempt route rather than a submission: its loader calls
-    # Submissions#create, which creates or resumes the submission. That flow is never reimplemented
-    # here. Matches the { redirectUrl: } contract every other attempt endpoint returns.
-    render json: { redirectUrl: course_assessment_attempt_path(container, copy) }
+    # Hand off to the platform's own attempt action, which creates or resumes the submission
+    # (session token, monitoring, logging) and renders the { redirectUrl: } the SPA expects. None of
+    # that is reimplemented here.
+    #
+    # The hop is deliberately server-side. The SPA's API client derives its course id from
+    # window.location (BaseCourseAPI#courseId -> getCourseIdFromUrl), which still points at the
+    # previewer's course mid-redirect — so a browser-made second hop would ask the wrong course for
+    # the container's assessment. XHR follows this 302 transparently.
+    redirect_to course_assessment_attempt_path(container, copy, format: :json)
   end
 
   private

@@ -160,15 +160,14 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       subject { get :attempt, params: { course_id: course.id, id: listing.id } }
       before { controller_sign_in(controller, manager.user) }
 
-      it 'provisions a container copy and points the SPA at its attempt route' do
+      it 'provisions a container copy and hands off to the real attempt action' do
         expect { subject }.to change { Course::Assessment::Marketplace::Preview.count }.by(1)
-        expect(response).to have_http_status(:ok)
 
-        # The frontend redirects to this; the container copy's own attempt route then creates or
-        # resumes the submission via Submissions#create.
+        # Server-side hop: Submissions#create runs with the CONTAINER course in its own URL, so it
+        # creates/resumes the submission and returns the { redirectUrl: } the SPA follows. Making
+        # this hop in the browser would send the previewer's course id instead.
         copy = Course::Assessment::Marketplace::Preview.last.assessment
-        expect(response.parsed_body['redirectUrl']).
-          to eq("/courses/#{copy.course_id}/assessments/#{copy.id}/attempt")
+        expect(response).to redirect_to("/courses/#{copy.course_id}/assessments/#{copy.id}/attempt.json")
       end
 
       it 'resumes the same copy on a second visit (no new copy)' do
