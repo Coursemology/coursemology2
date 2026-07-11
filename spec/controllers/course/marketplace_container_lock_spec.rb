@@ -44,6 +44,18 @@ RSpec.describe 'Marketplace container lock', type: :controller do
         end.to raise_exception(CanCan::AccessDenied)
       end
 
+      it 'does not treat the course id param as a preview assessment id fallback' do
+        colliding_assessment = create(:assessment, course: container)
+        colliding_assessment.update_column(:id, container.id)
+        Course::Assessment::Marketplace::Preview.create!(
+          assessment: colliding_assessment, course_user: course_user, listing: listing
+        )
+
+        expect do
+          get :show, as: :json, params: { id: container.id }
+        end.to raise_exception(CanCan::AccessDenied)
+      end
+
       it 'still allows an ordinary course the user manages' do
         ordinary = create(:course, instance: instance)
         create(:course_manager, course: ordinary, user: previewer)
