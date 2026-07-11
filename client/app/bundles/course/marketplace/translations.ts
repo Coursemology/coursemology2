@@ -87,6 +87,11 @@ export default defineMessages({
     id: 'course.marketplace.duplicateIntoMyCourse',
     defaultMessage: 'Duplicate into my course',
   },
+  errorAttemptingListing: {
+    id: 'course.marketplace.attemptLoader.errorAttemptingListing',
+    defaultMessage:
+      'An error occurred while opening this assessment. Try again later.',
+  },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
     defaultMessage: 'View question details',
