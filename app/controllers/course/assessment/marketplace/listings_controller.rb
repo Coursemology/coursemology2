@@ -26,16 +26,42 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def show
     ActsAsTenant.without_tenant do
-      @listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).find_by(id: params[:id])
-      raise CanCan::AccessDenied unless @listing
-
+      load_published_listing!
       @assessment = @listing.assessment
       authorize!(:preview_in_marketplace, @assessment)
       render 'show'
     end
   end
 
+  def attempt
+    # The listing (and its assessment) may live in another instance, so it is loaded and
+    # authorized without the tenant scope. Everything after provisions in the *previewer's*
+    # instance, which `current_tenant` only reports outside that block.
+    ActsAsTenant.without_tenant do
+      load_published_listing!
+      authorize!(:preview_in_marketplace, @listing.assessment)
+    end
+
+    container = Course::Assessment::Marketplace::ContainerCourseService.
+                find_or_create!(instance: current_tenant, creator: current_user)
+    course_user = Course::Assessment::Marketplace::PreviewEnrolmentService.
+                  ensure_manager!(course: container, user: current_user)
+
+    copy = resume_or_fresh_copy(container, course_user)
+    redirect_to course_assessment_attempt_url(container, copy, host: container.instance.host)
+  end
+
   private
+
+  # Callers must wrap this in `ActsAsTenant.without_tenant` — a listing may be published in
+  # another instance. An unpublished or unknown listing is denied rather than 404'd, so the
+  # marketplace never confirms that a hidden listing exists.
+  def load_published_listing!
+    @listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).find_by(id: params[:id])
+    raise CanCan::AccessDenied unless @listing
+
+    @listing
+  end
 
   def authorize_access!
     authorize!(:access_marketplace, current_course)
@@ -77,5 +103,22 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def duplicate_params
     params.permit(:destination_tab_id, listing_ids: [])
+  end
+
+  # Resume the previewer's in-progress copy of this listing if they still have an unsubmitted
+  # attempt against it; otherwise hand them a fresh copy (design note §5).
+  def resume_or_fresh_copy(container, course_user)
+    marker = Course::Assessment::Marketplace::Preview.for(@listing, course_user)
+    return marker.assessment if resumable?(marker)
+
+    Course::Assessment::Marketplace::PreviewCopyService.copy!(
+      listing: @listing, container: container, course_user: course_user, current_user: current_user
+    )
+  end
+
+  def resumable?(marker)
+    return false unless marker&.assessment
+
+    marker.assessment.submissions.find_by(creator: current_user)&.attempting? || false
   end
 end

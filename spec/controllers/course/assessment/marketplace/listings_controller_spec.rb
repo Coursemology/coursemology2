@@ -147,6 +147,36 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         end
       end
     end
+    describe 'GET #attempt' do
+      # The listing's assessment lives in another course: attempting it copies it into the
+      # marketplace container course, never into the previewer's own course.
+      let!(:listing) do
+        source = create(:assessment, :published, course: create(:course))
+        create(:course_assessment_marketplace_listing, assessment: source, published: true)
+      end
+
+      subject { get :attempt, params: { course_id: course.id, id: listing.id } }
+      before { controller_sign_in(controller, manager.user) }
+
+      it 'provisions a container copy and redirects into the real attempt flow' do
+        expect { subject }.to change { Course::Assessment::Marketplace::Preview.count }.by(1)
+        expect(response).to have_http_status(:redirect)
+        expect(response.location).to match(/\/assessments\/\d+\/attempt/)
+      end
+
+      it 'resumes the same copy on a second visit (no new copy)' do
+        get :attempt, params: { course_id: course.id, id: listing.id }
+        expect do
+          get :attempt, params: { course_id: course.id, id: listing.id }
+        end.not_to change(Course::Assessment::Marketplace::Preview, :count)
+      end
+
+      it 'denies a user without marketplace preview access' do
+        student = create(:course_student, course: course).user
+        controller_sign_in(controller, student)
+        expect { subject }.to raise_exception(CanCan::AccessDenied)
+      end
+    end
   end
 
   # Cross-instance: a listing published in another instance is visible.

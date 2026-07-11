@@ -617,6 +617,7 @@ Rails.application.routes.draw do
         get 'marketplace' => 'listings#index', as: :marketplace
         resources :listings, only: [:show], path: 'marketplace/listings' do
           post 'duplicate', on: :collection
+          get 'attempt', on: :member
           resources :questions, only: [:show]
         end
       end
