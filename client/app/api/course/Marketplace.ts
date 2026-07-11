@@ -34,8 +34,11 @@ export default class MarketplaceAPI extends BaseCourseAPI {
   duplicate(
     listingIds: number[],
     destinationTabId: number | null,
+    courseId: number | null = null,
   ): Promise<AxiosResponse> {
-    return this.client.post(`${this.#urlPrefix}/listings/duplicate`, {
+    const urlPrefix = `/courses/${courseId ?? this.courseId}/marketplace`;
+
+    return this.client.post(`${urlPrefix}/listings/duplicate`, {
       listing_ids: listingIds,
       ...(destinationTabId ? { destination_tab_id: destinationTabId } : {}),
     });

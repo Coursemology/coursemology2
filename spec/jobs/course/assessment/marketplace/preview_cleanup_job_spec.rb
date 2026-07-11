@@ -22,7 +22,10 @@ RSpec.describe Course::Assessment::Marketplace::PreviewCleanupJob, type: :job do
           :submission, submission_state,
           assessment: copy, course_user: previewer, creator: previewer.user
         )
-        submission.update_column(:updated_at, last_activity) if last_activity
+        if last_activity
+          submission.update_column(:updated_at, last_activity)
+          submission.answers.update_all(updated_at: last_activity)
+        end
       elsif last_activity
         marker.update_column(:updated_at, last_activity)
       end
@@ -76,6 +79,23 @@ RSpec.describe Course::Assessment::Marketplace::PreviewCleanupJob, type: :job do
         create(:submission, :attempting, assessment: marker.assessment,
                                          course_user: other, creator: other.user).
           update_column(:updated_at, 1.hour.ago)
+
+        expect { described_class.perform_now }.
+          not_to(change { Course::Assessment.where(id: copy_id).count })
+
+        expect(Course::Assessment::Marketplace::Preview.where(id: marker.id)).to exist
+      end
+
+      it 'keeps a copy when a stale submission has a recently saved answer' do
+        marker = make_preview(submission_state: :attempting, last_activity: 3.days.ago)
+        copy_id = marker.assessment_id
+        submission = Course::Assessment::Submission.find_by!(assessment_id: copy_id)
+        answer = create(:course_assessment_answer_text_response,
+                        assessment: marker.assessment,
+                        course: container,
+                        submission: submission)
+        submission.update_column(:updated_at, 3.days.ago)
+        Course::Assessment::Answer.find(answer.id).update_column(:updated_at, 1.hour.ago)
 
         expect { described_class.perform_now }.
           not_to(change { Course::Assessment.where(id: copy_id).count })

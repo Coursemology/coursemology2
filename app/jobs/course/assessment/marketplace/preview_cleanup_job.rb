@@ -16,8 +16,11 @@ class Course::Assessment::Marketplace::PreviewCleanupJob < ApplicationJob
       joins('LEFT JOIN course_assessment_submissions ' \
             'ON course_assessment_submissions.assessment_id = ' \
             'course_assessment_marketplace_previews.assessment_id').
+      joins('LEFT JOIN course_assessment_answers ' \
+            'ON course_assessment_answers.submission_id = course_assessment_submissions.id').
       group('course_assessment_marketplace_previews.id').
-      having('COALESCE(MAX(course_assessment_submissions.updated_at), ' \
+      having('COALESCE(MAX(GREATEST(course_assessment_submissions.updated_at, ' \
+             'COALESCE(course_assessment_answers.updated_at, course_assessment_submissions.updated_at))), ' \
              'course_assessment_marketplace_previews.updated_at) <= ?', cutoff).
       order('course_assessment_marketplace_previews.id').
       limit(BATCH_LIMIT)

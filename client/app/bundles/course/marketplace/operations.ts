@@ -22,10 +22,12 @@ export const duplicateListings = async (
   destinationTabId: number | null,
   onSuccess: (redirectUrl?: string) => void,
   onFailure: () => void,
+  courseId: number | null = null,
 ): Promise<void> => {
   const response = await CourseAPI.marketplace.duplicate(
     listingIds,
     destinationTabId,
+    courseId,
   );
   pollJob(
     response.data.jobUrl,

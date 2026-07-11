@@ -14,11 +14,17 @@ import PreviewBanner from './PreviewBanner';
 
 export { previewAttemptLoader } from './loader';
 
+const courseIdFromPath = (path: string): number | null => {
+  const match = path.match(/^\/courses\/(\d+)/);
+  return match ? Number(match[1]) : null;
+};
+
 const PreviewAttempt = (): JSX.Element => {
   const { listingTitle } = useLoaderData() as PreviewAttemptData;
   const { listingId } = useParams();
   const { courseTitle, courseUrl } = useCourseContext();
   const [duplicating, setDuplicating] = useState(false);
+  const visibleCourseId = courseIdFromPath(courseUrl);
 
   // Leaving the preview must restore ordinary URL-based identity resolution immediately.
   useEffect(() => clearPreviewIdentity, []);
@@ -33,6 +39,7 @@ const PreviewAttempt = (): JSX.Element => {
       <SubmissionEditIndex />
 
       <DuplicateConfirmation
+        courseId={visibleCourseId}
         destinationCategory={null}
         destinationCourse={{ title: courseTitle, url: courseUrl }}
         destinationTab={null}

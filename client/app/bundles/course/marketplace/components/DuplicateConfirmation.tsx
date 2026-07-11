@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 
 import DuplicationAssessmentTree from 'course/duplication/components/DuplicationAssessmentTree';
-import Link from 'lib/components/core/Link';
 import Prompt from 'lib/components/core/dialogs/Prompt';
+import Link from 'lib/components/core/Link';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -17,6 +17,7 @@ interface Props {
   destinationCourse: { title: string; url: string };
   destinationCategory: { id: number; title: string } | null;
   destinationTab: { id: number; title: string } | null;
+  courseId?: number | null;
   open: boolean;
   onClose: () => void;
 }
@@ -27,6 +28,7 @@ const DuplicateConfirmation = ({
   destinationCourse,
   destinationCategory,
   destinationTab,
+  courseId = null,
   open,
   onClose,
 }: Props): JSX.Element => {
@@ -47,6 +49,7 @@ const DuplicateConfirmation = ({
         toast.error(t(translations.duplicateFailed, { n: listings.length }));
         setSubmitting(false);
       },
+      courseId,
     );
   };
 
