@@ -359,7 +359,11 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
       redirect_url = edit_course_assessment_submission_path(current_course, @assessment, submission)
     end
 
-    render json: { redirectUrl: redirect_url }
+    # The ids ride alongside the URL because the marketplace masked preview must NOT navigate to
+    # redirectUrl - it names the hidden container course. It seeds its preview identity from these
+    # instead. Purely additive: the ordinary attempt flow still reads only redirectUrl.
+    render json: { redirectUrl: redirect_url, courseId: current_course.id,
+                   assessmentId: @assessment.id, submissionId: submission.id }
   end
 
   def authorize_assessment!

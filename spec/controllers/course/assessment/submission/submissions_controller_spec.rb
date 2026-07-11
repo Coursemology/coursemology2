@@ -87,6 +87,48 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             to eq('activerecord.errors.models.course/assessment/submission.no_bundles_assigned')
         end
       end
+
+      # The marketplace masked preview seeds its preview identity from these ids. It deliberately
+      # does NOT navigate to redirectUrl - that URL names the hidden container course.
+      context 'when a new submission is created' do
+        render_views
+
+        subject do
+          post :create, params: { course_id: course, assessment_id: assessment, format: :json }
+        end
+
+        it 'reports the submission ids alongside the redirect url' do
+          subject
+
+          body = response.parsed_body
+          submission = assessment.submissions.find_by(creator: user)
+          expect(body['redirectUrl']).to be_present
+          expect(body['courseId']).to eq(course.id)
+          expect(body['assessmentId']).to eq(assessment.id)
+          expect(body['submissionId']).to eq(submission.id)
+        end
+      end
+
+      context 'when the submission already exists' do
+        render_views
+
+        let!(:existing) { create(:submission, :attempting, assessment: assessment, creator: user) }
+
+        subject do
+          post :create, params: { course_id: course, assessment_id: assessment, format: :json }
+        end
+
+        # The resume path returns early through a *second* call site of create_success_response. A fix
+        # applied to only one of the two would leave a resumed preview with no ids to mask with.
+        it 'reports the existing submission ids' do
+          subject
+
+          body = response.parsed_body
+          expect(body['courseId']).to eq(course.id)
+          expect(body['assessmentId']).to eq(assessment.id)
+          expect(body['submissionId']).to eq(existing.id)
+        end
+      end
     end
 
     describe '#edit' do
