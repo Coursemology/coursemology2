@@ -12,6 +12,11 @@ export const errorResolver = (
   return async (data) => {
     const allErrors = {};
     Object.entries(data).forEach(([answerId, answer]) => {
+      // Question types with no answer field have a null initial value by design (see
+      // convertAnswerDataToInitialValue's default branch — Comprehension renders as
+      // AnswerNotImplemented). There is nothing to validate, and destructuring it throws.
+      if (!answer) return;
+
       const { questionId } = answer;
       const errors = validateBasedOnQuestionType(
         questions[questionId],
