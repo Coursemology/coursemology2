@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_11_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -301,6 +301,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
     t.index ["published"], name: "index_course_assessment_marketplace_listings_on_published"
     t.index ["publisher_id"], name: "fk__course_assessment_marketplace_listings_publisher_id"
     t.index ["updater_id"], name: "fk__course_assessment_marketplace_listings_updater_id"
+  end
+
+  create_table "course_assessment_marketplace_previews", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "course_user_id", null: false
+    t.bigint "assessment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assessment_id"], name: "index_course_assessment_marketplace_previews_on_assessment_id"
+    t.index ["course_user_id"], name: "index_course_assessment_marketplace_previews_on_course_user_id"
+    t.index ["listing_id", "course_user_id"], name: "idx_on_listing_id_course_user_id_a34a1f2f86", unique: true
+    t.index ["listing_id"], name: "index_course_assessment_marketplace_previews_on_listing_id"
   end
 
   create_table "course_assessment_plagiarism_checks", force: :cascade do |t|
@@ -1960,6 +1972,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "creator_id", name: "fk_course_assessment_marketplace_listings_creator_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "publisher_id", name: "fk_course_assessment_marketplace_listings_publisher_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "updater_id", name: "fk_course_assessment_marketplace_listings_updater_id"
+  add_foreign_key "course_assessment_marketplace_previews", "course_assessment_marketplace_listings", column: "listing_id"
+  add_foreign_key "course_assessment_marketplace_previews", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_marketplace_previews", "course_users"
   add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
   add_foreign_key "course_assessment_plagiarism_checks", "jobs", name: "fk_course_assessment_plagiarism_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"

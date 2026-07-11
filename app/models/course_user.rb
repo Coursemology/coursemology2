@@ -52,6 +52,8 @@ class CourseUser < ApplicationRecord
   has_many :personal_times, class_name: 'Course::PersonalTime', inverse_of: :course_user, dependent: :destroy
   has_many :external_assessment_grades, class_name: 'Course::ExternalAssessmentGrade',
                                         inverse_of: :course_user, dependent: :destroy
+  has_many :marketplace_previews, class_name: 'Course::Assessment::Marketplace::Preview',
+                                  inverse_of: :course_user, dependent: :destroy
   belongs_to :reference_timeline, class_name: 'Course::ReferenceTimeline', inverse_of: :course_users, optional: true
 
   default_scope { where(deleted_at: nil) }
