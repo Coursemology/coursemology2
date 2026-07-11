@@ -6,7 +6,7 @@ class Course::Assessment::Answer::AutoGradingService
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
     def grade(answer)
-      answer = if answer.question.auto_gradable?
+      answer = if auto_gradable?(answer)
                  pick_grader(answer.question).grade(answer)
                else
                  assign_maximum_grade(answer)
@@ -15,6 +15,20 @@ class Course::Assessment::Answer::AutoGradingService
     end
 
     private
+
+    # A marketplace preview copy must never reach the graders that cost money per run (Codaveri,
+    # the rubric LLM), so those questions are treated as non-auto-gradable for the preview and are
+    # graded by hand in the real grader view instead.
+    # See Course::Assessment::Marketplace::PreviewGradingPolicy.
+    #
+    # @param [Course::Assessment::Answer] answer The answer about to be graded.
+    # @return [Boolean] True if an autograder should run for this answer.
+    def auto_gradable?(answer)
+      return false if Course::Assessment::Marketplace::PreviewGradingPolicy.
+                      inert?(answer.submission.assessment, answer.question)
+
+      answer.question.auto_gradable?
+    end
 
     # Picks the grader to use for the given question.
     #

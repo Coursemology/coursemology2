@@ -32,6 +32,24 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
         end
       end
 
+      # Which questions are inert is PreviewGradingPolicy's contract (specced separately); this
+      # asserts the wiring: an inert question reaches no autograder at all, so the paid Codaveri
+      # and rubric-LLM graders are never billed for a marketplace preview attempt.
+      context 'when the preview policy marks the question inert' do
+        before do
+          allow(Course::Assessment::Marketplace::PreviewGradingPolicy).to receive(:inert?).and_return(true)
+        end
+
+        it 'runs no autograder and leaves the answer to be graded by hand' do
+          expect(Course::Assessment::Answer::MultipleResponseAutoGradingService).not_to receive(:new)
+
+          subject
+
+          expect(answer).to be_evaluated
+          expect(answer.grade).to be_nil
+        end
+      end
+
       context 'when the assessment is autograded' do
         before { allow(assessment).to receive(:autograded?).and_return(true) }
 
