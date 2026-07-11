@@ -111,6 +111,23 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
 
+      context 'when a scribing question has no attachment' do
+        render_views
+        let(:assessment_traits) { [] }
+        let!(:scribing_question) { create(:course_assessment_question_scribing, assessment: assessment) }
+        subject do
+          get :edit, params: {
+            course_id: course, assessment_id: assessment.id, id: submission.id, format: :json
+          }
+        end
+
+        it 'renders the scribing answer with a nil image url' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['answers'].first['scribing_answer']['image_url']).to be_nil
+        end
+      end
+
       context 'when randomization is prepared' do
         render_views
         subject do
