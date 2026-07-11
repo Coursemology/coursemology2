@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Marketplace::ContainerCourseService do
@@ -21,7 +22,7 @@ RSpec.describe Course::Assessment::Marketplace::ContainerCourseService do
         expect do
           second = described_class.find_or_create!(instance: instance, creator: admin)
           expect(second).to eq(first)
-        end.not_to change { Course.count }
+        end.not_to change(Course, :count)
       end
     end
   end

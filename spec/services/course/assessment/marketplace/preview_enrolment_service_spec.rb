@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Marketplace::PreviewEnrolmentService do
@@ -20,7 +21,7 @@ RSpec.describe Course::Assessment::Marketplace::PreviewEnrolmentService do
       described_class.ensure_manager!(course: course, user: user)
       expect do
         described_class.ensure_manager!(course: course, user: user)
-      end.not_to change { CourseUser.where(course: course, user: user).count }
+      end.not_to change(CourseUser.where(course: course, user: user), :count)
     end
   end
 end
