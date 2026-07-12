@@ -20,7 +20,7 @@ import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
 import withRouter from 'lib/components/navigation/withRouter';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { getSubmissionId, getUrlParameter } from 'lib/helpers/url-helpers';
 
 import assessmentsTranslations from '../../../translations';
 import {
@@ -59,7 +59,12 @@ class VisibleSubmissionEditIndex extends Component {
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
-    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+    // The masked marketplace preview route carries no :submissionId param, so fall
+    // back to the shimmed identity (getSubmissionId), the same source that already
+    // re-points the course and assessment ids at the hidden preview container. On
+    // every ordinary submission route the param is present, so this is a no-op there.
+    const submissionId = match.params.submissionId ?? getSubmissionId();
+    dispatch(fetchSubmission(submissionId, setSessionId));
   }
 
   componentWillUnmount() {
