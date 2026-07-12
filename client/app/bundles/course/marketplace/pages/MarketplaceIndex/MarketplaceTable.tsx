@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   ContentCopy,
+  PlayArrow,
   StorefrontOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material';
@@ -85,6 +86,16 @@ const MarketplaceTable = ({
               to={withFromTab(l.previewUrl, fromTab)}
             >
               <VisibilityOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip disableInteractive title={t(translations.tryItOut)}>
+            <IconButton
+              aria-label={t(translations.tryItOut)}
+              component={Link}
+              size="small"
+              to={withFromTab(`${l.previewUrl}/attempt`, fromTab)}
+            >
+              <PlayArrow />
             </IconButton>
           </Tooltip>
           <Tooltip disableInteractive title={t(translations.duplicateConfirm)}>

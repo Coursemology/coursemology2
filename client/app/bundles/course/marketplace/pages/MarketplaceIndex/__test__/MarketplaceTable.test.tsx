@@ -2,7 +2,6 @@ import userEvent from '@testing-library/user-event';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import { MarketplaceListing } from '../../../types';
-
 import MarketplaceTable from '../MarketplaceTable';
 
 // Sort keys disagree so order is meaningful: Graph Theory is most-adopted, Recursion newest.
@@ -179,4 +178,23 @@ it('sorts by published date (not adoptions) when Newest is selected', async () =
   expect(onDuplicate).toHaveBeenCalledWith([
     expect.objectContaining({ title: 'Recursion Drills' }),
   ]);
+});
+
+it('renders a "Try it out" play button linking to the attempt route, carrying from_tab', async () => {
+  const page = render(
+    <MarketplaceTable
+      fromTab="42"
+      listings={LISTINGS}
+      onDuplicate={jest.fn()}
+    />,
+  );
+
+  const tryButtons = await page.findAllByLabelText('Try it out');
+  tryButtons.forEach((el) => expect(el).not.toHaveAttribute('target'));
+  expect(tryButtons.map((el) => el.getAttribute('href'))).toEqual(
+    expect.arrayContaining([
+      '/p/1/attempt?from_tab=42',
+      '/p/2/attempt?from_tab=42',
+    ]),
+  );
 });
