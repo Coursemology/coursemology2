@@ -106,8 +106,23 @@ class Course::Controller < ApplicationController
   def deny_marketplace_container_access!
     return unless current_course&.marketplace_container?
     return if own_preview_copy_request?
+    return if preview_support_request?
 
     raise CanCan::AccessDenied
+  end
+
+  # A handful of preview sub-requests the reused submission page fires are NOT nested under
+  # assessments/:assessment_id, so own_preview_copy_request? cannot vet them by assessment. The
+  # forum-post-response question's attempt UI fetches the current user's own forum posts via
+  # Course::Forum::ForumsController#all_posts to offer as selectable answers. Allow that one
+  # read-only, user-scoped endpoint for a signed-in previewer (anyone enrolled in this container).
+  # It cannot leak another previewer's data: the query is scoped to the current user's own posts, of
+  # which a previewer has none in the container. Without it the preview is ejected to /forbidden.
+  def preview_support_request?
+    return false if current_user.nil?
+    return false unless [params[:controller], params[:action]] == ['course/forum/forums', 'all_posts']
+
+    current_course.course_users.exists?(user: current_user)
   end
 
   # Every endpoint the preview needs is nested under /courses/:course_id/assessments/:assessment_id/…

@@ -6,8 +6,9 @@ export default class ForumPostResponseAPI extends BaseAssessmentAPI {
   }
 
   fetchSelectedPostPacks(answerId) {
-    return this.client
-      .get(`/courses/${this.courseId}/assessments/${this.assessmentId}\
-                /submissions/${this.submissionId}/answers/${answerId}/forum_post_response/selected_post_packs`);
+    return this.client.get(
+      `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions/${this.submissionId}` +
+        `/answers/${answerId}/forum_post_response/selected_post_packs`,
+    );
   }
 }

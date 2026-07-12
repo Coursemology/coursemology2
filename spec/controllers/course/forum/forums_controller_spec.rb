@@ -286,5 +286,45 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
         end
       end
     end
+
+    # A marketplace preview runs the real submission page in the shared container course, whose access
+    # is otherwise locked by Course::Controller#deny_marketplace_container_access!. A forum-post-
+    # response question's attempt UI fetches the previewer's own forum posts via #all_posts — the one
+    # preview sub-request NOT nested under assessments/:assessment_id — so the guard must allow it, or
+    # the preview is ejected to the forbidden page.
+    describe '#all_posts in a marketplace preview container' do
+      # One container per instance (partial unique index), so reuse any existing one.
+      let(:container) do
+        Course.find_by(marketplace_container: true) || create(:course, marketplace_container: true)
+      end
+      let(:user) { create(:user) }
+
+      render_views
+
+      subject { get :all_posts, as: :json, params: { course_id: container } }
+
+      context 'when the user is a previewer (enrolled in the container)' do
+        let!(:course_user) { create(:course_manager, course: container, user: user) }
+
+        it 'allows the forum post lookup and returns an empty list' do
+          expect(subject).to have_http_status(:success)
+          expect(JSON.parse(response.body)['forumTopicPostPacks']).to be_empty
+        end
+      end
+
+      context 'when the user is not a previewer in the container' do
+        it 'denies access' do
+          expect { subject }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when a previewer requests a different container action' do
+        let!(:course_user) { create(:course_manager, course: container, user: user) }
+
+        it 'stays denied — the allowance is scoped to all_posts' do
+          expect { get :index, params: { course_id: container } }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
   end
 end
