@@ -8,11 +8,15 @@ import translations from '../../translations';
 interface PreviewBannerProps {
   listingTitle: string;
   onDuplicate: () => void;
+  // Whether this preview will leave AI-graded questions ungraded (PreviewGradingPolicy). Shown only
+  // then, so an all-MCQ preview carries no confusing note about graders it never uses.
+  previewGradingInert: boolean;
 }
 
 const PreviewBanner = ({
   listingTitle,
   onDuplicate,
+  previewGradingInert,
 }: PreviewBannerProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -31,7 +35,7 @@ const PreviewBanner = ({
       severity="info"
     >
       <div>{t(translations.previewSandbox, { title: listingTitle })}</div>
-      <div>{t(translations.previewInertGrading)}</div>
+      {previewGradingInert && <div>{t(translations.previewInertGrading)}</div>}
     </Alert>
   );
 };

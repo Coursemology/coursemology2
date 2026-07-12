@@ -52,11 +52,15 @@ export interface ListingPreviewData {
   showRubricToStudents: boolean;
   gradedTestCases: string;
   typeCounts: Record<string, number>;
+  // Whether the preview leaves any AI-graded question ungraded (PreviewGradingPolicy). Drives the
+  // preview banner's grading caveat.
+  previewGradingInert: boolean;
   questions: PreviewQuestionSummary[];
 }
 
 export interface PreviewAttemptData {
   listingTitle: string;
+  previewGradingInert: boolean;
 }
 
 export interface ProgrammingTestCase {

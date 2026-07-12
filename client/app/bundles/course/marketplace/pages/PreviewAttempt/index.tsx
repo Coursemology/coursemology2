@@ -20,7 +20,8 @@ const courseIdFromPath = (path: string): number | null => {
 };
 
 const PreviewAttempt = (): JSX.Element => {
-  const { listingTitle } = useLoaderData() as PreviewAttemptData;
+  const { listingTitle, previewGradingInert } =
+    useLoaderData() as PreviewAttemptData;
   const { listingId } = useParams();
   const { courseTitle, courseUrl } = useCourseContext();
   const [duplicating, setDuplicating] = useState(false);
@@ -34,6 +35,7 @@ const PreviewAttempt = (): JSX.Element => {
       <PreviewBanner
         listingTitle={listingTitle}
         onDuplicate={(): void => setDuplicating(true)}
+        previewGradingInert={previewGradingInert}
       />
 
       <SubmissionEditIndex />

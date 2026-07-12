@@ -44,7 +44,10 @@ export const previewAttemptLoader: Translated<LoaderFunction> =
         submissionId: attempt.submissionId,
       });
 
-      return { listingTitle: listing.title };
+      return {
+        listingTitle: listing.title,
+        previewGradingInert: listing.previewGradingInert,
+      };
     } catch {
       toast.error(t(translations.errorAttemptingListing));
 

@@ -73,6 +73,7 @@ beforeEach(() => {
   (fetchListing as jest.Mock).mockResolvedValue({
     id: 10,
     title: '[MP] Grand mix',
+    previewGradingInert: true,
   });
 });
 
@@ -84,8 +85,24 @@ it('seeds the preview identity from the attempt response', async () => {
   expect(resolvePreviewIdentity()).toEqual(IDS);
 });
 
-it('returns the listing title for the banner', async () => {
-  await expect(run()).resolves.toEqual({ listingTitle: '[MP] Grand mix' });
+it('returns the listing title and grading flag for the banner', async () => {
+  await expect(run()).resolves.toEqual({
+    listingTitle: '[MP] Grand mix',
+    previewGradingInert: true,
+  });
+});
+
+it('threads previewGradingInert=false through from the listing', async () => {
+  (fetchListing as jest.Mock).mockResolvedValue({
+    id: 10,
+    title: '[MP] Grand mix',
+    previewGradingInert: false,
+  });
+
+  await expect(run()).resolves.toEqual({
+    listingTitle: '[MP] Grand mix',
+    previewGradingInert: false,
+  });
 });
 
 // Load-bearing ordering. MarketplaceAPI builds its URLs from getCourseId(), which is shimmed on this
