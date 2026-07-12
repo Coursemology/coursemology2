@@ -8,6 +8,7 @@ import {
 } from '@mui/icons-material';
 import {
   Button,
+  CircularProgress,
   IconButton,
   MenuItem,
   TextField,
@@ -22,8 +23,39 @@ import { formatLongDate } from 'lib/moment';
 import { withFromTab } from '../../fromTab';
 import translations from '../../translations';
 import { MarketplaceListing } from '../../types';
+import { useNavigatingTo } from '../../useNavigatingTo';
 
 type SortMode = 'adoptions' | 'newest';
+
+// The attempt route's loader is slow (it provisions the preview copy), so while it is opening we
+// swap the play icon for a spinner and disable the button — otherwise the row looks inert on click.
+// Its own component because the hook cannot be called from the `cell` render callback.
+const TryItOutAction = ({
+  label,
+  to,
+}: {
+  label: string;
+  to: string;
+}): JSX.Element => {
+  const pending = useNavigatingTo(to);
+
+  return (
+    <Tooltip disableInteractive title={label}>
+      {pending ? (
+        // Tooltip needs a ref-holding child; a disabled button doesn't qualify, hence the span.
+        <span>
+          <IconButton aria-label={label} disabled size="small">
+            <CircularProgress size={20} />
+          </IconButton>
+        </span>
+      ) : (
+        <IconButton aria-label={label} component={Link} size="small" to={to}>
+          <PlayArrow />
+        </IconButton>
+      )}
+    </Tooltip>
+  );
+};
 
 interface Props {
   fromTab?: string | null;
@@ -88,16 +120,10 @@ const MarketplaceTable = ({
               <VisibilityOutlined />
             </IconButton>
           </Tooltip>
-          <Tooltip disableInteractive title={t(translations.tryItOut)}>
-            <IconButton
-              aria-label={t(translations.tryItOut)}
-              component={Link}
-              size="small"
-              to={withFromTab(`${l.previewUrl}/attempt`, fromTab)}
-            >
-              <PlayArrow />
-            </IconButton>
-          </Tooltip>
+          <TryItOutAction
+            label={t(translations.tryItOut)}
+            to={withFromTab(`${l.previewUrl}/attempt`, fromTab)}
+          />
           <Tooltip disableInteractive title={t(translations.duplicateConfirm)}>
             <IconButton
               aria-label={t(translations.duplicateConfirm)}

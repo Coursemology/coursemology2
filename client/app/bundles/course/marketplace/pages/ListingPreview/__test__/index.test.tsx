@@ -6,22 +6,29 @@ import CourseAPI from 'api/course';
 import ListingPreview from '../index';
 
 const mockNavigate = jest.fn();
+const mockUseNavigation = jest.fn(() => ({ state: 'idle' }));
 
 // `TestApp` mounts the component directly inside a `MemoryRouter` with no matching
 // `<Route path=":listingId">`, so `useParams()` would otherwise be empty and the page
 // would fetch `.../listings/NaN`. Mock it to supply the route param, mirroring
 // survey/pages/ResponseIndex/__test__. `useNavigate` is spied so the back button's
 // navigate() target can be asserted (Page renders backTo as a navigate() button, not a link).
+// `useNavigation` is mocked because MemoryRouter never reports a pending navigation — it drives the
+// "Try it out" spinner.
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: (): typeof mockNavigate => mockNavigate,
+  useNavigation: (): unknown => mockUseNavigation(),
   useParams: (): { listingId: string; courseId: string } => ({
     listingId: '7',
     courseId: global.courseId.toString(),
   }),
 }));
 
-beforeEach(() => mockNavigate.mockClear());
+beforeEach(() => {
+  mockNavigate.mockClear();
+  mockUseNavigation.mockReturnValue({ state: 'idle' });
+});
 
 // The Duplicate Assessment button needs the destination course, which the page reads from the
 // course outlet context. There is no CourseLayout outlet in the test, so mock the hook (mirrors
@@ -187,4 +194,37 @@ it('renders a back button to the marketplace index', async () => {
   await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
   // Page renders the back affordance as an IconButton with this testid when `backTo` is set.
   expect(screen.getByTestId('ArrowBackIconButton')).toBeInTheDocument();
+});
+
+it('shows a spinner on "Try it out" while its attempt route is opening', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    description: '<p>desc</p>',
+    attemptUrl: `${url}/attempt`,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+
+  // The attempt loader is slow (it provisions the preview copy); the button must show it is working.
+  mockUseNavigation.mockReturnValue({
+    state: 'loading',
+    location: { pathname: `${url}/attempt` },
+  } as ReturnType<typeof mockUseNavigation>);
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  expect(screen.getByRole('progressbar')).toBeVisible();
+  // While opening it is no longer an actionable link.
+  expect(
+    screen.queryByRole('link', { name: 'Try it out' }),
+  ).not.toBeInTheDocument();
 });

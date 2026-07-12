@@ -6,6 +6,13 @@ import CourseAPI from 'api/course';
 
 import MarketplaceIndex from '../index';
 
+// MarketplaceTable's "Try it out" button reads useNavigation, which throws outside a data router;
+// test-utils mounts a plain MemoryRouter, so stub it to the idle state.
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigation: (): { state: string } => ({ state: 'idle' }),
+}));
+
 jest.mock('../../../../container/CourseLoader', () => ({
   useCourseContext: (): { courseTitle: string; courseUrl: string } => ({
     courseTitle: 'Test Course',

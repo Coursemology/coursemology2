@@ -1,8 +1,20 @@
+import { useNavigation } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import { MarketplaceListing } from '../../../types';
 import MarketplaceTable from '../MarketplaceTable';
+
+// test-utils mounts a plain MemoryRouter, so useNavigation would never report a pending navigation.
+// Mock it (idle by default) so the "Try it out" spinner behaviour can be driven per test.
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigation: jest.fn(() => ({ state: 'idle' })),
+}));
+
+beforeEach(() =>
+  (useNavigation as jest.Mock).mockReturnValue({ state: 'idle' }),
+);
 
 // Sort keys disagree so order is meaningful: Graph Theory is most-adopted, Recursion newest.
 const LISTINGS: MarketplaceListing[] = [
@@ -197,4 +209,31 @@ it('renders a "Try it out" play button linking to the attempt route, carrying fr
       '/p/2/attempt?from_tab=42',
     ]),
   );
+});
+
+it('shows a spinner on the "Try it out" button of the row being opened, leaving the rest linkable', async () => {
+  // The attempt loader is slow (it provisions the preview copy), so the clicked row must show it is
+  // working. /p/2 is Graph Theory's preview path (see LISTINGS), so its attempt route is opening.
+  (useNavigation as jest.Mock).mockReturnValue({
+    state: 'loading',
+    location: { pathname: '/p/2/attempt' },
+  });
+
+  const page = render(
+    <MarketplaceTable
+      fromTab="42"
+      listings={LISTINGS}
+      onDuplicate={jest.fn()}
+    />,
+  );
+
+  const tryButtons = await page.findAllByLabelText('Try it out');
+  // The opening row renders a progressbar in place of the play icon...
+  expect(page.getByRole('progressbar')).toBeVisible();
+  // ...and only the other row stays a plain link.
+  expect(
+    tryButtons
+      .map((el) => el.getAttribute('href'))
+      .filter((href): href is string => href !== null),
+  ).toEqual(['/p/1/attempt?from_tab=42']);
 });
