@@ -51,4 +51,34 @@ RSpec.describe Course::Assessment::Marketplace::PreviewGradingPolicy do
       end
     end
   end
+
+  describe '.any_paid_grader?' do
+    # Copy-independent by design: it inspects question TYPES, so it is asked of a listing's *source*
+    # assessment (never itself a preview copy). No preview marker is set up here on purpose.
+    it 'is true when the assessment has a Codaveri programming question' do
+      create(:course_assessment_question_programming, assessment: assessment, with_codaveri_question: true)
+      expect(described_class.any_paid_grader?(assessment)).to be(true)
+    end
+
+    it 'is true when the assessment has a rubric-based question' do
+      create(:course_assessment_question_rubric_based_response, assessment: assessment)
+      expect(described_class.any_paid_grader?(assessment)).to be(true)
+    end
+
+    it 'is true when at least one of several questions is a paid grader' do
+      create(:course_assessment_question_multiple_response, assessment: assessment)
+      create(:course_assessment_question_rubric_based_response, assessment: assessment)
+      expect(described_class.any_paid_grader?(assessment)).to be(true)
+    end
+
+    it 'is false when the assessment has only free-evaluator questions' do
+      create(:course_assessment_question_multiple_response, assessment: assessment)
+      create(:course_assessment_question_programming, assessment: assessment)
+      expect(described_class.any_paid_grader?(assessment)).to be(false)
+    end
+
+    it 'is false for an assessment with no questions' do
+      expect(described_class.any_paid_grader?(assessment)).to be(false)
+    end
+  end
 end

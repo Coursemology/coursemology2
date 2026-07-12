@@ -20,6 +20,15 @@ class Course::Assessment::Marketplace::PreviewGradingPolicy
     paid_grader?(question)
   end
 
+  # Whether any of the assessment's questions would be left ungraded by the paid-grader policy in a
+  # preview. Copy-independent — it inspects question TYPES, so it can be asked of a listing's source
+  # assessment, which is not itself a preview copy. Drives the preview banner's "auto-grading is off"
+  # caveat, which must appear only when there is actually such a question. Reuses the private
+  # paid_grader? (a class method can call its own class's private class method with implicit self).
+  def self.any_paid_grader?(assessment)
+    assessment.questions.includes(:actable).any? { |question| paid_grader?(question) }
+  end
+
   # A copy made by PreviewCopyService is the only assessment carrying a marketplace preview marker.
   def self.preview_copy?(assessment)
     assessment.marketplace_preview.present?
