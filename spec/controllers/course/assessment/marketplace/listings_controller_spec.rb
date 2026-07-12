@@ -141,6 +141,22 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         expect(question['options']).to be_present
       end
 
+      it 'reports previewGradingInert=false when the assessment has only free-evaluator questions' do
+        get :show, params: { course_id: course, id: listing.id, format: :json }
+
+        expect(response.parsed_body['previewGradingInert']).to be(false)
+      end
+
+      it 'reports previewGradingInert=true when the assessment has a paid-grader (rubric) question' do
+        paid_assessment = create(:assessment, course: create(:course))
+        create(:course_assessment_question_rubric_based_response, assessment: paid_assessment)
+        paid_listing = create(:course_assessment_marketplace_listing, assessment: paid_assessment, published: true)
+
+        get :show, params: { course_id: course, id: paid_listing.id, format: :json }
+
+        expect(response.parsed_body['previewGradingInert']).to be(true)
+      end
+
       context 'when the listing is unpublished' do
         let!(:listing) { create(:course_assessment_marketplace_listing, published: false) }
         it 'is forbidden' do

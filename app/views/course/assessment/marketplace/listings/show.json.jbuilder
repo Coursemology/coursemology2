@@ -12,6 +12,9 @@ json.bonusExp @assessment.time_bonus_exp if @assessment.time_bonus_exp > 0
 json.showMcqMrqSolution @assessment.show_mcq_mrq_solution
 json.showRubricToStudents @assessment.show_rubric_to_students
 json.gradedTestCases display_graded_test_types(@assessment)
+# Whether the preview will leave any AI-graded question ungraded (PreviewGradingPolicy) — drives the
+# preview banner's "auto-grading is off" caveat so it shows only when there is such a question.
+json.previewGradingInert @preview_grading_inert
 
 questions = @assessment.questions.includes(:actable)
 

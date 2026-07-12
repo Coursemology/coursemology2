@@ -29,6 +29,8 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
       load_published_listing!
       @assessment = @listing.assessment
       authorize!(:preview_in_marketplace, @assessment)
+      @preview_grading_inert =
+        Course::Assessment::Marketplace::PreviewGradingPolicy.any_paid_grader?(@assessment)
       render 'show'
     end
   end
