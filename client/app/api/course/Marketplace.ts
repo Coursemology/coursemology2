@@ -1,10 +1,22 @@
 import { AxiosResponse } from 'axios';
 
 import { DestinationTab, MarketplaceListing } from 'course/marketplace/types';
+import { getCourseIdFromString } from 'lib/helpers/url-helpers';
 
 import BaseCourseAPI from './Base';
 
 export default class MarketplaceAPI extends BaseCourseAPI {
+  // Marketplace endpoints (listing show/attempt/questions) always operate in the previewer's
+  // *visible* course. BaseCourseAPI.courseId honours the preview-identity shim (getCourseId), which
+  // on the masked attempt route reports the hidden container course — correct for the platform
+  // submission APIs the preview reuses, but wrong here: e.g. the breadcrumb's listing-title fetch is
+  // a marketplace call, and addressing it to the container course's marketplace is denied (403).
+  // Resolve straight from the URL path, which names the visible course on every marketplace route.
+  // eslint-disable-next-line class-methods-use-this
+  override get courseId(): string | null {
+    return getCourseIdFromString(window.location.pathname);
+  }
+
   get #urlPrefix(): string {
     return `/courses/${this.courseId}/marketplace`;
   }

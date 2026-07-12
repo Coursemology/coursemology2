@@ -28,9 +28,11 @@ export const previewAttemptLoader: Translated<LoaderFunction> =
       const listingId = getIdFromUnknown(params?.listingId);
       if (!listingId) return redirect('/');
 
-      // Clear FIRST. MarketplaceAPI builds its URLs from getCourseId(), which is shimmed on this
-      // very route: an identity left over from an earlier preview would address both requests below
-      // to the *container* course, which the container lock bounces.
+      // Reset FIRST, then set below: this is the one place the preview identity is cleared (the page
+      // deliberately does not clear on unmount — see PreviewAttempt/index.tsx). Clearing here means a
+      // leftover identity from an earlier preview cannot be read by the reused submission page before
+      // this load sets its own. (The marketplace requests below are unaffected either way —
+      // MarketplaceAPI resolves the visible course directly, not through the identity shim.)
       clearPreviewIdentity();
 
       const [{ data: attempt }, listing] = await Promise.all([
