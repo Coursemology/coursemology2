@@ -32,12 +32,22 @@ const marketplaceRouter: Translated<RouteObject> = (t) => ({
         {
           path: 'attempt',
           lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
-            const { default: Component, previewAttemptLoader } = await import(
-              /* webpackChunkName: 'MarketplacePreviewAttempt' */
-              'course/marketplace/pages/PreviewAttempt'
-            );
+            const [
+              { default: Component, previewAttemptLoader },
+              { attemptHandle },
+            ] = await Promise.all([
+              import(
+                /* webpackChunkName: 'MarketplacePreviewAttempt' */
+                'course/marketplace/pages/PreviewAttempt'
+              ),
+              import('course/marketplace/handles'),
+            ]);
 
-            return { Component, loader: previewAttemptLoader(t) };
+            return {
+              Component,
+              loader: previewAttemptLoader(t),
+              handle: attemptHandle,
+            };
           },
         },
         {

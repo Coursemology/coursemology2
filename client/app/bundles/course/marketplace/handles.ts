@@ -1,6 +1,7 @@
 import { getIdFromUnknown } from 'utilities';
 
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
+import { Descriptor } from 'lib/hooks/useTranslation';
 
 import { readFromTab, withFromTab } from './fromTab';
 import { fetchListing, fetchQuestion } from './operations';
@@ -47,3 +48,10 @@ export const questionHandle: DataHandle = (match) => {
     },
   };
 };
+
+// The attempt (masked preview) crumb. It returns a bare title descriptor with no url, so it renders
+// as a non-linking crumb — and because it is now the terminal crumb, the listing-title crumb before
+// it becomes a link back to the listing preview.
+export const attemptHandle: DataHandle = () => ({
+  getData: (): Descriptor => translations.tryItOut,
+});

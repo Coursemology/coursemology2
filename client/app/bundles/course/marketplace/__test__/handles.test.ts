@@ -2,8 +2,9 @@ import { Location } from 'react-router-dom';
 
 import { CrumbPath } from 'lib/hooks/router/dynamicNest';
 
-import { listingHandle, marketplaceHandle } from '../handles';
+import { attemptHandle, listingHandle, marketplaceHandle } from '../handles';
 import { fetchListing } from '../operations';
+import translations from '../translations';
 
 // The handles always return a `{ getData }` request (never a bare title/null), so narrow the
 // DataHandle union to read getData directly.
@@ -73,5 +74,16 @@ describe('listingHandle', () => {
         url: '/courses/1/marketplace/listings/7?from_tab=42',
       },
     });
+  });
+});
+
+describe('attemptHandle', () => {
+  it('titles the attempt crumb "Try it out" and carries no link (a terminal crumb)', () => {
+    const handle = attemptHandle(
+      asMatch('/courses/1/marketplace/listings/7/attempt', { listingId: '7' }),
+      asLocation(''),
+    ) as WithGetData<typeof translations.tryItOut>;
+
+    expect(handle.getData()).toBe(translations.tryItOut);
   });
 });
