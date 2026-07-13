@@ -1,6 +1,8 @@
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen, waitFor } from 'test-utils';
 
+import toast from 'lib/hooks/toast';
+
 import AddExternalColumnPrompt from '../components/AddExternalColumnPrompt';
 import { createExternalAssessment } from '../operations';
 
@@ -9,6 +11,31 @@ jest.mock('../operations', () => ({
     () => (): Promise<void> => Promise.resolve(),
   ),
 }));
+jest.mock('lib/hooks/toast', () => ({ error: jest.fn(), success: jest.fn() }));
+
+// The floor/cap hints only reference the weighted total when the weighted view
+// is on, so a couple of tests seed a store with it enabled.
+const weightedState = {
+  gradebook: {
+    categories: [],
+    tabs: [],
+    assessments: [],
+    students: [],
+    submissions: [],
+    gamificationEnabled: false,
+    weightedViewEnabled: true,
+    canManageWeights: false,
+    courseMaxLevel: 0,
+    capTotal: false,
+    levelContribution: {
+      enabled: false,
+      formula: '',
+      weight: 0,
+      show: false,
+      clamp: true,
+    },
+  },
+};
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -127,7 +154,7 @@ it('closes the dialog after a successful create', async () => {
   await waitFor(() => expect(onClose).toHaveBeenCalled());
 });
 
-it('keeps the dialog open when create fails', async () => {
+it('shows the generic error toast and keeps the dialog open when create fails', async () => {
   (createExternalAssessment as jest.Mock).mockReturnValueOnce(() =>
     Promise.reject(new Error('boom')),
   );
@@ -141,12 +168,66 @@ it('keeps the dialog open when create fails', async () => {
     target: { value: '50' },
   });
   fireEvent.click(screen.getByRole('button', { name: 'Create' }));
-  await waitFor(() => expect(createExternalAssessment).toHaveBeenCalled());
+  await waitFor(() =>
+    expect(toast.error).toHaveBeenCalledWith(
+      'Could not create the external assessment.',
+    ),
+  );
   expect(onClose).not.toHaveBeenCalled();
 });
 
-it('explains the floor and cap toggles, stressing the grade is unchanged', async () => {
+it('shows a name-collision toast when create fails on a duplicate name', async () => {
+  const duplicateError = Object.assign(new Error('Request failed'), {
+    response: {
+      data: {
+        errors: { base: 'Validation failed: Title has already been taken' },
+      },
+    },
+  });
+  (createExternalAssessment as jest.Mock).mockReturnValueOnce(() =>
+    Promise.reject(duplicateError),
+  );
+  const onClose = jest.fn();
+  render(<AddExternalColumnPrompt onClose={onClose} open />);
+  await waitFor(() => screen.getByLabelText('Name'));
+  fireEvent.change(screen.getByLabelText('Name'), {
+    target: { value: 'Quiz 1' },
+  });
+  fireEvent.change(screen.getByLabelText('Max marks'), {
+    target: { value: '50' },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Create' }));
+  await waitFor(() =>
+    expect(toast.error).toHaveBeenCalledWith(
+      'Another external assessment already has this name.',
+    ),
+  );
+  expect(onClose).not.toHaveBeenCalled();
+});
+
+it('explains the floor and cap toggles without mentioning weights when the weighted view is off', async () => {
   render(<AddExternalColumnPrompt onClose={jest.fn()} open />);
+  await waitFor(() => screen.getByLabelText('Name'));
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
+  expect(
+    screen.getByLabelText(
+      /Marks negative grades with a warning in the gradebook. The actual grade is unchanged./i,
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByLabelText(
+      /Marks grades above the maximum with a warning in the gradebook. The actual grade is unchanged./i,
+    ),
+  ).toBeInTheDocument();
+  expect(screen.queryByLabelText(/weighted total/i)).not.toBeInTheDocument();
+});
+
+it('explains the weighted effect of the floor and cap toggles when the weighted view is on', async () => {
+  render(<AddExternalColumnPrompt onClose={jest.fn()} open />, {
+    state: weightedState,
+  });
   await waitFor(() => screen.getByLabelText('Name'));
   await userEvent.click(
     screen.getByRole('button', { name: /advanced settings/i }),

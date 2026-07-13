@@ -19,11 +19,13 @@ import {
 } from '@mui/material';
 import type { AssessmentData } from 'types/course/gradebook';
 
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { isDuplicateNameError } from '../../duplicateNameError';
 import { editExternalAssessment } from '../../operations';
+import { getWeightedViewEnabled } from '../../selectors';
 
 const translations = defineMessages({
   title: {
@@ -53,10 +55,20 @@ const translations = defineMessages({
   floorHint: {
     id: 'course.gradebook.EditExternalAssessmentPrompt.floorHint',
     defaultMessage:
+      'Marks negative grades with a warning in the gradebook. The actual grade is unchanged.',
+  },
+  floorHintWeighted: {
+    id: 'course.gradebook.EditExternalAssessmentPrompt.floorHintWeighted',
+    defaultMessage:
       'Counts negative grades as 0 when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged.',
   },
   capHint: {
     id: 'course.gradebook.EditExternalAssessmentPrompt.capHint',
+    defaultMessage:
+      'Marks grades above the maximum with a warning in the gradebook. The actual grade is unchanged.',
+  },
+  capHintWeighted: {
+    id: 'course.gradebook.EditExternalAssessmentPrompt.capHintWeighted',
     defaultMessage:
       'Counts grades above the maximum as the maximum when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged.',
   },
@@ -71,6 +83,10 @@ const translations = defineMessages({
   error: {
     id: 'course.gradebook.EditExternalAssessmentPrompt.error',
     defaultMessage: 'Could not save the external assessment.',
+  },
+  duplicateNameError: {
+    id: 'course.gradebook.EditExternalAssessmentPrompt.duplicateNameError',
+    defaultMessage: 'Another external assessment already has this name.',
   },
 });
 
@@ -87,6 +103,7 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
   const [name, setName] = useState(assessment.title);
   const [max, setMax] = useState(String(assessment.maxGrade));
   const [floorAtZero, setFloorAtZero] = useState(
@@ -110,6 +127,15 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
   const canSave =
     name.trim() !== '' && max.trim() !== '' && Number(max) >= 0 && !saving;
 
+  // The weighted-total wording only makes sense when the weighted view is on;
+  // otherwise the toggles just govern gradebook warnings.
+  const floorHint = weightedViewEnabled
+    ? translations.floorHintWeighted
+    : translations.floorHint;
+  const capHint = weightedViewEnabled
+    ? translations.capHintWeighted
+    : translations.capHint;
+
   const submit = async (): Promise<void> => {
     setSaving(true);
     try {
@@ -122,8 +148,14 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
         }),
       );
       onClose();
-    } catch {
-      toast.error(t(translations.error));
+    } catch (error) {
+      toast.error(
+        t(
+          isDuplicateNameError(error)
+            ? translations.duplicateNameError
+            : translations.error,
+        ),
+      );
     } finally {
       setSaving(false);
     }
@@ -202,9 +234,9 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
                   </Typography>
                 }
               />
-              <Tooltip title={t(translations.floorHint)}>
+              <Tooltip title={t(floorHint)}>
                 <InfoOutlined
-                  aria-label={t(translations.floorHint)}
+                  aria-label={t(floorHint)}
                   color="action"
                   fontSize="small"
                 />
@@ -225,9 +257,9 @@ const EditExternalAssessmentPrompt: FC<Props> = ({
                   </Typography>
                 }
               />
-              <Tooltip title={t(translations.capHint)}>
+              <Tooltip title={t(capHint)}>
                 <InfoOutlined
-                  aria-label={t(translations.capHint)}
+                  aria-label={t(capHint)}
                   color="action"
                   fontSize="small"
                 />
