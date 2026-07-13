@@ -9773,6 +9773,9 @@
   "course.gradebook.AddExternalColumnPrompt.create": {
     "defaultMessage": "만들기"
   },
+  "course.gradebook.AddExternalColumnPrompt.duplicateNameError": {
+    "defaultMessage": "다른 외부 평가에서 이미 이 이름을 사용하고 있습니다."
+  },
   "course.gradebook.AddExternalColumnPrompt.error": {
     "defaultMessage": "외부 평가를 생성할 수 없습니다."
   },
@@ -9876,13 +9879,19 @@
     "defaultMessage": "총점은 채점되지 않은 평가를 0점으로 계산합니다."
   },
   "course.gradebook.AddExternalColumnPrompt.capHint": {
-    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산합니다. 실제 성적은 변경되지 않습니다."
+    "defaultMessage": "성적표에서 최대 점수를 초과하는 성적을 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.capHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산하고, 성적표에서 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
   },
   "course.gradebook.AddExternalColumnPrompt.capLabel": {
     "defaultMessage": "최대 점수로 상한 적용"
   },
   "course.gradebook.AddExternalColumnPrompt.floorHint": {
-    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산합니다. 실제 성적은 변경되지 않습니다."
+    "defaultMessage": "성적표에서 음수 성적을 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산하고, 성적표에서 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
   },
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
     "defaultMessage": "0으로 하한 적용"
@@ -9891,16 +9900,25 @@
     "defaultMessage": "취소"
   },
   "course.gradebook.EditExternalAssessmentPrompt.capHint": {
-    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산합니다. 실제 성적은 변경되지 않습니다."
+    "defaultMessage": "성적표에서 최대 점수를 초과하는 성적을 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적을 최대 점수로 계산하고, 성적표에서 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
   },
   "course.gradebook.EditExternalAssessmentPrompt.capLabel": {
     "defaultMessage": "최대 점수로 상한 적용"
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.duplicateNameError": {
+    "defaultMessage": "다른 외부 평가에서 이미 이 이름을 사용하고 있습니다."
   },
   "course.gradebook.EditExternalAssessmentPrompt.error": {
     "defaultMessage": "외부 평가를 저장할 수 없습니다."
   },
   "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
-    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산합니다. 실제 성적은 변경되지 않습니다."
+    "defaultMessage": "성적표에서 음수 성적을 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 음수 성적을 0으로 계산하고, 성적표에서 경고로 표시합니다. 실제 성적은 변경되지 않습니다."
   },
   "course.gradebook.EditExternalAssessmentPrompt.floorLabel": {
     "defaultMessage": "0으로 하한 적용"
@@ -9949,6 +9967,18 @@
   },
   "course.gradebook.ManageExternalAssessmentContent.name": {
     "defaultMessage": "이름"
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noCapHint": {
+    "defaultMessage": "성적표에서 최대 점수를 초과하는 성적에 대한 경고가 숨겨집니다."
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noCapHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 최대 점수를 초과하는 성적은 그대로 사용됩니다(상한 없음). 성적표에서 최대 점수를 초과하는 성적에 대한 경고가 숨겨집니다."
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noFloorHint": {
+    "defaultMessage": "성적표에서 음수 성적에 대한 경고가 숨겨집니다."
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noFloorHintWeighted": {
+    "defaultMessage": "가중 총점을 계산할 때 음수 성적은 그대로 사용됩니다(0으로 하한 적용 안 함). 성적표에서 음수 성적에 대한 경고가 숨겨집니다."
   },
   "course.gradebook.ManageExternalAssessmentContent.reorderError": {
     "defaultMessage": "새 순서를 저장할 수 없습니다. 다시 시도해 주세요."

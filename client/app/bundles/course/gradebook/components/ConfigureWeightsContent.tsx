@@ -506,14 +506,24 @@ const ConfigureWeightsContent: FC<ConfigureWeightsContentProps> = ({
     try {
       const serialized = levelEnabled ? serializeFormula(levelFormula) : null;
       const formulaAst = serialized?.ok ? serialized.ast : null;
-      const lcPayload: LevelContributionSaveData = {
-        enabled: levelEnabled,
-        formula: levelFormula,
-        formulaAst,
-        weight: levelWeight,
-        show: levelShow,
-        clamp: levelClamp,
-      };
+      // Only send levelContribution when the feature is actually in play: it lives
+      // behind gamification, and we skip an untouched-and-off config so we don't
+      // persist a spurious disabled LevelConfig on ordinary weight saves. The
+      // levelContribution.enabled term keeps sending when disabling a config that
+      // was previously enabled, so the disable actually gets persisted.
+      const sendLevelContribution =
+        gamificationEnabled && (levelEnabled || levelContribution.enabled);
+      const lcPayload: LevelContributionSaveData | undefined =
+        sendLevelContribution
+          ? {
+              enabled: levelEnabled,
+              formula: levelFormula,
+              formulaAst,
+              weight: levelWeight,
+              show: levelShow,
+              clamp: levelClamp,
+            }
+          : undefined;
       await dispatch(
         updateGradebookWeights(
           tabs.map((tb) => {

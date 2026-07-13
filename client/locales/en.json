@@ -9798,6 +9798,9 @@
     "defaultMessage": "Cancel"
   },
   "course.gradebook.AddExternalColumnPrompt.capHint": {
+    "defaultMessage": "Marks grades above the maximum with a warning in the gradebook. The actual grade is unchanged."
+  },
+  "course.gradebook.AddExternalColumnPrompt.capHintWeighted": {
     "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged."
   },
   "course.gradebook.AddExternalColumnPrompt.capLabel": {
@@ -9806,10 +9809,16 @@
   "course.gradebook.AddExternalColumnPrompt.create": {
     "defaultMessage": "Create"
   },
+  "course.gradebook.AddExternalColumnPrompt.duplicateNameError": {
+    "defaultMessage": "Another external assessment already has this name."
+  },
   "course.gradebook.AddExternalColumnPrompt.error": {
     "defaultMessage": "Could not create the external assessment."
   },
   "course.gradebook.AddExternalColumnPrompt.floorHint": {
+    "defaultMessage": "Marks negative grades with a warning in the gradebook. The actual grade is unchanged."
+  },
+  "course.gradebook.AddExternalColumnPrompt.floorHintWeighted": {
     "defaultMessage": "Counts negative grades as 0 when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged."
   },
   "course.gradebook.AddExternalColumnPrompt.floorLabel": {
@@ -9915,15 +9924,24 @@
     "defaultMessage": "Cancel"
   },
   "course.gradebook.EditExternalAssessmentPrompt.capHint": {
+    "defaultMessage": "Marks grades above the maximum with a warning in the gradebook. The actual grade is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.capHintWeighted": {
     "defaultMessage": "Counts grades above the maximum as the maximum when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged."
   },
   "course.gradebook.EditExternalAssessmentPrompt.capLabel": {
     "defaultMessage": "Cap grades at max"
   },
+  "course.gradebook.EditExternalAssessmentPrompt.duplicateNameError": {
+    "defaultMessage": "Another external assessment already has this name."
+  },
   "course.gradebook.EditExternalAssessmentPrompt.error": {
     "defaultMessage": "Could not save the external assessment."
   },
   "course.gradebook.EditExternalAssessmentPrompt.floorHint": {
+    "defaultMessage": "Marks negative grades with a warning in the gradebook. The actual grade is unchanged."
+  },
+  "course.gradebook.EditExternalAssessmentPrompt.floorHintWeighted": {
     "defaultMessage": "Counts negative grades as 0 when computing the weighted total, and marks them with a warning in the gradebook. The actual grade is unchanged."
   },
   "course.gradebook.EditExternalAssessmentPrompt.floorLabel": {
@@ -9969,9 +9987,15 @@
     "defaultMessage": "No floor"
   },
   "course.gradebook.ManageExternalAssessmentContent.noCapHint": {
+    "defaultMessage": "Gradebook warnings for grades above the maximum are hidden."
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noCapHintWeighted": {
     "defaultMessage": "Grades above the maximum are kept as-is (not capped) when computing the weighted total. Gradebook warnings for grades above the maximum are hidden."
   },
   "course.gradebook.ManageExternalAssessmentContent.noFloorHint": {
+    "defaultMessage": "Gradebook warnings for negative grades are hidden."
+  },
+  "course.gradebook.ManageExternalAssessmentContent.noFloorHintWeighted": {
     "defaultMessage": "Negative grades are kept as-is (not floored to 0) when computing the weighted total. Gradebook warnings for negative grades are hidden."
   },
   "course.gradebook.ManageExternalAssessmentContent.remarks": {
