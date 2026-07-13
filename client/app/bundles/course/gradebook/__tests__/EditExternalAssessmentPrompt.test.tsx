@@ -21,6 +21,30 @@ const assessment = {
   capAtMaximum: true,
 };
 
+// The floor/cap hints only reference the weighted total when the weighted view
+// is on, so a handful of tests seed a store with it enabled.
+const weightedState = {
+  gradebook: {
+    categories: [],
+    tabs: [],
+    assessments: [],
+    students: [],
+    submissions: [],
+    gamificationEnabled: false,
+    weightedViewEnabled: true,
+    canManageWeights: false,
+    courseMaxLevel: 0,
+    capTotal: false,
+    levelContribution: {
+      enabled: false,
+      formula: '',
+      weight: 0,
+      show: false,
+      clamp: true,
+    },
+  },
+};
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
@@ -145,13 +169,39 @@ it('defaults floor and cap switches to checked when the assessment omits them', 
   ).toBeChecked();
 });
 
-it('explains the floor and cap toggles, explaining the grade is unchanged', async () => {
+it('explains the floor and cap toggles without mentioning weights when the weighted view is off', async () => {
   render(
     <EditExternalAssessmentPrompt
       assessment={assessment}
       onClose={jest.fn()}
       open
     />,
+  );
+  await screen.findByLabelText('Name');
+  await userEvent.click(
+    screen.getByRole('button', { name: /advanced settings/i }),
+  );
+  expect(
+    screen.getByLabelText(
+      /Marks negative grades with a warning in the gradebook. The actual grade is unchanged./i,
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByLabelText(
+      /Marks grades above the maximum with a warning in the gradebook. The actual grade is unchanged./i,
+    ),
+  ).toBeInTheDocument();
+  expect(screen.queryByLabelText(/weighted total/i)).not.toBeInTheDocument();
+});
+
+it('explains the weighted effect of the floor and cap toggles when the weighted view is on', async () => {
+  render(
+    <EditExternalAssessmentPrompt
+      assessment={assessment}
+      onClose={jest.fn()}
+      open
+    />,
+    { state: weightedState },
   );
   await screen.findByLabelText('Name');
   await userEvent.click(
@@ -251,7 +301,7 @@ it('closes the dialog after a successful save', async () => {
   await waitFor(() => expect(onClose).toHaveBeenCalled());
 });
 
-it('shows an error toast and keeps the dialog open when saving fails', async () => {
+it('shows the generic error toast and keeps the dialog open when saving fails', async () => {
   (editExternalAssessment as jest.Mock).mockImplementationOnce(
     () => (): Promise<void> => Promise.reject(new Error('boom')),
   );
@@ -265,7 +315,40 @@ it('shows an error toast and keeps the dialog open when saving fails', async () 
   );
   await screen.findByLabelText('Name');
   fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-  await waitFor(() => expect(toast.error).toHaveBeenCalled());
+  await waitFor(() =>
+    expect(toast.error).toHaveBeenCalledWith(
+      'Could not save the external assessment.',
+    ),
+  );
+  expect(onClose).not.toHaveBeenCalled();
+});
+
+it('shows a name-collision toast when the save fails on a duplicate name', async () => {
+  const duplicateError = Object.assign(new Error('Request failed'), {
+    response: {
+      data: {
+        errors: { base: 'Validation failed: Title has already been taken' },
+      },
+    },
+  });
+  (editExternalAssessment as jest.Mock).mockImplementationOnce(
+    () => (): Promise<void> => Promise.reject(duplicateError),
+  );
+  const onClose = jest.fn();
+  render(
+    <EditExternalAssessmentPrompt
+      assessment={assessment}
+      onClose={onClose}
+      open
+    />,
+  );
+  await screen.findByLabelText('Name');
+  fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+  await waitFor(() =>
+    expect(toast.error).toHaveBeenCalledWith(
+      'Another external assessment already has this name.',
+    ),
+  );
   expect(onClose).not.toHaveBeenCalled();
 });
 

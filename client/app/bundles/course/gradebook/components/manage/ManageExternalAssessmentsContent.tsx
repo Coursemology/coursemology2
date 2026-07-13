@@ -23,7 +23,10 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { reorderExternalAssessments } from '../../operations';
-import { getExternalAssessments } from '../../selectors';
+import {
+  getExternalAssessments,
+  getWeightedViewEnabled,
+} from '../../selectors';
 import AddExternalColumnPrompt from '../AddExternalColumnPrompt';
 import DeleteExternalColumnPrompt from '../DeleteExternalColumnPrompt';
 
@@ -56,11 +59,20 @@ const translations = defineMessages({
   },
   noFloorHint: {
     id: 'course.gradebook.ManageExternalAssessmentContent.noFloorHint',
+    defaultMessage: 'Gradebook warnings for negative grades are hidden.',
+  },
+  noFloorHintWeighted: {
+    id: 'course.gradebook.ManageExternalAssessmentContent.noFloorHintWeighted',
     defaultMessage:
       'Negative grades are kept as-is (not floored to 0) when computing the weighted total. Gradebook warnings for negative grades are hidden.',
   },
   noCapHint: {
     id: 'course.gradebook.ManageExternalAssessmentContent.noCapHint',
+    defaultMessage:
+      'Gradebook warnings for grades above the maximum are hidden.',
+  },
+  noCapHintWeighted: {
+    id: 'course.gradebook.ManageExternalAssessmentContent.noCapHintWeighted',
     defaultMessage:
       'Grades above the maximum are kept as-is (not capped) when computing the weighted total. Gradebook warnings for grades above the maximum are hidden.',
   },
@@ -118,7 +130,17 @@ interface Props {
 const ManageExternalAssessmentsContent: FC<Props> = () => {
   const { t } = useTranslation();
   const externals = useAppSelector(getExternalAssessments);
+  const weightedViewEnabled = useAppSelector(getWeightedViewEnabled);
   const dispatch = useAppDispatch();
+
+  // The weighted-total wording only makes sense when the weighted view is on;
+  // otherwise the chips only describe the hidden gradebook warnings.
+  const noFloorHint = weightedViewEnabled
+    ? translations.noFloorHintWeighted
+    : translations.noFloorHint;
+  const noCapHint = weightedViewEnabled
+    ? translations.noCapHintWeighted
+    : translations.noCapHint;
   const [addOpen, setAddOpen] = useState(false);
   const [editing, setEditing] = useState<AssessmentData | null>(null);
   const [deleting, setDeleting] = useState<AssessmentData | null>(null);
@@ -133,13 +155,16 @@ const ManageExternalAssessmentsContent: FC<Props> = () => {
 
   // The Remarks column only appears when some row carries a chip ("No floor" /
   // "No cap"), and is widened when a row shows both so they stay on one line.
+  // The single-chip width must clear the wider "No floor" label — MUI Chips cap
+  // at max-width:100% of their track, so a too-narrow column truncates the label
+  // (the chips also set maxWidth:none as a belt-and-braces guard).
   const maxRemarksPerRow = externals.reduce((max, a) => {
     const count =
       (a.floorAtZero === false ? 1 : 0) + (a.capAtMaximum === false ? 1 : 0);
     return Math.max(max, count);
   }, 0);
   const showRemarks = maxRemarksPerRow > 0;
-  const remarksColWidth = maxRemarksPerRow >= 2 ? '12rem' : '6rem';
+  const remarksColWidth = maxRemarksPerRow >= 2 ? '12rem' : '7rem';
 
   // Name/Max/Remarks keep natural widths and cluster at the left; a flexible
   // spacer then pushes Actions to the right edge — the standard "list row with
@@ -249,20 +274,20 @@ const ManageExternalAssessmentsContent: FC<Props> = () => {
                                 spacing={1}
                               >
                                 {a.floorAtZero === false && (
-                                  <Tooltip title={t(translations.noFloorHint)}>
+                                  <Tooltip title={t(noFloorHint)}>
                                     <Chip
                                       label={t(translations.noFloor)}
                                       size="small"
-                                      sx={{ flexShrink: 0 }}
+                                      sx={{ flexShrink: 0, maxWidth: 'none' }}
                                     />
                                   </Tooltip>
                                 )}
                                 {a.capAtMaximum === false && (
-                                  <Tooltip title={t(translations.noCapHint)}>
+                                  <Tooltip title={t(noCapHint)}>
                                     <Chip
                                       label={t(translations.noCap)}
                                       size="small"
-                                      sx={{ flexShrink: 0 }}
+                                      sx={{ flexShrink: 0, maxWidth: 'none' }}
                                     />
                                   </Tooltip>
                                 )}

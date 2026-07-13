@@ -244,12 +244,58 @@ it('shows Remarks with No floor and No cap chips when neither bound applies', as
   expect(screen.getByText(/no cap/i)).toBeInTheDocument();
 });
 
-it('shows a hint explaining the No cap chip on hover', async () => {
+it('shows a weight-free hint explaining the No cap chip on hover when the weighted view is off', async () => {
   render(<ManageExternalAssessmentsContent />, {
     state: externalWith({ floorAtZero: true, capAtMaximum: false }),
   });
   await userEvent.hover(await screen.findByText(/no cap/i));
+  expect(
+    await screen.findByText(
+      /Gradebook warnings for grades above the maximum are hidden\./i,
+    ),
+  ).toBeVisible();
+  expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
+});
+
+it('explains the weighted effect of the No cap chip on hover when the weighted view is on', async () => {
+  render(<ManageExternalAssessmentsContent />, {
+    state: {
+      gradebook: {
+        ...externalWith({ floorAtZero: true, capAtMaximum: false }).gradebook,
+        weightedViewEnabled: true,
+      },
+    },
+  });
+  await userEvent.hover(await screen.findByText(/no cap/i));
   expect(await screen.findByText(/kept as-is \(not capped\)/i)).toBeVisible();
+});
+
+it('shows a weight-free hint explaining the No floor chip on hover when the weighted view is off', async () => {
+  render(<ManageExternalAssessmentsContent />, {
+    state: externalWith({ floorAtZero: false, capAtMaximum: true }),
+  });
+  await userEvent.hover(await screen.findByText(/no floor/i));
+  expect(
+    await screen.findByText(
+      /Gradebook warnings for negative grades are hidden\./i,
+    ),
+  ).toBeVisible();
+  expect(screen.queryByText(/weighted total/i)).not.toBeInTheDocument();
+});
+
+it('explains the weighted effect of the No floor chip on hover when the weighted view is on', async () => {
+  render(<ManageExternalAssessmentsContent />, {
+    state: {
+      gradebook: {
+        ...externalWith({ floorAtZero: false, capAtMaximum: true }).gradebook,
+        weightedViewEnabled: true,
+      },
+    },
+  });
+  await userEvent.hover(await screen.findByText(/no floor/i));
+  expect(
+    await screen.findByText(/kept as-is \(not floored to 0\)/i),
+  ).toBeVisible();
 });
 
 it('renders a drag handle per external assessment', async () => {
