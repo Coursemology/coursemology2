@@ -248,6 +248,211 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       end
     end
 
+    describe '#compute_satisfaction_information' do
+      let(:course_user1) { create(:course_user, course: course) }
+      let(:course_user2) { create(:course_user, course: course) }
+      let(:course_user3) { create(:course_user, course: course) }
+
+      context 'without minimum grade percentage' do
+        let(:assessment) do
+          assessment = create(:assessment, course: course)
+          create(:course_assessment_question_multiple_response,
+                 maximum_grade: 10, assessment: assessment)
+          assessment.published = true
+          assessment.save!
+          assessment
+        end
+        subject do
+          condition = create(:course_condition_assessment)
+          condition.assessment = assessment
+          condition
+        end
+
+        context 'when all users have submitted submissions' do
+          before do
+            create(:submission, :submitted, assessment: assessment, creator: course_user1.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user2.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user3.user)
+          end
+
+          it 'returns true for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, true])
+          end
+        end
+
+        context 'when one user does not have a submission and the rest have submitted submissions' do
+          before do
+            create(:submission, :submitted, assessment: assessment, creator: course_user1.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user3.user)
+          end
+          subject do
+            condition = create(:course_condition_assessment)
+            condition.assessment = assessment
+            condition
+          end
+
+          it 'returns false for that user and true for the rest' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, false, true])
+          end
+        end
+
+        context 'when one user has an attempting submission and the rest have submitted submissions' do
+          before do
+            create(:submission, :submitted, assessment: assessment, creator: course_user1.user)
+            create(:submission, :attempting, assessment: assessment, creator: course_user2.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user3.user)
+          end
+          subject do
+            condition = create(:course_condition_assessment)
+            condition.assessment = assessment
+            condition
+          end
+
+          it 'returns false for that user and true for the rest' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, false, true])
+          end
+        end
+
+        context 'when one user has a published submission and the rest have submitted submissions' do
+          before do
+            create(:submission, :submitted, assessment: assessment, creator: course_user1.user)
+            create(:submission, :published, assessment: assessment, creator: course_user2.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user3.user)
+          end
+          subject do
+            condition = create(:course_condition_assessment)
+            condition.assessment = assessment
+            condition
+          end
+
+          it 'returns true for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, true])
+          end
+        end
+
+        context 'when all users do not have submissions' do
+          it 'returns false for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+      end
+
+      context 'with minimum grade percentage' do
+        let(:assessment) do
+          assessment = create(:assessment, course: course)
+          create(:course_assessment_question_multiple_response,
+                 maximum_grade: 10, assessment: assessment)
+          assessment.published = true
+          assessment.save!
+          assessment
+        end
+        let(:submission1) do
+          create(:submission, :published, assessment: assessment, creator: course_user1.user)
+        end
+        let(:submission2) do
+          create(:submission, :published, assessment: assessment, creator: course_user2.user)
+        end
+        let(:submission3) do
+          create(:submission, :published, assessment: assessment, creator: course_user3.user)
+        end
+        subject do
+          condition = create(:course_condition_assessment, minimum_grade_percentage: 60)
+          condition.assessment = assessment
+          condition
+        end
+
+        context 'when all users have submissions with the minimum grade percentage' do
+          it 'returns true for all users' do
+            allow(submission1).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission1.answers
+            answers.each do |answer|
+              answer.grade = 6
+              answer.save!
+            end
+            allow(submission2).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission2.answers
+            answers.each do |answer|
+              answer.grade = 7
+              answer.save!
+            end
+            allow(submission3).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission3.answers
+            answers.each do |answer|
+              answer.grade = 8
+              answer.save!
+            end
+
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, true])
+          end
+        end
+
+        context 'when only one user does not meet the minimum grade percentage' do
+          it 'returns false for that user and true for rest' do
+            allow(submission1).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission1.answers
+            answers.each do |answer|
+              answer.grade = 5
+              answer.save!
+            end
+            allow(submission2).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission2.answers
+            answers.each do |answer|
+              answer.grade = 7
+              answer.save!
+            end
+            allow(submission3).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission3.answers
+            answers.each do |answer|
+              answer.grade = 8
+              answer.save!
+            end
+
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, true, true])
+          end
+        end
+
+        context 'all users do not meet the minimum grade percentage' do
+          it 'returns false for all users' do
+            allow(submission1).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission1.answers
+            answers.each do |answer|
+              answer.grade = 5
+              answer.save!
+            end
+            allow(submission2).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission2.answers
+            answers.each do |answer|
+              answer.grade = 3
+              answer.save!
+            end
+            allow(submission3).to receive(:last_graded_time).and_return(Time.now)
+            answers = submission3.answers
+            answers.each do |answer|
+              answer.grade = 2
+              answer.save!
+            end
+
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+
+        context 'all users do not have submissions' do
+          it 'returns false for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+      end
+    end
+
     describe '#dependent_object' do
       it 'returns the correct dependent assessment object' do
         expect(subject.dependent_object).to eq(subject.assessment)

@@ -20,6 +20,8 @@ class Course::Condition::Assessment < ApplicationRecord
 
   alias_method :dependent_object, :assessment
 
+  COMPLETED_WORKFLOWS = [:submitted, :graded, :published].freeze
+
   def title
     if minimum_grade_percentage
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,
@@ -45,6 +47,29 @@ class Course::Condition::Assessment < ApplicationRecord
     else
       submitted_submissions_by_user(user).exists?
     end
+  end
+
+  # Returns a boolean array denoting whether each of the specified
+  # course users has satisfied the assessment condition.
+  #
+  # @param [Array<CourseUser>] course_users The specified course users.
+  # @return [Array<Boolean>] At each index, true if the corresponding course
+  #   user has satisfied the assessment condition and false otherwise.
+  def compute_satisfaction_information(course_users)
+    satisfaction_information = Array.new(course_users.length, false)
+    user_ids = course_users.map(&:user).map(&:id)
+    user_submissions = assessment.submissions.where(creator_id: user_ids).where(workflow_state: COMPLETED_WORKFLOWS)
+    user_ids_to_indices = user_ids.map.with_index { |user_id, index| [user_id, index] }.to_h
+
+    if minimum_grade_percentage
+      fill_satisfaction_information_with_minimum_grade_percentage(user_submissions, satisfaction_information,
+                                                                  user_ids_to_indices)
+    else
+      fill_satisfaction_information_without_minimum_grade_percentage(user_submissions, satisfaction_information,
+                                                                     user_ids_to_indices)
+    end
+
+    satisfaction_information
   end
 
   # Class that the condition depends on.
@@ -80,12 +105,33 @@ class Course::Condition::Assessment < ApplicationRecord
 
   def submitted_submissions_by_user(user)
     # TODO: Replace with Rails 5 ActiveRecord::Relation#or with named scope
-    assessment.submissions.by_user(user).where(workflow_state: [:submitted, :graded, :published])
+    assessment.submissions.by_user(user).where(workflow_state: COMPLETED_WORKFLOWS)
   end
 
-  def published_submissions_with_minimum_grade_exists?(user, minimum_grade_percentage)
+  def published_submissions_with_minimum_grade_exists?(user, _minimum_grade_percentage)
     assessment.submissions.by_user(user).with_published_state.eager_load(:answers, assessment: :questions).any? do |sub|
-      sub.grade.to_f >= sub.questions.sum(:maximum_grade).to_f * minimum_grade_percentage / 100.0
+      satisfied_minimum_grade_percentage?(sub)
+    end
+  end
+
+  def satisfied_minimum_grade_percentage?(submission)
+    submission.grade.to_f >= submission.questions.sum(:maximum_grade).to_f * minimum_grade_percentage / 100.0
+  end
+
+  def fill_satisfaction_information_with_minimum_grade_percentage(user_submissions, satisfaction_information,
+                                                                  user_ids_to_indices)
+    user_submissions.with_published_state.eager_load(:answers, assessment: :questions).each do |user_submission|
+      if !satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] &&
+         satisfied_minimum_grade_percentage?(user_submission)
+        satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] = true
+      end
+    end
+  end
+
+  def fill_satisfaction_information_without_minimum_grade_percentage(user_submissions, satisfaction_information,
+                                                                     user_ids_to_indices)
+    user_submissions.each do |user_submission|
+      satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] = true
     end
   end
 
