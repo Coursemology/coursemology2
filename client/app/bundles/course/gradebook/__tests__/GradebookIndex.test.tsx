@@ -285,6 +285,9 @@ describe('GradebookIndex', () => {
   it('shows grade-only hint in column picker when gamification is disabled and no data cols selected', async () => {
     render(<GradebookIndex />, { state: populatedState });
     fireEvent.click(await screen.findByRole('button', { name: /columns/i }));
+    // Assessments are shown by default; deselect the Grades group to reach the
+    // "no data columns" state that triggers the hint.
+    fireEvent.click(await screen.findByRole('checkbox', { name: /grades/i }));
     expect(
       await screen.findByText(
         'No grade columns selected - export will include student info only.',
@@ -292,12 +295,15 @@ describe('GradebookIndex', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows grade-and-gamification hint in column picker after enabling a gamification column with no grade columns selected', async () => {
+  it('shows grade-and-gamification hint in column picker when no data cols are selected and gamification is enabled', async () => {
     render(<GradebookIndex />, { state: populatedStateWithGamification });
     fireEvent.click(await screen.findByRole('button', { name: /columns/i }));
+    // Both gamification and assessment columns are shown by default; deselect
+    // both groups to reach the "no data columns" state that triggers the hint.
     fireEvent.click(
       await screen.findByRole('checkbox', { name: /gamification/i }),
     );
+    fireEvent.click(await screen.findByRole('checkbox', { name: /grades/i }));
     expect(
       await screen.findByText(
         'No grade or gamification columns selected - export will include student info only.',

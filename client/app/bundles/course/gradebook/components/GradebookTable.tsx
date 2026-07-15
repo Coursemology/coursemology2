@@ -563,11 +563,6 @@ const GradebookTable = ({
     [students, assessments, submissionsByStudent],
   );
 
-  const hasExternalIds = useMemo(
-    () => students.some((s) => s.externalId != null && s.externalId !== ''),
-    [students],
-  );
-
   const columns = useMemo<ColumnTemplate<GradebookRow>[]>(() => {
     const cols: ColumnTemplate<GradebookRow>[] = [
       {
@@ -588,11 +583,13 @@ const GradebookTable = ({
         csvDownloadable: true,
         searchable: true,
         sortable: true,
+        // Hidden by default: an export identifier, not needed for reading grades.
+        defaultVisible: false,
       },
     ];
 
-    // The External ID column is always offered in the picker, but only shown by
-    // default when the course actually uses external IDs (see column picker).
+    // The External ID column is always offered in the picker, but hidden by
+    // default: like email, it's an export identifier, not needed for reading grades.
     cols.push({
       id: 'externalId',
       title: t(tableTranslations.externalId),
@@ -601,7 +598,7 @@ const GradebookTable = ({
       csvDownloadable: true,
       searchable: true,
       sortable: true,
-      defaultVisible: hasExternalIds,
+      defaultVisible: false,
     });
 
     if (gamificationEnabled) {
@@ -669,17 +666,12 @@ const GradebookTable = ({
           return grade;
         },
         csvDownloadable: true,
-        defaultVisible: asn.external ?? false,
+        // Assessments are the reason you open the gradebook — shown by default.
+        defaultVisible: true,
       });
     });
     return cols;
-  }, [
-    assessments,
-    gamificationEnabled,
-    hasExternalIds,
-    t,
-    weightedViewEnabled,
-  ]);
+  }, [assessments, gamificationEnabled, t, weightedViewEnabled]);
 
   const assessmentMaxGrades = useMemo(
     () => new Map(assessments.map((a) => [a.id, a.maxGrade])),
@@ -842,8 +834,21 @@ const GradebookTable = ({
 
   const row1Ref = useRef<HTMLTableRowElement>(null);
   const [row2Top, setRow2Top] = useState(0);
+  // Pin the Max Marks row's sticky offset to the header row's ACTUAL height.
+  // That height is not stable at first paint: HeaderLabel wraps/truncates long
+  // titles in its own layout effect (a later commit), and font load / column
+  // widths / viewport changes shift it afterwards too. A one-shot measure goes
+  // stale and opens a gap below the header through which the scrolling body
+  // bleeds. Observe row1 and re-measure on every resize (mirrors
+  // WeightedGradebookTable, which fixed the same seam).
   useLayoutEffect(() => {
-    setRow2Top(row1Ref.current?.offsetHeight ?? 0);
+    const row1 = row1Ref.current;
+    if (!row1) return undefined;
+    const measure = (): void => setRow2Top(row1.getBoundingClientRect().height);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(row1);
+    return () => observer.disconnect();
   }, [visibleCols]);
 
   const headerFitsRef = useRef<Record<string, boolean>>({});
@@ -877,7 +882,7 @@ const GradebookTable = ({
             cap the container grows to fit every row and never scrolls
             internally, leaving the header no scroll range. */}
           <TableContainer
-            sx={{ maxHeight: 'calc(100vh - 22rem)', overflowX: 'auto' }}
+            sx={{ maxHeight: 'calc(100vh - 12rem)', overflowX: 'auto' }}
           >
             <Table
               size="small"
