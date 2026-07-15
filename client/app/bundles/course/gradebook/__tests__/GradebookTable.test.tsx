@@ -298,10 +298,22 @@ describe('GradebookTable', () => {
     });
   });
 
-  it('does not show assessment columns in the table by default', async () => {
+  it('shows assessment columns in the table by default', async () => {
+    renderTable();
+    expect(await screen.findByText('Quiz 1')).toBeInTheDocument();
+  });
+
+  it('hides the email column by default but still offers it in the picker', async () => {
+    const user = userEvent.setup();
     renderTable();
     await screen.findByText('Alice');
-    expect(screen.queryByText('Quiz 1')).not.toBeInTheDocument();
+    // Email is an export identifier, not needed for reading grades.
+    expect(screen.queryByText('alice@example.com')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /select columns/i }));
+    const dialog = await screen.findByRole('dialog');
+    expect(
+      within(dialog).getByRole('checkbox', { name: /email/i }),
+    ).toBeInTheDocument();
   });
 
   it('shows gamification columns by default when gamification is enabled', async () => {
@@ -526,31 +538,16 @@ describe('GradebookTable', () => {
       );
     };
 
-    it('shows the External ID column by default when a student has an external ID', async () => {
+    it('hides the External ID column by default even when a student has an external ID', async () => {
+      // Like email, external ID is an export identifier, hidden by default.
       renderWith(studentsWithExtId);
-      expect(await screen.findByText('External ID')).toBeInTheDocument();
-      expect(screen.getByText('EXT-001')).toBeInTheDocument();
+      await screen.findByText('Alice');
+      expect(screen.queryByText('External ID')).not.toBeInTheDocument();
+      expect(screen.queryByText('EXT-001')).not.toBeInTheDocument();
     });
 
     it('hides the External ID column by default when no student has an external ID', async () => {
       renderWith(students);
-      await screen.findByText('Alice');
-      expect(screen.queryByText('External ID')).not.toBeInTheDocument();
-    });
-
-    it('treats a blank external ID as none and hides the column by default', async () => {
-      const studentsWithBlankExtId: StudentData[] = [
-        {
-          id: 1,
-          name: 'Alice',
-          email: 'alice@example.com',
-          externalId: '',
-          level: 3,
-          totalXp: 150,
-          levelContribution: null,
-        },
-      ];
-      renderWith(studentsWithBlankExtId);
       await screen.findByText('Alice');
       expect(screen.queryByText('External ID')).not.toBeInTheDocument();
     });
@@ -570,6 +567,8 @@ describe('GradebookTable', () => {
 
     it('filters by external ID', async () => {
       const user = userEvent.setup();
+      // Search only matches visible columns, so surface External ID first.
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ externalId: true }));
       renderWith(studentsWithExtId);
       const input = await screen.findByRole('textbox');
       await user.type(input, 'EXT-001');
@@ -1424,7 +1423,7 @@ describe('GradebookTable', () => {
   });
 
   describe('external assessments', () => {
-    it('shows external assessment columns by default but keeps native ones hidden', async () => {
+    it('shows both native and external assessment columns by default', async () => {
       render(
         <GradebookTable
           assessments={[
@@ -1451,7 +1450,7 @@ describe('GradebookTable', () => {
         { state: userState },
       );
       expect(await screen.findByText('Olympiad')).toBeInTheDocument();
-      expect(screen.queryByText('Quiz 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Quiz 1')).toBeInTheDocument();
     });
   });
 });
