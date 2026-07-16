@@ -15,7 +15,10 @@ RSpec.describe Course::AssessmentMarketplaceComponent do
 
     context 'when the user can access the marketplace (course manager)' do
       let(:user) { create(:course_manager, course: course).user }
-      before { controller_sign_in(controller, user) }
+      before do
+        create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: user)
+        controller_sign_in(controller, user)
+      end
 
       it 'exposes an admin sidebar item pointing at the marketplace' do
         item = subject.sidebar_items.find { |i| i[:key] == :admin_marketplace }

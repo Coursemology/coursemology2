@@ -19,6 +19,7 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
     context 'when the user is a course manager' do
       let(:course_user) { create(:course_manager, course: course) }
       let(:user) { course_user.user }
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: user) }
 
       it { is_expected.to be_able_to(:access_marketplace, course) }
       it { is_expected.not_to be_able_to(:publish_to_marketplace, build(:assessment)) }

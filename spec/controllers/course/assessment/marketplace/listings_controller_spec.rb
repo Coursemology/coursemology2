@@ -12,6 +12,8 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
     before { controller_sign_in(controller, manager.user) }
 
     describe 'GET #index' do
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
+
       let!(:published) { create(:course_assessment_marketplace_listing, published: true) }
       let!(:unpublished) { create(:course_assessment_marketplace_listing, published: false) }
 
@@ -110,6 +112,8 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       # propagating (controller specs bypass_rescue by default — see spec/support/controller_exceptions.rb).
       run_rescue
 
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
+
       with_active_job_queue_adapter(:test) do
         let!(:listing) { create(:course_assessment_marketplace_listing, published: true) }
         let!(:tab) { course.assessment_categories.first.tabs.first }
@@ -150,6 +154,8 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       # `run_rescue` re-enables handle_access_denied so a denied preview renders 403 rather than
       # propagating (controller specs bypass_rescue by default — see spec/support/controller_exceptions.rb).
       run_rescue
+
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
 
       let!(:listing) do
         assessment = create(:assessment, course: create(:course))
@@ -196,6 +202,7 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       ActsAsTenant.with_tenant(home_instance) do
         course = create(:course)
         manager = create(:course_manager, course: course)
+        create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user)
         controller_sign_in(controller, manager.user)
         # Point the request at the home instance's host so `deduce_tenant` resolves it (this
         # describe is outside `with_tenant`, which would otherwise set the host header for us).
