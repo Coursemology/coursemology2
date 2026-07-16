@@ -6119,6 +6119,9 @@
   "course.marketplace.previewAction": {
     "defaultMessage": "Preview"
   },
+  "course.marketplace.previewBadge": {
+    "defaultMessage": "Preview"
+  },
   "course.marketplace.searchPlaceholder": {
     "defaultMessage": "Search by title"
   },

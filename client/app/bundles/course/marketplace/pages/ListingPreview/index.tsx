@@ -51,7 +51,16 @@ const ListingPreview = (): JSX.Element => {
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"
-          title={listing.title}
+          title={
+            <span className="flex items-center gap-2">
+              {listing.title}
+              <Chip
+                label={t(translations.previewBadge)}
+                size="small"
+                variant="outlined"
+              />
+            </span>
+          }
         >
           {listing.description && (
             <DescriptionCard description={listing.description} />
