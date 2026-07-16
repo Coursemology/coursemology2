@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
@@ -15,6 +15,12 @@ const marketplaceRouter: Translated<RouteObject> = () => ({
         Component: (await import('course/marketplace/pages/MarketplaceIndex'))
           .default,
       }),
+    },
+    {
+      // `listings` on its own (no id) is not a real page — send it back to the
+      // marketplace index so it lands in the same place as `marketplace/`.
+      path: 'listings',
+      element: <Navigate replace to=".." />,
     },
     {
       path: 'listings/:listingId',
