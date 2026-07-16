@@ -43,6 +43,9 @@ export interface ListingPreviewData {
   id: number;
   title: string;
   description: string;
+  // The previewer's own category/tab structure, so the duplicate dialog can offer the destination
+  // tab picker from the listing detail page (the listing itself lives in another course).
+  destinationTabs: DestinationTab[];
   gradingMode: 'autograded' | 'manual';
   // Absent, not null, when the assessment awards none: show.json.jbuilder emits these keys only
   // when the value is > 0, so the details table skips the row instead of printing a bare "0".

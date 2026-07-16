@@ -6116,17 +6116,23 @@
   "course.marketplace.destinationCourse": {
     "defaultMessage": "대상 강좌"
   },
-  "course.marketplace.assessmentsHeading": {
-    "defaultMessage": "평가"
+  "course.marketplace.pickDestinationTab": {
+    "defaultMessage": "대상 탭 선택"
+  },
+  "course.marketplace.duplicating": {
+    "defaultMessage": "복제 중"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "복제"
   },
-  "course.marketplace.duplicateStarted": {
-    "defaultMessage": "{n, plural, one {평가 복제가} other {평가 복제가}} 시작되었습니다."
+  "course.marketplace.duplicateCompleted": {
+    "defaultMessage": "{n, plural, one {평가가 복제되었습니다} other {평가가 복제되었습니다}}."
   },
   "course.marketplace.duplicateFailed": {
-    "defaultMessage": "{n, plural, one {평가 복제에} other {평가 복제에}} 실패했습니다."
+    "defaultMessage": "{n, plural, one {평가를 복제할 수 없습니다} other {평가를 복제할 수 없습니다}}."
+  },
+  "course.marketplace.viewDuplicatedAssessment": {
+    "defaultMessage": "평가 보기"
   },
   "course.marketplace.selectToDuplicate": {
     "defaultMessage": "복제하려면 선택"
