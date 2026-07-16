@@ -73,6 +73,10 @@ export default defineMessages({
     id: 'course.marketplace.previewAction',
     defaultMessage: 'Preview',
   },
+  previewBadge: {
+    id: 'course.marketplace.previewBadge',
+    defaultMessage: 'Preview',
+  },
   duplicateAssessment: {
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
