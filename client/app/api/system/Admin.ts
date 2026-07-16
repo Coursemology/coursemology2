@@ -5,6 +5,10 @@ import {
 } from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
+import {
+  AllowlistRuleData,
+  AllowlistRuleFormData,
+} from 'types/system/marketplaceAllowlist';
 import { AdminStats, UserListData } from 'types/users';
 
 import BaseSystemAPI from '../Base';
@@ -172,5 +176,44 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   getDeploymentInfo(): Promise<AxiosResponse<DeploymentInfo>> {
     return this.client.get(`${AdminAPI.#urlPrefix}/deployment_info`);
+  }
+
+  /**
+   * Fetches the marketplace allow-list rules.
+   */
+  indexMarketplaceAllowlistRules(): Promise<
+    AxiosResponse<{ rules: AllowlistRuleData[] }>
+  > {
+    return this.client.get(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+    );
+  }
+
+  /**
+   * Creates a marketplace allow-list rule.
+   */
+  createMarketplaceAllowlistRule(
+    params: AllowlistRuleFormData,
+  ): Promise<AxiosResponse<AllowlistRuleData>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+      {
+        allowlist_rule: {
+          rule_type: params.ruleType,
+          user_id: params.userId,
+          instance_id: params.instanceId,
+          email_domain: params.emailDomain,
+        },
+      },
+    );
+  }
+
+  /**
+   * Deletes a marketplace allow-list rule.
+   */
+  deleteMarketplaceAllowlistRule(id: number): Promise<AxiosResponse> {
+    return this.client.delete(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules/${id}`,
+    );
   }
 }
