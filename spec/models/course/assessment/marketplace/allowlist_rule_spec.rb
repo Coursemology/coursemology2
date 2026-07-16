@@ -49,6 +49,17 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
         expect(described_class.grants_access?(user)).to be(true)
       end
 
+      it 'does not match an instance rule for another instance under the current tenant' do
+        user = create(:user)
+        other_instance = create(:instance)
+        ActsAsTenant.with_tenant(other_instance) { InstanceUser.create!(user: user) }
+        create(:course_assessment_marketplace_allowlist_rule, rule_type: :instance,
+                                                              instance: other_instance)
+        # `user.instance_users` is tenant-scoped (acts_as_tenant), so an instance rule grants
+        # access only while browsing the allow-listed instance — membership elsewhere is invisible.
+        expect(described_class.grants_access?(user)).to be(false)
+      end
+
       it 'matches an email-domain rule case-insensitively' do
         user_email = create(:user_email, email: 'testuser@Schools.GOV.sg')
         user = user_email.user

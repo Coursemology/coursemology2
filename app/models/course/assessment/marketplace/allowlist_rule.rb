@@ -9,8 +9,10 @@ class Course::Assessment::Marketplace::AllowlistRule < ApplicationRecord
   validates :instance, presence: true, if: :rule_type_instance?
   validates :email_domain, presence: true, if: :rule_type_email_domain?
 
-  # Whether the marketplace is visible to +user+ per the allow-list. Global (non-tenant):
-  # the marketplace is cross-instance, so rules are evaluated without a tenant scope.
+  # Whether the marketplace is visible to +user+ per the allow-list. The rules table itself is
+  # global (not tenant-scoped), but `user.instance_users` IS tenant-scoped (acts_as_tenant), so
+  # in a request an `instance` rule matches only while browsing the allow-listed instance —
+  # it grants that instance's users access *there*, not membership-based access everywhere.
   # @param [User] user
   # @return [Boolean]
   def self.grants_access?(user)
