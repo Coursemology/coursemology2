@@ -6083,6 +6083,9 @@
   "course.marketplace.previewAction": {
     "defaultMessage": "预览"
   },
+  "course.marketplace.previewBadge": {
+    "defaultMessage": "预览"
+  },
   "course.marketplace.duplicateAssessment": {
     "defaultMessage": "复制评估"
   },

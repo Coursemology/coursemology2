@@ -6125,6 +6125,9 @@
   "course.marketplace.previewAction": {
     "defaultMessage": "Preview"
   },
+  "course.marketplace.previewBadge": {
+    "defaultMessage": "Preview"
+  },
   "course.marketplace.duplicateAssessment": {
     "defaultMessage": "Duplicate Assessment"
   },

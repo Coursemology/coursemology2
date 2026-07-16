@@ -6089,6 +6089,9 @@
   "course.marketplace.previewAction": {
     "defaultMessage": "미리보기"
   },
+  "course.marketplace.previewBadge": {
+    "defaultMessage": "미리보기"
+  },
   "course.marketplace.duplicateAssessment": {
     "defaultMessage": "평가 복제"
   },
