@@ -14,5 +14,8 @@ FactoryBot.define do
       rule_type { :email_domain }
       email_domain { 'schools.gov.sg' }
     end
+    trait :everyone do
+      rule_type { :everyone }
+    end
   end
 end

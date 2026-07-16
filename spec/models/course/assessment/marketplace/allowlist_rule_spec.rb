@@ -23,6 +23,24 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
         expect(rule).not_to be_valid
         expect(rule.errors[:email_domain]).to be_present
       end
+
+      it 'requires instance for an instance rule' do
+        rule = build(:course_assessment_marketplace_allowlist_rule, rule_type: :instance, instance: nil)
+        expect(rule).not_to be_valid
+        expect(rule.errors[:instance]).to be_present
+      end
+
+      it 'is valid as an everyone rule with no target fields' do
+        rule = build(:course_assessment_marketplace_allowlist_rule, :everyone)
+        expect(rule).to be_valid
+      end
+
+      it 'allows only one everyone rule' do
+        create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        duplicate = build(:course_assessment_marketplace_allowlist_rule, :everyone)
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:rule_type]).to be_present
+      end
     end
 
     describe '.grants_access?' do
@@ -74,6 +92,17 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
         create(:course_assessment_marketplace_allowlist_rule, :for_email_domain,
                email_domain: 'schools.gov.sg')
         expect(described_class.grants_access?(user)).to be(false)
+      end
+
+      it 'matches any user when an everyone rule exists' do
+        user = create(:user)
+        create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        expect(described_class.grants_access?(user)).to be(true)
+      end
+
+      it 'is false for a nil user even when an everyone rule exists' do
+        create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        expect(described_class.grants_access?(nil)).to be(false)
       end
     end
   end

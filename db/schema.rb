@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_07_000003) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_16_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -295,6 +295,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000003) do
     t.datetime "updated_at", null: false
     t.index ["email_domain"], name: "idx_on_email_domain_6577b88d4e"
     t.index ["instance_id"], name: "idx_on_instance_id_77af5cff27"
+    t.index ["rule_type"], name: "index_marketplace_allowlist_rules_one_everyone", unique: true, where: "(rule_type = 3)"
     t.index ["user_id"], name: "index_course_assessment_marketplace_allowlist_rules_on_user_id"
   end
 
