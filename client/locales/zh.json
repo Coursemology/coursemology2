@@ -6110,17 +6110,23 @@
   "course.marketplace.destinationCourse": {
     "defaultMessage": "目标课程"
   },
-  "course.marketplace.assessmentsHeading": {
-    "defaultMessage": "评估"
+  "course.marketplace.pickDestinationTab": {
+    "defaultMessage": "选择目标标签页"
+  },
+  "course.marketplace.duplicating": {
+    "defaultMessage": "正在复制"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "复制"
   },
-  "course.marketplace.duplicateStarted": {
-    "defaultMessage": "{n, plural, one {评估复制} other {评估复制}}已开始。"
+  "course.marketplace.duplicateCompleted": {
+    "defaultMessage": "{n, plural, one {评估已复制} other {评估已复制}}。"
   },
   "course.marketplace.duplicateFailed": {
-    "defaultMessage": "{n, plural, one {评估复制} other {评估复制}}失败。"
+    "defaultMessage": "{n, plural, one {无法复制评估} other {无法复制评估}}。"
+  },
+  "course.marketplace.viewDuplicatedAssessment": {
+    "defaultMessage": "查看评估"
   },
   "course.marketplace.selectToDuplicate": {
     "defaultMessage": "选择评估复制"
