@@ -99,8 +99,9 @@ const MarketplaceAllowlistRuleForm = ({
 
   return (
     <Prompt
-      disabled={submitting || value.trim() === ''}
+      cancelDisabled={submitting}
       onClickPrimary={submit}
+      primaryDisabled={submitting || value.trim() === ''}
       onClose={handleClose}
       open={open}
       primaryLabel={t(translations.add)}
