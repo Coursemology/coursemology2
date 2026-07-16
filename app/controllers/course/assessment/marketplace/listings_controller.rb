@@ -31,6 +31,7 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
       @assessment = @listing.assessment
       authorize!(:preview_in_marketplace, @assessment)
+      @destination_tabs = destination_tabs
       render 'show'
     end
   end

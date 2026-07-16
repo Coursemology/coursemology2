@@ -46,6 +46,7 @@ it('renders the read-only assessment config', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>Awesome description 5</p>',
     gradingMode: 'manual',
     baseExp: 1000,
@@ -101,6 +102,7 @@ it('carries from_tab into the per-question detail links', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,
@@ -137,6 +139,7 @@ it('navigates back to the marketplace carrying from_tab', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,
@@ -162,6 +165,7 @@ it('renders a back button to the marketplace index', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,

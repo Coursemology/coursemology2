@@ -45,15 +45,18 @@ const translations: Record<DuplicableItemType, MessageDescriptor> =
     },
   });
 
-const TypeBadge: FC<{ text?: string; itemType: DuplicableItemType }> = ({
-  text,
-  itemType,
-}) => {
+const TypeBadge: FC<{
+  text?: string;
+  itemType: DuplicableItemType;
+  dense?: boolean;
+}> = ({ text, itemType, dense = false }) => {
   const { t } = useTranslation();
 
   return (
     <Typography
-      className="px-2 py-1 border border-solid rounded-md mr-3"
+      className={`px-2 ${
+        dense ? 'py-0.5' : 'py-1'
+      } border border-solid rounded-md mr-3`}
       fontWeight="inherit"
       variant="caption"
     >

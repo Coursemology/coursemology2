@@ -139,6 +139,20 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         expect(question['options']).to be_present
       end
 
+      it 'includes the current course destination tabs so the duplicate dialog can offer a picker' do
+        get :show, params: { course_id: course, id: listing.id, format: :json }
+        tabs = response.parsed_body['destinationTabs']
+        expect(tabs).to be_present
+        default_tab = course.assessment_categories.first.tabs.first
+        row = tabs.find { |tab| tab['id'] == default_tab.id }
+        expect(row).to include(
+          'id' => default_tab.id,
+          'title' => default_tab.title,
+          'categoryId' => default_tab.category.id,
+          'categoryTitle' => default_tab.category.title
+        )
+      end
+
       context 'when the listing is unpublished' do
         let!(:listing) { create(:course_assessment_marketplace_listing, published: false) }
         it 'is forbidden' do

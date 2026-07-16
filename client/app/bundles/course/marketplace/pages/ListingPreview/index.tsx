@@ -80,10 +80,9 @@ const ListingPreview = (): JSX.Element => {
           </Subsection>
 
           <DuplicateConfirmation
-            destinationCategory={null}
             destinationCourse={{ title: courseTitle, url: courseUrl }}
-            destinationTab={null}
-            destinationTabId={destinationTabId}
+            destinationTabs={listing.destinationTabs}
+            initialDestinationTabId={destinationTabId}
             listings={[{ id: listing.id, title: listing.title }]}
             onClose={(): void => setDuplicating(false)}
             open={duplicating}

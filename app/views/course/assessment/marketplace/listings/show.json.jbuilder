@@ -3,6 +3,15 @@ json.id @assessment.id
 json.title @assessment.title
 json.description format_ckeditor_rich_text(@assessment.description)
 
+# The current course's category/tab structure, so the duplicate confirmation dialog can offer the
+# destination tab picker from the listing detail page (the listing itself lives in another course).
+json.destinationTabs @destination_tabs do |tab|
+  json.id tab[:id]
+  json.title tab[:title]
+  json.categoryId tab[:category_id]
+  json.categoryTitle tab[:category_title]
+end
+
 json.gradingMode @assessment.autograded? ? 'autograded' : 'manual'
 json.baseExp @assessment.base_exp if @assessment.base_exp > 0
 json.bonusExp @assessment.time_bonus_exp if @assessment.time_bonus_exp > 0

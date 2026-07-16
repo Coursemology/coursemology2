@@ -16,7 +16,9 @@ import {
 import { Typography } from '@mui/material';
 import { produce } from 'immer';
 
-type Toaster = (message: string, options?: ToastOptions) => Id;
+// `formattedMessage` already renders a ReactNode (and `PromisedToastMessages` already types its
+// messages that way), so this only widens the type — nothing changes at runtime.
+type Toaster = (message: ReactNode, options?: ToastOptions) => Id;
 
 interface PromisedToastMessages {
   pending?: ReactNode;

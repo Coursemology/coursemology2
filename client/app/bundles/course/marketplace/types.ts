@@ -43,6 +43,9 @@ export interface ListingPreviewData {
   id: number;
   title: string;
   description: string;
+  // The previewer's own category/tab structure, so the duplicate dialog can offer the destination
+  // tab picker from the listing detail page (the listing itself lives in another course).
+  destinationTabs: DestinationTab[];
   gradingMode: 'autograded' | 'manual';
   baseExp: number | null;
   bonusExp: number | null;
