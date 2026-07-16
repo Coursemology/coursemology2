@@ -74,6 +74,13 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
     describe 'GET #index visibility gate' do
       subject { get :index, params: { course_id: course.id, format: :json } }
 
+      # The suite runs with `use_transactional_fixtures = false` (see spec/rails_helper.rb), so rows
+      # persist across examples/runs. `:everyone` is a DB-enforced singleton (one row allowed), so any
+      # leftover row here would either block a later `create(:everyone)` with a uniqueness error or
+      # spuriously widen access in a sibling example. Mirrors the cleanup in
+      # spec/models/course/assessment/marketplace/allowlist_rule_spec.rb.
+      before { Course::Assessment::Marketplace::AllowlistRule.delete_all }
+
       context 'when the manager is not on the allow-list' do
         before { controller_sign_in(controller, manager.user) }
 
@@ -102,6 +109,29 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
 
         it 'permits access without an allow-list rule' do
           expect { subject }.not_to raise_exception
+        end
+      end
+
+      context "when an 'everyone' rule exists" do
+        before do
+          create(:course_assessment_marketplace_allowlist_rule, :everyone)
+          controller_sign_in(controller, manager.user)
+        end
+
+        it 'permits a manager who has no matching scoped rule' do
+          expect { subject }.not_to raise_exception
+        end
+      end
+
+      context "when an 'everyone' rule exists but the user is a student" do
+        let(:student) { create(:course_student, course: course).user }
+        before do
+          create(:course_assessment_marketplace_allowlist_rule, :everyone)
+          controller_sign_in(controller, student)
+        end
+
+        it 'still denies a non-manager (the manager gate holds)' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
         end
       end
     end
