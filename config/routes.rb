@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       get '/' => 'admin#index'
       get 'deployment_info' => 'admin#deployment_info'
       resources :announcements, only: [:index, :create, :update, :destroy]
+      resources :marketplace_allowlist_rules, only: [:index, :create, :destroy]
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
