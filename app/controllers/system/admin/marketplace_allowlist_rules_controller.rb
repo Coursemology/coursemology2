@@ -5,7 +5,10 @@ class System::Admin::MarketplaceAllowlistRulesController < System::Admin::Contro
                               parent: false
 
   def index
-    @allowlist_rules = @allowlist_rules.includes(:user, :instance)
+    # "Everyone" is a page-level mode, not a table row: expose its presence as `@everyone_rule`
+    # and show only the scoped rules in the table.
+    @everyone_rule = @allowlist_rules.rule_type_everyone.first
+    @allowlist_rules = @allowlist_rules.where.not(rule_type: :everyone).includes(:user, :instance)
   end
 
   def create

@@ -2,3 +2,4 @@
 json.rules @allowlist_rules do |rule|
   json.partial! 'rule', rule: rule
 end
+json.everyoneRuleId @everyone_rule&.id

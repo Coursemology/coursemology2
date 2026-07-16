@@ -39,6 +39,55 @@ RSpec.describe System::Admin::MarketplaceAllowlistRulesController, type: :contro
       end
     end
 
+    describe 'GET #index everyone-mode reporting' do
+      render_views
+      before do
+        Course::Assessment::Marketplace::AllowlistRule.delete_all
+        create(:course_assessment_marketplace_allowlist_rule, :for_email_domain)
+      end
+
+      it 'reports everyoneRuleId null and lists only scoped rules when no everyone rule exists' do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['everyoneRuleId']).to be_nil
+        expect(response.parsed_body['rules'].size).to eq(1)
+      end
+
+      it 'reports everyoneRuleId and excludes the everyone rule from the list' do
+        everyone = create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['everyoneRuleId']).to eq(everyone.id)
+        expect(response.parsed_body['rules'].map { |r| r['ruleType'] }).not_to include('everyone')
+        expect(response.parsed_body['rules'].size).to eq(1)
+      end
+    end
+
+    describe "POST #create with rule_type 'everyone'" do
+      before { Course::Assessment::Marketplace::AllowlistRule.delete_all }
+
+      it 'opens the marketplace to everyone' do
+        expect do
+          post :create, format: :json, params: { allowlist_rule: { rule_type: 'everyone' } }
+        end.to change { Course::Assessment::Marketplace::AllowlistRule.rule_type_everyone.count }.by(1)
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'rejects a second everyone rule' do
+        create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        expect do
+          post :create, format: :json, params: { allowlist_rule: { rule_type: 'everyone' } }
+        end.not_to(change { Course::Assessment::Marketplace::AllowlistRule.count })
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it 'surfaces the uniqueness error when rejected' do
+        create(:course_assessment_marketplace_allowlist_rule, :everyone)
+        post :create, format: :json, params: { allowlist_rule: { rule_type: 'everyone' } }
+        expect(response.parsed_body['errors']).to include('already been taken')
+      end
+    end
+
     describe 'DELETE #destroy' do
       let!(:rule) { create(:course_assessment_marketplace_allowlist_rule, :for_email_domain) }
 
