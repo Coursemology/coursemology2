@@ -69,6 +69,41 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         end
       end
     end
+    describe 'GET #index visibility gate' do
+      subject { get :index, params: { course_id: course.id, format: :json } }
+
+      context 'when the manager is not on the allow-list' do
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'denies access' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when an allow-list rule matches the manager' do
+        before do
+          create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user)
+          controller_sign_in(controller, manager.user)
+        end
+
+        it 'permits access' do
+          expect { subject }.not_to raise_exception
+        end
+      end
+
+      context 'when the user is a system administrator' do
+        let(:admin) { create(:administrator) }
+        before do
+          create(:course_manager, course: course, user: admin)
+          controller_sign_in(controller, admin)
+        end
+
+        it 'permits access without an allow-list rule' do
+          expect { subject }.not_to raise_exception
+        end
+      end
+    end
+
     describe 'POST #duplicate' do
       # `have_enqueued_job` requires the :test adapter; the test env defaults to :background_thread.
       # `run_rescue` re-enables handle_access_denied so AccessDenied renders 403 rather than
