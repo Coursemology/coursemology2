@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_07_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -284,6 +284,18 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
     t.index ["listing_id", "destination_course_id"], name: "index_cama_on_listing_id_and_destination_course_id"
     t.index ["listing_id"], name: "fk__course_assessment_marketplace_adoptions_listing_id"
     t.index ["updater_id"], name: "fk__cama_updater_id"
+  end
+
+  create_table "course_assessment_marketplace_allowlist_rules", force: :cascade do |t|
+    t.integer "rule_type", null: false
+    t.bigint "user_id"
+    t.bigint "instance_id"
+    t.string "email_domain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_domain"], name: "idx_on_email_domain_6577b88d4e"
+    t.index ["instance_id"], name: "idx_on_instance_id_77af5cff27"
+    t.index ["user_id"], name: "index_course_assessment_marketplace_allowlist_rules_on_user_id"
   end
 
   create_table "course_assessment_marketplace_listings", force: :cascade do |t|
@@ -1956,6 +1968,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
   add_foreign_key "course_assessment_marketplace_adoptions", "courses", column: "destination_course_id", name: "fk_cama_destination_course_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "creator_id", name: "fk_course_assessment_marketplace_adoptions_creator_id"
   add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "updater_id", name: "fk_course_assessment_marketplace_adoptions_updater_id"
+  add_foreign_key "course_assessment_marketplace_allowlist_rules", "instances"
+  add_foreign_key "course_assessment_marketplace_allowlist_rules", "users"
   add_foreign_key "course_assessment_marketplace_listings", "course_assessments", column: "assessment_id", name: "fk_course_assessment_marketplace_listings_assessment_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "creator_id", name: "fk_course_assessment_marketplace_listings_creator_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "publisher_id", name: "fk_course_assessment_marketplace_listings_publisher_id"
