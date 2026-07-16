@@ -8,6 +8,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 interface Props {
   rules: AllowlistRuleData[];
   onDelete: (id: number) => Promise<void>;
+  disabled?: boolean;
 }
 
 const translations = defineMessages({
@@ -46,7 +47,11 @@ const translations = defineMessages({
   },
 });
 
-const MarketplaceAllowlistTable = ({ rules, onDelete }: Props): JSX.Element => {
+const MarketplaceAllowlistTable = ({
+  rules,
+  onDelete,
+  disabled = false,
+}: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const typeLabels: Record<AllowlistRuleData['ruleType'], string> = {
@@ -83,7 +88,7 @@ const MarketplaceAllowlistTable = ({ rules, onDelete }: Props): JSX.Element => {
       cell: (rule) => (
         <DeleteButton
           confirmMessage={t(translations.deleteConfirm)}
-          disabled={false}
+          disabled={disabled}
           onClick={(): Promise<void> => onDelete(rule.id)}
         />
       ),
@@ -91,12 +96,14 @@ const MarketplaceAllowlistTable = ({ rules, onDelete }: Props): JSX.Element => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={rules}
-      getRowId={(rule): string => rule.id.toString()}
-      renderEmpty={t(translations.empty)}
-    />
+    <div className={disabled ? 'opacity-50' : undefined}>
+      <Table
+        columns={columns}
+        data={rules}
+        getRowId={(rule): string => rule.id.toString()}
+        renderEmpty={t(translations.empty)}
+      />
+    </div>
   );
 };
 

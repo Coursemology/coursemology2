@@ -12,6 +12,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import toast from 'lib/hooks/toast';
 
 import MarketplaceAllowlistRuleForm from '../components/forms/MarketplaceAllowlistRuleForm';
+import MarketplaceAllowlistModeBanner from '../components/MarketplaceAllowlistModeBanner';
 import MarketplaceAllowlistTable from '../components/tables/MarketplaceAllowlistTable';
 
 type Props = WrappedComponentProps;
@@ -45,20 +46,42 @@ const translations = defineMessages({
     id: 'system.admin.admin.MarketplaceAllowlistIndex.deleteFailure',
     defaultMessage: 'Failed to remove access rule.',
   },
+  openSuccess: {
+    id: 'system.admin.admin.MarketplaceAllowlistIndex.openSuccess',
+    defaultMessage: 'Marketplace opened to all course managers.',
+  },
+  openFailure: {
+    id: 'system.admin.admin.MarketplaceAllowlistIndex.openFailure',
+    defaultMessage: 'Failed to open the marketplace to everyone.',
+  },
+  restrictSuccess: {
+    id: 'system.admin.admin.MarketplaceAllowlistIndex.restrictSuccess',
+    defaultMessage: 'Marketplace restricted to the scoped rules.',
+  },
+  restrictFailure: {
+    id: 'system.admin.admin.MarketplaceAllowlistIndex.restrictFailure',
+    defaultMessage: 'Failed to restrict the marketplace.',
+  },
 });
 
 const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [rules, setRules] = useState<AllowlistRuleData[]>([]);
+  const [everyoneRuleId, setEveryoneRuleId] = useState<number | null>(null);
 
   useEffect(() => {
     SystemAPI.admin
       .indexMarketplaceAllowlistRules()
-      .then((response) => setRules(response.data.rules))
+      .then((response) => {
+        setRules(response.data.rules);
+        setEveryoneRuleId(response.data.everyoneRuleId ?? null);
+      })
       .catch(() => toast.error(intl.formatMessage(translations.fetchFailure)))
       .finally(() => setIsLoading(false));
   }, []);
+
+  const openToEveryone = everyoneRuleId !== null;
 
   const handleCreate = async (data: AllowlistRuleFormData): Promise<void> => {
     try {
@@ -82,12 +105,34 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
     }
   };
 
+  const handleOpenToEveryone = async (): Promise<void> => {
+    try {
+      const response = await SystemAPI.admin.openMarketplaceToEveryone();
+      setEveryoneRuleId(response.data.id);
+      toast.success(intl.formatMessage(translations.openSuccess));
+    } catch {
+      toast.error(intl.formatMessage(translations.openFailure));
+    }
+  };
+
+  const handleRestrict = async (): Promise<void> => {
+    if (everyoneRuleId === null) return;
+    try {
+      await SystemAPI.admin.deleteMarketplaceAllowlistRule(everyoneRuleId);
+      setEveryoneRuleId(null);
+      toast.success(intl.formatMessage(translations.restrictSuccess));
+    } catch {
+      toast.error(intl.formatMessage(translations.restrictFailure));
+    }
+  };
+
   if (isLoading) return <LoadingIndicator />;
 
   return (
     <Page title={intl.formatMessage(translations.header)}>
       <AddButton
         className="float-right"
+        disabled={openToEveryone}
         fixed
         id="add-allowlist-rule-button"
         onClick={(): void => setIsFormOpen(true)}
@@ -95,7 +140,17 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
         {intl.formatMessage(translations.addRule)}
       </AddButton>
 
-      <MarketplaceAllowlistTable onDelete={handleDelete} rules={rules} />
+      <MarketplaceAllowlistModeBanner
+        onOpenToEveryone={handleOpenToEveryone}
+        onRestrict={handleRestrict}
+        openToEveryone={openToEveryone}
+      />
+
+      <MarketplaceAllowlistTable
+        disabled={openToEveryone}
+        onDelete={handleDelete}
+        rules={rules}
+      />
 
       <MarketplaceAllowlistRuleForm
         onClose={(): void => setIsFormOpen(false)}

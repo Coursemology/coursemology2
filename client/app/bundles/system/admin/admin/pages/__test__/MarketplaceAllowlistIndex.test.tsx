@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { createMockAdapter } from 'mocks/axiosMock';
-import { fireEvent, render, waitFor } from 'test-utils';
+import { fireEvent, render, waitFor, within } from 'test-utils';
 
 import SystemAPI from 'api/system';
 
@@ -10,6 +10,7 @@ const mock = createMockAdapter(SystemAPI.admin.client);
 beforeEach(() => mock.reset());
 
 const INDEX_URL = '/admin/marketplace_allowlist_rules';
+const EMAIL_DOMAIN = 'schools.gov.sg';
 const RULES = [
   {
     id: 1,
@@ -18,7 +19,7 @@ const RULES = [
     userName: null,
     instanceId: null,
     instanceName: null,
-    emailDomain: 'schools.gov.sg',
+    emailDomain: EMAIL_DOMAIN,
   },
 ];
 
@@ -26,7 +27,7 @@ it('renders the allow-list rules from the API', async () => {
   mock.onGet(INDEX_URL).reply(200, { rules: RULES });
   const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
 
-  await waitFor(() => expect(page.getByText('schools.gov.sg')).toBeVisible());
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
 });
 
 it('creates an email-domain rule from the add dialog', async () => {
@@ -65,13 +66,81 @@ it('deletes a rule after confirmation', async () => {
   mock.onDelete(`${INDEX_URL}/1`).reply(200);
 
   const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
-  await waitFor(() => expect(page.getByText('schools.gov.sg')).toBeVisible());
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
 
   fireEvent.click(page.getByTestId('DeleteIconButton'));
   fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
   await waitFor(() => expect(mock.history.delete).toHaveLength(1));
   await waitFor(() =>
-    expect(page.queryByText('schools.gov.sg')).not.toBeInTheDocument(),
+    expect(page.queryByText(EMAIL_DOMAIN)).not.toBeInTheDocument(),
   );
+});
+
+it('opens the marketplace to everyone from the banner', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: null });
+  mock.onPost(INDEX_URL).reply(200, { id: 99 });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
+
+  // Scoped state: banner offers "Open to everyone".
+  fireEvent.click(page.getByRole('button', { name: 'Open to everyone' }));
+
+  // Confirm inside the dialog (its primary button shares the label, so scope to the dialog).
+  const dialog = page.getByRole('dialog');
+  fireEvent.click(
+    within(dialog).getByRole('button', { name: 'Open to everyone' }),
+  );
+
+  await waitFor(() => expect(mock.history.post).toHaveLength(1));
+  expect(JSON.parse(mock.history.post[0].data)).toEqual({
+    allowlist_rule: { rule_type: 'everyone' },
+  });
+  await waitFor(() =>
+    expect(
+      page.getByText(
+        'The marketplace is open to all course managers. The rules below are preserved but inactive.',
+      ),
+    ).toBeVisible(),
+  );
+});
+
+it('restricts the marketplace to scoped rules from the banner', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: 42 });
+  mock.onDelete(`${INDEX_URL}/42`).reply(200);
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() =>
+    expect(
+      page.getByText(
+        'The marketplace is open to all course managers. The rules below are preserved but inactive.',
+      ),
+    ).toBeVisible(),
+  );
+
+  fireEvent.click(
+    page.getByRole('button', { name: 'Restrict to scoped rules' }),
+  );
+  const dialog = page.getByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Restrict' }));
+
+  await waitFor(() => expect(mock.history.delete).toHaveLength(1));
+  expect(mock.history.delete[0].url).toBe(`${INDEX_URL}/42`);
+  await waitFor(() =>
+    expect(
+      page.getByText('Access is limited to the rules below.'),
+    ).toBeVisible(),
+  );
+});
+
+it('disables adding and removing rules while the marketplace is open to everyone', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: 42 });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
+
+  // Open-to-everyone means the scoped rules are preserved but inactive: no add, no delete.
+  expect(page.getByRole('button', { name: 'Add rule' })).toBeDisabled();
+  expect(page.getByTestId('DeleteIconButton')).toBeDisabled();
 });

@@ -182,7 +182,7 @@ export default class AdminAPI extends BaseSystemAPI {
    * Fetches the marketplace allow-list rules.
    */
   indexMarketplaceAllowlistRules(): Promise<
-    AxiosResponse<{ rules: AllowlistRuleData[] }>
+    AxiosResponse<{ rules: AllowlistRuleData[]; everyoneRuleId: number | null }>
   > {
     return this.client.get(
       `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
@@ -205,6 +205,17 @@ export default class AdminAPI extends BaseSystemAPI {
           email_domain: params.emailDomain,
         },
       },
+    );
+  }
+
+  /**
+   * Opens the marketplace to everyone by creating the single `everyone` allow-list rule.
+   * Returns the created rule; only its `id` is consumed (to later restrict).
+   */
+  openMarketplaceToEveryone(): Promise<AxiosResponse<{ id: number }>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+      { allowlist_rule: { rule_type: 'everyone' } },
     );
   }
 
