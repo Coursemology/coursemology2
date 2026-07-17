@@ -26,4 +26,14 @@ export default class MarketplaceAPI extends BaseCourseAPI {
   > {
     return this.client.get(this.#urlPrefix);
   }
+
+  duplicate(
+    listingIds: number[],
+    destinationTabId: number | null,
+  ): Promise<AxiosResponse> {
+    return this.client.post(`${this.#urlPrefix}/listings/duplicate`, {
+      listing_ids: listingIds,
+      ...(destinationTabId ? { destination_tab_id: destinationTabId } : {}),
+    });
+  }
 }

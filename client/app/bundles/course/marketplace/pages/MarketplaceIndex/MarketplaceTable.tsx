@@ -56,7 +56,9 @@ const MarketplaceTable = ({ listings, onDuplicate }: Props): JSX.Element => {
           <Link opensInNewTab to={l.previewUrl}>
             {t(translations.preview)}
           </Link>
-          {/* Row-level Duplicate button wired in Task 18 */}
+          <button onClick={(): void => onDuplicate([l])} type="button">
+            {t(translations.duplicateConfirm)}
+          </button>
         </>
       ),
     },
