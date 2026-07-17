@@ -23,6 +23,28 @@ module Course::Assessment::Submission::AnswersConcern
     bulk_save_new_answers(new_answers) if new_answers.present?
   end
 
+  # Loads basic information about the past answers of each question. Generic over `answers` +
+  # `Course::Assessment::Answer::without_attempting_state` — shared by Submission and
+  # PreviewAttempt (both include this concern).
+  def answer_history
+    answers.
+      without_attempting_state.
+      group_by(&:question_id).
+      map do |pair|
+        {
+          question_id: pair[0],
+          answers: pair[1].map do |answer|
+            {
+              id: answer.id,
+              createdAt: answer.created_at&.iso8601,
+              currentAnswer: answer.current_answer,
+              workflowState: answer.workflow_state
+            }
+          end
+        }
+      end
+  end
+
   private
 
   # Insert new answer records (and its actables) in bulk.

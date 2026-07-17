@@ -88,6 +88,16 @@ class Course::Assessment::PreviewAttempt < ApplicationRecord
     nil
   end
 
+  # Duck-types `Submission#experience_points_record` (from `acts_as_experience_points_record`):
+  # the generic `Course::Assessment::Answer` CanCan rules hash-match on
+  # `submission: { experience_points_record: { course_user: { user_id: ... } } }`
+  # (assessment_ability.rb:26) regardless of the polymorphic attemptable's actual type — without
+  # this stub, evaluating that condition against a PreviewAttempt raises NoMethodError instead of
+  # simply not matching.
+  def experience_points_record
+    nil
+  end
+
   def current_points_awarded
     nil
   end

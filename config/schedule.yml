@@ -15,3 +15,10 @@ user_email_database_cleanup_job:
   cron: '0 0 1 * *'
   class: 'UserEmailDatabaseCleanupJob'
   queue: 'default'
+
+# Run the Course::Assessment::PreviewAttemptReapingJob every day at 22:00 UTC, 6:00 AM SGT,
+# destroying throwaway marketplace preview attempts past their TTL.
+preview_attempt_reaping_job:
+  cron: '0 22 * * *'
+  class: 'Course::Assessment::PreviewAttemptReapingJob'
+  queue: 'default'

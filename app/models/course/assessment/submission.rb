@@ -268,26 +268,6 @@ class Course::Assessment::Submission < ApplicationRecord
     current_answers.select { |ans| ans.actable_type == Course::Assessment::Answer::Programming.name }
   end
 
-  # Loads basic information about the past answers of each question
-  def answer_history
-    answers.
-      without_attempting_state.
-      group_by(&:question_id).
-      map do |pair|
-        {
-          question_id: pair[0],
-          answers: pair[1].map do |answer|
-            {
-              id: answer.id,
-              createdAt: answer.created_at&.iso8601,
-              currentAnswer: answer.current_answer,
-              workflowState: answer.workflow_state
-            }
-          end
-        }
-      end
-  end
-
   # Returns the count of user messages for each question in the submission.
   def user_get_help_message_counts
     Course::Assessment::SubmissionQuestion.find_by_sql(<<-SQL)
