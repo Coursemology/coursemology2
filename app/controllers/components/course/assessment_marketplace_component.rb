@@ -11,7 +11,7 @@ class Course::AssessmentMarketplaceComponent < SimpleDelegator
 
     [
       key: :admin_marketplace,
-      icon: :duplication,
+      icon: :marketplace,
       type: :admin,
       weight: 6,
       path: course_marketplace_path(current_course)

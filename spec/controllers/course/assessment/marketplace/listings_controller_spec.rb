@@ -29,6 +29,20 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         expect(row).to include('title', 'questionCount', 'adoptions', 'previewUrl', 'duplicateUrl')
       end
 
+      it 'includes the current course destination tabs with category names' do
+        get :index, params: { course_id: course, format: :json }
+        tabs = response.parsed_body['destinationTabs']
+        expect(tabs).to be_present
+        default_tab = course.assessment_categories.first.tabs.first
+        row = tabs.find { |tab| tab['id'] == default_tab.id }
+        expect(row).to include(
+          'id' => default_tab.id,
+          'title' => default_tab.title,
+          'categoryId' => default_tab.category.id,
+          'categoryTitle' => default_tab.category.title
+        )
+      end
+
       it 'reports the live distinct-course adoption count' do
         listing = create(:course_assessment_marketplace_listing, published: true)
         create(:course_assessment_marketplace_adoption, listing: listing, destination_course: create(:course))
@@ -94,6 +108,42 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
             }
             expect(response).to have_http_status(:forbidden)
           end
+        end
+      end
+    end
+    describe 'GET #show (preview)' do
+      # `run_rescue` re-enables handle_access_denied so a denied preview renders 403 rather than
+      # propagating (controller specs bypass_rescue by default — see spec/support/controller_exceptions.rb).
+      run_rescue
+
+      let!(:listing) do
+        assessment = create(:assessment, course: create(:course))
+        create(:course_assessment_question_multiple_response, :multiple_choice, assessment: assessment)
+        create(:course_assessment_marketplace_listing, assessment: assessment, published: true)
+      end
+
+      it 'renders the assessment config read-only' do
+        get :show, params: { course_id: course, id: listing.id, format: :json }
+        expect(response).to have_http_status(:ok)
+        body = response.parsed_body
+        expect(body).to include('title', 'gradingMode', 'showMcqMrqSolution', 'showRubricToStudents', 'gradedTestCases')
+        # The listing preview reports the human-readable question type, matching the per-question chips.
+        readable_type = I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
+        expect(body['typeCounts']).to include(readable_type => 1)
+
+        question = body['questions'].first
+        expect(question).to have_key('staffOnlyComments')
+        expect(question['type']).to eq(readable_type)
+        expect(question['unautogradable']).to be(false)
+        expect(question['mcqMrqType']).to eq('mcq')
+        expect(question['options']).to be_present
+      end
+
+      context 'when the listing is unpublished' do
+        let!(:listing) { create(:course_assessment_marketplace_listing, published: false) }
+        it 'is forbidden' do
+          get :show, params: { course_id: course, id: listing.id, format: :json }
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end

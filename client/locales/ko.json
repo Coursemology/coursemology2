@@ -6074,6 +6074,12 @@
   "course.marketplace.colActions": {
     "defaultMessage": "작업"
   },
+  "course.marketplace.colPublished": {
+    "defaultMessage": "게시 일시"
+  },
+  "course.marketplace.colPublisher": {
+    "defaultMessage": "게시자"
+  },
   "course.marketplace.previewAction": {
     "defaultMessage": "미리보기"
   },
@@ -6092,11 +6098,14 @@
   "course.marketplace.duplicateN": {
     "defaultMessage": "{n}개 평가 복제"
   },
-  "course.marketplace.duplicateTitle": {
-    "defaultMessage": "평가 {n}개를 내 강좌로 복제하시겠습니까?"
+  "course.marketplace.confirmationQuestion": {
+    "defaultMessage": "항목을 복제하시겠습니까?"
   },
-  "course.marketplace.duplicateBody": {
-    "defaultMessage": "{n, plural, one {이 평가가 내 강좌로 복사됩니다.} other {이 평가 {n}개가 내 강좌로 복사됩니다.}}"
+  "course.marketplace.destinationCourse": {
+    "defaultMessage": "대상 강좌"
+  },
+  "course.marketplace.assessmentsHeading": {
+    "defaultMessage": "평가"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "복제"
@@ -6106,6 +6115,15 @@
   },
   "course.marketplace.duplicateFailed": {
     "defaultMessage": "{n, plural, one {평가 복제에} other {평가 복제에}} 실패했습니다."
+  },
+  "course.marketplace.selectToDuplicate": {
+    "defaultMessage": "복제하려면 선택"
+  },
+  "course.marketplace.emptyNoListings": {
+    "defaultMessage": "아직 마켓플레이스에 게시된 평가가 없습니다."
+  },
+  "course.marketplace.emptyNoMatch": {
+    "defaultMessage": "검색과 일치하는 평가가 없습니다."
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "다운로드에 실패했습니다. 나중에 다시 시도하세요."

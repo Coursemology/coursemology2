@@ -16,7 +16,7 @@ export default defineMessages({
   publishConfirmBody: {
     id: 'course.marketplace.publishConfirmBody',
     defaultMessage:
-      'This assessment will be browsable by course managers, who can preview and duplicate it. It uses this assessment’s own title and description.',
+      'This assessment will be browsable by course managers, who can preview and duplicate it. It uses this assessment’s own title.',
   },
   removeConfirmTitle: {
     id: 'course.marketplace.removeConfirmTitle',
@@ -57,9 +57,21 @@ export default defineMessages({
     id: 'course.marketplace.colActions',
     defaultMessage: 'Actions',
   },
+  colPublished: {
+    id: 'course.marketplace.colPublished',
+    defaultMessage: 'Published at',
+  },
   preview: {
     id: 'course.marketplace.previewAction',
     defaultMessage: 'Preview',
+  },
+  duplicateAssessment: {
+    id: 'course.marketplace.duplicateAssessment',
+    defaultMessage: 'Duplicate Assessment',
+  },
+  viewDetails: {
+    id: 'course.marketplace.viewDetails',
+    defaultMessage: 'View question details',
   },
   searchPlaceholder: {
     id: 'course.marketplace.searchPlaceholder',
@@ -76,15 +88,17 @@ export default defineMessages({
     defaultMessage:
       '{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}',
   },
-  duplicateTitle: {
-    id: 'course.marketplace.duplicateTitle',
-    defaultMessage:
-      'Duplicate assessment{n, plural, one {} other {s}} to your course?',
+  confirmationQuestion: {
+    id: 'course.marketplace.confirmationQuestion',
+    defaultMessage: 'Duplicate items?',
   },
-  duplicateBody: {
-    id: 'course.marketplace.duplicateBody',
-    defaultMessage:
-      '{n, plural, one {This assessment will be copied to your course.} other {These assessments will be copied to your course.}}',
+  destinationCourse: {
+    id: 'course.marketplace.destinationCourse',
+    defaultMessage: 'Destination Course',
+  },
+  assessmentsHeading: {
+    id: 'course.marketplace.assessmentsHeading',
+    defaultMessage: 'Assessments',
   },
   duplicateConfirm: {
     id: 'course.marketplace.duplicateConfirm',
@@ -99,5 +113,29 @@ export default defineMessages({
     id: 'course.marketplace.duplicateFailed',
     defaultMessage:
       '{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed.',
+  },
+  selectToDuplicate: {
+    id: 'course.marketplace.selectToDuplicate',
+    defaultMessage: 'Select to duplicate',
+  },
+  emptyNoListings: {
+    id: 'course.marketplace.emptyNoListings',
+    defaultMessage:
+      'No assessments have been published to the marketplace yet.',
+  },
+  emptyNoMatch: {
+    id: 'course.marketplace.emptyNoMatch',
+    defaultMessage: 'No assessments match your search.',
+  },
+  // Preview-only copy with no equivalent in course/assessment/translations. Every other renderer
+  // label is reused from there; these three have no source and so live locally.
+  bonus: {
+    id: 'course.marketplace.bonus',
+    defaultMessage: 'Bonus',
+  },
+  noPreviewImage: {
+    id: 'course.marketplace.noPreviewImage',
+    defaultMessage:
+      'The background image for this question cannot be previewed here.',
   },
 });

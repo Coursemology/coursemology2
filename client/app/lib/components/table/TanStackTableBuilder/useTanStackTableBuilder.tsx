@@ -47,6 +47,7 @@ const useTanStackTableBuilder = <D extends object>(
     props.columns,
     props.indexing?.rowSelectable,
     props.indexing?.indices,
+    props.indexing?.hideSelectAll,
   );
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -337,6 +338,7 @@ const useTanStackTableBuilder = <D extends object>(
     },
     body: {
       rows: table.getRowModel().rows,
+      renderEmpty: props.renderEmpty,
       getCells: (row) => row.getVisibleCells(),
       // Use getRealColumnById (ID-based) not getRealColumn(index). getVisibleCells() skips hidden
       // columns, so its positional index diverges from getRealColumn's full-column-list index
