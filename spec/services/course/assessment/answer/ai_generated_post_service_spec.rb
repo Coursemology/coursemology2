@@ -73,6 +73,22 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
         end
         service.send(:create_topic_subscription, discussion_topic)
       end
+
+      context 'when the answer belongs to a preview attempt' do
+        let(:preview_attempt) do
+          create(:course_assessment_preview_attempt, assessment: assessment, course: assessment.course)
+        end
+        let(:preview_answer) do
+          create(:course_assessment_answer_rubric_based_response, :submitted,
+                 question: question.acting_as, submission: preview_attempt).answer
+        end
+        let(:service) { described_class.new(preview_answer, 'feedback') }
+
+        it 'subscribes the creator without requiring a course user' do
+          expect(discussion_topic).to receive(:ensure_subscribed_by).with(preview_attempt.creator)
+          expect { service.send(:create_topic_subscription, discussion_topic) }.not_to raise_error
+        end
+      end
     end
 
     describe '#find_existing_ai_draft_post' do
@@ -163,6 +179,34 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
           expect do
             service.create_ai_generated_draft_post
           end.not_to(change { Course::Discussion::Post.count })
+        end
+      end
+
+      context 'when the answer belongs to a preview attempt' do
+        let(:preview_attempt) do
+          create(:course_assessment_preview_attempt, assessment: assessment, course: assessment.course)
+        end
+        let(:preview_answer) do
+          create(:course_assessment_answer_rubric_based_response, :submitted,
+                 question: question.acting_as, submission: preview_attempt).answer
+        end
+        let!(:preview_submission_question) do
+          create(:course_assessment_submission_question,
+                 submission: preview_attempt,
+                 question: question.acting_as,
+                 assessment: assessment,
+                 course: assessment.course)
+        end
+        let(:service) { described_class.new(preview_answer, 'draft post') }
+
+        it 'creates the draft post without requiring a course user' do
+          expect do
+            service.create_ai_generated_draft_post
+          end.to change { Course::Discussion::Post.count }.by(1)
+
+          post = Course::Discussion::Post.last
+          expect(post.text).to eq('draft post')
+          expect(post.topic).to eq(preview_submission_question.acting_as)
         end
       end
     end

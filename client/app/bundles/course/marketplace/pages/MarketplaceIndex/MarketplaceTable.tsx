@@ -2,11 +2,13 @@ import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   ContentCopy,
+  PlayArrow,
   StorefrontOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material';
 import {
   Button,
+  CircularProgress,
   IconButton,
   MenuItem,
   TextField,
@@ -37,6 +39,9 @@ const MarketplaceTable = ({
 }: Props): JSX.Element => {
   const { formatMessage: t } = useIntl();
   const [sortMode, setSortMode] = useState<SortMode>('adoptions');
+  const [attemptingListingId, setAttemptingListingId] = useState<number | null>(
+    null,
+  );
 
   const sorted = useMemo(() => {
     const copy = [...listings];
@@ -85,6 +90,21 @@ const MarketplaceTable = ({
               to={withFromTab(l.previewUrl, fromTab)}
             >
               <VisibilityOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip disableInteractive title={t(translations.attempt)}>
+            <IconButton
+              aria-label={t(translations.attempt)}
+              component={Link}
+              onClick={(): void => setAttemptingListingId(l.id)}
+              size="small"
+              to={withFromTab(`${l.previewUrl}/attempt`, fromTab)}
+            >
+              {attemptingListingId === l.id ? (
+                <CircularProgress size={24} />
+              ) : (
+                <PlayArrow />
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip disableInteractive title={t(translations.duplicateConfirm)}>

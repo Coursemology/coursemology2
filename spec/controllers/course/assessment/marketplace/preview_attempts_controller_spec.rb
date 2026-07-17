@@ -118,6 +118,108 @@ RSpec.describe Course::Assessment::Marketplace::PreviewAttemptsController, type:
       end
     end
 
+    describe 'POST #reset' do
+      let(:attempt) do
+        a = create(:course_assessment_preview_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a.finalise!
+        a
+      end
+      subject { post :reset, params: { course_id: course.id, id: attempt.id, format: :json } }
+
+      it 'returns the attempt to a fresh attempting state with new answers, reusing the same row' do
+        original_answer_ids = attempt.current_answers.map(&:id)
+        expect(attempt.reload.workflow_state).to eq('submitted')
+
+        expect { subject }.not_to(change { Course::Assessment::PreviewAttempt.count })
+
+        expect(response).to have_http_status(:ok)
+        attempt.reload
+        expect(attempt.workflow_state).to eq('attempting')
+        expect(attempt.current_answers).not_to be_empty
+        expect(attempt.current_answers.all?(&:attempting?)).to be(true)
+        # The pre-reset answers are discarded, not resumed.
+        expect(attempt.current_answers.map(&:id)).not_to match_array(original_answer_ids)
+      end
+
+      context 'when the requester is a different manager (not the creator)' do
+        before { controller_sign_in(controller, other_manager) }
+        it 'is denied' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
+
+    describe 'live feedback endpoints' do
+      let(:source_assessment) { create(:assessment, :published_with_programming_question) }
+      let(:attempt) do
+        a = create(:course_assessment_preview_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a
+      end
+      let(:answer) { attempt.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first }
+      let(:question) { answer.question }
+      let!(:submission_question) do
+        create(:submission_question, submission: attempt, question: question)
+      end
+      let!(:thread) do
+        Course::Assessment::LiveFeedback::Thread.create!({
+          codaveri_thread_id: SecureRandom.hex(12),
+          submission_question: submission_question,
+          is_active: true,
+          submission_creator_id: attempt.creator_id,
+          created_at: Time.zone.now
+        })
+      end
+
+      it 'fetches a preview attempt live feedback chat without an assessment_id route param' do
+        get :fetch_live_feedback_chat, params: { course_id: course.id, answer_id: answer.id, format: :json }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['threadId']).to eq(thread.codaveri_thread_id)
+      end
+
+      it 'saves preview attempt live feedback without an assessment_id route param' do
+        post :save_live_feedback, params: {
+          course_id: course.id,
+          current_thread_id: thread.codaveri_thread_id,
+          content: 'Feedback from Codaveri',
+          is_error: false,
+          format: :json
+        }
+
+        expect(response).to have_http_status(:no_content)
+        expect(thread.messages.last.content).to eq('Feedback from Codaveri')
+      end
+    end
+
+    describe 'POST #create_scribing_scribble' do
+      let(:source_assessment) do
+        create(:assessment, :published).tap do |assessment|
+          create(:course_assessment_question_scribing, assessment: assessment)
+        end
+      end
+      let(:attempt) do
+        a = create(:course_assessment_preview_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a
+      end
+      let(:answer) { attempt.answers.where(actable_type: 'Course::Assessment::Answer::Scribing').first }
+
+      it 'updates preview attempt scribbles without an assessment_id route param' do
+        post :create_scribing_scribble, params: {
+          course_id: course.id,
+          id: attempt.id,
+          answer_id: answer.id,
+          scribble: { answer_id: answer.actable.id, content: '{"objects":[]}' },
+          format: :json
+        }
+
+        expect(response).to have_http_status(:ok)
+        expect(answer.actable.scribbles.last.content).to eq('{"objects":[]}')
+      end
+    end
+
     # PATCH #update goes through the REAL platform path: delegate_to_service(:update) →
     # PreviewAttempt::UpdateService. These examples are the anti-no-op proof — each asserts a
     # persisted state change, not just a 200.

@@ -41,7 +41,7 @@ export default function (state = initialState, action) {
        * When the user navigate to other path without stopping the recorder
        * We need to help the user to stop
        */
-      if (recorderComponentsCount === 0) {
+      if (recorderComponentsCount === 0 && recorderHelper.isRecording()) {
         recorderHelper.stopRecord();
       }
       return {

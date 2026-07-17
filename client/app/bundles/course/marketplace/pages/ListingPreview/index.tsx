@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { ContentCopy } from '@mui/icons-material';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { ContentCopy, PlayArrow } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import { Button, Chip, Paper } from '@mui/material';
 
 // Reuse the assessment show page's "Questions" heading so wording + locales stay identical.
@@ -23,6 +24,7 @@ import PreviewQuestionCard from './PreviewQuestionCard';
 
 const ListingPreview = (): JSX.Element => {
   const { listingId } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { courseTitle, courseUrl } = useCourseContext();
   const [params] = useSearchParams();
@@ -31,6 +33,11 @@ const ListingPreview = (): JSX.Element => {
   const fromTab = params.get('from_tab');
   const destinationTabId = parseInt(fromTab ?? '', 10) || null;
   const [duplicating, setDuplicating] = useState(false);
+  const [attempting, setAttempting] = useState(false);
+  const attemptUrl = withFromTab(
+    `${courseUrl}/marketplace/listings/${listingId}/attempt`,
+    fromTab,
+  );
 
   return (
     <Preload
@@ -40,14 +47,29 @@ const ListingPreview = (): JSX.Element => {
       {(listing): JSX.Element => (
         <Page
           actions={
-            <Button
-              color="primary"
-              onClick={(): void => setDuplicating(true)}
-              startIcon={<ContentCopy />}
-              variant="contained"
-            >
-              {t(translations.duplicateAssessment)}
-            </Button>
+            <>
+              <LoadingButton
+                className="min-w-32 px-4"
+                color="primary"
+                loading={attempting}
+                onClick={(): void => {
+                  setAttempting(true);
+                  navigate(attemptUrl);
+                }}
+                startIcon={<PlayArrow />}
+                variant="outlined"
+              >
+                {t(translations.tryItOut)}
+              </LoadingButton>
+              <Button
+                color="primary"
+                onClick={(): void => setDuplicating(true)}
+                startIcon={<ContentCopy />}
+                variant="contained"
+              >
+                {t(translations.duplicateAssessment)}
+              </Button>
+            </>
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"

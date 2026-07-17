@@ -1,5 +1,6 @@
 import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
+import { getActivePreview } from 'course/marketplace/contexts/PreviewContext';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
@@ -246,7 +247,13 @@ export function publish(submissionId, grades, exp) {
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.PUBLISH_SUCCESS, payload: data });
-        dispatch(setNotification(translations.updateSuccess));
+        dispatch(
+          setNotification(
+            getActivePreview()
+              ? translations.gradesPublishedSandbox
+              : translations.updateSuccess,
+          ),
+        );
       })
       .catch((error) => {
         dispatch({ type: actionTypes.PUBLISH_FAILURE });

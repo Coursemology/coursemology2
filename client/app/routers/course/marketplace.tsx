@@ -46,6 +46,31 @@ const marketplaceRouter: Translated<RouteObject> = () => ({
             return { Component, handle: questionHandle };
           },
         },
+        {
+          path: 'attempt',
+          lazy: async (): Promise<
+            WithRequired<
+              RouteObject,
+              'Component' | 'errorElement' | 'handle' | 'loader'
+            >
+          > => {
+            const [
+              { PreviewAttemptRoute, PreviewAttemptErrorElement },
+              { previewAttemptLoader },
+              { attemptHandle },
+            ] = await Promise.all([
+              import('course/marketplace/pages/PreviewAttempt'),
+              import('course/marketplace/pages/PreviewAttempt/loader'),
+              import('course/marketplace/handles'),
+            ]);
+            return {
+              Component: PreviewAttemptRoute,
+              errorElement: <PreviewAttemptErrorElement />,
+              handle: attemptHandle,
+              loader: previewAttemptLoader(),
+            };
+          },
+        },
       ],
     },
   ],

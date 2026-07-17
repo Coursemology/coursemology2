@@ -143,6 +143,23 @@ class Course::Assessment::PreviewAttempt < ApplicationRecord
     self.published_at = nil
   end
 
+  # Discards every answer and returns the attempt to a fresh attempting state, as if newly
+  # created. Backs the marketplace preview "Reset attempt" action: a throwaway attempt has no EXP
+  # record or history to preserve, so a clean wipe (not an unsubmit, which resumes the current
+  # answers) is the whole intent.
+  def reset_attempt!
+    transaction do
+      answers.destroy_all
+      self.submitted_at = nil
+      self.published_at = nil
+      self.workflow_state = 'attempting'
+      save!
+      answers.reload
+      create_new_answers
+      answers.reload
+    end
+  end
+
   private
 
   def select_question_bundles

@@ -1,4 +1,9 @@
+import { getActivePreview } from 'course/marketplace/contexts/PreviewContext';
+
 import BaseAssessmentAPI from './Base';
+
+const previewSubmissionId = (submissionId) =>
+  getActivePreview()?.submissionId ?? submissionId;
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
   index() {
@@ -68,13 +73,15 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   edit(submissionId) {
-    return this.client.get(`${this.#urlPrefix}/${submissionId}/edit`);
+    return this.client.get(
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/edit`,
+    );
   }
 
   updateGrade(submissionId, updateGradeField) {
     // updateGradeField contains list of {id, grade} of all modified grades in all answers
     return this.client.patch(
-      `${this.#urlPrefix}/${submissionId}`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}`,
       updateGradeField,
     );
   }
@@ -91,7 +98,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     SubmissionsAPI.appendFormData(formData, submissionFields);
 
     return this.client.patch(
-      `${this.#urlPrefix}/${submissionId}`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}`,
       formData,
       config,
     );
@@ -107,31 +114,33 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
    */
   fetchAnswer(submissionId, answerId) {
     return this.client.get(
-      `${this.#urlPrefix}/${submissionId}/answers/${answerId}`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/answers/${answerId}`,
     );
   }
 
   reloadAnswer(submissionId, params) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/reload_answer`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/reload_answer`,
       params,
     );
   }
 
   autoGrade(submissionId) {
-    return this.client.post(`${this.#urlPrefix}/${submissionId}/auto_grade`);
+    return this.client.post(
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/auto_grade`,
+    );
   }
 
   reevaluateAnswer(submissionId, params) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/reevaluate_answer`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/reevaluate_answer`,
       params,
     );
   }
 
   generateFeedback(submissionId, params) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/generate_feedback`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/generate_feedback`,
       params,
     );
   }
@@ -145,7 +154,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     optionId,
   ) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/generate_live_feedback`,
       {
         answer_id: answerId,
         message,
@@ -157,7 +166,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
 
   createLiveFeedbackChat(submissionId, params) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/create_live_feedback_chat`,
+      `${this.#urlPrefix}/${previewSubmissionId(submissionId)}/create_live_feedback_chat`,
       params,
     );
   }
@@ -193,11 +202,20 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
-    const url = `${this.#urlPrefix}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
+    const url = `${this.#urlPrefix}/${previewSubmissionId(
+      submissionId,
+    )}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.client.post(url, params);
   }
 
   get #urlPrefix() {
+    const preview = getActivePreview();
+    if (preview || !this.assessmentId) {
+      // Member calls compose `${prefix}/${submissionId}/…` (edit/update/auto_grade), matching the
+      // shallow `marketplace/attempt/:id` routes (T8) — the listing id is only needed at create,
+      // which goes through the Marketplace API (T12), so PreviewContext carries no listingId.
+      return `/courses/${preview?.courseId ?? this.courseId}/marketplace/attempt`;
+    }
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions`;
   }
 
