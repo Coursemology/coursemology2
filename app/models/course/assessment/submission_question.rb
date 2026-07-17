@@ -5,11 +5,24 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   validates :submission, presence: true
   validates :question, presence: true
-  validates :submission_id, uniqueness: { scope: [:question_id], if: -> { question_id? && submission_id_changed? } }
-  validates :question_id, uniqueness: { scope: [:submission_id], if: -> { submission_id? && question_id_changed? } }
+  validates :submission_id,
+            uniqueness: { scope: [:attemptable_type, :question_id],
+                          if: -> { question_id? && (submission_id_changed? || attemptable_type_changed?) } }
+  validates :question_id,
+            uniqueness: { scope: [:attemptable_type, :submission_id],
+                          if: -> { submission_id? && (question_id_changed? || attemptable_type_changed?) } }
 
-  belongs_to :submission, class_name: 'Course::Assessment::Submission',
-                          inverse_of: :submission_questions
+  belongs_to :attemptable, polymorphic: true, foreign_key: 'submission_id',
+                           inverse_of: :submission_questions
+
+  def submission
+    attemptable
+  end
+
+  def submission=(value)
+    self.attemptable = value
+  end
+
   belongs_to :question, class_name: 'Course::Assessment::Question',
                         inverse_of: :submission_questions
 
@@ -21,11 +34,13 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
-    # joining { submission }.
-    #   where.has { submission.creator_id.in(user_id) }.
+    # joining { course_assessment_submissions }.
+    #   where.has { course_assessment_submissions.creator_id.in(user_id) }.
     #   joining { discussion_topic }.selecting { discussion_topic.id }
     unscoped.
-      joins(:submission).
+      joins('INNER JOIN course_assessment_submissions ON ' \
+            'course_assessment_submissions.id = course_assessment_submission_questions.submission_id').
+      where(attemptable_type: Course::Assessment::Submission.name).
       where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
       joins(:discussion_topic).
       select(Course::Discussion::Topic.arel_table[:id])
@@ -33,7 +48,7 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   # Gets the SubmissionQuestion of a specific submission
   scope :from_submission, (lambda do |submission_id|
-    find_by(submission_id: submission_id)
+    find_by(submission_id: submission_id, attemptable_type: Course::Assessment::Submission.name)
   end)
 
   def notify(post)

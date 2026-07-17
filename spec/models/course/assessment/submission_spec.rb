@@ -133,6 +133,103 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe 'the attemptable association' do
+      before do
+        stub_const('Course::Assessment::PreviewAttempt', Class.new(Course::Assessment::Submission) do
+          def self.polymorphic_name
+            name
+          end
+        end)
+      end
+
+      let(:submission) do
+        create(:course_assessment_submission, :attempting,
+               assessment: create(:assessment, :with_mcq_question, question_count: 2, course: course))
+      end
+
+      it 'scopes answers to this submission by attemptable type + id' do
+        answer = submission.answers.first
+        expect(answer.attemptable_type).to eq('Course::Assessment::Submission')
+        expect(submission.answers).to include(answer)
+      end
+
+      it 'excludes answers and submission questions for other attemptable types' do
+        real_answers = submission.answers.to_a
+        real_answer = real_answers.first
+        preview_answer = create(:course_assessment_answer, submission: submission,
+                                question: real_answer.question).tap do |answer|
+          answer.update_column(:attemptable_type, 'Course::Assessment::PreviewAttempt')
+        end
+        real_submission_question = create(:submission_question, submission: submission,
+                                          question: submission.assessment.questions.first)
+        preview_submission_question = create(:submission_question, submission: submission,
+                                             question: submission.assessment.questions.second).tap do |question|
+          question.update_column(:attemptable_type, 'Course::Assessment::PreviewAttempt')
+        end
+
+        expect(submission.answers.reload).to match_array(real_answers)
+        expect(submission.submission_questions.reload).to contain_exactly(real_submission_question)
+        expect(submission.answers).not_to include(preview_answer)
+        expect(submission.submission_questions).not_to include(preview_submission_question)
+      end
+
+      it 'on_dependent_status_change ignores answers whose attemptable is not a Submission' do
+        answer = submission.answers.first
+        fake = double('preview_attempt')
+        allow(answer).to receive(:attemptable).and_return(fake)
+        allow(answer).to receive(:saved_change_to_grade?).and_return(true)
+        expect { Course::Assessment::Submission.on_dependent_status_change(answer) }.
+          not_to raise_error
+      end
+    end
+
+    describe 'SubmissionQuestion attemptable scopes' do
+      before do
+        stub_const('Course::Assessment::PreviewAttempt', Class.new(Course::Assessment::Submission) do
+          def self.polymorphic_name
+            name
+          end
+        end)
+      end
+
+      let(:assessment) do
+        create(:assessment, :with_mcq_question, question_count: 2, course: course)
+      end
+      let(:submission) do
+        create(:course_assessment_submission, :attempting, assessment: assessment, creator: user)
+      end
+      let!(:preview_submission_question) do
+        create(:submission_question, submission: submission, question: assessment.questions.first).tap do |question|
+          question.update_column(:attemptable_type, 'Course::Assessment::PreviewAttempt')
+        end
+      end
+      let!(:submission_question) do
+        create(:submission_question, submission: submission, question: assessment.questions.second)
+      end
+      let(:preview_attempt) { Course::Assessment::PreviewAttempt.find(submission.id) }
+
+      it 'executes from_user through submissions and excludes non-Submission rows' do
+        topic_ids = Course::Assessment::SubmissionQuestion.from_user(user.id).
+                    pluck(Course::Discussion::Topic.arel_table[:id])
+
+        expect(topic_ids).to include(submission_question.acting_as.id)
+        expect(topic_ids).not_to include(preview_submission_question.acting_as.id)
+      end
+
+      it 'finds only a Submission-typed row from a submission id' do
+        expect(Course::Assessment::SubmissionQuestion.from_submission(submission.id)).to eq(submission_question)
+      end
+
+      it 'allows the same submission and question for different attemptable types' do
+        expect do
+          Course::Assessment::SubmissionQuestion.new(question: assessment.questions.second).tap do |question|
+            question.attemptable = preview_attempt
+            question.save!
+          end
+        end.not_to raise_error
+      end
+    end
+
     describe '.by_user' do
       before do
         submission1
