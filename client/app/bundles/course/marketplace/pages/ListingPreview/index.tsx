@@ -51,7 +51,16 @@ const ListingPreview = (): JSX.Element => {
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"
-          title={listing.title}
+          title={
+            <span className="flex items-center gap-2">
+              {listing.title}
+              <Chip
+                label={t(translations.previewBadge)}
+                size="small"
+                variant="outlined"
+              />
+            </span>
+          }
         >
           {listing.description && (
             <DescriptionCard description={listing.description} />
@@ -80,10 +89,9 @@ const ListingPreview = (): JSX.Element => {
           </Subsection>
 
           <DuplicateConfirmation
-            destinationCategory={null}
             destinationCourse={{ title: courseTitle, url: courseUrl }}
-            destinationTab={null}
-            destinationTabId={destinationTabId}
+            destinationTabs={listing.destinationTabs}
+            initialDestinationTabId={destinationTabId}
             listings={[{ id: listing.id, title: listing.title }]}
             onClose={(): void => setDuplicating(false)}
             open={duplicating}

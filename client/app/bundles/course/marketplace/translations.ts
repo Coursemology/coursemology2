@@ -65,6 +65,10 @@ export default defineMessages({
     id: 'course.marketplace.previewAction',
     defaultMessage: 'Preview',
   },
+  previewBadge: {
+    id: 'course.marketplace.previewBadge',
+    defaultMessage: 'Preview',
+  },
   duplicateAssessment: {
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
@@ -96,23 +100,40 @@ export default defineMessages({
     id: 'course.marketplace.destinationCourse',
     defaultMessage: 'Destination Course',
   },
-  assessmentsHeading: {
-    id: 'course.marketplace.assessmentsHeading',
-    defaultMessage: 'Assessments',
+  pickDestinationTab: {
+    id: 'course.marketplace.pickDestinationTab',
+    defaultMessage: 'Pick destination tab',
+  },
+  duplicating: {
+    id: 'course.marketplace.duplicating',
+    defaultMessage: 'Duplicating',
+  },
+  // Reuses the duplication bundle's existing id verbatim so formatjs extract dedupes rather than
+  // minting a marketplace-only duplicate; marketplace renders the ⊘ unpublished tooltip itself now.
+  itemUnpublished: {
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.itemUnpublished',
+    defaultMessage:
+      'Items are duplicated as unpublished when duplicating to an existing course.',
   },
   duplicateConfirm: {
     id: 'course.marketplace.duplicateConfirm',
     defaultMessage: 'Duplicate',
   },
-  duplicateStarted: {
-    id: 'course.marketplace.duplicateStarted',
+  // Fired from pollJob's completion callback, so this reports what already happened. The old copy
+  // said "started", which was both malformed ("Duplicating assessment started.") and untrue.
+  duplicateCompleted: {
+    id: 'course.marketplace.duplicateCompleted',
     defaultMessage:
-      '{n, plural, one {Duplicating assessment} other {Duplicating assessments}} started.',
+      '{n, plural, one {Assessment duplicated} other {Assessments duplicated}}.',
   },
   duplicateFailed: {
     id: 'course.marketplace.duplicateFailed',
     defaultMessage:
-      '{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed.',
+      '{n, plural, one {Could not duplicate the assessment} other {Could not duplicate the assessments}}.',
+  },
+  viewDuplicatedAssessment: {
+    id: 'course.marketplace.viewDuplicatedAssessment',
+    defaultMessage: 'View assessment',
   },
   selectToDuplicate: {
     id: 'course.marketplace.selectToDuplicate',

@@ -46,6 +46,7 @@ it('renders the read-only assessment config', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>Awesome description 5</p>',
     gradingMode: 'manual',
     baseExp: 1000,
@@ -101,6 +102,7 @@ it('carries from_tab into the per-question detail links', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,
@@ -137,6 +139,7 @@ it('navigates back to the marketplace carrying from_tab', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,
@@ -162,6 +165,7 @@ it('renders a back button to the marketplace index', async () => {
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
+    destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
     baseExp: 0,
@@ -178,4 +182,29 @@ it('renders a back button to the marketplace index', async () => {
   await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
   // Page renders the back affordance as an IconButton with this testid when `backTo` is set.
   expect(screen.getByTestId('ArrowBackIconButton')).toBeInTheDocument();
+});
+
+it('marks the page title as a preview', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: '<p>desc</p>',
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  // A "Preview" chip sits beside the title so the read-only listing detail page is never mistaken
+  // for the real assessment it mirrors.
+  expect(screen.getByText('Preview')).toBeVisible();
 });

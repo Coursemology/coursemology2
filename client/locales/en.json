@@ -6119,6 +6119,9 @@
   "course.marketplace.previewAction": {
     "defaultMessage": "Preview"
   },
+  "course.marketplace.previewBadge": {
+    "defaultMessage": "Preview"
+  },
   "course.marketplace.searchPlaceholder": {
     "defaultMessage": "Search by title"
   },
@@ -6140,17 +6143,23 @@
   "course.marketplace.destinationCourse": {
     "defaultMessage": "Destination Course"
   },
-  "course.marketplace.assessmentsHeading": {
-    "defaultMessage": "Assessments"
+  "course.marketplace.pickDestinationTab": {
+    "defaultMessage": "Pick destination tab"
+  },
+  "course.marketplace.duplicating": {
+    "defaultMessage": "Duplicating"
   },
   "course.marketplace.duplicateConfirm": {
     "defaultMessage": "Duplicate"
   },
-  "course.marketplace.duplicateStarted": {
-    "defaultMessage": "{n, plural, one {Duplicating assessment} other {Duplicating assessments}} started."
+  "course.marketplace.duplicateCompleted": {
+    "defaultMessage": "{n, plural, one {Assessment duplicated} other {Assessments duplicated}}."
   },
   "course.marketplace.duplicateFailed": {
-    "defaultMessage": "{n, plural, one {Duplicating assessment} other {Duplicating assessments}} failed."
+    "defaultMessage": "{n, plural, one {Could not duplicate the assessment} other {Could not duplicate the assessments}}."
+  },
+  "course.marketplace.viewDuplicatedAssessment": {
+    "defaultMessage": "View assessment"
   },
   "course.marketplace.selectToDuplicate": {
     "defaultMessage": "Select to duplicate"
