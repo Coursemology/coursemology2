@@ -1484,6 +1484,9 @@
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "已成功发送结束测验的提醒邮件。"
   },
+  "course.assessment.AssessmentsIndex.importAssessments": {
+    "defaultMessage": "导入评估"
+  },
   "course.assessment.create.createAsDraft": {
     "defaultMessage": "创建为草稿"
   },
@@ -4298,6 +4301,9 @@
   "course.componentTitles.course_announcements_component": {
     "defaultMessage": "公告"
   },
+  "course.componentTitles.course_assessment_marketplace_component": {
+    "defaultMessage": "评估市场"
+  },
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "测验"
   },
@@ -4555,6 +4561,9 @@
   },
   "course.courses.SidebarItem.admin.duplication": {
     "defaultMessage": "复制数据"
+  },
+  "course.courses.SidebarItem.admin.marketplace": {
+    "defaultMessage": "평가 마켓플레이스"
   },
   "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
     "defaultMessage": "时间线设计工具"
@@ -6043,6 +6052,39 @@
   },
   "course.marketplace.deleteWarning": {
     "defaultMessage": "此评估位于评估市场中。删除它会将其从市场移除，并删除其采用历史记录。其他课程中的现有副本不受影响。"
+  },
+  "course.marketplace.pageTitle": {
+    "defaultMessage": "评估市场"
+  },
+  "course.marketplace.colTitle": {
+    "defaultMessage": "标题"
+  },
+  "course.marketplace.colQuestions": {
+    "defaultMessage": "问题"
+  },
+  "course.marketplace.colAdoptions": {
+    "defaultMessage": "采用次数"
+  },
+  "course.marketplace.colActions": {
+    "defaultMessage": "操作"
+  },
+  "course.marketplace.previewAction": {
+    "defaultMessage": "预览"
+  },
+  "course.marketplace.searchPlaceholder": {
+    "defaultMessage": "按标题搜索"
+  },
+  "course.marketplace.sortLabel": {
+    "defaultMessage": "排序方式"
+  },
+  "course.marketplace.sortMostAdopted": {
+    "defaultMessage": "采用最多"
+  },
+  "course.marketplace.sortNewest": {
+    "defaultMessage": "最新"
+  },
+  "course.marketplace.duplicateN": {
+    "defaultMessage": "复制 {n} 个评估"
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "下载失败。请稍后再试。"

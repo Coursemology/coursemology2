@@ -1493,6 +1493,9 @@
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "Closing assessment reminder emails have been successfully dispatched."
   },
+  "course.assessment.AssessmentsIndex.importAssessments": {
+    "defaultMessage": "Import Assessments"
+  },
   "course.assessment.create.createAsDraft": {
     "defaultMessage": "Create As Draft"
   },
@@ -4322,6 +4325,9 @@
   "course.componentTitles.course_announcements_component": {
     "defaultMessage": "Announcements"
   },
+  "course.componentTitles.course_assessment_marketplace_component": {
+    "defaultMessage": "Assessment Marketplace"
+  },
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "Assessments"
   },
@@ -4579,6 +4585,9 @@
   },
   "course.courses.SidebarItem.admin.duplication": {
     "defaultMessage": "Duplicate Data"
+  },
+  "course.courses.SidebarItem.admin.marketplace": {
+    "defaultMessage": "Assessment Marketplace"
   },
   "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
     "defaultMessage": "Timeline Designer"
@@ -6085,6 +6094,39 @@
   },
   "course.marketplace.deleteWarning": {
     "defaultMessage": "This assessment is in the Assessment Marketplace. Deleting it removes it from the marketplace and deletes its adoption history. Existing copies in other courses are unaffected."
+  },
+  "course.marketplace.pageTitle": {
+    "defaultMessage": "Assessment Marketplace"
+  },
+  "course.marketplace.colTitle": {
+    "defaultMessage": "Title"
+  },
+  "course.marketplace.colQuestions": {
+    "defaultMessage": "Questions"
+  },
+  "course.marketplace.colAdoptions": {
+    "defaultMessage": "Adoptions"
+  },
+  "course.marketplace.colActions": {
+    "defaultMessage": "Actions"
+  },
+  "course.marketplace.previewAction": {
+    "defaultMessage": "Preview"
+  },
+  "course.marketplace.searchPlaceholder": {
+    "defaultMessage": "Search by title"
+  },
+  "course.marketplace.sortLabel": {
+    "defaultMessage": "Sort by"
+  },
+  "course.marketplace.sortMostAdopted": {
+    "defaultMessage": "Most adopted"
+  },
+  "course.marketplace.sortNewest": {
+    "defaultMessage": "Newest"
+  },
+  "course.marketplace.duplicateN": {
+    "defaultMessage": "{n, plural, one {Duplicate # assessment} other {Duplicate # assessments}}"
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "Download has failed. Please try again later."
