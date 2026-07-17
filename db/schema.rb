@@ -341,6 +341,21 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.index ["job_id"], name: "fk__course_assessment_plagiarism_checks_job_id", unique: true
   end
 
+  create_table "course_assessment_preview_attempts", id: :serial, force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.string "workflow_state", null: false
+    t.datetime "submitted_at"
+    t.datetime "published_at"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "selected_question_bundle_ids", default: [], null: false, array: true
+    t.index ["assessment_id"], name: "index_course_assessment_preview_attempts_on_assessment_id"
+    t.index ["creator_id"], name: "index_course_assessment_preview_attempts_on_creator_id"
+    t.index ["updater_id"], name: "index_course_assessment_preview_attempts_on_updater_id"
+  end
+
   create_table "course_assessment_question_bundle_assignments", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "assessment_id", null: false
@@ -2021,6 +2036,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "updater_id", name: "fk_course_assessment_marketplace_listings_updater_id"
   add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
   add_foreign_key "course_assessment_plagiarism_checks", "jobs", name: "fk_course_assessment_plagiarism_checks_job_id", on_delete: :nullify
+  add_foreign_key "course_assessment_preview_attempts", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_preview_attempts", "users", column: "creator_id"
+  add_foreign_key "course_assessment_preview_attempts", "users", column: "updater_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_submissions", column: "submission_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessments", column: "assessment_id"
