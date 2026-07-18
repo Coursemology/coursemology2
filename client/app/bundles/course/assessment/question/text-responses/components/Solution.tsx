@@ -58,6 +58,7 @@ const Solution: FC<SolutionProps> = ({
           solution.spreadsheet?.testTimestamp ?? Date.now(),
         ),
         numRandomTests: solution.spreadsheet?.numRandomTests ?? 2,
+        targetSheetName: solution.spreadsheet?.targetSheetName ?? null,
         file: solution.spreadsheet?.file ?? { file: null, name: '', url: '' },
         variables: solution.spreadsheet?.variables,
       });

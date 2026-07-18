@@ -2312,6 +2312,12 @@
   "course.assessment.question.textResponses.numberOfRandomTests": {
     "defaultMessage": "随机测试次数"
   },
+  "course.assessment.question.textResponses.SpreadsheetManager.targetSheet": {
+    "defaultMessage": "目标工作表"
+  },
+  "course.assessment.question.textResponses.SpreadsheetManager.targetSheetDescription": {
+    "defaultMessage": "求值公式时，未指定工作表的单元格引用（例如 A1）所指向的工作表。默认为第一个工作表。"
+  },
   "course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed": {
     "defaultMessage": "固定随机种子"
   },

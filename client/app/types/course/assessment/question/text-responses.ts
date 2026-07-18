@@ -67,6 +67,7 @@ export interface SolutionData {
     isTimestampFixed: boolean;
     testTimestamp: Date | null;
     numRandomTests: number;
+    targetSheetName?: string | null;
     file?: {
       name: string;
       url: string;
@@ -129,6 +130,7 @@ export interface TextResponseSpreadsheetPostData {
   is_timestamp_fixed?: boolean;
   test_timestamp?: string | null;
   num_random_tests?: number;
+  target_sheet_name?: string | null;
   variables?: string;
   _destroy?: boolean;
 }

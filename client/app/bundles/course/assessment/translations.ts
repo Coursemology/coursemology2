@@ -1164,6 +1164,15 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.numberOfRandomTests',
     defaultMessage: 'Number of random tests',
   },
+  targetSheet: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.targetSheet',
+    defaultMessage: 'Target sheet',
+  },
+  targetSheetDescription: {
+    id: 'course.assessment.question.textResponses.SpreadsheetManager.targetSheetDescription',
+    defaultMessage:
+      'The sheet that unqualified cell references (e.g. A1) resolve to when evaluating the formula. Defaults to the first sheet.',
+  },
   fixedRandomSeed: {
     id: 'course.assessment.question.textResponses.SpreadsheetManager.fixedRandomSeed',
     defaultMessage: 'Fixed random seed',

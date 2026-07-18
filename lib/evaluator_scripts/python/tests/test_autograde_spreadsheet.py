@@ -53,6 +53,23 @@ class TestEvaluateFormula(unittest.TestCase):
     np.random.seed(42)
     self.assertFormula('=RAND() * RAND()', 0.5114958297721829)
 
+  def test_target_sheetname(self):
+    # An unqualified reference resolves against the configured target sheet,
+    # matching the value of the explicitly-qualified reference.
+    for target, expected in [('new sheet', 2), ('newer sheet', 3)]:
+      with self.subTest(target):
+        result = FormulaEvaluator('=A1', SPREADSHEET_PATH, None, False, target).evaluate()
+        self.assertTrue(is_output_correct(result, expected), f'Expected {expected!r}, got {result.value!r}')
+
+  def test_target_sheetname_case_insensitive(self):
+    result = FormulaEvaluator('=A1', SPREADSHEET_PATH, None, False, 'NEW SHEET').evaluate()
+    self.assertTrue(is_output_correct(result, 2), f'Expected 2, got {result.value!r}')
+
+  def test_target_sheetname_unknown_falls_back_to_first_sheet(self):
+    fallback = FormulaEvaluator('=A1', SPREADSHEET_PATH, None, False, 'does not exist').evaluate()
+    default = FormulaEvaluator('=A1', SPREADSHEET_PATH, None, False).evaluate()
+    self.assertTrue(is_output_correct(fallback, default), f'Expected {default.value!r}, got {fallback.value!r}')
+
   def test_spreadsheet_evaluation_error(self):
     result = evaluate_spreadsheet(
       'test_spreadsheet_evaluation_error',

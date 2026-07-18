@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_25_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -467,6 +467,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_25_000000) do
     t.datetime "test_timestamp"
     t.integer "num_random_tests", default: 2, null: false
     t.jsonb "variables", default: [], null: false
+    t.string "target_sheet_name"
     t.index ["solution_id"], name: "idx_on_solution_id_1073150e65"
   end
 

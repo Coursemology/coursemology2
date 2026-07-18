@@ -80,6 +80,7 @@ const adaptSpreadsheetPostData = (
     is_timestamp_fixed: spreadsheet.isTimestampFixed,
     test_timestamp: spreadsheet.testTimestamp?.toISOString() ?? null,
     num_random_tests: spreadsheet.numRandomTests,
+    target_sheet_name: spreadsheet.targetSheetName ?? null,
     variables: JSON.stringify(
       (spreadsheet.variables ?? []).map((v) => {
         if (v.mode !== 'date') return v;
