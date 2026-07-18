@@ -32,18 +32,27 @@ def generate_character_map(charset):
 
 
 class FormulaEvaluator:
-  def __init__(self, formula_str, filename, variables, randomize_inputs):
+  def __init__(self, formula_str, filename, variables, randomize_inputs, target_sheetname=None):
     self.xl_model = formulas.ExcelModel().loads(local_file_path(filename))
     self.bookname, bookdata = next(iter(self.xl_model.books.items()))
     internal_book = next((v for k, v in bookdata.items() if str(k) == 'Book'), None)
     self.sheetnames = internal_book.sheetnames
     self.book_epoch = internal_book.epoch
-    self.default_sheetname = self.sheetnames[0]
+    # Unqualified references (and variable cells) resolve against the configured
+    # target sheet, falling back to the first sheet when unset or unrecognized.
+    self.default_sheetname = self.resolve_sheetname(target_sheetname)
     self.variables = variables
     self.randomize_inputs = randomize_inputs
 
     rewrite_str = self.rewrite_formula(formula_str)
     self.xl_model.from_dict({ "SHEET1!A1": rewrite_str })
+
+  def resolve_sheetname(self, target_sheetname):
+    if target_sheetname:
+      match = next((s for s in self.sheetnames if s.upper() == target_sheetname.upper()), None)
+      if match:
+        return match
+    return self.sheetnames[0]
 
   def split_sheetname_from_ref(self, ref):
     if '!' in ref:
@@ -158,7 +167,8 @@ def is_output_correct(output, expected):
     return np.all(np.vectorize(compare_output_elements)(comparable_answer, comparable_solution)).item()
   return compare_output_elements(comparable_answer, comparable_solution)
 
-def evaluate_spreadsheet(identifier, answer, solution, filename, variables, random_seed, randomize_inputs):
+def evaluate_spreadsheet(identifier, answer, solution, filename, variables, random_seed, randomize_inputs,
+                         target_sheetname=None):
   result = {
     'identifier': identifier,
     'correct': False
@@ -166,7 +176,7 @@ def evaluate_spreadsheet(identifier, answer, solution, filename, variables, rand
 
   try:
     np.random.seed(random_seed)
-    output_raw = FormulaEvaluator(answer, filename, variables, randomize_inputs).evaluate()
+    output_raw = FormulaEvaluator(answer, filename, variables, randomize_inputs, target_sheetname).evaluate()
     result['output'] = serialize_output(output_raw)
   except Exception as e:
     print(f"Error occurred while evaluating answer formula: {e}", file=sys.stderr, flush=True)
@@ -174,7 +184,7 @@ def evaluate_spreadsheet(identifier, answer, solution, filename, variables, rand
 
   try:
     np.random.seed(random_seed)
-    expected_raw = FormulaEvaluator(solution, filename, variables, randomize_inputs).evaluate()
+    expected_raw = FormulaEvaluator(solution, filename, variables, randomize_inputs, target_sheetname).evaluate()
     result['expected'] = serialize_output(expected_raw)
   except Exception as e:
     print(f"Error occurred while evaluating solution formula: {e}", file=sys.stderr, flush=True)
@@ -195,6 +205,8 @@ def evaluate_solution(answer, solution):
 
   random_seeds = np.random.randint(0, 2**31-1, size=num_random_tests + 1)
 
+  target_sheetname = solution['spreadsheet'].get('target_sheet_name')
+
   with time_machine.travel(datetime.fromisoformat(timestamp)):
     return {
       'solution_id': solution['id'],
@@ -202,12 +214,12 @@ def evaluate_solution(answer, solution):
         evaluate_spreadsheet(
           'test_original_spreadsheet',
           answer, solution['solution'], solution['spreadsheet']['filename'], solution['variables'],
-          random_seeds[0], False
+          random_seeds[0], False, target_sheetname
         ),
         *[evaluate_spreadsheet(
           f"test_random_{i+1}",
           answer, solution['solution'], solution['spreadsheet']['filename'], solution['variables'],
-          random_seeds[i+1], True
+          random_seeds[i+1], True, target_sheetname
         ) for i in range(num_random_tests)]
       ]
     }

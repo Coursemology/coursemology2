@@ -18,6 +18,7 @@ json.solutions question.solutions do |sol|
       json.isTimestampFixed sol.test_spreadsheet.is_timestamp_fixed
       json.testTimestamp sol.test_spreadsheet.test_timestamp
       json.numRandomTests sol.test_spreadsheet.num_random_tests
+      json.targetSheetName sol.test_spreadsheet.target_sheet_name
       json.variables sol.test_spreadsheet.variables
     end
   end

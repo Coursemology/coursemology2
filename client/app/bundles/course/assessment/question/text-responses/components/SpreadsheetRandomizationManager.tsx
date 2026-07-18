@@ -22,10 +22,7 @@ import {
   SheetGrid,
   SpreadsheetCellValue,
 } from 'lib/components/form/fields/SingleFileInput/types';
-import {
-  getCellKey,
-  parseSpreadsheet,
-} from 'lib/components/form/fields/SingleFileInput/utils';
+import { getCellKey } from 'lib/components/form/fields/SingleFileInput/utils';
 import AZIcon from 'lib/components/icons/AZIcon';
 import OneNineIcon from 'lib/components/icons/OneNineIcon';
 import RandomizeIcon from 'lib/components/icons/RandomizeIcon';
@@ -46,6 +43,7 @@ import StringRandomizationManager from './StringRandomizationManager';
 
 interface Props {
   file?: File;
+  gridData?: GridData | null;
   initialVariables?: CellRandomConfig[];
   onVariablesChange?: (variables: CellRandomConfig[]) => void;
 }
@@ -244,6 +242,7 @@ const CellOverrideContent: FC<{
 
 const SpreadsheetRandomizationManager: FC<Props> = ({
   file,
+  gridData,
   initialVariables,
   onVariablesChange,
 }) => {
@@ -253,41 +252,35 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
   const [cellConfigs, setCellConfigs] = useState<
     CellRandomConfigState | undefined
   >(() => fromVariables(initialVariables));
-  const [gridData, setGridData] = useState<GridData | null>(null);
   const popoverActionsRef = useRef<PopoverActions>(null);
   const spreadsheetRef = useRef<HTMLDivElement>(null);
-  const fileRef = useRef<File | undefined>(undefined);
+  // Whether default configs have already been applied for a grid in this mount,
+  // used to detect a file/grid *replacement* (which always forces an override).
+  const appliedRef = useRef(false);
 
   const updateCellConfigs = (newState: CellRandomConfigState): void => {
     setCellConfigs(newState);
     onVariablesChange?.(toVariables(newState));
   };
 
-  const initSpreadsheetDefaultConfigFromFile = async (
-    override: boolean,
-  ): Promise<void> => {
-    if (!file) return;
-    const data = await parseSpreadsheet(file);
-    setGridData(data);
-    if (override) {
-      updateCellConfigs(
-        initSpreadsheetDefaultConfig(data.sheetNames, data.sheets),
-      );
-    }
+  const applyDefaultConfig = (): void => {
+    if (!gridData) return;
+    updateCellConfigs(
+      initSpreadsheetDefaultConfig(gridData.sheetNames, gridData.sheets),
+    );
   };
 
-  // If there is a previous file, we always override because old config structure is no longer valid.
-  // If there are initial variables, it implies this is the first render editing a spreadsheet formula, so don't override.
-  // If there are no initial variables, this triggers when a file is uploaded for the first time creating new spreadsheet formula solution.
+  // The spreadsheet is parsed once by the parent and passed in as `gridData`.
+  // If a previous grid was already applied in this mount, the grid was replaced,
+  // so we always override because the old config structure is no longer valid.
+  // If there are initial variables, this is the first render editing a spreadsheet
+  // formula, so don't override. If there are no initial variables, this is a file
+  // uploaded for the first time creating a new spreadsheet formula solution.
   useEffect(() => {
-    initSpreadsheetDefaultConfigFromFile(
-      Boolean(fileRef.current) || !initialVariables,
-    );
-    fileRef.current = file;
-    return (): void => {
-      fileRef.current = undefined;
-    };
-  }, [file]);
+    if (!gridData) return;
+    if (appliedRef.current || !initialVariables) applyDefaultConfig();
+    appliedRef.current = true;
+  }, [gridData]);
 
   const isEditableElement = (el: Element | null): boolean => {
     if (!el) return false;
@@ -381,7 +374,7 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
     }
   };
 
-  if (!file) return null;
+  if (!file || !gridData) return null;
 
   return (
     <>
@@ -405,7 +398,7 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
         </Button>
         <Button
           className="w-fit"
-          onClick={() => initSpreadsheetDefaultConfigFromFile(true)}
+          onClick={() => applyDefaultConfig()}
           size="small"
           variant="outlined"
         >
@@ -423,6 +416,7 @@ const SpreadsheetRandomizationManager: FC<Props> = ({
               ? 'bg-blue-100'
               : '';
           }}
+          grid={gridData}
           onCellClick={(e, rowIdx, colIdx, sheetName, cellValue) => {
             setPopover({
               anchorEl: e.currentTarget,

@@ -9,6 +9,9 @@ import { getCellKey, parseSpreadsheet } from './utils';
 
 interface SpreadsheetPreviewProps {
   file: File | null;
+  // Optionally supply already-parsed grid data to avoid re-parsing the file.
+  // When omitted, the component parses `file` itself.
+  grid?: GridData | null;
   activeCellKey?: string | null;
   getCellClassName?: (
     cellValue: SpreadsheetCellValue,
@@ -29,6 +32,7 @@ interface SpreadsheetPreviewProps {
 
 const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
   file,
+  grid: providedGrid,
   activeCellKey,
   onCellClick,
   renderCell,
@@ -36,7 +40,7 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const [grid, setGrid] = useState<GridData | null>(null);
+  const [parsedGrid, setParsedGrid] = useState<GridData | null>(null);
   const [activeSheetIdx, setActiveSheetIdx] = useState(0);
   const [activeCell, setActiveCell] = useState<{
     rowIdx: number;
@@ -44,17 +48,22 @@ const SpreadsheetPreview: FC<SpreadsheetPreviewProps> = ({
   } | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
     setActiveSheetIdx(0);
-    if (file) {
-      parseSpreadsheet(file).then((parsed) => {
-        if (!cancelled) setGrid(parsed);
-      });
-    }
+  }, [file, providedGrid]);
+
+  useEffect(() => {
+    // Skip parsing when the caller already supplies parsed grid data.
+    if (providedGrid !== undefined || !file) return undefined;
+    let cancelled = false;
+    parseSpreadsheet(file).then((parsed) => {
+      if (!cancelled) setParsedGrid(parsed);
+    });
     return (): void => {
       cancelled = true;
     };
-  }, [file]);
+  }, [file, providedGrid !== undefined]);
+
+  const grid = providedGrid ?? parsedGrid;
 
   if (!grid) {
     return <div className="block">{t(translations.dropzone)}</div>;

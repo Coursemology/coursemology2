@@ -94,7 +94,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
             :id, :file, :_destroy, :is_randomization_enabled, :num_random_tests,
             :is_random_seed_fixed, :test_random_seed,
             :is_timestamp_fixed, :test_timestamp,
-            :variables
+            :target_sheet_name, :variables
           ]
         ]]
       )

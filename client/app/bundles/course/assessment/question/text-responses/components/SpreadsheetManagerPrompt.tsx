@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import {
   CellRandomConfig,
   TextResponseEditableFormData,
@@ -9,6 +9,9 @@ import {
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import { GridData } from 'lib/components/form/fields/SingleFileInput/types';
+import { parseSpreadsheet } from 'lib/components/form/fields/SingleFileInput/utils';
 import FormTextField from 'lib/components/form/fields/TextField';
 import RandomizeIcon from 'lib/components/icons/RandomizeIcon';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -36,6 +39,29 @@ const SpreadsheetManagerPrompt: FC<Props> = ({
   const { control, watch, setValue } =
     useFormContext<TextResponseEditableFormData>();
   const spreadsheet = watch(`solutions.${index}.spreadsheet`);
+
+  // Parse the (hydrated) spreadsheet file once here and share the result with
+  // both the target-sheet dropdown and the randomization manager, so the file is
+  // not parsed multiple times across the Advanced Options prompt.
+  const [gridData, setGridData] = useState<GridData | null>(null);
+  useEffect(() => {
+    if (!file) {
+      setGridData(null);
+      return undefined;
+    }
+    let cancelled = false;
+    parseSpreadsheet(file)
+      .then((data) => {
+        if (!cancelled) setGridData(data);
+      })
+      .catch(() => {
+        if (!cancelled) setGridData(null);
+      });
+    return (): void => {
+      cancelled = true;
+    };
+  }, [file]);
+  const sheetNames = gridData?.sheetNames ?? [];
 
   // Incremented each time the dialog opens so SpreadsheetRandomizationManager
   // remounts and re-initialises from the latest saved variables.
@@ -132,10 +158,50 @@ const SpreadsheetManagerPrompt: FC<Props> = ({
             />
           )}
         />
+        <div className="flex flex-col">
+          <Typography variant="body1">{t(translations.targetSheet)}</Typography>
+          <Typography className="text-neutral-500" variant="body2">
+            {t(translations.targetSheetDescription)}
+          </Typography>
+          <Controller
+            control={control}
+            name={`solutions.${index}.spreadsheet.targetSheetName`}
+            render={({ field, fieldState }): JSX.Element => {
+              const defaultSheet = sheetNames[0];
+              // A null/empty value means "use the first sheet", so show the first
+              // sheet as selected — that is what autograding actually resolves to.
+              const current = field.value || defaultSheet || '';
+              // Ensure a previously-saved sheet still displays even if it is not
+              // among the parsed names (e.g. file not yet loaded, or renamed).
+              const options = (
+                current && !sheetNames.includes(current)
+                  ? [current, ...sheetNames]
+                  : sheetNames
+              ).map((name) => ({ value: name, label: name }));
+              return (
+                <FormSelectField
+                  disabled={sheetNames.length <= 1}
+                  field={{
+                    ...field,
+                    value: current,
+                    onChange: (e) =>
+                      field.onChange(
+                        e.target.value === defaultSheet ? null : e.target.value,
+                      ),
+                  }}
+                  fieldState={fieldState}
+                  options={options}
+                  variant="outlined"
+                />
+              );
+            }}
+          />
+        </div>
 
         <SpreadsheetRandomizationManager
           key={dialogKey}
           file={file ?? undefined}
+          gridData={gridData}
           initialVariables={spreadsheet?.variables}
           onVariablesChange={(vars) => {
             pendingVariablesRef.current = vars;

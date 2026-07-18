@@ -135,5 +135,29 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         end
       end
     end
+
+    describe '#save_container_test_metadata' do
+      let(:target_sheet_name) { 'Sheet2' }
+      let(:test_spreadsheet) do
+        Course::Assessment::Question::TextResponseSolutionSpreadsheet.new(target_sheet_name: target_sheet_name)
+      end
+      let(:spreadsheet_solution) do
+        build(:course_assessment_question_text_response_solution,
+              solution_type: :spreadsheet_formula, solution: '=A1').tap do |solution|
+          solution.test_spreadsheet = test_spreadsheet
+        end
+      end
+
+      it 'includes the target sheet name in the container test metadata' do
+        captured = nil
+        container = instance_double(CoursemologyDockerContainer)
+        allow(container).to receive(:store_file) { |_path, data| captured = data }
+
+        subject.send(:save_container_test_metadata, container, '=A1', [spreadsheet_solution])
+
+        metadata = JSON.parse(captured)
+        expect(metadata['solutions'].first['spreadsheet']['target_sheet_name']).to eq(target_sheet_name)
+      end
+    end
   end
 end

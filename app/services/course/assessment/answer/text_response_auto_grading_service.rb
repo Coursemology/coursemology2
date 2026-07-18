@@ -139,7 +139,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
           spreadsheet:
             {
               id: solution.test_spreadsheet.id,
-              filename: solution.test_spreadsheet.container_filename
+              filename: solution.test_spreadsheet.container_filename,
+              target_sheet_name: solution.test_spreadsheet.target_sheet_name
             }
         }
       end
