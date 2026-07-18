@@ -23,7 +23,8 @@ gem 'rack-cors'
 # Instance/Course settings
 gem 'settings_on_rails', git: 'https://github.com/Coursemology/settings_on_rails'
 # Manage read/unread status
-gem 'unread', '~> 0.14.0'
+# Pinned past v0.14.0 (last RubyGems release, Oct 2024) for Rails 8.0/8.1 support; still supports 7.2.
+gem 'unread', git: 'https://github.com/ledermann/unread.git', ref: '9114324'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
@@ -34,14 +35,17 @@ gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', git: 'https://github.com/Coursemology/calculated_attributes.git'
+# Upstream v1.1.1 (supports Rails 7.0/7.1/7.2/8.0); retires the Coursemology fork.
+# TODO: bump to upstream master (v1.2.0) for Rails 8.1 during that upgrade — v1.1.1 ships no 8.1 patch.
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes.git', ref: 'ecaf6c9'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres with validations
-gem 'active_record_upsert', git: 'https://github.com/jesjos/active_record_upsert', ref: 'c3e07ae'
+# Pinned to v0.13.0 (adds Rails 8.1 support); not yet published to RubyGems. Supports AR 7.2–8.1.
+gem 'active_record_upsert', git: 'https://github.com/jesjos/active_record_upsert', ref: 'cb6f2a2'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
@@ -61,8 +65,6 @@ gem 'globalid'
 gem 'jbuilder'
 # Slim as the templating language
 gem 'slim-rails'
-# Paginator for Rails
-gem 'kaminari'
 # Work with Docker
 gem 'docker-api'
 
