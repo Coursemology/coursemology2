@@ -5,6 +5,14 @@ import {
 } from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
+import {
+  AllowlistRuleData,
+  AllowlistRuleFormData,
+} from 'types/system/marketplaceAllowlist';
+import {
+  AllowlistRulePreviewData,
+  MarketplaceAccessData,
+} from 'types/system/marketplaceAccess';
 import { AdminStats, UserListData } from 'types/users';
 
 import BaseSystemAPI from '../Base';
@@ -172,5 +180,105 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   getDeploymentInfo(): Promise<AxiosResponse<DeploymentInfo>> {
     return this.client.get(`${AdminAPI.#urlPrefix}/deployment_info`);
+  }
+
+  /**
+   * Fetches the marketplace allow-list rules.
+   */
+  indexMarketplaceAllowlistRules(): Promise<
+    AxiosResponse<{ rules: AllowlistRuleData[]; everyoneRuleId: number | null }>
+  > {
+    return this.client.get(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+    );
+  }
+
+  /**
+   * Creates a marketplace allow-list rule.
+   */
+  createMarketplaceAllowlistRule(
+    params: AllowlistRuleFormData,
+  ): Promise<AxiosResponse<AllowlistRuleData>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+      {
+        allowlist_rule: {
+          rule_type: params.ruleType,
+          instance_id: params.instanceId,
+          email_domain: params.emailDomain,
+          email: params.email,
+        },
+      },
+    );
+  }
+
+  /**
+   * Dry run for a prospective allow-list rule: reports who it would let in, without saving it.
+   * Runs the same validations as create, so a duplicate rule is reported here as a 400.
+   */
+  previewMarketplaceAllowlistRule(
+    params: AllowlistRuleFormData,
+  ): Promise<AxiosResponse<AllowlistRulePreviewData>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules/preview`,
+      {
+        allowlist_rule: {
+          rule_type: params.ruleType,
+          instance_id: params.instanceId,
+          email_domain: params.emailDomain,
+          email: params.email,
+        },
+      },
+    );
+  }
+
+  /**
+   * Opens the marketplace to everyone by creating the single `everyone` allow-list rule.
+   * Returns the created rule; only its `id` is consumed (to later restrict).
+   */
+  openMarketplaceToEveryone(): Promise<AxiosResponse<{ id: number }>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+      { allowlist_rule: { rule_type: 'everyone' } },
+    );
+  }
+
+  /**
+   * Deletes a marketplace allow-list rule.
+   */
+  deleteMarketplaceAllowlistRule(id: number): Promise<AxiosResponse> {
+    return this.client.delete(
+      `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules/${id}`,
+    );
+  }
+
+  /**
+   * Fetches the marketplace access audit list (everyone with effective access, blocked flagged).
+   */
+  indexMarketplaceAccess(): Promise<AxiosResponse<MarketplaceAccessData>> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/marketplace_access`);
+  }
+
+  /**
+   * Blocks (disables) a user's marketplace access. Returns the created block's id.
+   */
+  blockMarketplaceUser(
+    userId: number,
+  ): Promise<AxiosResponse<{ id: number; userId: number }>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_access_blocks`,
+      {
+        user_id: userId,
+      },
+    );
+  }
+
+  /**
+   * Removes a block, re-enabling the user's marketplace access.
+   */
+  unblockMarketplaceUser(blockId: number): Promise<AxiosResponse> {
+    return this.client.delete(
+      `${AdminAPI.#urlPrefix}/marketplace_access_blocks/${blockId}`,
+    );
   }
 }

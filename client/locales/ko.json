@@ -8831,6 +8831,12 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "{field}이(가) {prevValue}에서 {newValue}로 변경되었습니다."
   },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstanceRole": {
+    "defaultMessage": "인스턴스 역할"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.targetInstanceRole": {
+    "defaultMessage": "강사 및 관리자(모든 인스턴스)"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "사용자 삭제"
   },

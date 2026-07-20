@@ -8864,6 +8864,12 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "Renamed {field} from {prevValue} to {newValue}"
   },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstanceRole": {
+    "defaultMessage": "Instance role"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.targetInstanceRole": {
+    "defaultMessage": "Instructors & administrators (any instance)"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "Delete User"
   },

@@ -8825,6 +8825,12 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "已将 {field} 从 {prevValue} 重命名为 {newValue}"
   },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstanceRole": {
+    "defaultMessage": "实例角色"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.targetInstanceRole": {
+    "defaultMessage": "教师和管理员（任何实例）"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "删除用户"
   },
