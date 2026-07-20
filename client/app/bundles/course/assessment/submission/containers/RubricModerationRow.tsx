@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
@@ -65,9 +65,24 @@ const RubricModerationRow: FC<RubricModerationRowProps> = (props) => {
   const breakdown = sumRubricBreakdown(categoryGrades);
   const moderation = currentGrade - breakdown;
 
-  const handleOnChange = (event): void => {
-    const value = event.target.value;
-    const newModeration = value === '' ? 0 : Number(value);
+  // The field holds its own text so intermediate inputs (e.g. "-" or "1.") can be displayed while typing.
+  // A numeric controlled value would discard these, making it impossible to type a negative moderation.
+  const [moderationText, setModerationText] = useState(String(moderation));
+
+  // Resync when `moderation` changes for external reasons (e.g. a category grade edit changed the
+  // breakdown). Skipped when the text already represents the same value, so mid-edit inputs like "-" or
+  // "1." are not clobbered by our own committed grade updates.
+  useEffect(() => {
+    if (Number(moderationText) !== moderation)
+      setModerationText(String(moderation));
+  }, [moderation]);
+
+  const handleOnChange = (_event, value: string | number): void => {
+    const text = String(value);
+    setModerationText(text);
+
+    const newModeration = text === '' ? 0 : Number(text);
+    // Intermediate values ("-", ".", "-.") parse to NaN: keep showing them, but don't commit a grade yet.
     if (Number.isNaN(newModeration)) return;
 
     const finalGrade = Math.max(
@@ -105,7 +120,7 @@ const RubricModerationRow: FC<RubricModerationRowProps> = (props) => {
             id="moderation-grade"
             InputProps={{ classes: { input: 'text-center' } }}
             onChange={handleOnChange}
-            value={moderation}
+            value={moderationText}
             variant="outlined"
           />
         ) : (

@@ -164,14 +164,15 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     answer_evaluation&.update!(evaluation_type: :playground_hidden)
   end
 
+  # Detaches the mock answer from this rubric revision by removing only its evaluation here. The mock
+  # answer (a named, editable entity) and its grading contexts persist; deleting the answer itself is an
+  # explicit action via Course::Assessment::MockAnswersController#destroy.
   def delete_mock_answer_evaluations
     mock_answer = @question.mock_answers.find(params.permit(:mock_answer_id)[:mock_answer_id])
     mock_answer_evaluation = @rubric.mock_answer_evaluations.find_by(
       mock_answer: mock_answer
     )
     mock_answer_evaluation&.destroy!
-    mock_answer.reload
-    mock_answer.destroy! if mock_answer.rubric_evaluations.empty?
   end
 
   def apply_evaluations

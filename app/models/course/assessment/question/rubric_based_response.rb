@@ -26,6 +26,7 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     # acting_as) so the new question owns its own (immutable) v2 rubric instead of sharing the source's.
     self.active_rubric = duplicator.duplicate(other.active_rubric)
     self.categories = duplicator.duplicate(other.categories)
+    initialize_grading_context_duplicates(duplicator, other)
   end
 
   def auto_gradable?

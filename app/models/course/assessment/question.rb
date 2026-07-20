@@ -200,6 +200,22 @@ class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics
     self.is_synced_with_koditsu = false
   end
 
+  # Duplicates this question's grading contexts (see Course::Assessment::Question::GradingContext). Called from
+  # each rubric-gradable actable's #initialize_duplicate with +other+ = the source actable being duplicated.
+  #   * As a CONSUMER: deep-copy the contexts this question pulls from onto the duplicate.
+  #   * As a SOURCE: re-point any already-duplicated contexts that reference this question, so a duplicate
+  #     consumer pulls from the duplicate source. Together with GradingContext#initialize_duplicate, the source
+  #     linkage is preserved regardless of which of the two questions is duplicated first.
+  def initialize_grading_context_duplicates(duplicator, other)
+    self.grading_contexts = duplicator.duplicate(other.grading_contexts)
+
+    Course::Assessment::Question::GradingContext.where(source: other.acting_as).find_each do |context|
+      next unless duplicator.duplicated?(context)
+
+      duplicator.duplicate(context).source = self
+    end
+  end
+
   private
 
   def apply_default_grading_mode
