@@ -8747,6 +8747,9 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "도움 받기"
   },
+  "system.admin.admin.AdminNavigator.marketplace": {
+    "defaultMessage": "마켓플레이스 접근"
+  },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "공지사항을 가져올 수 없습니다."
   },
@@ -8830,6 +8833,174 @@
   },
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "{field}이(가) {prevValue}에서 {newValue}로 변경되었습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
+    "defaultMessage": "접근 규칙 추가"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.eligibility": {
+    "defaultMessage": "모든 과정의 관리자 및 소유자, 그리고 모든 인스턴스의 강사 및 관리자가 사용할 수 있습니다. 단, 아래 규칙 중 하나와도 일치해야 합니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.fetchFailure": {
+    "defaultMessage": "마켓플레이스 접근 규칙을 불러오지 못했습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createSuccess": {
+    "defaultMessage": "접근 규칙이 추가되었습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createFailure": {
+    "defaultMessage": "접근 규칙 추가에 실패했습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteSuccess": {
+    "defaultMessage": "접근 규칙이 제거되었습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteFailure": {
+    "defaultMessage": "접근 규칙 제거에 실패했습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openSuccess": {
+    "defaultMessage": "마켓플레이스가 모든 과정 관리자에게 공개되었습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openFailure": {
+    "defaultMessage": "마켓플레이스를 모두에게 공개하지 못했습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictSuccess": {
+    "defaultMessage": "마켓플레이스가 범위가 지정된 규칙으로 제한되었습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictFailure": {
+    "defaultMessage": "마켓플레이스를 제한하지 못했습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.scopedTitle": {
+    "defaultMessage": "접근이 아래 규칙으로 제한됩니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.everyoneTitle": {
+    "defaultMessage": "마켓플레이스가 모든 자격 있는 직원(과정 관리자/소유자 및 인스턴스 강사/관리자)에게 열려 있습니다. 아래 규칙은 유지되지만 비활성 상태입니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.toggleLabel": {
+    "defaultMessage": "모두에게 공개"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmTitle": {
+    "defaultMessage": "마켓플레이스를 모두에게 공개하시겠습니까?"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmBody": {
+    "defaultMessage": "이렇게 하면 마켓플레이스가 모든 자격 있는 직원(과정 관리자/소유자 및 인스턴스 강사/관리자)에게 표시됩니다. 언제든지 다시 제한할 수 있으며, 범위가 지정된 규칙은 유지됩니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmTitle": {
+    "defaultMessage": "범위가 지정된 규칙으로 제한하시겠습니까?"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmBody": {
+    "defaultMessage": "마켓플레이스가 다시 아래 규칙으로 제한됩니다. 규칙에 해당하지 않는 자격 있는 직원은 접근 권한을 잃게 됩니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmOpen": {
+    "defaultMessage": "모두에게 공개"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmRestrict": {
+    "defaultMessage": "제한"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.title": {
+    "defaultMessage": "마켓플레이스 접근 규칙 추가"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.ruleType": {
+    "defaultMessage": "규칙 유형"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeUser": {
+    "defaultMessage": "특정 자격 있는 직원"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeInstance": {
+    "defaultMessage": "인스턴스 내 모든 자격 있는 직원"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeEmailDomain": {
+    "defaultMessage": "특정 이메일 도메인의 모든 자격 있는 직원"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.userEmail": {
+    "defaultMessage": "자격 있는 직원 이메일"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.instanceId": {
+    "defaultMessage": "인스턴스"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.emailDomain": {
+    "defaultMessage": "이메일 도메인 (예: schools.gov.sg)"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.next": {
+    "defaultMessage": "다음"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.back": {
+    "defaultMessage": "뒤로"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.confirmAdd": {
+    "defaultMessage": "추가 확인"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.counts": {
+    "defaultMessage": "{matched}명의 자격 있는 직원에게 접근 권한을 부여합니다"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsOfMatched": {
+    "defaultMessage": "{matched}명의 자격 있는 직원 중 {granted}명에게 접근 권한을 부여합니다"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsExistingClause": {
+    "defaultMessage": "{existing}명은 이미 접근 권한이 있었습니다"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsBlockedClause": {
+    "defaultMessage": "{blocked}명은 개별적으로 차단되었습니다"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.noMatches": {
+    "defaultMessage": "현재 이 규칙과 일치하는 자격 있는 직원이 없습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.openToEveryone": {
+    "defaultMessage": "마켓플레이스가 현재 모두에게 공개되어 있습니다. 이 규칙은 접근을 다시 제한할 경우에만 적용됩니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.previewFailure": {
+    "defaultMessage": "이 규칙을 미리 볼 수 없습니다."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerNew": {
+    "defaultMessage": "신규"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerExisting": {
+    "defaultMessage": "이미 접근 권한 있음"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerBlocked": {
+    "defaultMessage": "차단됨"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.managesCourses": {
+    "defaultMessage": "{count, plural, one {#개 과정} other {#개 과정}} 관리"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colName": {
+    "defaultMessage": "이름"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colEligibleVia": {
+    "defaultMessage": "자격 경로"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colStatus": {
+    "defaultMessage": "상태"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.searchPlaceholder": {
+    "defaultMessage": "이름 또는 이메일로 검색"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colType": {
+    "defaultMessage": "유형"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colTarget": {
+    "defaultMessage": "접근 권한 대상"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colActions": {
+    "defaultMessage": "작업"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeUser": {
+    "defaultMessage": "사용자"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstance": {
+    "defaultMessage": "인스턴스"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeEmailDomain": {
+    "defaultMessage": "이메일 도메인"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.deleteConfirm": {
+    "defaultMessage": "이 마켓플레이스 접근 규칙을 제거하시겠습니까?"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyTitle": {
+    "defaultMessage": "아직 접근 규칙이 없습니다"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyHint": {
+    "defaultMessage": "시스템 관리자를 제외한 모든 사용자에게 마켓플레이스가 숨겨진 상태로 유지됩니다. 규칙을 추가하여 접근 권한을 부여하세요."
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.zeroMatchWarning": {
+    "defaultMessage": "현재 이 규칙과 일치하는 자격 있는 직원이 없어 아무에게도 접근 권한이 부여되지 않습니다."
   },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "사용자 삭제"
