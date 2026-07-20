@@ -7,10 +7,12 @@ import {
 } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MyLocation from '@mui/icons-material/MyLocation';
-import { Autocomplete, Box, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 
 import { selectDestinationInstances } from 'course/duplication/selectors';
-import TextField from 'lib/components/core/fields/TextField';
+import InstanceAutocomplete, {
+  InstanceOption,
+} from 'lib/components/core/fields/InstanceAutocomplete';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -37,59 +39,45 @@ const translations = defineMessages({
 const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
   const { currentInstanceId, disabled, field, fieldState, setValue } = props;
   const instances = useAppSelector(selectDestinationInstances);
-  const instanceIds = useMemo(
+  const options = useMemo<InstanceOption[]>(
     () =>
-      Object.keys(instances).toSorted(
-        (a, b) => instances[a].weight - instances[b].weight,
-      ),
+      Object.keys(instances)
+        .toSorted((a, b) => instances[a].weight - instances[b].weight)
+        .map((id) => ({
+          id: parseInt(id, 10),
+          name: instances[id]?.name ?? '',
+        })),
     [instances],
   );
   const { t } = useTranslation();
 
   return (
     <div className="flex">
-      <Autocomplete
-        {...field}
-        disabled={disabled || !instanceIds.length}
-        fullWidth
-        getOptionLabel={(instanceId): string =>
-          instances[instanceId]?.name ?? ''
+      <InstanceAutocomplete
+        disabled={disabled || !options.length}
+        error={!!fieldState.error}
+        helperText={
+          fieldState.error && formatErrorMessage(fieldState.error.message)
         }
-        onChange={(_, instanceId): void =>
-          field.onChange(parseInt(instanceId, 10))
-        }
-        options={instanceIds}
-        renderInput={(inputProps): JSX.Element => (
-          <TextField
-            {...inputProps}
-            error={!!fieldState.error}
-            helperText={
-              fieldState.error && formatErrorMessage(fieldState.error.message)
-            }
-            label={<FormattedMessage {...translations.destinationInstance} />}
-            required
-            variant="standard"
-          />
-        )}
-        renderOption={(optionProps, instanceId): JSX.Element => (
-          <Box component="li" {...optionProps} key={instanceId}>
-            {instances[instanceId]?.name ?? ''}
-          </Box>
-        )}
-        value={field.value?.toString()}
+        label={<FormattedMessage {...translations.destinationInstance} />}
+        onBlur={field.onBlur}
+        onChange={(instanceId): void => field.onChange(instanceId)}
+        options={options}
+        required
+        value={field.value ?? null}
       />
       <div className="flex items-end">
         <Tooltip title={t(translations.currentInstance)}>
           <IconButton
             disabled={disabled || !(currentInstanceId in instances)}
-            onClick={() =>
+            onClick={(): void =>
               setValue('destination_instance_id', currentInstanceId)
             }
           >
             <MyLocation
-              className={`${
+              className={
                 currentInstanceId === field.value ? 'text-blue-500' : ''
-              }`}
+              }
             />
           </IconButton>
         </Tooltip>
