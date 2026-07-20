@@ -98,3 +98,19 @@ export interface RubricAnswerData {
   submissionId?: number;
   submissionStatus?: string;
 }
+
+// Author-supplied content for one of the mock answer's grading contexts. `id` is the join row's own id
+// (present once persisted); it is round-tripped on update so the row is updated in place rather than inserted.
+export interface RubricMockAnswerGradingContext {
+  id?: number;
+  gradingContextId: number;
+  content: string;
+}
+
+// A question-level mock ("custom") answer. `name` is the author-supplied label (may be blank -- the UI
+// shows a "(Mock Answer)" placeholder when blank); `title` mirrors `name` so mock answers slot into the
+// shared answer-table rendering. `gradingContexts` carries the per-context content for the edit form.
+export interface RubricMockAnswerData extends RubricAnswerData {
+  name: string;
+  gradingContexts: RubricMockAnswerGradingContext[];
+}

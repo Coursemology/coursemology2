@@ -1,22 +1,46 @@
 import { AxiosError } from 'axios';
 import {
-  RubricAnswerData,
   RubricGradingContextData,
+  RubricMockAnswerData,
   RubricMockAnswerEvaluationData,
+  RubricMockAnswerGradingContext,
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
 
 export const createQuestionMockAnswer = async (
+  name: string,
   answerText: string,
-  gradingContexts: { gradingContextId: number; content: string }[] = [],
-): Promise<number> => {
+  gradingContexts: RubricMockAnswerGradingContext[] = [],
+): Promise<RubricMockAnswerData> => {
   try {
     const response = await CourseAPI.assessment.question.mockAnswers.create(
+      name,
       answerText,
       gradingContexts,
     );
-    return response.data.id;
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const updateQuestionMockAnswer = async (
+  mockAnswerId: number,
+  name: string,
+  answerText: string,
+  gradingContexts: RubricMockAnswerGradingContext[] = [],
+): Promise<RubricMockAnswerData> => {
+  try {
+    const response = await CourseAPI.assessment.question.mockAnswers.update(
+      mockAnswerId,
+      name,
+      answerText,
+      gradingContexts,
+    );
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
 
@@ -39,7 +63,7 @@ export const fetchQuestionRubricGradingContexts = async (): Promise<
 };
 
 export const fetchQuestionRubricMockAnswers = async (): Promise<
-  RubricAnswerData[]
+  RubricMockAnswerData[]
 > => {
   try {
     const response = await CourseAPI.assessment.question.mockAnswers.index();

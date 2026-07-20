@@ -2612,9 +2612,6 @@
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
     "defaultMessage": "Add {inputComponent} random student answer(s)"
   },
-  "course.assessment.question.rubricPlayground.writeCustomAnswer": {
-    "defaultMessage": "Write a custom answer"
-  },
   "course.assessment.question.rubricPlayground.writeAnswerPlaceholder": {
     "defaultMessage": "Write the answer here"
   },
@@ -9492,16 +9489,31 @@
     "defaultMessage": "Rubric-based"
   },
   "course.assessment.question.rubricPlayground.mockContextHeading": {
-    "defaultMessage": "{identifier}: context"
+    "defaultMessage": "'{'{identifier}'}': context"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingForumThread": {
-    "defaultMessage": "{identifier}: Conversation root of answer post"
+    "defaultMessage": "'{'{identifier}'}': Conversation root of answer post"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingSibling": {
-    "defaultMessage": "{identifier}: answer to \"{title}\""
+    "defaultMessage": "'{'{identifier}'}': answer to \"{title}\""
   },
   "course.assessment.question.rubricPlayground.mockContextPlaceholder": {
     "defaultMessage": "Content the grader would see for this context"
+  },
+  "course.assessment.question.rubricPlayground.addMockAnswer": {
+    "defaultMessage": "Add Mock Answer"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswer": {
+    "defaultMessage": "View/Edit Mock Answer"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerName": {
+    "defaultMessage": "Name (optional)"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerPlaceholderTitle": {
+    "defaultMessage": "(Mock Answer)"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
+    "defaultMessage": "Click to view or edit this mock answer"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "Gradebook settings"

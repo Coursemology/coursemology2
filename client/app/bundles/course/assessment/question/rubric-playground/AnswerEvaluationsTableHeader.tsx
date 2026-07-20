@@ -3,7 +3,6 @@ import { Add, PlayArrow, Refresh } from '@mui/icons-material';
 import { Alert, Button, Typography } from '@mui/material';
 import sampleSize from 'lodash-es/sampleSize';
 import { dispatch } from 'store';
-import { RubricGradingContextData } from 'types/course/rubrics';
 
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -16,10 +15,6 @@ import {
 import { AnswerTableEntry } from './AnswerEvaluationsTable/types';
 import { isAnswerAlreadyEvaluated } from './AnswerEvaluationsTable/utils';
 import { initializeAnswerEvaluations } from './operations/answers';
-import {
-  createQuestionMockAnswer,
-  initializeMockAnswerEvaluations,
-} from './operations/mockAnswers';
 import { requestRowEvaluation } from './operations/rowEvaluation';
 import AddAnswersPrompt, {
   AddSampleAnswersFormData,
@@ -32,9 +27,9 @@ const AnswerEvaluationsTableHeader: FC<{
   answerEvaluatedCount: number;
   answerEvaluationTableData: AnswerTableEntry[];
   compareCount: number;
-  gradingContexts: RubricGradingContextData[];
   isComparing: boolean;
   selectedRubric: RubricState;
+  onAddMockAnswer: () => void;
 }> = (props) => {
   const { t } = useTranslation();
   const {
@@ -42,9 +37,9 @@ const AnswerEvaluationsTableHeader: FC<{
     answerEvaluatedCount,
     answerEvaluationTableData,
     compareCount,
-    gradingContexts,
     isComparing,
     selectedRubric,
+    onAddMockAnswer,
   } = props;
 
   const rubricAnswers = useAppSelector(
@@ -89,26 +84,6 @@ const AnswerEvaluationsTableHeader: FC<{
         await initializeAnswerEvaluations(selectedRubric.id, randomAnswerIds);
         break;
       }
-      case AddSampleMode.CUSTOM_ANSWER: {
-        const mockAnswerId = await createQuestionMockAnswer(
-          data.addMockAnswerText,
-          gradingContexts.map((context, index) => ({
-            gradingContextId: context.id,
-            content: data.mockAnswerContexts?.[index]?.content ?? '',
-          })),
-        );
-        dispatch(
-          questionRubricsActions.initializeMockAnswer({
-            rubricId: selectedRubric.id,
-            mockAnswerId,
-            answerText: data.addMockAnswerText,
-          }),
-        );
-        await initializeMockAnswerEvaluations(selectedRubric.id, [
-          mockAnswerId,
-        ]);
-        break;
-      }
       default: {
         break;
       }
@@ -128,6 +103,14 @@ const AnswerEvaluationsTableHeader: FC<{
           variant="outlined"
         >
           {t(translations.addSampleAnswers)}
+        </Button>
+        <Button
+          onClick={onAddMockAnswer}
+          size="small"
+          startIcon={<Add />}
+          variant="outlined"
+        >
+          {t(translations.addMockAnswer)}
         </Button>
         {Boolean(answerCount) && !isComparing && (
           <Button
@@ -180,7 +163,6 @@ const AnswerEvaluationsTableHeader: FC<{
 
       <AddAnswersPrompt
         answers={selectableAnswers}
-        gradingContexts={gradingContexts}
         maximumGrade={maximumGrade ?? 0}
         onClose={() => setIsAddingAnswers(false)}
         onSubmit={async (data: AddSampleAnswersFormData): Promise<void> => {

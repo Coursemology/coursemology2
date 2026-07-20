@@ -4,7 +4,9 @@ import {
   RubricAnswerEvaluationData,
   RubricData,
   RubricDataWithEvaluations,
+  RubricMockAnswerData,
   RubricMockAnswerEvaluationData,
+  RubricMockAnswerGradingContext,
 } from 'types/course/rubrics';
 import { JobStatusResponse } from 'types/jobs';
 
@@ -15,7 +17,7 @@ export type RubricState = RubricDataWithEvaluations & {
 export interface QuestionRubricsState {
   rubrics: Record<number, RubricState>;
   answers: Record<number, RubricAnswerData>;
-  mockAnswers: Record<number, RubricAnswerData>;
+  mockAnswers: Record<number, RubricMockAnswerData>;
   exportJob?: JobStatusResponse;
 }
 
@@ -88,7 +90,7 @@ export const questionRubricsStore = createSlice({
         state.answers[answer.id] = answer;
       });
     },
-    loadMockAnswers: (state, action: PayloadAction<RubricAnswerData[]>) => {
+    loadMockAnswers: (state, action: PayloadAction<RubricMockAnswerData[]>) => {
       action.payload.forEach((mockAnswer) => {
         state.mockAnswers[mockAnswer.id] = mockAnswer;
       });
@@ -185,20 +187,44 @@ export const questionRubricsStore = createSlice({
       action: PayloadAction<{
         mockAnswerId: number;
         rubricId: number;
+        name: string;
         answerText: string;
+        gradingContexts: RubricMockAnswerGradingContext[];
       }>,
     ) => {
-      const { rubricId, mockAnswerId, answerText } = action.payload;
+      const { rubricId, mockAnswerId, name, answerText, gradingContexts } =
+        action.payload;
       if (!(rubricId in state.rubrics)) return;
       state.mockAnswers[mockAnswerId] = {
         id: mockAnswerId,
-        title: '(Mock Answer)',
+        name,
+        // title mirrors name (may be blank); the placeholder is applied at render time.
+        title: name,
         currentAnswer: true,
         answerText,
+        gradingContexts,
       };
       state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {
         mockAnswerId,
       };
+    },
+    updateMockAnswer: (
+      state,
+      action: PayloadAction<{
+        mockAnswerId: number;
+        name: string;
+        answerText: string;
+        gradingContexts: RubricMockAnswerGradingContext[];
+      }>,
+    ) => {
+      const { mockAnswerId, name, answerText, gradingContexts } =
+        action.payload;
+      const mockAnswer = state.mockAnswers[mockAnswerId];
+      if (!mockAnswer) return;
+      mockAnswer.name = name;
+      mockAnswer.title = name;
+      mockAnswer.answerText = answerText;
+      mockAnswer.gradingContexts = gradingContexts;
     },
     requestMockAnswerEvaluation: (
       state,
