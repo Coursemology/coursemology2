@@ -4,9 +4,13 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
   let!(:instance) { Instance.default }
 
+  HARDCODED_EMAIL_DOMAINS = ['schools.gov.sg', 'other.edu', 'school.edu', 'newdomain.example'].freeze
+
   before do
     Course::Assessment::Marketplace::AllowlistRule.delete_all
-    User::Email.delete_all
+    HARDCODED_EMAIL_DOMAINS.each do |domain|
+      User::Email.where('LOWER(email) LIKE ?', "%#{domain}").delete_all
+    end
   end
 
   with_tenant(:instance) do
