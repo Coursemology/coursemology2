@@ -8867,6 +8867,126 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "Renamed {field} from {prevValue} to {newValue}"
   },
+  "system.admin.admin.MarketplaceAccessFilter.trigger": {
+    "defaultMessage": "Filter"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.status": {
+    "defaultMessage": "Status"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.active": {
+    "defaultMessage": "Active"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.blocked": {
+    "defaultMessage": "Blocked"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.allowedByRule": {
+    "defaultMessage": "Allowed by rule"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.clearAll": {
+    "defaultMessage": "Clear all"
+  },
+  "system.admin.admin.MarketplaceAccessSection.heading": {
+    "defaultMessage": "People matched by these rules"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summary": {
+    "defaultMessage": "Total with access: {count} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summaryWithBlocked": {
+    "defaultMessage": "Total with access: {count} · Total blocked: {blocked} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.filteredCounts": {
+    "defaultMessage": "Filtered: {count} with access · {blocked} blocked"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeOpen": {
+    "defaultMessage": "Open to everyone"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeScoped": {
+    "defaultMessage": "Scoped to the rules above"
+  },
+  "system.admin.admin.MarketplaceAccessSection.fetchFailure": {
+    "defaultMessage": "Failed to load the marketplace access list."
+  },
+  "system.admin.admin.MarketplaceAccessSection.colName": {
+    "defaultMessage": "Name"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEmail": {
+    "defaultMessage": "Email"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEligibleVia": {
+    "defaultMessage": "Eligible via"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colAllowedBy": {
+    "defaultMessage": "Allowed by"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colStatus": {
+    "defaultMessage": "Status"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colActions": {
+    "defaultMessage": "Actions"
+  },
+  "system.admin.admin.MarketplaceAccessSection.managesCourses": {
+    "defaultMessage": "Manages {count, plural, one {# course} other {# courses}}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceInstructor": {
+    "defaultMessage": "Instance instructor"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceAdministrator": {
+    "defaultMessage": "Instance administrator"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedEveryone": {
+    "defaultMessage": "Everyone"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedNothing": {
+    "defaultMessage": "No matching rule"
+  },
+  "system.admin.admin.MarketplaceAccessSection.systemAdmin": {
+    "defaultMessage": "System admin"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeUser": {
+    "defaultMessage": "User"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeInstance": {
+    "defaultMessage": "Instance"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeEmailDomain": {
+    "defaultMessage": "Email domain"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusActive": {
+    "defaultMessage": "Active"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusBlocked": {
+    "defaultMessage": "Blocked"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disable": {
+    "defaultMessage": "Block"
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnable": {
+    "defaultMessage": "Unblock"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableSuccess": {
+    "defaultMessage": "Access blocked for this user."
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableFailure": {
+    "defaultMessage": "Failed to block access."
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableSuccess": {
+    "defaultMessage": "Access unblocked for this user."
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableFailure": {
+    "defaultMessage": "Failed to unblock access."
+  },
+  "system.admin.admin.MarketplaceAccessSection.searchPlaceholder": {
+    "defaultMessage": "Search by name or email"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantHeading": {
+    "defaultMessage": "Dormant blocks ({count})"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantExplanation": {
+    "defaultMessage": "These people are blocked but no rule currently grants them access. The block denies nothing today — but it would take effect again if a rule starts matching them, so clear it if it is no longer wanted."
+  },
+  "system.admin.admin.MarketplaceAccessSection.clearBlock": {
+    "defaultMessage": "Clear block"
+  },
   "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
     "defaultMessage": "Add access rule"
   },

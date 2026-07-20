@@ -14,6 +14,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import toast from 'lib/hooks/toast';
 
 import MarketplaceAllowlistRuleForm from '../components/forms/MarketplaceAllowlistRuleForm';
+import MarketplaceAccessSection from '../components/MarketplaceAccessSection';
 import MarketplaceAllowlistModeBanner from '../components/MarketplaceAllowlistModeBanner';
 import MarketplaceAllowlistTable from '../components/tables/MarketplaceAllowlistTable';
 
@@ -72,6 +73,14 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [rules, setRules] = useState<AllowlistRuleData[]>([]);
   const [everyoneRuleId, setEveryoneRuleId] = useState<number | null>(null);
+  // Bumped on every rule mutation. Adding a domain rule changes who is in the access list in ways
+  // the client cannot compute locally, so the list must refetch rather than patch itself.
+  const [ruleVersion, setRuleVersion] = useState(0);
+  // Published by the access section after each fetch; passed to the rules table so it can flag rules
+  // that grant access to nobody. Null until the first fetch resolves (unknown ≠ zero).
+  const [matchCounts, setMatchCounts] = useState<Map<number, number> | null>(
+    null,
+  );
 
   useEffect(() => {
     SystemAPI.admin
@@ -85,12 +94,21 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
   }, []);
 
   const openToEveryone = everyoneRuleId !== null;
+  const invalidateAccessList = (): void => {
+    // Blank the counts until the refetch this triggers resolves: they are derived from the access
+    // list, so between a mutation and the fresh fetch they are stale. After a Restrict, the
+    // everyone-mode counts are an empty map that would mark every scoped rule as matching nobody.
+    // Null means "unknown, don't warn", same as before the first load.
+    setMatchCounts(null);
+    setRuleVersion((version) => version + 1);
+  };
 
   const handleCreate = async (data: AllowlistRuleFormData): Promise<void> => {
     try {
       const response =
         await SystemAPI.admin.createMarketplaceAllowlistRule(data);
       setRules((current) => [...current, response.data]);
+      invalidateAccessList();
       toast.success(intl.formatMessage(translations.createSuccess));
       setIsFormOpen(false);
     } catch (error) {
@@ -106,6 +124,7 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
     try {
       await SystemAPI.admin.deleteMarketplaceAllowlistRule(id);
       setRules((current) => current.filter((rule) => rule.id !== id));
+      invalidateAccessList();
       toast.success(intl.formatMessage(translations.deleteSuccess));
     } catch {
       toast.error(intl.formatMessage(translations.deleteFailure));
@@ -116,6 +135,7 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
     try {
       const response = await SystemAPI.admin.openMarketplaceToEveryone();
       setEveryoneRuleId(response.data.id);
+      invalidateAccessList();
       toast.success(intl.formatMessage(translations.openSuccess));
     } catch {
       toast.error(intl.formatMessage(translations.openFailure));
@@ -127,6 +147,7 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
     try {
       await SystemAPI.admin.deleteMarketplaceAllowlistRule(everyoneRuleId);
       setEveryoneRuleId(null);
+      invalidateAccessList();
       toast.success(intl.formatMessage(translations.restrictSuccess));
     } catch {
       toast.error(intl.formatMessage(translations.restrictFailure));
@@ -158,6 +179,7 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
           </AddButton>
         }
         disabled={openToEveryone}
+        matchCounts={openToEveryone ? null : matchCounts}
         onDelete={handleDelete}
         rules={rules}
       />
@@ -166,6 +188,13 @@ const MarketplaceAllowlistIndex: FC<Props> = ({ intl }) => {
         onClose={(): void => setIsFormOpen(false)}
         onSubmit={handleCreate}
         open={isFormOpen}
+      />
+
+      <MarketplaceAccessSection
+        onMatchCounts={setMatchCounts}
+        openToEveryone={openToEveryone}
+        rules={rules}
+        ruleVersion={ruleVersion}
       />
     </Page>
   );
