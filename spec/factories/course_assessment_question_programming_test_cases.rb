@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  base_time = Time.zone.now.to_i
+  # Unique per process — see the note in user_emails.rb.
+  run_id = "#{Time.zone.now.to_i}-#{SecureRandom.hex(3)}"
   factory :course_assessment_question_programming_test_case,
           class: Course::Assessment::Question::ProgrammingTestCase do
     question { build(:course_assessment_question_programming) }
-    sequence(:identifier) { |n| "test_id_#{base_time}_#{n}" }
+    sequence(:identifier) { |n| "test_id_#{run_id}_#{n}" }
     expression { '' }
     expected { '' }
     test_case_type { :public_test }

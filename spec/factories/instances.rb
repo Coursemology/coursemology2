@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  base_time = Time.zone.now.to_i
+  # Unique per process — see the note in user_emails.rb; host and name are both unique-constrained.
+  run_id = "#{Time.zone.now.to_i}-#{SecureRandom.hex(3)}"
   sequence :host do |n|
-    "local-#{base_time}-#{n}.lvh.me"
+    "local-#{run_id}-#{n}.lvh.me"
   end
 
   factory :instance do
-    sequence(:name) { |n| "Instance-#{base_time}-#{n}" }
+    sequence(:name) { |n| "Instance-#{run_id}-#{n}" }
     host
 
     trait :with_learning_map_component_enabled do
