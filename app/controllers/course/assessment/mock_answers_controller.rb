@@ -21,6 +21,16 @@ class Course::Assessment::MockAnswersController < Course::Assessment::QuestionsC
     end
   end
 
+  def destroy
+    # `dependent: :destroy` on the mock answer's grading_contexts (backed by an on_delete: :cascade FK)
+    # removes the author-supplied context rows tied to this answer.
+    if @mock_answer.destroy
+      head :ok
+    else
+      render json: { errors: @mock_answer.errors }, status: :bad_request
+    end
+  end
+
   private
 
   def mock_answer_params

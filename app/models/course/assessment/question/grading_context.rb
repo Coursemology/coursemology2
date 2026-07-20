@@ -20,6 +20,20 @@ class Course::Assessment::Question::GradingContext < ApplicationRecord
     Course::Assessment::Question::GradingContext::Provider.for(context_type).context_text(self, submission)
   end
 
+  # Duplication (see Duplicator). A context is a child of its consumer +question+ and is duplicated when that
+  # question is (Course::Assessment::Question#initialize_grading_context_duplicates). Here we re-point the
+  # polymorphic +source+ (a sibling question, for 'sibling_question_answer' contexts; null for 'forum_thread').
+  # The consumer and source questions can be duplicated in either order, so the source linkage is formed from
+  # whichever side runs later: if the source is already duplicated we point at its duplicate now; otherwise we
+  # leave the copied source in place and the source question re-points us when it is duplicated (the fix-up
+  # pass in that same helper).
+  def initialize_duplicate(duplicator, other)
+    self.question = duplicator.duplicate(other.question.actable).acting_as
+    return unless other.source && duplicator.duplicated?(other.source.actable)
+
+    self.source = duplicator.duplicate(other.source.actable).acting_as
+  end
+
   private
 
   def validate_source_for_context_type

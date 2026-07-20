@@ -32,7 +32,7 @@ RSpec.describe Course::Assessment::MockAnswersController, type: :controller do
             mock_answer: {
               name: 'Borderline pass',
               answer_text: 'Sample answer',
-              grading_contexts_attributes: [{ grading_context_id: grading_context.id, content: 'The opening post' }]
+              grading_contexts_attributes: [grading_context_id: grading_context.id, content: 'The opening post']
             }
           ), format: :json
         end.to change(Course::Assessment::Question::MockAnswer, :count).by(1)
@@ -49,25 +49,22 @@ RSpec.describe Course::Assessment::MockAnswersController, type: :controller do
       let!(:mock_answer) do
         question.mock_answers.create!(
           name: 'Original', answer_text: 'Old answer',
-          grading_contexts_attributes: [{ grading_context_id: grading_context.id, content: 'Old context' }]
+          grading_contexts_attributes: [grading_context_id: grading_context.id, content: 'Old context']
         )
       end
 
-      # The client round-trips the join row's own id, so nested attributes update it in place.
-      it 'renames the mock answer and updates its context in place (no duplicate row)' do
-        expect do
-          patch :update, params: member_params(
-            id: mock_answer.id,
-            mock_answer: {
-              name: 'Renamed',
-              answer_text: 'New answer',
-              grading_contexts_attributes: [
-                id: mock_answer.grading_contexts.first.id,
-                grading_context_id: grading_context.id, content: 'New context'
-              ]
-            }
-          ), format: :json
-        end.not_to change(Course::Assessment::Question::MockAnswer::GradingContext, :count)
+      it 'renames the mock answer and updates its answer and context content' do
+        patch :update, params: member_params(
+          id: mock_answer.id,
+          mock_answer: {
+            name: 'Renamed',
+            answer_text: 'New answer',
+            grading_contexts_attributes: [
+              id: mock_answer.grading_contexts.first.id,
+              grading_context_id: grading_context.id, content: 'New context'
+            ]
+          }
+        )
 
         expect(response).to have_http_status(:ok)
         mock_answer.reload
@@ -77,13 +74,47 @@ RSpec.describe Course::Assessment::MockAnswersController, type: :controller do
       end
     end
 
+    describe '#destroy' do
+      let!(:mock_answer) do
+        question.mock_answers.create!(
+          name: 'To delete', answer_text: 'An answer',
+          grading_contexts_attributes: [grading_context_id: grading_context.id, content: 'Some context']
+        )
+      end
+
+      def delete_mock_answer(target = mock_answer)
+        delete :destroy, params: member_params(id: target.id)
+      end
+
+      it 'deletes the mock answer and cascades to its grading contexts' do
+        expect { delete_mock_answer }.
+          to change(Course::Assessment::Question::MockAnswer, :count).by(-1).
+          and change(Course::Assessment::Question::MockAnswer::GradingContext, :count).by(-1)
+
+        expect(response).to have_http_status(:ok)
+        expect(Course::Assessment::Question::MockAnswer::GradingContext.
+          where(mock_answer_id: mock_answer.id)).to be_empty
+      end
+
+      it 'also removes the mock answer\'s rubric evaluations' do
+        rubric = create(:course_rubric, course: course).tap do |r|
+          r.question_rubrics.create!(question: question)
+        end
+        Course::Rubric::MockAnswerEvaluation.create!(mock_answer: mock_answer, rubric: rubric)
+
+        expect { delete_mock_answer }.
+          to change(Course::Rubric::MockAnswerEvaluation, :count).by(-1)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
     describe '#index' do
       render_views
 
       let!(:mock_answer) do
         question.mock_answers.create!(
           name: '', answer_text: 'An answer',
-          grading_contexts_attributes: [{ grading_context_id: grading_context.id, content: 'Some context' }]
+          grading_contexts_attributes: [grading_context_id: grading_context.id, content: 'Some context']
         )
       end
 

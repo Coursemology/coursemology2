@@ -57,8 +57,9 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
     answer.acting_as
   end
 
-  def initialize_duplicate(_duplicator, other)
+  def initialize_duplicate(duplicator, other)
     copy_attributes(other)
+    initialize_grading_context_duplicates(duplicator, other)
   end
 
   def max_posts_allowed

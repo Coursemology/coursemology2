@@ -1,5 +1,4 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 import { GradingContextSourceOption } from 'types/course/assessment/question/grading-contexts';
 import { RubricBasedResponseFormData } from 'types/course/assessment/question/rubric-based-responses';
 
@@ -32,7 +31,6 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
     availableGradingContextTypes,
     contextSourceOptions,
   } = props;
-  const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
   const { control, watch } = useFormContext<RubricBasedResponseFormData>();
   const aiGradingEnabled = watch('aiGradingEnabled');

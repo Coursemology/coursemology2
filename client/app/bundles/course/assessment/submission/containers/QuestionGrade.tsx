@@ -328,9 +328,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
         )}
 
         {editable &&
-          (isProgrammingQuestion ||
-            isForumPostResponseAndAutogradable ||
-            isTextResponseAndAutogradable) && (
+          (isProgrammingQuestion || isTextResponseAndAutogradable) && (
             <ReevaluateButton questionId={questionId} />
           )}
 

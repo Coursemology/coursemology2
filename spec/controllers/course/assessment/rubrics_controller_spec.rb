@@ -136,5 +136,37 @@ RSpec.describe Course::Assessment::RubricsController, type: :controller do
         end
       end
     end
+
+    describe '#delete_mock_answer_evaluations' do
+      let!(:grading_context) do
+        Course::Assessment::Question::GradingContext.create!(
+          question: question.acting_as, context_type: 'forum_thread', identifier: 'thread_root'
+        )
+      end
+      let!(:mock_answer) do
+        question.acting_as.mock_answers.create!(
+          name: 'Sample', answer_text: 'Answer',
+          grading_contexts_attributes: [grading_context_id: grading_context.id, content: 'Context']
+        )
+      end
+      let!(:mock_answer_evaluation) do
+        Course::Rubric::MockAnswerEvaluation.create!(mock_answer: mock_answer, rubric: rubric)
+      end
+
+      def dismiss(rubric_target = rubric, answer = mock_answer)
+        delete :delete_mock_answer_evaluations, params: {
+          course_id: course.id, assessment_id: assessment.id,
+          question_id: question.acting_as.id, id: rubric_target.id,
+          mock_answer_id: answer.id, on: :member
+        }
+      end
+
+      it 'removes only this revision\'s evaluation, keeping the mock answer and its grading contexts' do
+        expect { dismiss }.to change(Course::Rubric::MockAnswerEvaluation, :count).by(-1)
+        expect(response).to have_http_status(:success)
+        expect(Course::Assessment::Question::MockAnswer.exists?(mock_answer.id)).to be(true)
+        expect(mock_answer.grading_contexts.count).to eq(1)
+      end
+    end
   end
 end
