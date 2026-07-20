@@ -169,7 +169,7 @@ RSpec.describe System::Admin::MarketplaceAllowlistRulesController, type: :contro
         post :preview, format: :json, params: { allowlist_rule: params }
       end
 
-      it 'counts eligible staff a domain rule would match, and how many are new' do
+      it 'counts eligible users a domain rule would match, and how many are new' do
         newcomer = create(:user, email: 'newcomer@preview.test')
         create(:course_manager, course: create(:course), user: newcomer)
         existing = create(:user, email: 'existing@preview.test')
@@ -278,7 +278,7 @@ RSpec.describe System::Admin::MarketplaceAllowlistRulesController, type: :contro
         expect(response).to have_http_status(:bad_request)
         # Attribute name omitted: StubbedI18nBackend returns the raw key for
         # `activerecord.attributes.*`, so full_messages can never render "Email domain" here.
-        expect(response.parsed_body['errors']).to include('already has a rule.')
+        expect(response.parsed_body['errors']).to include('already has the same rule.')
       end
 
       it 'denies a non-administrator' do

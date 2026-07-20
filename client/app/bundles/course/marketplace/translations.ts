@@ -16,7 +16,7 @@ export default defineMessages({
   publishConfirmBody: {
     id: 'course.marketplace.publishConfirmBody',
     defaultMessage:
-      'This assessment will be browsable by course managers, who can preview and duplicate it. It uses this assessment’s own title.',
+      'This assessment will be browsable by eligible users, who can preview and duplicate it. It uses this assessment’s own title.',
   },
   removeConfirmTitle: {
     id: 'course.marketplace.removeConfirmTitle',
