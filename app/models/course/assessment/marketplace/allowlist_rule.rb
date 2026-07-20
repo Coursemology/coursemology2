@@ -23,11 +23,11 @@ class Course::Assessment::Marketplace::AllowlistRule < ApplicationRecord
   validates :instance, presence: true, if: :rule_type_instance?
   validates :email_domain, presence: true, if: :rule_type_email_domain?
 
-  validates :user_id, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :user_id, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                       if: :rule_type_user?
-  validates :instance_id, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :instance_id, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                           if: :rule_type_instance?
-  validates :email_domain, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :email_domain, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                            if: :rule_type_email_domain?
   # "Everyone" is the widest rule; only one may exist. Paired with a partial unique index.
   validates :rule_type, uniqueness: true, if: :rule_type_everyone?

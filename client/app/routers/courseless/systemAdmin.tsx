@@ -68,6 +68,17 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
       }),
     },
     {
+      path: 'marketplace_allowlist_rules',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'MarketplaceAllowlistIndex' */
+            'bundles/system/admin/admin/pages/MarketplaceAllowlistIndex'
+          )
+        ).default,
+      }),
+    },
+    {
       path: 'get_help',
       lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (

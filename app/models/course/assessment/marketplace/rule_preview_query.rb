@@ -50,7 +50,7 @@ class Course::Assessment::Marketplace::RulePreviewQuery
     @matched_ids ||= RuleMatchQuery.new(@rule).user_ids_within(baseline_ids)
   end
 
-  # Only baseline-eligible staff can ever reach the marketplace, so a rule matching anyone else
+  # Only baseline-eligible users can ever reach the marketplace, so a rule matching anyone else
   # grants nothing and must not be counted.
   def baseline_ids
     @baseline_ids ||= User.where(id: CourseUser.managers.select(:user_id)).
