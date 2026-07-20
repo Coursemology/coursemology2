@@ -44,6 +44,67 @@ RSpec.describe User do
       end
     end
 
+    describe '#course_manager_or_owner?' do
+      let(:user) { create(:user) }
+
+      it 'is true when the user manages a course' do
+        create(:course_manager, course: create(:course), user: user)
+        expect(user.course_manager_or_owner?).to be(true)
+      end
+
+      it 'is true when the user owns a course' do
+        create(:course_owner, course: create(:course), user: user)
+        expect(user.course_manager_or_owner?).to be(true)
+      end
+
+      it 'is true when the user manages a course in a different instance' do
+        other_instance = create(:instance)
+        ActsAsTenant.with_tenant(other_instance) do
+          create(:course_manager, course: create(:course), user: user)
+        end
+        expect(user.course_manager_or_owner?).to be(true)
+      end
+
+      it 'is false when the user only has non-manager course roles' do
+        create(:course_student, course: create(:course), user: user)
+        create(:course_observer, course: create(:course), user: user)
+        expect(user.course_manager_or_owner?).to be(false)
+      end
+
+      it 'is false when the user is in no course' do
+        expect(user.course_manager_or_owner?).to be(false)
+      end
+    end
+
+    describe '#instance_instructor_or_administrator?' do
+      # Eager: a lazy `let` would first run `create(:user)` inside the `with_tenant(other_instance)`
+      # block below, and `after_create :create_instance_user` would then give the user a normal
+      # InstanceUser in *that* instance — colliding with the instructor/administrator one we create.
+      let!(:user) { create(:user) }
+
+      it 'is true when the user is an instructor in some instance' do
+        other_instance = create(:instance)
+        ActsAsTenant.with_tenant(other_instance) do
+          create(:instance_user, :instructor, user: user, instance: other_instance)
+        end
+        expect(user.instance_instructor_or_administrator?).to be(true)
+      end
+
+      it 'is true when the user is an administrator in some instance' do
+        another_instance = create(:instance)
+        ActsAsTenant.with_tenant(another_instance) do
+          create(:instance_administrator, user: user, instance: another_instance)
+        end
+        expect(user.instance_instructor_or_administrator?).to be(true)
+      end
+
+      it 'is false when the user is only a normal instance member' do
+        # `create(:user)` already gives a normal InstanceUser in the default instance via the
+        # after_create callback; there is no instructor/administrator membership anywhere.
+        expect(user.instance_instructor_or_administrator?).to be(false)
+      end
+    end
+
     describe '#emails' do
       let(:user) { create(:user, emails_count: 5) }
       it 'unsets other email as primary when a new email is assigned' do
