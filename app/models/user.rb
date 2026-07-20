@@ -76,6 +76,22 @@ class User < ApplicationRecord
 
   has_one :cikgo_user, dependent: :destroy, inverse_of: :user
 
+  # Both tables FK to users with no ON DELETE, so without these the admin panel's delete-user
+  # action dies with PG::ForeignKeyViolation for anyone who is allow-listed or blocked. Destroying
+  # is the right semantic for both: each row is *about* this user and means nothing without them.
+  has_many :marketplace_allowlist_rules, class_name: 'Course::Assessment::Marketplace::AllowlistRule',
+                                         inverse_of: false, dependent: :destroy
+  has_many :marketplace_access_blocks, class_name: 'Course::Assessment::Marketplace::AccessBlock',
+                                       inverse_of: false, dependent: :destroy
+  # Blocks this user ISSUED. Not `dependent:` anything — destroying them would silently restore
+  # marketplace access for everyone this admin ever blocked, and `creator_id` is NOT NULL so it
+  # cannot be nullified either. `reassign_issued_marketplace_blocks` hands authorship to the
+  # Deleted user instead, which keeps the block standing and satisfies the FK.
+  has_many :issued_marketplace_access_blocks, class_name: 'Course::Assessment::Marketplace::AccessBlock',
+                                              foreign_key: :creator_id, inverse_of: false,
+                                              dependent: nil
+  before_destroy :reassign_issued_marketplace_blocks
+
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
@@ -96,6 +112,26 @@ class User < ApplicationRecord
     id == User::SYSTEM_USER_ID || id == User::DELETED_USER_ID
   end
 
+  # Whether the user manages or owns at least one course, in any instance. This is the baseline
+  # capability for the assessment marketplace: browsing is then further gated by the allow-list.
+  # `course_users` is not tenant-scoped (CourseUser has no acts_as_tenant), so this correctly
+  # spans all instances.
+  #
+  # @return [Boolean]
+  def course_manager_or_owner?
+    course_users.managers.exists?
+  end
+
+  # Whether the user is an instructor or administrator InstanceUser in ANY instance. This is the
+  # second baseline capability for the assessment marketplace, a peer of course_manager_or_owner?.
+  # `instance_users` IS tenant-scoped (acts_as_tenant), so bypass the tenant to span all instances.
+  #
+  # @return [Boolean]
+  def instance_instructor_or_administrator?
+    ActsAsTenant.without_tenant do
+      instance_users.where(role: [:instructor, :administrator]).exists?
+    end
+  end
   # Pick the default email and set it as primary email. This method would immediately set the
   # attributes in the database.
   #
@@ -135,6 +171,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  # Hands any marketplace blocks this user issued to the Deleted user, so destroying an admin does
+  # not lift the blocks they put in place (nor trip the NOT NULL FK on `creator_id`).
+  def reassign_issued_marketplace_blocks
+    return if id == User::DELETED_USER_ID
+
+    issued_marketplace_access_blocks.update_all(creator_id: User::DELETED_USER_ID)
+  end
 
   # Gets the default email address record.
   #
