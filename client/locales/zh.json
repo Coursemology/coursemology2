@@ -2427,10 +2427,10 @@
     "defaultMessage": "您确定要继续吗？"
   },
   "course.assessment.question.rubricPlayground.sampleAnswerEvaluations": {
-    "defaultMessage": "示例答案评估"
+    "defaultMessage": "答案评估"
   },
   "course.assessment.question.rubricPlayground.addSampleAnswers": {
-    "defaultMessage": "添加示例答案"
+    "defaultMessage": "添加现有答案"
   },
   "course.assessment.question.rubricPlayground.evaluateAll": {
     "defaultMessage": "全部评估 ({count})"
@@ -2562,7 +2562,7 @@
     "defaultMessage": "此表格中的评估不会影响分配给学生的成绩。您可以在「应用」按钮下更新现有的学生成绩。"
   },
   "course.assessment.question.rubricPlayground.addAnswersTitle": {
-    "defaultMessage": "添加示例答案"
+    "defaultMessage": "添加现有答案"
   },
   "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
     "defaultMessage": "添加"
@@ -2574,7 +2574,7 @@
     "defaultMessage": "添加"
   },
   "course.assessment.question.rubricPlayground.addExistingAnswers": {
-    "defaultMessage": "添加现有答案"
+    "defaultMessage": "添加特定答案"
   },
   "course.assessment.question.rubricPlayground.student": {
     "defaultMessage": "学生"
@@ -9483,7 +9483,7 @@
     "defaultMessage": "（模拟答案）"
   },
   "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
-    "defaultMessage": "点击查看或编辑此模拟答案"
+    "defaultMessage": "查看/编辑"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "成绩册设置"
@@ -10204,5 +10204,29 @@
   },
   "course.gradebook.ManageExternalAssessmentContent.import": {
     "defaultMessage": "导入 CSV"
+  },
+  "course.assessment.question.rubricPlayground.activeRubricInfo": {
+    "defaultMessage": "此评分标准将用于自动评分所有新答案。"
+  },
+  "course.assessment.question.rubricPlayground.inactiveRubricInfo": {
+    "defaultMessage": "新答案将使用当前使用中的评分标准自动评分。点击“设为使用中”以改用此评分标准。"
+  },
+  "course.assessment.question.rubricPlayground.useOnlyCurrentAnswers": {
+    "defaultMessage": "仅使用当前答案"
+  },
+  "course.assessment.question.rubricPlayground.viewAnswer": {
+    "defaultMessage": "查看"
+  },
+  "course.assessment.question.rubricPlayground.answerByStudent": {
+    "defaultMessage": "{name} 的答案"
+  },
+  "course.assessment.question.rubricPlayground.emptyGradingContext": {
+    "defaultMessage": "此上下文没有可用内容。"
+  },
+  "course.assessment.question.rubricPlayground.saveMockAnswerFailure": {
+    "defaultMessage": "无法保存此模拟答案，请重试。"
+  },
+  "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
+    "defaultMessage": "无法加载此答案的评分上下文。"
   }
 }

@@ -46,6 +46,7 @@ import {
   UNSAVED_RUBRIC_ID,
 } from './types';
 import { buildSelectedRubricTableData, rubricStateToFormData } from './utils';
+import ViewAnswerPrompt from './ViewAnswerPrompt';
 
 const RubricPlaygroundPage = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -83,6 +84,12 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
   const [mockAnswerPrompt, setMockAnswerPrompt] = useState<{
     open: boolean;
     mockAnswerId?: number;
+  }>({ open: false });
+
+  // Controls the read-only "view answer" prompt for a real student answer.
+  const [viewAnswerPrompt, setViewAnswerPrompt] = useState<{
+    open: boolean;
+    answerId?: number;
   }>({ open: false });
 
   // The client-only "Unsaved" draft revision, present only while editing. `draftCreatedAt` timestamps
@@ -346,6 +353,9 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
                 onEditMockAnswer={(mockAnswerId) =>
                   setMockAnswerPrompt({ open: true, mockAnswerId })
                 }
+                onViewAnswer={(answerId) =>
+                  setViewAnswerPrompt({ open: true, answerId })
+                }
                 selectedRubric={selectedRubric}
               />
             )}
@@ -359,6 +369,17 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
                 }
                 open={mockAnswerPrompt.open}
                 rubricId={selectedRubricData.state.id}
+              />
+            )}
+
+            {isShowingAnswerEvaluationsTable && (
+              <ViewAnswerPrompt
+                answerId={viewAnswerPrompt.answerId}
+                gradingContexts={gradingContexts}
+                onClose={() =>
+                  setViewAnswerPrompt((prev) => ({ ...prev, open: false }))
+                }
+                open={viewAnswerPrompt.open}
               />
             )}
           </>

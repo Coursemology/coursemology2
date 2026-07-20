@@ -22,6 +22,9 @@ export interface AddSampleAnswersFormData {
   addMode: AddSampleMode;
   addAnswerIds: number[];
   addRandomAnswerCount: number;
+  // Whether to restrict to each submission's current (latest) answer -- affects both the selectable table
+  // and the pool that random selection draws from.
+  showOnlyCurrent?: boolean;
 }
 
 interface Props {
@@ -97,6 +100,7 @@ const AddAnswersPrompt: FC<Props> = (props) => {
         data.addAnswerIds = Object.keys(
           tableRef.current?.getRowSelectionState() ?? {},
         ).map((id) => parseInt(id, 10));
+        data.showOnlyCurrent = showOnlyLatest;
         onSubmit(data).then(() => {
           reset();
         });
@@ -114,7 +118,7 @@ const AddAnswersPrompt: FC<Props> = (props) => {
             <RadioGroup
               defaultValue={selectedAddMode}
               {...outerField}
-              className="space-y-5"
+              className="space-y-2"
               onChange={(e): void => {
                 setValue('addMode', e.target.value as AddSampleMode);
               }}
@@ -125,42 +129,6 @@ const AddAnswersPrompt: FC<Props> = (props) => {
                 label={t(translations.addExistingAnswers)}
                 value={AddSampleMode.SPECIFIC_ANSWER}
               />
-              {selectedAddMode === AddSampleMode.SPECIFIC_ANSWER && (
-                <div className="space-y-2">
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={showOnlyLatest}
-                        onChange={(_, checked) => setShowOnlyLatest(checked)}
-                        size="small"
-                      />
-                    }
-                    label={t(translations.showOnlyLatestAnswers)}
-                  />
-                  <Table
-                    ref={tableRef}
-                    className="overflow-x-scroll"
-                    columns={columns}
-                    data={displayedAnswers}
-                    getRowClassName={(answer): string => `answer_${answer.id}`}
-                    getRowEqualityData={(answer) => answer}
-                    getRowId={(instance): string => instance.id.toString()}
-                    indexing={{ rowSelectable: true }}
-                    pagination={{
-                      rowsPerPage: [5],
-                    }}
-                    search={{
-                      searchPlaceholder: t(
-                        translations.searchAnswersPlaceholder,
-                      ),
-                    }}
-                    toolbar={{
-                      show: true,
-                      keepNative: true,
-                    }}
-                  />
-                </div>
-              )}
               <RadioButton
                 className="my-0"
                 disabled={false}
@@ -195,6 +163,38 @@ const AddAnswersPrompt: FC<Props> = (props) => {
             </RadioGroup>
           )}
         />
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showOnlyLatest}
+              onChange={(_, checked) => setShowOnlyLatest(checked)}
+            />
+          }
+          label={t(translations.useOnlyCurrentAnswers)}
+        />
+        {selectedAddMode === AddSampleMode.SPECIFIC_ANSWER && (
+          <Table
+            ref={tableRef}
+            className="overflow-x-scroll"
+            columns={columns}
+            data={displayedAnswers}
+            getRowClassName={(answer): string => `answer_${answer.id}`}
+            getRowEqualityData={(answer) => answer}
+            getRowId={(instance): string => instance.id.toString()}
+            indexing={{ rowSelectable: true }}
+            pagination={{
+              rowsPerPage: [5],
+            }}
+            search={{
+              searchPlaceholder: t(translations.searchAnswersPlaceholder),
+            }}
+            toolbar={{
+              show: true,
+              keepNative: true,
+            }}
+          />
+        )}
       </form>
     </Prompt>
   );

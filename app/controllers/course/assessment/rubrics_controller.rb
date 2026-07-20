@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::RubricsController < Course::Assessment::QuestionsController # rubocop:disable Metrics/ClassLength
   load_resource :rubric, class: 'Course::Rubric', through: :question,
-                         except: [:index, :rubric_answers, :grading_contexts]
+                         except: [:index, :rubric_answers, :grading_contexts, :answer_grading_contexts]
 
   def index
     head :not_found and return unless rubric_graded_question?
@@ -67,6 +67,17 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     head :not_found and return unless rubric_graded_question?
 
     @grading_contexts = @question.grading_contexts
+  end
+
+  # Each grading context resolved against a real answer's submission (the actual source content the grader
+  # sees), so the playground's "view answer" prompt can display them read-only.
+  def answer_grading_contexts
+    head :not_found and return unless rubric_graded_question?
+
+    answer = @question.answers.find(params[:answer_id])
+    @answer_grading_contexts = @question.grading_contexts.map do |context|
+      { context: context, content: context.context_text(answer.submission).to_s }
+    end
   end
 
   def fetch_answer_evaluations

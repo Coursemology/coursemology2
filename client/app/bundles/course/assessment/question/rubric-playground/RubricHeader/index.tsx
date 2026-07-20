@@ -300,15 +300,13 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
       )}
       {revisions.length > 1 && !isEditing && (
         <Alert
-          className="mb-3 px-2 py-0"
+          className="mb-3 px-3 py-0"
           icon={false}
           severity="info"
           variant="outlined"
         >
-          {selectedRubric?.isActive &&
-            'This rubric will be used to autograde any new answers.'}
-          {!selectedRubric?.isActive &&
-            "Click 'Set as Active' to use this rubric to autograde new answers."}
+          {selectedRubric?.isActive && t(translations.activeRubricInfo)}
+          {!selectedRubric?.isActive && t(translations.inactiveRubricInfo)}
         </Alert>
       )}
       {!isEditing && selectedRubric && (

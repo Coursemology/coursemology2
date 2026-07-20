@@ -2445,10 +2445,10 @@
     "defaultMessage": "Are you sure you wish to proceed?"
   },
   "course.assessment.question.rubricPlayground.sampleAnswerEvaluations": {
-    "defaultMessage": "Sample Answer Evaluations"
+    "defaultMessage": "Answer Evaluations"
   },
   "course.assessment.question.rubricPlayground.addSampleAnswers": {
-    "defaultMessage": "Add Sample Answers"
+    "defaultMessage": "Add Existing Answers"
   },
   "course.assessment.question.rubricPlayground.evaluateAll": {
     "defaultMessage": "Evaluate All ({count})"
@@ -2580,7 +2580,7 @@
     "defaultMessage": "Evaluations in this table do not affect the grades assigned to students. You can update existing student grades under the 'Apply' button."
   },
   "course.assessment.question.rubricPlayground.addAnswersTitle": {
-    "defaultMessage": "Add Sample Answers"
+    "defaultMessage": "Add Existing Answers"
   },
   "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
     "defaultMessage": "Add"
@@ -2592,7 +2592,7 @@
     "defaultMessage": "Add"
   },
   "course.assessment.question.rubricPlayground.addExistingAnswers": {
-    "defaultMessage": "Add existing answers"
+    "defaultMessage": "Add specific answers"
   },
   "course.assessment.question.rubricPlayground.student": {
     "defaultMessage": "Student"
@@ -9513,7 +9513,7 @@
     "defaultMessage": "(Mock Answer)"
   },
   "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
-    "defaultMessage": "Click to view or edit this mock answer"
+    "defaultMessage": "View/Edit"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "Gradebook settings"
@@ -10186,5 +10186,29 @@
   },
   "course.gradebook.ImportWizard.willChangeExisting": {
     "defaultMessage": "{count, plural, one {# row contains} other {# rows contain}} changes to existing grades. After checking this preview, click Resolve Conflicts to review these conflicts before anything is imported."
+  },
+  "course.assessment.question.rubricPlayground.activeRubricInfo": {
+    "defaultMessage": "This rubric will be used to autograde any new answers."
+  },
+  "course.assessment.question.rubricPlayground.inactiveRubricInfo": {
+    "defaultMessage": "New answers will be autograded with the active rubric. Click \"Set as Active\" to use this one instead."
+  },
+  "course.assessment.question.rubricPlayground.useOnlyCurrentAnswers": {
+    "defaultMessage": "Use only current answers"
+  },
+  "course.assessment.question.rubricPlayground.viewAnswer": {
+    "defaultMessage": "View"
+  },
+  "course.assessment.question.rubricPlayground.answerByStudent": {
+    "defaultMessage": "Answer by {name}"
+  },
+  "course.assessment.question.rubricPlayground.emptyGradingContext": {
+    "defaultMessage": "No content available for this context."
+  },
+  "course.assessment.question.rubricPlayground.saveMockAnswerFailure": {
+    "defaultMessage": "Could not save this mock answer. Please try again."
+  },
+  "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
+    "defaultMessage": "Could not load the grading contexts for this answer."
   }
 }

@@ -21,6 +21,7 @@ import AddAnswersPrompt, {
   AddSampleMode,
 } from './AddAnswersPrompt';
 import translations from './translations';
+import { currentAnswersOnly } from './utils';
 
 const AnswerEvaluationsTableHeader: FC<{
   answerCount: number;
@@ -71,8 +72,11 @@ const AnswerEvaluationsTableHeader: FC<{
         break;
       }
       case AddSampleMode.RANDOM_STUDENT: {
+        const randomPool = data.showOnlyCurrent
+          ? currentAnswersOnly(selectableAnswers)
+          : selectableAnswers;
         const randomAnswerIds = sampleSize(
-          selectableAnswers,
+          randomPool,
           data.addRandomAnswerCount,
         ).map((answer) => answer.id);
         dispatch(
@@ -148,7 +152,7 @@ const AnswerEvaluationsTableHeader: FC<{
         )}
       </div>
       <Alert
-        className="mb-3 px-2 py-0"
+        className="mb-3 px-3 py-0"
         icon={false}
         severity="info"
         variant="outlined"

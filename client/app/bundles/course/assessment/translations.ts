@@ -976,7 +976,7 @@ const translations = defineMessages({
   gradingContextHint: {
     id: 'course.assessment.question.gradingContext.hint',
     defaultMessage:
-      "Pull extra material from other sources into the AI grading custom prompt. If needed, each context can be referenced by its identifier in the rubric or custom prompt (e.g. \"This answer is a follow_up of '{'previous_question_answer'}'.\").",
+      "Specify where AI grading should reference external context when grading the student answer. If needed, each context item can be referenced by its identifier in the rubric or custom prompt (e.g. \"This answer is a follow_up of '{'previous_question_answer'}'.\").",
   },
   addGradingContext: {
     id: 'course.assessment.question.gradingContext.add',

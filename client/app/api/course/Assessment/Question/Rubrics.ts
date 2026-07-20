@@ -1,6 +1,7 @@
 import {
   RubricAnswerData,
   RubricAnswerEvaluationData,
+  RubricAnswerGradingContextData,
   RubricData,
   RubricGradingContextData,
   RubricMockAnswerEvaluationData,
@@ -27,6 +28,15 @@ export default class RubricsAPI extends BaseAssessmentAPI {
 
   gradingContexts(): APIResponse<RubricGradingContextData[]> {
     return this.client.get(`${this.#urlPrefix}/grading_contexts`);
+  }
+
+  // The question's grading contexts resolved against a real answer's submission (read-only source content).
+  answerGradingContexts(
+    answerId: number,
+  ): APIResponse<RubricAnswerGradingContextData[]> {
+    return this.client.get(
+      `${this.#urlPrefix}/answers/${answerId}/grading_contexts`,
+    );
   }
 
   create(data: RubricPostRequestData): APIResponse<RubricData> {
