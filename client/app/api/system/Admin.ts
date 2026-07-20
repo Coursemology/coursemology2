@@ -5,11 +5,14 @@ import {
 } from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
-import { AllowlistRulePreviewData } from 'types/system/marketplaceAccess';
 import {
   AllowlistRuleData,
   AllowlistRuleFormData,
 } from 'types/system/marketplaceAllowlist';
+import {
+  AllowlistRulePreviewData,
+  MarketplaceAccessData,
+} from 'types/system/marketplaceAccess';
 import { AdminStats, UserListData } from 'types/users';
 
 import BaseSystemAPI from '../Base';
@@ -246,6 +249,36 @@ export default class AdminAPI extends BaseSystemAPI {
   deleteMarketplaceAllowlistRule(id: number): Promise<AxiosResponse> {
     return this.client.delete(
       `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules/${id}`,
+    );
+  }
+
+  /**
+   * Fetches the marketplace access audit list (everyone with effective access, blocked flagged).
+   */
+  indexMarketplaceAccess(): Promise<AxiosResponse<MarketplaceAccessData>> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/marketplace_access`);
+  }
+
+  /**
+   * Blocks (disables) a user's marketplace access. Returns the created block's id.
+   */
+  blockMarketplaceUser(
+    userId: number,
+  ): Promise<AxiosResponse<{ id: number; userId: number }>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_access_blocks`,
+      {
+        user_id: userId,
+      },
+    );
+  }
+
+  /**
+   * Removes a block, re-enabling the user's marketplace access.
+   */
+  unblockMarketplaceUser(blockId: number): Promise<AxiosResponse> {
+    return this.client.delete(
+      `${AdminAPI.#urlPrefix}/marketplace_access_blocks/${blockId}`,
     );
   }
 }

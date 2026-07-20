@@ -8834,6 +8834,126 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "{field}이(가) {prevValue}에서 {newValue}로 변경되었습니다."
   },
+  "system.admin.admin.MarketplaceAccessFilter.trigger": {
+    "defaultMessage": "필터"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.status": {
+    "defaultMessage": "상태"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.active": {
+    "defaultMessage": "활성"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.blocked": {
+    "defaultMessage": "차단됨"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.allowedByRule": {
+    "defaultMessage": "허용 규칙"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.clearAll": {
+    "defaultMessage": "모두 지우기"
+  },
+  "system.admin.admin.MarketplaceAccessSection.heading": {
+    "defaultMessage": "접근 권한이 있는 사용자"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summary": {
+    "defaultMessage": "총 접근 가능 인원: {count} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summaryWithBlocked": {
+    "defaultMessage": "총 접근 가능 인원: {count} · 총 차단 인원: {blocked} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.filteredCounts": {
+    "defaultMessage": "필터링됨: 접근 가능 {count} · 차단 {blocked}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeOpen": {
+    "defaultMessage": "모두에게 공개"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeScoped": {
+    "defaultMessage": "위 규칙으로 제한됨"
+  },
+  "system.admin.admin.MarketplaceAccessSection.fetchFailure": {
+    "defaultMessage": "마켓플레이스 접근 목록을 불러오지 못했습니다."
+  },
+  "system.admin.admin.MarketplaceAccessSection.colName": {
+    "defaultMessage": "이름"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEmail": {
+    "defaultMessage": "이메일"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEligibleVia": {
+    "defaultMessage": "적격 사유"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colAllowedBy": {
+    "defaultMessage": "허용 근거"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colStatus": {
+    "defaultMessage": "상태"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colActions": {
+    "defaultMessage": "작업"
+  },
+  "system.admin.admin.MarketplaceAccessSection.managesCourses": {
+    "defaultMessage": "{count, plural, one {#개 과정 관리 중} other {#개 과정 관리 중}}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceInstructor": {
+    "defaultMessage": "인스턴스 강사"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceAdministrator": {
+    "defaultMessage": "인스턴스 관리자"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedEveryone": {
+    "defaultMessage": "모든 사용자"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedNothing": {
+    "defaultMessage": "일치하는 규칙 없음"
+  },
+  "system.admin.admin.MarketplaceAccessSection.systemAdmin": {
+    "defaultMessage": "시스템 관리자"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeUser": {
+    "defaultMessage": "사용자"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeInstance": {
+    "defaultMessage": "인스턴스"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeEmailDomain": {
+    "defaultMessage": "이메일 도메인"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusActive": {
+    "defaultMessage": "활성"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusBlocked": {
+    "defaultMessage": "차단됨"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disable": {
+    "defaultMessage": "차단"
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnable": {
+    "defaultMessage": "차단 해제"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableSuccess": {
+    "defaultMessage": "이 사용자의 접근이 차단되었습니다."
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableFailure": {
+    "defaultMessage": "접근 차단에 실패했습니다."
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableSuccess": {
+    "defaultMessage": "이 사용자의 접근 차단이 해제되었습니다."
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableFailure": {
+    "defaultMessage": "접근 차단 해제에 실패했습니다."
+  },
+  "system.admin.admin.MarketplaceAccessSection.searchPlaceholder": {
+    "defaultMessage": "이름 또는 이메일 검색"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantHeading": {
+    "defaultMessage": "휴면 차단 ({count})"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantExplanation": {
+    "defaultMessage": "이 사용자들은 차단되어 있지만, 현재 어떤 규칙도 이들에게 접근 권한을 부여하지 않습니다. 이 차단은 현재로서는 아무것도 막고 있지 않지만, 이후 어떤 규칙이 이들과 일치하게 되면 다시 효력을 발휘하므로, 더 이상 필요하지 않다면 차단을 해제하세요."
+  },
+  "system.admin.admin.MarketplaceAccessSection.clearBlock": {
+    "defaultMessage": "차단 제거"
+  },
   "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
     "defaultMessage": "접근 규칙 추가"
   },
