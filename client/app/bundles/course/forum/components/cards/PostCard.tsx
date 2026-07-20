@@ -24,6 +24,7 @@ import MarkAnswerButton from '../buttons/MarkAnswerButton';
 import VotePostButton from '../buttons/VotePostButton';
 import PostCreatorObject from '../misc/PostCreatorObject';
 
+import RagWiseCommentCard from './RagWiseCommentCard';
 import ReplyCard from './ReplyCard';
 
 interface Props {
@@ -51,6 +52,36 @@ const PostCard: FC<Props> = (props) => {
   });
 
   if (!post || !topic) return null;
+
+  // A RagWise-generated draft still awaiting a staff decision uses the rateable card in place of the normal
+  // post body. The Generate (regenerate) button is kept so staff can regenerate the answer.
+  const isRateableAiDraft =
+    post.isAiGenerated &&
+    post.workflowState === POST_WORKFLOW_STATE.draft &&
+    Boolean(post.generatedRating);
+
+  if (isRateableAiDraft) {
+    return (
+      <Element name={`postElement_${post.id}`}>
+        <div
+          className={`post_${post.id}`}
+          style={{ marginLeft: 0 + Math.min(3, level - 1) * 25 }}
+        >
+          <RagWiseCommentCard
+            canManage={topic.permissions.canManageAIResponse}
+            post={post}
+          />
+          {topic.permissions.canManageAIResponse && (
+            <GenerateReplyButton
+              forumId={topic.forumId.toString()}
+              post={post}
+              topicId={topic.id.toString()}
+            />
+          )}
+        </div>
+      </Element>
+    );
+  }
 
   return (
     <Element name={`postElement_${post.id}`}>

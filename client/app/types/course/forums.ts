@@ -1,4 +1,5 @@
 import { Permissions, RecursiveArray } from 'types';
+import { GeneratedRating } from 'types/course/comments';
 
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
@@ -114,6 +115,7 @@ export interface ForumTopicPostListData {
   isAnonymous: boolean;
   creator?: { id: number; userUrl: string; name: string; imageUrl: string };
   isAiGenerated: boolean;
+  generatedRating?: GeneratedRating;
   workflowState: keyof typeof POST_WORKFLOW_STATE;
   permissions: ForumTopicPostListDataPermissions;
 }
@@ -192,6 +194,7 @@ export interface ForumTopicPostEntity {
   isAnonymous: ForumTopicPostListData['isAnonymous'];
   creator?: ForumTopicPostListData['creator'];
   isAiGenerated: ForumTopicPostListData['isAiGenerated'];
+  generatedRating?: ForumTopicPostListData['generatedRating'];
   workflowState: ForumTopicPostListData['workflowState'];
 
   permissions: ForumTopicPostListData['permissions'];

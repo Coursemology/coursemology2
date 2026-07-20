@@ -166,5 +166,83 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
         end
       end
     end
+
+    describe 'AI feedback rating lifecycle' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+      let!(:grading_evaluation) do
+        Course::Rubric::AnswerEvaluation.create!(answer: answer, evaluation_type: :grading, feedback: 'generated')
+      end
+      before do
+        allow(answer.submission).to receive(:submission_questions).and_return(
+          double(find_by: submission_question)
+        )
+      end
+
+      context 'when a new draft post is created' do
+        let(:service) { described_class.new(answer, 'generated feedback') }
+        it 'initializes an unrated rating linked to the grading evaluation' do
+          expect do
+            service.create_ai_generated_draft_post
+          end.to change { grading_evaluation.ratings.count }.by(1)
+
+          rating = grading_evaluation.ratings.last
+          expect(rating.rating).to be_nil
+          expect(rating.original_feedback).to eq('generated feedback')
+          expect(rating.post).to eq(Course::Discussion::Post.last)
+          expect(rating.creator).to eq(User.system)
+        end
+      end
+
+      context 'when the draft post is refreshed and the rating is still unrated' do
+        let(:service) { described_class.new(answer, 'refreshed feedback') }
+        let!(:existing_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, text: 'draft post',
+                                          is_ai_generated: true, workflow_state: 'draft')
+        end
+        let!(:rating) do
+          grading_evaluation.ratings.create!(post: existing_post, original_feedback: 'generated',
+                                             creator: User.system, updater: User.system)
+        end
+
+        it 'reuses the rating and refreshes the snapshotted feedback' do
+          expect do
+            service.create_ai_generated_draft_post
+          end.not_to(change { Course::Rubric::AnswerEvaluation::Rating.count })
+
+          rating.reload
+          expect(rating.original_feedback).to eq('refreshed feedback')
+          expect(rating.post).to eq(existing_post)
+        end
+      end
+
+      context 'when the draft post is refreshed after the rating was scored' do
+        let(:service) { described_class.new(answer, 'refreshed feedback') }
+        let!(:existing_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, text: 'draft post',
+                                          is_ai_generated: true, workflow_state: 'draft')
+        end
+        let!(:rating) do
+          grading_evaluation.ratings.create!(post: existing_post, rating: 4, original_feedback: 'generated',
+                                             creator: User.system, updater: User.system)
+        end
+
+        it 'preserves the scored rating (detached) and creates a fresh one' do
+          expect do
+            service.create_ai_generated_draft_post
+          end.to change { Course::Rubric::AnswerEvaluation::Rating.count }.by(1)
+
+          rating.reload
+          expect(rating.post).to be_nil
+          expect(rating.rating).to eq(4)
+
+          new_rating = grading_evaluation.ratings.where.not(id: rating.id).last
+          expect(new_rating.post).to eq(existing_post)
+          expect(new_rating.rating).to be_nil
+          expect(new_rating.original_feedback).to eq('refreshed feedback')
+        end
+      end
+    end
   end
 end

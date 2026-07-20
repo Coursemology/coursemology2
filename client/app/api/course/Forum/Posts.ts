@@ -84,13 +84,22 @@ export default class PostsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Publish a drafted post
+   * Publish a drafted post. Optionally carries the edited `postText` so an AI-generated draft can be finalised
+   * (edit + publish) in a single request.
    */
-  publish(urlSlug: string): APIResponse<{
+  publish(
+    urlSlug: string,
+    postText?: string,
+  ): APIResponse<{
     workflowState: keyof typeof POST_WORKFLOW_STATE;
     creator: { id: number; userUrl: string; name: string; imageUrl: string };
   }> {
-    return this.client.put(`${urlSlug}/publish`);
+    return this.client.put(
+      `${urlSlug}/publish`,
+      postText === undefined
+        ? undefined
+        : { discussion_post: { text: postText } },
+    );
   }
 
   /**
@@ -98,5 +107,16 @@ export default class PostsAPI extends BaseCourseAPI {
    */
   generateReply(urlSlug: string): APIResponse<JobSubmitted> {
     return this.client.put(`${urlSlug}/generate_reply`);
+  }
+
+  /**
+   * Sets the numeric rating for a RagWise-generated answer post. The edited content is captured separately
+   * from the post lifecycle (on publish/reject) -- see the backend post hook.
+   */
+  updateRagWiseRating(
+    urlSlug: string,
+    rating: number | null,
+  ): APIResponse<{ id: number; rating: number | null }> {
+    return this.client.patch(`${urlSlug}/rag_wise_rating`, { rating });
   }
 }

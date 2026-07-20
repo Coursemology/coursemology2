@@ -51,6 +51,7 @@ class Course::Assessment::Answer::AiGeneratedPostService
       end
       post.save!
       submission_question.save!
+      initialize_rating(post)
       create_topic_subscription(post.topic)
       post.topic.mark_as_pending
     end
@@ -63,12 +64,53 @@ class Course::Assessment::Answer::AiGeneratedPostService
   # @return [void]
   def update_existing_draft_post(post)
     post.class.transaction do
+      # Re-generation replaces the draft's content, so refresh created_at too -- graders see it as a newly
+      # generated comment (fresh timestamp), and the changed timestamp lets the client remount the card with
+      # the new content.
       post.update!(
         text: @content,
         updater: User.system,
-        title: @answer.submission.assessment.title
+        title: @answer.submission.assessment.title,
+        created_at: Time.current
       )
+      refresh_rating(post)
       post.topic.mark_as_pending
+    end
+  end
+
+  # The answer's grade-bearing evaluation, whose feedback drives the draft post. Present whenever this service
+  # runs (auto-grading and apply both mirror it before drafting the post); the rating links back to it.
+  # @return [Course::Rubric::AnswerEvaluation, nil]
+  def grading_evaluation
+    @grading_evaluation ||= @answer.grading_rubric_evaluation
+  end
+
+  # Initializes an unrated rating record for a freshly created draft post, snapshotting the generated feedback.
+  # @param [Course::Discussion::Post] post The draft post
+  # @return [void]
+  def initialize_rating(post)
+    return unless grading_evaluation
+
+    grading_evaluation.ratings.create!(
+      post: post, original_feedback: @content, creator: User.system, updater: User.system
+    )
+  end
+
+  # Reconciles the rating when a draft post's feedback is re-generated in place:
+  #   * no rating yet          -> initialize one.
+  #   * rating exists, unrated -> reuse it, refreshing the snapshotted feedback.
+  #   * rating already scored  -> preserve it (detach from the post) and start a fresh one.
+  # @param [Course::Discussion::Post] post The existing draft post
+  # @return [void]
+  def refresh_rating(post)
+    rating = post.ai_feedback_rating
+    return initialize_rating(post) if rating.nil?
+
+    if rating.rating.nil?
+      rating.update!(original_feedback: @content)
+    else
+      rating.update!(post: nil)
+      initialize_rating(post)
     end
   end
 

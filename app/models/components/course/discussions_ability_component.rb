@@ -10,6 +10,7 @@ module Course::DiscussionsAbilityComponent
       allow_course_users_reply_and_vote_posts
       allow_course_users_view_own_anonymous_posts
       allow_course_staff_view_anonymous_posts if course_user.staff?
+      allow_course_staff_rate_ai_feedback if course_user.staff?
       allow_course_teaching_staff_manage_discussion_topics if course_user.teaching_staff?
       allow_course_teaching_staff_manage_posts if course_user.teaching_staff?
       allow_course_users_update_delete_own_post
@@ -46,6 +47,11 @@ module Course::DiscussionsAbilityComponent
 
   def allow_course_staff_view_anonymous_posts
     can :view_anonymous, Course::Discussion::Post, topic: { course_id: course.id }
+  end
+
+  # Course staff (teaching assistants and up) may rate AI-generated rubric feedback posts in this course.
+  def allow_course_staff_rate_ai_feedback
+    can :update, Course::Rubric::AnswerEvaluation::Rating, post: { topic: { course_id: course.id } }
   end
 
   def allow_course_teaching_staff_manage_posts

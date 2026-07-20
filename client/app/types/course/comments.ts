@@ -66,6 +66,7 @@ export interface CommentPostListData {
   canUpdate: boolean;
   canDestroy: boolean;
   codaveriFeedback?: CodaveriFeedback;
+  generatedRating?: GeneratedRating;
   workflowState: keyof typeof POST_WORKFLOW_STATE;
   isAiGenerated: boolean;
 }
@@ -76,6 +77,26 @@ export interface CodaveriFeedback {
   originalFeedback: string;
   rating: number;
 }
+
+// A staff rating of an AI-generated post. `type` discriminates which endpoint the client submits to.
+interface GeneratedRatingBase {
+  id: number;
+  rating: number | null;
+  originalContent: string;
+  editedContent: string | null;
+}
+
+export interface RubricFeedbackRating extends GeneratedRatingBase {
+  type: 'rubric_feedback';
+}
+
+export interface RagWiseRating extends GeneratedRatingBase {
+  type: 'rag_wise';
+  faithfulnessScore: number;
+  answerRelevanceScore: number;
+}
+
+export type GeneratedRating = RubricFeedbackRating | RagWiseRating;
 
 export interface CommentLinks {
   titleLink: string;
@@ -111,6 +132,7 @@ export interface CommentPostMiniEntity {
   canUpdate: boolean;
   canDestroy: boolean;
   codaveriFeedback?: CodaveriFeedback;
+  generatedRating?: GeneratedRating;
   workflowState: keyof typeof POST_WORKFLOW_STATE;
   isAiGenerated: boolean;
 }

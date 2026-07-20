@@ -420,6 +420,7 @@ Rails.application.routes.draw do
               put 'mark_answer_and_publish', on: :member
               put 'publish', on: :member
               put 'generate_reply', on: :member
+              patch 'rag_wise_rating' => 'post_rag_wise_ratings#update', on: :member
             end
 
             post 'subscribe', on: :member
@@ -526,7 +527,9 @@ Rails.application.routes.draw do
           get 'all', on: :collection
           patch 'toggle_pending', on: :member
           patch 'mark_as_read', on: :member
-          resources :posts, only: [:create, :update, :destroy]
+          resources :posts, only: [:create, :update, :destroy] do
+            patch 'ai_feedback_rating' => 'post_ai_feedback_ratings#update', on: :member
+          end
         end
       end
 

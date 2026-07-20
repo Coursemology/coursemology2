@@ -60,6 +60,12 @@ module Course::ForumsAbilityComponent
   def define_staff_forum_permissions
     allow_staff_show_all_topics
     allow_staff_resolve_topics
+    allow_staff_rate_ai_responses
+  end
+
+  # Course staff (teaching assistants and up) may rate RagWise-generated answer posts in this course.
+  def allow_staff_rate_ai_responses
+    can :update, Course::Forum::RagWiseRating, post: { topic: { course_id: course.id } }
   end
 
   def allow_staff_show_all_topics

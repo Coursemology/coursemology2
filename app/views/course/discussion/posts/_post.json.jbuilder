@@ -32,3 +32,17 @@ if codaveri_feedback && codaveri_feedback.status == 'pending_review'
     json.rating codaveri_feedback.rating
   end
 end
+
+# Lazily backfills the rating for pre-feature (or straggler) AI drafts so they render with the rateable card.
+post.ensure_generated_rating! if post.is_ai_generated && post.workflow_state == 'draft'
+ai_feedback_rating = post.is_ai_generated ? post.ai_feedback_rating : nil
+if ai_feedback_rating
+  json.generatedRating do
+    # `type` discriminates which rating endpoint the client should call (see RateableGeneratedCommentCard).
+    json.type 'rubric_feedback'
+    json.id ai_feedback_rating.id
+    json.rating ai_feedback_rating.rating
+    json.originalContent ai_feedback_rating.original_feedback
+    json.editedContent ai_feedback_rating.edited_feedback
+  end
+end

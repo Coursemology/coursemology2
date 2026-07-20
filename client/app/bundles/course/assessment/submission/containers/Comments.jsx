@@ -8,6 +8,7 @@ import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 
 import * as commentActions from '../actions/comments';
+import AiFeedbackCommentCard from '../components/comment/AiFeedbackCommentCard';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
 import { workflowStates } from '../constants';
@@ -30,6 +31,9 @@ class VisibleComments extends Component {
       updateComment,
       deleteComment,
       publishComment,
+      rateComment,
+      acceptComment,
+      rejectComment,
       graderView,
       renderDelayedCommentButton,
     } = this.props;
@@ -40,23 +44,48 @@ class VisibleComments extends Component {
           <FormattedMessage {...translations.comments} />
         </Typography>
 
-        {posts.map(
-          (post) =>
-            (graderView ||
-              (!post.isDelayed &&
-                post.workflowState !== POST_WORKFLOW_STATE.draft)) && (
-              <CommentCard
-                key={post.id}
-                deleteComment={() => deleteComment(post.id)}
-                editValue={commentForms.posts[post.id]}
-                handleChange={(value) => handleUpdateChange(post.id, value)}
-                isUpdatingAnnotationAllowed
+        {posts.map((post) => {
+          const isVisible =
+            graderView ||
+            (!post.isDelayed &&
+              post.workflowState !== POST_WORKFLOW_STATE.draft);
+          if (!isVisible) {
+            return null;
+          }
+
+          // An AI-generated draft still awaiting a staff decision uses the rateable card (rate -> edit ->
+          // accept/reject) in place of the plain comment card + Publish button.
+          if (
+            post.isAiGenerated &&
+            post.workflowState === POST_WORKFLOW_STATE.draft &&
+            post.generatedRating
+          ) {
+            return (
+              // Key on createdAt so a re-generated draft (fresh timestamp) remounts with the new content,
+              // resetting the card's local edit state.
+              <AiFeedbackCommentCard
+                key={`${post.id}-${post.createdAt}`}
+                acceptComment={(value) => acceptComment(post.id, value)}
                 post={post}
-                publishComment={(value) => publishComment(post.id, value)}
-                updateComment={(value) => updateComment(post.id, value)}
+                rateComment={(rating) => rateComment(post.id, rating)}
+                rejectComment={(value) => rejectComment(post.id, value)}
               />
-            ),
-        )}
+            );
+          }
+
+          return (
+            <CommentCard
+              key={post.id}
+              deleteComment={() => deleteComment(post.id)}
+              editValue={commentForms.posts[post.id]}
+              handleChange={(value) => handleUpdateChange(post.id, value)}
+              isUpdatingAnnotationAllowed
+              post={post}
+              publishComment={(value) => publishComment(post.id, value)}
+              updateComment={(value) => updateComment(post.id, value)}
+            />
+          );
+        })}
 
         <CommentField
           createComment={createComment}
@@ -92,6 +121,9 @@ VisibleComments.propTypes = {
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   publishComment: PropTypes.func.isRequired,
+  rateComment: PropTypes.func.isRequired,
+  acceptComment: PropTypes.func.isRequired,
+  rejectComment: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
@@ -135,6 +167,12 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(commentActions.destroy(topic.id, postId)),
     publishComment: (postId, comment) =>
       dispatch(commentActions.publish(topic.id, postId, comment)),
+    rateComment: (postId, rating) =>
+      dispatch(commentActions.rateAiFeedback(topic.id, postId, rating)),
+    acceptComment: (postId, comment) =>
+      dispatch(commentActions.acceptAiFeedback(topic.id, postId, comment)),
+    rejectComment: (postId, comment) =>
+      dispatch(commentActions.rejectAiFeedback(topic.id, postId, comment)),
   };
 }
 

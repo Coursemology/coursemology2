@@ -97,7 +97,11 @@ const GenerateReplyButton: FC<Props> = ({ post, forumId, topicId }: Props) => {
           deleteIcon={
             isLoading ? <LoadingIndicator bare size={15} /> : <AutoAwesome />
           }
-          disabled={isLoading || post.isAiGenerated}
+          disabled={
+            isLoading ||
+            post.isAiGenerated ||
+            post.workflowState === POST_WORKFLOW_STATE.draft
+          }
           label={
             isLoading
               ? t(translations.GeneratingReply)

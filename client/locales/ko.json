@@ -7982,6 +7982,45 @@
   "lib.component.navigation.UserPopupMenuList.signOut": {
     "defaultMessage": "로그아웃"
   },
+  "lib.components.RateableGeneratedCommentCard.approve": {
+    "defaultMessage": "확정 및 게시"
+  },
+  "lib.components.RateableGeneratedCommentCard.clearFailure": {
+    "defaultMessage": "평가 지우기 실패."
+  },
+  "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
+    "defaultMessage": "이 메시지를 거부하고 삭제하시겠습니까? 삭제한 메시지는 복구할 수 없습니다."
+  },
+  "lib.components.RateableGeneratedCommentCard.emptyError": {
+    "defaultMessage": "피드백은 비워둘 수 없습니다."
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseImprove": {
+    "defaultMessage": "아래 댓글을 개선해주세요!"
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseRate": {
+    "defaultMessage": "계속하려면 평가해 주세요!"
+  },
+  "lib.components.RateableGeneratedCommentCard.publishFailure": {
+    "defaultMessage": "피드백 게시 실패."
+  },
+  "lib.components.RateableGeneratedCommentCard.publishSuccess": {
+    "defaultMessage": "피드백이 성공적으로 게시되었습니다."
+  },
+  "lib.components.RateableGeneratedCommentCard.reject": {
+    "defaultMessage": "거부"
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectFailure": {
+    "defaultMessage": "피드백 거부 실패."
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectSuccess": {
+    "defaultMessage": "피드백이 성공적으로 거부되었습니다."
+  },
+  "lib.components.RateableGeneratedCommentCard.revert": {
+    "defaultMessage": "피드백 되돌리기"
+  },
+  "lib.components.RateableGeneratedCommentCard.title": {
+    "defaultMessage": "AI 생성 댓글"
+  },
   "lib.components.core.DescriptionCard.description": {
     "defaultMessage": "설명"
   },

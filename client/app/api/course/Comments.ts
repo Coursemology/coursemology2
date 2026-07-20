@@ -106,6 +106,27 @@ export default class CommentsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Sets the numeric rating for an AI-generated feedback post. The edited feedback content is captured
+   * separately from the post lifecycle (on publish/reject) -- see the backend post hook.
+   *
+   * @param {string} topicId
+   * @param {string} postId
+   * @param {number} rating
+   * @return {Promise}
+   * success response: { id, rating }
+   */
+  updateAiFeedbackRating(
+    topicId: string,
+    postId: string,
+    rating: number | null,
+  ): APIResponse<{ id: number; rating: number | null }> {
+    return this.client.patch(
+      `${this.#urlPrefix}/${topicId}/posts/${postId}/ai_feedback_rating`,
+      { rating },
+    );
+  }
+
+  /**
    * Deletes a comment (discussion post)
    *
    * @param {string} topicId

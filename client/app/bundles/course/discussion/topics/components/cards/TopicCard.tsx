@@ -6,7 +6,11 @@ import {
   ScheduleOutlined,
 } from '@mui/icons-material';
 import { Card, CardContent, CardHeader, Typography } from '@mui/material';
-import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
+import {
+  CommentPostMiniEntity,
+  CommentStatusTypes,
+  CommentTopicEntity,
+} from 'types/course/comments';
 
 import Link from 'lib/components/core/Link';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
@@ -18,8 +22,13 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
 
+import AiFeedbackCommentCard from './AiFeedbackCommentCard';
 import CodaveriCommentCard from './CodaveriCommentCard';
 import CommentCard from './CommentCard';
+
+// An AI-generated feedback post still awaiting a staff decision -- shown with the rateable card.
+const isRateableGeneratedDraft = (post: CommentPostMiniEntity): boolean =>
+  Boolean(post.generatedRating) && post.workflowState === 'draft';
 
 const CommentField = lazy(
   () =>
@@ -67,6 +76,7 @@ const TopicCard: FC<TopicCardProps> = (props) => {
   const postListData = useAppSelector(getAllCommentPostMiniEntities).filter(
     (post) => post.topicId === topic.id,
   );
+  const lastPost = postListData[postListData.length - 1];
   const [status, setStatus] = useState(CommentStatusTypes.loading);
 
   useEffect(() => {
@@ -238,34 +248,35 @@ const TopicCard: FC<TopicCardProps> = (props) => {
       <CardContent>
         {topic.content && <UserHTMLText html={topic.content} />}
         {postListData.map((post) => {
-          return (
-            <div key={post.id}>
-              {post.codaveriFeedback &&
-              post.codaveriFeedback.status === 'pending_review' ? (
-                <CodaveriCommentCard post={post} />
-              ) : (
-                <CommentCard post={post} />
-              )}
-            </div>
-          );
-        })}
-        {/* Dont need to render the comment field when the last post (which is
-          the intended post to be shown) is of codaveri feedback type */}
-        {!postListData[postListData.length - 1]?.codaveriFeedback && (
-          <Suspense
-            fallback={
-              <div
-                style={{
-                  marginTop: 10,
-                }}
-              >
-                {t(translations.loadingComment)}
-              </div>
+          const renderCard = (): JSX.Element => {
+            if (post.codaveriFeedback?.status === 'pending_review') {
+              return <CodaveriCommentCard post={post} />;
             }
-          >
-            <CommentField topic={topic} updateStatus={updateStatus} />
-          </Suspense>
-        )}
+            if (isRateableGeneratedDraft(post)) {
+              return <AiFeedbackCommentCard post={post} />;
+            }
+            return <CommentCard post={post} />;
+          };
+          return <div key={post.id}>{renderCard()}</div>;
+        })}
+        {/* Dont need to render the comment field when the last post (which is the intended post to be shown)
+          is a codaveri feedback or a still-pending AI-generated (rateable) feedback post. */}
+        {!lastPost?.codaveriFeedback &&
+          !(lastPost && isRateableGeneratedDraft(lastPost)) && (
+            <Suspense
+              fallback={
+                <div
+                  style={{
+                    marginTop: 10,
+                  }}
+                >
+                  {t(translations.loadingComment)}
+                </div>
+              }
+            >
+              <CommentField topic={topic} updateStatus={updateStatus} />
+            </Suspense>
+          )}
       </CardContent>
     </Card>
   );
