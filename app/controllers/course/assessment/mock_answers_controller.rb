@@ -5,7 +5,17 @@ class Course::Assessment::MockAnswersController < Course::Assessment::QuestionsC
   def create
     @mock_answer.question = @question
     if @mock_answer.save
-      render json: { id: @mock_answer.id }, status: :ok
+      # Renders the created mock answer, including each grading context's join-row id, so the client can send
+      # those ids back on a later update (nested attributes then update in place instead of inserting a dup).
+      render 'show', status: :ok
+    else
+      render json: { errors: @mock_answer.errors }, status: :bad_request
+    end
+  end
+
+  def update
+    if @mock_answer.update(mock_answer_params)
+      render 'show', status: :ok
     else
       render json: { errors: @mock_answer.errors }, status: :bad_request
     end
@@ -15,8 +25,9 @@ class Course::Assessment::MockAnswersController < Course::Assessment::QuestionsC
 
   def mock_answer_params
     params.require(:mock_answer).permit(
+      :name,
       :answer_text,
-      grading_contexts_attributes: [:grading_context_id, :content]
+      grading_contexts_attributes: [:id, :grading_context_id, :content]
     )
   end
 end

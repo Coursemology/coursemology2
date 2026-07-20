@@ -85,6 +85,11 @@ export default {
           'justify-content': 'safe center',
         },
       });
+      addUtilities({
+        '.field-sizing-content': {
+          'field-sizing': 'content',
+        },
+      });
     }),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(

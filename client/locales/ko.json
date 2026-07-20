@@ -2639,9 +2639,6 @@
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
     "defaultMessage": "{inputComponent}개의 무작위 학생 답변 추가"
   },
-  "course.assessment.question.rubricPlayground.writeCustomAnswer": {
-    "defaultMessage": "사용자 정의 답변 작성"
-  },
   "course.assessment.question.rubricPlayground.writeAnswerPlaceholder": {
     "defaultMessage": "여기에 답변을 작성하세요"
   },
@@ -9468,16 +9465,31 @@
     "defaultMessage": "Rubric-based"
   },
   "course.assessment.question.rubricPlayground.mockContextHeading": {
-    "defaultMessage": "{identifier}: context"
+    "defaultMessage": "'{'{identifier}'}': context"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingForumThread": {
-    "defaultMessage": "{identifier}: Conversation root of answer post"
+    "defaultMessage": "'{'{identifier}'}': Conversation root of answer post"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingSibling": {
-    "defaultMessage": "{identifier}: answer to \"{title}\""
+    "defaultMessage": "'{'{identifier}'}': answer to \"{title}\""
   },
   "course.assessment.question.rubricPlayground.mockContextPlaceholder": {
     "defaultMessage": "Content the grader would see for this context"
+  },
+  "course.assessment.question.rubricPlayground.addMockAnswer": {
+    "defaultMessage": "모의 답변 추가"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswer": {
+    "defaultMessage": "모의 답변 보기/편집"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerName": {
+    "defaultMessage": "이름 (선택 사항)"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerPlaceholderTitle": {
+    "defaultMessage": "(모의 답변)"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
+    "defaultMessage": "이 모의 답변을 보거나 편집하려면 클릭하세요"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "성적부 설정"

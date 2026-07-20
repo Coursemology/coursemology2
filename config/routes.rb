@@ -283,7 +283,7 @@ Rails.application.routes.draw do
               post :set_active, on: :member
             end
 
-            resources :mock_answers, on: :member, only: [:index, :create, :destroy]
+            resources :mock_answers, on: :member, only: [:index, :create, :update, :destroy]
           end
 
           namespace :question do

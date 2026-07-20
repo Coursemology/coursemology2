@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_01_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -349,6 +349,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
     t.bigint "question_id", null: false
     t.text "answer_text"
     t.boolean "is_ai_generated", default: false, null: false
+    t.string "name", default: "", null: false
     t.index ["question_id"], name: "index_course_assessment_question_mock_answers_on_question_id"
   end
 
@@ -867,6 +868,22 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
     t.index ["post_id"], name: "fk__course_forum_rag_auto_answerings_post_id", unique: true
   end
 
+  create_table "course_forum_rag_wise_ratings", force: :cascade do |t|
+    t.bigint "post_id"
+    t.integer "rating"
+    t.text "original_content", null: false
+    t.text "edited_content"
+    t.float "faithfulness_score", default: 0.0, null: false
+    t.float "answer_relevance_score", default: 0.0, null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "fk__cfrwr_creator_id"
+    t.index ["post_id"], name: "index_cfrwr_on_post_id_unique_active", unique: true, where: "(post_id IS NOT NULL)"
+    t.index ["updater_id"], name: "fk__cfrwr_updater_id"
+  end
+
   create_table "course_forum_subscriptions", id: :serial, force: :cascade do |t|
     t.integer "forum_id", null: false
     t.integer "user_id", null: false
@@ -1261,6 +1278,22 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["lesson_plan_item_id"], name: "index_course_reference_times_on_lesson_plan_item_id"
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
+  end
+
+  create_table "course_rubric_answer_evaluation_ratings", force: :cascade do |t|
+    t.bigint "answer_evaluation_id", null: false
+    t.bigint "post_id"
+    t.integer "rating"
+    t.text "original_feedback", null: false
+    t.text "edited_feedback"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_evaluation_id"], name: "fk__craer_answer_evaluation_id"
+    t.index ["creator_id"], name: "fk__craer_creator_id"
+    t.index ["post_id"], name: "index_craer_on_post_id_unique_active", unique: true, where: "(post_id IS NOT NULL)"
+    t.index ["updater_id"], name: "fk__craer_updater_id"
   end
 
   create_table "course_rubric_answer_evaluation_selections", force: :cascade do |t|
@@ -2044,6 +2077,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
   add_foreign_key "course_forum_imports", "jobs", name: "fk_course_forum_importings_job_id", on_delete: :nullify
   add_foreign_key "course_forum_rag_auto_answerings", "course_discussion_posts", column: "post_id", name: "fk_course_forum_rag_auto_answerings_post_id"
   add_foreign_key "course_forum_rag_auto_answerings", "jobs", name: "fk_course_forum_rag_auto_answerings_job_id", on_delete: :nullify
+  add_foreign_key "course_forum_rag_wise_ratings", "course_discussion_posts", column: "post_id", on_delete: :nullify
+  add_foreign_key "course_forum_rag_wise_ratings", "users", column: "creator_id"
+  add_foreign_key "course_forum_rag_wise_ratings", "users", column: "updater_id"
   add_foreign_key "course_forum_subscriptions", "course_forums", column: "forum_id", name: "fk_course_forum_subscriptions_forum_id"
   add_foreign_key "course_forum_subscriptions", "users", name: "fk_course_forum_subscriptions_user_id"
   add_foreign_key "course_forum_topic_views", "course_forum_topics", column: "topic_id", name: "fk_course_forum_topic_views_topic_id"
@@ -2115,6 +2151,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_000000) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_rubric_answer_evaluation_ratings", "course_discussion_posts", column: "post_id", on_delete: :nullify
+  add_foreign_key "course_rubric_answer_evaluation_ratings", "course_rubric_answer_evaluations", column: "answer_evaluation_id", on_delete: :cascade
+  add_foreign_key "course_rubric_answer_evaluation_ratings", "users", column: "creator_id"
+  add_foreign_key "course_rubric_answer_evaluation_ratings", "users", column: "updater_id"
   add_foreign_key "course_rubric_answer_evaluation_selections", "course_rubric_answer_evaluations", column: "answer_evaluation_id"
   add_foreign_key "course_rubric_answer_evaluation_selections", "course_rubric_categories", column: "category_id"
   add_foreign_key "course_rubric_answer_evaluation_selections", "course_rubric_category_criterions", column: "criterion_id"

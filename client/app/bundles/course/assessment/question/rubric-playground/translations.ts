@@ -277,29 +277,48 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.addRandomStudentAnswers',
     defaultMessage: 'Add {inputComponent} random student answer(s)',
   },
-  writeCustomAnswer: {
-    id: 'course.assessment.question.rubricPlayground.writeCustomAnswer',
-    defaultMessage: 'Write a custom answer',
-  },
   writeAnswerPlaceholder: {
     id: 'course.assessment.question.rubricPlayground.writeAnswerPlaceholder',
     defaultMessage: 'Write the answer here',
   },
   mockContextHeading: {
     id: 'course.assessment.question.rubricPlayground.mockContextHeading',
-    defaultMessage: '{identifier}: context',
+    defaultMessage: "'{'{identifier}'}': context",
   },
   mockContextHeadingForumThread: {
     id: 'course.assessment.question.rubricPlayground.mockContextHeadingForumThread',
-    defaultMessage: '{identifier}: Conversation root of answer post',
+    defaultMessage: "'{'{identifier}'}': Conversation root of answer post",
   },
   mockContextHeadingSibling: {
     id: 'course.assessment.question.rubricPlayground.mockContextHeadingSibling',
-    defaultMessage: '{identifier}: answer to "{title}"',
+    defaultMessage: "'{'{identifier}'}': answer to \"{title}\"",
   },
   mockContextPlaceholder: {
     id: 'course.assessment.question.rubricPlayground.mockContextPlaceholder',
     defaultMessage: 'Content the grader would see for this context',
+  },
+
+  // MockAnswerPrompt
+  addMockAnswer: {
+    id: 'course.assessment.question.rubricPlayground.addMockAnswer',
+    defaultMessage: 'Add Mock Answer',
+  },
+  editMockAnswer: {
+    id: 'course.assessment.question.rubricPlayground.editMockAnswer',
+    defaultMessage: 'View/Edit Mock Answer',
+  },
+  mockAnswerName: {
+    id: 'course.assessment.question.rubricPlayground.mockAnswerName',
+    defaultMessage: 'Name (optional)',
+  },
+  // Fallback label shown in the answers table for a mock answer with a blank name.
+  mockAnswerPlaceholderTitle: {
+    id: 'course.assessment.question.rubricPlayground.mockAnswerPlaceholderTitle',
+    defaultMessage: '(Mock Answer)',
+  },
+  editMockAnswerTooltip: {
+    id: 'course.assessment.question.rubricPlayground.editMockAnswerTooltip',
+    defaultMessage: 'Click to view or edit this mock answer',
   },
 
   // AnswerEvaluationsTable

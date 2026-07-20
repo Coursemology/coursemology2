@@ -2594,9 +2594,6 @@
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
     "defaultMessage": "添加 {inputComponent} 个随机学生答案"
   },
-  "course.assessment.question.rubricPlayground.writeCustomAnswer": {
-    "defaultMessage": "编写自定义答案"
-  },
   "course.assessment.question.rubricPlayground.writeAnswerPlaceholder": {
     "defaultMessage": "在此处编写答案"
   },
@@ -9462,16 +9459,31 @@
     "defaultMessage": "Rubric-based"
   },
   "course.assessment.question.rubricPlayground.mockContextHeading": {
-    "defaultMessage": "{identifier}: context"
+    "defaultMessage": "'{'{identifier}'}': context"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingForumThread": {
-    "defaultMessage": "{identifier}: Conversation root of answer post"
+    "defaultMessage": "'{'{identifier}'}': Conversation root of answer post"
   },
   "course.assessment.question.rubricPlayground.mockContextHeadingSibling": {
-    "defaultMessage": "{identifier}: answer to \"{title}\""
+    "defaultMessage": "'{'{identifier}'}': answer to \"{title}\""
   },
   "course.assessment.question.rubricPlayground.mockContextPlaceholder": {
     "defaultMessage": "Content the grader would see for this context"
+  },
+  "course.assessment.question.rubricPlayground.addMockAnswer": {
+    "defaultMessage": "添加模拟答案"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswer": {
+    "defaultMessage": "查看/编辑模拟答案"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerName": {
+    "defaultMessage": "名称（可选）"
+  },
+  "course.assessment.question.rubricPlayground.mockAnswerPlaceholderTitle": {
+    "defaultMessage": "（模拟答案）"
+  },
+  "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
+    "defaultMessage": "点击查看或编辑此模拟答案"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "成绩册设置"

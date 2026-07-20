@@ -36,6 +36,7 @@ import {
 } from './operations/rubric';
 import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import AnswerEvaluationsTableHeader from './AnswerEvaluationsTableHeader';
+import MockAnswerPrompt from './MockAnswerPrompt';
 import RubricEditForm from './RubricEditForm';
 import RubricHeader from './RubricHeader';
 import {
@@ -77,6 +78,12 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
     activeTab === RubricPlaygroundTab.EVALUATE ||
     activeTab === RubricPlaygroundTab.COMPARE;
   const [compareCount, setCompareCount] = useState(2);
+
+  // Controls the shared mock-answer prompt: undefined mockAnswerId => create mode, otherwise edit mode.
+  const [mockAnswerPrompt, setMockAnswerPrompt] = useState<{
+    open: boolean;
+    mockAnswerId?: number;
+  }>({ open: false });
 
   // The client-only "Unsaved" draft revision, present only while editing. `draftCreatedAt` timestamps
   // it for the slider, and `editSourceRubricId` is the saved revision editing began from (return target).
@@ -324,8 +331,10 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
                 answerEvaluatedCount={selectedRubricData.answerEvaluatedCount}
                 answerEvaluationTableData={answerEvaluationTableData}
                 compareCount={compareCount}
-                gradingContexts={gradingContexts}
                 isComparing={activeTab === RubricPlaygroundTab.COMPARE}
+                onAddMockAnswer={() =>
+                  setMockAnswerPrompt({ open: true, mockAnswerId: undefined })
+                }
                 selectedRubric={selectedRubricData.state}
               />
             )}
@@ -334,7 +343,22 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
               <AnswerEvaluationsTable
                 data={answerEvaluationTableData}
                 isComparing={activeTab === RubricPlaygroundTab.COMPARE}
+                onEditMockAnswer={(mockAnswerId) =>
+                  setMockAnswerPrompt({ open: true, mockAnswerId })
+                }
                 selectedRubric={selectedRubric}
+              />
+            )}
+
+            {isShowingAnswerEvaluationsTable && selectedRubricData && (
+              <MockAnswerPrompt
+                gradingContexts={gradingContexts}
+                mockAnswerId={mockAnswerPrompt.mockAnswerId}
+                onClose={() =>
+                  setMockAnswerPrompt((prev) => ({ ...prev, open: false }))
+                }
+                open={mockAnswerPrompt.open}
+                rubricId={selectedRubricData.state.id}
               />
             )}
           </>

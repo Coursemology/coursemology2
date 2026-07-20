@@ -3,6 +3,7 @@ import { Close, Refresh } from '@mui/icons-material';
 import { IconButton, Paper, Tooltip, Typography } from '@mui/material';
 import { RubricCategoryData } from 'types/course/rubrics';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -30,6 +31,7 @@ interface AnswerEvaluationsTableProps {
   data: AnswerTableEntry[];
   selectedRubric?: RubricState;
   isComparing: boolean;
+  onEditMockAnswer: (mockAnswerId: number) => void;
 }
 
 const EmptyTablePlaceholder: FC = () => {
@@ -45,7 +47,7 @@ const EmptyTablePlaceholder: FC = () => {
 
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const { t } = useTranslation();
-  const { data, selectedRubric, isComparing } = props;
+  const { data, selectedRubric, isComparing, onEditMockAnswer } = props;
 
   const dispatch = useAppDispatch();
 
@@ -181,7 +183,8 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       className: 'relative',
       cell: (answer) => (
         <div className="relative w-full h-full">
-          {answer.title}
+          {answer.title ||
+            (answer.isMock ? t(translations.mockAnswerPlaceholderTitle) : '')}
           <div className="absolute -top-2 -right-4 flex space-y-0 flex-col">
             <Tooltip title={t(translations.dismiss)}>
               <IconButton
@@ -248,7 +251,18 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     {
       of: 'answerText',
       title: t(translations.answer),
-      cell: (answer) => <PopoverContentCell content={answer.answerText} />,
+      cell: (answer) =>
+        answer.isMock ? (
+          <Tooltip title={t(translations.editMockAnswerTooltip)}>
+            <UserHTMLText
+              className="whitespace-normal line-clamp-4 [&_p]:m-0 text-[13px]"
+              html={answer.answerText}
+              onClick={() => onEditMockAnswer(answer.id)}
+            />
+          </Tooltip>
+        ) : (
+          <PopoverContentCell content={answer.answerText} />
+        ),
     },
     {
       id: 'feedback',
