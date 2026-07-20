@@ -351,9 +351,13 @@ export function voteTopicPost(postUrl: string, vote: -1 | 0 | 1): Operation {
     });
 }
 
-export function publishPost(postId: number, postUrl: string): Operation {
+export function publishPost(
+  postId: number,
+  postUrl: string,
+  postText?: string,
+): Operation {
   return async (dispatch) =>
-    CourseAPI.forum.posts.publish(postUrl).then((response) => {
+    CourseAPI.forum.posts.publish(postUrl, postText).then((response) => {
       dispatch(
         updatePostWorkflowState({
           postId,
@@ -362,6 +366,17 @@ export function publishPost(postId: number, postUrl: string): Operation {
         }),
       );
     });
+}
+
+// Sets the numeric rating for a RagWise-generated answer post. The edited content is captured server-side from
+// the post lifecycle (on publish/reject), so this only persists the score.
+export function updateRagWiseRating(
+  postUrl: string,
+  rating: number | null,
+): Operation {
+  return async () => {
+    await CourseAPI.forum.posts.updateRagWiseRating(postUrl, rating);
+  };
 }
 
 export function generateNewReply(

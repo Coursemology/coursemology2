@@ -34,6 +34,12 @@ class Course::Rubric::AnswerEvaluation < ApplicationRecord
            class_name: 'Course::Rubric::AnswerEvaluation::Selection',
            foreign_key: :answer_evaluation_id, inverse_of: :answer_evaluation, dependent: :destroy
 
+  # Ratings of the AI-generated feedback drafted from this evaluation (includes detached history -- ratings
+  # whose post was re-generated or deleted keep pointing here via answer_evaluation_id).
+  has_many :ratings,
+           class_name: 'Course::Rubric::AnswerEvaluation::Rating',
+           foreign_key: :answer_evaluation_id, inverse_of: :answer_evaluation, dependent: :destroy
+
   # Finds the answer's playground evaluation for the rubric -- visible OR previously dismissed -- or builds
   # a new one. The result is set to +playground+, so saving it un-hides a dismissed evaluation.
   def self.find_or_build_playground(answer:, rubric:)

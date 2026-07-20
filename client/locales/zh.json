@@ -7976,6 +7976,45 @@
   "lib.component.navigation.UserPopupMenuList.signOut": {
     "defaultMessage": "退出登录"
   },
+  "lib.components.RateableGeneratedCommentCard.approve": {
+    "defaultMessage": "完成并发布"
+  },
+  "lib.components.RateableGeneratedCommentCard.clearFailure": {
+    "defaultMessage": "无法清除评分。"
+  },
+  "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
+    "defaultMessage": "你确定要拒绝并删除此消息吗？你将无法再检索它。"
+  },
+  "lib.components.RateableGeneratedCommentCard.emptyError": {
+    "defaultMessage": "反馈不能为空。"
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseImprove": {
+    "defaultMessage": "请帮助改进以下评论！"
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseRate": {
+    "defaultMessage": "请评价以继续！"
+  },
+  "lib.components.RateableGeneratedCommentCard.publishFailure": {
+    "defaultMessage": "无法发布反馈。"
+  },
+  "lib.components.RateableGeneratedCommentCard.publishSuccess": {
+    "defaultMessage": "已成功发布反馈。"
+  },
+  "lib.components.RateableGeneratedCommentCard.reject": {
+    "defaultMessage": "拒绝"
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectFailure": {
+    "defaultMessage": "未能拒绝反馈。"
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectSuccess": {
+    "defaultMessage": "已成功拒绝反馈。"
+  },
+  "lib.components.RateableGeneratedCommentCard.revert": {
+    "defaultMessage": "复原反馈"
+  },
+  "lib.components.RateableGeneratedCommentCard.title": {
+    "defaultMessage": "AI 生成评论"
+  },
   "lib.components.core.DescriptionCard.description": {
     "defaultMessage": "描述"
   },

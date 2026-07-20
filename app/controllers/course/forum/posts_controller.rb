@@ -76,6 +76,9 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def publish
     authorize!(:publish, @topic)
+    # Optionally carry the edited text so an AI-generated draft can be finalised (text + publish) in one request;
+    # publish_post persists it, and the workflow-state change snapshots it into the post's generated rating.
+    @post.text = publish_text_param unless publish_text_param.nil?
     if publish_post_action
       render partial: 'post_publish_data', locals: { forum: @forum, topic: @topic, post: @post }
     else
@@ -108,6 +111,10 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def topic_id_param
     params.permit(:topic_id)[:topic_id]
+  end
+
+  def publish_text_param
+    params.dig(:discussion_post, :text)
   end
 
   def load_topic

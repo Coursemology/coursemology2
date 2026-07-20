@@ -25,16 +25,33 @@ class Course::Forum::AutoAnsweringJob < ApplicationJob
   private
 
   def create_response_post(post, response, current_author, evaluation)
-    Course::Discussion::Post.create!(
+    Course::Discussion::Post.transaction do
+      response_post = Course::Discussion::Post.create!(
+        creator: current_author,
+        updater: current_author,
+        parent_id: post.parent&.id || post.id,
+        is_ai_generated: true,
+        text: response,
+        original_text: response,
+        workflow_state: evaluation.evaluate ? 'published' : 'draft',
+        faithfulness_score: evaluation.scores ? evaluation.scores[:faithfulness_score] : 0.0,
+        answer_relevance_score: evaluation.scores ? evaluation.scores[:answer_relevance_score] : 0.0
+      )
+      initialize_rating(response_post, response, current_author)
+      response_post
+    end
+  end
+
+  # Initializes an unrated rating for the generated answer post, snapshotting its RAG quality scores so staff
+  # ratings can later be correlated against faithfulness / answer relevance.
+  def initialize_rating(response_post, response, current_author)
+    Course::Forum::RagWiseRating.create!(
+      post: response_post,
+      original_content: response,
+      faithfulness_score: response_post.faithfulness_score,
+      answer_relevance_score: response_post.answer_relevance_score,
       creator: current_author,
-      updater: current_author,
-      parent_id: post.parent&.id || post.id,
-      is_ai_generated: true,
-      text: response,
-      original_text: response,
-      workflow_state: evaluation.evaluate ? 'published' : 'draft',
-      faithfulness_score: evaluation.scores ? evaluation.scores[:faithfulness_score] : 0.0,
-      answer_relevance_score: evaluation.scores ? evaluation.scores[:answer_relevance_score] : 0.0
+      updater: current_author
     )
   end
 

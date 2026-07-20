@@ -154,6 +154,21 @@ export function updatePostCodaveri(
       });
 }
 
+// Sets the numeric rating for an AI-generated feedback post. The edited feedback is captured server-side from
+// the post lifecycle (on publish/reject), so this only persists the score.
+export function updateAiFeedbackRating(
+  post: CommentPostMiniEntity,
+  rating: number | null,
+): Operation {
+  return async () => {
+    await CourseAPI.comments.updateAiFeedbackRating(
+      post.topicId.toString(),
+      post.id.toString(),
+      rating,
+    );
+  };
+}
+
 export function deletePost(
   post: CommentPostMiniEntity,
   codaveriRating?: number,

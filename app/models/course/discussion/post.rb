@@ -28,6 +28,11 @@ class Course::Discussion::Post < ApplicationRecord
   after_commit :mark_topic_as_read
   after_save :mark_self_as_read
   after_update :mark_self_as_read
+  # Snapshot the final text into this post's AI-generated rating (if any) when the draft is accepted (published)
+  # or rejected (destroyed). The before_destroy runs before the rating association's nullify (declaration order),
+  # so the rating is still reachable when we capture. Only a direct deletion (reject) captures -- cascades skip.
+  after_update :capture_ai_generated_rating_edit, if: :saved_change_to_workflow_state?
+  before_destroy :capture_ai_generated_rating_edit_on_destroy, unless: :destroyed_by_association
   before_destroy :reparent_children, unless: :destroyed_by_association
   before_destroy :unparent_children, if: :destroyed_by_association
   before_save :sanitize_text
@@ -49,6 +54,12 @@ class Course::Discussion::Post < ApplicationRecord
   has_one :codaveri_feedback, inverse_of: :post, dependent: :destroy
   has_one :rag_auto_answering, class_name: 'Course::Forum::RagAutoAnswering',
                                inverse_of: :post, dependent: :destroy
+  # The active rating of this post's AI-generated content (nullified, not destroyed, when the post is deleted so
+  # the rating survives for analysis). Only one of these applies, by post source: rubric feedback vs RagWise.
+  has_one :ai_feedback_rating, class_name: 'Course::Rubric::AnswerEvaluation::Rating',
+                               inverse_of: :post, dependent: :nullify
+  has_one :rag_wise_rating, class_name: 'Course::Forum::RagWiseRating',
+                            inverse_of: :post, dependent: :nullify
 
   accepts_nested_attributes_for :codaveri_feedback
 
@@ -164,7 +175,49 @@ class Course::Discussion::Post < ApplicationRecord
     end
   end
 
+  # Lazily creates this AI-generated post's rating if it is missing, so drafts created before the rating
+  # feature (or any straggler) render with the rateable card. New posts get their rating at generation time;
+  # this runs when the post is serialized (see the discussion/forum post partials). No-op for non-AI posts or
+  # posts that already have a rating; best-effort so a failure never breaks the page.
+  def ensure_generated_rating!
+    build_generated_rating if is_ai_generated?
+  rescue StandardError => e
+    Rails.logger.warn("Failed to ensure generated rating for post #{id}: #{e.message}")
+    nil
+  end
+
   private
+
+  def build_generated_rating
+    case topic&.actable
+    when Course::Assessment::SubmissionQuestion
+      build_ai_feedback_rating(topic.actable) unless ai_feedback_rating
+    when Course::Forum::Topic
+      build_rag_wise_rating unless rag_wise_rating
+    end
+  end
+
+  # Backfills the rubric-feedback rating, linking the answer's grading evaluation. Skipped when the answer has
+  # no grading evaluation (e.g. manually graded) -- there is nothing to attribute the rating to.
+  def build_ai_feedback_rating(submission_question)
+    answer = submission_question.submission.answers.find_by(question_id: submission_question.question_id)
+    grading = answer&.grading_rubric_evaluation
+    return unless grading
+
+    rating = grading.ratings.create!(post: self, original_feedback: text,
+                                     creator: User.system, updater: User.system)
+    association(:ai_feedback_rating).target = rating
+  end
+
+  # Backfills the RagWise rating, snapshotting the post's quality scores.
+  def build_rag_wise_rating
+    rating = Course::Forum::RagWiseRating.create!(
+      post: self, original_content: original_text.presence || text,
+      faithfulness_score: faithfulness_score, answer_relevance_score: answer_relevance_score,
+      creator: User.system, updater: User.system
+    )
+    association(:rag_wise_rating).target = rating
+  end
 
   def set_topic
     self.topic ||= parent.topic if parent
@@ -200,6 +253,23 @@ class Course::Discussion::Post < ApplicationRecord
 
   def sanitize_text
     self.text = ApplicationController.helpers.sanitize_ckeditor_rich_text(text)
+  end
+
+  # Copies the current text into this post's AI-generated rating so the rating retains the finally-kept content.
+  def capture_ai_generated_rating_edit
+    return unless is_ai_generated?
+
+    rating = ai_feedback_rating || rag_wise_rating
+    rating&.capture_edited_content(text)
+  end
+
+  # Best-effort variant for the reject path: the post is being destroyed regardless, so a failed snapshot must
+  # not abort the deletion (the content is low-value once rejected). Returns true so the destroy proceeds.
+  def capture_ai_generated_rating_edit_on_destroy
+    capture_ai_generated_rating_edit
+  rescue StandardError => e
+    Rails.logger.warn("Failed to snapshot AI rating edit before destroying post #{id}: #{e.message}")
+    true
   end
 
   def ensure_rag_auto_answering!

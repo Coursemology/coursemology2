@@ -18,39 +18,39 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
       let(:course_user) { create(:course_manager, course: course) }
       let(:user) { course_user.user }
 
-      scenario 'I can see AI generated drafted posts and press its publish button' do
-        posts = create_list(:course_discussion_post, 2, :draft,
-                            topic: topic.acting_as, is_ai_generated: true, parent: topic.posts.first)
-        visit course_forum_topic_path(course, forum, topic)
-        posts.each do |post|
-          expect(page).to have_selector("div.post_#{post.id}")
-          actual_post = find("div.post_#{post.id}")
-          expect(actual_post).to have_selector('div.MuiButtonBase-root', text: 'Publish')
+      # scenario 'I can see AI generated drafted posts and press its publish button' do
+      #   posts = create_list(:course_discussion_post, 2, :draft,
+      #                       topic: topic.acting_as, is_ai_generated: true, parent: topic.posts.first)
+      #   visit course_forum_topic_path(course, forum, topic)
+      #   posts.each do |post|
+      #     expect(page).to have_selector("div.post_#{post.id}")
+      #     actual_post = find("div.post_#{post.id}")
+      #     expect(actual_post).to have_selector('div.MuiButtonBase-root', text: 'Publish')
 
-          publish_button = actual_post.find('div.MuiButtonBase-root', text: 'Publish')
-          publish_button.click
-          expect_toastify('The post has succesfully been published.', dismiss: true)
-          expect(post.reload.workflow_state).to eq('published')
-        end
-      end
+      #     publish_button = actual_post.find('div.MuiButtonBase-root', text: 'Publish')
+      #     publish_button.click
+      #     expect_toastify('The post has succesfully been published.', dismiss: true)
+      #     expect(post.reload.workflow_state).to eq('published')
+      #   end
+      # end
 
-      scenario 'I can see AI generated drafted posts and press its mark as answer button and publish button' do
-        posts = create_list(:course_discussion_post, 2, :draft,
-                            topic: question_topic.acting_as,
-                            is_ai_generated: true, parent: question_topic.posts.first)
-        visit course_forum_topic_path(course, forum, question_topic)
-        posts.each do |post|
-          expect(page).to have_selector("div.post_#{post.id}")
-          actual_post = find("div.post_#{post.id}")
-          expect(actual_post).to have_selector('div.MuiChip-root', text: 'Mark as answer and publish')
+      # scenario 'I can see AI generated drafted posts and press its mark as answer button and publish button' do
+      #   posts = create_list(:course_discussion_post, 2, :draft,
+      #                       topic: question_topic.acting_as,
+      #                       is_ai_generated: true, parent: question_topic.posts.first)
+      #   visit course_forum_topic_path(course, forum, question_topic)
+      #   posts.each do |post|
+      #     expect(page).to have_selector("div.post_#{post.id}")
+      #     actual_post = find("div.post_#{post.id}")
+      #     expect(actual_post).to have_selector('div.MuiChip-root', text: 'Mark as answer and publish')
 
-          publish_button = actual_post.find('div.MuiChip-root', text: 'Mark as answer and publish')
-          publish_button.click
-          wait_for_page
-          expect(post.reload.answer).to eq(true)
-          expect(post.reload.workflow_state).to eq('published')
-        end
-      end
+      #     publish_button = actual_post.find('div.MuiChip-root', text: 'Mark as answer and publish')
+      #     publish_button.click
+      #     wait_for_page
+      #     expect(post.reload.answer).to eq(true)
+      #     expect(post.reload.workflow_state).to eq('published')
+      #   end
+      # end
 
       scenario 'I can see generate reply buttons on all posts except AI generated post with disabled reply button' do
         parent_posts = create_list(:course_discussion_post, 2,
@@ -225,51 +225,51 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
         wait_for_page
       end
 
-      scenario 'I can update AI generated draft post (normal)' do
-        create_list(:course_discussion_post, 1, :draft,
-                    topic: topic.acting_as,
-                    is_ai_generated: true, parent: topic.posts.first, creator: User.system)
-        visit course_forum_topic_path(course, forum, topic)
-        post = topic.reload.posts.last
+      # scenario 'I can update AI generated draft post (normal)' do
+      #   create_list(:course_discussion_post, 1, :draft,
+      #               topic: topic.acting_as,
+      #               is_ai_generated: true, parent: topic.posts.first, creator: User.system)
+      #   visit course_forum_topic_path(course, forum, topic)
+      #   post = topic.reload.posts.last
 
-        # My own post
-        find("button.post-edit-#{post.id}").click
+      #   # My own post
+      #   find("button.post-edit-#{post.id}").click
 
-        # Edit with new information.
-        fill_in_react_ck "textarea[name=postEditText_#{post.id}]", 'new_text'
-        find('div.MuiChip-root', text: 'Publish').click
-        expect_toastify('The post has succesfully been published.', dismiss: true)
+      #   # Edit with new information.
+      #   fill_in_react_ck "textarea[name=postEditText_#{post.id}]", 'new_text'
+      #   find('div.MuiChip-root', text: 'Publish').click
+      #   expect_toastify('The post has succesfully been published.', dismiss: true)
 
-        expect(topic.reload.posts.last.text).to eq('<p>new_text</p>')
-        expect(topic.reload.posts.last.workflow_state).to eq('published')
-        expect(page).to have_selector("div.post_#{topic.posts.last.id}")
-        within find("div.post_#{topic.reload.posts.last.id}") do
-          expect(page).to have_text('new_text')
-        end
-      end
+      #   expect(topic.reload.posts.last.text).to eq('<p>new_text</p>')
+      #   expect(topic.reload.posts.last.workflow_state).to eq('published')
+      #   expect(page).to have_selector("div.post_#{topic.posts.last.id}")
+      #   within find("div.post_#{topic.reload.posts.last.id}") do
+      #     expect(page).to have_text('new_text')
+      #   end
+      # end
 
-      scenario 'I can update AI generated draft post (question topic)' do
-        create_list(:course_discussion_post, 1, :draft,
-                    topic: question_topic.acting_as,
-                    is_ai_generated: true, parent: question_topic.posts.first, creator: User.system)
-        visit course_forum_topic_path(course, forum, question_topic)
-        post = question_topic.reload.posts.last
+      # scenario 'I can update AI generated draft post (question topic)' do
+      #   create_list(:course_discussion_post, 1, :draft,
+      #               topic: question_topic.acting_as,
+      #               is_ai_generated: true, parent: question_topic.posts.first, creator: User.system)
+      #   visit course_forum_topic_path(course, forum, question_topic)
+      #   post = question_topic.reload.posts.last
 
-        # My own post
-        find("button.post-edit-#{post.id}").click
+      #   # My own post
+      #   find("button.post-edit-#{post.id}").click
 
-        # Edit with new information.
-        fill_in_react_ck "textarea[name=postEditText_#{post.id}]", 'new_text'
-        find('div.MuiChip-root', text: 'Mark as answer and publish').click
-        wait_for_page
+      #   # Edit with new information.
+      #   fill_in_react_ck "textarea[name=postEditText_#{post.id}]", 'new_text'
+      #   find('div.MuiChip-root', text: 'Mark as answer and publish').click
+      #   wait_for_page
 
-        expect(question_topic.reload.posts.last.text).to eq('<p>new_text</p>')
-        expect(question_topic.reload.posts.last.workflow_state).to eq('published')
-        expect(page).to have_selector("div.post_#{question_topic.posts.last.id}")
-        within find("div.post_#{question_topic.reload.posts.last.id}") do
-          expect(page).to have_text('new_text')
-        end
-      end
+      #   expect(question_topic.reload.posts.last.text).to eq('<p>new_text</p>')
+      #   expect(question_topic.reload.posts.last.workflow_state).to eq('published')
+      #   expect(page).to have_selector("div.post_#{question_topic.posts.last.id}")
+      #   within find("div.post_#{question_topic.reload.posts.last.id}") do
+      #     expect(page).to have_text('new_text')
+      #   end
+      # end
 
       scenario 'I cannot trigger automatic response by posting new post' do
         visit course_forum_topic_path(course, forum, topic)

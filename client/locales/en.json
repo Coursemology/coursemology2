@@ -8015,6 +8015,45 @@
   "lib.component.navigation.UserPopupMenuList.signOut": {
     "defaultMessage": "Sign out"
   },
+  "lib.components.RateableGeneratedCommentCard.approve": {
+    "defaultMessage": "Finalise and Publish"
+  },
+  "lib.components.RateableGeneratedCommentCard.clearFailure": {
+    "defaultMessage": "Failed to clear rating."
+  },
+  "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
+    "defaultMessage": "Are you sure you wish to reject and delete this message? You will not be able to retrieve this anymore."
+  },
+  "lib.components.RateableGeneratedCommentCard.emptyError": {
+    "defaultMessage": "Feedback cannot be empty."
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseImprove": {
+    "defaultMessage": "Please help to improve the comment below!"
+  },
+  "lib.components.RateableGeneratedCommentCard.pleaseRate": {
+    "defaultMessage": "Please rate to continue!"
+  },
+  "lib.components.RateableGeneratedCommentCard.publishFailure": {
+    "defaultMessage": "Failed to publish feedback."
+  },
+  "lib.components.RateableGeneratedCommentCard.publishSuccess": {
+    "defaultMessage": "Successfully published feedback."
+  },
+  "lib.components.RateableGeneratedCommentCard.reject": {
+    "defaultMessage": "Reject"
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectFailure": {
+    "defaultMessage": "Failed to reject feedback."
+  },
+  "lib.components.RateableGeneratedCommentCard.rejectSuccess": {
+    "defaultMessage": "Successfully rejected feedback."
+  },
+  "lib.components.RateableGeneratedCommentCard.revert": {
+    "defaultMessage": "Revert Feedback"
+  },
+  "lib.components.RateableGeneratedCommentCard.title": {
+    "defaultMessage": "AI Generated Comment"
+  },
   "lib.components.core.DescriptionCard.description": {
     "defaultMessage": "Description"
   },
