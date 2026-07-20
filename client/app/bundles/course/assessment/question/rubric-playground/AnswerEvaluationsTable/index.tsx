@@ -1,9 +1,14 @@
 import { FC } from 'react';
-import { Close, Refresh } from '@mui/icons-material';
+import {
+  Close,
+  Edit,
+  PlayArrow,
+  Refresh,
+  Visibility,
+} from '@mui/icons-material';
 import { IconButton, Paper, Tooltip, Typography } from '@mui/material';
 import { RubricCategoryData } from 'types/course/rubrics';
 
-import UserHTMLText from 'lib/components/core/UserHTMLText';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -32,6 +37,7 @@ interface AnswerEvaluationsTableProps {
   selectedRubric?: RubricState;
   isComparing: boolean;
   onEditMockAnswer: (mockAnswerId: number) => void;
+  onViewAnswer: (answerId: number) => void;
 }
 
 const EmptyTablePlaceholder: FC = () => {
@@ -47,7 +53,8 @@ const EmptyTablePlaceholder: FC = () => {
 
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const { t } = useTranslation();
-  const { data, selectedRubric, isComparing, onEditMockAnswer } = props;
+  const { data, selectedRubric, isComparing, onEditMockAnswer, onViewAnswer } =
+    props;
 
   const dispatch = useAppDispatch();
 
@@ -88,7 +95,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       getValue: answerCategoryGradeGetter(category),
     },
 
-    className: 'max-lg:!hidden p-0',
+    className: 'max-lg:!hidden align-top',
     cell: (answer: AnswerTableEntry) =>
       isRenderingEvaluatedCells(answer) ? (
         <CategoryGradeCell
@@ -118,7 +125,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     categoryIndex: number,
   ): ColumnTemplate<AnswerTableEntry> => ({
     id: `grade_${categoryIndex + 1}`,
-    className: 'max-lg:!hidden p-0',
+    className: 'max-lg:!hidden align-top',
 
     title: () => (
       <Tooltip title={category.name}>
@@ -153,7 +160,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     id: 'grade_small',
     title: t(translations.questionGrade),
     sortable: true,
-    className: 'lg:!hidden p-0',
+    className: 'lg:!hidden align-top',
     sortProps: {
       sort: answerSortFn(answerTotalGradeGetter),
     },
@@ -180,12 +187,65 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       title: t(translations.student),
       searchable: true,
       sortable: true,
-      className: 'relative',
+      // The cell (td) stretches to the row height, so absolutely positioning the actions against it pins
+      // them to the bottom of the row regardless of the name's length (a plain flex child cannot read the
+      // stretched row height because a table-cell's percentage height resolves against the table, not the row).
+      className: 'relative align-top p-0',
       cell: (answer) => (
-        <div className="relative w-full h-full">
-          {answer.title ||
-            (answer.isMock ? t(translations.mockAnswerPlaceholderTitle) : '')}
-          <div className="absolute -top-2 -right-4 flex space-y-0 flex-col">
+        <>
+          <div className="p-4 pb-12">
+            {answer.title ||
+              (answer.isMock ? t(translations.mockAnswerPlaceholderTitle) : '')}
+          </div>
+          <div className="absolute bottom-2 left-4 flex flex-row items-center gap-1">
+            <Tooltip
+              title={t(
+                answer.evaluation
+                  ? translations.reevaluate
+                  : translations.evaluate,
+              )}
+            >
+              <IconButton
+                className="p-0"
+                color="primary"
+                disabled={answer.isEvaluating}
+                onClick={() =>
+                  requestRowEvaluation(dispatch, answer, selectedRubric.id)
+                }
+                size="small"
+              >
+                {answer.evaluation ? (
+                  <Refresh fontSize="small" />
+                ) : (
+                  <PlayArrow fontSize="small" />
+                )}
+              </IconButton>
+            </Tooltip>
+            {!answer.isMock && (
+              <Tooltip title={t(translations.viewAnswer)}>
+                <IconButton
+                  className="p-0"
+                  color="primary"
+                  disabled={answer.isEvaluating}
+                  onClick={() => onViewAnswer(answer.id)}
+                  size="small"
+                >
+                  <Visibility fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            {answer.isMock && (
+              <Tooltip title={t(translations.editMockAnswerTooltip)}>
+                <IconButton
+                  className="p-0"
+                  color="primary"
+                  onClick={() => onEditMockAnswer(answer.id)}
+                  size="small"
+                >
+                  <Edit fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
             <Tooltip title={t(translations.dismiss)}>
               <IconButton
                 className="p-0"
@@ -199,23 +259,8 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
                 <Close fontSize="small" />
               </IconButton>
             </Tooltip>
-            {answer.evaluation && (
-              <Tooltip title={t(translations.reevaluate)}>
-                <IconButton
-                  className="p-0"
-                  color="primary"
-                  disabled={answer.isEvaluating}
-                  onClick={() =>
-                    requestRowEvaluation(dispatch, answer, selectedRubric.id)
-                  }
-                  size="small"
-                >
-                  <Refresh fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            )}
           </div>
-        </div>
+        </>
       ),
     },
     smallScreenGradesColumn,
@@ -228,7 +273,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       id: 'totalGrade',
       title: t(translations.totalGrade),
       sortable: true,
-      className: 'max-lg:!hidden p-0',
+      className: 'max-lg:!hidden align-top',
       sortProps: {
         sort: answerSortFn(answerTotalGradeGetter),
       },
@@ -251,22 +296,13 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     {
       of: 'answerText',
       title: t(translations.answer),
-      cell: (answer) =>
-        answer.isMock ? (
-          <Tooltip title={t(translations.editMockAnswerTooltip)}>
-            <UserHTMLText
-              className="whitespace-normal line-clamp-4 [&_p]:m-0 text-[13px]"
-              html={answer.answerText}
-              onClick={() => onEditMockAnswer(answer.id)}
-            />
-          </Tooltip>
-        ) : (
-          <PopoverContentCell content={answer.answerText} />
-        ),
+      className: 'align-top',
+      cell: (answer) => <PopoverContentCell content={answer.answerText} />,
     },
     {
       id: 'feedback',
       title: t(translations.feedback),
+      className: 'align-top',
       cell: (answer) => (
         <PopoverContentCell content={answer.evaluation?.feedback ?? ''} />
       ),

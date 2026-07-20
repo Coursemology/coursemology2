@@ -168,5 +168,40 @@ RSpec.describe Course::Assessment::RubricsController, type: :controller do
         expect(mock_answer.grading_contexts.count).to eq(1)
       end
     end
+
+    describe '#answer_grading_contexts' do
+      render_views
+
+      let(:submission) { create(:submission, assessment: assessment, creator: user) }
+      let(:answer) do
+        create(:course_assessment_answer_rubric_based_response, :submitted,
+               question: question.acting_as, submission: submission).answer
+      end
+      let(:sibling) { create(:course_assessment_question_rubric_based_response, assessment: assessment) }
+      let!(:grading_context) do
+        Course::Assessment::Question::GradingContext.create!(
+          question: question.acting_as, context_type: 'sibling_question_answer',
+          source: sibling.acting_as, identifier: 'sibling'
+        )
+      end
+
+      it 'returns each grading context resolved against the answer submission' do
+        get :answer_grading_contexts, params: {
+          course_id: course.id, assessment_id: assessment.id,
+          question_id: question.acting_as.id, answer_id: answer.id, on: :member
+        }, format: :json
+
+        expect(response).to have_http_status(:ok)
+        # Self-contained entries (heading fields + content). The sibling has no answer in this submission,
+        # so its resolved content is blank.
+        expect(JSON.parse(response.body)).to contain_exactly(
+          'id' => grading_context.id,
+          'identifier' => 'sibling',
+          'contextType' => 'sibling_question_answer',
+          'sourceTitle' => sibling.acting_as.title,
+          'content' => ''
+        )
+      end
+    end
   end
 end

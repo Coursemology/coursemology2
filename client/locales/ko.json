@@ -2472,10 +2472,10 @@
     "defaultMessage": "계속 진행하시겠습니까?"
   },
   "course.assessment.question.rubricPlayground.sampleAnswerEvaluations": {
-    "defaultMessage": "샘플 답변 평가"
+    "defaultMessage": "답변 평가"
   },
   "course.assessment.question.rubricPlayground.addSampleAnswers": {
-    "defaultMessage": "샘플 답변 추가"
+    "defaultMessage": "기존 답변 추가"
   },
   "course.assessment.question.rubricPlayground.evaluateAll": {
     "defaultMessage": "모두 평가 ({count})"
@@ -2607,7 +2607,7 @@
     "defaultMessage": "이 표의 평가는 학생에게 부여된 점수에 영향을 주지 않습니다. '적용' 버튼에서 기존 학생 점수를 업데이트할 수 있습니다."
   },
   "course.assessment.question.rubricPlayground.addAnswersTitle": {
-    "defaultMessage": "샘플 답변 추가"
+    "defaultMessage": "기존 답변 추가"
   },
   "course.assessment.question.rubricPlayground.addAnswersPromptAction": {
     "defaultMessage": "추가"
@@ -2619,7 +2619,7 @@
     "defaultMessage": "추가"
   },
   "course.assessment.question.rubricPlayground.addExistingAnswers": {
-    "defaultMessage": "기존 답변 추가"
+    "defaultMessage": "특정 답변 추가"
   },
   "course.assessment.question.rubricPlayground.student": {
     "defaultMessage": "학생"
@@ -9489,7 +9489,7 @@
     "defaultMessage": "(모의 답변)"
   },
   "course.assessment.question.rubricPlayground.editMockAnswerTooltip": {
-    "defaultMessage": "이 모의 답변을 보거나 편집하려면 클릭하세요"
+    "defaultMessage": "보기/편집"
   },
   "course.admin.GradebookSettings.gradebookSettings": {
     "defaultMessage": "성적부 설정"
@@ -10210,5 +10210,29 @@
   },
   "course.gradebook.ManageExternalAssessmentContent.import": {
     "defaultMessage": "CSV 가져오기"
+  },
+  "course.assessment.question.rubricPlayground.activeRubricInfo": {
+    "defaultMessage": "이 루브릭은 모든 새 답변을 자동 채점하는 데 사용됩니다."
+  },
+  "course.assessment.question.rubricPlayground.inactiveRubricInfo": {
+    "defaultMessage": "새 답변은 사용 중인 루브릭으로 자동 채점됩니다. 대신 이 루브릭을 사용하려면 \"사용 중으로 설정\"을 클릭하세요."
+  },
+  "course.assessment.question.rubricPlayground.useOnlyCurrentAnswers": {
+    "defaultMessage": "현재 답변만 사용"
+  },
+  "course.assessment.question.rubricPlayground.viewAnswer": {
+    "defaultMessage": "보기"
+  },
+  "course.assessment.question.rubricPlayground.answerByStudent": {
+    "defaultMessage": "{name}님의 답변"
+  },
+  "course.assessment.question.rubricPlayground.emptyGradingContext": {
+    "defaultMessage": "이 컨텍스트에 사용 가능한 콘텐츠가 없습니다."
+  },
+  "course.assessment.question.rubricPlayground.saveMockAnswerFailure": {
+    "defaultMessage": "이 모의 답변을 저장할 수 없습니다. 다시 시도해 주세요."
+  },
+  "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
+    "defaultMessage": "이 답변의 채점 컨텍스트를 불러올 수 없습니다."
   }
 }

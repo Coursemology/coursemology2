@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import {
   RubricAnswerData,
   RubricAnswerEvaluationData,
+  RubricAnswerGradingContextData,
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
@@ -11,6 +12,23 @@ export const fetchQuestionRubricAnswers = async (): Promise<
 > => {
   try {
     const response = await CourseAPI.assessment.question.rubrics.answers();
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+// Each grading context resolved against a real answer's submission, for the read-only "view answer" prompt.
+export const fetchAnswerGradingContexts = async (
+  answerId: number,
+): Promise<RubricAnswerGradingContextData[]> => {
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.answerGradingContexts(
+        answerId,
+      );
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;

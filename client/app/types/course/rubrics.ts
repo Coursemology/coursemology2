@@ -87,6 +87,13 @@ export interface RubricGradingContextData {
   sourceTitle: string | null;
 }
 
+// A grading context resolved against a real answer's submission -- the source content the grader sees, self
+// contained (heading + content) so the read-only "view answer" prompt can render it without a second lookup.
+export interface RubricAnswerGradingContextData
+  extends RubricGradingContextData {
+  content: string;
+}
+
 export interface RubricAnswerData {
   id: number;
   title: string;

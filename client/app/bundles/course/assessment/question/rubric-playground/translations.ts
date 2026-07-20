@@ -16,6 +16,15 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.activeRubric',
     defaultMessage: 'Active',
   },
+  activeRubricInfo: {
+    id: 'course.assessment.question.rubricPlayground.activeRubricInfo',
+    defaultMessage: 'This rubric will be used to autograde any new answers.',
+  },
+  inactiveRubricInfo: {
+    id: 'course.assessment.question.rubricPlayground.inactiveRubricInfo',
+    defaultMessage:
+      'New answers will be autograded with the active rubric. Click "Set as Active" to use this one instead.',
+  },
   latestRubric: {
     id: 'course.assessment.question.rubricPlayground.latestRubric',
     defaultMessage: 'Latest',
@@ -85,6 +94,11 @@ const translations = defineMessages({
   showOnlyLatestAnswers: {
     id: 'course.assessment.question.rubricPlayground.showOnlyLatestAnswers',
     defaultMessage: 'Show only current answers',
+  },
+  // Used by the "Add Sample Answers" prompt switch; applies to both the table and random selection.
+  useOnlyCurrentAnswers: {
+    id: 'course.assessment.question.rubricPlayground.useOnlyCurrentAnswers',
+    defaultMessage: 'Use only current answers',
   },
   setAsActive: {
     id: 'course.assessment.question.rubricPlayground.setAsActive',
@@ -216,11 +230,11 @@ const translations = defineMessages({
   // AnswerEvaluationsTableHeader
   sampleAnswerEvaluations: {
     id: 'course.assessment.question.rubricPlayground.sampleAnswerEvaluations',
-    defaultMessage: 'Sample Answer Evaluations',
+    defaultMessage: 'Answer Evaluations',
   },
   addSampleAnswers: {
     id: 'course.assessment.question.rubricPlayground.addSampleAnswers',
-    defaultMessage: 'Add Sample Answers',
+    defaultMessage: 'Add Existing Answers',
   },
   evaluateAll: {
     id: 'course.assessment.question.rubricPlayground.evaluateAll',
@@ -247,7 +261,7 @@ const translations = defineMessages({
   // AddAnswersPrompt
   addAnswersTitle: {
     id: 'course.assessment.question.rubricPlayground.addAnswersTitle',
-    defaultMessage: 'Add Sample Answers',
+    defaultMessage: 'Add Existing Answers',
   },
   addAnswersPromptAction: {
     id: 'course.assessment.question.rubricPlayground.addAnswersPromptAction',
@@ -255,7 +269,7 @@ const translations = defineMessages({
   },
   addExistingAnswers: {
     id: 'course.assessment.question.rubricPlayground.addExistingAnswers',
-    defaultMessage: 'Add existing answers',
+    defaultMessage: 'Add specific answers',
   },
   student: {
     id: 'course.assessment.question.rubricPlayground.student',
@@ -318,13 +332,33 @@ const translations = defineMessages({
   },
   editMockAnswerTooltip: {
     id: 'course.assessment.question.rubricPlayground.editMockAnswerTooltip',
-    defaultMessage: 'Click to view or edit this mock answer',
+    defaultMessage: 'View/Edit',
   },
 
   // AnswerEvaluationsTable
   dismiss: {
     id: 'course.assessment.question.rubricPlayground.dismiss',
     defaultMessage: 'Dismiss',
+  },
+  viewAnswer: {
+    id: 'course.assessment.question.rubricPlayground.viewAnswer',
+    defaultMessage: 'View',
+  },
+  answerByStudent: {
+    id: 'course.assessment.question.rubricPlayground.answerByStudent',
+    defaultMessage: 'Answer by {name}',
+  },
+  emptyGradingContext: {
+    id: 'course.assessment.question.rubricPlayground.emptyGradingContext',
+    defaultMessage: 'No content available for this context.',
+  },
+  saveMockAnswerFailure: {
+    id: 'course.assessment.question.rubricPlayground.saveMockAnswerFailure',
+    defaultMessage: 'Could not save this mock answer. Please try again.',
+  },
+  loadAnswerContextsFailure: {
+    id: 'course.assessment.question.rubricPlayground.loadAnswerContextsFailure',
+    defaultMessage: 'Could not load the grading contexts for this answer.',
   },
   noAnswers: {
     id: 'course.assessment.question.rubricPlayground.noAnswers',

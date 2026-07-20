@@ -64,7 +64,7 @@ RSpec.describe Course::Assessment::MockAnswersController, type: :controller do
               grading_context_id: grading_context.id, content: 'New context'
             ]
           }
-        )
+        ), format: :json
 
         expect(response).to have_http_status(:ok)
         mock_answer.reload

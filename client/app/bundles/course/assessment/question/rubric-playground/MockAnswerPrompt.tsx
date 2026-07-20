@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormHelperText } from '@mui/material';
 import { dispatch } from 'store';
 import {
   RubricGradingContextData,
@@ -13,6 +12,7 @@ import Subsection from 'lib/components/core/layouts/Subsection';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -23,6 +23,7 @@ import {
   initializeMockAnswerEvaluations,
   updateQuestionMockAnswer,
 } from './operations/mockAnswers';
+import ContextHeading from './ContextHeading';
 import translations from './translations';
 
 interface MockAnswerFormData {
@@ -86,23 +87,6 @@ const MockAnswerPrompt: FC<Props> = (props) => {
     });
   }, [open, mockAnswerId]);
 
-  const contextHeading = (context: RubricGradingContextData): string => {
-    if (context.contextType === 'forum_thread') {
-      return t(translations.mockContextHeadingForumThread, {
-        identifier: context.identifier,
-      });
-    }
-    if (context.contextType === 'sibling_question_answer') {
-      return t(translations.mockContextHeadingSibling, {
-        identifier: context.identifier,
-        title: context.sourceTitle ?? '',
-      });
-    }
-    return t(translations.mockContextHeading, {
-      identifier: context.identifier,
-    });
-  };
-
   const handleSave = async (data: MockAnswerFormData): Promise<void> => {
     const gradingContextPayload = gradingContexts.map((context, index) => ({
       // Carry the persisted join-row id (if any) so an edit updates the context in place.
@@ -153,7 +137,10 @@ const MockAnswerPrompt: FC<Props> = (props) => {
       cancelLabel={t(formTranslations.close)}
       maxWidth="md"
       onClickPrimary={handleSubmit((data) => {
-        handleSave(data).then(onClose);
+        // On failure, keep the prompt open (don't call onClose) so the user can retry.
+        handleSave(data)
+          .then(onClose)
+          .catch(() => toast.error(t(translations.saveMockAnswerFailure)));
       })}
       onClose={onClose}
       open={open}
@@ -204,9 +191,7 @@ const MockAnswerPrompt: FC<Props> = (props) => {
           <Subsection title={t(assessmentTranslations.gradingContext)}>
             {gradingContexts.map((context, index) => (
               <div key={context.id} className="space-y-1">
-                <FormHelperText className="font-medium">
-                  {contextHeading(context)}
-                </FormHelperText>
+                <ContextHeading {...context} />
                 <Controller
                   control={control}
                   name={`mockAnswerContexts.${index}.content`}
