@@ -35,7 +35,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     let(:destination_course) { create(:course) }
     let(:manager) { create(:course_manager, course: destination_course).user }
 
-    before { controller_sign_in(controller, manager) }
+    before do
+      create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager)
+      controller_sign_in(controller, manager)
+    end
 
     it 'serializes the question across instances' do
       get :show, as: :json, params: {

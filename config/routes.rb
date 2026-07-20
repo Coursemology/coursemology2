@@ -109,6 +109,13 @@ Rails.application.routes.draw do
       get '/' => 'admin#index'
       get 'deployment_info' => 'admin#deployment_info'
       resources :announcements, only: [:index, :create, :update, :destroy]
+      resources :marketplace_allowlist_rules, only: [:index, :create, :destroy] do
+        # Dry run: reports who a prospective rule would let in. POST because it carries a body,
+        # not because it mutates - the action never saves.
+        post :preview, on: :collection
+      end
+      get 'marketplace_access' => 'marketplace_access#index'
+      resources :marketplace_access_blocks, only: [:create, :destroy]
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
