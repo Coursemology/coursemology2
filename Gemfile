@@ -155,7 +155,7 @@ end
 
 group :development, :production, :test do
   # Puma will be our app server
-  gem 'puma', '~> 7.2'
+  gem 'puma', '~> 8.0'
 end
 
 group :production, :test, :ci do
