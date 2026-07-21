@@ -189,7 +189,7 @@ gem 'http_accept_language'
 gem 'devise', '4.9.4'
 gem 'devise-multi_email'
 gem 'keycloak'
-gem 'jwt', '~> 2.10.3'
+gem 'jwt', '~> 3.2.0'
 
 # Use cancancan for authorization
 gem 'cancancan'
