@@ -190,7 +190,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       // The cell (td) stretches to the row height, so absolutely positioning the actions against it pins
       // them to the bottom of the row regardless of the name's length (a plain flex child cannot read the
       // stretched row height because a table-cell's percentage height resolves against the table, not the row).
-      className: 'relative align-top p-0',
+      className: 'relative align-top [&:is(td)]:p-0',
       cell: (answer) => (
         <>
           <div className="p-4 pb-12">
