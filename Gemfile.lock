@@ -346,12 +346,12 @@ GEM
     json-schema (5.2.2)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
-    jwt (2.10.3)
+    jwt (3.2.0)
       base64
-    keycloak (3.3.0)
-      json (~> 2.6)
-      jwt (~> 2.4)
-      rest-client (~> 2.1)
+    keycloak (3.0.0)
+      json
+      jwt
+      rest-client
     langchainrb (0.19.5)
       baran (~> 0.1.9)
       csv
@@ -741,7 +741,7 @@ DEPENDENCIES
   i18n-tasks
   image_optim_rails
   jbuilder
-  jwt (~> 2.10.3)
+  jwt (~> 3.2.0)
   keycloak
   langchainrb
   listen
