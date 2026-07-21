@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.61.1",
-    "@types/node": "^25.9.5",
+    "@types/node": "^26.0.0",
     "istanbul-lib-processinfo": "^3.0.1",
     "nyc": "^18.0.0"
   },
