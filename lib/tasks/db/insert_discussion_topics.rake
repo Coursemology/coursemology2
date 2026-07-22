@@ -28,7 +28,7 @@ namespace :db do
         INNER JOIN course_assessment_categories cac
           ON cac.id = cat.category_id
         LEFT JOIN course_assessment_answers caa
-          ON (caa.submission_id = casq.submission_id AND caa.question_id = casq.question_id)
+          ON (caa.attempt_id = casq.submission_id AND caa.question_id = casq.question_id)
         LEFT JOIN course_discussion_topics cdt
           ON (cdt.actable_id = caa.id AND cdt.actable_type = 'Course::Assessment::Answer')
         GROUP BY cac.course_id, casq.id, casq.submission_id, casq.question_id

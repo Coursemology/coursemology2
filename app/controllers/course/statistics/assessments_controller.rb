@@ -131,9 +131,9 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     submission_hash = @submissions.index_by(&:creator_id)
 
     final_grade_hash = Course::Assessment::Answer.where(
-      submission_id: @submissions.pluck(:id),
+      attempt_id: @submissions.pluck(:id),
       current_answer: true
-    ).to_h { |answer| [[answer.submission_id, answer.question_id], answer&.grade&.to_f || 0] }
+    ).to_h { |answer| [[answer.attempt_id, answer.question_id], answer&.grade&.to_f || 0] }
 
     @student_live_feedback_hash = @all_students.to_h do |student|
       submission = submission_hash[student.user_id]
@@ -238,7 +238,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def feedback_answers_cte
     <<-SQL
       SELECT
-        a.submission_id,
+        a.attempt_id AS submission_id,
         a.question_id,
         a.created_at,
         a.grade,
@@ -249,7 +249,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
       FROM feedback_messages f
       JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
       JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
-      JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
+      JOIN course_assessment_answers a ON a.attempt_id = sq.submission_id AND a.question_id = sq.question_id
     SQL
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_22_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -205,7 +205,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
   create_table "course_assessment_answers", id: :serial, force: :cascade do |t|
     t.integer "actable_id"
     t.string "actable_type", limit: 255
-    t.integer "submission_id", null: false
+    t.integer "attempt_id", null: false
     t.integer "question_id", null: false
     t.string "workflow_state", limit: 255, null: false
     t.datetime "submitted_at", precision: nil
@@ -219,9 +219,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
     t.string "last_session_id"
     t.bigint "client_version"
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_answers_actable", unique: true
+    t.index ["attempt_id"], name: "fk__course_assessment_answers_submission_id"
     t.index ["grader_id"], name: "fk__course_assessment_answers_grader_id"
     t.index ["question_id"], name: "fk__course_assessment_answers_question_id"
-    t.index ["submission_id"], name: "fk__course_assessment_answers_submission_id"
   end
 
   create_table "course_assessment_attempts", id: :serial, force: :cascade do |t|
@@ -1991,7 +1991,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
   add_foreign_key "course_assessment_answer_scribing_scribbles", "course_assessment_answer_scribings", column: "answer_id", name: "fk_course_assessment_answer_scribing_scribbles_answer_id"
   add_foreign_key "course_assessment_answer_scribing_scribbles", "users", column: "creator_id", name: "fk_course_assessment_answer_scribing_scribbles_creator_id"
   add_foreign_key "course_assessment_answers", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_answers_question_id"
-  add_foreign_key "course_assessment_answers", "course_assessment_attempts", column: "submission_id", name: "fk_course_assessment_answers_submission_id"
+  add_foreign_key "course_assessment_answers", "course_assessment_attempts", column: "attempt_id", name: "fk_course_assessment_answers_submission_id"
   add_foreign_key "course_assessment_answers", "users", column: "grader_id", name: "fk_course_assessment_answers_grader_id"
   add_foreign_key "course_assessment_attempts", "course_assessments", column: "assessment_id", name: "fk_course_assessment_submissions_assessment_id"
   add_foreign_key "course_assessment_attempts", "users", column: "creator_id", name: "fk_course_assessment_submissions_creator_id"

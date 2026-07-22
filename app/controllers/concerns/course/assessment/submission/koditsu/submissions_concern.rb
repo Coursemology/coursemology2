@@ -96,7 +96,7 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def process_submission_answers(submission, cm_submission)
-    answers = Course::Assessment::Answer.includes(:question).where(submission_id: cm_submission.id)
+    answers = Course::Assessment::Answer.includes(:question).where(attempt_id: cm_submission.id)
 
     build_answer_hash(answers)
 

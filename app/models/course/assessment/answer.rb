@@ -52,7 +52,8 @@ class Course::Assessment::Answer < ApplicationRecord
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
 
-  belongs_to :submission, inverse_of: :answers
+  # Column is `attempt_id` as of Phase 1a (association name kept as `submission`).
+  belongs_to :submission, inverse_of: :answers, foreign_key: 'attempt_id'
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
@@ -71,7 +72,7 @@ class Course::Assessment::Answer < ApplicationRecord
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
   scope :non_current_answers, -> { where(current_answer: false) }
   scope :current_answers, -> { where(current_answer: true) }
-  scope :belonging_to_submissions, ->(submissions) { where(submission_id: submissions) }
+  scope :belonging_to_submissions, ->(submissions) { where(attempt_id: submissions) }
 
   # Autogrades the answer. This saves the answer if there are pending changes.
   #

@@ -76,7 +76,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   this is because every answer is saved over time. Use the {.latest} scope of the answers if
   #   only the latest answer for each question is desired.
   has_many :answers, class_name: 'Course::Assessment::Answer', dependent: :destroy,
-                     inverse_of: :submission do
+                     foreign_key: 'attempt_id', inverse_of: :submission do
     include Course::Assessment::Submission::AnswersConcern
   end
   has_many :multiple_response_answers,
@@ -109,7 +109,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   @return [Time]
   calculated :graded_at, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_attempts.id').
+      where('course_assessment_answers.attempt_id = course_assessment_attempts.id').
       select('max(course_assessment_answers.graded_at)')
   end)
 
@@ -124,7 +124,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   Returns the total grade of the submissions.
   calculated :grade, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_attempts.id
+      where('course_assessment_answers.attempt_id = course_assessment_attempts.id
              AND course_assessment_answers.current_answer = true').
       select('sum(course_assessment_answers.grade)')
   end)
@@ -133,7 +133,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   Returns the grader_ids of a submission
   calculated :grader_ids, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_attempts.id
+      where('course_assessment_answers.attempt_id = course_assessment_attempts.id
              AND course_assessment_answers.current_answer = true').
       select('ARRAY_REMOVE(ARRAY_AGG(DISTINCT(course_assessment_answers.grader_id)), NULL)')
   end)
@@ -344,7 +344,7 @@ class Course::Assessment::Submission < ApplicationRecord
         SELECT cas.creator_id AS student_id, cas.assessment_id,
                cas.id AS submission_id, SUM(caa.grade) AS grade
         FROM course_assessment_attempts cas
-        JOIN course_assessment_answers caa ON caa.submission_id = cas.id
+        JOIN course_assessment_answers caa ON caa.attempt_id = cas.id
         WHERE cas.creator_id IN (?)
           AND cas.assessment_id IN (?)
           AND cas.workflow_state IN ('graded', 'published')

@@ -74,7 +74,7 @@ module Course::Assessment::Submission::Koditsu::AnswersConcern
   def build_answer_object(question, answer, submitted_answer)
     {
       id: answer.id,
-      submission_id: answer.submission_id,
+      attempt_id: answer.attempt_id,
       question_id: question.id,
       workflow_state: 'submitted',
       correct: submitted_answer['exprTestcaseResults'].all? { |tc| tc['result']['success'] },
