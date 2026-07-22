@@ -39,7 +39,7 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   def process_all_submissions
     create_new_submissions_if_not_existing
 
-    @submission_hash = Course::Assessment::Submission.where(assessment: @assessment).to_h do |s|
+    @submission_hash = @assessment.submissions.to_h do |s|
       [s.creator_id, s]
     end
 
@@ -59,8 +59,12 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def create_new_submissions_if_not_existing
-    existing_submission_user_ids = Course::Assessment::Submission.where(assessment: @assessment).
-                                   pluck(:creator_id)
+    # `creator_id` is not a column on Submission's own (small) table — it lives on
+    # `course_assessment_attempts` (Step 2c). Unqualified, `pluck` can't tell which joined table's
+    # `creator_id` to read (Submission's own `acts_as :experience_points_record` default scope also
+    # joins `course_experience_points_records`, which ALSO has a `creator_id` column), so Postgres
+    # rejects it as ambiguous — same fix as `submissions_controller.rb#user_ids_without_submission`.
+    existing_submission_user_ids = @assessment.submissions.pluck('course_assessment_attempts.creator_id')
     koditsu_submission_user_ids = @cu_submission_hash.keys.map { |creator, _| creator.id }
     user_ids_without_submission = koditsu_submission_user_ids - existing_submission_user_ids
 
@@ -77,8 +81,7 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
   def create_new_submission_for(creator, course_user)
     User.with_stamper(creator) do
-      new_submission = @assessment.submissions.new(creator: creator,
-                                                   course_user: course_user)
+      new_submission = @assessment.build_submission(creator: creator, course_user: course_user)
       success = @assessment.create_new_submission(new_submission, course_user)
 
       raise ActiveRecord::Rollback unless success
@@ -96,7 +99,13 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def process_submission_answers(submission, cm_submission)
-    answers = Course::Assessment::Answer.includes(:question).where(attempt_id: cm_submission.id)
+    # `cm_submission.id` is now the small Submission table's OWN id, not the Attempt id the
+    # `attempt_id` FK needs — `course_assessment_submissions.id` is an independent serial column
+    # (see the Task 1 backfill migration), not guaranteed equal to `attempt_id`. This was silently
+    # correct pre-split, when `cm_submission` was a `Submission` instance mapped directly onto
+    # `course_assessment_attempts` (so `.id` and `attempt_id` were the same value); the split
+    # exposed it. `attempt_id` is a real, undelegated column already on Submission's own table.
+    answers = Course::Assessment::Answer.includes(:question).where(attempt_id: cm_submission.attempt_id)
 
     build_answer_hash(answers)
 

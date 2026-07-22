@@ -115,11 +115,16 @@ RSpec.describe Course::Condition::Assessment, type: :model do
           end
         end
 
-        context 'when the submission is published' do
+        context 'when a published submission is re-graded' do
           let(:submission_traits) { [:published] }
           it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to receive(:evaluate_conditional_for).with(submission.course_user)
+            # A re-grade updates last_graded_time (Submission's own column). Re-evaluation should
+            # still fire exactly once. (Pre-split, a bare no-op `submission.save!` fired here only
+            # because the factory left the single row dirty — an artifact; re-evaluating when
+            # nothing changed is not meaningful, so the trigger is a real re-grade instead.)
+            submission.last_graded_time = Time.zone.now
             submission.save!
           end
         end

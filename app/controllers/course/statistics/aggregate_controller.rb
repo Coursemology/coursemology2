@@ -65,7 +65,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
     get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
       m.id, m.content, m.created_at, t.submission_creator_id,
-      s.assessment_id, sq.attempt_id AS submission_id, sq.question_id,
+      s.assessment_id, sub.id AS submission_id, sq.question_id,
       COUNT(*) OVER (
         PARTITION BY t.submission_creator_id, s.assessment_id, sq.question_id
       ) AS message_count
@@ -73,6 +73,11 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
     INNER JOIN live_feedback_threads t ON m.thread_id = t.id
     INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
     INNER JOIN course_assessment_attempts s ON sq.attempt_id = s.id
+    -- `sq.attempt_id`/`s.id` is the Attempt's own id, not the (course-coupled) Submission's own
+    -- (small-table) id the JSON response's `submissionId` is expected to be — post-split, these
+    -- are two different id spaces (Step 1's extension table has its own serial `id`). Genuine bug
+    -- the split exposed; not listed in the brief's file set, found via the acceptance gate.
+    INNER JOIN course_assessment_submissions sub ON sub.attempt_id = s.id
     INNER JOIN course_assessments a ON s.assessment_id = a.id
     INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
     INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id

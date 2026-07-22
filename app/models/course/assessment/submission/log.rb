@@ -9,7 +9,7 @@ class Course::Assessment::Submission::Log < ApplicationRecord
 
   validates :submission, presence: true
 
-  belongs_to :submission, class_name: 'Course::Assessment::Submission',
+  belongs_to :submission, class_name: 'Course::Assessment::Attempt',
                           inverse_of: :logs
 
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }

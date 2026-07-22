@@ -41,7 +41,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   def create # rubocop:disable Metrics/AbcSize
     authorize! :access, @assessment
 
-    existing_submission = @assessment.submissions.find_by(creator: current_user)
+    existing_submission = @assessment.submissions.by_user(current_user).first
     create_success_response(existing_submission) and return if existing_submission
 
     ActiveRecord::Base.transaction do
@@ -423,7 +423,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def user_ids_without_submission
     existing_submissions = @assessment.submissions.by_users(course_user_ids.pluck(:user_id))
-    user_ids_with_submission = existing_submissions.pluck(:creator_id)
+    # `creator_id` is not a column on Submission's own (small) table — it lives on
+    # `course_assessment_attempts` (Step 2c). Unqualified, Rails can't tell `pluck` which joined
+    # table's `creator_id` to read (Submission's own `acts_as :experience_points_record` default
+    # scope also joins `course_experience_points_records`, which ALSO has a `creator_id` column),
+    # so Postgres rejects it as ambiguous. Qualify explicitly.
+    user_ids_with_submission = existing_submissions.pluck('course_assessment_attempts.creator_id')
     course_user_ids.pluck(:user_id) - user_ids_with_submission
   end
 

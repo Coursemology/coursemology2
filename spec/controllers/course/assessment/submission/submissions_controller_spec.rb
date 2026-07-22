@@ -151,40 +151,56 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
-    describe '#update_grade' do
-      subject do
-        post :update, params: {
-          course_id: course, assessment_id: assessment2, id: graded_submission,
-          submission: {
-            answers: [{ id: answer.id, grade: grade }]
-          },
-          format: :json
-        }
-      end
-
-      context 'when update fails' do
-        let(:grade) { nil }
-        before do
-          subject
+    # `graded_submission` builds via the `:graded` factory trait, which passes through
+    # `:submitted` on its way there — briefly triggering `Attempt#after_save :auto_grade_submission,
+    # if: :submitted?`, which enqueues a real `Submission::AutoGradingJob` (there's a programming
+    # question among `:with_all_question_types`, per `graded_submission.answers.third`'s own
+    # comment below). Under the test env's default `:background_thread` adapter (see
+    # `spec/support/active_job.rb` / `app/CLAUDE.md`), that job runs concurrently with the rest of
+    # this example — and can win the race against the `post :update` below, re-grading (and
+    # transitioning) the very answer this example is asserting on before the request reaches it.
+    # This pre-existing race (the job enqueue is unchanged by Step 2's split) became far more likely
+    # to manifest post-split — the Attempt/Submission split adds enough extra latency to the main
+    # thread's own request handling to give the background job time to complete first. Wrapping
+    # with the repo's own `with_active_job_queue_adapter(:test)` helper (already used the same way
+    # for `Submission#finalise!`'s own auto-grading-job example) makes the job just enqueue,
+    # not execute, removing the race outright — not a behaviour change to the code under test.
+    with_active_job_queue_adapter(:test) do
+      describe '#update_grade' do
+        subject do
+          post :update, params: {
+            course_id: course, assessment_id: assessment2, id: graded_submission,
+            submission: {
+              answers: [{ id: answer.id, grade: grade }]
+            },
+            format: :json
+          }
         end
 
-        it { is_expected.to have_http_status(:bad_request) }
-      end
+        context 'when update fails' do
+          let(:grade) { nil }
+          before do
+            subject
+          end
 
-      context 'when update grade is called, even when answer is not valid' do
-        let(:grade) { 0 }
-        let(:answer) { graded_submission.answers.third } # programming answer
-        let(:max_file_size) { 2.kilobytes }
-        let(:invalid_content) { 'a' * (max_file_size + 1) }
-        before do
-          stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
-          file = answer.actable.files.first
-          file.content = invalid_content
-          file.save!(validate: false)
-          subject
+          it { is_expected.to have_http_status(:bad_request) }
         end
 
-        it { is_expected.to have_http_status(:ok) }
+        context 'when update grade is called, even when answer is not valid' do
+          let(:grade) { 0 }
+          let(:answer) { graded_submission.answers.third } # programming answer
+          let(:max_file_size) { 2.kilobytes }
+          let(:invalid_content) { 'a' * (max_file_size + 1) }
+          before do
+            stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
+            file = answer.actable.files.first
+            file.content = invalid_content
+            file.save!(validate: false)
+            subject
+          end
+
+          it { is_expected.to have_http_status(:ok) }
+        end
       end
     end
 

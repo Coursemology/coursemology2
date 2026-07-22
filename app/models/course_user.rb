@@ -118,8 +118,13 @@ class CourseUser < ApplicationRecord
   # @!attribute [r] assessment_submission_count
   #   Returns the total number of submitted assessment submissions by CourseUser in this course
   calculated :assessment_submission_count, (lambda do
+    # `assessment` is no longer a real association on Submission (Step 2c) — it's delegated to
+    # `attempt`, so `joins(assessment: ...)` raised `ActiveRecord::ConfigurationError`. Join through
+    # `:attempt` first (a real association), matching the same shape as `Submission.from_course`'s
+    # own `joins(attempt: { assessment: { tab: :category } })`. Genuine bug the split exposed; not
+    # listed in the brief's file set, found via the acceptance gate.
     Course::Assessment::Submission.select('count(*)').
-      joins(assessment: { tab: :category }).
+      joins(attempt: { assessment: { tab: :category } }).
       where('course_assessment_attempts.creator_id = course_users.user_id').
       where('course_assessment_categories.course_id = course_users.course_id').
       where(course_assessment_attempts: { workflow_state: [:submitted, :graded, :published] })

@@ -21,7 +21,14 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   includes(programming_questions: [:language]).
                   calculated(:maximum_grade, :question_count).
                   find(assessment_params[:id])
-    submissions = Course::Assessment::Submission.unscoped.
+    # `Course::Assessment::Submission` has no `assessment_id` column post-split (it's Attempt-only,
+    # reached through the delegate); querying it directly like this raised
+    # `PG::UndefinedColumn` once the split landed. `Attempt` carries `assessment_id`, `grade`, and
+    # `grader_ids` natively/as `calculated`, so it is a drop-in replacement here — the jbuilder view
+    # for this action (`_submission.json.jbuilder`) only ever reads `workflow_state`, `submitted_at`,
+    # `grade`, `graded?`/`published?`, `grader_ids`, all present on Attempt. (Genuine bug the split
+    # exposed, mirroring the two call sites the design spike already named in this file.)
+    submissions = Course::Assessment::Attempt.unscoped.
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids)
     @course_users_hash = preload_course_users_hash(current_course)
@@ -39,7 +46,9 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   calculated(:maximum_grade).
                   find(assessment_params[:id])
     authorize!(:read_ancestor, @assessment)
-    submissions = Course::Assessment::Submission.unscoped.
+    # Same `assessment_id`-column bug as `submission_statistics` above — `Attempt` is the
+    # drop-in replacement (see the comment there).
+    submissions = Course::Assessment::Attempt.unscoped.
                   preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
@@ -52,7 +61,10 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def live_feedback_statistics
     @assessment = Course::Assessment.unscoped.includes(:questions).
                   find(assessment_params[:id])
-    @submissions = Course::Assessment::Submission.unscoped.
+    # id/creator_id/workflow_state all live on Attempt post-split; this action only ever reads
+    # those three columns (unscoped + a narrow .select), so querying Attempt directly is equivalent
+    # in Phase 1b (every Attempt still has exactly one Submission).
+    @submissions = Course::Assessment::Attempt.unscoped.
                    select(:id, :creator_id, :workflow_state).
                    where(assessment_id: assessment_params[:id])
 
@@ -64,7 +76,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def live_feedback_history
     user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
-    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator_id: user_id)
+    @submissions = Course::Assessment::Attempt.where(assessment_id: assessment_params[:id], creator_id: user_id)
     @question = Course::Assessment::Question.find(params[:question_id])
 
     create_submission_question_id_hash([@question])

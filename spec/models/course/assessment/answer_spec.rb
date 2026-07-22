@@ -288,12 +288,25 @@ RSpec.describe Course::Assessment::Answer do
     describe '#can_read_grade?' do
       let(:ability) { instance_double(Ability) }
       let(:answer) { create(:course_assessment_answer) }
+      # `can_read_grade?` is called with `self` as the receiver. For the base `:course_assessment_answer`
+      # factory, `answer` already IS that receiver; for the MultipleResponse/TextResponse factories
+      # below (which build the `acts_as :answer` actable directly, not the base `Answer`), calling
+      # `answer.can_read_grade?` falls through `acts_as`'s own `method_missing` to
+      # `answer.acting_as.send(:can_read_grade?, ...)` — so `self` inside the method is
+      # `answer.acting_as`, not `answer` itself. `.try(:acting_as)` resolves either case correctly
+      # (the base Answer doesn't respond to `acting_as` at all, since it uses the OTHER `acts_as`
+      # macro direction — `actable`, not `acts_as :answer`).
+      let(:can_read_grade_receiver) { answer.try(:acting_as) || answer }
       let(:submission) { answer.submission }
       let(:assessment) { submission.assessment }
       let(:show_mcq_answer) { false }
 
       before do
-        allow(ability).to receive(:can?).with(:grade, submission).and_return(false)
+        # `can_read_grade?` routes through `ability.can?(:grade, self)` (the answer), not
+        # `ability.can?(:grade, submission)` — `submission` now resolves to an Attempt post-repoint,
+        # and CanCan's `can :grade, Course::Assessment::Answer, submission: { assessment: ... }`
+        # rule matches on the Answer subject, not its Attempt (design spike §5.2, Step 2d).
+        allow(ability).to receive(:can?).with(:grade, can_read_grade_receiver).and_return(false)
         allow(submission).to receive(:published?).and_return(false)
         allow(assessment).to receive(:autograded?).and_return(false)
         allow(assessment).to receive(:allow_partial_submission).and_return(false)
@@ -309,7 +322,7 @@ RSpec.describe Course::Assessment::Answer do
       end
 
       context 'when the ability can grade the submission' do
-        before { allow(ability).to receive(:can?).with(:grade, submission).and_return(true) }
+        before { allow(ability).to receive(:can?).with(:grade, can_read_grade_receiver).and_return(true) }
 
         it 'returns true' do
           expect(answer.can_read_grade?(ability)).to be(true)

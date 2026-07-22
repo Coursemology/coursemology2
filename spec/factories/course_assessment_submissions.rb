@@ -7,13 +7,39 @@ FactoryBot.define do
       grader { User.stamper }
       auto_grade { true } # Used only with any of the submitted or finalised traits.
       creator
+      assessment { create(:assessment, :with_mcq_question, course: course) }
     end
-    assessment { create(:assessment, :with_mcq_question, course: course) }
+
+    # `assessment`/`creator` above build the backing Attempt, not Submission's own (nonexistent)
+    # columns — this preserves every existing `create(:submission, assessment: foo)` call site's
+    # literal syntax (FactoryBot treats transient/real attribute overrides identically), while no
+    # longer trying to assign a nonexistent `submission.assessment=`.
+    #
+    # `creator: creator` must be threaded through explicitly: a bare `creator` inside `transient do
+    # ... end` is NOT actually inert here — `:creator` is a registered alias of the `:user` factory
+    # (spec/factories/users.rb), so FactoryBot resolves it as an implicit `Attribute::Association`,
+    # which the gem *always* builds with `ignored: false` regardless of being declared inside
+    # `transient` (`factory_bot/attribute/association.rb` hardcodes `super(name, false)`). Pre-split,
+    # that meant `submission.creator = <built/overridden user>` landed directly on Submission's own
+    # (real, userstamp) `creator` column. Post-split, Submission has no `creator=` writer of its own
+    # (only a delegated reader) — the same assignment now silently falls through to
+    # `acts_as`'s `method_missing` and sets `experience_points_record.creator` instead (harmless
+    # duplication of the final `after(:build)` hook below, but it leaves `attempt.creator` unset).
+    # Passing `creator:` straight into the Attempt's own build restores the pre-split guarantee that
+    # `create(:submission, creator: X)` actually makes `submission.creator == X` — required for
+    # `validate_consistent_user` (`course_user.user == creator`) to ever pass. Mechanical fix,
+    # reproduced via `FactoryBot.build(:submission, creator: X, course_user: cu_for_X).valid?` →
+    # `experience_points_record inconsistent_user` (attempt.creator was nil, not X).
+    attempt { association(:course_assessment_attempt, assessment: assessment, creator: creator) }
     points_awarded { nil }
 
     trait :attempting do
       after(:build) do |submission|
-        submission.answers = submission.assessment.questions.attempt(submission)
+        # `Answer#submission` now targets `Course::Assessment::Attempt` (the FK repoint, Step 2d) —
+        # `.attempt(submission)` here must be given the Attempt, not the Submission, or building
+        # the new answer raises `ActiveRecord::AssociationTypeMismatch`. Mechanical fix; the
+        # question-attempt logic itself is otherwise unchanged.
+        submission.answers = submission.assessment.questions.attempt(submission.attempt)
         # These are the first answers, so set their `current_answer` flag.
         submission.answers.map do |answer|
           answer.current_answer = true
@@ -62,7 +88,7 @@ FactoryBot.define do
     trait :attempting_with_past_answers do
       attempting
       after(:build) do |submission|
-        answers = submission.assessment.questions.attempt(submission)
+        answers = submission.assessment.questions.attempt(submission.attempt)
         answers.map do |answer|
           answer.current_answer = false
           answer.save!
@@ -74,7 +100,7 @@ FactoryBot.define do
 
     trait :with_past_answers do
       after(:build) do |submission|
-        old_answers = submission.assessment.questions.attempt(submission)
+        old_answers = submission.assessment.questions.attempt(submission.attempt)
         old_answers.map do |answer|
           answer.created_at = Time.zone.now - 1.day
           answer.finalise!
@@ -82,7 +108,7 @@ FactoryBot.define do
         end
         submission.answers << old_answers
 
-        new_answers = submission.assessment.questions.attempt(submission)
+        new_answers = submission.assessment.questions.attempt(submission.attempt)
         new_answers.map do |answer|
           answer.current_answer = true
           answer.finalise!

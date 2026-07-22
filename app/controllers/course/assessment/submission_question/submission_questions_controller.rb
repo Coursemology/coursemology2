@@ -3,7 +3,14 @@ class Course::Assessment::SubmissionQuestion::SubmissionQuestionsController < Co
   load_resource :assessment, class: 'Course::Assessment', through: :course, parent: false
 
   def all_answers
-    @submission = @assessment.submissions.find(all_answers_params[:submission_id])
+    # `all_answers_params[:submission_id]` is, by the statistics feature's own established
+    # convention (see `Course::Statistics::AssessmentsController#submission_statistics`/
+    # `#live_feedback_statistics`, which serialize `Attempt#id` under the wire key `id`/
+    # `submissionId`), an Attempt id — not Submission's own (small-table) id. Find by attempt, then
+    # navigate to the real Submission for `authorize!` (CanCan's `can :read, ...Submission` rules
+    # match on subject class — see `Answer#can_read_grade?`'s identical fix, Step 2d). Genuine bug
+    # the split exposed; not listed in the brief's file set, found via the acceptance gate.
+    @submission = @assessment.attempts.find(all_answers_params[:submission_id]).submission
     authorize!(:read, @submission)
     @submission_question = @submission.
                            submission_questions.

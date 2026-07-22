@@ -78,8 +78,14 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     questions_without_submission_questions = questions_to_attempt - questions_with_submission_questions
     new_submission_questions = []
     questions_without_submission_questions.each do |question|
+      # `SubmissionQuestion#submission` now targets `Course::Assessment::Attempt` (the FK repoint,
+      # Step 2d) — assigning a `Course::Assessment::Submission` instance here raises
+      # `ActiveRecord::AssociationTypeMismatch` (belongs_to's writer strictly checks
+      # `record.is_a?(reflection.klass)`). `@submission.attempt` is the real, undelegated
+      # association already on Submission's own table. (Genuine bug the split exposed; not listed
+      # in the brief's file set, found via the acceptance gate.)
       new_submission_questions <<
-        Course::Assessment::SubmissionQuestion.new(submission: @submission, question: question)
+        Course::Assessment::SubmissionQuestion.new(submission: @submission.attempt, question: question)
     end
 
     import_success = true
