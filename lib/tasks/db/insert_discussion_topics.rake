@@ -15,12 +15,12 @@ namespace :db do
       # submission_id and question_id are used to group submission_questions where there are
       # multiple answers acting as old discussion topics.
       course_sq_tuples = connection.exec_query(<<-SQL)
-        SELECT cac.course_id AS course_id, casq.id AS sq_id, casq.submission_id AS submission_id,
+        SELECT cac.course_id AS course_id, casq.id AS sq_id, casq.attempt_id AS submission_id,
           casq.question_id AS question_id, MAX(cdt.created_at) AS created_at,
           MAX(cdt.updated_at) AS updated_at
         FROM course_assessment_submission_questions casq
         INNER JOIN course_assessment_attempts cas
-          ON cas.id = casq.submission_id
+          ON cas.id = casq.attempt_id
         INNER JOIN course_assessments ca
           ON ca.id = cas.assessment_id
         INNER JOIN course_assessment_tabs cat
@@ -28,10 +28,10 @@ namespace :db do
         INNER JOIN course_assessment_categories cac
           ON cac.id = cat.category_id
         LEFT JOIN course_assessment_answers caa
-          ON (caa.attempt_id = casq.submission_id AND caa.question_id = casq.question_id)
+          ON (caa.attempt_id = casq.attempt_id AND caa.question_id = casq.question_id)
         LEFT JOIN course_discussion_topics cdt
           ON (cdt.actable_id = caa.id AND cdt.actable_type = 'Course::Assessment::Answer')
-        GROUP BY cac.course_id, casq.id, casq.submission_id, casq.question_id
+        GROUP BY cac.course_id, casq.id, casq.attempt_id, casq.question_id
       SQL
 
       puts 'DROP UNIQUE index'

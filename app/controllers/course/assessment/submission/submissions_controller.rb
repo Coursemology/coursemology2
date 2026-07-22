@@ -110,7 +110,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     system_thread = Course::Assessment::LiveFeedback::Thread.
                     joins(:submission_question).
                     where(
-                      submission_question: { submission_id: @submission.id, question_id: @answer.question.id },
+                      submission_question: { attempt_id: @submission.id, question_id: @answer.question.id },
                       is_active: true
                     ).
                     first
@@ -141,7 +141,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     submission = answer.submission
     question = answer.question
 
-    submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: submission.id,
+    submission_question = Course::Assessment::SubmissionQuestion.where(attempt_id: submission.id,
                                                                        question_id: question.id).first
 
     @thread = Course::Assessment::LiveFeedback::Thread.where(submission_question_id: submission_question.id).

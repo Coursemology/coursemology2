@@ -42,14 +42,14 @@ class System::Admin::Instance::GetHelpController < System::Admin::Instance::Cont
     get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
         m.id, m.content, m.created_at, t.submission_creator_id,
-        s.assessment_id, sq.submission_id, sq.question_id,
+        s.assessment_id, sq.attempt_id AS submission_id, sq.question_id,
         COUNT(*) OVER (
           PARTITION BY t.submission_creator_id, s.assessment_id, sq.question_id
         ) AS message_count
       FROM live_feedback_messages m
       INNER JOIN live_feedback_threads t ON m.thread_id = t.id
       INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
-      INNER JOIN course_assessment_attempts s ON sq.submission_id = s.id
+      INNER JOIN course_assessment_attempts s ON sq.attempt_id = s.id
       INNER JOIN course_assessments a ON s.assessment_id = a.id
       INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
       INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id

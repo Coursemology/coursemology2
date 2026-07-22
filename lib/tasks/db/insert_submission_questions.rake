@@ -36,7 +36,7 @@ namespace :db do
 
         connection.exec_query(<<-SQL)
           INSERT INTO course_assessment_submission_questions
-                        (submission_id,
+                        (attempt_id,
                          question_id,
                          created_at,
                          updated_at)
@@ -49,10 +49,10 @@ namespace :db do
       # This deletes the later version of the row.
       connection.exec_query(<<-SQL)
         DELETE FROM course_assessment_submission_questions a
-        USING (SELECT MIN(ctid) AS ctid, submission_id, question_id
-                FROM course_assessment_submission_questions GROUP BY submission_id, question_id
+        USING (SELECT MIN(ctid) AS ctid, attempt_id, question_id
+                FROM course_assessment_submission_questions GROUP BY attempt_id, question_id
                 HAVING COUNT(*)>1) b
-        WHERE a.submission_id = b.submission_id AND a.question_id = b.question_id
+        WHERE a.attempt_id = b.attempt_id AND a.question_id = b.question_id
           AND a.ctid <> b.ctid
       SQL
 
@@ -60,7 +60,7 @@ namespace :db do
       connection.exec_query(<<-SQL)
         CREATE UNIQUE INDEX idx_course_assessment_submission_questions_on_sub_and_qn
         ON course_assessment_submission_questions USING btree
-        (submission_id, question_id)
+        (attempt_id, question_id)
       SQL
     end
   end

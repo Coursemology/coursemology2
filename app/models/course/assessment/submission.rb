@@ -69,7 +69,7 @@ class Course::Assessment::Submission < ApplicationRecord
   belongs_to :assessment, inverse_of: :submissions
 
   has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
-                                  dependent: :destroy, inverse_of: :submission
+                                  foreign_key: 'attempt_id', dependent: :destroy, inverse_of: :submission
 
   # @!attribute [r] answers
   #   The answers associated with this submission. There can be more than one answer per submission,
@@ -306,7 +306,7 @@ class Course::Assessment::Submission < ApplicationRecord
       INNER JOIN course_assessment_questions q ON sq.question_id = q.id
       INNER JOIN course_assessment_question_programming pq
         ON q.actable_id = pq.id AND q.actable_type = 'Course::Assessment::Question::Programming'
-      INNER JOIN course_assessment_attempts s ON sq.submission_id = s.id
+      INNER JOIN course_assessment_attempts s ON sq.attempt_id = s.id
       LEFT JOIN live_feedback_threads t ON t.submission_question_id = sq.id
       LEFT JOIN live_feedback_messages m ON m.thread_id = t.id AND m.creator_id != #{User::SYSTEM_USER_ID}
       WHERE

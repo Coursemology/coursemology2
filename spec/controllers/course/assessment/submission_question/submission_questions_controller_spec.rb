@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::SubmissionQuestionsContro
     let(:submission) { create(:submission, :graded, assessment: assessment, creator: submitter.user) }
     let(:answer) { submission.answers.first }
     let!(:submission_question) do
-      create(:submission_question, :with_post, submission_id: answer.submission_id, question_id: answer.question_id)
+      create(:submission_question, :with_post, attempt_id: answer.attempt_id, question_id: answer.question_id)
     end
 
     describe '#all_answers' do
@@ -22,7 +22,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::SubmissionQuestionsContro
         get :all_answers, format: :json, params: {
           course_id: course,
           id: assessment,
-          submission_id: answer.submission_id,
+          submission_id: answer.attempt_id,
           question_id: answer.question_id
         }
       end

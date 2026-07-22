@@ -5,10 +5,12 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   validates :submission, presence: true
   validates :question, presence: true
-  validates :submission_id, uniqueness: { scope: [:question_id], if: -> { question_id? && submission_id_changed? } }
-  validates :question_id, uniqueness: { scope: [:submission_id], if: -> { submission_id? && question_id_changed? } }
+  validates :attempt_id, uniqueness: { scope: [:question_id], if: -> { question_id? && attempt_id_changed? } }
+  validates :question_id, uniqueness: { scope: [:attempt_id], if: -> { attempt_id? && question_id_changed? } }
 
-  belongs_to :submission, class_name: 'Course::Assessment::Submission',
+  # The underlying column is `attempt_id` (renamed from `submission_id`); foreign_key kept explicit
+  # since the association name stays `submission`.
+  belongs_to :submission, class_name: 'Course::Assessment::Submission', foreign_key: 'attempt_id',
                           inverse_of: :submission_questions
   belongs_to :question, class_name: 'Course::Assessment::Question',
                         inverse_of: :submission_questions
@@ -33,7 +35,7 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   # Gets the SubmissionQuestion of a specific submission
   scope :from_submission, (lambda do |submission_id|
-    find_by(submission_id: submission_id)
+    find_by(attempt_id: submission_id)
   end)
 
   def notify(post)

@@ -249,7 +249,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
       FROM feedback_messages f
       JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
       JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
-      JOIN course_assessment_answers a ON a.attempt_id = sq.submission_id AND a.question_id = sq.question_id
+      JOIN course_assessment_answers a ON a.attempt_id = sq.attempt_id AND a.question_id = sq.question_id
     SQL
   end
 
@@ -330,10 +330,10 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def create_submission_question_id_hash(questions)
     @submission_question_id_hash = Course::Assessment::SubmissionQuestion.unscoped.
-                                   select(:id, :submission_id, :question_id).
-                                   where(submission_id: @submissions.pluck(:id),
+                                   select(:id, :attempt_id, :question_id).
+                                   where(attempt_id: @submissions.pluck(:id),
                                          question_id: questions.pluck(:id)).to_h do |sq|
-      [[sq.submission_id, sq.question_id], sq.id]
+      [[sq.attempt_id, sq.question_id], sq.id]
     end
   end
 end
