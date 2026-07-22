@@ -201,7 +201,7 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
         ccu.id AS creator_course_user_id,
         ccu.name AS creator_course_user_name,
         vcu.id AS viewer_course_user_id
-      FROM course_assessment_submissions cas
+      FROM course_assessment_attempts cas
       INNER JOIN course_assessments ca ON cas.assessment_id = ca.id
       INNER JOIN course_lesson_plan_items clpi ON clpi.actable_id = ca.id AND clpi.actable_type = 'Course::Assessment'
       INNER JOIN course_assessment_tabs tab ON ca.tab_id = tab.id

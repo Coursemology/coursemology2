@@ -10,7 +10,7 @@ module Course::Statistics::TimesConcern
       FROM (
         SELECT cas.creator_id, cas.assessment_id,
           EXTRACT(EPOCH FROM cas.submitted_at) - EXTRACT(EPOCH FROM cas.created_at) AS duration
-        FROM course_assessment_submissions cas
+        FROM course_assessment_attempts cas
         WHERE
           cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
           AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})

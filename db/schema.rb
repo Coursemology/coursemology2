@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -222,6 +222,25 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.index ["grader_id"], name: "fk__course_assessment_answers_grader_id"
     t.index ["question_id"], name: "fk__course_assessment_answers_question_id"
     t.index ["submission_id"], name: "fk__course_assessment_answers_submission_id"
+  end
+
+  create_table "course_assessment_attempts", id: :serial, force: :cascade do |t|
+    t.integer "assessment_id", null: false
+    t.string "workflow_state", limit: 255, null: false
+    t.integer "creator_id", null: false
+    t.integer "updater_id", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "publisher_id"
+    t.datetime "published_at", precision: nil
+    t.string "session_id", limit: 255
+    t.datetime "submitted_at", precision: nil
+    t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
+    t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
+    t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
+    t.index ["publisher_id"], name: "fk__course_assessment_submissions_publisher_id"
+    t.index ["updater_id"], name: "fk__course_assessment_submissions_updater_id"
   end
 
   create_table "course_assessment_categories", id: :serial, force: :cascade do |t|
@@ -622,25 +641,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.index ["question_id"], name: "fk__course_assessment_submission_questions_question_id"
     t.index ["submission_id", "question_id"], name: "idx_course_assessment_submission_questions_on_sub_and_qn", unique: true
     t.index ["submission_id"], name: "fk__course_assessment_submission_questions_submission_id"
-  end
-
-  create_table "course_assessment_submissions", id: :serial, force: :cascade do |t|
-    t.integer "assessment_id", null: false
-    t.string "workflow_state", limit: 255, null: false
-    t.integer "creator_id", null: false
-    t.integer "updater_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.integer "publisher_id"
-    t.datetime "published_at", precision: nil
-    t.string "session_id", limit: 255
-    t.datetime "submitted_at", precision: nil
-    t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
-    t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
-    t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
-    t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
-    t.index ["publisher_id"], name: "fk__course_assessment_submissions_publisher_id"
-    t.index ["updater_id"], name: "fk__course_assessment_submissions_updater_id"
   end
 
   create_table "course_assessment_tabs", id: :serial, force: :cascade do |t|
@@ -1991,8 +1991,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_answer_scribing_scribbles", "course_assessment_answer_scribings", column: "answer_id", name: "fk_course_assessment_answer_scribing_scribbles_answer_id"
   add_foreign_key "course_assessment_answer_scribing_scribbles", "users", column: "creator_id", name: "fk_course_assessment_answer_scribing_scribbles_creator_id"
   add_foreign_key "course_assessment_answers", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_answers_question_id"
-  add_foreign_key "course_assessment_answers", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_answers_submission_id"
+  add_foreign_key "course_assessment_answers", "course_assessment_attempts", column: "submission_id", name: "fk_course_assessment_answers_submission_id"
   add_foreign_key "course_assessment_answers", "users", column: "grader_id", name: "fk_course_assessment_answers_grader_id"
+  add_foreign_key "course_assessment_attempts", "course_assessments", column: "assessment_id", name: "fk_course_assessment_submissions_assessment_id"
+  add_foreign_key "course_assessment_attempts", "users", column: "creator_id", name: "fk_course_assessment_submissions_creator_id"
+  add_foreign_key "course_assessment_attempts", "users", column: "publisher_id", name: "fk_course_assessment_submissions_publisher_id"
+  add_foreign_key "course_assessment_attempts", "users", column: "updater_id", name: "fk_course_assessment_submissions_updater_id"
   add_foreign_key "course_assessment_categories", "courses", name: "fk_course_assessment_categories_course_id"
   add_foreign_key "course_assessment_categories", "users", column: "creator_id", name: "fk_course_assessment_categories_creator_id"
   add_foreign_key "course_assessment_categories", "users", column: "updater_id", name: "fk_course_assessment_categories_updater_id"
@@ -2019,7 +2023,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
   add_foreign_key "course_assessment_plagiarism_checks", "jobs", name: "fk_course_assessment_plagiarism_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
-  add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_submissions", column: "submission_id"
+  add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_attempts", column: "submission_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "users"
   add_foreign_key "course_assessment_question_bundle_questions", "course_assessment_question_bundles", column: "bundle_id"
@@ -2056,13 +2060,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_skills", "users", column: "updater_id", name: "fk_course_assessment_skills_updater_id"
   add_foreign_key "course_assessment_skills_question_assessments", "course_assessment_skills", column: "skill_id"
   add_foreign_key "course_assessment_skills_question_assessments", "course_question_assessments", column: "question_assessment_id"
-  add_foreign_key "course_assessment_submission_logs", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_logs_submission_id"
+  add_foreign_key "course_assessment_submission_logs", "course_assessment_attempts", column: "submission_id", name: "fk_course_assessment_submission_logs_submission_id"
   add_foreign_key "course_assessment_submission_questions", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_submission_questions_question_id"
-  add_foreign_key "course_assessment_submission_questions", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_questions_submission_id"
-  add_foreign_key "course_assessment_submissions", "course_assessments", column: "assessment_id", name: "fk_course_assessment_submissions_assessment_id"
-  add_foreign_key "course_assessment_submissions", "users", column: "creator_id", name: "fk_course_assessment_submissions_creator_id"
-  add_foreign_key "course_assessment_submissions", "users", column: "publisher_id", name: "fk_course_assessment_submissions_publisher_id"
-  add_foreign_key "course_assessment_submissions", "users", column: "updater_id", name: "fk_course_assessment_submissions_updater_id"
+  add_foreign_key "course_assessment_submission_questions", "course_assessment_attempts", column: "submission_id", name: "fk_course_assessment_submission_questions_submission_id"
   add_foreign_key "course_assessment_tabs", "course_assessment_categories", column: "category_id", name: "fk_course_assessment_tabs_category_id"
   add_foreign_key "course_assessment_tabs", "users", column: "creator_id", name: "fk_course_assessment_tabs_creator_id"
   add_foreign_key "course_assessment_tabs", "users", column: "updater_id", name: "fk_course_assessment_tabs_updater_id"

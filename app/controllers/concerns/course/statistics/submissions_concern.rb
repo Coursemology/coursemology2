@@ -42,7 +42,7 @@ module Course::Statistics::SubmissionsConcern
             FROM
               course_assessment_answers caa_inner
             JOIN
-              course_assessment_submissions cas_inner ON caa_inner.submission_id = cas_inner.id
+              course_assessment_attempts cas_inner ON caa_inner.submission_id = cas_inner.id
             WHERE
               cas_inner.assessment_id = #{assessment_params[:id]}
           ) AS caa_ranked
@@ -56,7 +56,7 @@ module Course::Statistics::SubmissionsConcern
             caa.submission_id,
             COUNT(*) AS attempt_count
           FROM course_assessment_answers caa
-          JOIN course_assessment_submissions cas ON caa.submission_id = cas.id
+          JOIN course_assessment_attempts cas ON caa.submission_id = cas.id
           WHERE cas.assessment_id = #{assessment_params[:id]} AND caa.workflow_state != 'attempting'
           GROUP BY caa.question_id, caa.submission_id
         )

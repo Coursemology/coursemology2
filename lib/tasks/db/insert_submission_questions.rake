@@ -9,7 +9,7 @@ namespace :db do
       # for all submission/question pairs.
       submission_question_tuples = connection.exec_query(<<-SQL)
         SELECT cac.course_id AS course_id, cas.id AS submission_id, caq.id AS question_id
-        FROM course_assessment_submissions cas
+        FROM course_assessment_attempts cas
         INNER JOIN course_assessments ca
           ON ca.id = cas.assessment_id
         INNER JOIN course_assessment_questions caq

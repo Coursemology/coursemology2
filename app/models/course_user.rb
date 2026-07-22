@@ -120,9 +120,9 @@ class CourseUser < ApplicationRecord
   calculated :assessment_submission_count, (lambda do
     Course::Assessment::Submission.select('count(*)').
       joins(assessment: { tab: :category }).
-      where('course_assessment_submissions.creator_id = course_users.user_id').
+      where('course_assessment_attempts.creator_id = course_users.user_id').
       where('course_assessment_categories.course_id = course_users.course_id').
-      where(course_assessment_submissions: { workflow_state: [:submitted, :graded, :published] })
+      where(course_assessment_attempts: { workflow_state: [:submitted, :graded, :published] })
   end)
 
   scope :staff, -> { where(role: STAFF_ROLES) }

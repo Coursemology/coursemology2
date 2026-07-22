@@ -31,7 +31,7 @@ module CourseUser::StaffConcern
       joins(experience_points_record: :course_user).
       where('course_users.role = ?', CourseUser.roles[:student]).
       where('course_users.phantom = ?', false).
-      where('course_assessment_submissions.publisher_id = ?', user_id).
+      where('course_assessment_attempts.publisher_id = ?', user_id).
       where('course_users.course_id = ?', course_id).
       pluck(:published_at, :submitted_at).
       map { |published_at, submitted_at| { published_at: published_at, submitted_at: submitted_at } }

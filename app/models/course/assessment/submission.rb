@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission < ApplicationRecord
+  # TEMPORARY (Phase 1a only). The table was renamed to `course_assessment_attempts`; this model
+  # still owns it wholesale until Phase 1b introduces Course::Assessment::Attempt and reduces
+  # Submission to the course-coupled extension. Delete these two lines in 1b.
+  self.table_name = 'course_assessment_attempts'
+  # ApplicationUserstampConcern's `inherited` hook ran `add_userstamp_associations` against the
+  # class's default table name (which no longer exists post-rename) before the line above took
+  # effect, so it silently failed and Submission never got its own creator/updater associations.
+  # Re-run it now that table_name is correct.
+  add_userstamp_associations({})
+
   include Workflow
   include Generic::CollectionConcern
   include Course::Assessment::Submission::WorkflowEventConcern
@@ -99,7 +109,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   @return [Time]
   calculated :graded_at, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_submissions.id').
+      where('course_assessment_answers.submission_id = course_assessment_attempts.id').
       select('max(course_assessment_answers.graded_at)')
   end)
 
@@ -107,14 +117,14 @@ class Course::Assessment::Submission < ApplicationRecord
   #   Returns the total number of access logs for the submission.
   calculated :log_count, (lambda do
     Course::Assessment::Submission::Log.select("count('*')").
-      where('course_assessment_submission_logs.submission_id = course_assessment_submissions.id')
+      where('course_assessment_submission_logs.submission_id = course_assessment_attempts.id')
   end)
 
   # @!attribute [r] grade
   #   Returns the total grade of the submissions.
   calculated :grade, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_submissions.id
+      where('course_assessment_answers.submission_id = course_assessment_attempts.id
              AND course_assessment_answers.current_answer = true').
       select('sum(course_assessment_answers.grade)')
   end)
@@ -123,7 +133,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   Returns the grader_ids of a submission
   calculated :grader_ids, (lambda do
     Course::Assessment::Answer.unscope(:order).
-      where('course_assessment_answers.submission_id = course_assessment_submissions.id
+      where('course_assessment_answers.submission_id = course_assessment_attempts.id
              AND course_assessment_answers.current_answer = true').
       select('ARRAY_REMOVE(ARRAY_AGG(DISTINCT(course_assessment_answers.grader_id)), NULL)')
   end)
@@ -296,7 +306,7 @@ class Course::Assessment::Submission < ApplicationRecord
       INNER JOIN course_assessment_questions q ON sq.question_id = q.id
       INNER JOIN course_assessment_question_programming pq
         ON q.actable_id = pq.id AND q.actable_type = 'Course::Assessment::Question::Programming'
-      INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
+      INNER JOIN course_assessment_attempts s ON sq.submission_id = s.id
       LEFT JOIN live_feedback_threads t ON t.submission_question_id = sq.id
       LEFT JOIN live_feedback_messages m ON m.thread_id = t.id AND m.creator_id != #{User::SYSTEM_USER_ID}
       WHERE
@@ -333,7 +343,7 @@ class Course::Assessment::Submission < ApplicationRecord
       sanitize_sql_array([<<-SQL.squish, student_ids, assessment_ids])
         SELECT cas.creator_id AS student_id, cas.assessment_id,
                cas.id AS submission_id, SUM(caa.grade) AS grade
-        FROM course_assessment_submissions cas
+        FROM course_assessment_attempts cas
         JOIN course_assessment_answers caa ON caa.submission_id = cas.id
         WHERE cas.creator_id IN (?)
           AND cas.assessment_id IN (?)

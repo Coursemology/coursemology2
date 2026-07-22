@@ -51,7 +51,7 @@ class System::Admin::GetHelpController < System::Admin::Controller
       FROM live_feedback_messages m
       INNER JOIN live_feedback_threads t ON m.thread_id = t.id
       INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
-      INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
+      INNER JOIN course_assessment_attempts s ON sq.submission_id = s.id
       WHERE m.creator_id != #{User::SYSTEM_USER_ID}
         AND m.created_at >= '#{start_date.utc.iso8601}'
         AND m.created_at <= '#{end_date.utc.iso8601}'

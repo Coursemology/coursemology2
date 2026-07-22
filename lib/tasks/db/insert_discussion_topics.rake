@@ -19,7 +19,7 @@ namespace :db do
           casq.question_id AS question_id, MAX(cdt.created_at) AS created_at,
           MAX(cdt.updated_at) AS updated_at
         FROM course_assessment_submission_questions casq
-        INNER JOIN course_assessment_submissions cas
+        INNER JOIN course_assessment_attempts cas
           ON cas.id = casq.submission_id
         INNER JOIN course_assessments ca
           ON ca.id = cas.assessment_id

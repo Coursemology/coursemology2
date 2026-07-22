@@ -49,7 +49,7 @@ class System::Admin::Instance::GetHelpController < System::Admin::Instance::Cont
       FROM live_feedback_messages m
       INNER JOIN live_feedback_threads t ON m.thread_id = t.id
       INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
-      INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
+      INNER JOIN course_assessment_attempts s ON sq.submission_id = s.id
       INNER JOIN course_assessments a ON s.assessment_id = a.id
       INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
       INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
