@@ -102,9 +102,20 @@ class Course::Assessment::Submission::AutoGradingService
     end
   end
 
+  # Post-split, this service is driven by the Attempt base (the after_save trigger + AutoGradingJob pass
+  # the Attempt, not the Submission extension). Experience points live on the optional Submission
+  # extension: award them there for a real attempt, and for a preview (no extension) publish the graded
+  # work WITHOUT awarding EXP. The `is_a?(Submission)` branch keeps callers that pass a Submission
+  # directly (e.g. specs) working unchanged.
   def assign_exp_and_publish_grade(submission)
-    submission.points_awarded = Course::Assessment::Submission::CalculateExpService.calculate_exp(submission).to_i
-    submission.publish!
+    exp_record = submission.is_a?(Course::Assessment::Submission) ? submission : submission.submission
+    if exp_record
+      exp_record.points_awarded =
+        Course::Assessment::Submission::CalculateExpService.calculate_exp(exp_record).to_i
+      exp_record.publish!
+    else
+      submission.publish!
+    end
   end
 
   # Gets the ungraded answers for the given submission.
