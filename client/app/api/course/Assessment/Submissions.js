@@ -1,3 +1,5 @@
+import { getActivePreview } from './previewAttemptContext';
+
 import BaseAssessmentAPI from './Base';
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
@@ -122,6 +124,10 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.client.post(`${this.#urlPrefix}/${submissionId}/auto_grade`);
   }
 
+  reset(submissionId) {
+    return this.client.post(`${this.#urlPrefix}/${submissionId}/reset`);
+  }
+
   reevaluateAnswer(submissionId, params) {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/reevaluate_answer`,
@@ -198,6 +204,14 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   get #urlPrefix() {
+    // Preview routing triggers on EITHER the explicit context OR the absence of an
+    // assessment id in the URL. The only reuse of this API on a non-/assessments/:id
+    // URL is the marketplace preview page, so `this.assessmentId === null` is a robust
+    // fallback that survives a stray poller firing after the singleton was cleared:
+    // it routes to /marketplace/attempt/... rather than ever emitting /assessments/null/...
+    if (getActivePreview() !== null || this.assessmentId === null) {
+      return `/courses/${this.courseId}/marketplace/attempt`;
+    }
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions`;
   }
 
