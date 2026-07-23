@@ -11,6 +11,7 @@ module Course::Statistics::CountsConcern
     attempted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
+      INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
@@ -27,6 +28,7 @@ module Course::Statistics::CountsConcern
     submitted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
+      INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
@@ -46,6 +48,7 @@ module Course::Statistics::CountsConcern
     all_submissions = ActiveRecord::Base.connection.execute("
       SELECT cu.id AS course_user_id, cas.assessment_id, MAX(cas.submitted_at) as submitted_at
       FROM course_assessment_submissions cas
+      INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
       JOIN course_users cu
       ON cu.user_id = cas.creator_id
       WHERE
@@ -65,6 +68,7 @@ module Course::Statistics::CountsConcern
     latest_submissions = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, MAX(cas.submitted_at) AS latest_submitted_at
       FROM course_assessment_submissions cas
+      INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})

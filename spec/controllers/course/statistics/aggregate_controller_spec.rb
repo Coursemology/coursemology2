@@ -211,6 +211,28 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         it { expect(subject).to be_successful }
       end
 
+      context 'with a preview attempt (a bare Attempt with no Submission extension) by a student' do
+        let(:user) { create(:course_manager, course: course).user }
+        let!(:preview_student) { create(:course_student, course: course) }
+        # A preview attempt is an Attempt row in course_assessment_submissions with NO
+        # course_assessment_submission_details (extension) row. `update_columns` puts it in a
+        # submitted state without going through the workflow/extension machinery, exactly mimicking
+        # a leaked preview. The statistics must count it as neither attempted nor submitted.
+        let!(:preview_attempt) do
+          create(:course_assessment_attempt, assessment: assessment, creator: preview_student.user).
+            tap { |attempt| attempt.update_columns(workflow_state: 'submitted', submitted_at: Time.zone.now) }
+        end
+        before { controller_sign_in(controller, user) }
+
+        it 'excludes the preview from the attempted and submitted student counts' do
+          expect(subject).to be_successful
+          json_result = JSON.parse(response.body)
+
+          expect(json_result['assessments'][0]['numAttempted']).to eq(3)
+          expect(json_result['assessments'][0]['numSubmitted']).to eq(2)
+        end
+      end
+
       context 'when the course has no students' do
         let(:user) { create(:course_manager, course: course).user }
         before do
