@@ -75,6 +75,36 @@ class Course::Assessment::Submission < ApplicationRecord
            :logs,
            to: :attempt, allow_nil: true
 
+  # Mirror Attempt's calculated attributes so `@assessment.submissions.calculated(:grade, …)` (used by
+  # the gradebook/download/statistics services) works on the extension relation. Attempt correlates
+  # each subquery on its own `id`; here we correlate on this extension table's `attempt_id`, which
+  # equals that base id. The delegated instance readers above still return these values per-record;
+  # registering the calculated attributes restores the batch-load form the services rely on.
+  calculated :graded_at, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submission_details.attempt_id').
+      select('max(course_assessment_answers.graded_at)')
+  end)
+
+  calculated :log_count, (lambda do
+    Course::Assessment::Submission::Log.select("count('*')").
+      where('course_assessment_submission_logs.submission_id = course_assessment_submission_details.attempt_id')
+  end)
+
+  calculated :grade, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submission_details.attempt_id
+             AND course_assessment_answers.current_answer = true').
+      select('sum(course_assessment_answers.grade)')
+  end)
+
+  calculated :grader_ids, (lambda do
+    Course::Assessment::Answer.unscope(:order).
+      where('course_assessment_answers.submission_id = course_assessment_submission_details.attempt_id
+             AND course_assessment_answers.current_answer = true').
+      select('ARRAY_REMOVE(ARRAY_AGG(DISTINCT(course_assessment_answers.grader_id)), NULL)')
+  end)
+
   Course::Assessment::Answer.after_save do |answer|
     Course::Assessment::Submission.on_dependent_status_change(answer)
   end
