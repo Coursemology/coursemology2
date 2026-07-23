@@ -7,6 +7,10 @@ class Course::Assessment::SubmissionQuestion::SubmissionQuestionsController < Co
     # the attempt's id, not the extension table's own id. Find by attempt, then navigate to the real
     # Submission for `authorize!`, whose `can :read, ...Submission` rules match on subject class.
     @submission = @assessment.attempts.find(all_answers_params[:submission_id]).submission
+    # A preview attempt has no Submission extension row; treat it as not found here rather
+    # than relying on the incidental `authorize!(:read, nil)` denial.
+    raise ActiveRecord::RecordNotFound if @submission.nil?
+
     authorize!(:read, @submission)
     @submission_question = @submission.
                            submission_questions.

@@ -85,6 +85,21 @@ RSpec.describe Course::Assessment::SubmissionQuestion::SubmissionQuestionsContro
           expect(json_result['comments'].count).to eq(1)
         end
       end
+
+      context 'when the submission_id refers to a preview attempt (an Attempt with no Submission)' do
+        let(:user) { create(:course_manager, course: course).user }
+        let!(:preview_attempt) { create(:course_assessment_attempt, assessment: assessment) }
+        before { controller_sign_in(controller, user) }
+
+        it 'raises RecordNotFound rather than dereferencing the nil submission' do
+          expect do
+            get :all_answers, format: :json, params: {
+              course_id: course, id: assessment,
+              submission_id: preview_attempt.id, question_id: answer.question_id
+            }
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
     end
   end
 end
