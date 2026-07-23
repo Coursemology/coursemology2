@@ -150,6 +150,8 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
           ON ca.tab_id = tab.id
           INNER JOIN course_assessment_submissions cas
           ON cas.assessment_id = ca.id
+          INNER JOIN course_assessment_submission_details cad
+          ON cad.attempt_id = cas.id
           INNER JOIN course_assessment_answers caa
           ON caa.submission_id = cas.id
           INNER JOIN course_assessment_questions caq

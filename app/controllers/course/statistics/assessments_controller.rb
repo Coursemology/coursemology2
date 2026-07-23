@@ -26,6 +26,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     # `assessment_id`, `grade`, and `grader_ids` natively/as `calculated`, and this action's jbuilder
     # only reads columns present on Attempt, so query Attempt directly.
     submissions = Course::Assessment::Attempt.unscoped.
+                  joins(:submission).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids)
     @course_users_hash = preload_course_users_hash(current_course)
@@ -46,6 +47,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     # Same `assessment_id`-column bug as `submission_statistics` above — `Attempt` is the
     # drop-in replacement (see the comment there).
     submissions = Course::Assessment::Attempt.unscoped.
+                  joins(:submission).
                   preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
@@ -62,7 +64,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     # (unscoped + a narrow .select), so querying Attempt directly is equivalent (every course-member
     # attempt has exactly one submission).
     @submissions = Course::Assessment::Attempt.unscoped.
-                   select(:id, :creator_id, :workflow_state).
+                   joins(:submission).
+                   select('course_assessment_submissions.id', :creator_id, :workflow_state).
                    where(assessment_id: assessment_params[:id])
 
     create_submission_question_id_hash(@assessment.questions)
@@ -73,7 +76,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def live_feedback_history
     user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
-    @submissions = Course::Assessment::Attempt.where(assessment_id: assessment_params[:id], creator_id: user_id)
+    @submissions = Course::Assessment::Attempt.joins(:submission).
+                   where(assessment_id: assessment_params[:id], creator_id: user_id)
     @question = Course::Assessment::Question.find(params[:question_id])
 
     create_submission_question_id_hash([@question])

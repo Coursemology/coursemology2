@@ -11,6 +11,7 @@ module Course::Statistics::TimesConcern
         SELECT cas.creator_id, cas.assessment_id,
           EXTRACT(EPOCH FROM cas.submitted_at) - EXTRACT(EPOCH FROM cas.created_at) AS duration
         FROM course_assessment_submissions cas
+        INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
         WHERE
           cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
           AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
