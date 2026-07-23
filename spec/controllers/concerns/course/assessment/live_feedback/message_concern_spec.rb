@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::LiveFeedback::MessageConcern do
     let!(:answer) { submission.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first }
     let!(:question) { answer.question }
     let!(:submission_question) do
-      Course::Assessment::SubmissionQuestion.create!(submission_id: submission.id, question_id: question.id)
+      Course::Assessment::SubmissionQuestion.create!(attempt_id: submission.id, question_id: question.id)
     end
 
     let!(:codaveri_thread_id) { SecureRandom.hex(12) }

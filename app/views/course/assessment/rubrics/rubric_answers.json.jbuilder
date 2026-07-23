@@ -7,7 +7,7 @@ json.array! @answers do |answer|
   # Whether this is the submission's latest (current) attempt -- the same flag the past-answers views use --
   # so the frontend can show only the latest answer per student.
   json.currentAnswer answer.current_answer?
-  json.submissionId answer.submission_id
+  json.submissionId answer.attempt_id
   json.submissionStatus answer.submission.workflow_state
   json.grade answer.grade.to_f if answer.evaluated? || answer.graded?
   # Show exactly what the LLM sees when grading (RBR: the response; forum post: the assembled posts + parent

@@ -9,8 +9,8 @@ module Course::Statistics::GradesConcern
       SELECT ca.assessment_id AS id, AVG(ca.grade) AS avg, STDDEV(ca.grade) AS stdev
       FROM (
         SELECT cas.creator_id, cas.assessment_id, SUM(caa.grade) AS grade
-        FROM course_assessment_submissions cas
-        JOIN course_assessment_answers caa ON cas.id = caa.submission_id
+        FROM course_assessment_attempts cas
+        JOIN course_assessment_answers caa ON cas.id = caa.attempt_id
         WHERE
           cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
           AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})

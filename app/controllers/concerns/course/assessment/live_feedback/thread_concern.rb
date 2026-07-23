@@ -4,7 +4,7 @@ module Course::Assessment::LiveFeedback::ThreadConcern
 
   def safe_create_and_save_thread_info
     submission_question = Course::Assessment::SubmissionQuestion.where(
-      submission_id: @submission, question_id: @answer.question
+      attempt_id: @submission, question_id: @answer.question
     ).first
 
     submission_question.with_lock do

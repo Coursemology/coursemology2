@@ -12,7 +12,11 @@ module Course::Assessment::NewSubmissionConcern
           raise ActiveRecord::Rollback
         end
         raise ActiveRecord::Rollback unless new_submission.save
-        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: new_submission.id)
+        # `question_bundle_assignments.submission_id` now targets course_assessment_attempts (the
+        # FK repoint, Step 2d) — it must hold an Attempt id, not the small Submission table's own
+        # (different) id. `attempt_id` is a real, undelegated column already on Submission's own
+        # table (the FK to its attempt), so no delegate is needed to read it.
+        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: new_submission.attempt_id)
 
         success = true
       end

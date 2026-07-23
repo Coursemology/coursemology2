@@ -67,7 +67,7 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
       let(:submission) { create(:submission, :published, assessment: assessment, creator: submitter) }
       let(:answer) { submission.answers.first }
       let!(:submission_question) do
-        create(:submission_question, :with_post, submission_id: answer.submission_id, question_id: answer.question_id)
+        create(:submission_question, :with_post, attempt_id: answer.attempt_id, question_id: answer.question_id)
       end
 
       describe '#show' do

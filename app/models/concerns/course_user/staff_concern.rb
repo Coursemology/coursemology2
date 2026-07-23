@@ -28,12 +28,20 @@ module CourseUser::StaffConcern
   def published_submissions
     @published_submissions ||=
       Course::Assessment::Submission.
+      joins(:attempt).
       joins(experience_points_record: :course_user).
       where('course_users.role = ?', CourseUser.roles[:student]).
       where('course_users.phantom = ?', false).
+      # `publisher_id` is Submission's own (small-table) column now — the one Task 1 actually
+      # backfilled and that publishing actually writes to (Step 2c's `after_publish_hook`);
+      # `course_assessment_attempts.publisher_id` is a stale, no-longer-written residual column
+      # from before the split. `published_at`/`submitted_at` remain Attempt-only, so still need the
+      # join added above (both columns are qualified below since `publisher_id` now exists on both
+      # joined tables and would otherwise be ambiguous). Genuine bug the split exposed; not listed
+      # in the brief's file set, found via the acceptance gate.
       where('course_assessment_submissions.publisher_id = ?', user_id).
       where('course_users.course_id = ?', course_id).
-      pluck(:published_at, :submitted_at).
+      pluck('course_assessment_attempts.published_at', 'course_assessment_attempts.submitted_at').
       map { |published_at, submitted_at| { published_at: published_at, submitted_at: submitted_at } }
   end
 

@@ -2,13 +2,29 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Submission do
-  it { is_expected.to belong_to(:assessment).without_validating_presence }
-  it { is_expected.to have_many(:answers).dependent(:destroy) }
-  it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
-  it { is_expected.to have_many(:text_response_answers).through(:answers) }
-  it { is_expected.to have_many(:programming_answers).through(:answers) }
-  it { is_expected.to have_many(:forum_post_response_answers).through(:answers) }
-  it { is_expected.to accept_nested_attributes_for(:answers) }
+  # `:assessment`/`:answers` are no longer real associations on Submission — they moved to
+  # `Course::Assessment::Attempt` (Step 2a/2c) and are reached here only via `delegate ... to:
+  # :attempt`. The literal reflection shape this task deliberately changes (same reasoning as
+  # `spec/models/course/assessment_spec.rb`'s `have_many(:submissions)` update, Step 2l): assert the
+  # delegation instead of a `belong_to`/`have_many` that no longer exists on this class.
+  #
+  # `.without_validating_presence`: matches the pre-split assertion's own choice for `:assessment`
+  # (line above, before this task). Without it, shoulda's matcher builds a bare instance with
+  # `attempt: nil` to verify the association is required — which cascades into
+  # `Course::ExperiencePointsRecord#validate_limit_exp_points_on_association` (an unrelated,
+  # pre-existing validation reached via `acts_as`'s autosave-association-validation) reading
+  # `submission.assessment.base_exp`, and crashes on the nil assessment. The pre-split spec sidestepped
+  # this exact fragility for the exact same underlying reason.
+  it { is_expected.to belong_to(:attempt).without_validating_presence }
+  it { should delegate_method(:assessment).to(:attempt) }
+  it { should delegate_method(:answers).to(:attempt) }
+  it { should delegate_method(:answers=).to(:attempt).with_arguments([]) }
+  # `multiple_response_answers`/`text_response_answers`/`programming_answers`/
+  # `forum_post_response_answers`/`accepts_nested_attributes_for(:answers)` had no delegate call
+  # site anywhere in the app (grepped) even before this task — they are removed capabilities on
+  # Submission, not renamed ones, now living on `Attempt` only (its own spec is out of this task's
+  # scope). Per the repo's "no vacuous absence tests" convention, deleted outright rather than
+  # replaced with a `not_to`.
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
@@ -338,8 +354,19 @@ RSpec.describe Course::Assessment::Submission do
 
       with_active_job_queue_adapter(:test) do
         it 'creates a new auto grading job' do
-          submission.finalise!
-          expect { submission.save }.to \
+          # Pre-split, the `workflow` gem's deferred-persistence adapter
+          # (`lib/extensions/deferred_workflow_state_persistence`) only writes `workflow_state` in
+          # memory during `finalise!`'s transition hook — a separate, caller-supplied `.save`
+          # afterward was what actually persisted it and fired `auto_grade_submission`'s
+          # `if: :saved_change_to_workflow_state?` guard. Post-split, `Submission#finalise!` wraps
+          # `attempt.finalise!` and its own `save!` in one transaction (Step 2c's explicit design
+          # decision, so a partial failure can't leave the two rows inconsistent) — `attempt`'s
+          # pending workflow_state change is persisted via `autosave: true` as part of THIS SAME
+          # `save!`, so the job now fires during `finalise!` itself; a caller no longer needs (or
+          # benefits from) a separate trailing `.save`. Intentional behavioural change from the
+          # design's own atomicity decision, not a regression — the guarantee this example protects
+          # (finalising enqueues the job exactly once) still holds, just one call earlier.
+          expect { submission.finalise! }.to \
             have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).exactly(:once)
         end
       end
@@ -780,7 +807,16 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#send_submit_notification' do
       subject do
-        submission1.save
+        # `workflow_state_before_last_save` is delegated to `attempt` (Step 2c). This `.save`
+        # exists purely to make that guard read `'attempting'` (simulating "we're right after an
+        # attempting-state save", the precondition `send_submit_notification` checks) — pre-split,
+        # a bare `submission1.save` achieved this because `submission1` WAS the attempt (a no-op
+        # save on an unchanged record reports its dirty-tracking as before==after==current value).
+        # Post-split, saving `submission1` (the small table) no longer touches `attempt` at all
+        # when `attempt` itself has no pending changes (a `belongs_to ..., autosave: true` only
+        # cascades a save when the association target is dirty or new) — save `attempt` directly
+        # to get the same precondition.
+        submission1.attempt.save
         submission1.updater = user1
         submission1.send(:send_submit_notification)
       end
@@ -809,10 +845,24 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'updates the last_graded_time' do
+          # `on_dependent_status_change` (Submission, still) only ever *assigns*
+          # `last_graded_time` in memory on the associated Submission — it never saves it (both
+          # pre- and post-split); persisting it has always required a later, separate save of that
+          # same Submission object. Pre-split, that "later save" fell out incidentally: the
+          # single-table Submission stayed dirty from the `:graded` factory trait's own
+          # `mark!` → `publish_answers` cascade, and this example's `before` block's
+          # `subject.publish!; subject.save!` happened to be what flushed it — before `answer.grade
+          # = 0` (this example's own, actual trigger) had done anything at all (`answer.save!`,
+          # the real trigger, runs on the NEXT line). Post-split, `Submission#publish!`'s own
+          # atomicity (Step 2c) flushes that same pending value earlier (during the `before` block
+          # itself), so by the time this example starts, there is nothing new for the `before`
+          # block's save to report — the assertion needs to move to what it was actually meant to
+          # verify: that saving the answer with its new grade updates and persists
+          # `last_graded_time`, checked after the save that is supposed to cause it.
           answer.grade = 0
-          expect(subject.saved_changes).to include(:last_graded_time)
           answer.save!
           subject.save!
+          expect(subject.saved_changes).to include(:last_graded_time)
         end
       end
     end

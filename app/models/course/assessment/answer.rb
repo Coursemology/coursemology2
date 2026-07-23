@@ -52,8 +52,27 @@ class Course::Assessment::Answer < ApplicationRecord
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
 
-  belongs_to :submission, inverse_of: :answers
+  # Name kept as `:submission` (Phase 1c renames it to `:attempt`); target repointed to Attempt,
+  # since `attempt_id` now identifies an Attempt row, not a Submission row (design spike §5.3).
+  belongs_to :submission, class_name: 'Course::Assessment::Attempt', inverse_of: :answers,
+                          foreign_key: 'attempt_id'
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
+
+  # Coerce a `Course::Assessment::Submission` passed here into its `Attempt` (the association's
+  # real target post-repoint). `Course::Assessment::Question(Concern)#attempt`/`#not_answered`/etc.
+  # accept either a `Submission` or an `Attempt` as their "submission" argument (both are valid,
+  # 1:1-co-referential representations of the same attempt during Phase 1b), and thread it straight
+  # into `Answer::<Type>.new(submission: ...)` — without this coercion, passing the `Submission`
+  # half raises `ActiveRecord::AssociationTypeMismatch` (`belongs_to`'s writer strictly checks
+  # `record.is_a?(reflection.klass)`). Genuine bug the split exposed (reproduced by
+  # `spec/models/course/assessment_spec.rb`'s `.questions.attempt(submission)`/`#step`/
+  # `#next_unanswered` examples, which call these helpers directly with a `Submission`) — fixed here
+  # rather than at each call site so every existing caller (production and spec) keeps working
+  # unchanged.
+  def submission=(value)
+    value = value.attempt if value.is_a?(Course::Assessment::Submission)
+    super
+  end
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          dependent: :destroy, inverse_of: :answer, autosave: true
@@ -71,7 +90,7 @@ class Course::Assessment::Answer < ApplicationRecord
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
   scope :non_current_answers, -> { where(current_answer: false) }
   scope :current_answers, -> { where(current_answer: true) }
-  scope :belonging_to_submissions, ->(submissions) { where(submission_id: submissions) }
+  scope :belonging_to_submissions, ->(submissions) { where(attempt_id: submissions) }
 
   # Autogrades the answer. This saves the answer if there are pending changes.
   #
@@ -126,7 +145,13 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def can_read_grade?(ability)
-    submission.published? || ability.can?(:grade, submission) ||
+    # Was `ability.can?(:grade, submission)` — with `submission` now resolving to an Attempt
+    # instance, that check would silently always be false (CanCan matches on subject *class*, and
+    # the only registered rule is `can :grade, Course::Assessment::Submission, ...`). Route through
+    # the answer's own `can :grade, Course::Assessment::Answer, submission: { assessment: ... }`
+    # rule instead (assessment_ability.rb) — same permission, unaffected by what class the
+    # association returns. (Design spike §5.2's chosen fix, option (b).)
+    submission.published? || ability.can?(:grade, self) ||
       (submission.assessment.autograded? && !submission.assessment.allow_partial_submission) ||
       (
         submission.assessment.autograded? &&

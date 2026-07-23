@@ -12,7 +12,7 @@ namespace :db do
         INNER JOIN course_assessment_answers caa
           ON caa.id = cdt.actable_id
         INNER JOIN course_assessment_submission_questions casq
-          ON casq.submission_id = caa.submission_id AND casq.question_id = caa.question_id
+          ON casq.attempt_id = caa.attempt_id AND casq.question_id = caa.question_id
         INNER JOIN course_discussion_topics cdt2
           ON casq.id = cdt2.actable_id
           AND cdt2.actable_type = 'Course::Assessment::SubmissionQuestion'
