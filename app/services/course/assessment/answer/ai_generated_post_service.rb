@@ -80,7 +80,7 @@ class Course::Assessment::Answer::AiGeneratedPostService
     # Ensure the student who wrote the answer amd all group managers
     # gets notified when someone comments on his answer
     discussion_topic.ensure_subscribed_by(@answer.submission.creator)
-    answer_course_user = @answer.submission.submission.course_user
+    answer_course_user = @answer.attempt.submission.course_user
     answer_course_user.my_managers.each do |manager|
       discussion_topic.ensure_subscribed_by(manager.user)
     end

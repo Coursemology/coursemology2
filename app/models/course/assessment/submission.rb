@@ -225,7 +225,7 @@ class Course::Assessment::Submission < ApplicationRecord
     # `answer.submission` resolves to an Attempt (the association name is `:submission`, its
     # `class_name` is Attempt). `last_graded_time` is a course-coupled column that lives only on the
     # real Submission, reached via the attempt's `has_one :submission`.
-    answer.submission.submission&.last_graded_time = Time.now
+    answer.attempt.submission&.last_graded_time = Time.now
   end
 
   # Returns an array of submission rows for the given students and assessments.

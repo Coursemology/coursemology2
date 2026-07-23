@@ -46,7 +46,7 @@ class Course::Assessment::Answer::BaseAutoGradingJob < ApplicationJob
       # `answer.submission` is the Attempt base; EXP (awarder/awarded_at/points_awarded) lives on its
       # Submission extension. Recompute against the extension (nil for a preview attempt, which has no
       # EXP and must be skipped).
-      submission = answer.submission.submission
+      submission = answer.attempt.submission
       if submission && update_exp?(submission)
         Course::Assessment::Submission::CalculateExpService.update_exp(submission)
       end

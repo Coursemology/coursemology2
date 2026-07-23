@@ -57,18 +57,15 @@ class Course::Assessment::Answer < ApplicationRecord
   # base record: `submission_id` identifies an Attempt row (the base), not a Submission row.
   belongs_to :submission, class_name: 'Course::Assessment::Attempt', inverse_of: :answers,
                           foreign_key: 'submission_id'
+  include Course::Assessment::CoercesSubmissionToAttempt
+
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
 
-  # Coerce a `Course::Assessment::Submission` passed here into its `Attempt` (the association's real
-  # target). Several question helpers accept either a `Submission` or an `Attempt` as their
-  # "submission" argument and thread it straight into `Answer::<Type>.new(submission: ...)`; without
-  # this coercion, passing the `Submission` raises `ActiveRecord::AssociationTypeMismatch`, since
-  # `belongs_to`'s writer strictly checks `record.is_a?(reflection.klass)`. Coercing here keeps every
-  # caller working without a per-call-site change.
-  def submission=(value)
-    value = value.attempt if value.is_a?(Course::Assessment::Submission)
-    super
-  end
+  # `attempt` is the accurate name for what `:submission` returns — the Attempt base record. Prefer it in
+  # new code: `answer.attempt.submission` reads clearly where `answer.submission.submission` stuttered (the
+  # FK column is misleadingly named `submission_id`). Reader-only alias; the association stays `:submission`
+  # for existing call sites.
+  alias_method :attempt, :submission
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          dependent: :destroy, inverse_of: :answer, autosave: true
