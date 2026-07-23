@@ -207,6 +207,26 @@ class Course::Assessment::Attempt < ApplicationRecord
     !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user&.student?
   end
 
+  # A preview is a throwaway attempt with no Submission extension row (marketplace "try it out"). Real
+  # attempts always have exactly one. This is the single source of truth for preview-only branching.
+  def preview?
+    submission.nil?
+  end
+
+  # Throws away all work on this attempt and starts it over: destroys every answer, returns the attempt to
+  # the `attempting` state, and rebuilds fresh answers. Backs the marketplace preview "Reset attempt" action.
+  def reset_attempt!
+    transaction do
+      answers.destroy_all
+      self.submitted_at = nil
+      self.published_at = nil
+      self.workflow_state = 'attempting'
+      save!
+      answers.reload
+      create_new_answers
+    end
+  end
+
   def questions
     assessment.randomization.nil? ? assessment.questions : assigned_questions
   end
