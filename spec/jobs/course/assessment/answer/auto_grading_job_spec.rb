@@ -58,6 +58,9 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
         initial_points = submission.points_awarded
 
         subject.perform_now(answer)
+        # The job grades through the Attempt and updates points on its extension row; the spec's
+        # `submission` (a separate extension instance) must be reloaded to observe the DB change.
+        submission.reload
         expect(answer).to be_graded
         expect(answer.grade).to eq(question.maximum_grade)
         correct_exp = assessment.base_exp + assessment.time_bonus_exp
