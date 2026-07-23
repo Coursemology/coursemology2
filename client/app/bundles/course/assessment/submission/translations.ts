@@ -10,6 +10,23 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissionsHeader',
     defaultMessage: 'Submissions: {assessment}',
   },
+  previewBanner: {
+    id: 'course.assessment.submission.previewBanner',
+    defaultMessage:
+      'You are previewing this assessment. This is a throwaway attempt — nothing here is recorded, graded for credit, or visible to students.',
+  },
+  resetPreview: {
+    id: 'course.assessment.submission.resetPreview',
+    defaultMessage: 'Reset',
+  },
+  exitPreview: {
+    id: 'course.assessment.submission.exitPreview',
+    defaultMessage: 'Exit preview',
+  },
+  resetPreviewSuccess: {
+    id: 'course.assessment.submission.resetPreviewSuccess',
+    defaultMessage: 'Preview attempt reset.',
+  },
   studentView: {
     id: 'course.assessment.submission.studentView',
     defaultMessage: 'Student View',
