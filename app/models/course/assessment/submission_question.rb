@@ -39,9 +39,11 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
     #   where.has { submission.creator_id.in(user_id) }.
     #   joining { discussion_topic }.selecting { discussion_topic.id }
     unscoped.
-      joins(:submission).
-      # `creator_id` lives on Course::Assessment::Attempt post-repoint — `:submission` now joins
-      # course_assessment_submissions, so the arel_table reference must match.
+      # SubmissionQuestion `:submission` joins the Attempt base (which includes previews); the nested
+      # `:submission` (Attempt's `has_one :submission`) inner-joins the extension table, restricting
+      # to real submissions so a preview's submission_questions never leak here. `creator_id` lives on
+      # Course::Assessment::Attempt post-repoint, so the arel_table reference must match.
+      joins(submission: :submission).
       where(Course::Assessment::Attempt.arel_table[:creator_id].in(user_id)).
       joins(:discussion_topic).
       select(Course::Discussion::Topic.arel_table[:id])

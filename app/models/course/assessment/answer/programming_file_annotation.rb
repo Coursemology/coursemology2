@@ -17,8 +17,13 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
     #   where.has { file.answer.answer.submission.creator_id.in(user_id) }.
     #   joining { discussion_topic }.selecting { discussion_topic.id }
     unscoped.
-      joins(file: { answer: { answer: :submission } }).
-      where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
+      # The innermost `:submission` joins the Attempt base (post-split); the nested `:submission`
+      # (Attempt's `has_one :submission`) inner-joins the extension table, restricting to real
+      # submissions so a preview attempt's annotations never leak here. `creator_id` lives on
+      # Course::Assessment::Attempt post-repoint — `Course::Assessment::Submission.arel_table` now
+      # points at the column-less extension table, so the reference must use Attempt.
+      joins(file: { answer: { answer: { submission: :submission } } }).
+      where(Course::Assessment::Attempt.arel_table[:creator_id].in(user_id)).
       joins(:discussion_topic).
       select(Course::Discussion::Topic.arel_table[:id])
   end)

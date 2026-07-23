@@ -209,6 +209,7 @@ class Course::Assessment::Submission < ApplicationRecord
         SELECT cas.creator_id AS student_id, cas.assessment_id,
                cas.id AS submission_id, SUM(caa.grade) AS grade
         FROM course_assessment_submissions cas
+        INNER JOIN course_assessment_submission_details cad ON cad.attempt_id = cas.id
         JOIN course_assessment_answers caa ON caa.submission_id = cas.id
         WHERE cas.creator_id IN (?)
           AND cas.assessment_id IN (?)

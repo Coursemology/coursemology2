@@ -967,6 +967,29 @@ RSpec.describe Course::Assessment::Submission do
         )
         expect(results).to be_empty
       end
+
+      it 'excludes preview attempts (an Attempt with no Submission extension row)' do
+        real = create(:course_assessment_submission, :graded,
+                      assessment: graded_assessment, creator: student.user)
+        real.answers.update_all(grade: 5.0, current_answer: true)
+
+        # Build a normal graded submission for another student, then drop its extension row so only
+        # the base Attempt (with graded answers) remains — exactly a preview attempt. grade_summary
+        # must not sum it.
+        preview_student = create(:course_student, course: course)
+        preview = create(:course_assessment_submission, :graded,
+                         assessment: graded_assessment, creator: preview_student.user)
+        preview.answers.update_all(grade: 7.0, current_answer: true)
+        Course::Assessment::Submission.where(attempt_id: preview.attempt_id).delete_all
+
+        results = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id, preview_student.user_id],
+          assessment_ids: [graded_assessment.id]
+        )
+
+        expect(results.map(&:student_id)).to contain_exactly(student.user_id)
+        expect(results.map { |row| row.grade.to_f }).to eq([5.0])
+      end
     end
   end
 end
