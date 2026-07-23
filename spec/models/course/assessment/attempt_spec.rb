@@ -41,6 +41,23 @@ RSpec.describe Course::Assessment::Attempt, type: :model do
       end
     end
 
+    describe 'course-coupled interface delegation (lets an Attempt serve as @submission)' do
+      it 'returns nil for a preview attempt (no extension row)' do
+        attempt = create(:course_assessment_attempt, assessment: assessment, creator: previewer)
+        expect(attempt.course_user).to be_nil
+        expect(attempt.current_points_awarded).to be_nil
+        expect(attempt.experience_points_record).to be_nil
+        expect(attempt.publisher).to be_nil
+      end
+
+      it 'delegates to the extension for a real submission' do
+        submission = create(:course_assessment_submission, assessment: assessment)
+        attempt = submission.attempt
+        expect(attempt.course_user).to eq(submission.course_user)
+        expect(attempt.experience_points_record).to eq(submission.experience_points_record)
+      end
+    end
+
     describe '#reset_attempt!' do
       it 'destroys existing answers, returns to attempting, and rebuilds answers' do
         attempt = create(:course_assessment_attempt, assessment: assessment, creator: previewer)

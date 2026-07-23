@@ -60,6 +60,13 @@ class Course::Assessment::Attempt < ApplicationRecord
   has_one :submission, class_name: 'Course::Assessment::Submission', inverse_of: :attempt,
                        dependent: :destroy
 
+  # Course-coupled / EXP slice of the submission interface, owned by the extension. Delegating here lets
+  # an Attempt stand in as `@submission` for a marketplace preview: the shared submission
+  # jbuilders call these on the served object, and for a preview (no extension) they must be nil. For a
+  # real submission the serving path uses the extension directly, so these are exercised only by previews.
+  delegate :course_user, :current_points_awarded, :experience_points_record, :publisher,
+           to: :submission, allow_nil: true
+
   has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
                                   foreign_key: 'submission_id', dependent: :destroy, inverse_of: :submission
 
