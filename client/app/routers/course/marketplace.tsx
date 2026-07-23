@@ -48,6 +48,31 @@ const marketplaceRouter: Translated<RouteObject> = () => ({
         },
       ],
     },
+    {
+      path: 'attempt/:submissionId',
+      lazy: async () => ({
+        Component: (await import('course/marketplace/pages/PreviewAttempt'))
+          .default,
+      }),
+      children: [
+        {
+          path: 'edit',
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
+            const SubmissionEditIndex = (
+              await import(
+                /* webpackChunkName: 'SubmissionEditIndex' */
+                'course/assessment/submission/pages/SubmissionEditIndex'
+              )
+            ).default;
+
+            return {
+              Component: SubmissionEditIndex,
+              handle: SubmissionEditIndex.handle,
+            };
+          },
+        },
+      ],
+    },
   ],
 });
 

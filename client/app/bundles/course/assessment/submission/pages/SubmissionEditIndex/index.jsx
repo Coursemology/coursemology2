@@ -40,6 +40,7 @@ import {
 import translations from '../../translations';
 
 import BlockedSubmission from './BlockedSubmission';
+import PreviewAttemptBanner from './PreviewAttemptBanner';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import SubmissionForm from './SubmissionForm';
 import TimeLimitBanner from './TimeLimitBanner';
@@ -173,6 +174,7 @@ class VisibleSubmissionEditIndex extends Component {
 
     return (
       <Page className="space-y-5">
+        <PreviewAttemptBanner />
         {this.renderTimeLimitBanner()}
         {this.renderAssessment()}
         {isBlockedInStudentView ? (
