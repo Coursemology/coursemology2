@@ -45,14 +45,27 @@ class Course::Assessment::Answer < ApplicationRecord
   validates :workflow_state, length: { maximum: 255 }, presence: true
   validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, allow_nil: true
   validates :current_answer, inclusion: { in: [true, false] }
-  validates :submission, presence: true
+  validates :attemptable, presence: true
   validates :question, presence: true
   validates :actable_type, uniqueness: { scope: [:actable_id], allow_nil: true,
                                          if: -> { actable_id? && actable_type_changed? } }
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
 
-  belongs_to :submission, inverse_of: :answers
+  belongs_to :attemptable, polymorphic: true, foreign_key: 'submission_id'
+
+  # Backward-compatibility shim for the additive-migration phase: the FK column is still
+  # `submission_id` and ~40 platform call sites read/write `answer.submission`. Delegate both to
+  # `attemptable` so those sites (and every existing factory/spec) are untouched. A later contract
+  # PR renames the column to `attemptable_id` and removes this shim.
+  def submission
+    attemptable
+  end
+
+  def submission=(value)
+    self.attemptable = value
+  end
+
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
@@ -71,7 +84,9 @@ class Course::Assessment::Answer < ApplicationRecord
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
   scope :non_current_answers, -> { where(current_answer: false) }
   scope :current_answers, -> { where(current_answer: true) }
-  scope :belonging_to_submissions, ->(submissions) { where(submission_id: submissions) }
+  scope :belonging_to_submissions, lambda { |submissions|
+    where(attemptable_type: Course::Assessment::Submission.name, submission_id: submissions)
+  }
 
   # Autogrades the answer. This saves the answer if there are pending changes.
   #
@@ -188,6 +203,7 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_consistent_assessment
+    return unless submission
     return if question.question_assessments.map(&:assessment_id).include?(submission.assessment_id)
 
     errors.add(:question, :consistent_assessment)
@@ -198,6 +214,7 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_assessment_state
+    return unless submission
     return unless !submission.attempting? && !submission.unsubmitting?
 
     errors.add(:submission, :attemptable_state)

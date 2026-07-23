@@ -1,6 +1,7 @@
 import { getIdFromUnknown } from 'utilities';
 
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
+import { Descriptor } from 'lib/hooks/useTranslation';
 
 import { readFromTab, withFromTab } from './fromTab';
 import { fetchListing, fetchQuestion } from './operations';
@@ -47,3 +48,7 @@ export const questionHandle: DataHandle = (match) => {
     },
   };
 };
+
+export const attemptHandle: DataHandle = () => ({
+  getData: (): Descriptor => translations.tryItOutBreadcrumb,
+});

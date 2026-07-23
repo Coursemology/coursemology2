@@ -368,6 +368,11 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateSuccess',
     defaultMessage: 'Submission updated successfully.',
   },
+  gradesPublishedSandbox: {
+    id: 'course.assessment.submission.gradesPublishedSandbox',
+    defaultMessage:
+      'Grades published in your sandbox only. Turn on Student View at the top of this page to see what a student sees.',
+  },
   updateIndividualSuccess: {
     id: 'course.assessment.submission.updateIndividualSuccess',
     defaultMessage: 'Submission for {errors} updated successfully',

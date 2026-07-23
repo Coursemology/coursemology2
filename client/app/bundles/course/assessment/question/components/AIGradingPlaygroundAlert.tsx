@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Alert, Typography } from '@mui/material';
 
+import { usePreviewContext } from 'course/marketplace/contexts/PreviewContext';
 import Link from 'lib/components/core/Link';
 
 const AIGradingPlaygroundAlert: FC<{
@@ -10,6 +11,9 @@ const AIGradingPlaygroundAlert: FC<{
   answerId?: number;
 }> = (props) => {
   const { courseId, assessmentId } = useParams();
+  const preview = usePreviewContext();
+
+  if (preview) return null;
 
   return (
     <Alert className={props.className} severity="info">

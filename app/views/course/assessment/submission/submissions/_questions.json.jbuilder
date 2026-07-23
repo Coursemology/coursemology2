@@ -16,7 +16,11 @@ json.questions question_assessments.each_with_index.to_a do |(question_assessmen
   answer = answer_ids_hash[question.id]
   answer_id = answer&.id
   submission_question = sq_topic_ids_hash[question.id][0]
-  json.partial! 'question', question: question, can_grade: can_grade, answer: answer
+  # Fully-qualified: this partial is reused from a non-submissions controller (the marketplace
+  # preview attempts controller), whose own view-path prefixes don't include this directory, so a
+  # bare 'question' reference would fail to resolve there.
+  json.partial! 'course/assessment/submission/submissions/question', question: question, can_grade: can_grade,
+                                                                     answer: answer
   json.questionNumber index + 1
   json.questionTitle question.title
 

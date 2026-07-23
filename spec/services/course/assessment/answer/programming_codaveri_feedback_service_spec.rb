@@ -94,6 +94,31 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackServi
           expect(test_payload_object[:config]).to include(actual_payload_object[:config])
         end
       end
+
+      describe '#create_topic_subscription' do
+        let(:discussion_topic) { create(:course_discussion_topic) }
+
+        context 'when the answer belongs to a preview attempt' do
+          let(:preview_attempt) do
+            create(:course_assessment_preview_attempt, assessment: assessment, course: course)
+          end
+          let(:preview_answer) do
+            create(:course_assessment_answer_programming, :submitted, current_answer: true,
+                                                                      question: question.acting_as,
+                                                                      submission: preview_attempt,
+                                                                      file_name_contents: [['template.py',
+                                                                                            answer_contents]]).answer
+          end
+          let(:preview_service) do
+            described_class.new(assessment, question, preview_answer.actable, true, nil)
+          end
+
+          it 'subscribes the creator without requiring a course user' do
+            expect(discussion_topic).to receive(:ensure_subscribed_by).with(preview_attempt.creator)
+            expect { preview_service.send(:create_topic_subscription, discussion_topic) }.not_to raise_error
+          end
+        end
+      end
     end
   end
 end

@@ -59,14 +59,16 @@ class Course::Assessment::Submission < ApplicationRecord
   belongs_to :assessment, inverse_of: :submissions
 
   has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
-                                  dependent: :destroy, inverse_of: :submission
+                                  as: :attemptable, foreign_key: 'submission_id',
+                                  dependent: :destroy, inverse_of: :attemptable
 
   # @!attribute [r] answers
   #   The answers associated with this submission. There can be more than one answer per submission,
   #   this is because every answer is saved over time. Use the {.latest} scope of the answers if
   #   only the latest answer for each question is desired.
-  has_many :answers, class_name: 'Course::Assessment::Answer', dependent: :destroy,
-                     inverse_of: :submission do
+  has_many :answers, class_name: 'Course::Assessment::Answer',
+                     as: :attemptable, foreign_key: 'submission_id',
+                     dependent: :destroy, inverse_of: :attemptable do
     include Course::Assessment::Submission::AnswersConcern
   end
   has_many :multiple_response_answers,
@@ -266,26 +268,6 @@ class Course::Assessment::Submission < ApplicationRecord
     current_answers.select { |ans| ans.actable_type == Course::Assessment::Answer::Programming.name }
   end
 
-  # Loads basic information about the past answers of each question
-  def answer_history
-    answers.
-      without_attempting_state.
-      group_by(&:question_id).
-      map do |pair|
-        {
-          question_id: pair[0],
-          answers: pair[1].map do |answer|
-            {
-              id: answer.id,
-              createdAt: answer.created_at&.iso8601,
-              currentAnswer: answer.current_answer,
-              workflowState: answer.workflow_state
-            }
-          end
-        }
-      end
-  end
-
   # Returns the count of user messages for each question in the submission.
   def user_get_help_message_counts
     Course::Assessment::SubmissionQuestion.find_by_sql(<<-SQL)
@@ -318,9 +300,10 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   def self.on_dependent_status_change(answer)
-    return unless answer.saved_changes.key?(:grade)
+    return unless answer.saved_change_to_grade?
+    return unless answer.attemptable.is_a?(Course::Assessment::Submission)
 
-    answer.submission.last_graded_time = Time.now
+    answer.attemptable.last_graded_time = Time.now
   end
 
   # Returns an array of submission rows for the given students and assessments.

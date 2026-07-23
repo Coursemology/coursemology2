@@ -154,6 +154,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     # Ensure all group managers get a notification when someone adds a programming annotation
     # to the answer.
     answer_course_user = @answer.submission.course_user
+    return unless answer_course_user
+
     answer_course_user.my_managers.each do |manager|
       discussion_topic.ensure_subscribed_by(manager.user)
     end

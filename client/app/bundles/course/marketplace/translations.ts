@@ -65,9 +65,43 @@ export default defineMessages({
     id: 'course.marketplace.previewAction',
     defaultMessage: 'Preview',
   },
+  attempt: {
+    id: 'course.marketplace.attemptAction',
+    defaultMessage: 'Attempt',
+  },
   previewBadge: {
     id: 'course.marketplace.previewBadge',
     defaultMessage: 'Preview',
+  },
+  tryItOut: {
+    id: 'course.marketplace.tryItOut',
+    defaultMessage: 'Try it out',
+  },
+  tryItOutBreadcrumb: {
+    id: 'course.marketplace.tryItOutBreadcrumb',
+    defaultMessage: 'Try It Out',
+  },
+  previewSandbox: {
+    id: 'course.marketplace.previewSandbox',
+    defaultMessage:
+      'You are trying out this assessment in a private sandbox, separate from your own courses.',
+  },
+  resetAttempt: {
+    id: 'course.marketplace.resetAttempt',
+    defaultMessage: 'Reset attempt',
+  },
+  resetAttemptConfirmation: {
+    id: 'course.marketplace.resetAttemptConfirmation',
+    defaultMessage:
+      'Reset this attempt? All answers in this sandbox will be discarded and you will start fresh.',
+  },
+  attemptReset: {
+    id: 'course.marketplace.attemptReset',
+    defaultMessage: 'Attempt reset. Starting fresh.',
+  },
+  resetAttemptFailed: {
+    id: 'course.marketplace.resetAttemptFailed',
+    defaultMessage: 'Failed to reset the attempt. Please try again.',
   },
   duplicateAssessment: {
     id: 'course.marketplace.duplicateAssessment',

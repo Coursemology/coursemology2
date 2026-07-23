@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event';
 import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, screen, waitFor } from 'test-utils';
 
@@ -6,6 +7,7 @@ import CourseAPI from 'api/course';
 import ListingPreview from '../index';
 
 const mockNavigate = jest.fn();
+const FIXTURE_DESCRIPTION = '<p>desc</p>';
 
 // `TestApp` mounts the component directly inside a `MemoryRouter` with no matching
 // `<Route path=":listingId">`, so `useParams()` would otherwise be empty and the page
@@ -90,6 +92,10 @@ it('renders the read-only assessment config', async () => {
   expect(
     screen.getByRole('button', { name: 'Duplicate Assessment' }),
   ).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Try it out' })).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Try it out' })).toHaveClass(
+    'min-w-32',
+  );
   // The card title is plain text now; the eye icon links into the per-question detail route.
   expect(screen.getByText('The awesome question 17')).toBeVisible();
   expect(
@@ -103,7 +109,7 @@ it('carries from_tab into the per-question detail links', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: FIXTURE_DESCRIPTION,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -140,7 +146,7 @@ it('navigates back to the marketplace carrying from_tab', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: FIXTURE_DESCRIPTION,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -166,7 +172,7 @@ it('renders a back button to the marketplace index', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: FIXTURE_DESCRIPTION,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -184,13 +190,42 @@ it('renders a back button to the marketplace index', async () => {
   expect(screen.getByTestId('ArrowBackIconButton')).toBeInTheDocument();
 });
 
+it('navigates to the preview attempt route and shows loading while entering it', async () => {
+  const user = userEvent.setup();
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: FIXTURE_DESCRIPTION,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+
+  render(<ListingPreview />, { at: [`${url}?from_tab=42`] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  await user.click(screen.getByRole('button', { name: 'Try it out' }));
+
+  expect(mockNavigate).toHaveBeenCalledWith(
+    `/courses/${global.courseId}/marketplace/listings/7/attempt?from_tab=42`,
+  );
+  expect(screen.getByRole('progressbar')).toBeVisible();
+});
+
 it('marks the page title as a preview', async () => {
   const url = `/courses/${global.courseId}/marketplace/listings/7`;
   mock.onGet(url).reply(200, {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: FIXTURE_DESCRIPTION,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,

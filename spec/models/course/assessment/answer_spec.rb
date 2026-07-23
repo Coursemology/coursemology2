@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer do
   it { is_expected.to be_actable }
-  it { is_expected.to belong_to(:submission).without_validating_presence }
+  it { is_expected.to belong_to(:attemptable).without_validating_presence }
   it { is_expected.to belong_to(:question).without_validating_presence }
   it { is_expected.to accept_nested_attributes_for(:actable) }
   it { is_expected.to have_one(:auto_grading).dependent(:destroy) }
@@ -11,6 +11,36 @@ RSpec.describe Course::Assessment::Answer do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { create(:course_assessment_answer) }
+
+    describe 'the polymorphic attemptable seam' do
+      let(:submission) { create(:course_assessment_submission, :attempting) }
+
+      it 'exposes attemptable and keeps submission as a delegating shim' do
+        answer = submission.answers.first
+        expect(answer.attemptable).to eq(submission)
+        expect(answer.submission).to eq(submission)
+        expect(answer.attemptable_type).to eq('Course::Assessment::Submission')
+      end
+
+      it 'writes through the submission= shim to attemptable' do
+        answer = build(:course_assessment_answer)
+        other = create(:course_assessment_submission, :attempting)
+        answer.submission = other
+        expect(answer.attemptable).to eq(other)
+      end
+
+      it 'requires an attemptable' do
+        answer = build(:course_assessment_answer)
+        answer.attemptable = nil
+        expect(answer).not_to be_valid
+        expect(answer.errors[:attemptable]).to be_present
+      end
+
+      it 'belonging_to_submissions is scoped to Submission-typed rows only' do
+        answer = submission.answers.first
+        expect(Course::Assessment::Answer.belonging_to_submissions([submission.id])).to include(answer)
+      end
+    end
 
     describe 'database validation for client_version and last_session_id' do
       let(:answer) { create(:course_assessment_answer, last_session_id: 'abc', client_version: 1) }

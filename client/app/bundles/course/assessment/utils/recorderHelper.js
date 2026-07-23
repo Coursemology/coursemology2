@@ -3,6 +3,7 @@ import Recorder from '../../../../../vendor/recorderjs';
 
 let recorder;
 let recording = false;
+let startingPromise;
 
 const initRecorder = () =>
   Promise.resolve().then(() => {
@@ -25,21 +26,27 @@ const initRecorder = () =>
 
 const startRecord = () => {
   if (recording) {
-    return Promise.reject(new Error('Recorder has already started'));
+    return Promise.resolve();
+  }
+  if (startingPromise) {
+    return startingPromise;
   }
 
   const startRecorder = () => {
+    if (recording) return;
     recorder.record();
     recording = true;
   };
-  if (recorder) {
-    startRecorder();
-    return Promise.resolve();
-  }
-  return initRecorder().then(() => {
-    startRecord();
-    return {};
-  });
+  const recorderPromise = recorder ? Promise.resolve() : initRecorder();
+  startingPromise = recorderPromise
+    .then(() => {
+      startRecorder();
+    })
+    .finally(() => {
+      startingPromise = null;
+    });
+
+  return startingPromise;
 };
 
 /**

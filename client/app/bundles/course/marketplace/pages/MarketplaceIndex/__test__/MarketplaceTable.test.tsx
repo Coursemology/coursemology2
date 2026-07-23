@@ -38,7 +38,7 @@ it('shows a disabled "Select to duplicate" button when nothing is selected', asy
   expect(idle).toBeDisabled();
 });
 
-it('renders Preview and Duplicate as icon buttons with one-word tooltips/labels', async () => {
+it('renders Preview, Attempt, and Duplicate as icon buttons with one-word tooltips/labels', async () => {
   const onDuplicate = jest.fn();
   const page = render(
     <MarketplaceTable listings={LISTINGS} onDuplicate={onDuplicate} />,
@@ -48,6 +48,11 @@ it('renders Preview and Duplicate as icon buttons with one-word tooltips/labels'
   previews.forEach((el) => expect(el).not.toHaveAttribute('target'));
   expect(previews.map((el) => el.getAttribute('href'))).toEqual(
     expect.arrayContaining(['/p/1', '/p/2']),
+  );
+
+  const attempts = await page.findAllByLabelText('Attempt');
+  expect(attempts.map((el) => el.getAttribute('href'))).toEqual(
+    expect.arrayContaining(['/p/1/attempt', '/p/2/attempt']),
   );
 
   const duplicates = await page.findAllByLabelText('Duplicate');
@@ -70,6 +75,25 @@ it('carries from_tab into the preview links when set', async () => {
   expect(previews.map((el) => el.getAttribute('href'))).toEqual(
     expect.arrayContaining(['/p/1?from_tab=42', '/p/2?from_tab=42']),
   );
+
+  const attempts = await page.findAllByLabelText('Attempt');
+  expect(attempts.map((el) => el.getAttribute('href'))).toEqual(
+    expect.arrayContaining([
+      '/p/1/attempt?from_tab=42',
+      '/p/2/attempt?from_tab=42',
+    ]),
+  );
+});
+
+it('shows a loading indicator after clicking Attempt', async () => {
+  const page = render(
+    <MarketplaceTable listings={LISTINGS} onDuplicate={jest.fn()} />,
+  );
+  const attempts = await page.findAllByLabelText('Attempt');
+
+  await userEvent.click(attempts[0]);
+
+  expect(page.getByRole('progressbar')).toBeVisible();
 });
 
 it('renders one checkbox per row and no select-all header checkbox', async () => {

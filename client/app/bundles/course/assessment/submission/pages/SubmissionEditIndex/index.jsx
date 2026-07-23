@@ -15,6 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 
+import { usePreviewContext } from 'course/marketplace/contexts/PreviewContext';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -40,6 +41,7 @@ import {
 import translations from '../../translations';
 
 import BlockedSubmission from './BlockedSubmission';
+import { resolveSubmissionMatch } from './resolveSubmissionMatch';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import SubmissionForm from './SubmissionForm';
 import TimeLimitBanner from './TimeLimitBanner';
@@ -237,11 +239,39 @@ function mapStateToProps({ assessments: { submission } }) {
   };
 }
 
+// See resolveSubmissionMatch.ts for why this override exists (marketplace preview attempts,
+// course/marketplace/pages/PreviewAttempt, reuse this page but their route has no `:submissionId`
+// segment for `withRouter`'s `useParams()` to pick up).
+function withPreviewAwareMatch(Child) {
+  const PreviewAwareMatch = (props) => {
+    const preview = usePreviewContext();
+    return (
+      <Child {...props} match={resolveSubmissionMatch(props.match, preview)} />
+    );
+  };
+
+  // Mirrors VisibleSubmissionEditIndex.propTypes.match above — this wrapper only ever forwards
+  // (an override of) the same `match` shape that ultimately reaches that component.
+  PreviewAwareMatch.propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        courseId: PropTypes.string,
+        assessmentId: PropTypes.string,
+        submissionId: PropTypes.string,
+      }),
+    }),
+  };
+
+  return PreviewAwareMatch;
+}
+
 const handle = assessmentsTranslations.attempt;
 
 const SubmissionEditIndex = withRouter(
-  withHeartbeatWorker(
-    connect(mapStateToProps)(injectIntl(VisibleSubmissionEditIndex)),
+  withPreviewAwareMatch(
+    withHeartbeatWorker(
+      connect(mapStateToProps)(injectIntl(VisibleSubmissionEditIndex)),
+    ),
   ),
 );
 

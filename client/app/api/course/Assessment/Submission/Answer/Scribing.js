@@ -1,3 +1,5 @@
+import { getActivePreview } from 'course/marketplace/contexts/PreviewContext';
+
 import BaseAssessmentAPI from '../../Base';
 
 export default class ScribingsAPI extends BaseAssessmentAPI {
@@ -12,6 +14,11 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
   }
 
   get #urlPrefix() {
+    const preview = getActivePreview();
+    if (preview) {
+      return `/courses/${preview.courseId}/marketplace/attempt/${preview.submissionId}/answers`;
+    }
+
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions/${this.submissionId}/answers`;
   }
 }

@@ -1,7 +1,9 @@
+import { AxiosRequestConfig } from 'axios';
 import { AnswerData } from 'types/course/assessment/submission/answer';
 import { JobSubmitted } from 'types/jobs';
 
 import { APIResponse } from 'api/types';
+import { getActivePreview } from 'course/marketplace/contexts/PreviewContext';
 
 import BaseAPI from '../../Base';
 import SubmissionsAPI from '../../Submissions';
@@ -19,6 +21,17 @@ export default class AnswersAPI extends BaseAPI {
       },
     };
 
+    const preview = getActivePreview();
+    if (preview) {
+      return this.#savePreviewDraft(
+        preview.courseId,
+        preview.submissionId,
+        answerId,
+        answerData,
+        config,
+      );
+    }
+
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, answerData);
 
@@ -27,6 +40,33 @@ export default class AnswersAPI extends BaseAPI {
       formData,
       config,
     );
+  }
+
+  #savePreviewDraft(
+    courseId: number,
+    submissionId: number,
+    answerId: number,
+    answerData: unknown,
+    config: AxiosRequestConfig<FormData>,
+  ): APIResponse<AnswerData> {
+    const formData = new FormData();
+    const { answer } = answerData as { answer?: unknown };
+    SubmissionsAPI.appendFormData(formData, {
+      submission: { answers: answer ? [answer] : [] },
+    });
+
+    return this.client
+      .patch(
+        `/courses/${courseId}/marketplace/attempt/${submissionId}`,
+        formData,
+        config,
+      )
+      .then((response) => {
+        const updatedAnswer = response.data.answers?.find(
+          (candidate: AnswerData) => candidate.id === answerId,
+        );
+        return { ...response, data: updatedAnswer ?? response.data };
+      }) as APIResponse<AnswerData>;
   }
 
   submitAnswer(
