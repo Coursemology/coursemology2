@@ -1,6 +1,5 @@
-import { getActivePreview } from './previewAttemptContext';
-
 import BaseAssessmentAPI from './Base';
+import { getActivePreview } from './previewAttemptContext';
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
   index() {
