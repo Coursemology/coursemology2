@@ -48,13 +48,36 @@ module Course::AssessmentMarketplaceAbilityComponent
     can :publish_to_marketplace, Course::Assessment
   end
 
-  def allow_managers_access_marketplace
+  def allow_managers_access_marketplace # rubocop:disable Metrics/AbcSize
     can :access_marketplace, Course, id: course.id
     can :duplicate_from_marketplace, Course::Assessment do |assessment|
       assessment.marketplace_listing&.published? || false
     end
     can :preview_in_marketplace, Course::Assessment do |assessment|
       assessment.marketplace_listing&.published? || false
+    end
+
+    # Marketplace preview serving. Subject is Course::Assessment::Attempt (not a separate
+    # model). Block conditions gate on `preview?` (no extension row) + creator ownership, so real
+    # attempts — served via Submission and gated by AssessmentAbility — are never over-granted here.
+    #
+    # `:create` is class-level (CanCan can't evaluate a block without an instance); the published-listing
+    # scoping of creation lives in PreviewAttemptsController#authorize_attempt!, not here. It cannot
+    # over-authorize real submissions: those authorize `:attempt` on the assessment, never `:create` on
+    # Attempt.
+    can :create, Course::Assessment::Attempt
+    can [:read, :update, :grade, :reset, :reload_answer, :reevaluate_answer, :generate_feedback,
+         :generate_live_feedback, :create_live_feedback_chat, :fetch_live_feedback_chat,
+         :fetch_live_feedback_status, :save_live_feedback, :create_scribing_scribble, :read_tests],
+        Course::Assessment::Attempt do |attempt|
+      attempt.preview? && attempt.creator_id == user.id
+    end
+    # `Course::Assessment::Answer::UpdateAnswerConcern` gates answer-editing/grading params behind
+    # `can?(:update/:grade, answer)` on the ANSWER — without this, PATCH .../attempt/:id would silently
+    # drop every answer param for a preview-owned answer. Block form (not a hash) because a preview is the
+    # absence of an extension; `answer.submission` is the Attempt.
+    can [:update, :grade], Course::Assessment::Answer do |answer|
+      answer.submission.preview? && answer.submission.creator_id == user.id
     end
   end
 end
