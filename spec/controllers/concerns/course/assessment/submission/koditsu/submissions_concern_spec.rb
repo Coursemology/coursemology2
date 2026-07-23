@@ -103,8 +103,11 @@ RSpec.describe Course::Assessment::Submission::Koditsu::SubmissionsConcern do
         expect(submissions[0].workflow_state).to eq('submitted')
         expect(submissions[1].workflow_state).to eq('submitted')
 
-        student_one_answers = submissions[0].answers
-        student_two_answers = submissions[1].answers
+        # `Answer`'s `default_scope { order(:created_at) }` has no tiebreak, and the two answers are
+        # inserted together (identical `created_at`), so `.answers` may return them in either order.
+        # Sort by `question_id` to assert on each question's answer deterministically.
+        student_one_answers = submissions[0].answers.sort_by(&:question_id)
+        student_two_answers = submissions[1].answers.sort_by(&:question_id)
 
         expect(student_one_answers[0].correct).to be_truthy
         expect(student_one_answers[1].correct).to be_falsey

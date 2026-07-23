@@ -459,7 +459,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       if @assessment.submissions.loaded?
         @assessment.submissions.select { |s| s.creator_id == current_user.id }
       else
-        @assessment.submissions.where(creator_id: current_user.id)
+        @assessment.submissions.by_user(current_user)
       end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_23_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -605,6 +605,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.index ["question_assessment_id", "skill_id"], name: "index_skills_qn_assessments_on_qa_id_and_skill_id", unique: true
     t.index ["question_assessment_id"], name: "index_course_assessment_skills_question_assessments_on_qa_id"
     t.index ["skill_id"], name: "index_course_assessment_skills_question_assessments_on_skill_id"
+  end
+
+  create_table "course_assessment_submission_details", id: :serial, force: :cascade do |t|
+    t.integer "attempt_id", null: false
+    t.integer "publisher_id"
+    t.string "session_id", limit: 255
+    t.datetime "last_graded_time", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["attempt_id"], name: "unique_course_assessment_submission_details_attempt_id", unique: true
   end
 
   create_table "course_assessment_submission_logs", id: :serial, force: :cascade do |t|
@@ -2056,6 +2066,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_skills", "users", column: "updater_id", name: "fk_course_assessment_skills_updater_id"
   add_foreign_key "course_assessment_skills_question_assessments", "course_assessment_skills", column: "skill_id"
   add_foreign_key "course_assessment_skills_question_assessments", "course_question_assessments", column: "question_assessment_id"
+  add_foreign_key "course_assessment_submission_details", "course_assessment_submissions", column: "attempt_id", name: "fk_course_assessment_submission_details_attempt_id"
+  add_foreign_key "course_assessment_submission_details", "users", column: "publisher_id", name: "fk_course_assessment_submission_details_publisher_id"
   add_foreign_key "course_assessment_submission_logs", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_logs_submission_id"
   add_foreign_key "course_assessment_submission_questions", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_submission_questions_question_id"
   add_foreign_key "course_assessment_submission_questions", "course_assessment_submissions", column: "submission_id", name: "fk_course_assessment_submission_questions_submission_id"

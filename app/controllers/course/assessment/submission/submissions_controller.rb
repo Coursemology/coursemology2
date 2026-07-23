@@ -41,7 +41,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   def create # rubocop:disable Metrics/AbcSize
     authorize! :access, @assessment
 
-    existing_submission = @assessment.submissions.find_by(creator: current_user)
+    existing_submission = @assessment.submissions.by_user(current_user).first
     create_success_response(existing_submission) and return if existing_submission
 
     ActiveRecord::Base.transaction do
@@ -423,7 +423,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def user_ids_without_submission
     existing_submissions = @assessment.submissions.by_users(course_user_ids.pluck(:user_id))
-    user_ids_with_submission = existing_submissions.pluck(:creator_id)
+    # `creator_id` lives on the base (`course_assessment_submissions`), not on Submission's own
+    # table. Unqualified, `pluck` is ambiguous — `acts_as :experience_points_record` also joins
+    # `course_experience_points_records`, which also has `creator_id`. Qualify explicitly.
+    user_ids_with_submission = existing_submissions.pluck('course_assessment_submissions.creator_id')
     course_user_ids.pluck(:user_id) - user_ids_with_submission
   end
 
