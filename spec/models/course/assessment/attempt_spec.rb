@@ -58,6 +58,13 @@ RSpec.describe Course::Assessment::Attempt, type: :model do
       end
     end
 
+    describe '#attempt' do
+      it 'returns itself so the Attempt can stand in as its own base in the shared pipeline' do
+        attempt = create(:course_assessment_attempt, assessment: assessment, creator: previewer)
+        expect(attempt.attempt).to be(attempt)
+      end
+    end
+
     describe '#reset_attempt!' do
       it 'destroys existing answers, returns to attempting, and rebuilds answers' do
         attempt = create(:course_assessment_attempt, assessment: assessment, creator: previewer)

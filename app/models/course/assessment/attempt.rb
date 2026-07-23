@@ -67,6 +67,17 @@ class Course::Assessment::Attempt < ApplicationRecord
   delegate :course_user, :current_points_awarded, :experience_points_record, :publisher,
            to: :submission, allow_nil: true
 
+  # A preview's `@submission` IS this base Attempt, but the shared submission pipeline sometimes reaches
+  # for `<submission>.attempt` (e.g. Submission::UpdateService#create_missing_submission_questions builds
+  # `SubmissionQuestion.new(submission: @submission.attempt)`). For a real Submission that returns the base
+  # Attempt; for an Attempt standing in as @submission it is simply itself. Returning `self` lets that
+  # shared code work unmodified for both kinds, extending the "Attempt serves as @submission"
+  # seam. `SubmissionQuestion#submission` / `Answer#submission` both target Attempt, so `self` is the
+  # correct object to hand them.
+  def attempt
+    self
+  end
+
   has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
                                   foreign_key: 'submission_id', dependent: :destroy, inverse_of: :submission
 

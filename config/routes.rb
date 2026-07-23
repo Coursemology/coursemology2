@@ -626,6 +626,13 @@ Rails.application.routes.draw do
         resources :listings, only: [:show], path: 'marketplace/listings' do
           post 'duplicate', on: :collection
           resources :questions, only: [:show]
+          resource :attempt, only: [:create], controller: 'preview_attempts'
+        end
+        resources :preview_attempts, only: [:edit, :update], path: 'marketplace/attempt' do
+          member do
+            post :auto_grade
+            post :reset
+          end
         end
       end
     end

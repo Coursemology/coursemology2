@@ -4,6 +4,11 @@ class Course::Assessment::Marketplace::Controller < Course::ComponentController
   # preview views reuse it, but Rails only auto-includes a controller's own matching helper.
   helper Course::Assessment::AssessmentsHelper
 
+  # last_attempt (used by reused answer partials, e.g. _multiple_response.json.jbuilder) is defined in
+  # Course::Assessment::Submission::SubmissionsHelper; Rails only auto-includes a controller's own
+  # matching helper, so the preview attempt views need it declared here.
+  helper Course::Assessment::Submission::SubmissionsHelper
+
   private
 
   def component
