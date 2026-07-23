@@ -10,7 +10,11 @@ class Course::Assessment::Submission::ForceSubmitTimedSubmissionJob < Applicatio
     instance = Course.unscoped { assessment.course.instance }
 
     ActsAsTenant.with_tenant(instance) do
-      submission = Course::Assessment::Submission.find_by(id: submission_id)
+      # `submission_id` here is the id `create_force_submission_job` (Attempt#create_force_submission_job)
+      # scheduled with, which is `attempt.id` — this job's own param name predates the split and is
+      # not renamed here (renaming it is exactly the kind of cosmetic diff the repo's diff-hygiene
+      # rule forbids without a functional reason).
+      submission = Course::Assessment::Attempt.find_by(id: submission_id)&.submission
       return unless submission
 
       force_submit(submission, submitter)

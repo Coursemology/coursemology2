@@ -28,12 +28,16 @@ module CourseUser::StaffConcern
   def published_submissions
     @published_submissions ||=
       Course::Assessment::Submission.
+      joins(:attempt).
       joins(experience_points_record: :course_user).
       where('course_users.role = ?', CourseUser.roles[:student]).
       where('course_users.phantom = ?', false).
-      where('course_assessment_submissions.publisher_id = ?', user_id).
+      # `publisher_id` is Submission's own column (the one that publishing writes to);
+      # `course_assessment_submissions.publisher_id` is a stale residual column on the base. Qualify
+      # by the extension table. `published_at`/`submitted_at` are Attempt-only, hence the join above.
+      where('course_assessment_submission_details.publisher_id = ?', user_id).
       where('course_users.course_id = ?', course_id).
-      pluck(:published_at, :submitted_at).
+      pluck('course_assessment_submissions.published_at', 'course_assessment_submissions.submitted_at').
       map { |published_at, submitted_at| { published_at: published_at, submitted_at: submitted_at } }
   end
 

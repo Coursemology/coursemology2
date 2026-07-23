@@ -78,8 +78,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     questions_without_submission_questions = questions_to_attempt - questions_with_submission_questions
     new_submission_questions = []
     questions_without_submission_questions.each do |question|
+      # `SubmissionQuestion#submission` targets `Course::Assessment::Attempt`, so assigning a
+      # `Course::Assessment::Submission` here raises `ActiveRecord::AssociationTypeMismatch`.
+      # `@submission.attempt` is the real association to hand it.
       new_submission_questions <<
-        Course::Assessment::SubmissionQuestion.new(submission: @submission, question: question)
+        Course::Assessment::SubmissionQuestion.new(submission: @submission.attempt, question: question)
     end
 
     import_success = true

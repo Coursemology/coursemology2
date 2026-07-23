@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# Phase 1 (additive, Design C): extracts the course-coupled columns of the submission into their own
+# Extracts the course-coupled columns of the submission into their own
 # small extension table WITHOUT renaming the base table. `Course::Assessment::Attempt` maps onto the
 # existing `course_assessment_submissions` (the base) via `self.table_name`; `Submission` maps onto
-# this new table. See docs/superpowers/plans/2026-07-23-attempt-base-record-additive-replan.md.
+# this new table.
 #
 # Purely additive: no DDL touches `course_assessment_submissions` (only READ for the backfill), so a
 # rolling deploy's still-old worker is completely undisturbed. Reversible via `drop_table`.

@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Log < ApplicationRecord
+  # Rails derives a nested model's table name from its parent's `table_name`
+  # (`Submission.table_name.singularize + "_logs"`). Since Submission maps to
+  # `course_assessment_submission_details`, that derivation yields the nonexistent
+  # `course_assessment_submission_detail_logs`. Pin the real table name explicitly.
+  self.table_name = 'course_assessment_submission_logs'
+
   validates :submission, presence: true
 
-  belongs_to :submission, class_name: 'Course::Assessment::Submission',
+  belongs_to :submission, class_name: 'Course::Assessment::Attempt',
                           inverse_of: :logs
 
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
