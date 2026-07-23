@@ -229,5 +229,226 @@ RSpec.describe Course::Assessment::Marketplace::PreviewAttemptsController, type:
         end
       end
     end
+
+    describe 'live feedback endpoints' do
+      let(:source_assessment) { create(:assessment, :published_with_programming_question) }
+      let(:attempt) do
+        a = create(:course_assessment_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a
+      end
+      let(:answer) { attempt.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first }
+      let(:question) { answer.question }
+      let!(:submission_question) do
+        create(:submission_question, submission: attempt, question: question)
+      end
+      let!(:thread) do
+        Course::Assessment::LiveFeedback::Thread.create!({
+          codaveri_thread_id: SecureRandom.hex(12),
+          submission_question: submission_question,
+          is_active: true,
+          submission_creator_id: attempt.creator_id,
+          created_at: Time.zone.now
+        })
+      end
+
+      it 'fetches a preview attempt live feedback chat without an assessment_id route param' do
+        get :fetch_live_feedback_chat, params: { course_id: course.id, answer_id: answer.id, format: :json }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['threadId']).to eq(thread.codaveri_thread_id)
+      end
+
+      it 'saves preview attempt live feedback without an assessment_id route param' do
+        post :save_live_feedback, params: {
+          course_id: course.id,
+          current_thread_id: thread.codaveri_thread_id,
+          content: 'Feedback from Codaveri',
+          is_error: false,
+          format: :json
+        }
+
+        expect(response).to have_http_status(:no_content)
+        expect(thread.messages.last.content).to eq('Feedback from Codaveri')
+      end
+
+      context 'when the thread belongs to another manager\'s preview' do
+        let(:others_attempt) do
+          a = create(:course_assessment_attempt, assessment: source_assessment, creator: other_manager)
+          a.create_new_answers
+          a
+        end
+        let(:others_answer) do
+          others_attempt.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first
+        end
+        let!(:others_submission_question) do
+          create(:submission_question, submission: others_attempt, question: others_answer.question)
+        end
+        let!(:others_thread) do
+          Course::Assessment::LiveFeedback::Thread.create!({
+            codaveri_thread_id: SecureRandom.hex(12),
+            submission_question: others_submission_question,
+            is_active: true,
+            submission_creator_id: others_attempt.creator_id,
+            created_at: Time.zone.now
+          })
+        end
+
+        it 'denies saving into it (creator scoping via authorize_preview_attempt_for_thread!)' do
+          expect do
+            post :save_live_feedback, params: {
+              course_id: course.id, current_thread_id: others_thread.codaveri_thread_id,
+              content: 'nope', is_error: false, format: :json
+            }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when the answer belongs to another manager\'s preview attempt' do
+        let(:others_attempt) do
+          a = create(:course_assessment_attempt, assessment: source_assessment, creator: other_manager)
+          a.create_new_answers
+          a
+        end
+        let(:others_answer) do
+          others_attempt.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first
+        end
+        let!(:others_submission_question) do
+          create(:submission_question, submission: others_attempt, question: others_answer.question)
+        end
+
+        it 'denies fetching its chat (creator scoping via authorize_preview_attempt_for_answer!)' do
+          expect do
+            get :fetch_live_feedback_chat,
+                params: { course_id: course.id, answer_id: others_answer.id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when the answer/thread belongs to a real (non-preview) submission' do
+        let(:real_student) { create(:course_student, course: source_assessment.course).user }
+        let(:real_submission) do
+          create(:submission, :attempting, assessment: source_assessment, creator: real_student)
+        end
+        let(:real_answer) do
+          real_submission.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first
+        end
+        let!(:real_submission_question) do
+          create(:submission_question, submission: real_submission.attempt, question: real_answer.question)
+        end
+        let!(:real_thread) do
+          Course::Assessment::LiveFeedback::Thread.create!({
+            codaveri_thread_id: SecureRandom.hex(12),
+            submission_question: real_submission_question,
+            is_active: true,
+            submission_creator_id: real_submission.creator_id,
+            created_at: Time.zone.now
+          })
+        end
+
+        it 'denies fetching its chat (attempt.preview? guard)' do
+          expect do
+            get :fetch_live_feedback_chat,
+                params: { course_id: course.id, answer_id: real_answer.id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+
+        it 'denies saving into its thread (attempt.preview? guard)' do
+          expect do
+            post :save_live_feedback, params: {
+              course_id: course.id, current_thread_id: real_thread.codaveri_thread_id,
+              content: 'nope', is_error: false, format: :json
+            }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when there is no live feedback thread for the answer yet' do
+        # Own new assessment (not `source_assessment`) to avoid the (assessment, manager) unique-index
+        # collision with the outer `attempt` let.
+        let(:untried_assessment) { create(:assessment, :published_with_programming_question) }
+        let(:untried_attempt) do
+          a = create(:course_assessment_attempt, assessment: untried_assessment, creator: manager)
+          a.create_new_answers
+          a
+        end
+        let(:untried_answer) do
+          untried_attempt.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first
+        end
+        let!(:untried_submission_question) do
+          create(:submission_question, submission: untried_attempt, question: untried_answer.question)
+        end
+
+        it 'returns bad_request instead of a thread payload' do
+          get :fetch_live_feedback_chat,
+              params: { course_id: course.id, answer_id: untried_answer.id, format: :json }
+          expect(response).to have_http_status(:bad_request)
+        end
+      end
+
+      it 'returns bad_request when the saved thread id matches no thread' do
+        # The nil-thread guard runs before authorize_preview_attempt_for_thread!, so no auth setup needed.
+        post :save_live_feedback, params: {
+          course_id: course.id, current_thread_id: 'nonexistent-thread-id',
+          content: 'ignored', is_error: false, format: :json
+        }
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    describe 'POST #create_scribing_scribble' do
+      let(:source_assessment) do
+        create(:assessment, :published).tap do |assessment|
+          create(:course_assessment_question_scribing, assessment: assessment)
+        end
+      end
+      let(:attempt) do
+        a = create(:course_assessment_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a
+      end
+      let(:answer) { attempt.answers.where(actable_type: 'Course::Assessment::Answer::Scribing').first }
+
+      it 'updates preview attempt scribbles without an assessment_id route param' do
+        post :create_scribing_scribble, params: {
+          course_id: course.id,
+          id: attempt.id,
+          answer_id: answer.id,
+          scribble: { answer_id: answer.actable.id, content: '{"objects":[]}' },
+          format: :json
+        }
+
+        expect(response).to have_http_status(:ok)
+        expect(answer.actable.scribbles.last.content).to eq('{"objects":[]}')
+      end
+
+      context 'when the requester is a different manager (not the creator)' do
+        before { controller_sign_in(controller, other_manager) }
+        it 'is denied' do
+          expect do
+            post :create_scribing_scribble, params: {
+              course_id: course.id, id: attempt.id, answer_id: answer.id,
+              scribble: { answer_id: answer.actable.id, content: '{"objects":[]}' }, format: :json
+            }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      it 'returns bad_request when answer_id resolves to no scribing answer' do
+        post :create_scribing_scribble, params: {
+          course_id: course.id, id: attempt.id, answer_id: -1,
+          scribble: { answer_id: -1, content: '{"objects":[]}' }, format: :json
+        }
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it 'returns bad_request when the scribble answer_id mismatches the resolved scribing answer' do
+        post :create_scribing_scribble, params: {
+          course_id: course.id, id: attempt.id, answer_id: answer.id,
+          scribble: { answer_id: answer.actable.id + 1, content: '{"objects":[]}' }, format: :json
+        }
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
   end
 end
