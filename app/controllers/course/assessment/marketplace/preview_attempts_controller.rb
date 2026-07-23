@@ -140,18 +140,19 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
 
   def fetch_live_feedback_status
     thread_id = thread_params[:thread_id]
-    codaveri_api_service = CodaveriAsyncApiService.new("chat/feedback/threads/#{thread_id}", nil)
-
-    response_status, response_body = codaveri_api_service.get
-
-    raise CodaveriError, { status: response_status, body: response_body } if response_status != 200
-
-    @thread_status = response_body['data']['thread']['status']
-
     @thread = Course::Assessment::LiveFeedback::Thread.find_by(codaveri_thread_id: thread_id)
     return head :bad_request if @thread.nil?
 
+    # Authorize BEFORE the external (paid) Codaveri call: this collection action has no upfront
+    # authorize_attempt! gate, and the thread is resolvable from the DB alone. Doing the API call first
+    # would let an unauthorized caller trigger outbound calls / use the result as an existence oracle.
     authorize_preview_attempt_for_thread!(@thread, :fetch_live_feedback_status)
+
+    codaveri_api_service = CodaveriAsyncApiService.new("chat/feedback/threads/#{thread_id}", nil)
+    response_status, response_body = codaveri_api_service.get
+    raise CodaveriError, { status: response_status, body: response_body } if response_status != 200
+
+    @thread_status = response_body['data']['thread']['status']
     @thread.update!(is_active: @thread_status == 'active')
 
     render 'course/assessment/submission/submissions/fetch_live_feedback_status', status: response_status
@@ -246,7 +247,7 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
   # Member routes are shallow (no listing_id): the attempt resolves its own assessment. Load with the
   # calculated grade/graded_at/log_count/grader_ids the reused edit payload reads.
   def load_attempt
-    @attempt = Course::Assessment::Attempt.all.
+    @attempt = Course::Assessment::Attempt.previews.
                calculated(:grade, :graded_at, :log_count, :grader_ids).find(params[:id])
     @submission = @attempt
     @assessment = @attempt.assessment

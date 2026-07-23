@@ -110,6 +110,15 @@ RSpec.describe Course::Assessment::Marketplace::PreviewAttemptsController, type:
           expect { subject }.to raise_exception(CanCan::AccessDenied)
         end
       end
+
+      context 'when the id is a real submission (not a preview)' do
+        let(:real_submission) { create(:submission, assessment: source_assessment, creator: other_manager) }
+        it 'is not found (load scoped to previews)' do
+          expect do
+            get :edit, params: { course_id: course.id, id: real_submission.attempt_id, format: :json }
+          end.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
     end
 
     describe 'POST #auto_grade' do
@@ -393,6 +402,17 @@ RSpec.describe Course::Assessment::Marketplace::PreviewAttemptsController, type:
           content: 'ignored', is_error: false, format: :json
         }
         expect(response).to have_http_status(:bad_request)
+      end
+
+      context 'GET #fetch_live_feedback_status by a non-creator' do
+        before { controller_sign_in(controller, other_manager) }
+        it 'denies BEFORE making any Codaveri API call' do
+          expect(CodaveriAsyncApiService).not_to receive(:new)
+          expect do
+            get :fetch_live_feedback_status,
+                params: { course_id: course.id, thread_id: thread.codaveri_thread_id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
       end
     end
 
