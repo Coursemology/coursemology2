@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::WorkflowEventConcern
   extend ActiveSupport::Concern
-  include Course::LessonPlan::PersonalizationConcern
-  include Course::Assessment::Submission::CikgoTaskCompletionConcern
-
-  included do
-    before_validation :assign_experience_points, if: :workflow_state_changed?
-  end
 
   protected
 
@@ -21,13 +15,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     finalise_current_answers
 
     answers.reload # Reload answers after finalising
-    assign_zero_experience_points
-
-    # Trigger timeline recomputation
-    # NB: We are not recomputing on unsubmission because unsubmit is not done by the student
-    #     It will recompute again when resubmission occurs. This also prevents the timings for
-    #     the unsubmitted item from changing e.g. from other submissions that the student has done.
-    update_personalized_timeline_for_user(course_user)
+    after_finalise_hook
   end
 
   # Handles the marking of a submission.
@@ -49,13 +37,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
   def publish(_ = nil, send_email = true) # rubocop:disable Style/OptionalBooleanParameter
     publish_answers
 
-    self.publisher = User.stamper || User.system
     self.published_at = Time.zone.now
-    self.awarder = User.stamper || User.system
-    self.awarded_at = Time.zone.now
 
-    publish_delayed_posts
-    send_email_after_publishing(send_email)
+    after_publish_hook(send_email)
   end
 
   # Handles the unsubmission of a submitted submission.
@@ -66,13 +50,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
     recreate_current_answers
     answers.reload
 
-    self.points_awarded = nil
-    self.draft_points_awarded = nil
-    self.awarded_at = nil
-    self.awarder = nil
     self.submitted_at = nil
-    self.publisher = nil
     self.published_at = nil
+
+    after_unsubmit_hook
   end
 
   # Handles re-submitting a published submission's programming answers when there are
@@ -83,28 +64,42 @@ module Course::Assessment::Submission::WorkflowEventConcern
     @unsubmitting = true
 
     unsubmit_current_answers(only_programming: true)
-    self.points_awarded = nil
-    self.draft_points_awarded = nil
-    self.awarded_at = nil
-    self.awarder = nil
-    self.publisher = nil
     self.published_at = nil
+
+    after_unsubmit_hook
 
     current_answers.select(&:attempting?).each(&:finalise!)
 
-    assign_zero_experience_points
+    after_resubmit_programming_hook
+  end
+
+  # --- Hook seams, called at the exact points the old, single-table WorkflowEventConcern used to
+  # inline EXP-specific / course-coupled work. `Attempt` and `Submission` are sibling classes joined
+  # by association, not superclass/subclass, so these cannot be Ruby method overrides — they forward
+  # to the associated Submission if one exists. A submission-less (preview) Attempt has no Submission,
+  # so `submission` is `nil` and these become no-ops. The real bodies are defined on
+  # Course::Assessment::Submission (see submission.rb).
+  #
+  # `assign_zero_experience_points` is shared by `finalise` and `resubmit_programming`;
+  # `after_resubmit_programming_hook` exists as a separate hook for the second call site, which has
+  # no single seam it can share with `after_finalise_hook`.
+  def after_finalise_hook
+    submission&.after_finalise_hook
+  end
+
+  def after_publish_hook(send_email = true)
+    submission&.after_publish_hook(send_email)
+  end
+
+  def after_unsubmit_hook
+    submission&.after_unsubmit_hook
+  end
+
+  def after_resubmit_programming_hook
+    submission&.after_resubmit_programming_hook
   end
 
   private
-
-  # finalise event (from attempting) - Assign 0 points as there are no questions.
-  def assign_zero_experience_points
-    return unless assessment.questions.empty?
-
-    self.points_awarded = 0
-    self.awarded_at = Time.zone.now
-    self.awarder = User.stamper || User.system
-  end
 
   # When a submission is finalised, we will compare the current answer and the latest non-current answers.
   # If they are the same, remove the current answer and mark the latest non-current answer as the current answer
@@ -183,67 +178,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
     answers.current_answers.with_attempting_state.each(&:destroy!)
   end
 
-  def send_email_after_publishing(send_email)
-    return unless send_email && persisted? && !assessment.autograded? &&
-                  submission_graded_email_enabled? &&
-                  submission_graded_email_subscribed?
-
-    execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
-  end
-
-  def submission_graded_email_enabled?
-    is_enabled_as_phantom = course_user.phantom? && email_enabled.phantom
-    is_enabled_as_regular = !course_user.phantom? && email_enabled.regular
-    is_enabled_as_phantom || is_enabled_as_regular
-  end
-
-  def submission_graded_email_subscribed?
-    !course_user.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
-  end
-
-  def email_enabled
-    assessment.course.email_enabled(:assessments, :grades_released, assessment.tab.category.id)
-  end
-
-  # Defined outside of the workflow transition as points_awarded and draft_points_awarded are
-  # not set during the event transition, hence they are not modifiable within the method itself.
-  def assign_experience_points
-    # publish event (from grade) - Deduce points awarded from draft or updated attribute.
-    if workflow_state == 'published' &&
-       (workflow_state_was == 'graded' || workflow_state_was == 'submitted')
-      self.points_awarded ||= draft_points_awarded
-      self.draft_points_awarded = nil
-    end
-  end
-
   def publish_answers
     answers.each do |answer|
       answer.publish! if answer.submitted? || answer.evaluated?
-    end
-  end
-
-  def publish_delayed_posts
-    return if assessment.autograded?
-
-    # Publish delayed comments for each question of a submission
-    submission_question_topics = submission_questions.flat_map(&:discussion_topic)
-    update_delayed_topics_and_posts(submission_question_topics)
-
-    # Publish delayed annotations for each programming question of a submission
-    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming.name)
-    annotation_topics = programming_answers.flat_map(&:specific).
-                        flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic)
-    update_delayed_topics_and_posts(annotation_topics)
-  end
-
-  # Update read mark for topic and delayed for posts
-  def update_delayed_topics_and_posts(topics)
-    topics.each do |topic|
-      delayed_posts = topic.posts.only_delayed_posts
-      next if delayed_posts.empty?
-
-      topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all # Remove 'mark as read' (if any)
-      delayed_posts.update_all(workflow_state: 'published')
     end
   end
 

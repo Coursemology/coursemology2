@@ -11,7 +11,8 @@ RSpec.describe Course::Assessment do
   it { is_expected.to have_many(:programming_questions).through(:questions) }
   it { is_expected.to have_many(:scribing_questions).through(:questions) }
   it { is_expected.to have_many(:forum_post_response_questions).through(:questions) }
-  it { is_expected.to have_many(:submissions).dependent(:destroy) }
+  it { is_expected.to have_many(:attempts).dependent(:destroy) }
+  it { is_expected.to have_many(:submissions).through(:attempts) }
   it { is_expected.to have_many(:conditions) }
   it { is_expected.to have_many(:assessment_conditions).dependent(:destroy) }
   it { is_expected.to have_one(:duplication_traceable).dependent(:destroy) }

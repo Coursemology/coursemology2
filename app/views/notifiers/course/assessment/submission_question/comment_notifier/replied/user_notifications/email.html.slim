@@ -1,7 +1,9 @@
 - post = @object
 - submission_question = post.topic.actable
-- course_user = submission_question.submission.course_user
-- assessment = submission_question.submission.assessment
+- attempt = submission_question.submission
+- submission = attempt.submission
+- course_user = submission.course_user
+- assessment = attempt.assessment
 - question = submission_question.question
 - course = assessment.course
 - host = course.instance.host
@@ -15,7 +17,7 @@
 = format_html(t('.message',
                 topic: link_to("#{assessment.title}: #{question_assessment.display_title}",
                                edit_course_assessment_submission_url(course, assessment,
-                                                                     submission_question.submission,
+                                                                     submission,
                                                                      step: step, host: host)),
                                post: post.text_to_email,
                                post_author: post.author_name))

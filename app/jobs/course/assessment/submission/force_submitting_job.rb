@@ -50,9 +50,7 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
   # @param [Course::Assessment] assessment The assessment of which a submission is to be created.
   # @param [CourseUser] course_user The course user whose submission is to be created.
   def create_submission(assessment, course_user)
-    submission = assessment.submissions.new(creator: course_user.user, course_user: course_user)
-
-    assessment.submissions.new(creator: course_user.user)
+    submission = assessment.build_submission(creator: course_user.user, course_user: course_user)
     success = assessment.create_new_submission(submission, course_user)
 
     raise ActiveRecord::Rollback unless success

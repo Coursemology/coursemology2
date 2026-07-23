@@ -1,11 +1,30 @@
 # frozen_string_literal: true
-class Course::Condition::Assessment < ApplicationRecord
+# The class observes two tables (Attempt + Submission) via the after_save hooks below, which pushes
+# it just past the default class-length limit.
+class Course::Condition::Assessment < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include ActiveSupport::NumberHelper
   include DuplicationStateTrackingConcern
+
   acts_as_condition
 
-  # Trigger for evaluating the satisfiability of conditionals for a course user
+  # Trigger for evaluating the satisfiability of conditionals for a course user.
+  #
+  # Split across two `after_save` registrations, one per table that can change: `workflow_state`
+  # lives on Attempt, `last_graded_time` on Submission. Registering both halves on
+  # `Submission.after_save` and reading `submission.saved_change_to_workflow_state?` (delegated to
+  # `attempt`) goes stale across separate Submission saves: the dirty flag reflects `attempt`'s own
+  # most recent save, so a later unrelated `submission.save!` still reports the old transition as
+  # freshly changed and double-fires. Reading `attempt.saved_change_to_workflow_state?` from an
+  # `after_save` on `Attempt` itself avoids this.
+  Course::Assessment::Attempt.after_save do |attempt|
+    next unless attempt.saved_change_to_workflow_state? && attempt.submission
+
+    Course::Condition::Assessment.on_dependent_status_change(attempt.submission)
+  end
+
   Course::Assessment::Submission.after_save do |submission|
+    next unless submission.saved_changes.key?(:last_graded_time)
+
     Course::Condition::Assessment.on_dependent_status_change(submission)
   end
 
@@ -52,11 +71,21 @@ class Course::Condition::Assessment < ApplicationRecord
     Course::Assessment.name
   end
 
+  # The "did workflow_state/last_graded_time just change" check now lives in each of the two
+  # `after_save` registrations above (one per table that can actually change) instead of here.
+  #
+  # A single `publish!` legitimately trips BOTH registrations in one transaction (Attempt's
+  # `workflow_state` and Submission's `last_graded_time` both change). Guard so it still results in
+  # a single re-evaluation: register the
+  # after-commit re-evaluation once per submission per pending commit (the two registrations receive
+  # the same Submission instance via `inverse_of`), preserving the "exactly once per status change"
+  # contract instead of double-firing.
   def self.on_dependent_status_change(submission)
-    return unless submission.saved_changes.key?(:workflow_state) ||
-                  submission.saved_changes.key?(:last_graded_time)
+    return if submission.instance_variable_get(:@evaluate_conditional_pending)
 
+    submission.instance_variable_set(:@evaluate_conditional_pending, true)
     submission.execute_after_commit do
+      submission.instance_variable_set(:@evaluate_conditional_pending, false)
       evaluate_conditional_for(submission.course_user)
     end
   end
@@ -79,12 +108,17 @@ class Course::Condition::Assessment < ApplicationRecord
   private
 
   def submitted_submissions_by_user(user)
-    # TODO: Replace with Rails 5 ActiveRecord::Relation#or with named scope
-    assessment.submissions.by_user(user).where(workflow_state: [:submitted, :graded, :published])
+    # `workflow_state` lives on Attempt; `.confirmed` already wraps this exact set of states
+    # (`[:submitted, :graded, :published]`) through `:attempt`.
+    assessment.submissions.by_user(user).confirmed
   end
 
   def published_submissions_with_minimum_grade_exists?(user, minimum_grade_percentage)
-    assessment.submissions.by_user(user).with_published_state.eager_load(:answers, assessment: :questions).any? do |sub|
+    # `:answers`/`:assessment` are delegated methods on Submission, not real associations, so
+    # `eager_load(:answers, assessment: :questions)` on it raises `ActiveRecord::ConfigurationError`.
+    # Both live on `:attempt`, so eager-load through it.
+    assessment.submissions.by_user(user).with_published_state.
+      eager_load(attempt: [:answers, assessment: :questions]).any? do |sub|
       sub.grade.to_f >= sub.questions.sum(:maximum_grade).to_f * minimum_grade_percentage / 100.0
     end
   end

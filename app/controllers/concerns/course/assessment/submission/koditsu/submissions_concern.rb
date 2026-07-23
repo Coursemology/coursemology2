@@ -39,7 +39,7 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   def process_all_submissions
     create_new_submissions_if_not_existing
 
-    @submission_hash = Course::Assessment::Submission.where(assessment: @assessment).to_h do |s|
+    @submission_hash = @assessment.submissions.to_h do |s|
       [s.creator_id, s]
     end
 
@@ -59,8 +59,10 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def create_new_submissions_if_not_existing
-    existing_submission_user_ids = Course::Assessment::Submission.where(assessment: @assessment).
-                                   pluck(:creator_id)
+    # `creator_id` lives on the base (`course_assessment_submissions`), not on Submission's own
+    # table. Unqualified, `pluck` is ambiguous — `acts_as :experience_points_record` also joins
+    # `course_experience_points_records`, which also has `creator_id`. Qualify explicitly.
+    existing_submission_user_ids = @assessment.submissions.pluck('course_assessment_submissions.creator_id')
     koditsu_submission_user_ids = @cu_submission_hash.keys.map { |creator, _| creator.id }
     user_ids_without_submission = koditsu_submission_user_ids - existing_submission_user_ids
 
@@ -77,8 +79,7 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
   def create_new_submission_for(creator, course_user)
     User.with_stamper(creator) do
-      new_submission = @assessment.submissions.new(creator: creator,
-                                                   course_user: course_user)
+      new_submission = @assessment.build_submission(creator: creator, course_user: course_user)
       success = @assessment.create_new_submission(new_submission, course_user)
 
       raise ActiveRecord::Rollback unless success
@@ -96,7 +97,10 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def process_submission_answers(submission, cm_submission)
-    answers = Course::Assessment::Answer.includes(:question).where(submission_id: cm_submission.id)
+    # `cm_submission` is a Submission (extension), whose own `id` is an independent serial, NOT the
+    # attempt id that `answers.submission_id` references. Use `cm_submission.attempt_id` (the
+    # extension's FK to its attempt) to find the answers.
+    answers = Course::Assessment::Answer.includes(:question).where(submission_id: cm_submission.attempt_id)
 
     build_answer_hash(answers)
 

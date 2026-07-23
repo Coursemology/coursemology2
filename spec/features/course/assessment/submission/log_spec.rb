@@ -16,7 +16,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
       create(:submission, assessment: protected_assessment, creator: student)
     end
     let(:submission_logs) do
-      create_list(:course_assessment_submission_log, 5, submission: submission)
+      create_list(:course_assessment_submission_log, 5, submission: submission.attempt)
     end
 
     before { login_as(user, scope: :user) }

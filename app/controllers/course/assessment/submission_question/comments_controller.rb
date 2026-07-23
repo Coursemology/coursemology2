@@ -34,7 +34,7 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
     @discussion_topic.ensure_subscribed_by(@submission_question.submission.creator)
 
     # Ensure all group managers get a notification when someone comments on this submission question
-    submission_question_course_user = @submission_question.submission.course_user
+    submission_question_course_user = @submission_question.submission.submission.course_user
     submission_question_course_user.my_managers.each do |manager|
       @discussion_topic.ensure_subscribed_by(manager.user)
     end

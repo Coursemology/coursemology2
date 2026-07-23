@@ -44,9 +44,9 @@ class Course::Material::MaterialsController < Course::Material::Controller
   def create_submission
     current_course_user = current_course.course_users.find_by(user: current_user)
     @assessment = @folder.owner
-    existing_submission = @assessment.submissions.find_by(creator: current_user)
+    existing_submission = @assessment.submissions.by_user(current_user).first
     unless existing_submission
-      @submission = @assessment.submissions.new(course_user: current_course_user)
+      @submission = @assessment.build_submission(course_user: current_course_user)
       @submission.session_id = authentication_service.generate_authentication_token
       success = @assessment.create_new_submission(@submission, current_user)
 

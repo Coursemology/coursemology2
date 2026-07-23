@@ -6,7 +6,11 @@ FactoryBot.define do
       assessment { build(:assessment, course: course) }
     end
 
-    submission { build(:submission, assessment: assessment, course: course) }
+    # `Log#submission` targets the base `Course::Assessment::Attempt` (not the `Submission` detail
+    # extension), so this association must be given an Attempt or FactoryBot's lint raises
+    # `ActiveRecord::AssociationTypeMismatch`. Build through `:submission` (rather than a bare
+    # `:attempt`) so the Attempt gets a valid creator/course-user graph its validations require.
+    submission { build(:submission, assessment: assessment, course: course).attempt }
     request do
       {
         HTTP_X_FORWARDED_FOR: '192.168.123.45',

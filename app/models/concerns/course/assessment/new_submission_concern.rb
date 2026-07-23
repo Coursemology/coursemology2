@@ -12,7 +12,10 @@ module Course::Assessment::NewSubmissionConcern
           raise ActiveRecord::Rollback
         end
         raise ActiveRecord::Rollback unless new_submission.save
-        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: new_submission.id)
+        # `question_bundle_assignments.submission_id` references the attempt base, so it must hold an
+        # Attempt id — not the extension table's own (different) id. `attempt_id` is the extension's
+        # own FK column to its attempt.
+        raise ActiveRecord::Rollback unless qbas.update_all(submission_id: new_submission.attempt_id)
 
         success = true
       end
