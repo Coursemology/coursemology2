@@ -73,6 +73,14 @@ export default defineMessages({
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
   },
+  attemptAssessment: {
+    id: 'course.marketplace.attemptAssessment',
+    defaultMessage: 'Attempt',
+  },
+  attemptFailed: {
+    id: 'course.marketplace.attemptFailed',
+    defaultMessage: 'Could not start a preview attempt.',
+  },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
     defaultMessage: 'View question details',

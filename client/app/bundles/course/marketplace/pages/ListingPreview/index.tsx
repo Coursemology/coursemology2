@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { ContentCopy } from '@mui/icons-material';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { ContentCopy, PlayArrow } from '@mui/icons-material';
 import { Button, Chip, Paper } from '@mui/material';
 
 // Reuse the assessment show page's "Questions" heading so wording + locales stay identical.
 import assessmentTranslations from 'course/assessment/translations';
 import { useCourseContext } from 'course/container/CourseLoader';
+import { setNotification } from 'lib/actions';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import Preload from 'lib/components/wrappers/Preload';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DuplicateConfirmation from '../../components/DuplicateConfirmation';
 import { withFromTab } from '../../fromTab';
-import { fetchListing } from '../../operations';
+import { createAttempt, fetchListing } from '../../operations';
 import translations from '../../translations';
 import { ListingPreviewData } from '../../types';
 
@@ -32,6 +34,23 @@ const ListingPreview = (): JSX.Element => {
   const destinationTabId = parseInt(fromTab ?? '', 10) || null;
   const [duplicating, setDuplicating] = useState(false);
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [attempting, setAttempting] = useState(false);
+
+  const handleAttempt = async (): Promise<void> => {
+    setAttempting(true);
+    try {
+      const { id } = await createAttempt(Number(listingId));
+      navigate(
+        `${courseUrl}/marketplace/attempt/${id}/edit?fromListing=${listingId}`,
+      );
+    } catch {
+      dispatch(setNotification(translations.attemptFailed));
+      setAttempting(false);
+    }
+  };
+
   return (
     <Preload
       render={<div />}
@@ -40,14 +59,25 @@ const ListingPreview = (): JSX.Element => {
       {(listing): JSX.Element => (
         <Page
           actions={
-            <Button
-              color="primary"
-              onClick={(): void => setDuplicating(true)}
-              startIcon={<ContentCopy />}
-              variant="contained"
-            >
-              {t(translations.duplicateAssessment)}
-            </Button>
+            <>
+              <Button
+                color="primary"
+                disabled={attempting}
+                onClick={handleAttempt}
+                startIcon={<PlayArrow />}
+                variant="outlined"
+              >
+                {t(translations.attemptAssessment)}
+              </Button>
+              <Button
+                color="primary"
+                onClick={(): void => setDuplicating(true)}
+                startIcon={<ContentCopy />}
+                variant="contained"
+              >
+                {t(translations.duplicateAssessment)}
+              </Button>
+            </>
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"

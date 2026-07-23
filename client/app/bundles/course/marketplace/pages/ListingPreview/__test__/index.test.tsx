@@ -208,3 +208,63 @@ it('marks the page title as a preview', async () => {
   // for the real assessment it mirrors.
   expect(screen.getByText('Preview')).toBeVisible();
 });
+
+it('creates a preview attempt and navigates to the preview edit page', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: '',
+    typeCounts: {},
+    questions: [],
+  });
+  mock
+    .onPost(`/courses/${global.courseId}/marketplace/listings/7/attempt`)
+    .reply(200, { id: 55, assessmentId: 9 });
+
+  render(<ListingPreview />, { at: [url] });
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+
+  fireEvent.click(screen.getByRole('button', { name: 'Attempt' }));
+
+  await waitFor(() =>
+    expect(mockNavigate).toHaveBeenCalledWith(
+      `/courses/${global.courseId}/marketplace/attempt/55/edit?fromListing=7`,
+    ),
+  );
+});
+
+it('shows a notification and does not navigate when the attempt create conflicts (409)', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: '',
+    typeCounts: {},
+    questions: [],
+  });
+  mock
+    .onPost(`/courses/${global.courseId}/marketplace/listings/7/attempt`)
+    .reply(409, {
+      errors: ['You already have a submission for this assessment.'],
+    });
+
+  render(<ListingPreview />, { at: [url] });
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+
+  fireEvent.click(screen.getByRole('button', { name: 'Attempt' }));
+
+  // Wait for the create POST to actually round-trip (and 409), THEN assert no
+  // navigation followed — otherwise "not navigated" is trivially true before the
+  // request even fires.
+  await waitFor(() =>
+    expect(
+      mock.history.post.filter((r) =>
+        r.url?.endsWith('/marketplace/listings/7/attempt'),
+      ),
+    ).toHaveLength(1),
+  );
+  expect(mockNavigate).not.toHaveBeenCalled();
+});
