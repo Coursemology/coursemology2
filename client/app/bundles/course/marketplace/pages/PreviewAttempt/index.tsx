@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Outlet, useParams, useSearchParams } from 'react-router-dom';
 
 import {
@@ -6,6 +6,7 @@ import {
   setActivePreview,
 } from 'api/course/Assessment/previewAttemptContext';
 import PreviewAttemptContext from 'course/assessment/submission/pages/SubmissionEditIndex/PreviewAttemptContext';
+import { useCourseContext } from 'course/container/CourseLoader';
 
 const PreviewAttemptScope = (): JSX.Element => {
   const { submissionId } = useParams();
@@ -13,6 +14,12 @@ const PreviewAttemptScope = (): JSX.Element => {
   const [params] = useSearchParams();
   const listingParam = params.get('fromListing');
   const listingId = listingParam ? Number(listingParam) : undefined;
+
+  // Forward CourseContainer's outlet context (CourseLayoutData, incl. courseUrl) down
+  // to the reused SubmissionEditIndex. A bare <Outlet/> would set the outlet context to
+  // undefined, so the child's useCourseContext() — used by the preview banner — would
+  // otherwise read undefined on the preview page.
+  const courseContext = useCourseContext();
 
   // Set the singleton SYNCHRONOUSLY in the render body — not in a useEffect. The child
   // SubmissionEditIndex dispatches fetchSubmission in componentDidMount, which fires
@@ -23,11 +30,14 @@ const PreviewAttemptScope = (): JSX.Element => {
 
   useEffect(() => () => clearActivePreview(), []);
 
+  const previewContext = useMemo(
+    () => ({ isPreview: true, attemptId, listingId }),
+    [attemptId, listingId],
+  );
+
   return (
-    <PreviewAttemptContext.Provider
-      value={{ isPreview: true, attemptId, listingId }}
-    >
-      <Outlet />
+    <PreviewAttemptContext.Provider value={previewContext}>
+      <Outlet context={courseContext} />
     </PreviewAttemptContext.Provider>
   );
 };

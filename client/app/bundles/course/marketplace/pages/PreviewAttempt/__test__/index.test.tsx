@@ -12,7 +12,17 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ submissionId: '5' }),
   useSearchParams: () => [new URLSearchParams('fromListing=7'), jest.fn()],
-  Outlet: () => <Probe />,
+  // Stand in for CourseContainer's outlet context so we can assert the wrapper
+  // forwards it (useCourseContext() delegates to useOutletContext()).
+  useOutletContext: () => ({ courseUrl: '/courses/1' }),
+  // Render both the probe (for the singleton timing check) and the context the
+  // wrapper forwarded via <Outlet context={...}> (for the forwarding check).
+  Outlet: ({ context }: { context?: { courseUrl?: string } }): JSX.Element => (
+    <>
+      <Probe />
+      <div>forwarded: {context?.courseUrl ?? 'none'}</div>
+    </>
+  ),
 }));
 
 // TestApp's I18nProvider loads locale messages via a dynamic import(), so the tree
@@ -22,6 +32,13 @@ it('sets the preview singleton during render, before its child renders', async (
   // The Probe reads getActivePreview() during ITS OWN render; seeing '5' proves the
   // wrapper set the singleton before the child rendered (i.e. in render, not an effect).
   expect(await screen.findByText('preview id: 5')).toBeInTheDocument();
+});
+
+it('forwards the course outlet context down to the child route', async () => {
+  render(<PreviewAttemptScope />);
+  // A bare <Outlet/> would null the context; this proves CourseLayoutData is forwarded
+  // so the reused SubmissionEditIndex banner can read courseUrl on the preview page.
+  expect(await screen.findByText('forwarded: /courses/1')).toBeInTheDocument();
 });
 
 it('clears the singleton on unmount', async () => {

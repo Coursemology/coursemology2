@@ -18,11 +18,15 @@ const PreviewAttemptBanner = (): JSX.Element | null => {
   const { isPreview, attemptId, listingId } = useContext(PreviewAttemptContext);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { courseUrl } = useCourseContext();
+  // This banner mounts on the shared submission edit page too. Read the course context
+  // defensively (optional chaining, not destructuring) so it never throws there — the
+  // component early-returns for real submissions before courseUrl is ever used.
+  const courseContext = useCourseContext();
   const { t } = useTranslation();
 
   if (!isPreview || attemptId === undefined) return null;
 
+  const courseUrl = courseContext?.courseUrl;
   const backTo = listingId
     ? `${courseUrl}/marketplace/listings/${listingId}`
     : `${courseUrl}/marketplace`;
