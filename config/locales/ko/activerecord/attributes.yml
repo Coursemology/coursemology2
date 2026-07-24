@@ -15,6 +15,10 @@ ko:
         weight: '순서'
       course/assessment/category/title:
         default: '평가'
+      course/assessment/marketplace/allowlist_rule:
+        user_id: '사용자'
+        instance_id: '인스턴스'
+        email_domain: '이메일 도메인'
       course/assessment/question:
         weight: '순서'
       course/assessment/submission:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -270,6 +270,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
     t.index ["question_id"], name: "index_course_assessment_live_feedbacks_on_question_id"
   end
 
+  create_table "course_assessment_marketplace_access_blocks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "idx_on_creator_id_becaf2e041"
+    t.index ["user_id"], name: "index_course_assessment_marketplace_access_blocks_on_user_id", unique: true
+  end
+
   create_table "course_assessment_marketplace_adoptions", force: :cascade do |t|
     t.bigint "listing_id", null: false
     t.bigint "destination_course_id", null: false
@@ -284,6 +293,22 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
     t.index ["listing_id", "destination_course_id"], name: "index_cama_on_listing_id_and_destination_course_id"
     t.index ["listing_id"], name: "fk__course_assessment_marketplace_adoptions_listing_id"
     t.index ["updater_id"], name: "fk__cama_updater_id"
+  end
+
+  create_table "course_assessment_marketplace_allowlist_rules", force: :cascade do |t|
+    t.integer "rule_type", null: false
+    t.bigint "user_id"
+    t.bigint "instance_id"
+    t.string "email_domain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_domain"], name: "idx_on_email_domain_6577b88d4e"
+    t.index ["email_domain"], name: "index_marketplace_allowlist_rules_one_per_email_domain", unique: true, where: "(rule_type = 2)"
+    t.index ["instance_id"], name: "idx_on_instance_id_77af5cff27"
+    t.index ["instance_id"], name: "index_marketplace_allowlist_rules_one_per_instance", unique: true, where: "(rule_type = 1)"
+    t.index ["rule_type"], name: "index_marketplace_allowlist_rules_one_everyone", unique: true, where: "(rule_type = 3)"
+    t.index ["user_id"], name: "index_course_assessment_marketplace_allowlist_rules_on_user_id"
+    t.index ["user_id"], name: "index_marketplace_allowlist_rules_one_per_user", unique: true, where: "(rule_type = 0)"
   end
 
   create_table "course_assessment_marketplace_listings", force: :cascade do |t|
@@ -1978,11 +2003,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_07_000002) do
   add_foreign_key "course_assessment_live_feedbacks", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_live_feedbacks", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_live_feedbacks", "users", column: "creator_id"
+  add_foreign_key "course_assessment_marketplace_access_blocks", "users"
+  add_foreign_key "course_assessment_marketplace_access_blocks", "users", column: "creator_id"
   add_foreign_key "course_assessment_marketplace_adoptions", "course_assessment_marketplace_listings", column: "listing_id", name: "fk_course_assessment_marketplace_adoptions_listing_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_adoptions", "course_assessments", column: "duplicated_assessment_id", name: "fk_cama_duplicated_assessment_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_adoptions", "courses", column: "destination_course_id", name: "fk_cama_destination_course_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "creator_id", name: "fk_course_assessment_marketplace_adoptions_creator_id"
   add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "updater_id", name: "fk_course_assessment_marketplace_adoptions_updater_id"
+  add_foreign_key "course_assessment_marketplace_allowlist_rules", "instances"
+  add_foreign_key "course_assessment_marketplace_allowlist_rules", "users"
   add_foreign_key "course_assessment_marketplace_listings", "course_assessments", column: "assessment_id", name: "fk_course_assessment_marketplace_listings_assessment_id", on_delete: :cascade
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "creator_id", name: "fk_course_assessment_marketplace_listings_creator_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "publisher_id", name: "fk_course_assessment_marketplace_listings_publisher_id"
