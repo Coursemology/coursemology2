@@ -80,7 +80,17 @@ function getSubmissionId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/,
   );
-  return match?.[1] ?? null;
+  if (match) return match[1];
+
+  // The marketplace preview reuses the submission edit UI on a shallow attempt URL
+  // (`/courses/:c/marketplace/attempt/:id`) that has no /assessments/:aid/submissions
+  // segment. The attempt id is the submission base-record id, so pollers/buttons that
+  // derive the id from the URL must resolve it here rather than fall through to null
+  // and emit /marketplace/attempt/null/... requests.
+  const previewMatch = window.location.pathname.match(
+    /^\/courses\/\d+\/marketplace\/attempt\/(\d+)/,
+  );
+  return previewMatch?.[1] ?? null;
 }
 
 /**

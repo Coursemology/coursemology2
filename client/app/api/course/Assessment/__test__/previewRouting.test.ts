@@ -16,11 +16,13 @@ const submissionsMock = createMockAdapter(
 const scribingMock = createMockAdapter(
   CourseAPI.assessment.answer.scribing.client,
 );
+const answerMock = createMockAdapter(CourseAPI.assessment.answer.answer.client);
 const marketplaceMock = createMockAdapter(CourseAPI.marketplace.client);
 
 beforeEach(() => {
   submissionsMock.reset();
   scribingMock.reset();
+  answerMock.reset();
   marketplaceMock.reset();
   clearActivePreview();
 });
@@ -69,7 +71,9 @@ describe('submission API preview routing', () => {
     expect(submissionsMock.history.get[0].url).toBe(
       `/courses/${global.courseId}/marketplace/attempt/fetch_live_feedback_status`,
     );
-    expect(submissionsMock.history.get[0].url).not.toContain('assessments/null');
+    expect(submissionsMock.history.get[0].url).not.toContain(
+      'assessments/null',
+    );
   });
 
   it('routes reset to /marketplace/attempt/:id/reset', async () => {
@@ -83,6 +87,69 @@ describe('submission API preview routing', () => {
 
     expect(submissionsMock.history.post[0].url).toBe(
       `/courses/${global.courseId}/marketplace/attempt/5/reset`,
+    );
+  });
+});
+
+describe('answer API preview routing', () => {
+  it('routes saveDraft to /assessments/:aid/submissions/:sid/answers when NOT in preview', async () => {
+    setPath(`/courses/${global.courseId}/assessments/9/submissions/5/edit`);
+    answerMock
+      .onPatch(
+        `/courses/${global.courseId}/assessments/9/submissions/5/answers/7`,
+      )
+      .reply(200, {});
+
+    await CourseAPI.assessment.answer.answer.saveDraft(7, {});
+
+    expect(answerMock.history.patch[0].url).toBe(
+      `/courses/${global.courseId}/assessments/9/submissions/5/answers/7`,
+    );
+  });
+
+  it('routes saveDraft to /marketplace/attempt/:attemptId/answers/:answerId in preview', async () => {
+    setPath(`/courses/${global.courseId}/marketplace/attempt/5/edit`);
+    setActivePreview(5);
+    answerMock
+      .onPatch(`/courses/${global.courseId}/marketplace/attempt/5/answers/7`)
+      .reply(200, {});
+
+    await CourseAPI.assessment.answer.answer.saveDraft(7, {});
+
+    expect(answerMock.history.patch[0].url).toBe(
+      `/courses/${global.courseId}/marketplace/attempt/5/answers/7`,
+    );
+    expect(answerMock.history.patch[0].url).not.toContain('assessments/null');
+  });
+
+  it('routes saveDraft to /marketplace/attempt even after the singleton was cleared (stray poller)', async () => {
+    setPath(`/courses/${global.courseId}/marketplace/attempt/5/edit`);
+    clearActivePreview();
+    answerMock
+      .onPatch(`/courses/${global.courseId}/marketplace/attempt/5/answers/7`)
+      .reply(200, {});
+
+    await CourseAPI.assessment.answer.answer.saveDraft(7, {});
+
+    expect(answerMock.history.patch[0].url).toBe(
+      `/courses/${global.courseId}/marketplace/attempt/5/answers/7`,
+    );
+    expect(answerMock.history.patch[0].url).not.toContain('assessments/null');
+  });
+
+  it('routes submitAnswer to /marketplace/attempt/:attemptId/answers/:answerId/submit_answer in preview', async () => {
+    setPath(`/courses/${global.courseId}/marketplace/attempt/5/edit`);
+    setActivePreview(5);
+    answerMock
+      .onPatch(
+        `/courses/${global.courseId}/marketplace/attempt/5/answers/7/submit_answer`,
+      )
+      .reply(200, {});
+
+    await CourseAPI.assessment.answer.answer.submitAnswer(7, {});
+
+    expect(answerMock.history.patch[0].url).toBe(
+      `/courses/${global.courseId}/marketplace/attempt/5/answers/7/submit_answer`,
     );
   });
 });
