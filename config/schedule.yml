@@ -15,3 +15,9 @@ user_email_database_cleanup_job:
   cron: '0 0 1 * *'
   class: 'UserEmailDatabaseCleanupJob'
   queue: 'default'
+
+# Reap expired marketplace preview attempts once a day at 22:00 UTC, 6:00 AM SGT.
+preview_attempt_reaping_job:
+  cron: '0 22 * * *'
+  class: 'Course::Assessment::PreviewAttemptReapingJob'
+  queue: 'default'

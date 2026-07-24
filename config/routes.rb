@@ -626,6 +626,27 @@ Rails.application.routes.draw do
         resources :listings, only: [:show], path: 'marketplace/listings' do
           post 'duplicate', on: :collection
           resources :questions, only: [:show]
+          resource :attempt, only: [:create], controller: 'preview_attempts'
+        end
+        resources :preview_attempts, only: [:edit, :update], path: 'marketplace/attempt' do
+          collection do
+            get :fetch_live_feedback_chat
+            get :fetch_live_feedback_status
+            post :save_live_feedback
+          end
+
+          member do
+            post :auto_grade
+            post :reset
+            post :reload_answer
+            post :reevaluate_answer
+            post :generate_feedback
+            post :generate_live_feedback
+            post :create_live_feedback_chat
+            patch 'answers/:answer_id' => 'preview_attempts#save_draft'
+            patch 'answers/:answer_id/submit_answer' => 'preview_attempts#submit_answer'
+            post 'answers/:answer_id/scribing/scribbles' => 'preview_attempts#create_scribing_scribble'
+          end
         end
       end
     end

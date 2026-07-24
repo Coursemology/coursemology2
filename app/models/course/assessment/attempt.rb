@@ -60,6 +60,24 @@ class Course::Assessment::Attempt < ApplicationRecord
   has_one :submission, class_name: 'Course::Assessment::Submission', inverse_of: :attempt,
                        dependent: :destroy
 
+  # Course-coupled / EXP slice of the submission interface, owned by the extension. Delegating here lets
+  # an Attempt stand in as `@submission` for a marketplace preview: the shared submission
+  # jbuilders call these on the served object, and for a preview (no extension) they must be nil. For a
+  # real submission the serving path uses the extension directly, so these are exercised only by previews.
+  delegate :course_user, :current_points_awarded, :experience_points_record, :publisher,
+           to: :submission, allow_nil: true
+
+  # A preview's `@submission` IS this base Attempt, but the shared submission pipeline sometimes reaches
+  # for `<submission>.attempt` (e.g. Submission::UpdateService#create_missing_submission_questions builds
+  # `SubmissionQuestion.new(submission: @submission.attempt)`). For a real Submission that returns the base
+  # Attempt; for an Attempt standing in as @submission it is simply itself. Returning `self` lets that
+  # shared code work unmodified for both kinds, extending the "Attempt serves as @submission"
+  # seam. `SubmissionQuestion#submission` / `Answer#submission` both target Attempt, so `self` is the
+  # correct object to hand them.
+  def attempt
+    self
+  end
+
   has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
                                   foreign_key: 'submission_id', dependent: :destroy, inverse_of: :submission
 
@@ -205,6 +223,26 @@ class Course::Assessment::Attempt < ApplicationRecord
 
   def submission_view_blocked?(course_user)
     !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user&.student?
+  end
+
+  # A preview is a throwaway attempt with no Submission extension row (marketplace "try it out"). Real
+  # attempts always have exactly one. This is the single source of truth for preview-only branching.
+  def preview?
+    submission.nil?
+  end
+
+  # Throws away all work on this attempt and starts it over: destroys every answer, returns the attempt to
+  # the `attempting` state, and rebuilds fresh answers. Backs the marketplace preview "Reset attempt" action.
+  def reset_attempt!
+    transaction do
+      answers.destroy_all
+      self.submitted_at = nil
+      self.published_at = nil
+      self.workflow_state = 'attempting'
+      save!
+      answers.reload
+      create_new_answers
+    end
   end
 
   def questions

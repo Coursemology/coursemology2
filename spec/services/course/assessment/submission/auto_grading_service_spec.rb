@@ -131,6 +131,47 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
       end
     end
 
+    # Post-split, production drives this service with the ATTEMPT base (the after_save trigger passes
+    # `self`), not the Submission extension. These examples pin that path — the one the existing
+    # `context 'when assessment is autograded'` masks by hand-passing a Submission.
+    describe '#grade driven by the Attempt base (production path)' do
+      let(:autograded_assessment) do
+        create(:assessment, :published_with_mcq_question, :autograded, course: course, question_count: 2)
+      end
+
+      it 'awards EXP on the extension and publishes for a REAL autograded submission' do
+        submission = create(:submission, :attempting, assessment: autograded_assessment, creator: student_user)
+        # Suppress the async after_save re-trigger so we exercise grade() directly (mirrors the existing
+        # autograded context). The stub is on the Attempt base, where the callback lives.
+        allow(submission.attempt).to receive(:auto_grade_submission).and_return(true)
+        submission.finalise!
+        submission.save!
+
+        expect { subject.grade(submission.attempt) }.not_to raise_error
+
+        submission.reload
+        expect(submission).to be_published
+        expect(submission.points_awarded).not_to be_nil
+      end
+
+      it 'grades and publishes a PREVIEW attempt (no extension) WITHOUT awarding EXP, no crash' do
+        previewer = create(:course_manager, course: course).user
+        preview = create(:course_assessment_attempt, assessment: autograded_assessment, creator: previewer)
+        allow(preview).to receive(:auto_grade_submission).and_return(true)
+        preview.create_new_answers
+        preview.finalise!
+        preview.save!
+        expect(preview.submission).to be_nil # it is a preview: no Submission extension row
+
+        expect { subject.grade(preview) }.not_to raise_error
+
+        preview.reload
+        expect(preview).to be_published
+        expect(preview.submission).to be_nil
+        expect(preview.current_answers.map(&:reload)).to all(be_graded.or(be_evaluated))
+      end
+    end
+
     context 'when a sub job fails' do
       let(:answer) do
         create(:course_assessment_answer_multiple_response, :submitted,
