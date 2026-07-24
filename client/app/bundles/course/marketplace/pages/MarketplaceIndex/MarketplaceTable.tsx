@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   ContentCopy,
+  PlayArrow,
   StorefrontOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material';
@@ -27,12 +28,14 @@ type SortMode = 'adoptions' | 'newest';
 interface Props {
   fromTab?: string | null;
   listings: MarketplaceListing[];
+  onAttempt?: (listing: MarketplaceListing) => void;
   onDuplicate: (rows: MarketplaceListing[]) => void;
 }
 
 const MarketplaceTable = ({
   fromTab = null,
   listings,
+  onAttempt = (): void => {},
   onDuplicate,
 }: Props): JSX.Element => {
   const { formatMessage: t } = useIntl();
@@ -85,6 +88,15 @@ const MarketplaceTable = ({
               to={withFromTab(l.previewUrl, fromTab)}
             >
               <VisibilityOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip disableInteractive title={t(translations.attemptAssessment)}>
+            <IconButton
+              aria-label={t(translations.attemptAssessment)}
+              onClick={(): void => onAttempt(l)}
+              size="small"
+            >
+              <PlayArrow />
             </IconButton>
           </Tooltip>
           <Tooltip disableInteractive title={t(translations.duplicateConfirm)}>
