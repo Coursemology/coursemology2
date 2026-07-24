@@ -172,7 +172,7 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
                           rule_type: :user, user: user)
 
         expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:user_id]).to include('already has a rule.')
+        expect(duplicate.errors[:user_id]).to include('already has the same rule.')
       end
 
       it 'allows a user rule for a different user' do
@@ -189,7 +189,7 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
                           rule_type: :instance, instance: other_instance)
 
         expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:instance_id]).to include('already has a rule.')
+        expect(duplicate.errors[:instance_id]).to include('already has the same rule.')
       end
 
       it 'rejects a second email-domain rule for the same domain' do
@@ -199,7 +199,7 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
                           rule_type: :email_domain, email_domain: 'dupes.test')
 
         expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:email_domain]).to include('already has a rule.')
+        expect(duplicate.errors[:email_domain]).to include('already has the same rule.')
       end
 
       it 'treats a differently-cased domain as the same rule' do
@@ -209,7 +209,7 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
                           rule_type: :email_domain, email_domain: '  DUPES.TEST  ')
 
         expect(duplicate).not_to be_valid
-        expect(duplicate.errors[:email_domain]).to include('already has a rule.')
+        expect(duplicate.errors[:email_domain]).to include('already has the same rule.')
       end
 
       it 'normalizes the stored domain to stripped lowercase' do
@@ -220,7 +220,7 @@ RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
 
       # A user rule whose email resolves to nobody keeps user_id NULL, and Rails checks uniqueness
       # as `user_id IS NULL` — which matches every instance and email-domain rule unless the check
-      # is scoped to rule_type. Unscoped, the admin gets a bogus "already has a rule." stacked on
+      # is scoped to rule_type. Unscoped, the admin gets a bogus "already has the same rule." stacked on
       # top of the real reason. (Verified by mutation: dropping `scope: :rule_type` fails this.)
       it 'does not report a duplicate for an unresolvable email when other rule types exist' do
         create(:course_assessment_marketplace_allowlist_rule,

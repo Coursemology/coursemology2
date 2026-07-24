@@ -8780,6 +8780,9 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "Get Help"
   },
+  "system.admin.admin.AdminNavigator.marketplace": {
+    "defaultMessage": "Marketplace Access"
+  },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "Unable to fetch announcements"
   },
@@ -8863,6 +8866,177 @@
   },
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "Renamed {field} from {prevValue} to {newValue}"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
+    "defaultMessage": "Add access rule"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.eligibility": {
+    "defaultMessage": "Available to course managers & owners (of any course) and instance instructors & administrators (of any instance). They must also match one of the rules below."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.fetchFailure": {
+    "defaultMessage": "Failed to load marketplace access rules."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createSuccess": {
+    "defaultMessage": "Access rule added."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createFailure": {
+    "defaultMessage": "Failed to add access rule."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteSuccess": {
+    "defaultMessage": "Access rule removed."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteFailure": {
+    "defaultMessage": "Failed to remove access rule."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openSuccess": {
+    "defaultMessage": "Marketplace opened to all course managers."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openFailure": {
+    "defaultMessage": "Failed to open the marketplace to everyone."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictSuccess": {
+    "defaultMessage": "Marketplace restricted to the scoped rules."
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictFailure": {
+    "defaultMessage": "Failed to restrict the marketplace."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.scopedTitle": {
+    "defaultMessage": "Access is limited to the rules below."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.everyoneTitle": {
+    "defaultMessage": "The marketplace is open to all eligible staff: course managers/owners and instance instructors/administrators. The rules below are preserved but inactive."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.toggleLabel": {
+    "defaultMessage": "Open to everyone"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmTitle": {
+    "defaultMessage": "Open marketplace to everyone?"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmBody": {
+    "defaultMessage": "This makes the marketplace visible to all eligible staff: course managers/owners and instance instructors/administrators. You can restrict it again at any time; your scoped rules are kept."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmTitle": {
+    "defaultMessage": "Restrict to scoped rules?"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmBody": {
+    "defaultMessage": "The marketplace will again be limited to the rules below. Eligible staff not covered by a rule will lose access."
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmOpen": {
+    "defaultMessage": "Open to everyone"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmRestrict": {
+    "defaultMessage": "Restrict"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.title": {
+    "defaultMessage": "Add marketplace access rule"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.ruleType": {
+    "defaultMessage": "Rule type"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeUser": {
+    "defaultMessage": "Specific eligible user"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeInstance": {
+    "defaultMessage": "All eligible users in an instance"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeEmailDomain": {
+    "defaultMessage": "All eligible users with an email domain"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.userEmail": {
+    "defaultMessage": "Eligible user email"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.eligibilityHint": {
+    "defaultMessage": "Eligible users refer to course managers & owners (of any course) and instance instructors & administrators (of any instance)."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.instanceId": {
+    "defaultMessage": "Instance"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.emailDomain": {
+    "defaultMessage": "Email domain (e.g. schools.gov.sg)"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.next": {
+    "defaultMessage": "Next"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.back": {
+    "defaultMessage": "Back"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.confirmAdd": {
+    "defaultMessage": "Confirm add"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.counts": {
+    "defaultMessage": "Grants access to {matched, plural, one {# eligible user} other {# eligible users}}"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsOfMatched": {
+    "defaultMessage": "Grants access to {granted} of {matched, plural, one {# eligible user} other {# eligible users}}"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsExistingClause": {
+    "defaultMessage": "{existing} already had access"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsBlockedClause": {
+    "defaultMessage": "{blocked} blocked individually"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.noMatches": {
+    "defaultMessage": "This rule matches nobody eligible right now."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.openToEveryone": {
+    "defaultMessage": "The marketplace is currently open to everyone; this rule takes effect only if you restrict access again."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.previewFailure": {
+    "defaultMessage": "Could not preview this rule."
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerNew": {
+    "defaultMessage": "New"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerExisting": {
+    "defaultMessage": "Already has access"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerBlocked": {
+    "defaultMessage": "Blocked"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.managesCourses": {
+    "defaultMessage": "Manages {count, plural, one {# course} other {# courses}}"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colName": {
+    "defaultMessage": "Name"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colEligibleVia": {
+    "defaultMessage": "Eligible via"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colStatus": {
+    "defaultMessage": "Status"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.searchPlaceholder": {
+    "defaultMessage": "Search by name or email"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colType": {
+    "defaultMessage": "Type"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colTarget": {
+    "defaultMessage": "Grants access to"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colActions": {
+    "defaultMessage": "Actions"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeUser": {
+    "defaultMessage": "User"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstance": {
+    "defaultMessage": "Instance"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeEmailDomain": {
+    "defaultMessage": "Email domain"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.deleteConfirm": {
+    "defaultMessage": "Remove this marketplace access rule?"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyTitle": {
+    "defaultMessage": "No access rules yet"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyHint": {
+    "defaultMessage": "The marketplace stays hidden from everyone except system administrators. Add a rule to grant access."
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.zeroMatchWarning": {
+    "defaultMessage": "No eligible staff currently match this rule, so it grants access to nobody."
   },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "Delete User"

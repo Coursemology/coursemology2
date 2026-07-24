@@ -27,11 +27,11 @@ class Course::Assessment::Marketplace::AllowlistRule < ApplicationRecord
   # whose email matched nobody keeps user_id NULL, and Rails checks that as `user_id IS NULL`,
   # which matches every instance and email-domain rule — reporting a bogus duplicate on top of the
   # real "No user with that email." Scoping confines the check to rules of the same type.
-  validates :user_id, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :user_id, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                       if: :rule_type_user?
-  validates :instance_id, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :instance_id, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                           if: :rule_type_instance?
-  validates :email_domain, uniqueness: { scope: :rule_type, message: 'already has a rule.' },
+  validates :email_domain, uniqueness: { scope: :rule_type, message: 'already has the same rule.' },
                            if: :rule_type_email_domain?
   # "Everyone" is the widest rule; only one may exist. Paired with a partial unique index.
   validates :rule_type, uniqueness: true, if: :rule_type_everyone?

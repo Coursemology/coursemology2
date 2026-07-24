@@ -8741,6 +8741,9 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "获取帮助"
   },
+  "system.admin.admin.AdminNavigator.marketplace": {
+    "defaultMessage": "市场访问"
+  },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "无法获取公告"
   },
@@ -8824,6 +8827,174 @@
   },
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "已将 {field} 从 {prevValue} 重命名为 {newValue}"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
+    "defaultMessage": "添加访问规则"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.eligibility": {
+    "defaultMessage": "任何课程的管理员及拥有者，以及任何实例的教师及管理员均可使用，但仍须匹配以下规则之一。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.fetchFailure": {
+    "defaultMessage": "加载市场访问规则失败。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createSuccess": {
+    "defaultMessage": "访问规则已添加。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.createFailure": {
+    "defaultMessage": "添加访问规则失败。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteSuccess": {
+    "defaultMessage": "访问规则已移除。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.deleteFailure": {
+    "defaultMessage": "移除访问规则失败。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openSuccess": {
+    "defaultMessage": "市场已向所有课程管理员开放。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.openFailure": {
+    "defaultMessage": "未能将市场向所有人开放。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictSuccess": {
+    "defaultMessage": "市场已限制为已设定范围的规则。"
+  },
+  "system.admin.admin.MarketplaceAllowlistIndex.restrictFailure": {
+    "defaultMessage": "未能限制市场。"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.scopedTitle": {
+    "defaultMessage": "访问权限仅限于以下规则。"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.everyoneTitle": {
+    "defaultMessage": "市场目前向所有符合条件的职员开放：课程管理员/拥有者以及实例教师/管理员。以下规则会被保留，但暂不生效。"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.toggleLabel": {
+    "defaultMessage": "对所有人开放"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmTitle": {
+    "defaultMessage": "要将市场向所有人开放吗？"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.openConfirmBody": {
+    "defaultMessage": "这将使市场对所有符合条件的职员可见：课程管理员/拥有者以及实例教师/管理员。你可以随时重新限制访问，已设定范围的规则会被保留。"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmTitle": {
+    "defaultMessage": "要限制为已设定范围的规则吗？"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.restrictConfirmBody": {
+    "defaultMessage": "市场将再次仅限于以下规则。未被任何规则覆盖的符合条件职员将失去访问权限。"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmOpen": {
+    "defaultMessage": "对所有人开放"
+  },
+  "system.admin.admin.MarketplaceAllowlistModeBanner.confirmRestrict": {
+    "defaultMessage": "限制"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.title": {
+    "defaultMessage": "添加市场访问规则"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.ruleType": {
+    "defaultMessage": "规则类型"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeUser": {
+    "defaultMessage": "特定符合条件的职员"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeInstance": {
+    "defaultMessage": "某个实例中的所有符合条件职员"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.typeEmailDomain": {
+    "defaultMessage": "拥有特定邮箱域名的所有符合条件职员"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.userEmail": {
+    "defaultMessage": "符合条件职员的邮箱"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.instanceId": {
+    "defaultMessage": "实例"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.emailDomain": {
+    "defaultMessage": "邮箱域名（例如 schools.gov.sg）"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.next": {
+    "defaultMessage": "下一步"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.back": {
+    "defaultMessage": "返回"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.confirmAdd": {
+    "defaultMessage": "确认添加"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.counts": {
+    "defaultMessage": "为 {matched} 名符合条件的职员授予访问权限"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsOfMatched": {
+    "defaultMessage": "在 {matched} 名符合条件职员中，为 {granted} 名授予访问权限"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsExistingClause": {
+    "defaultMessage": "{existing} 人已拥有访问权限"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.countsBlockedClause": {
+    "defaultMessage": "{blocked} 人被单独屏蔽"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.noMatches": {
+    "defaultMessage": "此规则目前未匹配到任何符合条件的职员。"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.openToEveryone": {
+    "defaultMessage": "市场目前对所有人开放；此规则仅在你重新限制访问后才会生效。"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.previewFailure": {
+    "defaultMessage": "无法预览此规则。"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerNew": {
+    "defaultMessage": "新"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerExisting": {
+    "defaultMessage": "已拥有访问权限"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.markerBlocked": {
+    "defaultMessage": "已屏蔽"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.managesCourses": {
+    "defaultMessage": "管理 {count, plural, one {# 门课程} other {# 门课程}}"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colName": {
+    "defaultMessage": "姓名"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colEligibleVia": {
+    "defaultMessage": "资格来源"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.colStatus": {
+    "defaultMessage": "状态"
+  },
+  "system.admin.admin.MarketplaceAllowlistRuleForm.searchPlaceholder": {
+    "defaultMessage": "按姓名或邮箱搜索"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colType": {
+    "defaultMessage": "类型"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colTarget": {
+    "defaultMessage": "授权对象"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.colActions": {
+    "defaultMessage": "操作"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeUser": {
+    "defaultMessage": "用户"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeInstance": {
+    "defaultMessage": "实例"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.typeEmailDomain": {
+    "defaultMessage": "邮箱域名"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.deleteConfirm": {
+    "defaultMessage": "要移除此市场访问规则吗？"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyTitle": {
+    "defaultMessage": "尚无访问规则"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.emptyHint": {
+    "defaultMessage": "除系统管理员外，市场对所有人保持隐藏。添加规则以授予访问权限。"
+  },
+  "system.admin.admin.MarketplaceAllowlistTable.zeroMatchWarning": {
+    "defaultMessage": "目前没有符合条件的职员匹配此规则，因此不会授予任何人访问权限。"
   },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "删除用户"
