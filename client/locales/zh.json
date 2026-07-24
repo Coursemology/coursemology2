@@ -8828,6 +8828,126 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "已将 {field} 从 {prevValue} 重命名为 {newValue}"
   },
+  "system.admin.admin.MarketplaceAccessFilter.trigger": {
+    "defaultMessage": "筛选"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.status": {
+    "defaultMessage": "状态"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.active": {
+    "defaultMessage": "活跃"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.blocked": {
+    "defaultMessage": "已屏蔽"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.allowedByRule": {
+    "defaultMessage": "允许规则"
+  },
+  "system.admin.admin.MarketplaceAccessFilter.clearAll": {
+    "defaultMessage": "全部清除"
+  },
+  "system.admin.admin.MarketplaceAccessSection.heading": {
+    "defaultMessage": "拥有访问权限的用户"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summary": {
+    "defaultMessage": "拥有访问权限总数：{count} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.summaryWithBlocked": {
+    "defaultMessage": "拥有访问权限总数：{count} · 屏蔽总数：{blocked} · {mode}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.filteredCounts": {
+    "defaultMessage": "筛选结果：可访问 {count} · 已屏蔽 {blocked}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeOpen": {
+    "defaultMessage": "对所有人开放"
+  },
+  "system.admin.admin.MarketplaceAccessSection.modeScoped": {
+    "defaultMessage": "仅限于上方规则"
+  },
+  "system.admin.admin.MarketplaceAccessSection.fetchFailure": {
+    "defaultMessage": "无法加载市场访问权限列表。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colName": {
+    "defaultMessage": "姓名"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEmail": {
+    "defaultMessage": "电子邮件"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colEligibleVia": {
+    "defaultMessage": "资格来源"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colAllowedBy": {
+    "defaultMessage": "允许依据"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colStatus": {
+    "defaultMessage": "状态"
+  },
+  "system.admin.admin.MarketplaceAccessSection.colActions": {
+    "defaultMessage": "操作"
+  },
+  "system.admin.admin.MarketplaceAccessSection.managesCourses": {
+    "defaultMessage": "{count, plural, one {管理 # 门课程} other {管理 # 门课程}}"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceInstructor": {
+    "defaultMessage": "实例教师"
+  },
+  "system.admin.admin.MarketplaceAccessSection.instanceAdministrator": {
+    "defaultMessage": "实例管理员"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedEveryone": {
+    "defaultMessage": "每个人"
+  },
+  "system.admin.admin.MarketplaceAccessSection.allowedNothing": {
+    "defaultMessage": "没有匹配的规则"
+  },
+  "system.admin.admin.MarketplaceAccessSection.systemAdmin": {
+    "defaultMessage": "系统管理员"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeUser": {
+    "defaultMessage": "用户"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeInstance": {
+    "defaultMessage": "实例"
+  },
+  "system.admin.admin.MarketplaceAccessSection.typeEmailDomain": {
+    "defaultMessage": "电子邮件域名"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusActive": {
+    "defaultMessage": "活跃"
+  },
+  "system.admin.admin.MarketplaceAccessSection.statusBlocked": {
+    "defaultMessage": "已屏蔽"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disable": {
+    "defaultMessage": "屏蔽"
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnable": {
+    "defaultMessage": "取消屏蔽"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableSuccess": {
+    "defaultMessage": "已屏蔽该用户的访问权限。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.disableFailure": {
+    "defaultMessage": "屏蔽访问权限失败。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableSuccess": {
+    "defaultMessage": "已取消屏蔽该用户的访问权限。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.reEnableFailure": {
+    "defaultMessage": "取消屏蔽访问权限失败。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.searchPlaceholder": {
+    "defaultMessage": "搜索姓名或电子邮件"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantHeading": {
+    "defaultMessage": "休眠屏蔽（{count}）"
+  },
+  "system.admin.admin.MarketplaceAccessSection.dormantExplanation": {
+    "defaultMessage": "这些用户已被屏蔽，但目前没有任何规则授予他们访问权限。该屏蔽目前不会阻止任何事情——但如果日后有规则与他们匹配，它将再次生效，因此如果不再需要，请清除该屏蔽。"
+  },
+  "system.admin.admin.MarketplaceAccessSection.clearBlock": {
+    "defaultMessage": "清除屏蔽"
+  },
   "system.admin.admin.MarketplaceAllowlistIndex.addRule": {
     "defaultMessage": "添加访问规则"
   },

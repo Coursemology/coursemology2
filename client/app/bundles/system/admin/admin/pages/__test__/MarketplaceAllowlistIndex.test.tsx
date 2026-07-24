@@ -9,6 +9,10 @@ import MarketplaceAllowlistIndex from '../MarketplaceAllowlistIndex';
 const mock = createMockAdapter(SystemAPI.admin.client);
 beforeEach(() => {
   mock.reset();
+  mock.onGet('/admin/marketplace_access').reply(200, {
+    users: [],
+    summary: { totalWithAccess: 0, openToEveryone: false },
+  });
 });
 
 const INDEX_URL = '/admin/marketplace_allowlist_rules';
@@ -31,6 +35,10 @@ const RULES = [
   },
 ];
 const PREVIEW_URL = '/admin/marketplace_allowlist_rules/preview';
+const accessGetCount = (): number =>
+  mock.history.get.filter(
+    (request) => request.url === '/admin/marketplace_access',
+  ).length;
 // Step 2's preview is a POST too, so `mock.history.post[0]` is the preview, not the create.
 const createPosts = (): typeof mock.history.post =>
   mock.history.post.filter((request) => request.url === INDEX_URL);
@@ -408,6 +416,81 @@ it('keeps the Open to everyone toggle label on a single line', async () => {
   expect(label).toHaveClass('whitespace-nowrap');
 });
 
+it('refreshes the access list after a rule is added', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: [] });
+  mock.onPost(PREVIEW_URL).reply(200, {
+    matchedCount: 1,
+    newCount: 1,
+    openToEveryone: false,
+    users: [],
+  });
+  mock.onPost(INDEX_URL).reply(200, {
+    id: 2,
+    ruleType: 'email_domain',
+    userId: null,
+    userName: null,
+    userEmail: null,
+    instanceId: null,
+    instanceName: null,
+    emailDomain: NUS_DOMAIN,
+  });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(allowlistGetCount()).toBe(1));
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+
+  fireEvent.click(page.getByText('Add access rule'));
+  await userEvent.type(page.getByLabelText(EMAIL_DOMAIN_SUBTITLE), NUS_DOMAIN);
+  fireEvent.click(page.getByRole('button', { name: 'Next' }));
+  await confirmAdd(page);
+
+  await waitFor(() => expect(accessGetCount()).toBe(2));
+});
+
+it('refreshes the access list after a rule is deleted', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES });
+  mock.onDelete(`${INDEX_URL}/1`).reply(200);
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+
+  fireEvent.click(page.getByTestId('DeleteIconButton'));
+  fireEvent.click(page.getByRole('button', { name: 'Delete' }));
+
+  await waitFor(() => expect(accessGetCount()).toBe(2));
+});
+
+it('refreshes the access list after the marketplace is opened to everyone', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: null });
+  mock.onPost(INDEX_URL).reply(200, { id: 99 });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+
+  fireEvent.click(page.getByRole('checkbox', { name: OPEN_TO_EVERYONE }));
+  const dialog = page.getByRole('dialog');
+  fireEvent.click(
+    within(dialog).getByRole('button', { name: OPEN_TO_EVERYONE }),
+  );
+
+  await waitFor(() => expect(accessGetCount()).toBe(2));
+});
+
+it('refreshes the access list after the marketplace is restricted again', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: 42 });
+  mock.onDelete(`${INDEX_URL}/42`).reply(200);
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+
+  fireEvent.click(page.getByRole('checkbox', { name: OPEN_TO_EVERYONE }));
+  const dialog = page.getByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Restrict' }));
+
+  await waitFor(() => expect(accessGetCount()).toBe(2));
+});
+
 it('surfaces the server message when a rule is rejected as a duplicate', async () => {
   mock.onGet(INDEX_URL).reply(200, { rules: [] });
   mock.onPost(PREVIEW_URL).reply(200, {
@@ -432,4 +515,125 @@ it('surfaces the server message when a rule is rejected as a duplicate', async (
   expect(
     await page.findByText('Email domain already has the same rule.'),
   ).toBeVisible();
+});
+
+const ZERO_MATCH_WARNING =
+  'No eligible staff currently match this rule, so it grants access to nobody.';
+
+it('flags a rule that the loaded access list grants to nobody', async () => {
+  // beforeEach returns no access-list users, so the single email-domain rule matches nobody.
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+
+  expect(await page.findByLabelText(ZERO_MATCH_WARNING)).toBeInTheDocument();
+});
+
+it('does not flag a rule that the access list grants to someone', async () => {
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES });
+  mock.onGet('/admin/marketplace_access').reply(200, {
+    users: [
+      {
+        id: 1,
+        name: 'Jane Tan',
+        email: 'jane@schools.gov.sg',
+        courseCount: 1,
+        instanceRole: null,
+        allowedByRules: [
+          { id: 1, ruleType: 'email_domain', labelValue: EMAIL_DOMAIN },
+        ],
+        systemAdmin: false,
+        blocked: false,
+        blockId: null,
+      },
+    ],
+    summary: { totalWithAccess: 1, totalBlocked: 0, openToEveryone: false },
+  });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  // Wait for the access list to render (counts are published only after it resolves).
+  await page.findByText('jane@schools.gov.sg');
+
+  expect(page.queryByLabelText(ZERO_MATCH_WARNING)).not.toBeInTheDocument();
+});
+
+it('suppresses zero-match warnings while the marketplace is open to everyone', async () => {
+  // Everyone-mode empties scoped_rules, so every rule would report zero — but the mode banner
+  // already says the rules are moot, so the page passes null and shows no icons at all.
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: 42 });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(page.getByText(EMAIL_DOMAIN)).toBeVisible());
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+
+  expect(page.queryByLabelText(ZERO_MATCH_WARNING)).not.toBeInTheDocument();
+});
+
+it('does not flash zero-match warnings while a refetch after restrict is in flight', async () => {
+  // Restrict flips openToEveryone off and triggers a refetch. Until it resolves, the previously
+  // published counts are stale: everyone-mode publishes an empty map, which would mark every scoped
+  // rule as matching nobody. invalidateAccessList must blank matchCounts to null so no false warning
+  // shows in that window.
+  mock.onGet(INDEX_URL).reply(200, { rules: RULES, everyoneRuleId: 42 });
+  mock.onDelete(`${INDEX_URL}/42`).reply(200);
+
+  let releaseSecond = (): void => {};
+  let accessCalls = 0;
+  mock.onGet('/admin/marketplace_access').reply(() => {
+    accessCalls += 1;
+    if (accessCalls === 1) {
+      // Everyone-mode: users carry no per-rule reasons, so the published map is empty.
+      return [
+        200,
+        { users: [], summary: { totalWithAccess: 0, openToEveryone: true } },
+      ];
+    }
+    // Second fetch (after restrict) stays pending until released.
+    return new Promise((resolve) => {
+      releaseSecond = (): void =>
+        resolve([
+          200,
+          {
+            users: [
+              {
+                id: 1,
+                name: 'Jane',
+                email: 'jane@schools.gov.sg',
+                courseCount: 1,
+                instanceRole: null,
+                allowedByRules: [
+                  { id: 1, ruleType: 'email_domain', labelValue: EMAIL_DOMAIN },
+                ],
+                systemAdmin: false,
+                blocked: false,
+                blockId: null,
+              },
+            ],
+            summary: {
+              totalWithAccess: 1,
+              totalBlocked: 0,
+              openToEveryone: false,
+            },
+          },
+        ]);
+    });
+  });
+
+  const page = render(<MarketplaceAllowlistIndex />, { at: [INDEX_URL] });
+  await waitFor(() => expect(accessGetCount()).toBe(1));
+  await page.findByText(EMAIL_DOMAIN);
+
+  // Restrict: toggle off, then confirm in the dialog.
+  fireEvent.click(page.getByRole('checkbox', { name: OPEN_TO_EVERYONE }));
+  const dialog = page.getByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Restrict' }));
+
+  // Refetch is now in flight (second GET pending). No stale zero-match warning may show.
+  await waitFor(() => expect(accessGetCount()).toBe(2));
+  expect(page.queryByLabelText(ZERO_MATCH_WARNING)).not.toBeInTheDocument();
+
+  // Let the refetch resolve; Jane matches rule 1, so still no warning.
+  releaseSecond();
+  await page.findByText('jane@schools.gov.sg');
+  expect(page.queryByLabelText(ZERO_MATCH_WARNING)).not.toBeInTheDocument();
 });
