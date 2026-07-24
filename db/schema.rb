@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_22_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -287,6 +287,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.bigint "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "adopted_version"
+    t.integer "dismissed_version"
+    t.boolean "reminders_muted", default: false, null: false
     t.index ["creator_id"], name: "fk__cama_creator_id"
     t.index ["destination_course_id"], name: "fk__cama_destination_course_id"
     t.index ["duplicated_assessment_id"], name: "fk__cama_duplicated_assessment_id", unique: true
@@ -311,6 +314,23 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.index ["user_id"], name: "index_marketplace_allowlist_rules_one_per_user", unique: true, where: "(rule_type = 0)"
   end
 
+  create_table "course_assessment_marketplace_listing_versions", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.integer "version", null: false
+    t.bigint "assessment_id", null: false
+    t.bigint "published_by_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assessment_id"], name: "fk__camlv_assessment_id"
+    t.index ["creator_id"], name: "fk__camlv_creator_id"
+    t.index ["listing_id", "version"], name: "index_camlv_on_listing_id_and_version", unique: true
+    t.index ["listing_id"], name: "fk__camlv_listing_id"
+    t.index ["published_by_id"], name: "fk__camlv_published_by"
+    t.index ["updater_id"], name: "fk__camlv_updater_id"
+  end
+
   create_table "course_assessment_marketplace_listings", force: :cascade do |t|
     t.bigint "assessment_id", null: false
     t.boolean "published", default: false, null: false
@@ -321,10 +341,19 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
     t.bigint "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "current_version_id"
+    t.bigint "source_course_id"
+    t.string "source_course_name"
+    t.string "source_course_code"
+    t.string "source_academic_period"
+    t.bigint "fallback_maintainer_id"
     t.index ["assessment_id"], name: "fk__course_assessment_marketplace_listings_assessment_id", unique: true
     t.index ["creator_id"], name: "fk__course_assessment_marketplace_listings_creator_id"
+    t.index ["current_version_id"], name: "fk__caml_current_version_id"
+    t.index ["fallback_maintainer_id"], name: "fk__caml_fallback_maintainer_id"
     t.index ["published"], name: "index_course_assessment_marketplace_listings_on_published"
     t.index ["publisher_id"], name: "fk__course_assessment_marketplace_listings_publisher_id"
+    t.index ["source_course_id"], name: "fk__caml_source_course_id"
     t.index ["updater_id"], name: "fk__course_assessment_marketplace_listings_updater_id"
   end
 
@@ -2012,8 +2041,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_154800) do
   add_foreign_key "course_assessment_marketplace_adoptions", "users", column: "updater_id", name: "fk_course_assessment_marketplace_adoptions_updater_id"
   add_foreign_key "course_assessment_marketplace_allowlist_rules", "instances"
   add_foreign_key "course_assessment_marketplace_allowlist_rules", "users"
+  add_foreign_key "course_assessment_marketplace_listing_versions", "course_assessment_marketplace_listings", column: "listing_id", name: "fk_camlv_listing_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_listing_versions", "course_assessments", column: "assessment_id", name: "fk_camlv_assessment_id"
+  add_foreign_key "course_assessment_marketplace_listing_versions", "users", column: "creator_id", name: "fk_camlv_creator_id"
+  add_foreign_key "course_assessment_marketplace_listing_versions", "users", column: "published_by_id", name: "fk_camlv_published_by"
+  add_foreign_key "course_assessment_marketplace_listing_versions", "users", column: "updater_id", name: "fk_camlv_updater_id"
+  add_foreign_key "course_assessment_marketplace_listings", "course_assessment_marketplace_listing_versions", column: "current_version_id", name: "fk_caml_current_version_id", on_delete: :nullify
   add_foreign_key "course_assessment_marketplace_listings", "course_assessments", column: "assessment_id", name: "fk_course_assessment_marketplace_listings_assessment_id", on_delete: :cascade
+  add_foreign_key "course_assessment_marketplace_listings", "courses", column: "source_course_id", name: "fk_caml_source_course_id", on_delete: :nullify
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "creator_id", name: "fk_course_assessment_marketplace_listings_creator_id"
+  add_foreign_key "course_assessment_marketplace_listings", "users", column: "fallback_maintainer_id", name: "fk_caml_fallback_maintainer_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "publisher_id", name: "fk_course_assessment_marketplace_listings_publisher_id"
   add_foreign_key "course_assessment_marketplace_listings", "users", column: "updater_id", name: "fk_course_assessment_marketplace_listings_updater_id"
   add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
