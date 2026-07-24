@@ -3,11 +3,25 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Marketplace, type: :model do
   describe '.container' do
-    before do
-      # Deterministic across the repo's permanently-committing test DB: clear the
-      # pointer so each example exercises the find-or-heal path from a known state.
+    around do |example|
+      # This suite is non-transactional and commits permanently (app/CLAUDE.md), so a
+      # container course created by an example would otherwise leak and accumulate on
+      # every run. Start each example from a known state (nil pointer → find-or-heal),
+      # then destroy the container it created and restore the original pointer.
+      original_id = ActsAsTenant.without_tenant do
+        Instance.default.settings(:marketplace).container_course_id
+      end
       ActsAsTenant.without_tenant do
         Instance.default.settings(:marketplace).container_course_id = nil
+        Instance.default.save!
+      end
+
+      example.run
+
+      ActsAsTenant.without_tenant do
+        created_id = Instance.default.settings(:marketplace).container_course_id
+        Course.where(id: created_id).find_each(&:destroy) if created_id
+        Instance.default.settings(:marketplace).container_course_id = original_id
         Instance.default.save!
       end
     end
@@ -51,9 +65,16 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
 
     it 'enrolls only the system user as owner, so no other user ever sees it' do
       container = described_class.container
-      other_user = ActsAsTenant.with_tenant(Instance.default) { create(:user) }
+      # Enroll other_user in an unrelated real course so the negative assertion is
+      # non-vacuous: containing_user DOES surface a course they belong to, yet never
+      # the container.
+      other_course = ActsAsTenant.with_tenant(Instance.default) { create(:course) }
+      other_user = ActsAsTenant.with_tenant(Instance.default) do
+        create(:course_manager, course: other_course).user
+      end
       ActsAsTenant.without_tenant do
         expect(Course.containing_user(User.system)).to include(container)
+        expect(Course.containing_user(other_user)).to include(other_course)
         expect(Course.containing_user(other_user)).not_to include(container)
       end
     end
