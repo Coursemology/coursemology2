@@ -50,3 +50,10 @@ export const fetchQuestion = async (
   );
   return response.data as QuestionPreviewData;
 };
+
+export const createAttempt = async (
+  listingId: number,
+): Promise<{ id: number; assessmentId: number }> => {
+  const response = await CourseAPI.marketplace.createAttempt(listingId);
+  return response.data;
+};

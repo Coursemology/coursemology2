@@ -50,4 +50,10 @@ export default class MarketplaceAPI extends BaseCourseAPI {
       `${this.#urlPrefix}/listings/${listingId}/questions/${questionId}`,
     );
   }
+
+  createAttempt(
+    listingId: number,
+  ): Promise<AxiosResponse<{ id: number; assessmentId: number }>> {
+    return this.client.post(`${this.#urlPrefix}/listings/${listingId}/attempt`);
+  }
 }

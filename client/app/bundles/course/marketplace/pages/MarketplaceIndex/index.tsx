@@ -10,6 +10,7 @@ import DuplicateConfirmation from '../../components/DuplicateConfirmation';
 import { fetchListings } from '../../operations';
 import translations from '../../translations';
 import { MarketplaceListing } from '../../types';
+import useStartPreviewAttempt from '../../useStartPreviewAttempt';
 
 import MarketplaceTable from './MarketplaceTable';
 
@@ -20,6 +21,7 @@ const MarketplaceIndex = (): JSX.Element => {
   const fromTab = params.get('from_tab');
   const destinationTabId = parseInt(fromTab ?? '', 10) || null;
   const [pending, setPending] = useState<MarketplaceListing[]>([]);
+  const { start: startAttempt } = useStartPreviewAttempt();
 
   return (
     <Preload render={<div />} while={fetchListings}>
@@ -28,6 +30,7 @@ const MarketplaceIndex = (): JSX.Element => {
           <MarketplaceTable
             fromTab={fromTab}
             listings={listings}
+            onAttempt={(listing): Promise<void> => startAttempt(listing.id)}
             onDuplicate={setPending}
           />
           <DuplicateConfirmation

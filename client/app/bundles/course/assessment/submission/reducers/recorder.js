@@ -39,9 +39,13 @@ export default function (state = initialState, action) {
 
       /**
        * When the user navigate to other path without stopping the recorder
-       * We need to help the user to stop
+       * We need to help the user to stop.
+       *
+       * Guard on isRecording(): stopRecord() rejects with 'Recorder has already
+       * stopped' when nothing is being recorded, and that rejection is unhandled
+       * here (surfacing as an error overlay). Only stop what is actually recording.
        */
-      if (recorderComponentsCount === 0) {
+      if (recorderComponentsCount === 0 && recorderHelper.isRecording()) {
         recorderHelper.stopRecord();
       }
       return {

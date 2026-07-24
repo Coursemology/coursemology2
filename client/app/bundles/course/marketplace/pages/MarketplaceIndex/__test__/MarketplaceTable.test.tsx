@@ -58,6 +58,38 @@ it('renders Preview and Duplicate as icon buttons with one-word tooltips/labels'
   ]);
 });
 
+it('renders a play (attempt) button between preview and duplicate, calling onAttempt', async () => {
+  const onAttempt = jest.fn();
+  const page = render(
+    <MarketplaceTable
+      listings={LISTINGS}
+      onAttempt={onAttempt}
+      onDuplicate={jest.fn()}
+    />,
+  );
+
+  // Default sort = adoptions desc → Graph Theory (12) is the first row; [0] is its cell.
+  const preview = (await page.findAllByLabelText('Preview'))[0];
+  const attempt = (await page.findAllByLabelText('Attempt'))[0];
+  const duplicate = (await page.findAllByLabelText('Duplicate'))[0];
+
+  // Order within the row must be preview → attempt → duplicate.
+  /* eslint-disable no-bitwise */
+  expect(
+    preview.compareDocumentPosition(attempt) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(
+    attempt.compareDocumentPosition(duplicate) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  /* eslint-enable no-bitwise */
+
+  fireEvent.click(attempt);
+  expect(onAttempt).toHaveBeenCalledWith(
+    expect.objectContaining({ title: GRAPH_THEORY }),
+  );
+});
+
 it('carries from_tab into the preview links when set', async () => {
   const page = render(
     <MarketplaceTable
