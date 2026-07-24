@@ -3,17 +3,10 @@ class Course::Assessment::MarketplaceListingsController < Course::Assessment::Co
   before_action :authorize_publish_to_marketplace!
 
   def create
-    listing = Course::Assessment::Marketplace::Listing.find_or_initialize_by(assessment: @assessment)
-    now = Time.zone.now
-    listing.published = true
-    listing.first_published_at ||= now
-    listing.last_published_at = now
-    listing.publisher ||= current_user
-    if listing.save
-      render json: { published: true }, status: :ok
-    else
-      render json: { errors: listing.errors.full_messages }, status: :unprocessable_content
-    end
+    listing = Course::Assessment::Marketplace::PublishService.publish(@assessment, current_user)
+    render json: { published: listing.published }, status: :ok
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { errors: e.record.errors.full_messages }, status: :unprocessable_content
   end
 
   def destroy

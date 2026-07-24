@@ -22,6 +22,13 @@ RSpec.describe Course::Assessment::MarketplaceListingsController, type: :control
         expect(listing.publisher).to eq(admin)
       end
 
+      it 'cuts version 1 through the publish seam' do
+        expect { subject }.to change { Course::Assessment::Marketplace::ListingVersion.count }.by(1)
+        listing = assessment.reload.marketplace_listing
+        expect(listing.current_version&.version).to eq(1)
+        expect(listing.current_version.published_by).to eq(admin)
+      end
+
       context 'when the assessment was previously published then removed (re-publish)' do
         let!(:listing) do
           create(:course_assessment_marketplace_listing, assessment: assessment, published: false,
