@@ -21,7 +21,12 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   includes(programming_questions: [:language]).
                   calculated(:maximum_grade, :question_count).
                   find(assessment_params[:id])
-    submissions = Course::Assessment::Submission.unscoped.
+    # `Course::Assessment::Submission` has no `assessment_id` column (it's Attempt-only, reached via
+    # the delegate), so querying it directly here raises `PG::UndefinedColumn`. `Attempt` carries
+    # `assessment_id`, `grade`, and `grader_ids` natively/as `calculated`, and this action's jbuilder
+    # only reads columns present on Attempt, so query Attempt directly.
+    submissions = Course::Assessment::Attempt.unscoped.
+                  joins(:submission).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids)
     @course_users_hash = preload_course_users_hash(current_course)
@@ -39,7 +44,10 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   calculated(:maximum_grade).
                   find(assessment_params[:id])
     authorize!(:read_ancestor, @assessment)
-    submissions = Course::Assessment::Submission.unscoped.
+    # Same `assessment_id`-column bug as `submission_statistics` above — `Attempt` is the
+    # drop-in replacement (see the comment there).
+    submissions = Course::Assessment::Attempt.unscoped.
+                  joins(:submission).
                   preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
@@ -52,8 +60,12 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def live_feedback_statistics
     @assessment = Course::Assessment.unscoped.includes(:questions).
                   find(assessment_params[:id])
-    @submissions = Course::Assessment::Submission.unscoped.
-                   select(:id, :creator_id, :workflow_state).
+    # id/creator_id/workflow_state all live on Attempt; this action only reads those three columns
+    # (unscoped + a narrow .select), so querying Attempt directly is equivalent (every course-member
+    # attempt has exactly one submission).
+    @submissions = Course::Assessment::Attempt.unscoped.
+                   joins(:submission).
+                   select('course_assessment_submissions.id', :creator_id, :workflow_state).
                    where(assessment_id: assessment_params[:id])
 
     create_submission_question_id_hash(@assessment.questions)
@@ -64,7 +76,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def live_feedback_history
     user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
-    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator_id: user_id)
+    @submissions = Course::Assessment::Attempt.joins(:submission).
+                   where(assessment_id: assessment_params[:id], creator_id: user_id)
     @question = Course::Assessment::Question.find(params[:question_id])
 
     create_submission_question_id_hash([@question])
@@ -238,7 +251,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def feedback_answers_cte
     <<-SQL
       SELECT
-        a.submission_id,
+        a.submission_id AS submission_id,
         a.question_id,
         a.created_at,
         a.grade,

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer < ApplicationRecord
   include Workflow
+
   actable optional: true, inverse_of: :answer
 
   workflow do
@@ -52,8 +53,19 @@ class Course::Assessment::Answer < ApplicationRecord
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
 
-  belongs_to :submission, inverse_of: :answers
+  # Association name kept as `:submission` for call-site compatibility, but it targets the attempt
+  # base record: `submission_id` identifies an Attempt row (the base), not a Submission row.
+  belongs_to :submission, class_name: 'Course::Assessment::Attempt', inverse_of: :answers,
+                          foreign_key: 'submission_id'
+  include Course::Assessment::CoercesSubmissionToAttempt
+
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
+
+  # `attempt` is the accurate name for what `:submission` returns — the Attempt base record. Prefer it in
+  # new code: `answer.attempt.submission` reads clearly where `answer.submission.submission` stuttered (the
+  # FK column is misleadingly named `submission_id`). Reader-only alias; the association stays `:submission`
+  # for existing call sites.
+  alias_method :attempt, :submission
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          dependent: :destroy, inverse_of: :answer, autosave: true
@@ -126,7 +138,13 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def can_read_grade?(ability)
-    submission.published? || ability.can?(:grade, submission) ||
+    # Was `ability.can?(:grade, submission)` — with `submission` now resolving to an Attempt
+    # instance, that check would silently always be false (CanCan matches on subject *class*, and
+    # the only registered rule is `can :grade, Course::Assessment::Submission, ...`). Route through
+    # the answer's own `can :grade, Course::Assessment::Answer, submission: { assessment: ... }`
+    # rule instead (assessment_ability.rb) — same permission, unaffected by what class the
+    # association returns.
+    submission.published? || ability.can?(:grade, self) ||
       (submission.assessment.autograded? && !submission.assessment.allow_partial_submission) ||
       (
         submission.assessment.autograded? &&

@@ -118,8 +118,11 @@ class CourseUser < ApplicationRecord
   # @!attribute [r] assessment_submission_count
   #   Returns the total number of submitted assessment submissions by CourseUser in this course
   calculated :assessment_submission_count, (lambda do
+    # `assessment` is a delegated method on Submission, not a real association, so `joins(assessment:)`
+    # raises `ActiveRecord::ConfigurationError`. Join through `:attempt` first (a real association),
+    # matching `Submission.from_course`'s `joins(attempt: { assessment: { tab: :category } })`.
     Course::Assessment::Submission.select('count(*)').
-      joins(assessment: { tab: :category }).
+      joins(attempt: { assessment: { tab: :category } }).
       where('course_assessment_submissions.creator_id = course_users.user_id').
       where('course_assessment_categories.course_id = course_users.course_id').
       where(course_assessment_submissions: { workflow_state: [:submitted, :graded, :published] })

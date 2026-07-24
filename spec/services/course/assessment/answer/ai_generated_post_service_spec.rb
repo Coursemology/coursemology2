@@ -67,7 +67,7 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
       let(:discussion_topic) { create(:course_discussion_topic) }
       it 'ensures the student and group managers are subscribed' do
         expect(discussion_topic).to receive(:ensure_subscribed_by).with(answer.submission.creator)
-        answer_course_user = answer.submission.course_user
+        answer_course_user = answer.submission.submission.course_user
         answer_course_user.my_managers.each do |manager|
           expect(discussion_topic).to receive(:ensure_subscribed_by).with(manager.user)
         end

@@ -35,10 +35,16 @@ class Course::Assessment < ApplicationRecord
 
   belongs_to :monitor, class_name: 'Course::Monitoring::Monitor', optional: true
 
-  # `submissions` association must be put before `questions`, so that all answers will be deleted
-  # first when deleting the course. Otherwise due to the foreign key `question_id` in answers table,
-  # questions cannot be deleted.
-  has_many :submissions, inverse_of: :assessment, dependent: :destroy
+  # `attempts` association must be put before `questions`, so that all answers will be deleted
+  # first when deleting the course (via Attempt's own `dependent: :destroy` cascade to answers etc.)
+  # — otherwise, due to the foreign key `question_id` in the answers table, questions cannot be
+  # deleted. `submissions` is now a `through:` association and cannot itself carry `dependent:` —
+  # the destroy ordering guarantee comes from `attempts` instead.
+  has_many :attempts, class_name: 'Course::Assessment::Attempt', inverse_of: :assessment,
+                      dependent: :destroy
+  # An assessment's "submissions" are only its course-member submissions: a submission-less (preview)
+  # attempt is excluded by the join, with no filter needed. Read call sites are unaffected.
+  has_many :submissions, through: :attempts, source: :submission
 
   has_many :question_assessments, class_name: 'Course::QuestionAssessment',
                                   inverse_of: :assessment, dependent: :destroy
@@ -130,8 +136,12 @@ class Course::Assessment < ApplicationRecord
   #   Includes the submissions by the provided user.
   #   @param [User] user The user to preload submissions for.
   scope :with_submissions_by, (lambda do |user|
-    submissions = Course::Assessment::Submission.by_user(user).
-                  where(assessment: distinct(false).pluck(:id)).ordered_by_date
+    # `assessment` is a delegated method on Submission, not a real FK column, so `.where(assessment:)`
+    # would raise `PG::UndefinedColumn`. `.by_user(user)` is a subquery (not a join — see its own
+    # comment), so join `:attempt` explicitly here to filter by `assessment_id`.
+    submissions = Course::Assessment::Submission.by_user(user).joins(:attempt).
+                  where(course_assessment_submissions: { assessment_id: distinct(false).pluck(:id) }).
+                  ordered_by_date
 
     all.to_a.tap do |result|
       preloader = ActiveRecord::Associations::Preloader.new(records: result,
@@ -179,6 +189,27 @@ class Course::Assessment < ApplicationRecord
       SQL
     )
     rows.to_h { |row| [row.assessment_id, row.max_grade.to_f] }
+  end
+
+  # Builds a new (unsaved) course-coupled Submission together with its backing Attempt.
+  #
+  # Replaces `assessment.submissions.new(...)`, which does not work now that `submissions` is a
+  # `has_many :through` association — a `through:` collection proxy has no single owning foreign key
+  # to set, and building a Submission always requires building its Attempt in the same breath.
+  #
+  # @param [Hash] attributes A mix of Attempt attributes (only :creator is used by any call site
+  #   today) and Submission attributes (:course_user, :session_id). Attempt-level keys are pulled
+  #   out explicitly; everything else is passed straight to the built Submission.
+  # @return [Course::Assessment::Submission] an unsaved Submission with its (also unsaved) Attempt
+  #   already built and associated. Callers `.save`/`.save!` it exactly as they did the old
+  #   `assessment.submissions.new(...).save`.
+  def build_submission(attributes = {})
+    attempt_attributes = attributes.slice(:creator)
+    submission_attributes = attributes.except(:creator)
+
+    attempts.new(attempt_attributes).tap do |attempt|
+      attempt.build_submission(submission_attributes)
+    end.submission
   end
 
   def to_partial_path

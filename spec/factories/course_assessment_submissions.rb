@@ -7,13 +7,28 @@ FactoryBot.define do
       grader { User.stamper }
       auto_grade { true } # Used only with any of the submitted or finalised traits.
       creator
+      assessment { create(:assessment, :with_mcq_question, course: course) }
     end
-    assessment { create(:assessment, :with_mcq_question, course: course) }
+
+    # `assessment`/`creator` above are transients that build the backing Attempt (Submission has no
+    # such columns of its own), preserving every existing `create(:submission, assessment: foo)` call
+    # site's syntax.
+    #
+    # `creator: creator` must be threaded into the Attempt build explicitly: `:creator` is a
+    # registered alias of the `:user` factory, so FactoryBot builds it as an association even inside
+    # `transient`. If left to fall onto Submission, the assignment goes through `acts_as`'s
+    # `method_missing` to `experience_points_record.creator` and leaves `attempt.creator` unset —
+    # which then fails `validate_consistent_user` (`course_user.user == creator`). Passing it into
+    # the Attempt guarantees `create(:submission, creator: X)` makes `submission.creator == X`.
+    attempt { association(:course_assessment_attempt, assessment: assessment, creator: creator) }
     points_awarded { nil }
 
     trait :attempting do
       after(:build) do |submission|
-        submission.answers = submission.assessment.questions.attempt(submission)
+        # `Answer#submission` targets `Course::Assessment::Attempt`, so `.attempt(...)` must be given
+        # the Attempt, not the Submission, or building the answer raises
+        # `ActiveRecord::AssociationTypeMismatch`.
+        submission.answers = submission.assessment.questions.attempt(submission.attempt)
         # These are the first answers, so set their `current_answer` flag.
         submission.answers.map do |answer|
           answer.current_answer = true
@@ -62,7 +77,7 @@ FactoryBot.define do
     trait :attempting_with_past_answers do
       attempting
       after(:build) do |submission|
-        answers = submission.assessment.questions.attempt(submission)
+        answers = submission.assessment.questions.attempt(submission.attempt)
         answers.map do |answer|
           answer.current_answer = false
           answer.save!
@@ -74,7 +89,7 @@ FactoryBot.define do
 
     trait :with_past_answers do
       after(:build) do |submission|
-        old_answers = submission.assessment.questions.attempt(submission)
+        old_answers = submission.assessment.questions.attempt(submission.attempt)
         old_answers.map do |answer|
           answer.created_at = Time.zone.now - 1.day
           answer.finalise!
@@ -82,7 +97,7 @@ FactoryBot.define do
         end
         submission.answers << old_answers
 
-        new_answers = submission.assessment.questions.attempt(submission)
+        new_answers = submission.assessment.questions.attempt(submission.attempt)
         new_answers.map do |answer|
           answer.current_answer = true
           answer.finalise!

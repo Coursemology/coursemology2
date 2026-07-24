@@ -65,7 +65,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
     get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
       m.id, m.content, m.created_at, t.submission_creator_id,
-      s.assessment_id, sq.submission_id, sq.question_id,
+      s.assessment_id, sub.id AS submission_id, sq.question_id,
       COUNT(*) OVER (
         PARTITION BY t.submission_creator_id, s.assessment_id, sq.question_id
       ) AS message_count
@@ -73,6 +73,9 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
     INNER JOIN live_feedback_threads t ON m.thread_id = t.id
     INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
     INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
+    -- `s.id` is the attempt's id (what the response's `submissionId` carries), which is a different
+    -- id space from the extension table's own serial `id`. Join to the extension via its `attempt_id`.
+    INNER JOIN course_assessment_submission_details sub ON sub.attempt_id = s.id
     INNER JOIN course_assessments a ON s.assessment_id = a.id
     INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
     INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
@@ -147,6 +150,8 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller #
           ON ca.tab_id = tab.id
           INNER JOIN course_assessment_submissions cas
           ON cas.assessment_id = ca.id
+          INNER JOIN course_assessment_submission_details cad
+          ON cad.attempt_id = cas.id
           INNER JOIN course_assessment_answers caa
           ON caa.submission_id = cas.id
           INNER JOIN course_assessment_questions caq

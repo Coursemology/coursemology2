@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::Answer::Programming::AnnotationsController < \
+class Course::Assessment::Submission::Answer::Programming::AnnotationsController <
   Course::Assessment::Submission::Answer::Programming::Controller
   include Signals::EmissionConcern
 
@@ -66,7 +66,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
 
     # Ensure all group managers get a notification when someone adds a programming annotation
     # to the answer.
-    answer_course_user = @answer.submission.course_user
+    answer_course_user = @answer.attempt.submission.course_user
     answer_course_user.my_managers.each do |manager|
       @discussion_topic.ensure_subscribed_by(manager.user)
     end

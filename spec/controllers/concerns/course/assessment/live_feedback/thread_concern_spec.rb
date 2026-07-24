@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::LiveFeedback::ThreadConcern do
     let!(:answer) { submission.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first }
     let!(:question) { answer.question }
     let!(:submission_question) do
-      Course::Assessment::SubmissionQuestion.create!(submission: submission, question: question)
+      Course::Assessment::SubmissionQuestion.create!(submission: submission.attempt, question: question)
     end
 
     let!(:thread_info) { { 'id' => SecureRandom.hex(12), 'status' => 'active' } }

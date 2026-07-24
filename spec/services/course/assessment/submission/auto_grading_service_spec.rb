@@ -75,8 +75,9 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
                  submission: submission)
         end
         before do
-          # Stub #auto_grade_submission so that job is not created upon save
-          allow(submission).to receive(:auto_grade_submission).and_return(true)
+          # Stub #auto_grade_submission so that job is not created upon save. It is an after_save
+          # callback on the Attempt base (where the workflow lives), so stub it there.
+          allow(submission.attempt).to receive(:auto_grade_submission).and_return(true)
           submission.finalise!
           submission.save!
         end
@@ -93,7 +94,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
         context 'when submission is submitted before bonus end at' do
           before do
-            submission.update_column(:submitted_at, 4.days.ago)
+            submission.attempt.update_column(:submitted_at, 4.days.ago)
             subject.grade(submission)
           end
 
@@ -105,7 +106,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
         context 'when submission is submitted between bonus end at and end at' do
           before do
-            submission.update_column(:submitted_at, 2.days.ago)
+            submission.attempt.update_column(:submitted_at, 2.days.ago)
             subject.grade(submission)
           end
 

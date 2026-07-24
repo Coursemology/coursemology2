@@ -126,6 +126,28 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
         end
       end
 
+      context 'when a student has only a preview attempt (a bare Attempt with no Submission extension)' do
+        let(:user) { create(:course_manager, course: course).user }
+        let!(:preview_student) { create(:course_student, course: course) }
+        # A preview attempt: an Attempt row in course_assessment_submissions with no extension row.
+        # It must NOT be surfaced as this student's submission — they should read as 'unstarted'.
+        let!(:preview_attempt) do
+          create(:course_assessment_attempt, assessment: assessment, creator: preview_student.user).
+            tap { |attempt| attempt.update_columns(workflow_state: 'graded', submitted_at: Time.zone.now) }
+        end
+        before { controller_sign_in(controller, user) }
+
+        it 'shows the previewing student as unstarted, not as their preview attempt' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          preview_row = json_result.find { |row| row.dig('courseUser', 'id') == preview_student.id }
+          expect(preview_row).not_to be_nil
+          expect(preview_row['workflowState']).to eq('unstarted')
+          expect(preview_row['answers']).to be_nil
+        end
+      end
+
       context 'when the administrator get the submission statistics data' do
         let(:administrator) { create(:administrator) }
         before { controller_sign_in(controller, administrator) }

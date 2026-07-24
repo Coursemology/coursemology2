@@ -44,7 +44,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
     submissions = @assessment.submissions.confirmed.by_users(course_user_ids(@assessment)).
-                  includes(:answers, experience_points_record: :course_user)
+                  includes({ attempt: :answers }, experience_points_record: :course_user)
     submissions.find_each do |submission|
       folder_name = "#{submission.id}_#{submission.course_user.name}"
       submission_dir = create_folder(@base_dir, folder_name)

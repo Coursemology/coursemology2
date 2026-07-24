@@ -42,6 +42,9 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
         initial_points = submission.points_awarded
 
         subject.perform_now(answer)
+        # Points are updated on the extension row via the Attempt; reload the spec's separate
+        # `submission` instance to observe the DB change after the split.
+        submission.reload
         expect(answer).to be_graded
         expect(answer.grade).to eq(0)
         expect(submission.points_awarded).to eq(0)
@@ -62,6 +65,9 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
         initial_points = submission.points_awarded
 
         subject.perform_now(answer)
+        # Points are updated on the extension row via the Attempt; reload the spec's separate
+        # `submission` instance to observe the DB change after the split.
+        submission.reload
         expect(answer).to be_graded
         expect(answer.grade).to eq(question.maximum_grade)
         correct_exp = assessment.base_exp + assessment.time_bonus_exp

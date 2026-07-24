@@ -2,13 +2,25 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Submission do
-  it { is_expected.to belong_to(:assessment).without_validating_presence }
-  it { is_expected.to have_many(:answers).dependent(:destroy) }
-  it { is_expected.to have_many(:multiple_response_answers).through(:answers) }
-  it { is_expected.to have_many(:text_response_answers).through(:answers) }
-  it { is_expected.to have_many(:programming_answers).through(:answers) }
-  it { is_expected.to have_many(:forum_post_response_answers).through(:answers) }
-  it { is_expected.to accept_nested_attributes_for(:answers) }
+  # `:assessment`/`:answers` are not real associations on Submission — they live on
+  # `Course::Assessment::Attempt` and are reached here only via `delegate ... to: :attempt`. Assert
+  # the `belongs_to :attempt` instead.
+  #
+  # `.without_validating_presence`: without it, shoulda's matcher builds a bare instance with
+  # `attempt: nil` to verify the association is required, which cascades into
+  # `Course::ExperiencePointsRecord#validate_limit_exp_points_on_association` (reached via `acts_as`'s
+  # autosave-association-validation) reading `submission.assessment.base_exp` and crashing on the nil
+  # assessment.
+  it { is_expected.to belong_to(:attempt).without_validating_presence }
+  it { should delegate_method(:assessment).to(:attempt) }
+  it { should delegate_method(:answers).to(:attempt) }
+  it { should delegate_method(:answers=).to(:attempt).with_arguments([]) }
+  # `multiple_response_answers`/`text_response_answers`/`programming_answers`/
+  # `forum_post_response_answers`/`accepts_nested_attributes_for(:answers)` had no delegate call
+  # site anywhere in the app (grepped) even before this task — they are removed capabilities on
+  # Submission, not renamed ones, now living on `Attempt` only (its own spec is out of this task's
+  # scope). Per the repo's "no vacuous absence tests" convention, deleted outright rather than
+  # replaced with a `not_to`.
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
@@ -51,7 +63,7 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:experience_points_record]).
             to include(I18n.
-              t('activerecord.errors.models.course/assessment/submission.'\
+              t('activerecord.errors.models.course/assessment/submission.' \
                 'attributes.experience_points_record.inconsistent_user'))
         end
       end
@@ -69,7 +81,7 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:base]).
             to include(I18n.
-              t('activerecord.errors.models.course/assessment/submission.'\
+              t('activerecord.errors.models.course/assessment/submission.' \
                 'submission_already_exists'))
         end
       end
@@ -85,7 +97,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject).not_to be_valid
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
-                t('activerecord.errors.models.course/assessment/submission.'\
+                t('activerecord.errors.models.course/assessment/submission.' \
                   'attributes.experience_points_record.absent_award_attributes'))
           end
         end
@@ -96,7 +108,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject).not_to be_valid
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
-                t('activerecord.errors.models.course/assessment/submission.'\
+                t('activerecord.errors.models.course/assessment/submission.' \
                   'attributes.experience_points_record.absent_award_attributes'))
           end
         end
@@ -338,8 +350,13 @@ RSpec.describe Course::Assessment::Submission do
 
       with_active_job_queue_adapter(:test) do
         it 'creates a new auto grading job' do
-          submission.finalise!
-          expect { submission.save }.to \
+          # `Submission#finalise!` wraps `attempt.finalise!` and its own `save!` in one transaction,
+          # so the attempt's pending `workflow_state` change is persisted (via `autosave: true`) as
+          # part of that same `save!`. `auto_grade_submission`'s `if: :saved_change_to_workflow_state?`
+          # guard therefore fires during `finalise!` itself — a caller no longer needs a separate
+          # trailing `.save` to enqueue the job. The guarantee (finalising enqueues the job exactly
+          # once) still holds, just one call earlier.
+          expect { submission.finalise! }.to \
             have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).exactly(:once)
         end
       end
@@ -780,7 +797,15 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#send_submit_notification' do
       subject do
-        submission1.save
+        # `workflow_state_before_last_save` is delegated to `attempt`. This save on the attempt
+        # exists purely to make that guard read `'attempting'` (the precondition
+        # `send_submit_notification` checks): a no-op save on an unchanged record reports its
+        # dirty-tracking as before == after == current value.
+        # Post-split, saving `submission1` (the small table) no longer touches `attempt` at all
+        # when `attempt` itself has no pending changes (a `belongs_to ..., autosave: true` only
+        # cascades a save when the association target is dirty or new) — save `attempt` directly
+        # to get the same precondition.
+        submission1.attempt.save
         submission1.updater = user1
         submission1.send(:send_submit_notification)
       end
@@ -809,10 +834,15 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'updates the last_graded_time' do
+          # `on_dependent_status_change` only *assigns* `last_graded_time` in memory on the
+          # associated Submission; persisting it requires a later save of that same Submission. This
+          # example therefore drives the actual trigger explicitly — set the answer's grade, save the
+          # answer (which fires the assignment), then save the submission — and asserts that the save
+          # persisted `last_graded_time`.
           answer.grade = 0
-          expect(subject.saved_changes).to include(:last_graded_time)
           answer.save!
           subject.save!
+          expect(subject.saved_changes).to include(:last_graded_time)
         end
       end
     end
@@ -936,6 +966,29 @@ RSpec.describe Course::Assessment::Submission do
           assessment_ids: [graded_assessment.id]
         )
         expect(results).to be_empty
+      end
+
+      it 'excludes preview attempts (an Attempt with no Submission extension row)' do
+        real = create(:course_assessment_submission, :graded,
+                      assessment: graded_assessment, creator: student.user)
+        real.answers.update_all(grade: 5.0, current_answer: true)
+
+        # Build a normal graded submission for another student, then drop its extension row so only
+        # the base Attempt (with graded answers) remains — exactly a preview attempt. grade_summary
+        # must not sum it.
+        preview_student = create(:course_student, course: course)
+        preview = create(:course_assessment_submission, :graded,
+                         assessment: graded_assessment, creator: preview_student.user)
+        preview.answers.update_all(grade: 7.0, current_answer: true)
+        Course::Assessment::Submission.where(attempt_id: preview.attempt_id).delete_all
+
+        results = Course::Assessment::Submission.grade_summary(
+          student_ids: [student.user_id, preview_student.user_id],
+          assessment_ids: [graded_assessment.id]
+        )
+
+        expect(results.map(&:student_id)).to contain_exactly(student.user_id)
+        expect(results.map { |row| row.grade.to_f }).to eq([5.0])
       end
     end
   end

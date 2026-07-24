@@ -3,8 +3,10 @@ module Course::Assessment::LiveFeedback::ThreadConcern
   extend ActiveSupport::Concern
 
   def safe_create_and_save_thread_info
+    # `@submission` is the extension (`@assessment.submissions.find`), whose own id differs from the
+    # attempt id that `submission_questions.submission_id` references. Match on the attempt id.
     submission_question = Course::Assessment::SubmissionQuestion.where(
-      submission_id: @submission, question_id: @answer.question
+      submission_id: @submission.attempt_id, question_id: @answer.question
     ).first
 
     submission_question.with_lock do

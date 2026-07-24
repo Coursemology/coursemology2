@@ -8,10 +8,20 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   validates :submission_id, uniqueness: { scope: [:question_id], if: -> { question_id? && submission_id_changed? } }
   validates :question_id, uniqueness: { scope: [:submission_id], if: -> { submission_id? && question_id_changed? } }
 
-  belongs_to :submission, class_name: 'Course::Assessment::Submission',
+  # Association is `:submission` but its target is the `Attempt` base; the FK column stays
+  # `submission_id` (the base table/columns were not renamed — additive split). `foreign_key` is
+  # stated explicitly to document that the column is `submission_id`, not `attempt_id`.
+  belongs_to :submission, class_name: 'Course::Assessment::Attempt', foreign_key: 'submission_id',
                           inverse_of: :submission_questions
+  include Course::Assessment::CoercesSubmissionToAttempt
+
   belongs_to :question, class_name: 'Course::Assessment::Question',
                         inverse_of: :submission_questions
+
+  # `attempt` is the accurate name for what `:submission` returns — the Attempt base record. Prefer it in
+  # new code (e.g. `@submission_question.attempt.submission`); the association stays `:submission` for
+  # existing call sites. Reader-only alias.
+  alias_method :attempt, :submission
 
   has_many :threads, class_name: 'Course::Assessment::LiveFeedback::Thread',
                      inverse_of: :submission_question, dependent: :destroy
@@ -25,8 +35,12 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
     #   where.has { submission.creator_id.in(user_id) }.
     #   joining { discussion_topic }.selecting { discussion_topic.id }
     unscoped.
-      joins(:submission).
-      where(Course::Assessment::Submission.arel_table[:creator_id].in(user_id)).
+      # SubmissionQuestion `:submission` joins the Attempt base (which includes previews); the nested
+      # `:submission` (Attempt's `has_one :submission`) inner-joins the extension table, restricting
+      # to real submissions so a preview's submission_questions never leak here. `creator_id` lives on
+      # Course::Assessment::Attempt post-repoint, so the arel_table reference must match.
+      joins(submission: :submission).
+      where(Course::Assessment::Attempt.arel_table[:creator_id].in(user_id)).
       joins(:discussion_topic).
       select(Course::Discussion::Topic.arel_table[:id])
   end)

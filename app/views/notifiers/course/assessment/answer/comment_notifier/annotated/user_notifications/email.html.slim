@@ -2,9 +2,10 @@
 - annotation = post.topic.actable
 - answer = annotation.file.answer
 - question = answer.question
-- submission = answer.submission
+- attempt = answer.submission
+- submission = attempt.submission
 - course_user = submission.course_user
-- assessment = submission.assessment
+- assessment = attempt.assessment
 - question_assessment = assessment.question_assessments.find_by!(question: question)
 - course = assessment.course
 - host = course.instance.host

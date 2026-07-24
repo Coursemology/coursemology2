@@ -63,8 +63,10 @@ class Course::SkillsMasteryPreloadService
   def grade_by_skill
     @grade_by_skill ||= begin
       grade_by_skill = Hash.new(0)
+      # `belonging_to_submissions` filters answers by `submission_id`, which references the attempt
+      # (base) id, not the extension's own id. Pluck `attempt_id` so the answers actually match.
       submission_ids = Course::Assessment::Submission.by_user(@course_user.user.id).
-                       from_course(@course).with_published_state.pluck(:id)
+                       from_course(@course).with_published_state.pluck(:attempt_id)
       answers = Course::Assessment::Answer.belonging_to_submissions(submission_ids).current_answers.
                 includes(question: { question_assessments: :skills })
       answers.each do |answer|

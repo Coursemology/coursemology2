@@ -34,8 +34,8 @@ class Course::Assessment::Submission::CsvDownloadService
 
   def generate_csv
     submissions = @assessment.submissions.by_users(course_users.pluck(:user_id)).
-                  includes(:assessment, { answers: { actable: [:options, :files] },
-                                          experience_points_record: :course_user })
+                  includes(attempt: [:assessment, answers: { actable: [:options, :files] }],
+                           experience_points_record: :course_user)
     submissions_hash = submissions.to_h { |submission| [submission.creator_id, submission] }
     csv_file_path = File.join(@base_dir, "#{Pathname.normalize_filename(@assessment.title)}.csv")
     CSV.open(csv_file_path, 'w') do |csv|

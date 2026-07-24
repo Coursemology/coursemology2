@@ -21,9 +21,14 @@ module Course::Assessment::AssessmentAbility
     { tab: { category: { course_id: course.id } } }
   end
 
+  # The condition identifying a user's own attempt-in-progress, expressed against the Attempt base
+  # (which owns `workflow_state` and `creator_id` post-split; `creator_id` is the owner because
+  # `validate_consistent_user` pins it to the submission's course_user). Wrap it in `attempt:` for a
+  # `Submission` subject, or use it directly under `submission:` for an `Answer`/`Answer::TextResponse`
+  # subject, since that association now reaches the Attempt.
   def assessment_submission_attempting_hash(user)
     { workflow_state: 'attempting' }.tap do |result|
-      result.reverse_merge!(experience_points_record: { course_user: { user_id: user.id } }) if user
+      result[:creator_id] = user.id if user
     end
   end
 
@@ -77,7 +82,7 @@ module Course::Assessment::AssessmentAbility
         experience_points_record: { course_user: { user_id: user.id } }
     can [:update, :generate_live_feedback, :save_live_feedback,
          :create_live_feedback_chat, :fetch_live_feedback_status],
-        Course::Assessment::Submission, assessment_submission_attempting_hash(user)
+        Course::Assessment::Submission, attempt: assessment_submission_attempting_hash(user)
   end
 
   def allow_update_own_assessment_answer
@@ -141,19 +146,19 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_submissions
     can :view_all_submissions, Course::Assessment, assessment_course_hash
-    can :read, Course::Assessment::Submission, assessment: assessment_course_hash
+    can :read, Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_staff_read_assessment_tests
-    can :read_tests, Course::Assessment::Submission, assessment: assessment_course_hash
+    can :read_tests, Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_staff_update_category_grades
-    can :update_category_grades, Course::Assessment::Submission, assessment: assessment_course_hash
+    can :update_category_grades, Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_staff_update_category_explanations
-    can :update_category_explanations, Course::Assessment::Submission, assessment: assessment_course_hash
+    can :update_category_explanations, Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_staff_read_submission_questions
@@ -165,7 +170,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_staff_delete_own_assessment_submission
-    can :delete_submission, Course::Assessment::Submission, creator_id: user.id
+    can :delete_submission, Course::Assessment::Submission, attempt: { creator_id: user.id }
   end
 
   def define_teaching_staff_assessment_permissions
@@ -217,7 +222,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_teaching_staff_grade_assessment_submissions
     can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_feedback],
-        Course::Assessment::Submission, assessment: assessment_course_hash
+        Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
     can :grade, Course::Assessment::Answer,
         submission: { assessment: assessment_course_hash }
   end
@@ -225,7 +230,7 @@ module Course::Assessment::AssessmentAbility
   def allow_teaching_staff_interact_with_live_feedback
     can [:generate_live_feedback, :save_live_feedback, :create_live_feedback_chat,
          :fetch_live_feedback_status, :fetch_live_feedback_chat],
-        Course::Assessment::Submission, assessment: assessment_course_hash
+        Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_teaching_staff_manage_assessment_annotations
@@ -289,7 +294,7 @@ module Course::Assessment::AssessmentAbility
   # Only managers and above are allowed to delete assessment submissions
   def allow_manager_delete_assessment_submissions
     can :delete_all_submissions, Course::Assessment, assessment_course_hash
-    can :delete_submission, Course::Assessment::Submission, assessment: assessment_course_hash
+    can :delete_submission, Course::Assessment::Submission, attempt: { assessment: assessment_course_hash }
   end
 
   def allow_manager_update_assessment_answer
