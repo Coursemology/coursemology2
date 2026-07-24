@@ -68,7 +68,8 @@ module Course::AssessmentMarketplaceAbilityComponent
     can :create, Course::Assessment::Attempt
     can [:read, :update, :grade, :reset, :reload_answer, :reevaluate_answer, :generate_feedback,
          :generate_live_feedback, :create_live_feedback_chat, :fetch_live_feedback_chat,
-         :fetch_live_feedback_status, :save_live_feedback, :create_scribing_scribble, :read_tests],
+         :fetch_live_feedback_status, :save_live_feedback, :create_scribing_scribble, :read_tests,
+         :save_draft, :submit_answer],
         Course::Assessment::Attempt do |attempt|
       attempt.preview? && attempt.creator_id == user.id
     end

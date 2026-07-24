@@ -239,6 +239,70 @@ RSpec.describe Course::Assessment::Marketplace::PreviewAttemptsController, type:
       end
     end
 
+    describe 'PATCH #save_draft' do
+      let(:attempt) do
+        a = create(:course_assessment_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a.answers.reload
+        a
+      end
+
+      it 'saves the per-answer draft (not a no-op)' do
+        answer = attempt.current_answers.first
+        option = answer.question.actable.options.first
+        patch :save_draft, params: {
+          course_id: course.id, id: attempt.id, answer_id: answer.id, format: :json,
+          answer: { id: answer.id, option_ids: [option.id] }
+        }
+        expect(response).to have_http_status(:ok)
+        expect(answer.reload.actable.options).to include(option)
+      end
+
+      context 'when the requester is a different manager (not the creator)' do
+        before { controller_sign_in(controller, other_manager) }
+        it 'is denied' do
+          answer = attempt.current_answers.first
+          expect do
+            patch :save_draft, params: { course_id: course.id, id: attempt.id, answer_id: answer.id,
+                                         format: :json, answer: { id: answer.id, option_ids: [] } }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
+
+    describe 'PATCH #submit_answer' do
+      let(:source_assessment) { create(:assessment, :published, :with_mrq_question, :autograded) }
+      let(:attempt) do
+        a = create(:course_assessment_attempt, assessment: source_assessment, creator: manager)
+        a.create_new_answers
+        a.answers.reload
+        a
+      end
+
+      it 'submits and autogrades on the bare preview attempt without an EXP-tail crash' do
+        answer = attempt.current_answers.first
+        expect do
+          patch :submit_answer, params: {
+            course_id: course.id, id: attempt.id, answer_id: answer.id, format: :json,
+            answer: { id: answer.id }
+          }
+        end.to change { attempt.answers.count }.by(1)
+        expect(response).to have_http_status(:ok)
+        expect(attempt.reload.answers.last.workflow_state).to eq('graded')
+      end
+
+      context 'when the requester is a different manager (not the creator)' do
+        before { controller_sign_in(controller, other_manager) }
+        it 'is denied' do
+          answer = attempt.current_answers.first
+          expect do
+            patch :submit_answer, params: { course_id: course.id, id: attempt.id, answer_id: answer.id,
+                                            format: :json, answer: { id: answer.id } }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
+
     describe 'live feedback endpoints' do
       let(:source_assessment) { create(:assessment, :published_with_programming_question) }
       let(:attempt) do

@@ -4,10 +4,15 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
   include Course::Assessment::LiveFeedback::MessageConcern
   include Course::Assessment::LiveFeedback::ThreadConcern
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
+  # Per-answer draft save (#save_draft) and submit (#submit_answer) reuse the same answer
+  # write path as the platform AnswersController.
+  include Course::Assessment::Answer::UpdateAnswerConcern
+  include Course::Assessment::Answer::SubmitAnswerConcern
 
   MEMBER_ACTIONS = [
     :edit, :update, :auto_grade, :reset, :reload_answer, :reevaluate_answer, :generate_feedback,
-    :generate_live_feedback, :create_live_feedback_chat, :create_scribing_scribble
+    :generate_live_feedback, :create_live_feedback_chat, :create_scribing_scribble,
+    :save_draft, :submit_answer
   ].freeze
 
   before_action :load_listing, only: [:create]
@@ -19,7 +24,7 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
   before_action :load_or_create_submission_questions,
                 only: [:edit, :update, :auto_grade, :reset, :reload_answer, :reevaluate_answer,
                        :generate_feedback, :generate_live_feedback, :create_live_feedback_chat,
-                       :create_scribing_scribble]
+                       :create_scribing_scribble, :save_draft, :submit_answer]
 
   # Defines #update: service.update → answer saves + workflow transitions + render 'edit'. @assessment/
   # @submission are snapshot at service memoization, hence set in load_attempt, never in the action.
@@ -86,6 +91,37 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
 
     job = @answer.generate_feedback
     render partial: 'jobs/submitted', locals: { job: job }
+  end
+
+  # Per-answer autosave. Mirrors AnswersController#update; the whole-submission #update above
+  # is a different (finalise/mark) path.
+  def save_draft
+    @answer = @submission.answers.find_by(id: params[:answer_id])
+    return head :bad_request if @answer.nil?
+
+    if update_answer(@answer, draft_answer_params)
+      render @answer
+    else
+      render json: { errors: @answer.errors }, status: :bad_request
+    end
+  end
+
+  # Per-question submit + autograde. Mirrors AnswersController#submit_answer. The per-answer
+  # auto_grade path (answer.auto_grade!) is already exercised by #reevaluate_answer above and
+  # PreviewAutoGradingService, so it is safe on a bare preview Attempt (no EXP/publish tail).
+  def submit_answer
+    @answer = @submission.answers.find_by(id: params[:answer_id])
+    return head :bad_request if @answer.nil?
+
+    if update_answer(@answer, draft_answer_params)
+      if should_auto_grade_on_submit(@answer)
+        auto_grade_answer(@answer)
+      else
+        render @answer
+      end
+    else
+      render json: { errors: @answer.errors }, status: :bad_request
+    end
   end
 
   def generate_live_feedback # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -199,7 +235,9 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
     'generate_feedback' => :generate_feedback,
     'generate_live_feedback' => :generate_live_feedback,
     'create_live_feedback_chat' => :create_live_feedback_chat,
-    'create_scribing_scribble' => :create_scribing_scribble
+    'create_scribing_scribble' => :create_scribing_scribble,
+    'save_draft' => :save_draft,
+    'submit_answer' => :submit_answer
   }.freeze
 
   private
@@ -255,6 +293,12 @@ class Course::Assessment::Marketplace::PreviewAttemptsController < # rubocop:dis
 
   def reload_answer_params
     params.permit(:answer_id, :reset_answer)
+  end
+
+  # UpdateAnswerConcern#update_answer permits its own answer-type fields off this root; require
+  # the wrapper key only. (The existing #answer_params permits :answer_id for live feedback.)
+  def draft_answer_params
+    params.require(:answer)
   end
 
   def answer_params

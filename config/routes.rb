@@ -643,6 +643,8 @@ Rails.application.routes.draw do
             post :generate_feedback
             post :generate_live_feedback
             post :create_live_feedback_chat
+            patch 'answers/:answer_id' => 'preview_attempts#save_draft'
+            patch 'answers/:answer_id/submit_answer' => 'preview_attempts#submit_answer'
             post 'answers/:answer_id/scribing/scribbles' => 'preview_attempts#create_scribing_scribble'
           end
         end
