@@ -75,7 +75,10 @@ gem 'yajl-ruby', '~> 1.4'
 # Page profiler
 gem 'rack-mini-profiler'
 
-gem 'redis-rails'
+# Redis client — used directly (the REDIS global for assessment tokens, the ActionCable redis
+# adapter, rack-mini-profiler storage, and the RedisCacheStore / :cache_store session store).
+# Previously pulled in transitively via redis-rails; now a direct dependency.
+gem 'redis'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background.
@@ -97,7 +100,6 @@ end
 group :test do
   gem 'email_spec'
   gem 'rspec-html-matchers'
-  gem 'should_not'
   gem 'shoulda-matchers'
 
   # Capybara for feature testing
@@ -144,13 +146,6 @@ group :ci do
   gem 'rspec-retry'
   gem 'rspec_junit_formatter'
   gem 'rubocop-rails'
-end
-
-# This is used only when producing Production assets. Deals with things like minifying JavaScript
-# source files/image assets.
-group :assets do
-  # Compress image assets
-  gem 'image_optim_rails'
 end
 
 group :development, :production, :test do
@@ -219,7 +214,6 @@ gem 'rwordnet', git: 'https://github.com/Coursemology/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
-gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
 
 # Retreival Augmented Generation (RAG) Support

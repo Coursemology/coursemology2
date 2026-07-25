@@ -24,7 +24,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
-require 'should_not/rspec'
 require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 

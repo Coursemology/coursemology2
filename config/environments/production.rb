@@ -71,8 +71,18 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Redis cache store. This MUST be set here, not in an initializer: Rails.cache is built during
+  # the :initialize_cache bootstrap step (before config/initializers run), so a store configured
+  # in an initializer is silently ignored and Rails.cache falls back to the default FileStore.
+  # Backs both Rails.cache and the :cache_store session store (see config/initializers/cache_store.rb).
+  config.cache_store = :redis_cache_store, {
+    host: ENV['REDIS_HOST'],
+    port: 6379,
+    db: 0,
+    password: Rails.application.credentials.dig(:redis, :password),
+    namespace: 'cache',
+    expires_in: 90.minutes
+  }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
