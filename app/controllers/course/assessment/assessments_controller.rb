@@ -30,6 +30,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     end
 
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
+    @marketplace_container = current_course.preview? && can?(:manage, :all)
+    @marketplace_versions = marketplace_version_labels if @marketplace_container
   end
 
   def show
@@ -39,6 +41,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     @question_assessments = @assessment.question_assessments.with_question_actables
     @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
     @questions = @assessment.questions.includes({ actable: :test_cases })
+    @marketplace_update = Course::Assessment::Marketplace::Adoption.update_notice_for(@assessment.id)
+    # Same gate and same labels as the index: opening a container row must not lose the identity the
+    # row carried, since every snapshot and working copy there shares one title and one tab.
+    @marketplace_version = marketplace_version_label if current_course.preview? && can?(:manage, :all)
 
     @requirements = @assessment.specific_conditions.map do |condition|
       {
@@ -256,6 +262,23 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   private
+
+  # Drives the view-only version badge on the container course's assessment index. Every published
+  # snapshot keeps its original title and shares one tab, so without it an admin sees an
+  # undifferentiated pile of identically-named assessments. Skipped everywhere else.
+  #
+  # @return [Hash{Integer => Hash}]
+  def marketplace_version_labels
+    Course::Assessment::Marketplace::ListingVersion.labels_for_assessments(@assessments.pluck(:id))
+  end
+
+  # The single-assessment reading of the same labels, for `show`. Nil for a container assessment that
+  # is neither a snapshot nor a listing's working copy — one authored in the container directly.
+  #
+  # @return [Hash, nil]
+  def marketplace_version_label
+    Course::Assessment::Marketplace::ListingVersion.labels_for_assessments([@assessment.id])[@assessment.id]
+  end
 
   def load_assessment_submission_counts
     @all_students = current_course.course_users.students.without_phantom_users
