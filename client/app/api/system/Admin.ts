@@ -13,6 +13,10 @@ import {
   AllowlistRuleData,
   AllowlistRuleFormData,
 } from 'types/system/marketplaceAllowlist';
+import {
+  MarketplaceListingAdminData,
+  MarketplaceListingDetailData,
+} from 'types/system/marketplaceListings';
 import { AdminStats, UserListData } from 'types/users';
 
 import BaseSystemAPI from '../Base';
@@ -190,6 +194,67 @@ export default class AdminAPI extends BaseSystemAPI {
   > {
     return this.client.get(
       `${AdminAPI.#urlPrefix}/marketplace_allowlist_rules`,
+    );
+  }
+
+  /**
+   * Fetches every marketplace listing with its version chain and provenance.
+   */
+  indexMarketplaceListings(): Promise<
+    AxiosResponse<{ listings: MarketplaceListingAdminData[] }>
+  > {
+    return this.client.get(`${AdminAPI.#urlPrefix}/marketplace_listings`);
+  }
+
+  /**
+   * Fetches one listing's provenance, full version history and adoptions. Read-only — every
+   * mutation stays on the index.
+   */
+  fetchMarketplaceListing(
+    id: number,
+  ): Promise<AxiosResponse<MarketplaceListingDetailData>> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/marketplace_listings/${id}`);
+  }
+
+  /**
+   * PERMANENTLY deletes a marketplace listing, its versions and their container snapshots — not the
+   * reversible unlist. Succeeds with an EMPTY body (`head :ok`), so there is nothing to parse; the
+   * server refuses anything but an unadopted orphan with a 422 carrying `errors`.
+   */
+  deleteMarketplaceListing(id: number): Promise<AxiosResponse<void>> {
+    return this.client.delete(
+      `${AdminAPI.#urlPrefix}/marketplace_listings/${id}`,
+    );
+  }
+
+  /**
+   * Takes a listing off the marketplace, or puts it back — the REVERSIBLE step, and the one an admin
+   * has to take before a listing can be deleted at all. Succeeds with an EMPTY body (`head :ok`).
+   *
+   * Admin-side rather than through the course-side unlist because that one resolves the listing
+   * through its authoring assessment, which a listing whose source was deleted no longer has.
+   * Re-listing never cuts a version: it restores visibility over the version already held.
+   */
+  setMarketplaceListingPublished(
+    id: number,
+    published: boolean,
+  ): Promise<AxiosResponse<void>> {
+    return this.client.patch(
+      `${AdminAPI.#urlPrefix}/marketplace_listings/${id}`,
+      { published },
+    );
+  }
+
+  /**
+   * Duplicates an orphaned listing's latest snapshot into the marketplace's container course and
+   * makes it the new source assessment. There is no destination to choose. Asynchronous — the
+   * response carries a `jobUrl` for the client to poll.
+   */
+  restoreMarketplaceListingAuthoring(
+    id: number,
+  ): Promise<AxiosResponse<{ status: string; jobUrl: string }>> {
+    return this.client.post(
+      `${AdminAPI.#urlPrefix}/marketplace_listings/${id}/restore_authoring`,
     );
   }
 

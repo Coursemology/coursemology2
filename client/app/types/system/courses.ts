@@ -8,6 +8,8 @@ export interface CourseListData {
   createdAt: string;
   activeUserCount: number;
   userCount: number;
+  /** True for the hidden marketplace preview container, which no course picker may offer. */
+  preview: boolean;
   instance: InstanceMiniEntity;
   owners: UserBasicMiniEntity[];
 }
