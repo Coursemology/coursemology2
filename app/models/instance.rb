@@ -139,6 +139,21 @@ class Instance < ApplicationRecord
     read_attribute(:host).gsub('coursemology.org', default_host)
   end
 
+  # `#host` carries the port the app is publicly served on, and a url built from it must name that
+  # port separately: a controller's `url_options` always supplies `port: request.optional_port`, and
+  # Rails reads a port out of `host:` only when no `:port` key is present — so passing the host
+  # alone silently swaps in the port the request reached Rails on.
+  #
+  # The two differ whenever a proxy sits in front, i.e. every development setup, and the url then
+  # names a port the browser cannot reach. A host with no port yields `port: nil`, which is what
+  # production wants. Jobs and mailers escape this: no request, hence no `:port` key.
+  #
+  # @return [Hash] the `host:`/`port:` options for a url on this instance
+  def host_options
+    name, port = host.split(':', 2)
+    { host: name, port: port }
+  end
+
   def redirect_uri
     protocol = if Rails.env.development? && ENV['RAILS_USE_HTTP']
                  'http'

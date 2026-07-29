@@ -275,9 +275,37 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # The single-assessment reading of the same labels, for `show`. Nil for a container assessment that
   # is neither a snapshot nor a listing's working copy — one authored in the container directly.
   #
+  # A snapshot additionally carries where to edit the content it froze. Merged here rather than in
+  # `labels_for_assessments`, which the index shares and has no use for the field.
+  #
   # @return [Hash, nil]
   def marketplace_version_label
-    Course::Assessment::Marketplace::ListingVersion.labels_for_assessments([@assessment.id])[@assessment.id]
+    label = Course::Assessment::Marketplace::ListingVersion.
+            labels_for_assessments([@assessment.id])[@assessment.id]
+    return nil if label.nil?
+    # Skipped for the working copy: the source assessment is this page.
+    return label if label[:published_at].nil?
+
+    label.merge(source_assessment_url: source_assessment_url(label[:listing_id]))
+  end
+
+  # Absolute, and carrying the source assessment's own host: a course id only resolves on its
+  # instance's host, and a listing's source lives on whichever instance published it. Nil for an
+  # orphaned listing, whose source was deleted and whose rebuild has not landed.
+  #
+  # @param [Integer] listing_id
+  # @return [String, nil]
+  def source_assessment_url(listing_id)
+    ActsAsTenant.without_tenant do
+      listing = Course::Assessment::Marketplace::Listing.
+                includes(authoring_assessment: { lesson_plan_item: { course: :instance } }).
+                find_by(id: listing_id)
+      assessment = listing&.authoring_assessment
+      next nil if assessment.nil?
+
+      course_assessment_url(assessment.course_id, assessment,
+                            **assessment.course.instance.host_options)
+    end
   end
 
   def load_assessment_submission_counts

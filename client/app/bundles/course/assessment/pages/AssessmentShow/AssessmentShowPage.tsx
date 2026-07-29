@@ -27,6 +27,7 @@ import MarketplaceVersionChip from '../AssessmentsIndex/MarketplaceVersionChip';
 import AssessmentDetails from './AssessmentDetails';
 import AssessmentShowHeader from './AssessmentShowHeader';
 import GenerateQuestionMenu from './GenerateQuestionMenu';
+import MarketplaceSnapshotBanner from './MarketplaceSnapshotBanner';
 import MarketplaceUpdateBanner from './MarketplaceUpdateBanner';
 import NewQuestionMenu from './NewQuestionMenu';
 import QuestionsManager from './QuestionsManager';
@@ -81,6 +82,8 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       {assessment.status === 'unavailable' && (
         <UnavailableAlert for={assessment} />
       )}
+
+      <MarketplaceSnapshotBanner version={assessment.marketplaceVersion} />
 
       <MarketplaceUpdateBanner
         assessmentId={assessment.id}
