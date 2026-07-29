@@ -5,6 +5,10 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
 
   queue_as :duplication
 
+  # Mirrors `validates :title, length: { maximum: 255 }` on Course::LessonPlan::Item, which is where
+  # an assessment's title actually lives.
+  TITLE_LIMIT = 255
+
   protected
 
   def perform_tracked(listing_ids, destination_course, destination_tab_id, options = {})
@@ -12,15 +16,15 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
     ActsAsTenant.without_tenant do
       listings = Course::Assessment::Marketplace::Listing.published.where(id: listing_ids)
       target_tab = find_tab(destination_course, destination_tab_id)
-      last_copy = nil
-      listings.each do |listing|
-        # The adoption row is written by the duplication service itself, which tracks every copy of a
-        # listed assessment regardless of the path that produced it. See
-        # `Course::Duplication::BaseService#record_marketplace_adoptions`.
-        last_copy = duplicate_listing(listing, destination_course, current_user)
-        reparent_into_tab(last_copy, target_tab)
+      copies = listings.map do |listing|
+        copy = duplicate_listing(listing, destination_course, current_user)
+        reparent_into_tab(copy, target_tab)
+        resolve_title_collision(copy, listing, destination_course)
+        record_adoption(listing, destination_course, copy, current_user)
+        copy
       end
-      redirect_to assessments_url(destination_course, target_tab || last_copy&.tab)
+      landing_url = landing_url_for(copies, destination_course)
+      redirect_to landing_url if landing_url
     end
   end
 
@@ -36,7 +40,7 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
   end
 
   def duplicate_listing(listing, destination_course, current_user)
-    source = listing.authoring_assessment
+    source = listing.current_version.assessment
     Course::Duplication::ObjectDuplicationService.duplicate_objects(
       source.course, destination_course, source, current_user: current_user
     )
@@ -50,15 +54,78 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
     copy.save!
   end
 
-  # Points at the tab the copies actually landed in. No tab is requested from the sidebar entry
-  # point, and a requested tab may not belong to the destination course -- in both cases the
-  # duplication picks the destination's default tab, and the redirect has to follow it there
-  # instead of naming a tab (and its category) that the user cannot open.
-  def assessments_url(destination_course, tab)
-    redirect_category_id = tab&.category_id || destination_course.assessment_categories.first.id
-    course_assessments_url(destination_course,
-                           category: redirect_category_id,
-                           tab: tab&.id,
-                           host: destination_course.instance.host)
+  # Renames an imported copy whose title is already taken in the destination course.
+  #
+  # Fires on every import, not only on re-import of the same listing: a copy landing on top of an
+  # unrelated assessment of the same name collides just as badly, and previously landed silently.
+  #
+  # Escalates only as far as it has to:
+  #   "Lab 3"  ->  "Lab 3 [12 Jun 2026]"  ->  "Lab 3 [12 Jun 2026] (2)"  ->  (3) ...
+  #
+  # @param [Course::Assessment] copy
+  # @param [Course::Assessment::Marketplace::Listing] listing
+  # @param [Course] destination_course
+  # @return [void]
+  def resolve_title_collision(copy, listing, destination_course)
+    taken = Course::Assessment.titles_in_course(destination_course, except_id: copy.id)
+    base = copy.title
+    return if taken.exclude?(base.downcase)
+
+    published_at = ActsAsTenant.without_tenant { listing.current_version&.published_at }
+    # A listing with no recorded vintage has nothing to name, so it goes straight to the counter —
+    # stamping an empty "[]" would be worse than the collision it is trying to resolve.
+    dated = published_at ? "#{base} [#{published_at.strftime('%d %b %Y')}]" : base
+    candidate = truncate_to_limit(dated, base)
+
+    suffix_number = 2
+    while taken.include?(candidate.downcase)
+      candidate = truncate_to_limit("#{dated} (#{suffix_number})", base)
+      suffix_number += 1
+    end
+
+    copy.title = candidate
+    copy.save!
+  end
+
+  # Truncate the base for an over-long title.
+  #
+  # @param [String] candidate
+  # @param [String] base
+  # @return [String]
+  def truncate_to_limit(candidate, base)
+    return candidate if candidate.length <= TITLE_LIMIT
+
+    suffix = candidate.delete_prefix(base)
+    base.truncate(TITLE_LIMIT - suffix.length) + suffix
+  end
+
+  # Where the completion toast's link sends the manager.
+  #
+  # @param [Array<Course::Assessment>] copies
+  # @param [Course] destination_course
+  # @return [String, nil] nil when every listing was filtered out by `.published`, in which case
+  #   nothing landed and there is nowhere to link to.
+  def landing_url_for(copies, destination_course)
+    return nil if copies.empty?
+
+    host = destination_course.instance.host
+    return course_assessment_url(destination_course, copies.first, host: host) if copies.one?
+
+    tab = copies.first.tab
+    course_assessments_url(destination_course, category: tab.category_id, tab: tab.id, host: host)
+  end
+
+  # Written here rather than left to `Course::Duplication::BaseService#record_marketplace_adoptions`:
+  # that sweep keys off the SOURCE's own `marketplace_listing`, and the source here is the container
+  # snapshot, which authors no listing. This path is the only one that knows which listing it served.
+  def record_adoption(listing, destination_course, copy, current_user)
+    Course::Assessment::Marketplace::Adoption.create!(
+      listing: listing,
+      destination_course: destination_course,
+      duplicated_assessment: copy,
+      adopted_version_at: listing.current_version.published_at,
+      creator: current_user,
+      updater: current_user
+    )
   end
 end

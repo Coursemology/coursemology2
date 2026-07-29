@@ -307,11 +307,17 @@ class Course::Assessment < ApplicationRecord
   # @param [User] current_user The user who triggered the duplication.
   def record_marketplace_adoption(duplicate, destination_course, current_user)
     return unless marketplace_listing&.published?
+    # Publishing duplicates the source INTO the container to cut a snapshot. That is the listing
+    # growing a version, not a course adopting it, so the container is never an adopter.
+    return if destination_course.preview?
 
     Course::Assessment::Marketplace::Adoption.create!(
       listing: marketplace_listing,
       destination_course: destination_course,
       duplicated_assessment: duplicate,
+      # Stamped here rather than at the call site: this is the single writer of adoption rows, and the
+      # adopter's "your copy is behind" banner has nothing to compare against without it.
+      adopted_version_at: marketplace_listing.current_version&.published_at,
       creator: current_user,
       updater: current_user
     )
