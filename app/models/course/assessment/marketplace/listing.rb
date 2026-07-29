@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Marketplace::Listing < ApplicationRecord
   # The mutable authoring copy — the origin-course assessment. Nullable: the listing outlives
-  # deletion of its origin. Browse, preview and duplicate all still read this; the snapshots in
-  # `versions` are recorded here but not yet served.
+  # deletion of its origin. What the marketplace serves is `current_version.assessment`.
   belongs_to :authoring_assessment, class_name: 'Course::Assessment',
                                     inverse_of: :marketplace_listing, optional: true
   belongs_to :publisher, class_name: 'User', inverse_of: false
@@ -43,9 +42,8 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
     end
   end
 
-  # An orphaned listing lost its authoring copy (the origin assessment was deleted). Its snapshots
-  # survive, but every course-facing path reads the authoring copy, so the listing leaves the
-  # marketplace until the rebuild lands. Deliberately separate from `admin_state`, a display concern.
+  # An orphaned listing lost its authoring copy (the origin assessment was deleted) but still
+  # serves its last snapshot. Deliberately separate from `admin_state`, which is a display concern.
   # @return [Boolean]
   def orphaned?
     authoring_assessment_id.nil?

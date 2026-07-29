@@ -1,5 +1,8 @@
 # frozen_string_literal: true
-json.id @assessment.id
+# The LISTING's id, matching `index.json.jbuilder` — everything below is the snapshot assessment's
+# content, but the resource this payload identifies is the listing. The duplicate dialog posts this
+# id back as a `listing_ids` entry, so the snapshot assessment's id here 403s the duplicate.
+json.id @listing.id
 json.title @assessment.title
 json.description format_ckeditor_rich_text(@assessment.description)
 
