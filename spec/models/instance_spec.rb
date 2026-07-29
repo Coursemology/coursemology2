@@ -210,6 +210,35 @@ RSpec.describe Instance do
     end
   end
 
+  describe '#host_options' do
+    around do |example|
+      orig_default_host = Application::Application.config.x.default_host
+      example.run
+    ensure
+      Application::Application.config.x.default_host = orig_default_host
+    end
+
+    subject(:instance) { build(:instance, host: 'tenant.coursemology.org') }
+
+    context 'when the host carries no port' do
+      before { Application::Application.config.x.default_host = 'coursemology.org' }
+
+      it 'names no port, leaving the default for the protocol' do
+        expect(instance.host_options).to eq(host: 'tenant.coursemology.org', port: nil)
+      end
+    end
+
+    # The development shape: the served port arrives through `default_host`, and `#host` rewrites it
+    # onto every tenant.
+    context 'when the host carries a port' do
+      before { Application::Application.config.x.default_host = 'lvh.me:8080' }
+
+      it 'names the port separately from the host' do
+        expect(instance.host_options).to eq(host: 'tenant.lvh.me', port: '8080')
+      end
+    end
+  end
+
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.active_course_count' do
