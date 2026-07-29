@@ -98,6 +98,11 @@ if @marketplace_version
     json.source @marketplace_version[:source]
     json.latest @marketplace_version[:latest]
     json.listed @marketplace_version[:listed]
+    # Snapshot only, so the key's absence tells the client this is the listing's working copy. Null
+    # when the listing is orphaned. Absent from the index badge, which has no use for it.
+    if @marketplace_version.key?(:source_assessment_url)
+      json.sourceAssessmentUrl @marketplace_version[:source_assessment_url]
+    end
   end
 end
 

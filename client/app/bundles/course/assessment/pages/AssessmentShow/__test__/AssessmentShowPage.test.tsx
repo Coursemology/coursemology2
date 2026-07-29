@@ -71,6 +71,11 @@ describe('<AssessmentShowPage />', () => {
 
     expect(await page.findByText('Source Assessment')).toBeVisible();
     expect(page.queryByText('Live')).not.toBeInTheDocument();
+    // Editing the working copy is the point, so it must not be warned against. The chip assertion
+    // above is the async gate: once it is up, the banner has had its chance to render.
+    expect(
+      page.queryByText(/frozen at its publication date/),
+    ).not.toBeInTheDocument();
   });
 
   it('shows no marketplace chip outside the container', async () => {
@@ -79,5 +84,28 @@ describe('<AssessmentShowPage />', () => {
     expect(await page.findByText(baseAssessment.title)).toBeVisible();
     expect(page.queryByText(/2026/)).not.toBeInTheDocument();
     expect(page.queryByText('Source Assessment')).not.toBeInTheDocument();
+    expect(
+      page.queryByText(/frozen at its publication date/),
+    ).not.toBeInTheDocument();
+  });
+
+  // The show page is the only route to a snapshot, so the warning has to reach it through the page,
+  // not merely render in isolation.
+  it('warns on the page when the assessment is a published snapshot', async () => {
+    const page = renderWith({
+      listingId: 7,
+      publishedAt: '2026-07-24T07:04:00Z',
+      source: 'MP Allowlist Source Course',
+      latest: true,
+      listed: true,
+      sourceAssessmentUrl: 'http://origin.lvh.me/courses/3/assessments/9',
+    });
+
+    expect(
+      await page.findByText(/frozen at its publication date/),
+    ).toBeInTheDocument();
+    expect(
+      page.getByRole('link', { name: 'Open source assessment' }),
+    ).toHaveAttribute('href', 'http://origin.lvh.me/courses/3/assessments/9');
   });
 });

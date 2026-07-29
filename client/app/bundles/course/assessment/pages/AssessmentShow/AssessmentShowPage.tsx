@@ -27,6 +27,7 @@ import MarketplaceVersionChip from '../AssessmentsIndex/MarketplaceVersionChip';
 import AssessmentDetails from './AssessmentDetails';
 import AssessmentShowHeader from './AssessmentShowHeader';
 import GenerateQuestionMenu from './GenerateQuestionMenu';
+import MarketplaceSnapshotBanner from './MarketplaceSnapshotBanner';
 import MarketplaceUpdateBanner from './MarketplaceUpdateBanner';
 import NewQuestionMenu from './NewQuestionMenu';
 import QuestionsManager from './QuestionsManager';
@@ -84,6 +85,10 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       {assessment.status === 'unavailable' && (
         <UnavailableAlert for={assessment} />
       )}
+
+      {/* Before the adopter banner: the two cannot co-occur, since a container snapshot is never an
+          adoption, but "this object is frozen" would outrank "a newer version exists". */}
+      <MarketplaceSnapshotBanner version={assessment.marketplaceVersion} />
 
       <MarketplaceUpdateBanner
         assessmentId={assessment.id}

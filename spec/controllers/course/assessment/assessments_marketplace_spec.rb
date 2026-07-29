@@ -247,7 +247,7 @@ RSpec.describe Course::Assessment::AssessmentsController, type: :controller do
 
           label = response.parsed_body['marketplaceVersion']
           expect(label.keys).to contain_exactly('listingId', 'publishedAt', 'source', 'latest',
-                                                'listed')
+                                                'listed', 'sourceAssessmentUrl')
           expect(label['listingId']).to eq(listing.id)
           expect(label['source']).to eq('MP Allowlist Source Course')
           expect(label['latest']).to be(true)
@@ -262,6 +262,14 @@ RSpec.describe Course::Assessment::AssessmentsController, type: :controller do
           expect(label['listingId']).to eq(listing.id)
           expect(label['publishedAt']).to be_nil
           expect(label['latest']).to be(false)
+        end
+
+        # The source assessment IS this page, so there is nothing to link to. Key absent, not null,
+        # so the banner's trigger never has to special-case it.
+        it 'omits the source link on the working copy, which is the page itself' do
+          show_for(container, working_copy)
+
+          expect(response.parsed_body['marketplaceVersion']).not_to have_key('sourceAssessmentUrl')
         end
 
         it 'withholds publishing from a snapshot, which is already an existing listing content' do
@@ -298,6 +306,72 @@ RSpec.describe Course::Assessment::AssessmentsController, type: :controller do
           show_for(course, in_normal_course)
 
           expect(response.parsed_body).not_to have_key('marketplaceVersion')
+        end
+
+        # The one field the index badge never carries. A snapshot is frozen, so the only useful
+        # action is to go edit the assessment it was cut from.
+        it 'points a snapshot at the assessment it was published from' do
+          show_for(container, snapshot)
+
+          expect(response.parsed_body['marketplaceVersion']['sourceAssessmentUrl']).
+            to eq("http://#{instance.host}/courses/#{working_copy.course_id}/" \
+                  "assessments/#{working_copy.id}")
+        end
+
+        # `host_options` exists for this: a controller's `url_options` always supplies the port the
+        # request arrived on, which behind any proxy is not the port the app is served on.
+        it 'builds the link on the instance host, not the port the request arrived on' do
+          request.host = 'localhost:3999'
+
+          show_for(container, snapshot)
+
+          expect(response.parsed_body['marketplaceVersion']['sourceAssessmentUrl']).
+            to start_with("http://#{instance.host}/")
+        end
+
+        # The regression `without_tenant` exists for. Viewing a container snapshot means the request
+        # is tenanted to the container's instance, so a tenant-scoped `Course` lookup on a source
+        # published from elsewhere returns nil rather than raising - dropping the link silently.
+        it 'resolves a source assessment published from another instance' do
+          origin_instance = create(:instance)
+          origin_course = ActsAsTenant.with_tenant(origin_instance) { create(:course) }
+          origin_assessment = ActsAsTenant.with_tenant(origin_instance) do
+            create(:assessment, course: origin_course)
+          end
+          cross_listing = create(:course_assessment_marketplace_listing,
+                                 authoring_assessment: origin_assessment,
+                                 publisher: create(:user))
+          cross_snapshot = create(:assessment, course: container)
+          create(:course_assessment_marketplace_listing_version,
+                 listing: cross_listing, assessment: cross_snapshot,
+                 published_at: 2.days.ago.change(usec: 0),
+                 published_by: cross_listing.publisher).
+            tap { |cut| cross_listing.update!(current_version: cut) }
+
+          show_for(container, cross_snapshot)
+
+          expect(response.parsed_body['marketplaceVersion']['sourceAssessmentUrl']).
+            to eq("http://#{origin_instance.host}/courses/#{origin_course.id}/" \
+                  "assessments/#{origin_assessment.id}")
+        end
+
+        # An orphaned listing has nothing to link at until its rebuild lands. The key is still
+        # emitted so the client can tell "no source" from "not a snapshot".
+        it 'emits a null link for an orphaned listing, whose source was deleted' do
+          orphan_listing = create(:course_assessment_marketplace_listing)
+          orphan_snapshot = create(:assessment, course: container)
+          create(:course_assessment_marketplace_listing_version,
+                 listing: orphan_listing, assessment: orphan_snapshot,
+                 published_at: 4.days.ago.change(usec: 0),
+                 published_by: orphan_listing.publisher).
+            tap { |cut| orphan_listing.update!(current_version: cut) }
+          orphan_listing.update!(authoring_assessment: nil)
+
+          show_for(container, orphan_snapshot)
+
+          label = response.parsed_body['marketplaceVersion']
+          expect(label).to have_key('sourceAssessmentUrl')
+          expect(label['sourceAssessmentUrl']).to be_nil
         end
       end
 
