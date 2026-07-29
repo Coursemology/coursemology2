@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.canAccess true
 json.listings @listings do |listing|
-  assessment = listing.assessment
+  assessment = listing.authoring_assessment
   json.id listing.id
   json.assessmentId assessment.id
   json.title assessment.title
