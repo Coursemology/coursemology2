@@ -7,10 +7,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
       # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on
       # the acting-as record. The source course is deliberately NOT preloaded: the MVP exposes no
       # attribution, so nothing in the view reaches for it.
+      #
+      # `where.not(authoring_assessment_id: nil)` guards an orphaned listing: the authoring copy is
+      # nullable now that a listing outlives deletion of its origin, and browse reads every field
+      # off it, so a nil would 500 the whole page rather than hide one row.
       @listings = Course::Assessment::Marketplace::Listing.published.
-                  includes(assessment: :lesson_plan_item).to_a
+                  where.not(authoring_assessment_id: nil).
+                  includes(authoring_assessment: :lesson_plan_item).to_a
       @adoption_counts = adoption_counts(@listings.map(&:id))
-      @question_counts = question_counts(@listings.map(&:assessment_id))
+      @question_counts = question_counts(@listings.map(&:authoring_assessment_id))
       @destination_tabs = destination_tabs
     end
   end
@@ -26,11 +31,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def show
     ActsAsTenant.without_tenant do
-      @listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).find_by(id: params[:id])
+      @listing = Course::Assessment::Marketplace::Listing.published.
+                 includes(:authoring_assessment).find_by(id: params[:id])
       raise CanCan::AccessDenied unless @listing
 
-      @assessment = @listing.assessment
-      authorize!(:preview_in_marketplace, @assessment)
+      @assessment = @listing.authoring_assessment
+      # This page renders the authoring copy, which an orphaned listing no longer has — see `index`.
+      raise CanCan::AccessDenied unless @assessment
+
+      authorize!(:preview_in_marketplace, @listing)
       @destination_tabs = destination_tabs
       render 'show'
     end
@@ -67,11 +76,14 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def authorized_listings
     listings = ActsAsTenant.without_tenant do
-      Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).includes(:assessment)
+      # Orphaned listings excluded for the reason `index` gives — the duplicate copies the
+      # authoring assessment, so there is nothing for it to read.
+      Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).
+        where.not(authoring_assessment_id: nil).includes(:authoring_assessment)
     end
     raise CanCan::AccessDenied if listings.empty?
 
-    listings.each { |listing| authorize!(:duplicate_from_marketplace, listing.assessment) }
+    listings.each { |listing| authorize!(:duplicate_from_marketplace, listing) }
     authorize!(:duplicate_to, current_course)
     listings
   end

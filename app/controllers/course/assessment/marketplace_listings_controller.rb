@@ -3,7 +3,7 @@ class Course::Assessment::MarketplaceListingsController < Course::Assessment::Co
   before_action :authorize_publish_to_marketplace!
 
   def create
-    listing = Course::Assessment::Marketplace::Listing.find_or_initialize_by(assessment: @assessment)
+    listing = Course::Assessment::Marketplace::Listing.find_or_initialize_by(authoring_assessment: @assessment)
     now = Time.zone.now
     listing.published = true
     listing.first_published_at ||= now

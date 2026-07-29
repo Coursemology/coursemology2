@@ -55,7 +55,8 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
 
       it 'reports the actual question count for a listing (not the 0 fallback)' do
         assessment_with_questions = create(:assessment, :with_mcq_question, question_count: 3, course: course)
-        listing = create(:course_assessment_marketplace_listing, published: true, assessment: assessment_with_questions)
+        listing = create(:course_assessment_marketplace_listing, published: true,
+                                                                 authoring_assessment: assessment_with_questions)
         get :index, params: { course_id: course, format: :json }
         row = response.parsed_body['listings'].find { |l| l['id'] == listing.id }
         expect(row['questionCount']).to eq(3)
@@ -228,7 +229,7 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       let!(:listing) do
         assessment = create(:assessment, course: create(:course))
         create(:course_assessment_question_multiple_response, :multiple_choice, assessment: assessment)
-        create(:course_assessment_marketplace_listing, assessment: assessment, published: true)
+        create(:course_assessment_marketplace_listing, authoring_assessment: assessment, published: true)
       end
 
       it 'renders the assessment config read-only' do
