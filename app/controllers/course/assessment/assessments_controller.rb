@@ -280,9 +280,56 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # The single-assessment reading of the same labels, for `show`. Nil for a container assessment that
   # is neither a snapshot nor a listing's working copy — one authored in the container directly.
   #
+  # A snapshot additionally carries where to edit the content it froze. Merged here rather than in
+  # `labels_for_assessments`, which the index shares and has no use for the field.
+  #
   # @return [Hash, nil]
   def marketplace_version_label
-    Course::Assessment::Marketplace::ListingVersion.labels_for_assessments([@assessment.id])[@assessment.id]
+    label = Course::Assessment::Marketplace::ListingVersion.
+            labels_for_assessments([@assessment.id])[@assessment.id]
+    return nil if label.nil?
+    # Skipped for the working copy: the source assessment is this page.
+    return label if label[:published_at].nil?
+
+    label.merge(source_assessment_url: source_assessment_url(label[:listing_id]))
+  end
+
+  # Absolute, and carrying the source assessment's own host: a course id only resolves on its
+  # instance's host, and a listing's source lives on whichever instance published it. Nil for an
+  # orphaned listing, whose source was deleted and whose rebuild has not landed.
+  #
+  # `without_tenant` is load-bearing. Viewing a container snapshot means the request is tenanted to
+  # the container's instance, so a source published elsewhere has its course filtered out and
+  # `assessment.course` returns nil rather than raising — dropping the link in the common case.
+  #
+  # @param [Integer] listing_id
+  # @return [String, nil]
+  def source_assessment_url(listing_id)
+    ActsAsTenant.without_tenant do
+      listing = Course::Assessment::Marketplace::Listing.
+                includes(authoring_assessment: { lesson_plan_item: { course: :instance } }).
+                find_by(id: listing_id)
+      assessment = listing&.authoring_assessment
+      next nil if assessment.nil?
+
+      course_assessment_url(assessment.course_id, assessment,
+                            **host_options(assessment.course.instance.host))
+    end
+  end
+
+  # `Instance#host` carries the port the app is publicly served on, and that port must be named
+  # explicitly: a controller's `url_options` always supplies `port: request.optional_port`, and Rails
+  # reads a port out of `host:` only when no `:port` key is present, so passing the host alone swaps
+  # in the port the request reached Rails on.
+  #
+  # Duplicated from System::Admin::MarketplaceListingsController, which sits above this commit in the
+  # stack; extract once the marketplace stack lands.
+  #
+  # @param [String] host an instance host, optionally carrying a port
+  # @return [Hash] the `host:`/`port:` options for a url on that instance
+  def host_options(host)
+    name, port = host.split(':', 2)
+    { host: name, port: port }
   end
 
   def load_assessment_submission_counts

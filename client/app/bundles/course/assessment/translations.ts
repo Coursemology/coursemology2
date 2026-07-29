@@ -277,6 +277,20 @@ const translations = defineMessages({
     id: 'course.assessments.index.marketplaceSearchText',
     defaultMessage: 'Search by assessment title or source course',
   },
+  marketplaceSnapshotWarning: {
+    id: 'course.assessments.show.marketplaceSnapshotWarning',
+    defaultMessage:
+      'This is a published version, frozen at its publication date. Editing it silently changes what courses copy from the marketplace without publishing a new version. Make changes on the source assessment instead, then publish a new version.',
+  },
+  marketplaceSnapshotSourceLink: {
+    id: 'course.assessments.show.marketplaceSnapshotSourceLink',
+    defaultMessage: 'Open source assessment',
+  },
+  marketplaceSnapshotSourceMissing: {
+    id: 'course.assessments.show.marketplaceSnapshotSourceMissing',
+    defaultMessage:
+      'This listing has no source assessment right now — one is being rebuilt from this version.',
+  },
   requirements: {
     id: 'course.assessment.show.requirements',
     defaultMessage: 'Requirements',

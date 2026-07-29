@@ -48,6 +48,13 @@ export interface MarketplaceVersionData {
    * being served from merely the newest one. True for a published orphan, which still serves.
    */
   listed: boolean;
+  /**
+   * Where to edit the content this snapshot froze. Present only on the show page, and only for a
+   * snapshot — on the working copy the source assessment is the page you are already on. Null when
+   * the listing is orphaned and its rebuilt copy has not landed. Absolute, because the source may
+   * live on another instance.
+   */
+  sourceAssessmentUrl?: string | null;
 }
 
 export interface AssessmentListData extends AssessmentActionsData {
