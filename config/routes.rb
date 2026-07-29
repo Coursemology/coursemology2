@@ -116,6 +116,13 @@ Rails.application.routes.draw do
       end
       get 'marketplace_access' => 'marketplace_access#index'
       resources :marketplace_access_blocks, only: [:create, :destroy]
+      # `destroy` here is a permanent purge of an orphaned listing, not the reversible unlist that the
+      # course-side `marketplace_listing#destroy` performs. `update` is that reversible unlist —
+      # admin-side because the course-side one hangs off the authoring assessment, which an orphaned
+      # listing no longer has.
+      resources :marketplace_listings, only: [:index, :show, :update, :destroy] do
+        post :restore_authoring, on: :member
+      end
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
