@@ -4,18 +4,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def index
     ActsAsTenant.without_tenant do
-      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on
-      # the acting-as record. The source course is deliberately NOT preloaded: the MVP exposes no
-      # attribution, so nothing in the view reaches for it.
-      #
-      # `where.not(authoring_assessment_id: nil)` guards an orphaned listing: the authoring copy is
-      # nullable now that a listing outlives deletion of its origin, and browse reads every field
-      # off it, so a nil would 500 the whole page rather than hide one row.
+      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on the
+      # acting-as record. Reads go through the current version snapshot, never the authoring copy: the
+      # marketplace serves what a duplicate would give you (design §4.2). `where.not(current_version_id:
+      # nil)` guards a published listing with no snapshot, whose nil `current_version` would 500 browse.
       @listings = Course::Assessment::Marketplace::Listing.published.
-                  where.not(authoring_assessment_id: nil).
-                  includes(authoring_assessment: :lesson_plan_item).to_a
+                  where.not(current_version_id: nil).
+                  includes(current_version: { assessment: :lesson_plan_item }).to_a
       @adoption_counts = adoption_counts(@listings.map(&:id))
-      @question_counts = question_counts(@listings.map(&:authoring_assessment_id))
+      @question_counts = question_counts(@listings.map { |listing| listing.current_version.assessment_id })
       @destination_tabs = destination_tabs
     end
   end
@@ -32,11 +29,11 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
   def show
     ActsAsTenant.without_tenant do
       @listing = Course::Assessment::Marketplace::Listing.published.
-                 includes(:authoring_assessment).find_by(id: params[:id])
+                 includes(current_version: :assessment).find_by(id: params[:id])
       raise CanCan::AccessDenied unless @listing
 
-      @assessment = @listing.authoring_assessment
-      # An orphaned listing has nothing left to preview — see `index`.
+      # The SNAPSHOT, never the authoring copy (design §4.2).
+      @assessment = @listing.current_version&.assessment
       raise CanCan::AccessDenied unless @assessment
 
       authorize!(:preview_in_marketplace, @listing)
@@ -76,9 +73,8 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def authorized_listings
     listings = ActsAsTenant.without_tenant do
-      # Orphaned listings excluded for the reason `index` gives — there is no content to copy.
       Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).
-        where.not(authoring_assessment_id: nil).includes(:authoring_assessment)
+        includes(current_version: :assessment)
     end
     raise CanCan::AccessDenied if listings.empty?
 
