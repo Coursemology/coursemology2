@@ -249,6 +249,34 @@ const translations = defineMessages({
     defaultMessage:
       'The newest version of this listing. Nothing is being served — the listing is off the marketplace.',
   },
+  marketplaceListingColumn: {
+    id: 'course.assessments.index.marketplaceListingColumn',
+    defaultMessage: 'Listing',
+  },
+  marketplaceVersionColumn: {
+    id: 'course.assessments.index.marketplaceVersionColumn',
+    defaultMessage: 'Version',
+  },
+  marketplaceSourceColumn: {
+    id: 'course.assessments.index.marketplaceSourceColumn',
+    defaultMessage: 'Source',
+  },
+  marketplaceListingLabel: {
+    id: 'course.assessments.index.marketplaceListingLabel',
+    defaultMessage: '{title} · ID {listingId}',
+  },
+  marketplaceOlderVersion: {
+    id: 'course.assessments.index.marketplaceOlderVersion',
+    defaultMessage: 'Older version',
+  },
+  marketplaceNotAVersion: {
+    id: 'course.assessments.index.marketplaceNotAVersion',
+    defaultMessage: '—',
+  },
+  marketplaceSearchText: {
+    id: 'course.assessments.index.marketplaceSearchText',
+    defaultMessage: 'Search by assessment title or source course',
+  },
   requirements: {
     id: 'course.assessment.show.requirements',
     defaultMessage: 'Requirements',
