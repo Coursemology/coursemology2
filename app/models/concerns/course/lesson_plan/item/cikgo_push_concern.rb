@@ -53,8 +53,13 @@ module Course::LessonPlan::Item::CikgoPushConcern
     }
   end
 
+  # `course&.` because the destroy push runs in `after_destroy_commit`: when the item is going away
+  # as part of its whole COURSE being destroyed, the callback fires after that transaction has
+  # committed, so reloading `course` yields nil. There is nothing to push to at that point — a
+  # per-item delete against a course that no longer exists is meaningless — so a nil course is a
+  # reason to skip, not to crash. In every other case `belongs_to :course` guarantees it is present.
   def push(method)
-    return unless pushable?(actable) && course.component_enabled?(Course::StoriesComponent)
+    return unless pushable?(actable) && course&.component_enabled?(Course::StoriesComponent)
 
     Cikgo::ResourcesService.push_resources!(course, [{ method: method, id: id.to_s }.merge(send("#{method}_payload"))])
   rescue StandardError => e
