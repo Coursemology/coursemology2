@@ -37,14 +37,13 @@ RSpec.describe Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob do
         personal_time
       end
 
-      it 'updates the end_at of personal times' do
+      it 'updates the end_at of personal times', :sidekiq_same_thread do
         submission
         personal_time = shifted_personal_time
         # 1 minute is for the lag between the assignment to this comparison
         expect(personal_time.end_at).to be_within(1.minute).of 5.days.from_now
 
-        update_job = subject.perform_later(assessment.lesson_plan_item)
-        update_job.perform_now
+        perform_sidekiq_jobs { subject.perform_later(assessment.lesson_plan_item) }
         expect(personal_time.reload.end_at).to be_within(1.second).of assessment.end_at
       end
     end
@@ -66,14 +65,13 @@ RSpec.describe Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob do
         personal_time
       end
 
-      it 'updates the start_at of personal times' do
+      it 'updates the start_at of personal times', :sidekiq_same_thread do
         submission
         personal_time = shifted_personal_time
         # 1 minute is for the lag between the assignment to this comparison
         expect(personal_time.start_at).to be_within(1.minute).of 3.days.from_now
 
-        update_job = subject.perform_later(assessment.lesson_plan_item)
-        update_job.perform_now
+        perform_sidekiq_jobs { subject.perform_later(assessment.lesson_plan_item) }
         expect(personal_time.reload.start_at).to be_within(1.second).of assessment.start_at
       end
     end

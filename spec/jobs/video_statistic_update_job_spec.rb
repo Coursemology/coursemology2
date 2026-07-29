@@ -7,8 +7,8 @@ RSpec.describe VideoStatisticUpdateJob do
     let(:course) { create(:course) }
     let!(:video) { create(:video, course: course) }
 
-    describe '#perform' do
-      subject { VideoStatisticUpdateJob.perform_now }
+    describe '#perform', :sidekiq_same_thread do
+      subject { perform_sidekiq_jobs { VideoStatisticUpdateJob.perform_later } }
 
       context 'video statistics' do
         it 'marks uncached video statistics as cached' do

@@ -34,12 +34,12 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
     end
 
     context 'when the assessment is non-autograded' do
-      it 'evaluates answers and does not update the exp' do
+      it 'evaluates answers and does not update the exp', :sidekiq_same_thread do
         initial_points = submission.points_awarded
 
-        subject.perform_now(answer)
-        expect(answer).to be_graded
-        expect(submission.points_awarded).to eq(initial_points)
+        perform_sidekiq_jobs { subject.perform_later(answer) }
+        expect(answer.reload).to be_graded
+        expect(submission.reload.points_awarded).to eq(initial_points)
       end
     end
 
@@ -54,14 +54,14 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
 
       let(:assessment_traits) { [:autograded] }
 
-      it 'evaluates answers and updates the exp' do
+      it 'evaluates answers and updates the exp', :sidekiq_same_thread do
         initial_points = submission.points_awarded
 
-        subject.perform_now(answer)
-        expect(answer).to be_graded
+        perform_sidekiq_jobs { subject.perform_later(answer) }
+        expect(answer.reload).to be_graded
         expect(answer.grade).to eq(question.maximum_grade)
         correct_exp = assessment.base_exp + assessment.time_bonus_exp
-        expect(submission.points_awarded).to eq(correct_exp)
+        expect(submission.reload.points_awarded).to eq(correct_exp)
         expect(submission.points_awarded).not_to eq(initial_points)
       end
     end

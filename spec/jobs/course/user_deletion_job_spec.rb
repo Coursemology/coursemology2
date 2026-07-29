@@ -20,16 +20,17 @@ RSpec.describe Course::UserDeletionJob do
         to have_enqueued_job(subject).exactly(:once)
     end
 
-    it 'delete one user upon successful course user deletion' do
-      expect { subject.perform_now(course, student, user) }.
-        to change { course.course_users.count }.by(-1)
+    it 'delete one user upon successful course user deletion', :sidekiq_same_thread do
+      expect do
+        perform_sidekiq_jobs { subject.perform_later(course, student, user) }
+      end.to change { course.course_users.count }.by(-1)
     end
 
-    it 'sends failure email upon failing course user deletion' do
-      allow(student).to receive(:destroy).and_return(false)
+    it 'sends failure email upon failing course user deletion', :sidekiq_same_thread do
+      # The job operates on a deserialised course_user, so stub any instance (not just `student`).
+      allow_any_instance_of(CourseUser).to receive(:destroy).and_return(false)
 
-      deletion_job = subject.perform_later(course, student, user)
-      deletion_job.perform_now
+      perform_sidekiq_jobs { subject.perform_later(course, student, user) }
 
       emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
       email_subjects = ActionMailer::Base.deliveries.map(&:subject)
