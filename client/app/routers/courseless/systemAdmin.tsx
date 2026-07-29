@@ -79,6 +79,28 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
       }),
     },
     {
+      path: 'marketplace_listings',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'MarketplaceListingsIndex' */
+            'bundles/system/admin/admin/pages/MarketplaceListingsIndex'
+          )
+        ).default,
+      }),
+    },
+    {
+      path: 'marketplace_listings/:listingId',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'MarketplaceListingShow' */
+            'bundles/system/admin/admin/pages/MarketplaceListingShow'
+          )
+        ).default,
+      }),
+    },
+    {
       path: 'get_help',
       lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
