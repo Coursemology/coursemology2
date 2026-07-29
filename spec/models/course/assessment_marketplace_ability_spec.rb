@@ -5,8 +5,7 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:listing) { create(:course_assessment_marketplace_listing, published: true) }
-    let(:published_assessment) { listing.assessment }
+    let(:listing) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
 
     subject { Ability.new(user, course, course_user) }
 
@@ -23,13 +22,19 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
 
       it { is_expected.to be_able_to(:access_marketplace, course) }
       it { is_expected.not_to be_able_to(:publish_to_marketplace, build(:assessment)) }
-      it { is_expected.to be_able_to(:duplicate_from_marketplace, published_assessment) }
-      it { is_expected.to be_able_to(:preview_in_marketplace, published_assessment) }
+      it { is_expected.to be_able_to(:duplicate_from_marketplace, listing) }
+      it { is_expected.to be_able_to(:preview_in_marketplace, listing) }
 
       it 'cannot duplicate/preview an unpublished listing' do
-        unpublished = create(:course_assessment_marketplace_listing, published: false).assessment
+        unpublished = create(:course_assessment_marketplace_listing, :versioned, published: false)
         expect(subject).not_to be_able_to(:duplicate_from_marketplace, unpublished)
         expect(subject).not_to be_able_to(:preview_in_marketplace, unpublished)
+      end
+
+      it 'authorizes a listing whose served snapshot sits in a course the user cannot reach' do
+        remote = create(:course_assessment_marketplace_listing, :versioned, published: true)
+        expect(subject).to be_able_to(:duplicate_from_marketplace, remote)
+        expect(subject).to be_able_to(:preview_in_marketplace, remote)
       end
     end
 
@@ -57,8 +62,8 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
       end
 
       it { is_expected.to be_able_to(:access_marketplace, course) }
-      it { is_expected.to be_able_to(:duplicate_from_marketplace, published_assessment) }
-      it { is_expected.to be_able_to(:preview_in_marketplace, published_assessment) }
+      it { is_expected.to be_able_to(:duplicate_from_marketplace, listing) }
+      it { is_expected.to be_able_to(:preview_in_marketplace, listing) }
     end
 
     context 'when an allow-listed user manages no course at all' do
@@ -110,6 +115,56 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
       it 'regains access once the block is removed' do
         Course::Assessment::Marketplace::AccessBlock.where(user_id: user.id).delete_all
         expect(Ability.new(user, course, course_user)).to be_able_to(:access_marketplace, course)
+      end
+    end
+
+    context 'when the course is a preview (content-frozen) sandbox' do
+      let(:course) { create(:course, preview: true) }
+      let(:assessment) { create(:assessment, course: course) }
+
+      context 'and the user is the previewer (a course manager)' do
+        let(:course_user) { create(:course_manager, course: course) }
+        let(:user) { course_user.user }
+
+        it 'preserves the attempt + publish loop' do
+          expect(subject).to be_able_to(:attempt, assessment)
+          expect(subject).to be_able_to(:publish_grades, assessment)
+        end
+
+        it 'freezes the assessment content (no edit/delete)' do
+          expect(subject).not_to be_able_to(:update, assessment)
+          expect(subject).not_to be_able_to(:destroy, assessment)
+        end
+
+        it 'freezes question authoring' do
+          expect(subject).not_to be_able_to(:create, Course::Assessment::Question::MultipleResponse)
+        end
+
+        it 'forbids deleting submissions in the sandbox' do
+          expect(subject).not_to be_able_to(:delete_all_submissions, assessment)
+        end
+      end
+
+      context 'and the user is a system administrator' do
+        let(:user) { create(:administrator) }
+        let(:course_user) { nil }
+
+        it 'is exempt — retains full content management' do
+          expect(subject).to be_able_to(:update, assessment)
+          expect(subject).to be_able_to(:destroy, assessment)
+        end
+      end
+    end
+
+    context 'when a course manager is in a NON-preview course' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
+
+      it 'retains normal content management (the freeze is preview-scoped)' do
+        expect(subject).to be_able_to(:update, assessment)
+        expect(subject).to be_able_to(:destroy, assessment)
       end
     end
   end
