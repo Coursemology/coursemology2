@@ -69,8 +69,10 @@ const customize = <O extends NodeOnlyUpdateOptions | ToastOptions>(
 ): O | undefined => {
   if (!options) return undefined;
 
+  const render = isUpdateOptions(options) ? options.render : undefined;
+
   return produce(options, (draft) => {
-    if (isUpdateOptions(draft)) draft.render = formattedMessage(draft.render);
+    if (isUpdateOptions(draft)) draft.render = formattedMessage(render);
 
     draft.icon = getIconForToastType(draft.type ?? 'default');
   });
