@@ -18,6 +18,7 @@ import marketplaceTranslations from 'course/marketplace/translations';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
+import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -68,7 +69,7 @@ const AssessmentShowHeader = (
   };
 
   return (
-    <>
+    <div className="flex flex-wrap justify-end gap-2 [&>*]:shrink-0">
       {assessment.deleteUrl && (
         <DeleteButton
           aria-label={t(translations.deleteAssessment)}
@@ -79,10 +80,18 @@ const AssessmentShowHeader = (
         >
           <PromptText>{t(translations.deletingThisAssessment)}</PromptText>
           <PromptText className="italic">{assessment.title}</PromptText>
-          <PromptText>{t(translations.deleteAssessmentWarning)}</PromptText>
           {publishedToMarketplace && (
-            <PromptText>{t(marketplaceTranslations.deleteWarning)}</PromptText>
+            <PromptText>
+              {t(marketplaceTranslations.deleteWarning, {
+                mailto: (chunk: string): JSX.Element => (
+                  <Link external href={`mailto:${SUPPORT_EMAIL}`}>
+                    {chunk}
+                  </Link>
+                ),
+              })}
+            </PromptText>
           )}
+          <PromptText>{t(translations.deleteAssessmentWarning)}</PromptText>
         </DeleteButton>
       )}
 
@@ -178,7 +187,7 @@ const AssessmentShowHeader = (
           </Button>
         </Link>
       )}
-    </>
+    </div>
   );
 };
 

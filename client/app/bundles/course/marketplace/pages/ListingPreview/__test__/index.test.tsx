@@ -82,8 +82,6 @@ it('renders the read-only assessment config', async () => {
   expect(screen.getByText('Awesome description 5')).toBeVisible();
   // Properties table reuses AssessmentShow's labels.
   expect(screen.getByText('Grading mode')).toBeVisible();
-  expect(screen.getByText('Base EXP')).toBeVisible();
-  expect(screen.getByText('Bonus')).toBeVisible();
   // Type chip + summary breakdown both use the readable label.
   expect(screen.getAllByText(/Multiple Choice/).length).toBeGreaterThan(0);
   // Author's staff-only notes surface for adopters to judge intent.
@@ -97,6 +95,42 @@ it('renders the read-only assessment config', async () => {
   expect(
     screen.getByRole('link', { name: 'View question details' }),
   ).toHaveAttribute('href', expect.stringContaining('questions/17'));
+});
+
+// The page hands the dialog the listing it is previewing, and the dialog posts those ids verbatim.
+// `id` in this fixture is the LISTING's id (matching the route param) — the backend used to serialize
+// the snapshot assessment's id here, and every duplicate launched from this page 403'd.
+it('duplicates the listing being previewed', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 7,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: '<p>Recursion drills.</p>',
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+  mock
+    .onPost(`/courses/${global.courseId}/marketplace/listings/duplicate`)
+    .reply(200, { status: 'submitted', jobUrl: '/jobs/9' });
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  fireEvent.click(screen.getByRole('button', { name: 'Duplicate Assessment' }));
+  // The dialog's own primary action is labelled just "Duplicate"; the page action above is not.
+  fireEvent.click(await screen.findByRole('button', { name: 'Duplicate' }));
+
+  await waitFor(() => expect(mock.history.post).toHaveLength(1));
+  expect(JSON.parse(mock.history.post[0].data)).toMatchObject({
+    listing_ids: [7],
+  });
 });
 
 // show.json.jbuilder omits baseExp/bonusExp entirely when the assessment awards none, so the rows
@@ -132,6 +166,8 @@ it('carries from_tab into the per-question detail links', async () => {
     destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
     showMcqMrqSolution: false,
     showRubricToStudents: false,
     gradedTestCases: '',
@@ -167,6 +203,8 @@ it('navigates back to the marketplace carrying from_tab', async () => {
     destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
     showMcqMrqSolution: false,
     showRubricToStudents: false,
     gradedTestCases: '',
@@ -191,6 +229,8 @@ it('renders a back button to the marketplace index', async () => {
     destinationTabs: [],
     description: '<p>desc</p>',
     gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
     showMcqMrqSolution: false,
     showRubricToStudents: false,
     gradedTestCases: '',

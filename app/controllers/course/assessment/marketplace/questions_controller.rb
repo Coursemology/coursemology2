@@ -4,12 +4,12 @@ class Course::Assessment::Marketplace::QuestionsController < Course::Assessment:
 
   def show
     ActsAsTenant.without_tenant do
-      listing = Course::Assessment::Marketplace::Listing.published.includes(:authoring_assessment).
-                find_by(id: params[:listing_id])
+      listing = Course::Assessment::Marketplace::Listing.published.
+                includes(current_version: :assessment).find_by(id: params[:listing_id])
       raise CanCan::AccessDenied unless listing
 
-      @assessment = listing.authoring_assessment
-      # An orphaned listing has nothing left to preview — see ListingsController#index.
+      # The SNAPSHOT, never the authoring copy.
+      @assessment = listing.current_version&.assessment
       raise CanCan::AccessDenied unless @assessment
 
       authorize!(:preview_in_marketplace, listing)

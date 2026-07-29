@@ -6102,7 +6102,7 @@
     "defaultMessage": "Failed to remove from the marketplace. Please try again."
   },
   "course.marketplace.deleteWarning": {
-    "defaultMessage": "This assessment is in the Assessment Marketplace. Deleting it removes it from the marketplace and deletes its adoption history. Existing copies in other courses are unaffected."
+    "defaultMessage": "This assessment is in the Assessment Marketplace. The listing is not removed: it stays browsable and keeps serving its last published version, and its adoption history and the copies in other courses are preserved. What you lose is the source assessment, so no new version can be published for this listing. To have this assessment unlisted from the marketplace, <mailto>contact us</mailto>."
   },
   "course.marketplace.pageTitle": {
     "defaultMessage": "Assessment Marketplace"
@@ -6165,13 +6165,13 @@
     "defaultMessage": "Duplicate"
   },
   "course.marketplace.duplicateCompleted": {
-    "defaultMessage": "{n, plural, one {Assessment duplicated} other {Assessments duplicated}}."
+    "defaultMessage": "{n, plural, one {Assessment duplicated. } other {Assessments duplicated. }}"
   },
   "course.marketplace.duplicateFailed": {
     "defaultMessage": "{n, plural, one {Could not duplicate the assessment} other {Could not duplicate the assessments}}."
   },
   "course.marketplace.viewDuplicatedAssessment": {
-    "defaultMessage": "View assessment"
+    "defaultMessage": "{n, plural, one {View assessment} other {View assessments}}"
   },
   "course.marketplace.selectToDuplicate": {
     "defaultMessage": "Select to duplicate"
