@@ -1571,6 +1571,27 @@
   "course.assessment.generation.untitledQuestion": {
     "defaultMessage": "제목 없는 문항"
   },
+  "course.assessment.marketplaceUpdateCompleted": {
+    "defaultMessage": "평가가 최신 버전으로 업데이트되었습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmBody": {
+    "defaultMessage": "이 작업은 이 평가의 문항과 자료를 {latest}에 게시된 버전으로 대체합니다. 코스 내 위치, 마감일, 게시 여부는 유지됩니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmDeletion": {
+    "defaultMessage": "이 평가의 {count, plural, one {#개의 테스트 제출} other {#개의 테스트 제출}}이 삭제됩니다. 학생 제출물은 없습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmTitle": {
+    "defaultMessage": "이 평가를 업데이트하시겠습니까?"
+  },
+  "course.assessment.marketplaceUpdateFailed": {
+    "defaultMessage": "이 평가를 업데이트할 수 없습니다."
+  },
+  "course.assessment.marketplaceUpdateInPlace": {
+    "defaultMessage": "이 평가 업데이트"
+  },
+  "course.assessment.marketplaceUpdateStarted": {
+    "defaultMessage": "이 평가를 업데이트하는 중…"
+  },
   "course.assessment.question.multipleResponses.showOptions": {
     "defaultMessage": "옵션 보기"
   },
@@ -4250,6 +4271,15 @@
   "course.assessments.index.hasTodo": {
     "defaultMessage": "할 일 있음"
   },
+  "course.assessments.index.marketplaceAuthoring": {
+    "defaultMessage": "Source Assessment"
+  },
+  "course.assessments.index.marketplaceAuthoringHint": {
+    "defaultMessage": "Listing ID {listingId} · editable working copy, not a published version"
+  },
+  "course.assessments.index.marketplaceAuthoringHintWithSource": {
+    "defaultMessage": "Listing ID {listingId} · editable working copy, not a published version · from {source}"
+  },
   "course.assessments.index.neededFor": {
     "defaultMessage": "필요한 경우"
   },
@@ -6057,7 +6087,7 @@
     "defaultMessage": "마켓플레이스에서 제거되었습니다."
   },
   "course.marketplace.deleteWarning": {
-    "defaultMessage": "이 평가는 평가 마켓플레이스에 있습니다. 삭제하면 마켓플레이스에서 제거되고 채택 기록도 삭제됩니다. 다른 강좌의 기존 복사본은 영향을 받지 않습니다."
+    "defaultMessage": "이 평가는 평가 마켓플레이스에 있습니다. 마켓플레이스 등록 항목은 제거되지 않습니다. 계속 조회할 수 있고 마지막으로 발행된 버전을 계속 제공하며, 채택 기록과 다른 강좌의 기존 복사본도 그대로 유지됩니다. 잃게 되는 것은 원본 평가이므로 이후 이 등록 항목에 새 버전을 발행할 수 없습니다. 이 평가를 마켓플레이스에서 내리려면 <mailto>문의해 주세요</mailto>."
   },
   "course.marketplace.pageTitle": {
     "defaultMessage": "평가 마켓플레이스"
