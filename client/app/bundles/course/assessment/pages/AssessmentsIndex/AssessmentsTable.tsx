@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   AssessmentListData,
   AssessmentsListData,
@@ -13,6 +14,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 
 import ActionButtons from './ActionButtons';
+import MarketplaceVersionChip from './MarketplaceVersionChip';
 import StatusBadges from './StatusBadges';
 
 interface AssessmentsTableProps {
@@ -23,10 +25,59 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   const { display, assessments, totalStudentCount } = props.assessments;
   const { t } = useTranslation();
 
+  const isContainer = display.isMarketplaceContainer;
+
+  const listingLabels = useMemo((): Record<number, string> => {
+    const newest: Record<number, { title: string; publishedAt: string }> = {};
+
+    assessments.forEach((assessment) => {
+      const version = assessment.marketplaceVersion;
+      if (!version) return;
+
+      const held = newest[version.listingId];
+      const publishedAt = version.publishedAt ?? '';
+      if (!held || publishedAt > held.publishedAt)
+        newest[version.listingId] = { title: assessment.title, publishedAt };
+    });
+
+    return Object.fromEntries(
+      Object.entries(newest).map(([listingId, held]) => [
+        listingId,
+        t(translations.marketplaceListingLabel, {
+          title: held.title,
+          listingId,
+        }),
+      ]),
+    );
+  }, [assessments, t]);
+
+  const listingLabelFor = (assessment: AssessmentListData): string =>
+    assessment.marketplaceVersion
+      ? listingLabels[assessment.marketplaceVersion.listingId]
+      : '';
+
+  /**
+   * Live / Latest / Older version / Source Assessment — null for an assessment that belongs to no
+   * listing. Live and Latest are mutually exclusive: both mean "newest cut", and Live additionally
+   * means the listing is on the marketplace, so it stands in for the weaker label.
+   */
+  const versionKindFor = (assessment: AssessmentListData): string | null => {
+    const version = assessment.marketplaceVersion;
+    if (!version) return null;
+    if (version.publishedAt === null)
+      return t(translations.marketplaceAuthoring);
+    if (!version.latest) return t(translations.marketplaceOlderVersion);
+
+    return version.listed
+      ? t(translations.marketplaceLive)
+      : t(translations.marketplaceLatest);
+  };
+
   const columns: ColumnTemplate<AssessmentListData>[] = [
     {
       of: 'title',
       title: t(translations.title),
+      searchable: isContainer,
       cell: (assessment) => (
         <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
           <label className="m-0 font-normal" title={assessment.title}>
@@ -46,6 +97,72 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
           />
         </div>
       ),
+    },
+    {
+      id: 'marketplaceListing',
+      title: t(translations.marketplaceListingColumn),
+      unless: !isContainer,
+      filterable: true,
+      filterProps: {
+        getValue: (assessment) =>
+          assessment.marketplaceVersion ? [listingLabelFor(assessment)] : [],
+        shouldInclude: (assessment, filterValue?: string[]) =>
+          !filterValue?.length ||
+          filterValue.includes(listingLabelFor(assessment)),
+      },
+      cell: (assessment) =>
+        assessment.marketplaceVersion ? (
+          <Link
+            to={`/admin/marketplace_listings/${assessment.marketplaceVersion.listingId}`}
+            underline="hover"
+          >
+            {listingLabelFor(assessment)}
+          </Link>
+        ) : (
+          t(translations.marketplaceNotAVersion)
+        ),
+    },
+    {
+      id: 'marketplaceVersion',
+      title: t(translations.marketplaceVersionColumn),
+      unless: !isContainer,
+      sortable: true,
+      filterable: true,
+      // Sorts on the publication instant, not the rendered label. The server orders by
+      // `ordered_by_date_and_title`, and every snapshot of a listing inherits the origin's identical
+      // start_at AND title — so siblings have no tiebreak and their order can differ between loads.
+      // This column is how an admin pins them down.
+      accessorFn: (assessment) =>
+        assessment.marketplaceVersion?.publishedAt ?? '',
+      filterProps: {
+        getValue: (assessment): string[] => {
+          const kind = versionKindFor(assessment);
+          return kind ? [kind] : [];
+        },
+        shouldInclude: (assessment, filterValue?: string[]) =>
+          !filterValue?.length ||
+          filterValue.includes(versionKindFor(assessment) ?? ''),
+      },
+      cell: (assessment) =>
+        assessment.marketplaceVersion ? (
+          <MarketplaceVersionChip for={assessment.marketplaceVersion} />
+        ) : (
+          t(translations.marketplaceNotAVersion)
+        ),
+    },
+    {
+      id: 'marketplaceSource',
+      title: t(translations.marketplaceSourceColumn),
+      unless: !isContainer,
+      sortable: true,
+      searchable: true,
+      // Deliberately NOT filterable, mirroring MarketplaceListingsTable: source courses number in the
+      // hundreds, most contributing one or two listings, and the filter is client-side over loaded
+      // rows.
+      accessorFn: (assessment) => assessment.marketplaceVersion?.source ?? '',
+      cell: (assessment) =>
+        assessment.marketplaceVersion?.source ??
+        t(translations.marketplaceNotAVersion),
     },
     {
       of: 'baseExp',
@@ -185,6 +302,17 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         }`
       }
       getRowId={(assessment): string => assessment.id.toString()}
+      renderEmpty={
+        isContainer ? (
+          <Note message={t(translations.noAssessments)} />
+        ) : undefined
+      }
+      search={
+        isContainer
+          ? { searchPlaceholder: t(translations.marketplaceSearchText) }
+          : undefined
+      }
+      toolbar={isContainer ? { show: true } : undefined}
     />
   );
 };

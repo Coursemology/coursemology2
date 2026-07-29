@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 achievements_enabled = !current_component_host[:course_achievements_component].nil?
 submissions_hash = @assessments.to_h { |assessment| [assessment.id, assessment.submissions] }
+# Empty for every course except the marketplace's snapshot container viewed by a system admin.
+marketplace_versions = defined?(@marketplace_versions) ? @marketplace_versions : {}
 
 json.display do
   json.isStudent current_course_user&.student? || false
@@ -13,6 +15,11 @@ json.display do
   json.endTimes show_end_at?
   json.canCreateAssessments can?(:create, Course::Assessment.new(tab: @tab))
   json.canManageMonitor @can_manage_monitor && @monitoring_component_enabled
+
+  # True only in the marketplace's snapshot container, viewed by a system admin. Switches on the
+  # container-only Listing/Version/Source columns and the search toolbar — every other course's
+  # assessments index must stay exactly as it was.
+  json.isMarketplaceContainer @marketplace_container || false
 
   json.category do
     json.id @category.id
@@ -49,6 +56,17 @@ json.assessments @assessments do |assessment|
 
   if current_course.component_enabled?(Course::KoditsuPlatformComponent)
     json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled
+  end
+
+  marketplace_version = marketplace_versions[assessment.id]
+  if marketplace_version
+    json.marketplaceVersion do
+      json.listingId marketplace_version[:listing_id]
+      json.publishedAt marketplace_version[:published_at]
+      json.source marketplace_version[:source]
+      json.latest marketplace_version[:latest]
+      json.listed marketplace_version[:listed]
+    end
   end
 
   assessment_with_loaded_timeline = @items_hash[assessment.id].actable
