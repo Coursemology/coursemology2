@@ -419,20 +419,14 @@ class Course::Assessment < ApplicationRecord
   # nothing to rebuild from and is left to orphan through `fk_caml_authoring_assessment_id`. The early
   # return also keeps an assessment that authors no listing from provisioning the preview instance and
   # container course inside an ordinary delete.
+  #
+  # The clone itself lives in `RestoreAuthoringService`, shared with the admin's repair action, so a
+  # listing rebuilt by hand is indistinguishable from one rebuilt here.
   def repoint_marketplace_listing_authoring
     listing = marketplace_listing
     return if listing.nil? || listing.current_version_id.nil?
 
-    ActsAsTenant.without_tenant do
-      container = Course::Assessment::Marketplace::PreviewContainerService.container_course
-      source = listing.current_version.assessment
-      User.with_stamper(User.system) do
-        copy = Course::Duplication::ObjectDuplicationService.duplicate_objects(
-          source.course, container, source, current_user: User.system
-        )
-        listing.update!(authoring_assessment: copy)
-      end
-    end
+    Course::Assessment::Marketplace::RestoreAuthoringService.restore!(listing)
   end
 
   # Parents the assessment under its duplicated parent tab, if it exists.
