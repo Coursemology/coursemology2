@@ -1,6 +1,11 @@
 en:
   course:
     assessment:
+      marketplace_adoptions:
+        apply_latest_version:
+          student_submissions_exist: >-
+            This assessment cannot be updated in place because students have already submitted
+            work for it. Import the latest version as a new assessment instead.
       assessments:
         invalid_questions_order: 'Invalid ordering for assessment questions'
         show:

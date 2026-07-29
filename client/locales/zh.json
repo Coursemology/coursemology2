@@ -1562,6 +1562,27 @@
   "course.assessment.generation.untitledQuestion": {
     "defaultMessage": "无标题题目"
   },
+  "course.assessment.marketplaceUpdateCompleted": {
+    "defaultMessage": "评估已更新到最新版本。"
+  },
+  "course.assessment.marketplaceUpdateConfirmBody": {
+    "defaultMessage": "这会将此评估的问题和资料替换为 {latest} 发布的版本。它会保留其在课程中的位置、截止日期以及发布状态。"
+  },
+  "course.assessment.marketplaceUpdateConfirmDeletion": {
+    "defaultMessage": "此评估上的 {count, plural, one {# 个测试提交} other {# 个测试提交}} 将被删除。没有学生提交过作业。"
+  },
+  "course.assessment.marketplaceUpdateConfirmTitle": {
+    "defaultMessage": "更新此评估？"
+  },
+  "course.assessment.marketplaceUpdateFailed": {
+    "defaultMessage": "无法更新此评估。"
+  },
+  "course.assessment.marketplaceUpdateInPlace": {
+    "defaultMessage": "更新此评估"
+  },
+  "course.assessment.marketplaceUpdateStarted": {
+    "defaultMessage": "正在更新此评估…"
+  },
   "course.assessment.question.multipleResponses.showOptions": {
     "defaultMessage": "显示选项"
   },
@@ -4246,6 +4267,15 @@
   },
   "course.assessments.index.hasTodo": {
     "defaultMessage": "显示待办事项"
+  },
+  "course.assessments.index.marketplaceAuthoring": {
+    "defaultMessage": "源评估"
+  },
+  "course.assessments.index.marketplaceAuthoringHint": {
+    "defaultMessage": "市场条目 ID {listingId} · 可编辑的工作副本，非已发布版本"
+  },
+  "course.assessments.index.marketplaceAuthoringHintWithSource": {
+    "defaultMessage": "市场条目 ID {listingId} · 可编辑的工作副本，非已发布版本 · 来自 {source}"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "需要的"

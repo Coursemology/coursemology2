@@ -1571,6 +1571,27 @@
   "course.assessment.generation.untitledQuestion": {
     "defaultMessage": "Untitled Question"
   },
+  "course.assessment.marketplaceUpdateCompleted": {
+    "defaultMessage": "Assessment updated to the latest version. Refresh to see the latest version."
+  },
+  "course.assessment.marketplaceUpdateConfirmBody": {
+    "defaultMessage": "This replaces this assessment's questions and materials with the version published on {latest}. It keeps its place in your course, its deadlines, and whether it is published."
+  },
+  "course.assessment.marketplaceUpdateConfirmDeletion": {
+    "defaultMessage": "{count, plural, one {# test submission} other {# test submissions}} on this assessment will be deleted. No student has submitted work for it."
+  },
+  "course.assessment.marketplaceUpdateConfirmTitle": {
+    "defaultMessage": "Update this assessment?"
+  },
+  "course.assessment.marketplaceUpdateFailed": {
+    "defaultMessage": "Could not update this assessment."
+  },
+  "course.assessment.marketplaceUpdateInPlace": {
+    "defaultMessage": "Update this assessment"
+  },
+  "course.assessment.marketplaceUpdateStarted": {
+    "defaultMessage": "Updating this assessment…"
+  },
   "course.assessment.question.multipleResponses.showOptions": {
     "defaultMessage": "Show Options"
   },
@@ -4270,6 +4291,15 @@
   },
   "course.assessments.index.hasTodo": {
     "defaultMessage": "Has TODO"
+  },
+  "course.assessments.index.marketplaceAuthoring": {
+    "defaultMessage": "Source Assessment"
+  },
+  "course.assessments.index.marketplaceAuthoringHint": {
+    "defaultMessage": "Listing ID {listingId} · editable working copy, not a published version"
+  },
+  "course.assessments.index.marketplaceAuthoringHintWithSource": {
+    "defaultMessage": "Listing ID {listingId} · editable working copy, not a published version · from {source}"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "Needed for"

@@ -297,6 +297,9 @@ Rails.application.routes.draw do
           resource :marketplace_listing, only: [:create, :destroy] do
             post 'versions' => 'marketplace_listings#publish_version'
           end
+          resource :marketplace_adoption, only: [] do
+            post 'apply_latest_version' => 'marketplace_adoptions#apply_latest_version'
+          end
 
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy] do
