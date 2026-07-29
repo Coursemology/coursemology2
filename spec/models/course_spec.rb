@@ -349,5 +349,24 @@ RSpec.describe Course, type: :model do
         it { is_expected.to eq(course.course_users.student.count) }
       end
     end
+
+    describe 'the preview flag' do
+      it 'defaults to false for a new course' do
+        expect(build(:course).preview).to eq(false)
+      end
+
+      it 'is invalid when preview is nil' do
+        course = build(:course)
+        course.preview = nil
+        expect(course).not_to be_valid
+        expect(course.errors[:preview]).to be_present
+      end
+
+      it 'is valid when preview is true' do
+        course = build(:course)
+        course.preview = true
+        expect(course).to be_valid
+      end
+    end
   end
 end

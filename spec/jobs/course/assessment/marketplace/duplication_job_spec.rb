@@ -6,7 +6,9 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
   with_tenant(:instance) do
     let(:source_course) { create(:course) }
     let(:source_assessment) { create(:assessment, :with_mcq_question, course: source_course) }
-    let(:listing) { create(:course_assessment_marketplace_listing, assessment: source_assessment, published: true) }
+    let(:listing) do
+      create(:course_assessment_marketplace_listing, authoring_assessment: source_assessment, published: true)
+    end
     let(:destination_course) { create(:course) }
     let(:destination_tab) { destination_course.assessment_categories.first.tabs.first }
     let(:user) { create(:administrator) }
@@ -48,7 +50,8 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
 
     it 'duplicates every listing when given several ids' do
       other = create(:course_assessment_marketplace_listing,
-                     assessment: create(:assessment, :with_mcq_question, course: source_course), published: true)
+                     authoring_assessment: create(:assessment, :with_mcq_question, course: source_course),
+                     published: true)
       expect do
         described_class.perform_now([listing.id, other.id], destination_course, destination_tab.id, current_user: user)
       end.to change { destination_course.assessments.count }.by(2).

@@ -23,7 +23,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     # NOTE: the factory has no :published trait — `published { true }` is a default attribute
     # (spec/factories/course_assessment_marketplace_listings.rb). Do NOT pass `:published`.
     ActsAsTenant.without_tenant do
-      create(:course_assessment_marketplace_listing, assessment: source_assessment)
+      create(:course_assessment_marketplace_listing, authoring_assessment: source_assessment)
     end
   end
   let(:question) { source_assessment.questions.first }
@@ -82,7 +82,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         )
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 
@@ -102,7 +102,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         create(:course_assessment_question_text_response, :exact_match_solution, assessment: assessment)
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 
@@ -121,7 +121,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         create(:course_assessment_question_rubric_based_response, assessment: assessment)
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 
@@ -140,7 +140,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         create(:course_assessment_question_forum_post_response, assessment: assessment)
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 
@@ -157,7 +157,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         create(:course_assessment_question_voice_response, assessment: assessment)
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 
@@ -175,7 +175,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
         create(:course_assessment_question_scribing, assessment: assessment)
         question = assessment.questions.first
         ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment)
         end
       end
 

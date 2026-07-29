@@ -24,7 +24,7 @@ RSpec.describe Course::Assessment::MarketplaceListingsController, type: :control
 
       context 'when the assessment was previously published then removed (re-publish)' do
         let!(:listing) do
-          create(:course_assessment_marketplace_listing, assessment: assessment, published: false,
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment, published: false,
                                                          first_published_at: 3.days.ago, last_published_at: 3.days.ago)
         end
 
@@ -46,7 +46,9 @@ RSpec.describe Course::Assessment::MarketplaceListingsController, type: :control
     end
 
     describe 'DELETE #destroy' do
-      let!(:listing) { create(:course_assessment_marketplace_listing, assessment: assessment, published: true) }
+      let!(:listing) do
+        create(:course_assessment_marketplace_listing, authoring_assessment: assessment, published: true)
+      end
 
       it 'soft-removes: keeps the row, sets published false' do
         delete :destroy, params: { course_id: course, assessment_id: assessment, format: :json }
