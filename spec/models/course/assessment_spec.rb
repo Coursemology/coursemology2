@@ -436,5 +436,172 @@ RSpec.describe Course::Assessment do
         expect(result).not_to have_key(empty_assessment.id)
       end
     end
+
+    describe '.titles_in_course' do
+      let(:course) { create(:course) }
+
+      it 'returns the downcased titles of every assessment in the course' do
+        create(:assessment, course: course, title: 'Lab 3')
+        create(:assessment, course: course, title: 'Tutorial 1')
+
+        expect(described_class.titles_in_course(course)).
+          to contain_exactly('lab 3', 'tutorial 1')
+      end
+
+      # A duplicate title two tabs away is exactly as confusing as one in the same tab, so the whole
+      # course is the collision scope.
+      it 'spans every tab and category in the course' do
+        other_category = create(:course_assessment_category, course: course)
+        other_tab = create(:course_assessment_tab, category: other_category)
+        create(:assessment, course: course, title: 'Lab 3')
+        create(:assessment, course: course, tab: other_tab, title: 'Lab 4')
+
+        expect(described_class.titles_in_course(course)).
+          to contain_exactly('lab 3', 'lab 4')
+      end
+
+      it 'ignores assessments in other courses' do
+        create(:assessment, course: course, title: 'Lab 3')
+        create(:assessment, course: create(:course), title: 'Foreign Lab')
+
+        expect(described_class.titles_in_course(course)).to eq(['lab 3'])
+      end
+
+      # The in-place update overwrites an assessment's OWN title, so it must not collide with itself.
+      it 'excludes the named assessment' do
+        create(:assessment, course: course, title: 'Lab 3')
+        self_assessment = create(:assessment, course: course, title: 'Lab 4')
+
+        expect(described_class.titles_in_course(course, except_id: self_assessment.id)).
+          to eq(['lab 3'])
+      end
+
+      it 'returns an empty array for a course with no assessments' do
+        expect(described_class.titles_in_course(create(:course))).to eq([])
+      end
+    end
+
+    describe '#submission_counts_by_author' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
+
+      it 'is all zeroes for an assessment nobody has attempted' do
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 0)
+      end
+
+      # A real student's work blocks the in-place update in ANY workflow state - an untouched
+      # `attempting` draft is still their attempt.
+      it 'counts a non-phantom student attempt, even while merely attempting' do
+        student = create(:course_student, course: course)
+        create(:submission, :attempting, assessment: assessment, creator: student.user)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 1, other: 0)
+      end
+
+      it 'counts a submitted student submission' do
+        student = create(:course_student, course: course)
+        create(:submission, :submitted, assessment: assessment, creator: student.user)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 1, other: 0)
+      end
+
+      # An instructor's own test run must not permanently cost them the update option.
+      it 'counts a manager test run as other, not student' do
+        manager = create(:course_manager, course: course)
+        create(:submission, :attempting, assessment: assessment, creator: manager.user)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 1)
+      end
+
+      it 'counts a phantom student test run as other, not student' do
+        phantom = create(:course_student, :phantom, course: course)
+        create(:submission, :attempting, assessment: assessment, creator: phantom.user)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 1)
+      end
+
+      # A submission whose author has since left the course has no course_user row to classify it.
+      # It must land in `other` rather than vanishing from both counts.
+      it 'counts a submission by a departed user as other' do
+        student = create(:course_student, course: course)
+        create(:submission, :attempting, assessment: assessment, creator: student.user)
+        student.destroy!
+
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 1)
+      end
+
+      it 'counts a submission by a soft-deleted course user as other' do
+        student = create(:course_student, course: course)
+        create(:submission, :attempting, assessment: assessment, creator: student.user)
+        student.update!(deleted_at: Time.zone.now)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 1)
+      end
+
+      it 'ignores submissions on a different assessment' do
+        other_assessment = create(:assessment, :with_mcq_question, course: course)
+        student = create(:course_student, course: course)
+        create(:submission, :attempting, assessment: other_assessment, creator: student.user)
+
+        expect(assessment.submission_counts_by_author).to eq(student: 0, other: 0)
+      end
+    end
+
+    # Deleting the source assessment ORPHANS its listing rather than destroying it: the marketplace
+    # goes on serving the last snapshot, but nobody can publish a new version of it again. Rebuilding
+    # the authoring copy is what restores that, and it is automatic so an admin never has to notice
+    # the breakage first — the "Rebuild source assessment" action remains only as a manual retry.
+    describe 'automatic marketplace authoring rebuild' do
+      with_active_job_queue_adapter(:test) do
+        let(:listing) do
+          create(:course_assessment_marketplace_listing, :versioned, course: course)
+        end
+        let(:listing_without_version) do
+          create(:course_assessment_marketplace_listing, course: course)
+        end
+
+        it 'enqueues a rebuild when the source assessment is deleted' do
+          listed_assessment = listing.authoring_assessment
+
+          expect { listed_assessment.destroy! }.
+            to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob).
+            with(listing.id, current_user: User.system)
+        end
+
+        # A course deletion cascades to its assessments through Ruby `dependent: :destroy`, so the one
+        # hook on the assessment covers both ways a listing can lose its source.
+        #
+        # The snapshot is placed OUTSIDE the origin course, which is where a real one lives (the
+        # marketplace container). The `:versioned` factory's same-course stand-in cannot be used here:
+        # deleting the course would try to delete the snapshot too and trip the version's foreign key,
+        # a collision the production layout makes impossible.
+        it 'enqueues a rebuild when the whole source course is deleted' do
+          version = create(:course_assessment_marketplace_listing_version,
+                           listing: listing_without_version,
+                           assessment: create(:assessment, course: create(:course)),
+                           published_at: Time.zone.now,
+                           published_by: listing_without_version.publisher)
+          listing_without_version.update!(current_version: version)
+
+          expect { course.destroy! }.
+            to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob).
+            with(listing_without_version.id, current_user: User.system)
+        end
+
+        # There is nothing to rebuild FROM: the rebuild duplicates the latest snapshot, and this
+        # listing has never published one. It stays orphaned, and the admin's only route is deletion.
+        it 'enqueues nothing for a listing that has never published a version' do
+          versionless = create(:course_assessment_marketplace_listing, course: course)
+
+          expect { versionless.authoring_assessment.destroy! }.
+            not_to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob)
+        end
+
+        it 'enqueues nothing when the assessment authors no listing at all' do
+          expect { assessment.destroy! }.
+            not_to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob)
+        end
+      end
+    end
   end
 end
