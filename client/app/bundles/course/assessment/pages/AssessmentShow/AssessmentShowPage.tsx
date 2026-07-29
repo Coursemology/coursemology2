@@ -22,12 +22,14 @@ import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
+import MarketplaceVersionChip from '../AssessmentsIndex/MarketplaceVersionChip';
 
 import AssessmentDetails from './AssessmentDetails';
 import AssessmentShowHeader from './AssessmentShowHeader';
 import GenerateQuestionMenu from './GenerateQuestionMenu';
 import NewQuestionMenu from './NewQuestionMenu';
 import QuestionsManager from './QuestionsManager';
+import MarketplaceUpdateBanner from './MarketplaceUpdateBanner';
 import UnavailableAlert from './UnavailableAlert';
 
 interface AssessmentShowPageProps {
@@ -61,6 +63,14 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       title={
         <div className="flex flex-row space-x-5 align-middle">
           <Typography variant="h5">{assessment.title}</Typography>
+
+          {/* Beside the title, because the title is exactly what does NOT identify a container
+              assessment: every snapshot of every listing carries the origin's verbatim, in one tab.
+              The same chip the container's index row shows, so the two never disagree. */}
+          {assessment.marketplaceVersion && (
+            <MarketplaceVersionChip for={assessment.marketplaceVersion} />
+          )}
+
           {isKoditsuIndicatorShown && (
             <KoditsuChipButton
               assessmentId={assessment.id}
@@ -74,6 +84,11 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       {assessment.status === 'unavailable' && (
         <UnavailableAlert for={assessment} />
       )}
+
+      <MarketplaceUpdateBanner
+        assessmentId={assessment.id}
+        update={assessment.marketplaceUpdate}
+      />
 
       {assessment.description && (
         <DescriptionCard description={assessment.description} />

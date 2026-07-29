@@ -1,6 +1,47 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  marketplaceUpdateAvailable: {
+    id: 'course.assessment.marketplaceUpdateAvailable',
+    defaultMessage:
+      'This assessment was updated in the marketplace on {latest}. Your copy is from {adopted}.',
+  },
+  marketplaceUpdateInPlace: {
+    id: 'course.assessment.marketplaceUpdateInPlace',
+    defaultMessage: 'Update this assessment',
+  },
+  marketplaceUpdateBlocked: {
+    id: 'course.assessment.marketplaceUpdateBlocked',
+    defaultMessage:
+      'This assessment can no longer be updated automatically: students have already submitted work for it, and it may carry edits of your own. Replacing its content would discard both. To use the new version, import this assessment from the marketplace again.',
+  },
+  marketplaceUpdateConfirmTitle: {
+    id: 'course.assessment.marketplaceUpdateConfirmTitle',
+    defaultMessage: 'Update this assessment?',
+  },
+  marketplaceUpdateConfirmBody: {
+    id: 'course.assessment.marketplaceUpdateConfirmBody',
+    defaultMessage:
+      "This replaces this assessment's questions and materials with the version published on {latest}. It keeps its place in your course, its deadlines, and whether it is published.",
+  },
+  marketplaceUpdateConfirmDeletion: {
+    id: 'course.assessment.marketplaceUpdateConfirmDeletion',
+    defaultMessage:
+      '{count, plural, one {# test submission} other {# test submissions}} on this assessment will be deleted. No student has submitted work for it.',
+  },
+  marketplaceUpdateStarted: {
+    id: 'course.assessment.marketplaceUpdateStarted',
+    defaultMessage: 'Updating this assessment…',
+  },
+  marketplaceUpdateCompleted: {
+    id: 'course.assessment.marketplaceUpdateCompleted',
+    defaultMessage:
+      'Assessment updated to the latest version. Refresh to see the latest version.',
+  },
+  marketplaceUpdateFailed: {
+    id: 'course.assessment.marketplaceUpdateFailed',
+    defaultMessage: 'Could not update this assessment.',
+  },
   updateAssessment: {
     id: 'course.assessment.edit.update',
     defaultMessage: 'Save',
@@ -159,6 +200,83 @@ const translations = defineMessages({
   seeAllRequirements: {
     id: 'course.assessments.index.seeAllRequirements',
     defaultMessage: 'See all requirements',
+  },
+  marketplaceVersion: {
+    id: 'course.assessments.index.marketplaceVersion',
+    defaultMessage: '{version}',
+  },
+  // The label is renamed; the message ID is NOT. "Source assessment" is already this codebase's
+  // user-facing name for the authoring copy (MarketplaceListingsTable's "Open source assessment",
+  // MarketplaceRestoreAuthoringButton's "Rebuild source assessment") — the container was the one
+  // surface calling it something else. Renaming the id would orphan the key in all three locale
+  // files for a copy change, and the domain term `authoring_assessment` is unaffected either way.
+  marketplaceAuthoring: {
+    id: 'course.assessments.index.marketplaceAuthoring',
+    defaultMessage: 'Source Assessment',
+  },
+  marketplaceAuthoringHint: {
+    id: 'course.assessments.index.marketplaceAuthoringHint',
+    defaultMessage:
+      'Listing ID {listingId} · editable working copy, not a published version',
+  },
+  marketplaceAuthoringHintWithSource: {
+    id: 'course.assessments.index.marketplaceAuthoringHintWithSource',
+    defaultMessage:
+      'Listing ID {listingId} · editable working copy, not a published version · from {source}',
+  },
+  marketplaceVersionHint: {
+    id: 'course.assessments.index.marketplaceVersionHint',
+    defaultMessage: 'Listing ID {listingId}',
+  },
+  marketplaceVersionHintWithSource: {
+    id: 'course.assessments.index.marketplaceVersionHintWithSource',
+    defaultMessage: 'Listing ID {listingId} · from {source}',
+  },
+  marketplaceLive: {
+    id: 'course.assessments.index.marketplaceLive',
+    defaultMessage: 'Live',
+  },
+  marketplaceLiveHint: {
+    id: 'course.assessments.index.marketplaceLiveHint',
+    defaultMessage:
+      'The version the marketplace is serving right now. Adopting this listing copies this content.',
+  },
+  marketplaceLatest: {
+    id: 'course.assessments.index.marketplaceLatest',
+    defaultMessage: 'Latest',
+  },
+  marketplaceLatestHint: {
+    id: 'course.assessments.index.marketplaceLatestHint',
+    defaultMessage:
+      'The newest version of this listing. Nothing is being served — the listing is off the marketplace.',
+  },
+  marketplaceListingColumn: {
+    id: 'course.assessments.index.marketplaceListingColumn',
+    defaultMessage: 'Listing',
+  },
+  marketplaceVersionColumn: {
+    id: 'course.assessments.index.marketplaceVersionColumn',
+    defaultMessage: 'Version',
+  },
+  marketplaceSourceColumn: {
+    id: 'course.assessments.index.marketplaceSourceColumn',
+    defaultMessage: 'Source',
+  },
+  marketplaceListingLabel: {
+    id: 'course.assessments.index.marketplaceListingLabel',
+    defaultMessage: '{title} · ID {listingId}',
+  },
+  marketplaceOlderVersion: {
+    id: 'course.assessments.index.marketplaceOlderVersion',
+    defaultMessage: 'Older version',
+  },
+  marketplaceNotAVersion: {
+    id: 'course.assessments.index.marketplaceNotAVersion',
+    defaultMessage: '—',
+  },
+  marketplaceSearchText: {
+    id: 'course.assessments.index.marketplaceSearchText',
+    defaultMessage: 'Search by assessment title or source course',
   },
   requirements: {
     id: 'course.assessment.show.requirements',
