@@ -36,7 +36,7 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
   end
 
   def duplicate_listing(listing, destination_course, current_user)
-    source = listing.assessment
+    source = listing.authoring_assessment
     Course::Duplication::ObjectDuplicationService.duplicate_objects(
       source.course, destination_course, source, current_user: current_user
     )

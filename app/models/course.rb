@@ -25,6 +25,7 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :gamified, inclusion: { in: [true, false] }
   validates :published, inclusion: { in: [true, false] }
   validates :enrollable, inclusion: { in: [true, false] }
+  validates :preview, inclusion: { in: [true, false] }
   validates :time_zone, length: { maximum: 255 }, allow_nil: true
   validates :creator, presence: true
   validates :updater, presence: true
