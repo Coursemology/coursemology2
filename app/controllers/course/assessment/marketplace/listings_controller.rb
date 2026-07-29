@@ -4,13 +4,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def index
     ActsAsTenant.without_tenant do
-      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on
-      # the acting-as record.
+      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on the
+      # acting-as record. Reads go through the current version snapshot, never the authoring copy: the
+      # marketplace serves what a duplicate would give you. `where.not(current_version_id:
+      # nil)` guards a published listing with no snapshot, whose nil `current_version` would 500 browse.
       @listings = Course::Assessment::Marketplace::Listing.published.
-                  where.not(authoring_assessment_id: nil).
-                  includes(authoring_assessment: :lesson_plan_item).to_a
+                  where.not(current_version_id: nil).
+                  includes(current_version: { assessment: :lesson_plan_item }).to_a
       @adoption_counts = adoption_counts(@listings.map(&:id))
-      @question_counts = question_counts(@listings.map(&:authoring_assessment_id))
+      @question_counts = question_counts(@listings.map { |listing| listing.current_version.assessment_id })
       @destination_tabs = destination_tabs
     end
   end
@@ -29,11 +31,11 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
   def show
     ActsAsTenant.without_tenant do
       @listing = Course::Assessment::Marketplace::Listing.published.
-                 includes(:authoring_assessment).find_by(id: params[:id])
+                 includes(current_version: :assessment).find_by(id: params[:id])
       raise CanCan::AccessDenied unless @listing
 
-      @assessment = @listing.authoring_assessment
-      # This page renders the authoring copy, which an orphaned listing no longer has — see `index`.
+      # The SNAPSHOT, never the authoring copy (design §4.2).
+      @assessment = @listing.current_version&.assessment
       raise CanCan::AccessDenied unless @assessment
 
       authorize!(:preview_in_marketplace, @listing)
@@ -73,10 +75,8 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def authorized_listings
     listings = ActsAsTenant.without_tenant do
-      # Orphaned listings excluded for the reason `index` gives — the duplicate copies the
-      # authoring assessment, so there is nothing for it to read.
       Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).
-        where.not(authoring_assessment_id: nil).includes(:authoring_assessment)
+        includes(current_version: :assessment)
     end
     raise CanCan::AccessDenied if listings.empty?
 

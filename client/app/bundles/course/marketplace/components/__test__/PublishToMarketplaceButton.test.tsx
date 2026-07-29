@@ -57,6 +57,48 @@ it('publishes after confirming and reports published=true', async () => {
   expect(onChange).toHaveBeenCalledWith(true);
 });
 
+const versionsUrl = `/courses/${global.courseId}/assessments/5/marketplace_listing/versions`;
+
+it('offers Publish new version when already listed', async () => {
+  const page = render(
+    <PublishToMarketplaceButton
+      assessment={assessmentAt(true)}
+      onChange={jest.fn()}
+    />,
+  );
+
+  expect(await page.findByText('Publish new version')).toBeInTheDocument();
+});
+
+// Separate test, not a second render in the one above: RTL binds queries to `document.body`, so
+// two renders in a single test see each other's DOM and the negative assertion never fails.
+it('does not offer Publish new version when unlisted', async () => {
+  const page = render(
+    <PublishToMarketplaceButton
+      assessment={assessmentAt(false)}
+      onChange={jest.fn()}
+    />,
+  );
+
+  expect(await page.findByText('Publish to Marketplace')).toBeInTheDocument();
+  expect(page.queryByText('Publish new version')).not.toBeInTheDocument();
+});
+
+it('cuts a new version after confirming', async () => {
+  mock.onPost(versionsUrl).reply(200, { version: 2 });
+  const page = render(
+    <PublishToMarketplaceButton
+      assessment={assessmentAt(true)}
+      onChange={jest.fn()}
+    />,
+  );
+
+  fireEvent.click(await page.findByText('Publish new version'));
+  await confirmInDialog(page, /Publish new version/);
+  await waitFor(() => expect(mock.history.post).toHaveLength(1));
+  expect(mock.history.post[0].url).toBe(versionsUrl);
+});
+
 it('removes after confirming when already listed, reports published=false', async () => {
   mock.onDelete(url).reply(200);
   const onChange = jest.fn();

@@ -14,7 +14,7 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
     describe 'GET #index' do
       before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
 
-      let!(:published) { create(:course_assessment_marketplace_listing, published: true) }
+      let!(:published) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
       let!(:unpublished) { create(:course_assessment_marketplace_listing, published: false) }
 
       it 'returns only published listings' do
@@ -46,17 +46,19 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
       end
 
       it 'reports the live distinct-course adoption count' do
-        listing = create(:course_assessment_marketplace_listing, published: true)
+        listing = create(:course_assessment_marketplace_listing, :versioned, published: true)
         create(:course_assessment_marketplace_adoption, listing: listing, destination_course: create(:course))
         get :index, params: { course_id: course, format: :json }
         row = response.parsed_body['listings'].find { |l| l['id'] == listing.id }
         expect(row['adoptions']).to eq(1)
       end
 
+      # Published through the real service, not the `:versioned` stand-in trait: the count must come
+      # from the container SNAPSHOT, so this also proves copy-on-publish carries the questions across.
       it 'reports the actual question count for a listing (not the 0 fallback)' do
         assessment_with_questions = create(:assessment, :with_mcq_question, question_count: 3, course: course)
-        listing = create(:course_assessment_marketplace_listing, published: true,
-                                                                 authoring_assessment: assessment_with_questions)
+        listing = Course::Assessment::Marketplace::PublishService.
+                  publish(assessment_with_questions, course.creator)
         get :index, params: { course_id: course, format: :json }
         row = response.parsed_body['listings'].find { |l| l['id'] == listing.id }
         expect(row['questionCount']).to eq(3)
@@ -232,10 +234,12 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
 
       before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
 
+      # Published through the real service: `#show` renders the container SNAPSHOT (design §4.2),
+      # so the question must exist on the snapshot, not just the authoring copy.
       let!(:listing) do
         assessment = create(:assessment, course: create(:course))
         create(:course_assessment_question_multiple_response, :multiple_choice, assessment: assessment)
-        create(:course_assessment_marketplace_listing, authoring_assessment: assessment, published: true)
+        Course::Assessment::Marketplace::PublishService.publish(assessment, assessment.course.creator)
       end
 
       it 'renders the assessment config read-only' do
@@ -253,6 +257,16 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         expect(question['unautogradable']).to be(false)
         expect(question['mcqMrqType']).to eq('mcq')
         expect(question['options']).to be_present
+      end
+
+      # The duplicate dialog on this page posts the payload's `id` straight back as a `listing_ids`
+      # entry, so it has to identify the LISTING. Serializing the snapshot assessment's id here 403'd
+      # every duplicate launched from the preview page: `authorized_listings` found no published
+      # listing under that id and raised on the empty set.
+      it 'identifies the payload by the listing, not the snapshot assessment' do
+        get :show, params: { course_id: course, id: listing.id, format: :json }
+        expect(response.parsed_body['id']).to eq(listing.id)
+        expect(response.parsed_body['id']).not_to eq(listing.current_version.assessment_id)
       end
 
       it 'includes the current course destination tabs so the duplicate dialog can offer a picker' do
@@ -277,6 +291,34 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         end
       end
     end
+
+    describe 'GET #index snapshot serving' do
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
+
+      let!(:versioned) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
+
+      subject { get :index, params: { course_id: course.id, format: :json } }
+
+      it 'serves the current version snapshot, not the authoring assessment' do
+        subject
+        row = response.parsed_body['listings'].find { |l| l['id'] == versioned.id }
+
+        expect(row['assessmentId']).to eq(versioned.current_version.assessment_id)
+        expect(row['assessmentId']).not_to eq(versioned.authoring_assessment_id)
+      end
+
+      it 'counts the snapshot questions, not the authoring copy questions' do
+        ActsAsTenant.without_tenant do
+          create(:course_assessment_question_multiple_response,
+                 assessment: versioned.current_version.assessment)
+        end
+
+        subject
+        row = response.parsed_body['listings'].find { |l| l['id'] == versioned.id }
+
+        expect(row['questionCount']).to eq(1)
+      end
+    end
   end
 
   # Cross-instance: a listing published in another instance is visible.
@@ -286,7 +328,7 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
 
     it 'lists listings from other instances' do
       foreign = ActsAsTenant.with_tenant(other_instance) do
-        create(:course_assessment_marketplace_listing, published: true)
+        create(:course_assessment_marketplace_listing, :versioned, published: true)
       end
       ActsAsTenant.with_tenant(home_instance) do
         course = create(:course)

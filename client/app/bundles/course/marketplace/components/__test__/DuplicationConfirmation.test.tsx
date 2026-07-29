@@ -327,8 +327,13 @@ it('duplicates every selected listing and pluralises the completion toast', asyn
     listing_ids: [1, 2],
   });
 
+  // Trimmed: the message carries a trailing space so the "View assessments" link that follows it
+  // in the toast does not butt up against the full stop.
   await waitFor(
-    () => expect(successToastTexts()).toContain('Assessments duplicated.'),
+    () =>
+      expect(successToastTexts().map((text) => text.trim())).toContain(
+        'Assessments duplicated.',
+      ),
     { timeout: 6000 },
   );
 }, 10000);
@@ -368,6 +373,46 @@ it('reports completion and links to where the assessment landed', async () => {
   expect(
     toasted.getByRole('link', { name: 'View assessment' }),
   ).toHaveAttribute('href', REDIRECT_URL);
+}, 10000);
+
+// After the backend started linking a single copy straight to the assessment, the bulk case is the
+// only one still landing on the tab index — where several assessments are waiting, not one.
+it('pluralises the link label when several assessments landed', async () => {
+  mock.onPost(url).reply(200, { status: 'submitted', jobUrl: '/jobs/9' });
+  jobsMock
+    .onGet('/jobs/9')
+    .reply(200, { status: 'completed', redirectUrl: REDIRECT_URL });
+
+  const page = render(
+    <DuplicateConfirmation
+      destinationCourse={course}
+      destinationTabs={destinationTabs}
+      initialDestinationTabId={42}
+      listings={[
+        { id: 1, title: LISTING_TITLE },
+        { id: 2, title: 'Graph Traversals' },
+      ]}
+      onClose={jest.fn()}
+      open
+    />,
+  );
+
+  fireEvent.click(await page.findByRole('button', { name: /Duplicate/ }));
+
+  await waitFor(() => expect(toast.success).toHaveBeenCalled(), {
+    timeout: 6000,
+  });
+
+  const message = (toast.success as unknown as jest.Mock).mock.calls[0][0];
+  const toasted = render(<div>{message}</div>);
+
+  expect(await toasted.findByText(/Assessments duplicated\./)).toBeVisible();
+  expect(
+    toasted.getByRole('link', { name: 'View assessments' }),
+  ).toHaveAttribute('href', REDIRECT_URL);
+  expect(
+    toasted.queryByRole('link', { name: 'View assessment' }),
+  ).not.toBeInTheDocument();
 }, 10000);
 
 it('closes itself once the duplication completes', async () => {
