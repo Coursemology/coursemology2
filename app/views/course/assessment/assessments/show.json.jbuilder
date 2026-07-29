@@ -77,11 +77,43 @@ json.permissions do
   json.canManage can_manage
   json.canObserve can_observe
   json.canInviteToKoditsu can?(:invite_to_koditsu, assessment)
-  json.canPublishToMarketplace((can?(:publish_to_marketplace, @assessment) && current_user&.administrator?) || false)
+  # `marketplace_snapshot?` LAST so its query only runs for the administrators who could publish at
+  # all — every other request short-circuits before it. A snapshot is content an existing listing
+  # already serves, never a source assessment; see Course::Assessment#marketplace_snapshot?.
+  json.canPublishToMarketplace((can?(:publish_to_marketplace, @assessment) &&
+                                current_user&.administrator? &&
+                                !@assessment.marketplace_snapshot?) || false)
 end
 
 json.isPublishedToMarketplace @assessment.marketplace_listing&.published? || false
 json.marketplaceListingUrl course_assessment_marketplace_listing_path(current_course, @assessment)
+
+# Present only in the marketplace's container course, viewed by a system admin, and only for an
+# assessment the marketplace owns — a snapshot or a listing's working copy. Same shape as the index
+# row's badge, so the client renders both with one component.
+if @marketplace_version
+  json.marketplaceVersion do
+    json.listingId @marketplace_version[:listing_id]
+    json.publishedAt @marketplace_version[:published_at]
+    json.source @marketplace_version[:source]
+    json.latest @marketplace_version[:latest]
+    json.listed @marketplace_version[:listed]
+  end
+end
+
+# Null unless this assessment was copied from the marketplace AND a newer version has since been
+# published that the adopter has neither dismissed nor muted.
+if @marketplace_update
+  json.marketplaceUpdate do
+    # Two fields, not four: the ordinal and the date were always the same fact twice.
+    json.adoptedVersionAt @marketplace_update[:adopted_version_at]
+    json.latestVersionAt @marketplace_update[:latest_version_at]
+    json.canUpdateInPlace @marketplace_update[:can_update_in_place]
+    json.testSubmissionCount @marketplace_update[:test_submission_count]
+  end
+else
+  json.marketplaceUpdate nil
+end
 
 unless can_attempt
   not_started_for_user = assessment_not_started(assessment.time_for(current_course_user))
