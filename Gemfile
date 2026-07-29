@@ -165,13 +165,18 @@ group :production do
   gem 'fog-aws', '>= 3.19'
   gem 'flamegraph'
   gem 'stackprof'
-  gem 'sidekiq', '~> 7.3.10'
   gem 'sidekiq-cron'
   gem 'rollbar', '>= 1.5.3'
 
   # better log format
   gem 'lograge'
   gem 'lograge-sql'
+end
+
+# Sidekiq also loaded in :test so job specs can exercise the real Sidekiq client/server path
+# (serialization + middleware) instead of only the in-process :background_thread adapter.
+group :production, :test do
+  gem 'sidekiq', '~> 7.3.10'
 end
 
 # Multitenancy

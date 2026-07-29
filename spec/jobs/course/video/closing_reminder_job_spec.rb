@@ -21,5 +21,16 @@ RSpec.describe Course::Video::ClosingReminderJob do
         end
       end
     end
+
+    # The examples above only assert the job is ENQUEUED. Running it (its `perform`) is left to async
+    # specs, where that coverage is race-prone; drive it deterministically here. The service has its
+    # own spec, so we just assert the job runs it (without a tenant) after a real Redis round-trip.
+    context 'when the enqueued reminder job runs', :sidekiq_same_thread do
+      it 'invokes the closing reminder service' do
+        expect(Course::Video::ReminderService).to receive(:closing_reminder).
+          with(video, video.closing_reminder_token).once
+        perform_sidekiq_jobs { described_class.perform_later(video, video.closing_reminder_token) }
+      end
+    end
   end
 end

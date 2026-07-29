@@ -124,7 +124,7 @@ RSpec.describe TrackableJob do
     end
   end
 
-  describe '#wait' do
+  describe '#wait', :sidekiq_separate_thread do
     it 'waits for the job to finish' do
       expect(subject.job).to be_submitted
       subject.wait
