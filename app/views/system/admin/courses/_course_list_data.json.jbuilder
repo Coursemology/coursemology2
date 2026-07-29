@@ -4,6 +4,7 @@ json.title course.title
 json.createdAt course.created_at
 json.activeUserCount course.active_user_count
 json.userCount course.user_count
+json.preview course.preview
 json.instance do
   json.id course.instance.id
   json.name course.instance.name

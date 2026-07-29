@@ -31,6 +31,36 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
       end
     end
 
+    # The hidden marketplace preview container is a `preview: true` course and the system-admin index
+    # is cross-instance, so it appears here like any other course. Course pickers key off this flag to
+    # leave it out of their options (never off a host or instance id), so the payload must carry it.
+    describe '#index payload' do
+      render_views
+
+      let!(:container) do
+        ActsAsTenant.without_tenant do
+          Course::Assessment::Marketplace::PreviewContainerService.container_course
+        end
+      end
+      let!(:ordinary_course) { create(:course) }
+
+      before { controller_sign_in(controller, admin) }
+
+      def row_for(course)
+        response.parsed_body['courses'].find { |c| c['id'] == course.id }
+      end
+
+      it 'flags the preview container and only the preview container' do
+        get :index, as: :json, params: { search: container.title }
+
+        expect(row_for(container)['preview']).to be(true)
+
+        get :index, as: :json, params: { search: ordinary_course.title }
+
+        expect(row_for(ordinary_course)['preview']).to be(false)
+      end
+    end
+
     describe '#destroy' do
       let!(:course_to_delete) { create(:course) }
       let!(:course_stub) do

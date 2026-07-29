@@ -116,6 +116,9 @@ Rails.application.routes.draw do
       end
       get 'marketplace_access' => 'marketplace_access#index'
       resources :marketplace_access_blocks, only: [:create, :destroy]
+      resources :marketplace_listings, only: [:index, :show, :update, :destroy] do
+        post :restore_authoring, on: :member
+      end
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
