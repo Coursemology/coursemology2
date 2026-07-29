@@ -2,18 +2,31 @@
 class Course::Assessment::MarketplaceListingsController < Course::Assessment::Controller
   before_action :authorize_publish_to_marketplace!
 
+  # A published version of an existing listing is not a source assessment. Refused server-side and
+  # not only by withholding the button: the listing this would create has its source assessment
+  # frozen inside the container, so it could never be edited nor cut a further version.
+  SNAPSHOT_REJECTION = 'This is a published version of an existing listing, not a source assessment.'
+
   def create
-    listing = Course::Assessment::Marketplace::Listing.find_or_initialize_by(assessment: @assessment)
-    now = Time.zone.now
-    listing.published = true
-    listing.first_published_at ||= now
-    listing.last_published_at = now
-    listing.publisher ||= current_user
-    if listing.save
-      render json: { published: true }, status: :ok
-    else
-      render json: { errors: listing.errors.full_messages }, status: :unprocessable_content
-    end
+    return render json: { errors: [SNAPSHOT_REJECTION] }, status: :unprocessable_content if
+      @assessment.marketplace_snapshot?
+
+    listing = Course::Assessment::Marketplace::PublishService.publish(@assessment, current_user)
+    render json: { published: listing.published }, status: :ok
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { errors: e.record.errors.full_messages }, status: :unprocessable_content
+  end
+
+  # Cuts v(n+1) from the authoring copy. Deliberately separate from `create`: re-listing an unlisted
+  # assessment reactivates the row but must NOT silently republish changed content (design §5.2).
+  def publish_version
+    listing = @assessment.marketplace_listing
+    return render json: { errors: ['Not listed on the marketplace.'] }, status: :unprocessable_content if listing.nil?
+
+    version = Course::Assessment::Marketplace::PublishService.publish_new_version(listing, current_user)
+    render json: { published_at: version.published_at }, status: :ok
+  rescue ArgumentError => e
+    render json: { errors: [e.message] }, status: :unprocessable_content
   end
 
   def destroy

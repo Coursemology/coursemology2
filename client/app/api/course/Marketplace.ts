@@ -21,6 +21,20 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     );
   }
 
+  publishNewVersion(
+    assessmentId: number,
+  ): Promise<AxiosResponse<{ published_at: string }>> {
+    return this.client.post(
+      `/courses/${this.courseId}/assessments/${assessmentId}/marketplace_listing/versions`,
+    );
+  }
+
+  applyLatestVersion(assessmentId: number): Promise<AxiosResponse> {
+    return this.client.post(
+      `/courses/${this.courseId}/assessments/${assessmentId}/marketplace_adoption/apply_latest_version`,
+    );
+  }
+
   index(): Promise<
     AxiosResponse<{
       listings: MarketplaceListing[];

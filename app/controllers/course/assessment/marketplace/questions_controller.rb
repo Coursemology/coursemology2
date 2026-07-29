@@ -4,12 +4,15 @@ class Course::Assessment::Marketplace::QuestionsController < Course::Assessment:
 
   def show
     ActsAsTenant.without_tenant do
-      listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).
-                find_by(id: params[:listing_id])
+      listing = Course::Assessment::Marketplace::Listing.published.
+                includes(current_version: :assessment).find_by(id: params[:listing_id])
       raise CanCan::AccessDenied unless listing
 
-      @assessment = listing.assessment
-      authorize!(:preview_in_marketplace, @assessment)
+      # The SNAPSHOT, never the authoring copy (design §4.2).
+      @assessment = listing.current_version&.assessment
+      raise CanCan::AccessDenied unless @assessment
+
+      authorize!(:preview_in_marketplace, listing)
 
       @question = @assessment.questions.includes(:actable).find(params[:id])
       @question_assessment = @question.question_assessments.find_by!(assessment: @assessment)

@@ -78,9 +78,10 @@ const DuplicateConfirmation = ({
             {t(translations.duplicateCompleted, { n: listings.length })}
             {redirectUrl && (
               <>
-                {' '}
                 <Link href={redirectUrl}>
-                  {t(translations.viewDuplicatedAssessment)}
+                  {t(translations.viewDuplicatedAssessment, {
+                    n: listings.length,
+                  })}
                 </Link>
               </>
             )}
