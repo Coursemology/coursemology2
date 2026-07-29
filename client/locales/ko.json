@@ -1571,6 +1571,27 @@
   "course.assessment.generation.untitledQuestion": {
     "defaultMessage": "제목 없는 문항"
   },
+  "course.assessment.marketplaceUpdateCompleted": {
+    "defaultMessage": "평가가 최신 버전으로 업데이트되었습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmBody": {
+    "defaultMessage": "이 작업은 이 평가의 문항과 자료를 {latest}에 게시된 버전으로 대체합니다. 코스 내 위치, 마감일, 게시 여부는 유지됩니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmDeletion": {
+    "defaultMessage": "이 평가의 {count, plural, one {#개의 테스트 제출} other {#개의 테스트 제출}}이 삭제됩니다. 학생 제출물은 없습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmTitle": {
+    "defaultMessage": "이 평가를 업데이트하시겠습니까?"
+  },
+  "course.assessment.marketplaceUpdateFailed": {
+    "defaultMessage": "이 평가를 업데이트할 수 없습니다."
+  },
+  "course.assessment.marketplaceUpdateInPlace": {
+    "defaultMessage": "이 평가 업데이트"
+  },
+  "course.assessment.marketplaceUpdateStarted": {
+    "defaultMessage": "이 평가를 업데이트하는 중…"
+  },
   "course.assessment.question.multipleResponses.showOptions": {
     "defaultMessage": "옵션 보기"
   },
@@ -4252,6 +4273,15 @@
   },
   "course.assessments.index.hasTodo": {
     "defaultMessage": "할 일 있음"
+  },
+  "course.assessments.index.marketplaceAuthoring": {
+    "defaultMessage": "원본 평가"
+  },
+  "course.assessments.index.marketplaceAuthoringHint": {
+    "defaultMessage": "등록 항목 ID {listingId} · 수정 가능한 작업 사본이며, 발행된 버전이 아닙니다"
+  },
+  "course.assessments.index.marketplaceAuthoringHintWithSource": {
+    "defaultMessage": "등록 항목 ID {listingId} · 수정 가능한 작업 사본이며, 발행된 버전이 아닙니다 · 출처: {source}"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "필요한 경우"

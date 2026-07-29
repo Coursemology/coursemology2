@@ -1,6 +1,11 @@
 zh:
   course:
     assessment:
+      marketplace_adoptions:
+        apply_latest_version:
+          student_submissions_exist: >-
+            由于学生已经提交了此评估的作业，无法就地更新此评估。
+            请改为将最新版本导入为新的评估。
       assessments:
         invalid_questions_order: '测验问题的权重无效'
         show:

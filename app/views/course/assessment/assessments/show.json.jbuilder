@@ -77,11 +77,34 @@ json.permissions do
   json.canManage can_manage
   json.canObserve can_observe
   json.canInviteToKoditsu can?(:invite_to_koditsu, assessment)
-  json.canPublishToMarketplace((can?(:publish_to_marketplace, @assessment) && current_user&.administrator?) || false)
+  json.canPublishToMarketplace((can?(:publish_to_marketplace, @assessment) &&
+                                current_user&.administrator? &&
+                                !@assessment.marketplace_snapshot?) || false)
 end
 
 json.isPublishedToMarketplace @assessment.marketplace_listing&.published? || false
 json.marketplaceListingUrl course_assessment_marketplace_listing_path(current_course, @assessment)
+
+if @marketplace_version
+  json.marketplaceVersion do
+    json.listingId @marketplace_version[:listing_id]
+    json.publishedAt @marketplace_version[:published_at]
+    json.source @marketplace_version[:source]
+    json.latest @marketplace_version[:latest]
+    json.listed @marketplace_version[:listed]
+  end
+end
+
+if @marketplace_update
+  json.marketplaceUpdate do
+    json.adoptedVersionAt @marketplace_update[:adopted_version_at]
+    json.latestVersionAt @marketplace_update[:latest_version_at]
+    json.canUpdateInPlace @marketplace_update[:can_update_in_place]
+    json.testSubmissionCount @marketplace_update[:test_submission_count]
+  end
+else
+  json.marketplaceUpdate nil
+end
 
 unless can_attempt
   not_started_for_user = assessment_not_started(assessment.time_for(current_course_user))

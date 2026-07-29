@@ -1,6 +1,11 @@
 ko:
   course:
     assessment:
+      marketplace_adoptions:
+        apply_latest_version:
+          student_submissions_exist: >-
+            학생들이 이미 이 평가에 제출한 작업이 있으므로 이 평가를 제자리에서 업데이트할 수 없습니다.
+            대신 최신 버전을 새 평가로 가져오세요.
       assessments:
         invalid_questions_order: '평가 질문의 순서가 잘못되었습니다'
         show:
