@@ -23,7 +23,7 @@ RSpec.describe Course::Assessment::AssessmentsController, type: :controller do
         end
 
         it 'reports isPublishedToMarketplace true once a published listing exists' do
-          create(:course_assessment_marketplace_listing, assessment: assessment, published: true)
+          create(:course_assessment_marketplace_listing, authoring_assessment: assessment, published: true)
           get :show, as: :json, params: { course_id: course, id: assessment }
           expect(JSON.parse(response.body)).to include('isPublishedToMarketplace' => true)
         end

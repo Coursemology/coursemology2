@@ -17,6 +17,10 @@ class CreateCourseAssessmentMarketplaceAdoptions < ActiveRecord::Migration[7.2]
                                                           on_delete: :cascade },
                                            index: { name: 'fk__cama_duplicated_assessment_id',
                                                     unique: true }
+      # A datetime, not a version number: this is the content vintage the copy was made from, compared
+      # against the listing's current version's `published_at`. Stored as a value rather than an FK so
+      # a copy still knows how old its content is even if the version row is purged with its listing.
+      t.datetime :adopted_version_at
       t.references :creator, null: false,
                             foreign_key: { to_table: :users,
                                            name: 'fk_course_assessment_marketplace_adoptions_creator_id' },
