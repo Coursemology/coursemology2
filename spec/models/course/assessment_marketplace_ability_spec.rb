@@ -3,6 +3,14 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Marketplace, type: :model do
   let!(:instance) { Instance.default }
+
+  # Nothing rolls back here, so a leaked `everyone` rule from an earlier spec file would grant
+  # `:access_marketplace` to the not-allow-listed users below. Same cleanup as access_list_query_spec.
+  before do
+    Course::Assessment::Marketplace::AllowlistRule.delete_all
+    Course::Assessment::Marketplace::AccessBlock.delete_all
+  end
+
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:listing) { create(:course_assessment_marketplace_listing, :versioned, published: true) }

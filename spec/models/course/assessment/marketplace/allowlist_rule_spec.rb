@@ -4,6 +4,9 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Marketplace::AllowlistRule, type: :model do
   let!(:instance) { Instance.default }
 
+  # Only this file's own domains: an unscoped `User::Email.delete_all` also strips every earlier spec
+  # file's users, surfacing as `SMTP To address may not be blank` in the mailer specs. `LOWER() LIKE`
+  # because the uniqueness index is on `lower(email)` while SQL LIKE is case-sensitive.
   HARDCODED_EMAIL_DOMAINS = ['schools.gov.sg', 'other.edu', 'school.edu', 'newdomain.example'].freeze
 
   before do
