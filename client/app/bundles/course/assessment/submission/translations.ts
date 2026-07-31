@@ -368,6 +368,26 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateSuccess',
     defaultMessage: 'Submission updated successfully.',
   },
+  previewPublishSuccess: {
+    id: 'course.assessment.submission.previewPublishSuccess',
+    defaultMessage:
+      'Grade published. In a real course, the student would now be able to see this grade and feedback immediately.',
+  },
+  previewAutogradingInProgress: {
+    id: 'course.assessment.submission.previewAutogradingInProgress',
+    defaultMessage:
+      'Auto-marking is running. The results will appear here in a moment.',
+  },
+  previewAutogradingStalled: {
+    id: 'course.assessment.submission.previewAutogradingStalled',
+    defaultMessage:
+      'Auto-marking did not finish. Refresh this page to check for results.',
+  },
+  previewAutogradingSandboxGone: {
+    id: 'course.assessment.submission.previewAutogradingSandboxGone',
+    defaultMessage:
+      'This preview is no longer available. The assessment it was based on has been removed from the marketplace.',
+  },
   updateIndividualSuccess: {
     id: 'course.assessment.submission.updateIndividualSuccess',
     defaultMessage: 'Submission for {errors} updated successfully',
