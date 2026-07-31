@@ -306,6 +306,7 @@ Rails.application.routes.draw do
           resource :marketplace_adoption, only: [] do
             post 'apply_latest_version' => 'marketplace_adoptions#apply_latest_version'
           end
+          resource :preview_submission, only: [:update], controller: 'marketplace/preview_submissions'
 
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy] do
