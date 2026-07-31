@@ -51,8 +51,21 @@ export const redirectToSuspended = (): void => {
   window.location.href = url.pathname + url.search;
 };
 
+// Carries the address it was called from, the way `redirectToForbidden` and `redirectToSuspended` do.
+// The not-found page is standalone, so reaching it means leaving the page that 404ed; without the
+// source URL the viewer is shown `/404` instead of the address they actually asked for, which the
+// route catch-all — every other way of reaching this page — never does.
+//
+// Split from the assignment like `getForbiddenURL` so the URL it builds can be asserted on: jsdom
+// forbids stubbing `window.location`, so a test cannot observe the assignment itself.
+export const getNotFoundURL = (): string => {
+  const url = new URL('/404', window.location.origin);
+  url.searchParams.append(FORBIDDEN_SOURCE_URL_SEARCH_PARAM, getCurrentURL());
+  return url.pathname + url.search;
+};
+
 export const redirectToNotFound = (): void => {
-  window.location.href = '/404';
+  window.location.href = getNotFoundURL();
 };
 
 export const getForbiddenSourceURL = (rawURL: string): string | null => {
@@ -63,6 +76,17 @@ export const getForbiddenSourceURL = (rawURL: string): string | null => {
 export const getSuspendedSourceURL = (rawURL: string): string | null => {
   const url = new URL(rawURL);
   return url.searchParams.get(FORBIDDEN_SOURCE_URL_SEARCH_PARAM);
+};
+
+// Parsed defensively, unlike its two siblings: the not-found page hands this straight to
+// `history.replaceState`, and `defensivelyParseURL` reduces whatever arrives to a path on this
+// origin, so a crafted `?from=` cannot rewrite the address bar to somewhere else.
+export const getNotFoundSourceURL = (rawURL: string): string | null => {
+  const sourceURL = new URL(rawURL).searchParams.get(
+    FORBIDDEN_SOURCE_URL_SEARCH_PARAM,
+  );
+
+  return sourceURL && defensivelyParseURL(sourceURL);
 };
 
 /**
