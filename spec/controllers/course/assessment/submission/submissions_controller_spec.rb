@@ -555,5 +555,45 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
     end
+
+    context 'in the marketplace preview sandbox' do
+      let(:preview_course) { create(:course, preview: true) }
+      let(:preview_assessment) { create(:assessment, :with_mcq_question, course: preview_course) }
+      let(:previewer) { create(:user) }
+      let!(:previewer_course_user) { create(:course_manager, course: preview_course, user: previewer) }
+      let(:own_submission) do
+        create(:submission, :attempting, assessment: preview_assessment,
+                                         course: preview_course, creator: previewer)
+      end
+
+      before { controller_sign_in(controller, previewer) }
+
+      describe '#edit' do
+        it 'allows the previewer to edit their OWN submission' do
+          get :edit, params: { course_id: preview_course, assessment_id: preview_assessment,
+                               id: own_submission, format: :json }
+          expect(response).to be_successful
+        end
+
+        it "forbids the previewer from reading ANOTHER previewer's submission" do
+          other_previewer = create(:course_manager, course: preview_course).user
+          other_submission = create(:submission, :attempting, assessment: preview_assessment,
+                                                              course: preview_course, creator: other_previewer)
+          expect do
+            get :edit, params: { course_id: preview_course, assessment_id: preview_assessment,
+                                 id: other_submission, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      describe '#index' do
+        it 'forbids listing all submissions in the sandbox' do
+          own_submission
+          expect do
+            get :index, params: { course_id: preview_course, assessment_id: preview_assessment, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
   end
 end

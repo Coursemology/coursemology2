@@ -436,5 +436,38 @@ RSpec.describe Course::UsersController, type: :controller do
         end
       end
     end
+
+    context 'in the marketplace preview sandbox' do
+      let(:preview_course) { create(:course, preview: true) }
+      let(:previewer_course_user) { create(:course_manager, course: preview_course) }
+      let(:previewer) { previewer_course_user.user }
+
+      before { controller_sign_in(controller, previewer) }
+
+      it 'forbids listing the users roster' do
+        expect do
+          get :index, params: { course_id: preview_course.id, format: :json }
+        end.to raise_exception(CanCan::AccessDenied)
+      end
+
+      it "forbids reading another previewer's CourseUser record" do
+        other_course_user = create(:course_manager, course: preview_course)
+        expect do
+          get :show, params: { course_id: preview_course.id, id: other_course_user.id, format: :json }
+        end.to raise_exception(CanCan::AccessDenied)
+      end
+    end
+
+    context 'when a system administrator visits the preview sandbox users roster' do
+      let(:preview_course) { create(:course, preview: true) }
+      let(:admin) { create(:administrator) }
+
+      before { controller_sign_in(controller, admin) }
+
+      it 'is not denied (admins are exempt from the preview restriction)' do
+        get :index, params: { course_id: preview_course.id, format: :json }
+        expect(response).to be_successful
+      end
+    end
   end
 end
