@@ -11,6 +11,7 @@ import {
 import { getSubmissionFlags } from 'course/assessment/submission/selectors/submissionFlags';
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import translations from 'course/assessment/submission/translations';
+import { useCourseContext } from 'course/container/CourseLoader';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -24,6 +25,9 @@ const PublishButton: FC = () => {
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
   const submissionFlags = useAppSelector(getSubmissionFlags);
   const expPoints = useAppSelector(getExperiencePoints);
+  // Read defensively (optional chaining) — this button also mounts in test/other
+  // trees that may not sit under CourseContainer's outlet.
+  const isPreview = useCourseContext()?.isPreview;
 
   const { delayedGradePublication } = assessment;
   const { graderView, workflowState } = submission;
@@ -39,7 +43,12 @@ const PublishButton: FC = () => {
 
   const handlePublish = (): void => {
     dispatch(
-      publish(submissionId, Object.values(questionWithGrades), expPoints),
+      publish(
+        submissionId,
+        Object.values(questionWithGrades),
+        expPoints,
+        isPreview,
+      ),
     );
   };
 
