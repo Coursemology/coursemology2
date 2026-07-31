@@ -17,6 +17,7 @@ import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import Breadcrumbs from './Breadcrumbs';
 import { loader, useCourseLoader } from './CourseLoader';
+import PreviewCourseBanner from './PreviewCourseBanner';
 import Sidebar from './Sidebar';
 
 const CourseContainer = (): JSX.Element => {
@@ -63,10 +64,21 @@ const CourseContainer = (): JSX.Element => {
 
           <Breadcrumbs
             className="h-[4rem] w-full overflow-hidden"
+            disableLinks={data.isPreviewRestricted}
             in={crumbs}
             loading={loading}
           />
         </div>
+
+        {/*
+         * Deliberately the first persistent, all-pages course banner: it lives
+         * here because the flag is on the layout payload, which is the
+         * only data available on every course page.
+         *
+         * The banner narrows itself further to submission pages only (see
+         * PreviewCourseBanner). This gate simply checks if user is in the sandbox.
+         */}
+        {data.isPreview && <PreviewCourseBanner />}
 
         <div className="flex-grow">
           <Outlet context={data} />
