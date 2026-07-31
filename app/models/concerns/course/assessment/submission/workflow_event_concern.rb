@@ -184,6 +184,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
   end
 
   def send_email_after_publishing(send_email)
+    # Marketplace preview rehearsals happen in a `preview` sandbox course; the previewer grades and
+    # publishes their own submission, so this email would land in their own inbox for a fake grade.
+    # Guarded here rather than at the call sites because `publish!`'s `send_email` is positional and the
+    # UpdateService path reaches it via `alias_method :publish=, :publish!`, which cannot pass a 2nd arg.
+    return if assessment.course.preview?
+
     return unless send_email && persisted? && !assessment.autograded? &&
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?

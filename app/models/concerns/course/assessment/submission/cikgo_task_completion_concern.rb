@@ -25,6 +25,9 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   end
 
   def should_publish_task_completion?
+    # A sandbox rehearsal must never report a completed task to the previewer's real external LMS.
+    return false if lesson_plan_item.course.preview?
+
     lesson_plan_item.course.component_enabled?(Course::StoriesComponent) &&
       creator_id_on_cikgo.present? && status.present?
   end

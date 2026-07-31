@@ -81,8 +81,19 @@ class Course::Discussion::Topic < ApplicationRecord
     raise e
   end
 
+  # No-op in the marketplace preview sandbox. Every topic there hangs off a throwaway rehearsal
+  # attempt that a TTL reaps within a day, and the container has no staff who owe anyone a reply — so
+  # the flag only ever surfaces as a nag, since both the "Pending" tab and the Comments sidebar badge
+  # count `pending_staff_reply` (Course::Discussion::TopicsHelper#all_staff_unread_count). Guarded
+  # here rather than at the four writers (the inbox toggle, a non-staff reply,
+  # Course::Assessment::Answer::AiGeneratedPostService's draft, and Codaveri async feedback) so a
+  # fifth cannot reintroduce it. Same course-wide suppression of preview side effects as
+  # Course::Assessment::Submission::WorkflowEventConcern and CikgoTaskCompletionConcern.
+  #
+  # Returns true, not false: the writers treat a falsey result as a failure and roll the enclosing
+  # post creation back (Course::Discussion::PostsConcern#update_topic_pending_status).
   def mark_as_pending
-    return true if pending_staff_reply
+    return true if course.preview? || pending_staff_reply
 
     self.pending_staff_reply = true
     save
