@@ -81,8 +81,12 @@ class Course::Discussion::Topic < ApplicationRecord
     raise e
   end
 
+  # No-op in the marketplace preview sandbox.
+  #
+  # Returns true, not false: the writers treat a falsey result as a failure and roll the enclosing
+  # post creation back (Course::Discussion::PostsConcern#update_topic_pending_status).
   def mark_as_pending
-    return true if pending_staff_reply
+    return true if course.preview? || pending_staff_reply
 
     self.pending_staff_reply = true
     save
