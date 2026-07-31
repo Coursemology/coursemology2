@@ -18,9 +18,11 @@ import {
   Attributions,
   useSetAttributions,
 } from 'lib/components/wrappers/AttributionsProvider';
+import { useAppContext } from 'lib/containers/AppContainer';
 import { getCourseIdFromString } from 'lib/helpers/url-helpers';
 import {
   getForbiddenSourceURL,
+  getNotFoundSourceURL,
   getSuspendedSourceURL,
 } from 'lib/hooks/router/redirect';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -38,6 +40,11 @@ const translations = defineMessages({
     id: 'app.ErrorPage.notFoundSubtitle',
     defaultMessage:
       "Check if you've typed the correct address, try again later, or <home>go back home</home>.",
+  },
+  notFoundSubtitleWithoutHome: {
+    id: 'app.ErrorPage.notFoundSubtitleWithoutHome',
+    defaultMessage:
+      "Check if you've typed the correct address, or try again later.",
   },
   notFoundIllustrationAttribution: {
     id: 'app.ErrorPage.notFoundIllustrationAttribution',
@@ -135,6 +142,20 @@ const ErrorPage = (props: ErrorPageProps): JSX.Element => {
 const NotFoundPage = (): JSX.Element => {
   const { t } = useTranslation();
 
+  // A marketplace previewer has nowhere to go back to: `/` resolves to the preview container, their
+  // only course, and the sandbox lock denies it, so the link would land them on a 403. The link is
+  // dropped rather than repointed, and it takes a second message rather than a conditional chunk.
+  const { isPreviewRestricted } = useAppContext();
+
+  // Most viewers reach this page because no route matched their URL, and the address bar already
+  // reads what they typed. The rest are redirected here from a route that did match but whose record
+  // turned out missing, and arrive carrying that address — put it back, so both look the same.
+  const sourceURL = getNotFoundSourceURL(window.location.href);
+
+  useEffectOnce(() => {
+    if (sourceURL) window.history.replaceState(null, '', sourceURL);
+  });
+
   return (
     <ErrorPage
       attributions={[
@@ -166,13 +187,18 @@ const NotFoundPage = (): JSX.Element => {
       ]}
       illustrationAlt="Not found illustration"
       illustrationSrc={notFoundIllustration}
-      subtitle={t(translations.notFoundSubtitle, {
-        home: (chunk) => (
-          <Link to="/" variant="body1">
-            {chunk}
-          </Link>
-        ),
-      })}
+      subtitle={
+        isPreviewRestricted
+          ? t(translations.notFoundSubtitleWithoutHome)
+          : t(translations.notFoundSubtitle, {
+              home: (chunk) => (
+                <Link to="/" variant="body1">
+                  {chunk}
+                </Link>
+              ),
+            })
+      }
+      tip={sourceURL ?? undefined}
       title={t(translations.notFound)}
     />
   );
