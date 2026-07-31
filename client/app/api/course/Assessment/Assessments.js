@@ -23,6 +23,19 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Fetches only what a breadcrumb renders for an assessment: its title and its tab's. The full
+   * `fetch` is the assessment page's payload, and serving both from one request is what let a
+   * marketplace previewer read the authoring surface through the allowance their crumbs need.
+   * @param {number} assessmentId
+   * @returns An `AssessmentCrumbData` object
+   */
+  fetchCrumb(assessmentId) {
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}`, {
+      params: { crumb: true },
+    });
+  }
+
+  /**
    * Fetches the remaining unlock requirements for an assessment.
    * @param {number} assessmentId
    * @returns An `AssessmentUnlockRequirements` object

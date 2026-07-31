@@ -133,6 +133,34 @@ RSpec.describe Course::Assessment::AssessmentsController do
       end
     end
 
+    describe '#show' do
+      render_views
+
+      let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
+
+      # A breadcrumb needs a title and a tab; the assessment page needs everything. They shared one
+      # endpoint, which is what let a marketplace previewer reach the authoring surface through the
+      # allowance their breadcrumb needs (see ApplicationPreviewSandboxConcern). The flag splits them.
+      context 'when the request asks only for breadcrumb data' do
+        before { get :show, as: :json, params: { course_id: course, id: assessment, crumb: true } }
+
+        it 'renders the title and the tab, and nothing else' do
+          expect(response.parsed_body.keys).to contain_exactly('id', 'title', 'tabTitle', 'tabUrl')
+        end
+
+        it 'does not assemble the assessment page' do
+          expect(assigns(:submissions)).to be_nil
+          expect(assigns(:question_duplication_dropdown_data)).to be_nil
+          expect(assigns(:questions)).to be_nil
+        end
+      end
+
+      it 'renders the whole assessment page without the flag' do
+        get :show, as: :json, params: { course_id: course, id: assessment }
+        expect(response.parsed_body['permissions']).to be_present
+      end
+    end
+
     describe '#destroy' do
       subject { delete :destroy, params: { course_id: course, id: immutable_assessment } }
 
