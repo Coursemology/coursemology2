@@ -3,7 +3,7 @@ json.array! items do |item|
   json.key item[:key]
   json.label item[:title]
   json.icon item[:icon]
-  if can_read
+  if link_items
     json.path item[:path]
     json.unread item[:unread] if item[:unread]&.nonzero?
   end
