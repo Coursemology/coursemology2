@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Marketplace::Listing < ApplicationRecord
   # The mutable authoring copy — the origin-course assessment. Nullable: the listing outlives
-  # deletion of its origin (design §4.3). What the marketplace serves is `current_version.assessment`.
+  # deletion of its origin. What the marketplace serves is `current_version.assessment`.
   belongs_to :authoring_assessment, class_name: 'Course::Assessment',
                                     inverse_of: :marketplace_listing, optional: true
   belongs_to :publisher, class_name: 'User', inverse_of: false
@@ -43,6 +43,24 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
                { authoring_assessment: { lesson_plan_item: { course: :instance } } }).
         order(id: :desc).to_a
     end
+  end
+
+  # Whether `assessment_id` is the snapshot the marketplace currently serves for some listed listing
+  # — the only thing in the container course a previewer was ever handed a URL to (see
+  # `PreviewLaunchService`). Everything else there is a superseded snapshot, a restored authoring
+  # working copy, or the snapshot of a delisted listing, and container ids are guessable, so the
+  # preview sandbox lock vets the assessment with this rather than trusting a hidden index.
+  #
+  # Tenant-free without needing `without_tenant`: neither this table nor the versions table is
+  # `acts_as_tenant`, and the join never reaches `Course`.
+  #
+  # @param [Integer] assessment_id
+  # @return [Boolean]
+  def self.serving_assessment?(assessment_id)
+    return false if assessment_id.blank?
+
+    published.joins(:current_version).
+      exists?(course_assessment_marketplace_listing_versions: { assessment_id: assessment_id })
   end
 
   # An orphaned listing lost its authoring copy (the origin assessment was deleted) but still

@@ -82,6 +82,18 @@ RSpec.describe Course::Assessment::Marketplace::PreviewContainerService, type: :
           expect(Course.containing_user(other_user)).not_to include(container)
         end
       end
+
+      # The explainer is the only thing on the sandbox home page — the container has no
+      # announcements, todos or activity of its own, and its sidebar is de-linked — so a container
+      # created without it is a blank page. Asserted by content rather than against the locale
+      # value itself, which would only restate the service's own lookup.
+      it 'is created with the sandbox explainer as its description' do
+        container = described_class.container_course
+
+        expect(container.description).to include('<strong>Marketplace Preview Sandbox</strong>')
+        expect(container.description).to include('Nothing here is real.')
+        expect(container.description).to include('cleared automatically')
+      end
     end
   end
 end
