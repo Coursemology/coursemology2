@@ -21,6 +21,20 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     );
   }
 
+  publishNewVersion(
+    assessmentId: number,
+  ): Promise<AxiosResponse<{ published_at: string }>> {
+    return this.client.post(
+      `/courses/${this.courseId}/assessments/${assessmentId}/marketplace_listing/versions`,
+    );
+  }
+
+  applyLatestVersion(assessmentId: number): Promise<AxiosResponse> {
+    return this.client.post(
+      `/courses/${this.courseId}/assessments/${assessmentId}/marketplace_adoption/apply_latest_version`,
+    );
+  }
+
   index(): Promise<
     AxiosResponse<{
       listings: MarketplaceListing[];
@@ -43,6 +57,16 @@ export default class MarketplaceAPI extends BaseCourseAPI {
 
   fetchListing(id: number): Promise<AxiosResponse> {
     return this.client.get(`${this.#urlPrefix}/listings/${id}`);
+  }
+
+  launchPreview(id: number): Promise<AxiosResponse<{ url: string }>> {
+    return this.client.post(`${this.#urlPrefix}/listings/${id}/launch_preview`);
+  }
+
+  resetPreviewSubmission(assessmentId: number): Promise<AxiosResponse> {
+    return this.client.patch(
+      `/courses/${this.courseId}/assessments/${assessmentId}/preview_submission`,
+    );
   }
 
   fetchQuestion(listingId: number, questionId: number): Promise<AxiosResponse> {

@@ -17,13 +17,19 @@ interface AdminNavigablePageProps {
 const AdminNavigablePage = (props: AdminNavigablePageProps): JSX.Element => {
   const location = useLocation();
   const navigate = useNavigate();
+  const activePath =
+    props.paths.find(
+      (path) =>
+        location.pathname === path.path ||
+        location.pathname.startsWith(`${path.path}/`),
+    )?.path ?? false;
 
   return (
     <Page unpadded>
       <Tabs
         className="sticky top-0 z-50 bg-white border-only-b-neutral-200"
         onChange={(_, value): void => navigate(value)}
-        value={location.pathname}
+        value={activePath}
       >
         {props.paths.map((path) => (
           <Tab

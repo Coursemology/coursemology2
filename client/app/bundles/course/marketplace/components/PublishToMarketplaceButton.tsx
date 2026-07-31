@@ -23,6 +23,7 @@ const PublishToMarketplaceButton = ({
 }: Props): JSX.Element | null => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [versionOpen, setVersionOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const listed = assessment.isPublishedToMarketplace;
 
@@ -46,8 +47,31 @@ const PublishToMarketplaceButton = ({
     }
   };
 
+  const confirmNewVersion = async (): Promise<void> => {
+    setSubmitting(true);
+    try {
+      await CourseAPI.marketplace.publishNewVersion(assessment.id);
+      toast.success(t(translations.newVersionPublished));
+      setVersionOpen(false);
+    } catch {
+      toast.error(t(translations.newVersionFailed));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
+      {listed && (
+        <Button
+          color="primary"
+          onClick={(): void => setVersionOpen(true)}
+          variant="outlined"
+        >
+          {t(translations.publishNewVersion)}
+        </Button>
+      )}
+
       <Button
         color={listed ? 'error' : 'primary'}
         onClick={(): void => setOpen(true)}
@@ -75,6 +99,18 @@ const PublishToMarketplaceButton = ({
               : translations.publishConfirmBody,
           )}
         </PromptText>
+      </Prompt>
+
+      <Prompt
+        disabled={submitting}
+        onClickPrimary={confirmNewVersion}
+        onClose={(): void => setVersionOpen(false)}
+        open={versionOpen}
+        primaryColor="primary"
+        primaryLabel={t(translations.publishNewVersion)}
+        title={t(translations.publishNewVersionConfirmTitle)}
+      >
+        <PromptText>{t(translations.publishNewVersionConfirmBody)}</PromptText>
       </Prompt>
     </>
   );

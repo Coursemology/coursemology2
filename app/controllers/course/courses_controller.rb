@@ -45,12 +45,35 @@ class Course::CoursesController < Course::Controller
     #
     # To re-enable, restore the original condition.
     @home_redirects_to_learn = false
+
+    # The marketplace sandbox lock is per-viewer, not per-course. A system administrator curates the
+    # container from inside it — its version snapshots and the authoring copies RestoreAuthoringJob
+    # rebuilds there — so the sandbox must stay fully navigable for them, and the read-only banner
+    # would be a lie on pages they can edit. Mirrors the `!user&.administrator?` guard that gates the
+    # same freeze in Course::AssessmentMarketplaceAbilityComponent#define_permissions.
+    #
+    # An administrator's own CourseUser in the container is an artefact of having launched a preview
+    # (Course::Assessment::Marketplace::PreviewLaunchService enrols as `manager`, the lowest role that
+    # can attempt, grade and publish); it is not a role they were given, so the sidebar does not
+    # present them as a member of the sandbox.
+    @preview_sandbox_admin = current_course.preview? && current_user&.administrator?
+    @preview_restricted = current_course.preview? && !@preview_sandbox_admin
   end
 
   protected
 
   def publicly_accessible?
     Set[:index, :show, :sidebar].include?(action_name.to_sym)
+  end
+
+  # The layout payload is fetched on every course page, so the previewer's submission page needs it.
+  #
+  # `show` is deliberately NOT here. Its payload lists `current_course.managers`, which in the
+  # container is every previewer in the instance, and the sandbox explainer it renders now has no
+  # previewer audience: `PreviewLaunchService` lands them on the submission, `PreviewCourseBanner`
+  # says the same thing there, and the de-linked sidebar never offers the home page.
+  def preview_sandbox_accessible?
+    action_name.to_sym == :sidebar
   end
 
   private

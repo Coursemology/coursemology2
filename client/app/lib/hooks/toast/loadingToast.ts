@@ -1,8 +1,10 @@
+import { ReactNode } from 'react';
+
 import { DEFAULT_TOAST_TIMEOUT_MS } from 'lib/components/wrappers/ToastProvider';
 
 import toast from './toast';
 
-type Updater = (message: string) => void;
+type Updater = (message: ReactNode) => void;
 
 export interface LoadingToast {
   update: Updater;

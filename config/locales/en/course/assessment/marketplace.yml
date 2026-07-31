@@ -1,0 +1,23 @@
+en:
+  course:
+    assessment:
+      marketplace:
+        preview_container:
+          description_html: |
+            <p>Welcome to the <strong>Marketplace Preview Sandbox</strong> — a throwaway course for trying out
+            assessments shared on the Assessment Marketplace before you adopt one into your own course.</p>
+            <p>You are here because you launched a hands-on preview. The assessment opens in its own tab, where
+            you can answer, submit and grade it exactly as your students and graders would.</p>
+            <ul>
+              <li><strong>Nothing here is real.</strong> Attempts, grades and points stay in this sandbox and
+              never reach any course — yours or the author's.</li>
+              <li><strong>The content is read-only.</strong> Each assessment here is a frozen copy of its
+              listing and cannot be edited from the sandbox.</li>
+              <li><strong>Attempts are cleared automatically</strong> once they have been left alone for a
+              while. To start over on an assessment you have already submitted, use the
+              <strong>Reset submission</strong> button in the banner above your submission.</li>
+              <li><strong>Sidebar navigation is disabled.</strong> The sandbox exists only to rehearse the
+              assessment you opened.</li>
+            </ul>
+            <p>When you are ready to use an assessment for real, head back to your own course and duplicate it
+            from the Marketplace.</p>

@@ -35,10 +35,31 @@ export default defineMessages({
     id: 'course.marketplace.removedToast',
     defaultMessage: 'Removed from the marketplace.',
   },
+  publishNewVersion: {
+    id: 'course.marketplace.publishNewVersion',
+    defaultMessage: 'Publish new version',
+  },
+  publishNewVersionConfirmTitle: {
+    id: 'course.marketplace.publishNewVersionConfirmTitle',
+    defaultMessage: 'Publish new version?',
+  },
+  publishNewVersionConfirmBody: {
+    id: 'course.marketplace.publishNewVersionConfirmBody',
+    defaultMessage:
+      'This freezes the current content of this assessment as the next version and serves it to the marketplace from now on. Courses that already copied this assessment will be told an update is available.',
+  },
+  newVersionPublished: {
+    id: 'course.marketplace.newVersionPublishedToast',
+    defaultMessage: 'New version published.',
+  },
+  newVersionFailed: {
+    id: 'course.marketplace.newVersionFailedToast',
+    defaultMessage: 'Failed to publish a new version.',
+  },
   deleteWarning: {
     id: 'course.marketplace.deleteWarning',
     defaultMessage:
-      'This assessment is in the Assessment Marketplace. Deleting it removes it from the marketplace and deletes its adoption history. Existing copies in other courses are unaffected.',
+      'This assessment is in the Assessment Marketplace. The listing is not removed: it stays browsable and keeps serving its last published version, and its adoption history and the copies in other courses are preserved. What you lose is the source assessment, so no new version can be published for this listing. To have this assessment unlisted from the marketplace, <mailto>contact us</mailto>.',
   },
   pageTitle: {
     id: 'course.marketplace.pageTitle',
@@ -72,6 +93,44 @@ export default defineMessages({
   duplicateAssessment: {
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
+  },
+  tryItHandsOn: {
+    id: 'course.marketplace.tryItHandsOn',
+    defaultMessage: 'Try it hands-on',
+  },
+  tryItHandsOnConfirmTitle: {
+    id: 'course.marketplace.tryItHandsOnConfirmTitle',
+    defaultMessage: 'Try it hands-on?',
+  },
+  tryItHandsOnConfirmBody: {
+    id: 'course.marketplace.tryItHandsOnConfirmBody',
+    defaultMessage:
+      'This opens a hands-on preview in a separate sandbox, in a new tab. You may be briefly redirected to sign in. Your own course is not affected.',
+  },
+  launchPreviewFailed: {
+    id: 'course.marketplace.launchPreviewFailed',
+    defaultMessage: 'Could not launch the preview.',
+  },
+  resetSubmission: {
+    id: 'course.marketplace.resetSubmission',
+    defaultMessage: 'Reset submission',
+  },
+  resetSubmissionConfirmTitle: {
+    id: 'course.marketplace.resetSubmissionConfirmTitle',
+    defaultMessage: 'Reset your submission?',
+  },
+  resetSubmissionConfirmBody: {
+    id: 'course.marketplace.resetSubmissionConfirmBody',
+    defaultMessage:
+      'This clears all your answers for this assessment in the preview sandbox back to a blank state. You’ll stay on this page and can start answering again right away.',
+  },
+  resetSubmissionSuccess: {
+    id: 'course.marketplace.resetSubmissionSuccess',
+    defaultMessage: 'Submission reset.',
+  },
+  resetSubmissionFailed: {
+    id: 'course.marketplace.resetSubmissionFailed',
+    defaultMessage: 'Could not reset the submission.',
   },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
@@ -124,7 +183,7 @@ export default defineMessages({
   duplicateCompleted: {
     id: 'course.marketplace.duplicateCompleted',
     defaultMessage:
-      '{n, plural, one {Assessment duplicated} other {Assessments duplicated}}.',
+      '{n, plural, one {Assessment duplicated. } other {Assessments duplicated. }}',
   },
   duplicateFailed: {
     id: 'course.marketplace.duplicateFailed',
@@ -133,7 +192,8 @@ export default defineMessages({
   },
   viewDuplicatedAssessment: {
     id: 'course.marketplace.viewDuplicatedAssessment',
-    defaultMessage: 'View assessment',
+    defaultMessage:
+      '{n, plural, one {View assessment} other {View assessments}}',
   },
   selectToDuplicate: {
     id: 'course.marketplace.selectToDuplicate',

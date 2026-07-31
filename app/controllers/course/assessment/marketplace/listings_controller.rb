@@ -4,13 +4,15 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def index
     ActsAsTenant.without_tenant do
-      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on
-      # the acting-as record. The source course is deliberately NOT preloaded: the MVP exposes no
-      # attribution, so nothing in the view reaches for it.
+      # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on the
+      # acting-as record. Reads go through the current version snapshot, never the authoring copy: the
+      # marketplace serves what a duplicate would give you. `where.not(current_version_id:
+      # nil)` guards a published listing with no snapshot, whose nil `current_version` would 500 browse.
       @listings = Course::Assessment::Marketplace::Listing.published.
-                  includes(assessment: :lesson_plan_item).to_a
+                  where.not(current_version_id: nil).
+                  includes(current_version: { assessment: :lesson_plan_item }).to_a
       @adoption_counts = adoption_counts(@listings.map(&:id))
-      @question_counts = question_counts(@listings.map(&:assessment_id))
+      @question_counts = question_counts(@listings.map { |listing| listing.current_version.assessment_id })
       @destination_tabs = destination_tabs
     end
   end
@@ -26,13 +28,34 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def show
     ActsAsTenant.without_tenant do
-      @listing = Course::Assessment::Marketplace::Listing.published.includes(:assessment).find_by(id: params[:id])
+      @listing = Course::Assessment::Marketplace::Listing.published.
+                 includes(current_version: :assessment).find_by(id: params[:id])
       raise CanCan::AccessDenied unless @listing
 
-      @assessment = @listing.assessment
-      authorize!(:preview_in_marketplace, @assessment)
+      # The SNAPSHOT, never the authoring copy.
+      @assessment = @listing.current_version&.assessment
+      raise CanCan::AccessDenied unless @assessment
+
+      authorize!(:preview_in_marketplace, @listing)
       @destination_tabs = destination_tabs
       render 'show'
+    end
+  end
+
+  def launch_preview
+    ActsAsTenant.without_tenant do
+      @listing = Course::Assessment::Marketplace::Listing.published.
+                 includes(current_version: :assessment).find_by(id: params[:id])
+      raise CanCan::AccessDenied unless @listing
+
+      # A preview rehearses the SNAPSHOT, never the authoring copy — the same row a duplicate would
+      # copy. Guarded here rather than in the service so a published listing with no
+      # snapshot is denied instead of crashing on a nil deep inside provisioning.
+      raise CanCan::AccessDenied unless @listing.current_version&.assessment
+
+      authorize!(:preview_in_marketplace, @listing)
+      url = Course::Assessment::Marketplace::PreviewLaunchService.launch(@listing, current_user)
+      render json: { url: url }
     end
   end
 
@@ -67,11 +90,12 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
 
   def authorized_listings
     listings = ActsAsTenant.without_tenant do
-      Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).includes(:assessment)
+      Course::Assessment::Marketplace::Listing.published.where(id: duplicate_params[:listing_ids]).
+        includes(current_version: :assessment)
     end
     raise CanCan::AccessDenied if listings.empty?
 
-    listings.each { |listing| authorize!(:duplicate_from_marketplace, listing.assessment) }
+    listings.each { |listing| authorize!(:duplicate_from_marketplace, listing) }
     authorize!(:duplicate_to, current_course)
     listings
   end

@@ -37,6 +37,10 @@ const translations = defineMessages({
     id: 'system.admin.admin.AdminNavigator.marketplace',
     defaultMessage: 'Marketplace Access',
   },
+  marketplaceListings: {
+    id: 'system.admin.admin.AdminNavigator.marketplaceListings',
+    defaultMessage: 'Marketplace Listings',
+  },
   systemAdminPanel: {
     id: 'system.admin.admin.AdminNavigator.systemAdminPanel',
     defaultMessage: 'System Admin Panel',
@@ -73,6 +77,11 @@ const AdminNavigator = (): JSX.Element => {
           icon: <Storefront />,
           title: t(translations.marketplace),
           path: '/admin/marketplace_allowlist_rules',
+        },
+        {
+          icon: <Storefront />,
+          title: t(translations.marketplaceListings),
+          path: '/admin/marketplace_listings',
         },
         {
           icon: <Chat />,

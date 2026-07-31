@@ -19,6 +19,9 @@ class Course::Assessment < ApplicationRecord
   after_create :set_linkable_tree_id
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab
+  # See #rebuild_marketplace_listing_authoring for why the pair is split across the two callbacks.
+  before_destroy :remember_orphaned_marketplace_listing
+  after_commit :rebuild_marketplace_listing_authoring, on: :destroy
 
   enum :randomization, { prepared: 0 }
 
@@ -82,8 +85,12 @@ class Course::Assessment < ApplicationRecord
   has_one :gradebook_assessment_contribution,
           class_name: 'Course::Gradebook::AssessmentContribution',
           dependent: :destroy, inverse_of: :assessment
+  # `dependent: :nullify`, NOT `:destroy`: deleting the source assessment must ORPHAN the listing,
+  # not destroy it along with its version chain and every adopter's adoption record. The model
+  # callback fires before the DB, so this and the FK's `on_delete: :nullify` must move together.
   has_one :marketplace_listing, class_name: 'Course::Assessment::Marketplace::Listing',
-                                inverse_of: :assessment, dependent: :destroy
+                                foreign_key: :authoring_assessment_id,
+                                inverse_of: :authoring_assessment, dependent: :nullify
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
   has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
@@ -125,6 +132,26 @@ class Course::Assessment < ApplicationRecord
     joins(:lesson_plan_item).
       merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
+
+  # Every assessment title already taken in a course, downcased for case-insensitive comparison.
+  #
+  # An assessment's title lives on its lesson-plan item (`acts_as_lesson_plan_item`), so this joins
+  # rather than plucking a column off `course_assessments`. Scoped to the whole COURSE, not a tab:
+  # a duplicate title two tabs away is exactly as confusing as one sitting next to it.
+  #
+  # Downcased because "Lab 3" and "lab 3" side by side is the confusion the collision rule exists to
+  # prevent — a case-sensitive comparison would let them coexist.
+  #
+  # @param [Course] course
+  # @param [Integer, nil] except_id an assessment to leave out — the in-place update overwrites its
+  #   own title and must not collide with itself.
+  # @return [Array<String>]
+  def self.titles_in_course(course, except_id: nil)
+    scope = course.assessments.joins(:lesson_plan_item)
+    scope = scope.where.not(id: except_id) if except_id
+
+    scope.pluck('LOWER(course_lesson_plan_items.title)')
+  end
 
   # @!method with_submissions_by(creator)
   #   Includes the submissions by the provided user.
@@ -183,6 +210,36 @@ class Course::Assessment < ApplicationRecord
 
   def to_partial_path
     'course/assessment/assessments/assessment'
+  end
+
+  # Splits this assessment's submissions into those by real students of its course and everything
+  # else, which is what decides whether its content may be replaced in place.
+  #
+  # A LEFT JOIN, deliberately: a submission whose author has since left the course has no
+  # `course_users` row, and an INNER JOIN would drop it from BOTH counts - making a copy look
+  # untouched when it is not. It lands in `other`.
+  #
+  # Submissions carry no `course_user_id`, so course membership is resolved through
+  # `creator_id` + `course_id`. `role = 0` is `student` on Course::CourseUser's enum.
+  #
+  # Workflow state is deliberately not considered: an untouched `attempting` draft is still a
+  # student's attempt, and destroying it would be destroying their work.
+  #
+  # @return [Hash{Symbol => Integer}]
+  def submission_counts_by_author
+    sql = self.class.sanitize_sql_array([<<-SQL.squish, course.id, id])
+      SELECT
+        COUNT(*) FILTER (WHERE cu.id IS NOT NULL AND cu.role = 0 AND cu.phantom = FALSE)
+          AS student_count,
+        COUNT(*) FILTER (WHERE cu.id IS NULL OR cu.role <> 0 OR cu.phantom = TRUE)
+          AS other_count
+      FROM course_assessment_submissions s
+      LEFT JOIN course_users cu ON cu.user_id = s.creator_id AND cu.course_id = ? AND cu.deleted_at IS NULL
+      WHERE s.assessment_id = ?
+    SQL
+    row = self.class.connection.select_one(sql)
+
+    { student: row['student_count'].to_i, other: row['other_count'].to_i }
   end
 
   # Update assessment mode from params.
@@ -315,7 +372,71 @@ class Course::Assessment < ApplicationRecord
     ([self] + linked_assessments.includes(:course, :submissions)).uniq
   end
 
+  # Makes this assessment a standalone link tree of one.
+  #
+  # Marketplace distribution is not "linking". `initialize_duplicate` propagates the source's
+  # `linkable_tree_id` and rebuilds `linked_assessments` — right for course duplication, wrong here:
+  # without this the container snapshot, the origin, and every adopter's copy become mutual
+  # `linked_assessments`, exposing ids across unrelated courses and crashing onward duplication.
+  #
+  # Called on the snapshot at publish time and on the adopted copy at duplication time.
+  def detach_from_link_tree!
+    links.destroy_all
+    reverse_links.destroy_all
+    update_column(:linkable_tree_id, id)
+  end
+
+  # Whether this assessment is a published version of some listing — one of the immutable snapshots
+  # `Course::Assessment::Marketplace::PublishService` duplicates into the container course.
+  #
+  # A snapshot is an existing listing's content, never a source assessment, so it must not be
+  # publishable in its own right: the listing that would create has its source frozen inside the
+  # container, so nobody could edit it or cut a further version. Nothing on the assessment row says
+  # this — a snapshot carries the origin's title verbatim — so the version rows are the only tell.
+  #
+  # Deliberately keyed on the version rows rather than on the container's `preview` flag: an
+  # assessment authored directly in the container is not a snapshot and stays publishable.
+  #
+  # @return [Boolean]
+  def marketplace_snapshot?
+    Course::Assessment::Marketplace::ListingVersion.exists?(assessment_id: id)
+  end
+
   private
+
+  # The listing this assessment authors, if losing it would orphan a listing that can be rebuilt.
+  #
+  # Read here rather than in the `after_commit` because `dependent: :nullify` clears the association
+  # during the destroy — with `update_columns`, which fires no callbacks, so the listing side offers
+  # nothing to hook. Only listings holding a published version are remembered: the rebuild duplicates
+  # the latest snapshot, so one that never published has nothing to rebuild from.
+  def remember_orphaned_marketplace_listing
+    listing = marketplace_listing
+    @orphaned_marketplace_listing_id = listing&.current_version_id ? listing.id : nil
+  end
+
+  # Rebuilds the listing's authoring copy in the marketplace container as soon as its source is gone.
+  # The marketplace serves the snapshot either way — what orphaning costs is the ability to publish a
+  # new version, which an admin would otherwise learn only by visiting the listings table. Doing it
+  # automatically makes the manual "Rebuild source assessment" action only ever a retry.
+  #
+  # This is the single choke point for both ways a listing loses its source: a course deletion
+  # cascades to its assessments through Ruby `dependent: :destroy` (course -> categories -> tabs ->
+  # assessments), so it arrives here too.
+  #
+  # `after_commit`, never `after_destroy`: a course deletion destroys every one of its assessments
+  # inside one transaction, so a job enqueued mid-destroy could be picked up before the deletion is
+  # durable — or after a sibling's failure rolled the whole thing back, rebuilding a listing that was
+  # never orphaned at all.
+  #
+  # `User.system` because there is no acting user in a cascade, and the rebuild has to be attributable
+  # to something: the job stamps the duplicated copy's creator and the listing's updater.
+  def rebuild_marketplace_listing_authoring
+    return if @orphaned_marketplace_listing_id.nil?
+
+    Course::Assessment::Marketplace::RestoreAuthoringJob.
+      perform_later(@orphaned_marketplace_listing_id, current_user: User.system)
+  end
 
   # Parents the assessment under its duplicated parent tab, if it exists.
   #

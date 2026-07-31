@@ -1571,6 +1571,27 @@
   "course.assessment.generation.untitledQuestion": {
     "defaultMessage": "제목 없는 문항"
   },
+  "course.assessment.marketplaceUpdateCompleted": {
+    "defaultMessage": "평가가 최신 버전으로 업데이트되었습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmBody": {
+    "defaultMessage": "이 작업은 이 평가의 문항과 자료를 {latest}에 게시된 버전으로 대체합니다. 코스 내 위치, 마감일, 게시 여부는 유지됩니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmDeletion": {
+    "defaultMessage": "이 평가의 {count, plural, one {#개의 테스트 제출} other {#개의 테스트 제출}}이 삭제됩니다. 학생 제출물은 없습니다."
+  },
+  "course.assessment.marketplaceUpdateConfirmTitle": {
+    "defaultMessage": "이 평가를 업데이트하시겠습니까?"
+  },
+  "course.assessment.marketplaceUpdateFailed": {
+    "defaultMessage": "이 평가를 업데이트할 수 없습니다."
+  },
+  "course.assessment.marketplaceUpdateInPlace": {
+    "defaultMessage": "이 평가 업데이트"
+  },
+  "course.assessment.marketplaceUpdateStarted": {
+    "defaultMessage": "이 평가를 업데이트하는 중…"
+  },
   "course.assessment.question.multipleResponses.showOptions": {
     "defaultMessage": "옵션 보기"
   },
@@ -4250,6 +4271,15 @@
   "course.assessments.index.hasTodo": {
     "defaultMessage": "할 일 있음"
   },
+  "course.assessments.index.marketplaceAuthoring": {
+    "defaultMessage": "원본 평가"
+  },
+  "course.assessments.index.marketplaceAuthoringHint": {
+    "defaultMessage": "등록 항목 ID {listingId} · 수정 가능한 작업 사본이며, 발행된 버전이 아닙니다"
+  },
+  "course.assessments.index.marketplaceAuthoringHintWithSource": {
+    "defaultMessage": "등록 항목 ID {listingId} · 수정 가능한 작업 사본이며, 발행된 버전이 아닙니다 · 출처: {source}"
+  },
   "course.assessments.index.neededFor": {
     "defaultMessage": "필요한 경우"
   },
@@ -6057,7 +6087,7 @@
     "defaultMessage": "마켓플레이스에서 제거되었습니다."
   },
   "course.marketplace.deleteWarning": {
-    "defaultMessage": "이 평가는 평가 마켓플레이스에 있습니다. 삭제하면 마켓플레이스에서 제거되고 채택 기록도 삭제됩니다. 다른 강좌의 기존 복사본은 영향을 받지 않습니다."
+    "defaultMessage": "이 평가는 평가 마켓플레이스에 있습니다. 마켓플레이스 등록 항목은 제거되지 않습니다. 계속 조회할 수 있고 마지막으로 발행된 버전을 계속 제공하며, 채택 기록과 다른 강좌의 기존 복사본도 그대로 유지됩니다. 잃게 되는 것은 원본 평가이므로 이후 이 등록 항목에 새 버전을 발행할 수 없습니다. 이 평가를 마켓플레이스에서 내리려면 <mailto>문의해 주세요</mailto>."
   },
   "course.marketplace.pageTitle": {
     "defaultMessage": "평가 마켓플레이스"
@@ -6124,6 +6154,21 @@
   },
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "검색과 일치하는 평가가 없습니다."
+  },
+  "course.marketplace.resetSubmission": {
+    "defaultMessage": "제출 재설정"
+  },
+  "course.marketplace.resetSubmissionConfirmTitle": {
+    "defaultMessage": "제출을 재설정하시겠습니까?"
+  },
+  "course.marketplace.resetSubmissionConfirmBody": {
+    "defaultMessage": "미리보기 샌드박스에서 이 평가에 작성한 답안이 모두 빈 상태로 초기화됩니다. 이 페이지에 그대로 머물면서 바로 다시 답안을 작성할 수 있습니다."
+  },
+  "course.marketplace.resetSubmissionSuccess": {
+    "defaultMessage": "제출이 재설정되었습니다."
+  },
+  "course.marketplace.resetSubmissionFailed": {
+    "defaultMessage": "제출을 재설정할 수 없습니다."
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "다운로드에 실패했습니다. 나중에 다시 시도하세요."

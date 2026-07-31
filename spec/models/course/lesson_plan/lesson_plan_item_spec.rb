@@ -67,6 +67,21 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       end
     end
 
+    describe 'callbacks from Course::LessonPlan::Item::CikgoPushConcern' do
+      # The push runs in `after_destroy_commit`, so it fires only once the whole destroy has
+      # committed — by which point the course row is gone and `item.course` reloads to nil. A bare
+      # item cannot reproduce it: `pushable?` short-circuits on a nil actable. It needs a real
+      # pushable actable, whose cascade reaches the item through the assessment's `acts_as`
+      # belongs_to — which is also why `destroyed_by_association` is nil and unusable as the guard.
+      it 'does not raise when the item is destroyed along with its course' do
+        course_to_destroy = create(:course)
+        create(:assessment, :published, course: course_to_destroy)
+
+        expect { course_to_destroy.destroy }.not_to raise_error
+        expect(Course.exists?(course_to_destroy.id)).to be false
+      end
+    end
+
     context 'when actable object is declared to have a todo' do
       describe 'callbacks from Course::LessonPlan::ItemTodoConcern' do
         let(:course) { create(:course) }

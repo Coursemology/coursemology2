@@ -38,11 +38,15 @@ export default function (state = initialState, action) {
       recording = false;
 
       /**
-       * When the user navigate to other path without stopping the recorder
-       * We need to help the user to stop
+       * When the user navigates to another path without stopping the recorder,
+       * help them stop it — but only if it was actually recording. Otherwise
+       * stopRecord() rejects with "Recorder has already stopped", and since
+       * nothing here awaits the promise, that becomes an unhandled rejection
+       * (surfaces as a full-page crash under React 18 StrictMode's dev-only
+       * double mount/unmount, since it fires on every unrecorded Voice question).
        */
-      if (recorderComponentsCount === 0) {
-        recorderHelper.stopRecord();
+      if (recorderComponentsCount === 0 && recorderHelper.isRecording()) {
+        recorderHelper.stopRecord().catch(() => {});
       }
       return {
         ...state,

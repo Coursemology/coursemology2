@@ -26,7 +26,7 @@ import assessmentsTranslations from '../../../translations';
 import {
   enterStudentView,
   exitStudentView,
-  fetchSubmission,
+  loadSubmissionPage,
   purgeSubmissionStore,
 } from '../../actions';
 import ProgressPanel from '../../components/ProgressPanel';
@@ -40,6 +40,7 @@ import {
 import translations from '../../translations';
 
 import BlockedSubmission from './BlockedSubmission';
+import PreviewAutogradingBanner from './PreviewAutogradingBanner';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import SubmissionForm from './SubmissionForm';
 import TimeLimitBanner from './TimeLimitBanner';
@@ -59,7 +60,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
-    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+    dispatch(loadSubmissionPage(match.params.submissionId, setSessionId));
   }
 
   componentWillUnmount() {
@@ -174,6 +175,7 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <Page className="space-y-5">
         {this.renderTimeLimitBanner()}
+        <PreviewAutogradingBanner />
         {this.renderAssessment()}
         {isBlockedInStudentView ? (
           <div className="flex flex-col items-center py-16">

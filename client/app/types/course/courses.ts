@@ -113,6 +113,10 @@ export interface CourseLayoutData {
   courseUserRole?: CourseUserRole;
   userAvatarUrl?: string;
   homeRedirectsToLearn?: boolean;
+  isPreview?: boolean;
+  // Whether the marketplace sandbox's read-only lock applies to THIS viewer. False for a system
+  // administrator, who curates the container from inside it, while `isPreview` stays true for them.
+  isPreviewRestricted?: boolean;
   sidebar?: SidebarItemData[];
   adminSidebar?: SidebarItemData[];
   manageEmailSubscriptionUrl?: string;

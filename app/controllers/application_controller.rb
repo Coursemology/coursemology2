@@ -14,6 +14,9 @@ class ApplicationController < ActionController::Base
   include ApplicationAbilityConcern
   include ApplicationAnnouncementsConcern
   include ApplicationPaginationConcern
+  # Last, so its `before_action` runs after the tenant is deduced and the user authenticated — both of
+  # which it reads.
+  include ApplicationPreviewSandboxConcern
 
   rescue_from AuthenticationError, with: :handle_authentication_error
   rescue_from IllegalStateError, with: :handle_illegal_state_error

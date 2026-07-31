@@ -19,14 +19,29 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
       assessment
     end
   end
-  let!(:listing) do
-    # NOTE: the factory has no :published trait — `published { true }` is a default attribute
-    # (spec/factories/course_assessment_marketplace_listings.rb). Do NOT pass `:published`.
+  let!(:listing) { publish(source_assessment) }
+  # The controller serves the container SNAPSHOT, so every question assertion must
+  # target the snapshot's copy, never the authoring original.
+  let(:question) { snapshot_question(listing) }
+
+  # Publishes through the real service so the served content is a genuine copy-on-publish snapshot.
+  def publish(assessment)
     ActsAsTenant.without_tenant do
-      create(:course_assessment_marketplace_listing, assessment: source_assessment)
+      Course::Assessment::Marketplace::PublishService.publish(assessment, assessment.course.creator)
     end
   end
-  let(:question) { source_assessment.questions.first }
+
+  def snapshot_question(listing)
+    ActsAsTenant.without_tenant { listing.current_version.assessment.questions.first }
+  end
+
+  # Builds an assessment in the source instance via the block, publishes it, and returns
+  # [listing, snapshot_question].
+  def publish_with_question(&block)
+    assessment = ActsAsTenant.with_tenant(source_instance, &block)
+    listing = publish(assessment)
+    [listing, snapshot_question(listing)]
+  end
 
   # Destination-side data + the request run under the destination tenant. with_tenant (controller
   # variant) sets ActsAsTenant.current_tenant AND the request host, so every tenant-scoped create
@@ -70,8 +85,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes programming template files and test-case buckets' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(
           :course_assessment_question_programming,
@@ -80,10 +94,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
           private_test_case_count: 1,
           evaluation_test_case_count: 1
         )
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {
@@ -96,14 +107,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes text-response solutions and attachment settings' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(:course_assessment_question_text_response, :exact_match_solution, assessment: assessment)
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {
@@ -115,14 +122,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes rubric categories and criteria' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(:course_assessment_question_rubric_based_response, assessment: assessment)
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {
@@ -134,14 +137,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes forum post requirements' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(:course_assessment_question_forum_post_response, assessment: assessment)
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {
@@ -151,14 +150,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes voice response with an empty detail object' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(:course_assessment_question_voice_response, assessment: assessment)
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {
@@ -169,14 +164,10 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
 
     it 'serializes scribing with an imageUrl key (null when no attachment)' do
-      question = nil
-      listing = ActsAsTenant.with_tenant(source_instance) do
+      listing, question = publish_with_question do
         assessment = create(:assessment, course: create(:course, instance: source_instance))
         create(:course_assessment_question_scribing, assessment: assessment)
-        question = assessment.questions.first
-        ActsAsTenant.without_tenant do
-          create(:course_assessment_marketplace_listing, assessment: assessment)
-        end
+        assessment
       end
 
       get :show, as: :json, params: {

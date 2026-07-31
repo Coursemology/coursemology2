@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 json.locale I18n.locale
 json.timeZone ActiveSupport::TimeZone::MAPPING[user_time_zone]
+# The courseless counterpart to the same field in `course/courses/sidebar.json.jbuilder`, for the
+# navigation shell that renders without a course. A string comparison against the loaded tenant, so it
+# costs nothing on an endpoint every page hits.
+json.isPreviewRestricted preview_sandbox_locked?
 
 if user_signed_in?
   my_courses = Course.containing_user(current_user).ordered_by_start_at

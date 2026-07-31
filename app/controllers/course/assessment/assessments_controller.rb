@@ -6,14 +6,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   include Course::Assessment::Question::KoditsuQuestionConcern
   include Course::Assessment::KoditsuAssessmentInvitationConcern
 
-  before_action :load_submissions, only: [:show]
+  before_action :load_submissions, only: [:show], unless: :crumb_request?
   after_action :create_koditsu_invitation_job, only: [:update]
   after_action :create_fetch_koditsu_submissions_job, only: [:update]
 
   include Course::Assessment::MonitoringConcern
   include Course::Statistics::CountsConcern
 
-  before_action :load_question_duplication_data, only: [:show, :reorder]
+  before_action :load_question_duplication_data, only: [:show, :reorder], unless: :crumb_request?
 
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
@@ -30,15 +30,22 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     end
 
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
+    @marketplace_container = current_course.preview? && can?(:manage, :all)
+    @marketplace_versions = marketplace_version_labels if @marketplace_container
   end
 
   def show
     @assessment_time = @assessment.time_for(current_course_user)
     return render 'authenticate' unless can_access_assessment?
+    return render 'crumb' if crumb_request?
 
     @question_assessments = @assessment.question_assessments.with_question_actables
     @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
     @questions = @assessment.questions.includes({ actable: :test_cases })
+    @marketplace_update = Course::Assessment::Marketplace::Adoption.update_notice_for(@assessment.id)
+    # Same gate and same labels as the index: opening a container row must not lose the identity the
+    # row carried, since every snapshot and working copy there shares one title and one tab.
+    @marketplace_version = marketplace_version_label if current_course.preview? && can?(:manage, :all)
 
     @requirements = @assessment.specific_conditions.map do |condition|
       {
@@ -249,6 +256,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   protected
 
+  # Both breadcrumb handles on a preview submission page fetch `show`, so the previewer needs it —
+  # but only for a title, and only for the snapshot they were handed. Not the page: a previewer is a
+  # `manager`, and `show` serves a manager the whole authoring surface. The index is not here either:
+  # it is the whole container, one row per published snapshot and per restored authoring copy, each
+  # with an Attempt button.
+  def preview_sandbox_accessible?
+    crumb_request? && previewable_assessment?(params[:id])
+  end
+
   def load_assessment_options
     return super if skip_tab_filter?
 
@@ -256,6 +272,86 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   private
+
+  # Whether this `show` is asking only for what a breadcrumb renders — the assessment's title and its
+  # tab's. Both crumb handles on any assessment page fetch `show`, and so does the assessment page
+  # itself; one endpoint serving both is what made the marketplace sandbox's crumb allowance a licence
+  # to read the authoring surface. Splitting them on the request rather than on the viewer keeps the
+  # payload the same for everyone and saves the page's ~50 queries on a fetch that renders two strings.
+  #
+  # @return [Boolean]
+  def crumb_request?
+    action_name.to_sym == :show && params[:crumb].present?
+  end
+
+  # Drives the view-only version badge on the container course's assessment index. Every published
+  # snapshot keeps its original title and shares one tab, so without it an admin sees an
+  # undifferentiated pile of identically-named assessments.
+  #
+  # Skipped everywhere else: the index is a hot path used by every course, and the badge is noise for
+  # the previewers enrolled into the container as managers. `:manage, :all` is what excludes them —
+  # course managers hold a blanket `can :manage, Course`, which satisfies any `Course`-subject ability
+  # but never the `:all` subject (Ability#initialize grants that to administrators only).
+  #
+  # @return [Hash{Integer => Hash}]
+  def marketplace_version_labels
+    Course::Assessment::Marketplace::ListingVersion.labels_for_assessments(@assessments.pluck(:id))
+  end
+
+  # The single-assessment reading of the same labels, for `show`. Nil for a container assessment that
+  # is neither a snapshot nor a listing's working copy — one authored in the container directly.
+  #
+  # A snapshot additionally carries where to edit the content it froze. Merged here rather than in
+  # `labels_for_assessments`, which the index shares and has no use for the field.
+  #
+  # @return [Hash, nil]
+  def marketplace_version_label
+    label = Course::Assessment::Marketplace::ListingVersion.
+            labels_for_assessments([@assessment.id])[@assessment.id]
+    return nil if label.nil?
+    # Skipped for the working copy: the source assessment is this page.
+    return label if label[:published_at].nil?
+
+    label.merge(source_assessment_url: source_assessment_url(label[:listing_id]))
+  end
+
+  # Absolute, and carrying the source assessment's own host: a course id only resolves on its
+  # instance's host, and a listing's source lives on whichever instance published it. Nil for an
+  # orphaned listing, whose source was deleted and whose rebuild has not landed.
+  #
+  # `without_tenant` is load-bearing. Viewing a container snapshot means the request is tenanted to
+  # the container's instance, so a source published elsewhere has its course filtered out and
+  # `assessment.course` returns nil rather than raising — dropping the link in the common case.
+  #
+  # @param [Integer] listing_id
+  # @return [String, nil]
+  def source_assessment_url(listing_id)
+    ActsAsTenant.without_tenant do
+      listing = Course::Assessment::Marketplace::Listing.
+                includes(authoring_assessment: { lesson_plan_item: { course: :instance } }).
+                find_by(id: listing_id)
+      assessment = listing&.authoring_assessment
+      next nil if assessment.nil?
+
+      course_assessment_url(assessment.course_id, assessment,
+                            **host_options(assessment.course.instance.host))
+    end
+  end
+
+  # `Instance#host` carries the port the app is publicly served on, and that port must be named
+  # explicitly: a controller's `url_options` always supplies `port: request.optional_port`, and Rails
+  # reads a port out of `host:` only when no `:port` key is present, so passing the host alone swaps
+  # in the port the request reached Rails on.
+  #
+  # Duplicated from System::Admin::MarketplaceListingsController, which sits above this commit in the
+  # stack; extract once the marketplace stack lands.
+  #
+  # @param [String] host an instance host, optionally carrying a port
+  # @return [Hash] the `host:`/`port:` options for a url on that instance
+  def host_options(host)
+    name, port = host.split(':', 2)
+    { host: name, port: port }
+  end
 
   def load_assessment_submission_counts
     @all_students = current_course.course_users.students.without_phantom_users

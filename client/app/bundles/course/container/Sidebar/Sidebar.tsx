@@ -36,6 +36,13 @@ const Sidebar = forwardRef<ComponentRef<typeof SidebarContainer>, SidebarProps>(
 
     const { t } = useTranslation();
 
+    // Home is the one sidebar entry that does not come from the `sidebar` payload, so the de-link
+    // `sidebar.json.jbuilder` applies to every other item never reached it. Withholding its path below
+    // makes `SidebarItem` render it as the same grey inert row as its neighbours.
+    const homeUrl = data.homeRedirectsToLearn
+      ? `${data.courseUrl}/home`
+      : data.courseUrl;
+
     return (
       <SidebarContainer
         ref={ref}
@@ -65,11 +72,7 @@ const Sidebar = forwardRef<ComponentRef<typeof SidebarContainer>, SidebarProps>(
           {data.sidebar && (
             <div>
               <SidebarItem.Home
-                to={
-                  data.homeRedirectsToLearn
-                    ? `${data.courseUrl}/home`
-                    : data.courseUrl
-                }
+                to={data.isPreviewRestricted ? undefined : homeUrl}
               />
 
               {data.sidebar.map((item) => (
