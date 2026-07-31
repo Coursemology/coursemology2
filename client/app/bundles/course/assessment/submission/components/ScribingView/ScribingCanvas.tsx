@@ -1331,13 +1331,23 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
         className="flex justify-center-safe bg-neutral-300 m-0 w-full outline-none items-center"
         style={{ minWidth: 800 }}
       >
-        {!scribingState[answerId]?.isCanvasLoaded ? <LoadingIndicator /> : null}
         <canvas
           ref={htmlCanvasRef}
           data-testid={`canvas-${answerId}`}
           id={`canvas-${answerId}`}
           style={styles.canvas}
         />
+        {/*
+         * Rendered AFTER the canvas, never before: once Fabric.js constructs the
+         * canvas, it wraps the raw <canvas> node in its own container div,
+         * re-parenting it out from under this div's direct children. A sibling
+         * rendered BEFORE the canvas would need React to `insertBefore` relative
+         * to that no-longer-direct-child node on every toggle (e.g. a redundant
+         * re-initialize resetting isCanvasLoaded) — which throws. Appending a
+         * trailing sibling never needs a reference node, so it's safe regardless
+         * of what Fabric has done to the canvas by then.
+         */}
+        {!scribingState[answerId]?.isCanvasLoaded ? <LoadingIndicator /> : null}
       </div>
     );
   },
