@@ -45,6 +45,9 @@ class Course::CoursesController < Course::Controller
     #
     # To re-enable, restore the original condition.
     @home_redirects_to_learn = false
+
+    @preview_sandbox_admin = current_course.preview? && current_user&.administrator?
+    @preview_restricted = current_course.preview? && !@preview_sandbox_admin
   end
 
   protected

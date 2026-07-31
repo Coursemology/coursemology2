@@ -127,6 +127,85 @@ RSpec.describe Course::CoursesController, type: :controller do
       end
     end
 
+    describe '#sidebar' do
+      render_views
+
+      let(:user) { create(:user) }
+      let(:course) { create(:course, published: true) }
+      let!(:course_user) { create(:course_student, course: course, user: user) }
+
+      subject { get :sidebar, as: :json, params: { id: course } }
+
+      before { controller_sign_in(controller, user) }
+
+      context 'when the course is a normal course' do
+        it 'includes path on sidebar items' do
+          subject
+          sidebar_items = JSON.parse(response.body)['sidebar']
+          expect(sidebar_items).to be_present
+          expect(sidebar_items).to all(have_key('path'))
+        end
+      end
+
+      context 'when the course is a preview course' do
+        # Own instance: at most one `preview: true` course may exist per instance.
+        let(:instance) { create(:instance) }
+        let(:course) { create(:course, published: true, preview: true) }
+
+        it 'omits path on sidebar items' do
+          subject
+          sidebar_items = JSON.parse(response.body)['sidebar']
+          expect(sidebar_items).to be_present
+          expect(sidebar_items).not_to include(a_hash_including('path'))
+        end
+
+        it 'reports the sandbox as restricted' do
+          subject
+          expect(JSON.parse(response.body)['isPreviewRestricted']).to eq(true)
+        end
+      end
+
+      context 'when a system administrator views a preview course' do
+        # Own instance: at most one `preview: true` course may exist per instance.
+        let(:instance) { create(:instance) }
+        let(:user) { create(:administrator) }
+        let(:course) { create(:course, published: true, preview: true) }
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        it 'keeps sidebar items linked' do
+          subject
+          sidebar_items = JSON.parse(response.body)['sidebar']
+          expect(sidebar_items).to be_present
+          expect(sidebar_items).to all(have_key('path'))
+        end
+
+        it 'reports the sandbox as unrestricted' do
+          subject
+          expect(JSON.parse(response.body)['isPreviewRestricted']).to eq(false)
+        end
+
+        it 'does not present them as a member of the sandbox' do
+          subject
+          expect(JSON.parse(response.body)).not_to have_key('courseUserRole')
+        end
+      end
+
+      context 'when a system administrator views a normal course' do
+        let(:user) { create(:administrator) }
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        it 'presents them as a member' do
+          subject
+          expect(JSON.parse(response.body)['courseUserRole']).to eq('manager')
+        end
+      end
+
+      it 'exposes isPreview matching the course' do
+        subject
+        expect(JSON.parse(response.body)['isPreview']).to eq(course.preview)
+      end
+    end
+
     describe '#index' do
       context 'when there is no user logged in' do
         it 'allows unauthenticated access' do

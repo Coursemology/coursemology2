@@ -12,10 +12,12 @@ interface BreadcrumbProps {
   in: CrumbData[];
   className?: string;
   loading?: boolean;
+  /** Renders every crumb as inert text instead of a link — e.g. inside the marketplace preview sandbox, where nothing besides the current submission should be reachable. */
+  disableLinks?: boolean;
 }
 
 const Breadcrumbs = (props: BreadcrumbProps): JSX.Element => {
-  const { in: crumbs } = props;
+  const { in: crumbs, disableLinks } = props;
 
   const { t } = useTranslation();
 
@@ -26,14 +28,14 @@ const Breadcrumbs = (props: BreadcrumbProps): JSX.Element => {
 
     forEachFlatCrumb(crumbs, (content, isLastCrumb, key) => {
       elements.push(
-        <Crumb key={key} to={!isLastCrumb && content.url}>
+        <Crumb key={key} to={!isLastCrumb && !disableLinks && content.url}>
           {translatable(content.title) ? t(content.title) : content.title}
         </Crumb>,
       );
     });
 
     return elements;
-  }, [crumbs]);
+  }, [crumbs, disableLinks]);
 
   return (
     <div className={`relative flex items-center ${props.className ?? ''}`}>
