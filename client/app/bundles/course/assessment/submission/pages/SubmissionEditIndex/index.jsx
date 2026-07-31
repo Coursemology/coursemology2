@@ -26,7 +26,7 @@ import assessmentsTranslations from '../../../translations';
 import {
   enterStudentView,
   exitStudentView,
-  fetchSubmission,
+  loadSubmissionPage,
   purgeSubmissionStore,
 } from '../../actions';
 import ProgressPanel from '../../components/ProgressPanel';
@@ -59,7 +59,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
-    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+    dispatch(loadSubmissionPage(match.params.submissionId, setSessionId));
   }
 
   componentWillUnmount() {
