@@ -38,10 +38,10 @@ export default function (state = initialState, action) {
       recording = false;
 
       /**
-       * When the user navigate to other path without stopping the recorder
-       * We need to help the user to stop
+       * When the user navigates to another path without stopping the recorder,
+       * help them stop it, but only if it was actually recording.
        */
-      if (recorderComponentsCount === 0) {
+      if (recorderComponentsCount === 0 && recorderHelper.isRecording()) {
         recorderHelper.stopRecord();
       }
       return {
