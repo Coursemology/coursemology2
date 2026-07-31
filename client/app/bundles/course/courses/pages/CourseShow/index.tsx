@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { CourseEntity } from 'types/course/courses';
 
+import { useCourseContext } from 'course/container/CourseLoader';
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -46,6 +47,8 @@ const CourseShow: FC = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const course = useAppSelector((state) => getCourseEntity(state, +courseId!));
+  // Optional-chained: this page also renders outside a CourseLayout outlet (see PublishButton).
+  const isPreview = useCourseContext()?.isPreview;
 
   useEffect(() => {
     if (courseId) {
@@ -71,6 +74,18 @@ const CourseShow: FC = () => {
     return null;
   }
 
+  const descriptionSection = course.description.trim() ? (
+    <section className="space-y-2">
+      <Typography variant="h6">{t(translations.descriptionHeader)}</Typography>
+
+      <UserHTMLText
+        html={course.description}
+        id="course-description"
+        variant="body2"
+      />
+    </section>
+  ) : null;
+
   return (
     <Page className="space-y-5">
       {course.isSuspended && (
@@ -87,19 +102,7 @@ const CourseShow: FC = () => {
             </div>
           )}
 
-          {course.description.trim() && (
-            <section className="space-y-2">
-              <Typography variant="h6">
-                {t(translations.descriptionHeader)}
-              </Typography>
-
-              <UserHTMLText
-                html={course.description}
-                id="course-description"
-                variant="body2"
-              />
-            </section>
-          )}
+          {descriptionSection}
 
           <section className="space-y-2">
             <Typography variant="h6">
@@ -124,6 +127,15 @@ const CourseShow: FC = () => {
           </section>
         </>
       )}
+
+      {/* Everyone in the marketplace preview sandbox is enrolled (as a manager), so the description
+          above is skipped there — yet it is the only thing on the page, since the sandbox has no
+          announcement, todo or activity of its own. Reached only by the administrators who curate the
+          container: ApplicationPreviewSandboxConcern denies this page to a restricted previewer, who
+          is landed straight on a submission and told the same thing by PreviewCourseBanner. */}
+      {course.permissions.isCurrentCourseUser &&
+        isPreview &&
+        descriptionSection}
 
       {(course.permissions.isCurrentCourseUser ||
         course.permissions.canManage) && (
