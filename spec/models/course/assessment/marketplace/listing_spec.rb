@@ -120,6 +120,44 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
       end
     end
 
+    # The preview sandbox lock's only per-assessment check (see
+    # spec/controllers/course/assessment/marketplace/preview_sandbox_lock_spec.rb), so each way of
+    # being "in the container but not served" is worth stating outright.
+    describe '.serving_assessment?' do
+      let(:listing) { create(:course_assessment_marketplace_listing, :versioned) }
+      let(:served) { listing.current_version.assessment }
+
+      it 'is true for the assessment the current version points at' do
+        expect(described_class).to be_serving_assessment(served.id)
+      end
+
+      it 'is false for an assessment no version points at' do
+        expect(described_class).not_to be_serving_assessment(listing.authoring_assessment.id)
+      end
+
+      it 'is false for a superseded version' do
+        superseded = listing.current_version
+        newer = create(:course_assessment_marketplace_listing_version,
+                       listing: listing,
+                       assessment: create(:assessment, course: listing.authoring_assessment.course),
+                       published_at: 1.hour.from_now,
+                       published_by: listing.publisher)
+        listing.update!(current_version: newer)
+
+        expect(described_class).not_to be_serving_assessment(superseded.assessment_id)
+        expect(described_class).to be_serving_assessment(newer.assessment_id)
+      end
+
+      it 'is false once the listing is unlisted' do
+        listing.update!(published: false)
+        expect(described_class).not_to be_serving_assessment(served.id)
+      end
+
+      it 'is false for a blank id, without querying for one' do
+        expect(described_class).not_to be_serving_assessment(nil)
+      end
+    end
+
     describe 'maintenance predicates' do
       let(:listing) { create(:course_assessment_marketplace_listing, :versioned) }
 
