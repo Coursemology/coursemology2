@@ -18,7 +18,7 @@ class Course::Assessment::MarketplaceListingsController < Course::Assessment::Co
   end
 
   # Cuts v(n+1) from the authoring copy. Deliberately separate from `create`: re-listing an unlisted
-  # assessment reactivates the row but must NOT silently republish changed content (design §5.2).
+  # assessment reactivates the row but must NOT silently republish changed content.
   def publish_version
     listing = @assessment.marketplace_listing
     return render json: { errors: ['Not listed on the marketplace.'] }, status: :unprocessable_content if listing.nil?

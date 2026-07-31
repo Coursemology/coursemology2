@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # System-admin view of every marketplace listing — what version is served, how many courses adopted
 # it, and whether its source still exists — plus the maintenance actions on a listing off the
-# marketplace: restore a source assessment (orphaned only), or delete it permanently (design §5.3).
+# marketplace: restore a source assessment (orphaned only), or delete it permanently.
 #
 # `System::Admin::Controller` applies `before_action :authorize_admin` (`authorize!(:manage, :all)`),
 # which is the entire authorization story here. An ability check on the listing would not do: CanCan's
@@ -16,7 +16,7 @@ class System::Admin::MarketplaceListingsController < System::Admin::Controller
     @authoring_urls = authoring_urls(@listings)
   end
 
-  # The per-listing provenance + history page (design §4). Read-only: every mutation stays on the
+  # The per-listing provenance + history page. Read-only: every mutation stays on the
   # index. This is the ONLY index into the container course — publishing copies the assessment title
   # verbatim into a single shared tab, so version identity exists nowhere but the join table.
   def show

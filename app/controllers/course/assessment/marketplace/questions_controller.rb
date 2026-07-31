@@ -8,7 +8,7 @@ class Course::Assessment::Marketplace::QuestionsController < Course::Assessment:
                 includes(current_version: :assessment).find_by(id: params[:listing_id])
       raise CanCan::AccessDenied unless listing
 
-      # The SNAPSHOT, never the authoring copy (design §4.2).
+      # The SNAPSHOT, never the authoring copy.
       @assessment = listing.current_version&.assessment
       raise CanCan::AccessDenied unless @assessment
 

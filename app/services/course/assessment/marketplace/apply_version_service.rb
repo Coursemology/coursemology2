@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Replaces an adopted copy's CONTENT with the version the marketplace currently serves, without
-# replacing the assessment itself (2026-07-28 design §5).
+# replacing the assessment itself.
 #
 # The copy keeps its id and therefore its URL, its tab position, its published state, its unlock
 # conditions and its adoption row. Only what the marketplace authored is overwritten. That is the

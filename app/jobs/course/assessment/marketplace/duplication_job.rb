@@ -30,7 +30,7 @@ class Course::Assessment::Marketplace::DuplicationJob < ApplicationJob
   private
 
   def duplicate_listing(listing, destination_course, current_user)
-    # The SNAPSHOT (design §4.2). `source.course` is therefore the hidden container course, which is
+    # `source.course` is the hidden container course, which is
     # exactly what `duplicate_objects` needs as its source course.
     source = listing.current_version.assessment
     copy = Course::Duplication::ObjectDuplicationService.duplicate_objects(

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Publishes an assessment to the marketplace (copy-on-publish, design V2/§5.1): (re)activate the
+# Publishes an assessment to the marketplace (copy-on-publish): (re)activate the
 # listing, capture provenance, snapshot the authoring assessment into the hidden container course,
 # and point `current_version` at the snapshot. `.publish` cuts v1 on first publish only — re-listing
 # an already-versioned listing does not cut a version; `.publish_new_version` is that explicit action.
@@ -25,13 +25,13 @@ class Course::Assessment::Marketplace::PublishService # rubocop:disable Metrics/
     new(listing.authoring_assessment, publisher).ensure_first_version!(listing)
   end
 
-  # Deliberate version cut (design §5.1). Snapshots whatever the authoring copy currently is into
+  # Deliberate version cut. Snapshots whatever the authoring copy currently is into
   # the container as version N+1 and advances `current_version`. Prior snapshots are retained —
-  # they are what Phase-3 comments and contributions will anchor to.
+  # they are what comments and contributions will anchor to.
   #
   # There is deliberately no content-diff gating: `Course::Assessment#updated_at` does not track
   # content changes, and walking the object graph misses edits below any fixed depth and misses
-  # deletions entirely (app/CLAUDE.md). The publisher decides when to cut.
+  # deletions entirely. The publisher decides when to cut.
   #
   # @param [Course::Assessment::Marketplace::Listing] listing
   # @param [User] publisher
@@ -153,7 +153,7 @@ class Course::Assessment::Marketplace::PublishService # rubocop:disable Metrics/
     listing
   end
 
-  # Denormalized so the identity survives origin-course deletion (design §3.2): the course row is what
+  # Denormalized so the identity survives origin-course deletion: the course row is what
   # gets deleted, so its title is copied rather than read through `source_course`.
   def capture_provenance(listing)
     course = @assessment.course

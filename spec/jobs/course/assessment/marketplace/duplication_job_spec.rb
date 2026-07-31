@@ -11,7 +11,7 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
              title: "Marketplace source #{Process.pid}-#{object_id}")
     end
     # Published through the real service: the job duplicates the container SNAPSHOT, not the
-    # authoring copy (design §4.2), so the snapshot must be a genuine copy carrying the questions.
+    # authoring copy, so the snapshot must be a genuine copy carrying the questions.
     let(:listing) do
       Course::Assessment::Marketplace::PublishService.publish(source_assessment, user)
     end

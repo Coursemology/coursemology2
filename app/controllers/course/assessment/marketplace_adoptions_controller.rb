@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Adopter-side actions on a duplicated marketplace assessment (design §6.3).
+# Adopter-side actions on a duplicated marketplace assessment.
 class Course::Assessment::MarketplaceAdoptionsController < Course::Assessment::Controller
   before_action :authorize_manage_assessment!
 

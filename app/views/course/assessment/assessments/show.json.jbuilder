@@ -107,7 +107,7 @@ if @marketplace_version
 end
 
 # Null unless this assessment was copied from the marketplace AND a newer version has since been
-# published that the adopter has neither dismissed nor muted (design §6.1).
+# published that the adopter has neither dismissed nor muted.
 if @marketplace_update
   json.marketplaceUpdate do
     # Two fields, not four: the ordinal and the date were always the same fact twice.

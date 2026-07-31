@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Un-orphans a listing (design §5.3): duplicates the listing's latest snapshot into the marketplace's
+# Un-orphans a listing: duplicates the listing's latest snapshot into the marketplace's
 # own container course as a NEW, editable assessment and points `authoring_assessment` at it, so
 # `PublishService.publish_new_version` works again.
 #

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-# Marketplace versioning (design V2/V10/V17/§4.3–§5.1) in one migration: the marketplace stops
+# Marketplace versioning in one migration: the marketplace stops
 # serving live source content and serves an immutable snapshot held in the preview container course.
 #
 # Deliberately one migration, not a schema/data pair per slice. The data backfill calls application
@@ -41,7 +41,7 @@ class AddMarketplaceVersioningAndPreviewContainer < ActiveRecord::Migration[7.2]
                                             name: 'fk_camlv_listing_id',
                                             on_delete: :cascade },
                              index: { name: 'fk__camlv_listing_id' }
-      # A version IS its publication datetime (2026-07-28 design §2). There is no ordinal: an
+      # A version IS its publication datetime. There is no ordinal: an
       # integer would name a series the system cannot navigate — there is no rollback — and the
       # stable internal referent is already this row's primary key.
       t.datetime :published_at, null: false
@@ -128,7 +128,7 @@ class AddMarketplaceVersioningAndPreviewContainer < ActiveRecord::Migration[7.2]
     remove_column :course_assessment_marketplace_adoptions, :adopted_version_at
   end
 
-  # Design V10/§4.3. `assessment_id` no longer means "what the marketplace shows" — that is now
+  # `assessment_id` does not mean "what the marketplace shows" — that is now
   # `current_version.assessment` (the container snapshot). The column becomes the nullable authoring
   # copy, and the FK flips cascade -> nullify so deleting the origin orphans the listing instead of
   # destroying it along with its version chain and every adopter's adoption row.

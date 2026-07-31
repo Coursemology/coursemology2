@@ -18,8 +18,8 @@ interface Props {
 }
 
 /**
- * Tells a course that already copied a marketplace assessment that a newer version exists
- * (design §6.2). The copy deliberately avoids the words "sync" and "behind": the action replaces
+ * Tells a course that already copied a marketplace assessment that a newer version exists.
+ * The copy deliberately avoids the words "sync" and "behind": the action replaces
  * untouched local content in place.
  *
  * The notice cannot be dismissed or muted. It is a statement of fact about the copy rather than a

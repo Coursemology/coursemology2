@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
     end
   end
   let!(:listing) { publish(source_assessment) }
-  # The controller serves the container SNAPSHOT (design §4.2), so every question assertion must
+  # The controller serves the container SNAPSHOT, so every question assertion must
   # target the snapshot's copy, never the authoring original.
   let(:question) { snapshot_question(listing) }
 

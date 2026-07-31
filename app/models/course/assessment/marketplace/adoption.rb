@@ -8,7 +8,7 @@ class Course::Assessment::Marketplace::Adoption < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
 
-  # Resolves the "a newer version is available" notice for an adopted assessment (design §6.1).
+  # Resolves the "a newer version is available" notice for an adopted assessment.
   #
   # Deliberately a pure timestamp comparison over adoptions / listings / listing_versions — the
   # container snapshot is never loaded, so this stays cheap enough to run on every assessment show.
