@@ -555,5 +555,53 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
     end
+
+    context 'in the marketplace preview sandbox' do
+      let(:preview_course) { create(:course, preview: true) }
+      let(:preview_assessment) { create(:assessment, :with_mcq_question, course: preview_course) }
+      let(:previewer) { create(:user) }
+      let!(:previewer_course_user) { create(:course_manager, course: preview_course, user: previewer) }
+      let(:own_submission) do
+        create(:submission, :attempting, assessment: preview_assessment,
+                                         course: preview_course, creator: previewer)
+      end
+
+      before { controller_sign_in(controller, previewer) }
+
+      # Without Task 1's ability rules, a manager holds a course-wide (not creator-scoped) grant to
+      # read/update ANY submission and list all submissions, via
+      # Course::Assessment::AssessmentAbility#allow_staff_read_assessment_submissions /
+      # #allow_teaching_staff_grade_assessment_submissions (app/models/course/assessment/
+      # assessment_ability.rb) — previewers get this too, since they're enrolled as `manager`. Task
+      # 1's restrict_preview_course_reads revokes it specifically inside a preview course. These
+      # examples assert the POST-Task-1 behavior; they are expected to fail before Task 1 lands (see
+      # Step 2) precisely because that broad grant is still in effect until then.
+      describe '#edit' do
+        it 'allows the previewer to edit their OWN submission' do
+          get :edit, params: { course_id: preview_course, assessment_id: preview_assessment,
+                               id: own_submission, format: :json }
+          expect(response).to be_successful
+        end
+
+        it "forbids the previewer from reading ANOTHER previewer's submission" do
+          other_previewer = create(:course_manager, course: preview_course).user
+          other_submission = create(:submission, :attempting, assessment: preview_assessment,
+                                                              course: preview_course, creator: other_previewer)
+          expect do
+            get :edit, params: { course_id: preview_course, assessment_id: preview_assessment,
+                                 id: other_submission, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      describe '#index' do
+        it 'forbids listing all submissions in the sandbox' do
+          own_submission
+          expect do
+            get :index, params: { course_id: preview_course, assessment_id: preview_assessment, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
   end
 end

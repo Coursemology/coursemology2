@@ -1,0 +1,87 @@
+# frozen_string_literal: true
+# Confines a marketplace previewer to the preview flow, at the request layer.
+#
+# `Course::Assessment::Marketplace::PreviewLaunchService` enrols a previewer as a `manager` of the one
+# container course — the lowest role that can attempt, grade and publish, which the submission
+# machinery needs. That role is also, on the ordinary abilities, a licence to read and edit the whole
+# course. `Course::AssessmentMarketplaceAbilityComponent` subtracts from it verb by verb, and the
+# de-linked sidebar and breadcrumbs hide what is left; neither stops a typed URL, and a subtractive
+# list can never be complete — it has to name every component, every custom verb and every collection
+# action, and each new one arrives switched on.
+#
+# So this inverts it: on the preview instance a non-administrator may reach only what a controller
+# explicitly claims. `preview_sandbox_accessible?` defaults to false and is overridden by the handful
+# of actions the preview flow actually makes, mirroring how `publicly_accessible?` marks out the
+# unauthenticated surface. A component added tomorrow is denied here without anyone remembering to
+# deny it.
+#
+# The lock is per-VIEWER, not per-course: a system administrator curates the container from inside it
+# — its version snapshots, and the authoring copies `RestoreAuthoringJob` rebuilds there — so the
+# sandbox stays fully navigable for them. Mirrors the `!user&.administrator?` guard that gates the
+# content freeze in `Course::AssessmentMarketplaceAbilityComponent#define_permissions`.
+#
+# `CanCan::AccessDenied` rather than a bespoke error: `ApplicationUserConcern` already rescues it into
+# a JSON 403, and the frontend already knows what that means.
+module ApplicationPreviewSandboxConcern
+  extend ActiveSupport::Concern
+
+  included do
+    before_action :enforce_preview_sandbox_lock!
+
+    # The root payload reports the lock to the courseless navigation shell, which has no course to read
+    # a flag off — the 404 page drops its "go back home" link on it. One fact, one source: the same
+    # predicate this concern enforces, rather than a second guess at who is confined.
+    helper_method :preview_sandbox_locked?
+  end
+
+  protected
+
+  # Whether this action belongs to the marketplace preview flow, and may therefore run for a
+  # non-administrator on the preview instance. Deny by default; override in the controllers that serve
+  # the flow.
+  #
+  # Devise is exempt wholesale rather than by action: sign-in, sign-up, password reset and
+  # confirmation all happen on the preview host, so a previewer who arrives without a session must be
+  # able to complete them or the sandbox is unreachable. Exempting the base class cannot miss one of
+  # the four subclasses.
+  #
+  # The root payload (locale, time zone, and the courses the user is in — here, only the container) is
+  # fetched on every page, the previewer's included. Singled out the same way `publicly_accessible?`
+  # singles out that one action.
+  #
+  # @return [Boolean]
+  def preview_sandbox_accessible?
+    devise_controller? || (controller_name == 'application' && action_name.to_sym == :index)
+  end
+
+  # Whether `assessment_id` names an assessment a previewer was actually handed: the snapshot a listed
+  # listing currently serves. Every other assessment in the container — superseded snapshots, restored
+  # authoring working copies, snapshots of delisted listings — is content nobody was given a URL to,
+  # and ids there run consecutively, so hiding the index is not on its own a boundary.
+  #
+  # Deliberately no `can?` call. This runs before `load_and_authorize_resource :course`, and
+  # `Course::Controller#current_ability` memoizes on `current_course`; building the ability here would
+  # freeze a nil-course one for the rest of the request and deny the previewer everything downstream.
+  # The marketplace allow-list is enforced where the preview is launched, not on every page of it.
+  #
+  # @param [Integer, String, nil] assessment_id
+  # @return [Boolean]
+  def previewable_assessment?(assessment_id)
+    Course::Assessment::Marketplace::Listing.serving_assessment?(assessment_id)
+  end
+
+  private
+
+  def enforce_preview_sandbox_lock!
+    return unless preview_sandbox_locked?
+    return if preview_sandbox_accessible?
+
+    raise CanCan::AccessDenied
+  end
+
+  def preview_sandbox_locked?
+    return false if current_user&.administrator?
+
+    Course::Assessment::Marketplace::PreviewContainerService.preview_instance?(current_tenant)
+  end
+end

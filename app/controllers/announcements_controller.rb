@@ -26,6 +26,12 @@ class AnnouncementsController < ApplicationController
     requesting_unread? || action_name.to_sym == :mark_as_read
   end
 
+  # The announcement bell polls this on every page. There are no global announcements on the preview
+  # instance, but a 403 on every poll would surface to the previewer as a stream of errors.
+  def preview_sandbox_accessible?
+    true
+  end
+
   private
 
   def requesting_unread?

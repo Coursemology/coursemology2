@@ -53,6 +53,16 @@ class Course::CoursesController < Course::Controller
     Set[:index, :show, :sidebar].include?(action_name.to_sym)
   end
 
+  # The layout payload is fetched on every course page, so the previewer's submission page needs it.
+  #
+  # `show` is deliberately NOT here. Its payload lists `current_course.managers`, which in the
+  # container is every previewer in the instance, and the sandbox explainer it renders now has no
+  # previewer audience: `PreviewLaunchService` lands them on the submission, `PreviewCourseBanner`
+  # says the same thing there, and the de-linked sidebar never offers the home page.
+  def preview_sandbox_accessible?
+    action_name.to_sym == :sidebar
+  end
+
   private
 
   def course_params
