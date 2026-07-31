@@ -53,6 +53,11 @@ class Course::CoursesController < Course::Controller
     Set[:index, :show, :sidebar].include?(action_name.to_sym)
   end
 
+  # The layout payload is fetched on every course page, so the previewer's submission page needs it.
+  def preview_sandbox_accessible?
+    action_name.to_sym == :sidebar
+  end
+
   private
 
   def course_params

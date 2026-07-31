@@ -18,6 +18,11 @@ class JobsController < ApplicationController
     true
   end
 
+  # Autograding a preview submission is a job, and the submission page polls it here.
+  def preview_sandbox_accessible?
+    true
+  end
+
   private
 
   def load_job

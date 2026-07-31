@@ -25,6 +25,14 @@ class AttachmentReferencesController < ApplicationController
     end
   end
 
+  protected
+
+  # A previewed assessment's questions carry attachments (description images, template files) and its
+  # answers accept uploads, so both reading and writing an attachment are part of attempting one.
+  def preview_sandbox_accessible?
+    true
+  end
+
   private
 
   def file_params

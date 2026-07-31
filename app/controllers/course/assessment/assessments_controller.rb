@@ -256,6 +256,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   protected
 
+  # Both breadcrumb handles on a preview submission page fetch `show`, so the previewer needs it —
+  # but only for a title, and only for the snapshot they were handed. Not the page: a previewer is a
+  # `manager`, and `show` serves a manager the whole authoring surface. The index is not here either:
+  # it is the whole container, one row per published snapshot and per restored authoring copy, each
+  # with an Attempt button.
+  def preview_sandbox_accessible?
+    crumb_request? && previewable_assessment?(params[:id])
+  end
+
   def load_assessment_options
     return super if skip_tab_filter?
 
