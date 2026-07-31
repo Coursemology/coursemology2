@@ -132,6 +132,11 @@ export interface SubmissionFlagsState {
   isUnsubmitting: boolean;
 }
 
+export interface PreviewAutogradingState {
+  jobUrl: string | null;
+  status: 'idle' | 'polling' | 'failed' | 'gone';
+}
+
 export interface QuestionFlag {
   isAutograding: boolean;
   isResetting: boolean;
