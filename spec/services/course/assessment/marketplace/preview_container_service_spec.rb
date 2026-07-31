@@ -82,6 +82,7 @@ RSpec.describe Course::Assessment::Marketplace::PreviewContainerService, type: :
           expect(Course.containing_user(other_user)).not_to include(container)
         end
       end
+
     end
   end
 end

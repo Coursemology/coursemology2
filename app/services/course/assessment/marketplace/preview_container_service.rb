@@ -26,6 +26,18 @@ class Course::Assessment::Marketplace::PreviewContainerService
         end
     end
 
+    # Whether `instance` is the dedicated preview instance. The preview sandbox lock keys off this
+    # rather than off `Course#preview`, because it also has to confine a previewer on the courseless
+    # pages of this instance (`/courses`, `/role_requests`), where there is no course to read a flag
+    # from. The container is the only course here, so the instance is the wider of two circles
+    # that enclose the same content.
+    #
+    # @param [Instance, nil] instance
+    # @return [Boolean]
+    def preview_instance?(instance)
+      instance&.read_attribute(:host) == PREVIEW_INSTANCE_HOST
+    end
+
     # @return [Course] the single `preview: true` container course in the preview instance.
     def container_course
       instance = preview_instance

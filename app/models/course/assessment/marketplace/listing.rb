@@ -42,6 +42,21 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
     end
   end
 
+  # Whether `assessment_id` is the snapshot the marketplace currently serves for some listed listing;
+  # the only thing in the container course a previewer was ever handed a URL to (see `PreviewLaunchService`).
+  # Everything else there is a superseded snapshot, a restored authoring working copy, or the snapshot of a
+  # delisted listing, and container ids are guessable, so the preview sandbox lock vets the assessment
+  # with this rather than trusting a hidden index.
+  #
+  # @param [Integer] assessment_id
+  # @return [Boolean]
+  def self.serving_assessment?(assessment_id)
+    return false if assessment_id.blank?
+
+    published.joins(:current_version).
+      exists?(course_assessment_marketplace_listing_versions: { assessment_id: assessment_id })
+  end
+
   # An orphaned listing lost its authoring copy (the origin assessment was deleted) but still
   # serves its last snapshot. Deliberately separate from `admin_state`, which is a display concern.
   # @return [Boolean]

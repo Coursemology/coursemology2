@@ -6,7 +6,7 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
     ActsAsTenant.without_tenant do
       # Preload `lesson_plan_item` — `title` is not a column on Course::Assessment; it lives on the
       # acting-as record. Reads go through the current version snapshot, never the authoring copy: the
-      # marketplace serves what a duplicate would give you (design §4.2). `where.not(current_version_id:
+      # marketplace serves what a duplicate would give you. `where.not(current_version_id:
       # nil)` guards a published listing with no snapshot, whose nil `current_version` would 500 browse.
       @listings = Course::Assessment::Marketplace::Listing.published.
                   where.not(current_version_id: nil).
@@ -32,13 +32,30 @@ class Course::Assessment::Marketplace::ListingsController < Course::Assessment::
                  includes(current_version: :assessment).find_by(id: params[:id])
       raise CanCan::AccessDenied unless @listing
 
-      # The SNAPSHOT, never the authoring copy (design §4.2).
+      # The SNAPSHOT, never the authoring copy.
       @assessment = @listing.current_version&.assessment
       raise CanCan::AccessDenied unless @assessment
 
       authorize!(:preview_in_marketplace, @listing)
       @destination_tabs = destination_tabs
       render 'show'
+    end
+  end
+
+  def launch_preview
+    ActsAsTenant.without_tenant do
+      @listing = Course::Assessment::Marketplace::Listing.published.
+                 includes(current_version: :assessment).find_by(id: params[:id])
+      raise CanCan::AccessDenied unless @listing
+
+      # A preview rehearses the SNAPSHOT, never the authoring copy — the same row a duplicate would
+      # copy. Guarded here rather than in the service so a published listing with no
+      # snapshot is denied instead of crashing on a nil deep inside provisioning.
+      raise CanCan::AccessDenied unless @listing.current_version&.assessment
+
+      authorize!(:preview_in_marketplace, @listing)
+      url = Course::Assessment::Marketplace::PreviewLaunchService.launch(@listing, current_user)
+      render json: { url: url }
     end
   end
 
