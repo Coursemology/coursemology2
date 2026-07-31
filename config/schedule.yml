@@ -15,3 +15,12 @@ user_email_database_cleanup_job:
   cron: '0 0 1 * *'
   class: 'UserEmailDatabaseCleanupJob'
   queue: 'default'
+
+# Reap aged marketplace preview submissions every Sunday at 21:20 UTC, 5:20 AM SGT Monday. The TTL
+# is enforced in the job, not the cron, so this interval sets only how long past the TTL a submission
+# may linger — not how long it is kept. Previewers do not wait on it to start over; the preview
+# banner's "Reset submission" button clears an attempt on demand.
+preview_submission_reaping_job:
+  cron: '20 21 * * 0'
+  class: 'Course::Assessment::Marketplace::PreviewSubmissionReapingJob'
+  queue: 'default'
