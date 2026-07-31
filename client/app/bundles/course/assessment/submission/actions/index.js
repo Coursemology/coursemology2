@@ -241,7 +241,7 @@ export function unmark(submissionId) {
   };
 }
 
-export function publish(submissionId, grades, exp) {
+export function publish(submissionId, grades, exp, isPreview) {
   const payload = {
     submission: {
       answers: grades,
@@ -257,7 +257,13 @@ export function publish(submissionId, grades, exp) {
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.PUBLISH_SUCCESS, payload: data });
-        dispatch(setNotification(translations.updateSuccess));
+        dispatch(
+          setNotification(
+            isPreview
+              ? translations.previewPublishSuccess
+              : translations.updateSuccess,
+          ),
+        );
       })
       .catch((error) => {
         dispatch({ type: actionTypes.PUBLISH_FAILURE });
