@@ -435,6 +435,25 @@ RSpec.describe Course::Assessment::Submission do
         expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
+      context 'when the submission belongs to a marketplace preview rehearsal', type: :mailer do
+        # Own instance: at most one `preview: true` course may exist per instance.
+        let(:instance) { create(:instance) }
+        let(:course) { create(:course, preview: true) }
+        let(:course_student1) { create(:course_manager, course: course) }
+
+        it 'does not send the graded email' do
+          expect { submission.publish! }.not_to(change { ActionMailer::Base.deliveries.count })
+        end
+
+        context 'when the course is not a preview sandbox' do
+          let(:course) { create(:course) }
+
+          it 'still sends the graded email' do
+            expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+        end
+      end
+
       context 'when a user unsubscribes', type: :mailer do
         before do
           setting_email = course.
