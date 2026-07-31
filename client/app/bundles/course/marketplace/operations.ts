@@ -40,6 +40,19 @@ export const fetchListing = async (id: number): Promise<ListingPreviewData> => {
   return response.data as ListingPreviewData;
 };
 
+// Plain request, not `pollJob` — launch_preview is synchronous and returns the sandbox url
+// directly, unlike `duplicate` which hands back a job to poll.
+export const launchPreview = async (id: number): Promise<{ url: string }> => {
+  const response = await CourseAPI.marketplace.launchPreview(id);
+  return response.data as { url: string };
+};
+
+export const resetPreviewSubmission = async (
+  assessmentId: number,
+): Promise<void> => {
+  await CourseAPI.marketplace.resetPreviewSubmission(assessmentId);
+};
+
 export const fetchQuestion = async (
   listingId: number,
   questionId: number,

@@ -6155,6 +6155,21 @@
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "검색과 일치하는 평가가 없습니다."
   },
+  "course.marketplace.resetSubmission": {
+    "defaultMessage": "제출 재설정"
+  },
+  "course.marketplace.resetSubmissionConfirmTitle": {
+    "defaultMessage": "제출을 재설정하시겠습니까?"
+  },
+  "course.marketplace.resetSubmissionConfirmBody": {
+    "defaultMessage": "미리보기 샌드박스에서 이 평가에 작성한 답안이 모두 빈 상태로 초기화됩니다. 이 페이지에 그대로 머물면서 바로 다시 답안을 작성할 수 있습니다."
+  },
+  "course.marketplace.resetSubmissionSuccess": {
+    "defaultMessage": "제출이 재설정되었습니다."
+  },
+  "course.marketplace.resetSubmissionFailed": {
+    "defaultMessage": "제출을 재설정할 수 없습니다."
+  },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "다운로드에 실패했습니다. 나중에 다시 시도하세요."
   },

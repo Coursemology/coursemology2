@@ -6149,6 +6149,21 @@
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "没有符合搜索条件的评估。"
   },
+  "course.marketplace.resetSubmission": {
+    "defaultMessage": "重置提交"
+  },
+  "course.marketplace.resetSubmissionConfirmTitle": {
+    "defaultMessage": "要重置你的提交吗？"
+  },
+  "course.marketplace.resetSubmissionConfirmBody": {
+    "defaultMessage": "这会将你在预览沙盒中对此评估的所有答案清空为初始状态。你会留在本页面，可以立即重新开始作答。"
+  },
+  "course.marketplace.resetSubmissionSuccess": {
+    "defaultMessage": "提交已重置。"
+  },
+  "course.marketplace.resetSubmissionFailed": {
+    "defaultMessage": "无法重置提交。"
+  },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "下载失败。请稍后再试。"
   },
