@@ -10,6 +10,7 @@ import {
 } from '../reducers/answerFlags';
 import { historyActions } from '../reducers/history';
 import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
+import { previewAutogradingStarted } from '../reducers/previewAutograding';
 import { scribingActions } from '../reducers/scribing';
 import translations from '../translations';
 
@@ -148,6 +149,16 @@ export function finalise(submissionId, rawAnswers) {
           window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
+        // Marketplace preview sandbox only: the backend hands back the auto-grading job it just
+        // enqueued, so PreviewAutogradingBanner can poll it and refresh the marks in place. The key
+        // is absent everywhere else, which is what keeps this inert in real courses.
+        if (data.submission?.autoGradingJobUrl) {
+          dispatch(
+            previewAutogradingStarted({
+              jobUrl: data.submission.autoGradingJobUrl,
+            }),
+          );
+        }
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
