@@ -2,6 +2,7 @@
 import { AxiosError } from 'axios';
 import { Operation } from 'store';
 import {
+  AssessmentCrumbData,
   AssessmentDeleteResult,
   AssessmentsListData,
   AssessmentUnlockRequirements,
@@ -32,6 +33,13 @@ export const fetchAssessment = async (
   id: number,
 ): Promise<FetchAssessmentData> => {
   const response = await CourseAPI.assessment.assessments.fetch(id);
+  return response.data;
+};
+
+export const fetchAssessmentCrumb = async (
+  id: number,
+): Promise<AssessmentCrumbData> => {
+  const response = await CourseAPI.assessment.assessments.fetchCrumb(id);
   return response.data;
 };
 

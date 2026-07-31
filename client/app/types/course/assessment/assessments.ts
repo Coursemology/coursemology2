@@ -214,6 +214,18 @@ export interface AssessmentData extends AssessmentActionsData {
   generateQuestionUrls?: GenerateQuestionBuilderData[];
 }
 
+/**
+ * What `show` renders for a breadcrumb request, and the subset every one of the three full variants
+ * below opens with — so a crumb consumer reads the same fields whichever the backend falls through to
+ * (view-password locked, monitor-blocked, or accessible).
+ */
+export interface AssessmentCrumbData {
+  id: number;
+  title: string;
+  tabTitle: string;
+  tabUrl: string;
+}
+
 export interface UnauthenticatedAssessmentData {
   id: number;
   title: string;
