@@ -6218,6 +6218,21 @@
   "course.marketplace.noPreviewImage": {
     "defaultMessage": "The background image for this question cannot be previewed here."
   },
+  "course.marketplace.resetSubmission": {
+    "defaultMessage": "Reset submission"
+  },
+  "course.marketplace.resetSubmissionConfirmTitle": {
+    "defaultMessage": "Reset your submission?"
+  },
+  "course.marketplace.resetSubmissionConfirmBody": {
+    "defaultMessage": "This clears all your answers for this assessment in the preview sandbox back to a blank state. You’ll stay on this page and can start answering again right away."
+  },
+  "course.marketplace.resetSubmissionSuccess": {
+    "defaultMessage": "Submission reset."
+  },
+  "course.marketplace.resetSubmissionFailed": {
+    "defaultMessage": "Could not reset the submission."
+  },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "Download has failed. Please try again later."
   },

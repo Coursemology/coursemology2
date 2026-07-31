@@ -102,6 +102,44 @@ export default defineMessages({
     id: 'course.marketplace.duplicateAssessment',
     defaultMessage: 'Duplicate Assessment',
   },
+  tryItHandsOn: {
+    id: 'course.marketplace.tryItHandsOn',
+    defaultMessage: 'Try it hands-on',
+  },
+  tryItHandsOnConfirmTitle: {
+    id: 'course.marketplace.tryItHandsOnConfirmTitle',
+    defaultMessage: 'Try it hands-on?',
+  },
+  tryItHandsOnConfirmBody: {
+    id: 'course.marketplace.tryItHandsOnConfirmBody',
+    defaultMessage:
+      'This opens a hands-on preview in a separate sandbox, in a new tab. You may be briefly redirected to sign in. Your own course is not affected.',
+  },
+  launchPreviewFailed: {
+    id: 'course.marketplace.launchPreviewFailed',
+    defaultMessage: 'Could not launch the preview.',
+  },
+  resetSubmission: {
+    id: 'course.marketplace.resetSubmission',
+    defaultMessage: 'Reset submission',
+  },
+  resetSubmissionConfirmTitle: {
+    id: 'course.marketplace.resetSubmissionConfirmTitle',
+    defaultMessage: 'Reset your submission?',
+  },
+  resetSubmissionConfirmBody: {
+    id: 'course.marketplace.resetSubmissionConfirmBody',
+    defaultMessage:
+      'This clears all your answers for this assessment in the preview sandbox back to a blank state. You’ll stay on this page and can start answering again right away.',
+  },
+  resetSubmissionSuccess: {
+    id: 'course.marketplace.resetSubmissionSuccess',
+    defaultMessage: 'Submission reset.',
+  },
+  resetSubmissionFailed: {
+    id: 'course.marketplace.resetSubmissionFailed',
+    defaultMessage: 'Could not reset the submission.',
+  },
   viewDetails: {
     id: 'course.marketplace.viewDetails',
     defaultMessage: 'View question details',

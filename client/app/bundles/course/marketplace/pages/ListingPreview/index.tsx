@@ -13,6 +13,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DuplicateConfirmation from '../../components/DuplicateConfirmation';
+import TryItHandsOnButton from '../../components/TryItHandsOnButton';
 import { readFromTab, withFromTab } from '../../fromTab';
 import { fetchListing } from '../../operations';
 import translations from '../../translations';
@@ -38,14 +39,17 @@ const ListingPreview = (): JSX.Element => {
       {(listing): JSX.Element => (
         <Page
           actions={
-            <Button
-              color="primary"
-              onClick={(): void => setDuplicating(true)}
-              startIcon={<ContentCopy />}
-              variant="contained"
-            >
-              {t(translations.duplicateAssessment)}
-            </Button>
+            <>
+              <TryItHandsOnButton listingId={listing.id} />
+              <Button
+                color="primary"
+                onClick={(): void => setDuplicating(true)}
+                startIcon={<ContentCopy />}
+                variant="contained"
+              >
+                {t(translations.duplicateAssessment)}
+              </Button>
+            </>
           }
           backTo={withFromTab(`${courseUrl}/marketplace`, fromTab)}
           className="space-y-5"
