@@ -81,14 +81,20 @@ RSpec.describe Course::Assessment::Marketplace::RestoreAuthoringJob, type: :job 
         expect { run }.not_to change(Course::Assessment::Marketplace::Adoption, :count)
       end
 
-      # Same reason the adopted copy is detached: without this the restored copy, the container
-      # snapshot and every adopter's copy become mutual `linked_assessments`.
-      it 'leaves the restored copy in a link tree of its own' do
+      # Restoring duplicates the snapshot WITHIN the container course, so the instance filter in
+      # `#initialize_duplicate` keeps that one link. It is inert: a later adoption crosses from the
+      # preview instance into the adopter's, and is filtered there — proven by
+      # `publish_service_spec`'s "gives the snapshot the source root and no links".
+      it 'keeps the source root and links only to the snapshot it was restored from' do
         run
 
-        copy = listing.reload.authoring_assessment
-        expect(copy.linkable_tree_id).to eq(copy.id)
-        expect(copy.all_linked_assessments).to contain_exactly(copy)
+        listing.reload
+        copy = listing.authoring_assessment
+        snapshot = listing.current_version.assessment
+        ActsAsTenant.without_tenant do
+          expect(copy.linkable_tree_id).to eq(snapshot.linkable_tree_id)
+          expect(copy.linked_assessments).to contain_exactly(snapshot)
+        end
       end
 
       # Provenance describes where the content originally came from. A maintenance action must not
