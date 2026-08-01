@@ -11,8 +11,7 @@ gem 'csv'
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.3'
+gem 'rails', '~> 7.2.3.2'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -216,8 +215,8 @@ gem 'rails-controller-testing'
 
 # WordNet corpus to obtain lemma form of words, for comprehension questions.
 gem 'rwordnet', git: 'https://github.com/Coursemology/rwordnet'
-gem 'loofah', '>= 2.2.1'
-gem 'rails-html-sanitizer', '>= 1.0.4'
+gem 'loofah', '>= 2.25.2'
+gem 'rails-html-sanitizer', '>= 1.7.1'
 
 gem 'ffi', '>= 1.14.2'
 
