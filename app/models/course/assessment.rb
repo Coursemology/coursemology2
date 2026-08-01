@@ -335,12 +335,19 @@ class Course::Assessment < ApplicationRecord
     # the new assessment has links to all linked assessments of the original assessment,
     # as well as the duplicates of those linked assessments if they are duplicated
     # in the same process (i.e course duplication)
+    #
+    # Links that would cross an instance boundary are dropped rather than carried over. A link row is
+    # only ever read back through `Course`, which is `acts_as_tenant :instance`, so a row pointing into
+    # another instance resolves its course to nil for every later reader: the next duplication dies in
+    # `Course::LessonPlan::Item#link_default_reference_time`, and a plagiarism run either dies in
+    # `Course::SsidFolderConcern#sync_assessment_ssid_folder` or silently uploads that assessment's
+    # submissions to SSID. The picker never offers a cross-instance candidate either
+    # (`Course::Plagiarism::AssessmentsController#linked_and_unlinked_assessments` filters on
+    # `instance_id`), so this keeps the write side consistent with the read side.
     linked_assessments = other.all_linked_assessments.flat_map do |assessment|
-      if duplicator.duplicated?(assessment)
-        [assessment, duplicator.duplicate(assessment)]
-      else
-        assessment
-      end
+      # A duplicate lands in the destination course, so it stays linkable however its source is judged.
+      copies = duplicator.duplicated?(assessment) ? [duplicator.duplicate(assessment)] : []
+      copies + (linkable_within_destination?(assessment, duplicator) ? [assessment] : [])
     end
     self.linked_assessments = linked_assessments.reject { |assessment| assessment == self }
 
@@ -385,20 +392,6 @@ class Course::Assessment < ApplicationRecord
 
   def all_linked_assessments
     ([self] + linked_assessments.includes(:course, :submissions)).uniq
-  end
-
-  # Makes this assessment a standalone link tree of one.
-  #
-  # Marketplace distribution is not "linking". `initialize_duplicate` propagates the source's
-  # `linkable_tree_id` and rebuilds `linked_assessments` — right for course duplication, wrong here:
-  # without this the container snapshot, the origin, and every adopter's copy become mutual
-  # `linked_assessments`, exposing ids across unrelated courses and crashing onward duplication.
-  #
-  # Called on the snapshot at publish time and on the adopted copy at duplication time.
-  def detach_from_link_tree!
-    links.destroy_all
-    reverse_links.destroy_all
-    update_column(:linkable_tree_id, id)
   end
 
   # Whether this assessment is a published version of some listing — one of the immutable snapshots
@@ -489,6 +482,28 @@ class Course::Assessment < ApplicationRecord
     return if duplicating?
 
     update_column(:linkable_tree_id, id)
+  end
+
+  # Whether a link to `assessment` can survive duplication into this duplicator's destination course.
+  #
+  # Compares against the DESTINATION's instance rather than the current tenant: marketplace publish,
+  # adoption and restore all run inside `ActsAsTenant.without_tenant`, so there is no tenant to compare
+  # against on exactly the paths this matters for.
+  #
+  # `assessment.course` is nil in two situations and both mean "not linkable" — the tenant scope
+  # filtered a foreign course out, or `all_linked_assessments` preloaded it as nil for the same reason.
+  # Ordinary course duplication runs under a tenant and reaches the answer through that nil; the
+  # marketplace paths run tenant-free and reach it through a real `instance_id` mismatch. Both give the
+  # same verdict, which is why the safe-navigation is load-bearing rather than defensive.
+  #
+  # @param [Course::Assessment] assessment
+  # @param [Duplicator] duplicator
+  # @return [Boolean]
+  def linkable_within_destination?(assessment, duplicator)
+    destination_course = duplicator.options[:destination_course]
+    return true if destination_course.nil?
+
+    assessment.course&.instance_id == destination_course.instance_id
   end
 
   def tab_in_same_course

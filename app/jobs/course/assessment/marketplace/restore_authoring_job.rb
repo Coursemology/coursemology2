@@ -46,9 +46,6 @@ class Course::Assessment::Marketplace::RestoreAuthoringJob < ApplicationJob
       copy = Course::Duplication::ObjectDuplicationService.duplicate_objects(
         source.course, container, source, current_user: current_user
       )
-      # The restored copy is a standalone assessment, not a link-sibling of the container snapshot
-      # and of every adopter's copy. See Course::Assessment#detach_from_link_tree!.
-      copy.detach_from_link_tree!
       # `source_course` and `source_course_name` are deliberately left untouched: they record where
       # the content originally came from, a historical fact. Restoring is a maintenance action on the
       # listing, not a republish from a new origin, so rewriting provenance would falsify its history.
