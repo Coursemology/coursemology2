@@ -20,10 +20,7 @@ class Course::Assessment::Marketplace::PreviewContainerService
     # column — so a `*.coursemology.org` host validated against a `localhost:PORT` dev/test default
     # always fails on the injected colon. `db/seeds.rb` works around it the same way.
     def preview_instance
-      Instance.find_by(host: PREVIEW_INSTANCE_HOST) ||
-        Instance.new(host: PREVIEW_INSTANCE_HOST, name: PREVIEW_INSTANCE_NAME).tap do |instance|
-          instance.save!(validate: false)
-        end
+      find_preview_instance || create_preview_instance
     end
 
     # @return [Course] the single `preview: true` container course in the preview instance.
@@ -35,6 +32,26 @@ class Course::Assessment::Marketplace::PreviewContainerService
     end
 
     private
+
+    def find_preview_instance
+      Instance.where('lower(host) = ?', PREVIEW_INSTANCE_HOST.downcase).first
+    end
+
+    # `save!(validate: false)` skips the model's own uniqueness check as well as hostname validation
+    # (see the note on this class), so the DB index is the only thing standing between two concurrent
+    # callers. The loser re-reads rather than raising: provisioning is idempotent by contract.
+    #
+    # `requires_new: true` because a caller may already be in a transaction — the re-point runs in a
+    # `before_destroy` — where a unique violation would abort the rescue's re-read along with it.
+    def create_preview_instance
+      ApplicationRecord.transaction(requires_new: true) do
+        Instance.new(host: PREVIEW_INSTANCE_HOST, name: PREVIEW_INSTANCE_NAME).tap do |instance|
+          instance.save!(validate: false)
+        end
+      end
+    rescue ActiveRecord::RecordNotUnique
+      find_preview_instance
+    end
 
     # `published/gamified/enrollable: false` keep the container out of every listing, level and
     # self-enrolment path: it holds the marketplace's snapshots, so it must never surface as a

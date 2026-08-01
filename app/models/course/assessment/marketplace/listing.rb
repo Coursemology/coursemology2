@@ -51,13 +51,6 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
     authoring_assessment_id.nil?
   end
 
-  # Restorable = orphaned AND still holding a snapshot to duplicate a fresh authoring copy from.
-  # A listing that is not orphaned already has one; one without a version has nothing to copy.
-  # @return [Boolean]
-  def restorable?
-    orphaned? && current_version_id.present?
-  end
-
   # An unlisted listing kept its authoring copy but was taken off the marketplace. Distinct from
   # orphaned, which is about the authoring copy rather than visibility — and an orphaned listing keeps
   # its snapshots and its `published` flag, so neither state collapses into the other.
@@ -75,9 +68,9 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
   end
 
   # Whether the authoring copy lives in the marketplace's container course rather than in a course
-  # somebody owns — true for a listing rebuilt after orphaning, and for one authored in the
-  # container directly. It is the only thing on the record that says where the copy an admin would
-  # edit actually is: `RestoreAuthoringJob` leaves the provenance fields on the origin course.
+  # somebody owns — true for a listing re-pointed after its source was deleted, and for one authored
+  # in the container directly. It is the only thing on the record that says where the copy an admin
+  # would edit actually is: the re-point leaves the provenance fields on the origin course.
   #
   # `without_tenant` is load-bearing, not defensive. `Course` is `acts_as_tenant :instance` and the
   # container lives in the dedicated preview instance, so under every real admin request the tenant
@@ -88,10 +81,10 @@ class Course::Assessment::Marketplace::Listing < ApplicationRecord
     ActsAsTenant.without_tenant { authoring_assessment&.course&.preview? } || false
   end
 
-  # Whether the original source assessment is gone — either there is no authoring copy at all (never
-  # rebuilt after orphaning, or the rebuild failed), or there is one but it now lives in the
-  # marketplace container while the listing was published elsewhere. `RestoreAuthoringJob` produces
-  # the second case: it duplicates into the container but leaves provenance on the origin course.
+  # Whether the original source assessment is gone — either there is no authoring copy at all (no
+  # version to re-point from), or there is one but it now lives in the marketplace container while
+  # the listing was published elsewhere. The re-point produces the second case: it clones into the
+  # container but leaves provenance on the origin course.
   #
   # `source_course&.preview?` keeps this false for a listing authored in the container directly,
   # where the container legitimately is the source course and nothing was ever lost.

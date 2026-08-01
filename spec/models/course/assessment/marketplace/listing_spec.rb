@@ -123,8 +123,13 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
     describe 'maintenance predicates' do
       let(:listing) { create(:course_assessment_marketplace_listing, :versioned) }
 
+      # Orphaning is CONSTRUCTED here rather than derived from a deletion. Deleting the authoring
+      # assessment of a versioned listing re-points it at a fresh container copy in the same
+      # transaction (Course::Assessment#repoint_marketplace_listing_authoring), so a deletion no longer
+      # produces this state: the orphans left are rows orphaned before that shipped, and listings with
+      # no version to rebuild from.
       def orphan!(target = listing)
-        target.authoring_assessment.destroy!
+        target.update!(authoring_assessment: nil)
         target.reload
       end
 
@@ -133,23 +138,8 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
           expect(listing).not_to be_orphaned
         end
 
-        it 'is true once the authoring assessment is deleted' do
+        it 'is true once the listing loses its authoring copy' do
           expect(orphan!).to be_orphaned
-        end
-      end
-
-      describe '#restorable?' do
-        it 'is true for an orphaned listing that still has a version' do
-          expect(orphan!).to be_restorable
-        end
-
-        it 'is false while the listing still has an authoring copy' do
-          expect(listing).not_to be_restorable
-        end
-
-        it 'is false for an orphaned listing with no version to restore from' do
-          unversioned = create(:course_assessment_marketplace_listing)
-          expect(orphan!(unversioned)).not_to be_restorable
         end
       end
 
@@ -262,14 +252,13 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
         expect(listing).not_to be_source_assessment_deleted
       end
 
-      it 'is true once the authoring assessment is destroyed (no rebuild yet)' do
+      it 'is true once the authoring assessment is destroyed' do
         listing.authoring_assessment.destroy!
         expect(listing.reload).to be_source_assessment_deleted
       end
 
-      # `RestoreAuthoringJob` always duplicates into the container and leaves `source_course`
-      # pointing at the ORIGIN, so this is the rebuilt case: published and marketplace-hosted, but
-      # the original is still gone.
+      # The re-point clones into the container and leaves `source_course` pointing at the ORIGIN, so
+      # this is that case: published and marketplace-hosted, but the original is still gone.
       it 'is true once the authoring copy is rebuilt into the marketplace container' do
         container = Course::Assessment::Marketplace::PreviewContainerService.container_course
         rebuilt = ActsAsTenant.with_tenant(container.instance) { create(:assessment, course: container) }
@@ -378,29 +367,51 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
       end
     end
 
-    describe 'orphaning when the authoring assessment is deleted' do
-      let!(:listing) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
-      let!(:adoption) { create(:course_assessment_marketplace_adoption, listing: listing) }
+    describe 'when the authoring assessment is deleted' do
+      # The deletion path enqueues nothing, but the env default is `:background_thread` — a real thread
+      # sharing this example's connection — and these assertions must answer for the callback alone.
+      with_active_job_queue_adapter(:test) do
+        let!(:listing) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
+        let!(:adoption) { create(:course_assessment_marketplace_adoption, listing: listing) }
 
-      it 'survives with a null authoring assessment, keeping its versions and adoptions' do
-        expect { listing.authoring_assessment.destroy! }.
-          not_to(change { described_class.where(id: listing.id).count })
+        # The listing NEVER loses its authoring copy while it has a version to rebuild one from: the
+        # copy is replaced, in the same transaction, by one the marketplace owns. Its version chain and
+        # its adopters' records are untouched either way — a deleted source assessment must never take
+        # them with it.
+        it 'is re-pointed at a marketplace-owned copy, keeping its versions and adoptions' do
+          expect { listing.authoring_assessment.destroy! }.
+            not_to(change { described_class.where(id: listing.id).count })
 
-        expect(listing.reload.authoring_assessment_id).to be_nil
-        expect(listing.versions.count).to eq(1)
-        expect(listing.adoptions).to include(adoption)
-      end
+          expect(listing.reload.authoring_assessment_id).not_to be_nil
+          expect(listing).to be_marketplace_hosted
+          expect(listing.versions.count).to eq(1)
+          expect(listing.adoptions).to include(adoption)
+        end
 
-      it 'permits a second orphaned listing to coexist' do
-        first = create(:course_assessment_marketplace_listing)
-        second = create(:course_assessment_marketplace_listing)
-        first.authoring_assessment.destroy!
+        # No version, nothing to rebuild from — and no Ruby `dependent:` option on the association
+        # either, so this is `fk_caml_authoring_assessment_id`'s `on_delete: :nullify` doing the work.
+        it 'survives with a null authoring assessment when it has no version, keeping its adoptions' do
+          versionless = create(:course_assessment_marketplace_listing, published: true)
+          versionless_adoption = create(:course_assessment_marketplace_adoption, listing: versionless)
 
-        expect { second.authoring_assessment.destroy! }.
-          not_to(change { described_class.where(id: [first.id, second.id]).count })
+          expect { versionless.authoring_assessment.destroy! }.
+            not_to(change { described_class.where(id: versionless.id).count })
 
-        expect(first.reload.authoring_assessment_id).to be_nil
-        expect(second.reload.authoring_assessment_id).to be_nil
+          expect(versionless.reload.authoring_assessment_id).to be_nil
+          expect(versionless.adoptions).to include(versionless_adoption)
+        end
+
+        it 'permits a second orphaned listing to coexist' do
+          first = create(:course_assessment_marketplace_listing)
+          second = create(:course_assessment_marketplace_listing)
+          first.authoring_assessment.destroy!
+
+          expect { second.authoring_assessment.destroy! }.
+            not_to(change { described_class.where(id: [first.id, second.id]).count })
+
+          expect(first.reload.authoring_assessment_id).to be_nil
+          expect(second.reload.authoring_assessment_id).to be_nil
+        end
       end
     end
   end
