@@ -32,6 +32,19 @@ RSpec.describe Course::Assessment::Marketplace::PublishService, type: :service d
         end
       end
 
+      # The snapshot shares the source's duplication root so plagiarism comparison can still reach
+      # across everything descended from it, but carries no link rows: publishing crosses from the
+      # source instance into the preview instance, and `#initialize_duplicate` drops those.
+      it 'gives the snapshot the source root and no links' do
+        listing = described_class.publish(assessment, publisher)
+        snapshot = listing.current_version.assessment
+        ActsAsTenant.without_tenant do
+          expect(snapshot.linkable_tree_id).to eq(assessment.linkable_tree_id)
+          expect(snapshot.linked_assessments).to be_empty
+          expect(snapshot.reverse_linked_assessments).to be_empty
+        end
+      end
+
       it 'creates exactly one version row' do
         expect { described_class.publish(assessment, publisher) }.
           to change { Course::Assessment::Marketplace::ListingVersion.count }.by(1)

@@ -116,9 +116,6 @@ class Course::Assessment::Marketplace::PublishService
       assessment.course, container, assessment, current_user: @publisher
     )
     reparent_into_container_tab(copy, container)
-    # A published snapshot is a standalone assessment, not a link-sibling of the origin. See
-    # Course::Assessment#detach_from_link_tree!.
-    copy.detach_from_link_tree!
     copy
   end
 
