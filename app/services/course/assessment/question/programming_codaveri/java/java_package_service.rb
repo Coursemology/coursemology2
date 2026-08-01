@@ -103,23 +103,11 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     end
   end
 
-  def extract_supporting_file(filename, content)
-    supporting_file_object = default_codaveri_data_file_template
-
-    supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
-    supporting_file_object[:path] = filename.to_s
-    # TODO: remove filename.to_s.downcase.end_with?('.java') check
-    # For now, only plaintext files that require compiling (e.g. *.java) will use 'utf8' ecoding
-    # Pending Codaveri 'utf8' encoding support for all plaintext files in compiled languages
-    if content.force_encoding('UTF-8').valid_encoding? && filename.to_s.downcase.end_with?('.java')
-      supporting_file_object[:content] = content
-      supporting_file_object[:encoding] = 'utf8'
-    else
-      supporting_file_object[:content] = Base64.strict_encode64(content)
-      supporting_file_object[:encoding] = 'base64'
-    end
-
-    @data_files.append(supporting_file_object)
+  # TODO: remove filename.to_s.downcase.end_with?('.java') check
+  # For now, only plaintext files that require compiling (e.g. *.java) will use 'utf8' ecoding
+  # Pending Codaveri 'utf8' encoding support for all plaintext files in compiled languages
+  def utf8_encodable?(filename, utf8_content)
+    super && filename.to_s.downcase.end_with?('.java')
   end
 
   def extract_template

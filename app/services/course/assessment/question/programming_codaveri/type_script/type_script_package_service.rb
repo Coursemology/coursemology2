@@ -97,27 +97,6 @@ class Course::Assessment::Question::ProgrammingCodaveri::TypeScript::TypeScriptP
     end
   end
 
-  # Extracts filename and content of a data file and append it to the
-  # [:additionalFiles] array for the problem management API request body.
-  #
-  # @param [Pathname] pathname The pathname of the file.
-  # @param [String] content The content of the file.
-  def extract_supporting_file(filename, content)
-    supporting_file_object = default_codaveri_data_file_template
-
-    supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
-    supporting_file_object[:path] = filename.to_s
-    if content.force_encoding('UTF-8').valid_encoding?
-      supporting_file_object[:content] = content
-      supporting_file_object[:encoding] = 'utf8'
-    else
-      supporting_file_object[:content] = Base64.strict_encode64(content)
-      supporting_file_object[:encoding] = 'base64'
-    end
-
-    @data_files.append(supporting_file_object)
-  end
-
   # Extracts test cases from the built dummy reports and append all the test cases to the
   # [:IOTestcases] array for the problem management API request body.
   def extract_test_cases # rubocop:disable Metrics/AbcSize
