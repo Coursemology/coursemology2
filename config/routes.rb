@@ -513,7 +513,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :leaderboard, only: [:index] do
+      resource :leaderboard, only: [] do
         get '/' => 'leaderboards#index'
         get 'groups', as: :group
       end
@@ -616,7 +616,7 @@ Rails.application.routes.draw do
         post 'mark_as_read', on: :member
       end
 
-      resource :learning_map, only: [:index] do
+      resource :learning_map, only: [] do
         get '/' => 'learning_map#index'
         post 'add_parent_node' => 'learning_map#add_parent_node'
         post 'remove_parent_node' => 'learning_map#remove_parent_node'

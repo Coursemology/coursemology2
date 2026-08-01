@@ -19,11 +19,19 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     # @return [nil] If the timeout elapsed.
     def wait(identifier, timeout: nil, while_callback: nil, &block)
       deadline = timeout ? Time.zone.now + timeout : nil
-      connection.execute("LISTEN #{identifier};")
-
-      wait_for_identifier(identifier, deadline, while_callback, &block)
-    ensure
-      connection.execute("UNLISTEN #{identifier};")
+      # LISTEN, wait_for_notify and UNLISTEN must all run on the SAME physical connection. Lease one
+      # for the whole sequence via `with_connection` (`connection` is soft-deprecated in Rails 7.2)
+      # rather than re-resolving it on each call.
+      with_connection do |conn|
+        conn.execute("LISTEN #{identifier};")
+        # `raw_connection` (public since Rails 7.1, replacing the private `@raw_connection` ivar) has
+        # side effects — it may verify/reconnect and marks the connection dirty — so fetch the
+        # underlying PG connection ONCE and reuse it across the wait loop.
+        pg_connection = conn.raw_connection
+        wait_for_identifier(pg_connection, identifier, deadline, while_callback, &block)
+      ensure
+        conn.execute("UNLISTEN #{identifier};")
+      end
     end
 
     # Signals to possible waiting consumers on this record.
@@ -35,31 +43,32 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
 
     # Waits for the given identifier to be signalled.
     #
+    # @param [PG::Connection] pg_connection The underlying PG connection LISTENing for the signal.
     # @param [String] identifier The identifier to wait for.
     # @param [Time|nil] deadline The deadline to wait until.
     # @param [Proc|nil] while_callback The loop will keep waiting until this returns a truthy value.
     # @return [String] Returns the notified event if the deadline has not elapsed.
     # @return [nil] If the deadline elapsed.
-    def wait_for_identifier(identifier, deadline, while_callback, &block)
+    def wait_for_identifier(pg_connection, identifier, deadline, while_callback, &block)
       return false if while_callback && while_callback.call == false
 
       last_notification = false
-      last_notification = wait_until(deadline, while_callback, &block) until
+      last_notification = wait_until(pg_connection, deadline, while_callback, &block) until
         last_notification.nil? || last_notification == identifier
       last_notification
     end
 
     # Waits until the deadline, or while_callback returns false.
     #
+    # @param [PG::Connection] pg_connection The underlying PG connection LISTENing for the signal.
     # @param [Time|nil] deadline The deadline to wait until.
     # @param [Proc|nil] while_callback The loop will keep waiting until this returns a truthy value.
     # @return [String] Returns the notified event if the deadline has not elapsed.
     # @return [nil] If the deadline elapsed.
-    def wait_until(deadline, while_callback, &block)
+    def wait_until(pg_connection, deadline, while_callback, &block)
       while deadline.nil? || Time.zone.now < deadline
         wait_timeout = deadline ? deadline - Time.zone.now : nil
-        result = connection.instance_variable_get(:@raw_connection).
-                 wait_for_notify(wait_timeout, &block)
+        result = pg_connection.wait_for_notify(wait_timeout, &block)
         return result if while_callback.nil? || !while_callback.call
       end
 

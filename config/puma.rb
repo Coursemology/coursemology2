@@ -39,7 +39,9 @@ when 'production'
   before_worker_boot do
     require 'active_record'
     begin
-      ActiveRecord::Base.connection.disconnect!
+      # Drop connections inherited across the worker boot (Base.connection is soft-deprecated in 7.2;
+      # disconnecting the whole pool is the correct primitive here, not leasing a connection).
+      ActiveRecord::Base.connection_pool.disconnect!
     rescue ActiveRecord::ConnectionNotEstablished => e
       puts e
     end

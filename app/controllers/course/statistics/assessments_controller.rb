@@ -174,7 +174,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     student_ids = @all_students.pluck(:user_id)
     submission_question_ids = @submission_question_id_hash.values
 
-    result = ActiveRecord::Base.connection.execute(
+    result = ActiveRecord::Base.lease_connection.execute(
       build_message_grade_sql(student_ids, submission_question_ids)
     )
     result.to_h do |row|

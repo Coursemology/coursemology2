@@ -8,7 +8,7 @@ module Course::Statistics::CountsConcern
     return {} if @assessments.empty?
     return @assessments.index_with { 0 } if @all_students.empty?
 
-    attempted_submissions_count = ActiveRecord::Base.connection.execute("
+    attempted_submissions_count = ActiveRecord::Base.lease_connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
       WHERE
@@ -24,7 +24,7 @@ module Course::Statistics::CountsConcern
     return {} if @assessments.empty?
     return @assessments.index_with { 0 } if @all_students.empty?
 
-    submitted_submissions_count = ActiveRecord::Base.connection.execute("
+    submitted_submissions_count = ActiveRecord::Base.lease_connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
       WHERE
@@ -43,7 +43,7 @@ module Course::Statistics::CountsConcern
 
     @personal_end_at_hash = personal_end_at_hash(@assessments.pluck(:id), current_course.id)
     @reference_times_hash = reference_times_hash(@assessments.pluck(:id), current_course.id)
-    all_submissions = ActiveRecord::Base.connection.execute("
+    all_submissions = ActiveRecord::Base.lease_connection.execute("
       SELECT cu.id AS course_user_id, cas.assessment_id, MAX(cas.submitted_at) as submitted_at
       FROM course_assessment_submissions cas
       JOIN course_users cu
@@ -62,7 +62,7 @@ module Course::Statistics::CountsConcern
     return {} if @assessments.empty?
     return @assessments.index_with { nil } if @all_students.empty?
 
-    latest_submissions = ActiveRecord::Base.connection.execute("
+    latest_submissions = ActiveRecord::Base.lease_connection.execute("
       SELECT cas.assessment_id AS id, MAX(cas.submitted_at) AS latest_submitted_at
       FROM course_assessment_submissions cas
       WHERE
