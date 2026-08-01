@@ -1,21 +1,21 @@
 GIT
   remote: https://github.com/Coursemology/active_record-acts_as.git
-  revision: 39cdc27af5649fd140fccda56a701d87ef85730a
+  revision: eb6a5fa9d4a76eb0867a32b804c3fc7f5acd225c
   specs:
-    active_record-acts_as (4.0.0)
-      activerecord (>= 6.0)
-      activesupport (>= 6.0)
+    active_record-acts_as (4.1.0)
+      activerecord (>= 7.2)
+      activesupport (>= 7.2)
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 3e9a184a61246acae8f8fcbf01d040a166f539b1
+  revision: f3064cc887f539bf808241be02d12f5565236e24
   specs:
-    activerecord-userstamp (3.0.5)
-      rails (>= 6)
+    activerecord-userstamp (3.0.8)
+      rails (>= 7.2)
 
 GIT
   remote: https://github.com/Coursemology/polyglot
-  revision: 0cbe1260d30a6eb361930f811d92107775edeed3
+  revision: d1b3c74f86fe58420f33a21f45e10000307087cf
   specs:
     coursemology-polyglot (0.4.3)
       activesupport (>= 4.2)
@@ -28,10 +28,10 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/settings_on_rails
-  revision: 789e8fe1706da9c0e0c04aaa338afa7eb867e007
+  revision: 2a490ddb0415471d131111f79230f8ddee4c3560
   specs:
-    settings_on_rails (0.4.0)
-      rails (>= 6)
+    settings_on_rails (0.4.2)
+      rails (>= 7.2)
 
 GIT
   remote: https://github.com/aha-app/calculated_attributes.git
