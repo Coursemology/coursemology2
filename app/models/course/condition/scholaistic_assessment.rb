@@ -56,13 +56,14 @@ class Course::Condition::ScholaisticAssessment < ApplicationRecord
   end
 
   def required_assessments_for(conditional)
+    conditional_type = ActiveRecord::Base.with_connection { |c| c.quote(conditional.class.name) }
     Course::ScholaisticAssessment.joins(<<-SQL)
       INNER JOIN
         (SELECT cca.scholaistic_assessment_id
           FROM course_condition_scholaistic_assessments cca INNER JOIN course_conditions cc
           ON cc.actable_type = 'Course::Condition::ScholaisticAssessment' AND cc.actable_id = cca.id
           WHERE cc.conditional_id = #{conditional.id}
-            AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
+            AND cc.conditional_type = #{conditional_type}
         ) ids
       ON ids.scholaistic_assessment_id = course_scholaistic_assessments.id
     SQL

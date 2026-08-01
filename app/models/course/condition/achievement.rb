@@ -76,13 +76,14 @@ class Course::Condition::Achievement < ApplicationRecord
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow
     # allow the above query to work without #reload
+    conditional_type = ActiveRecord::Base.with_connection { |c| c.quote(conditional.class.name) }
     Course::Achievement.joins(<<-SQL)
       INNER JOIN
         (SELECT cca.achievement_id
           FROM course_condition_achievements cca INNER JOIN course_conditions cc
             ON cc.actable_type = 'Course::Condition::Achievement' AND cc.actable_id = cca.id
             WHERE cc.conditional_id = #{conditional.id}
-              AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
+              AND cc.conditional_type = #{conditional_type}
         ) ids
       ON ids.achievement_id = course_achievements.id
     SQL
