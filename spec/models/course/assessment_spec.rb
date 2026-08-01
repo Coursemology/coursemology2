@@ -547,59 +547,160 @@ RSpec.describe Course::Assessment do
       end
     end
 
-    # Deleting the source assessment ORPHANS its listing rather than destroying it: the marketplace
-    # goes on serving the last snapshot, but nobody can publish a new version of it again. Rebuilding
-    # the authoring copy is what restores that, and it is automatic so an admin never has to notice
-    # the breakage first — the "Rebuild source assessment" action remains only as a manual retry.
-    describe 'automatic marketplace authoring rebuild' do
+    describe 'in-transaction marketplace authoring re-point' do
+      # The re-point enqueues nothing, but the env default is `:background_thread` — a real thread
+      # sharing this example's connection — and these examples assert on row counts in the container.
       with_active_job_queue_adapter(:test) do
         let(:listing) do
           create(:course_assessment_marketplace_listing, :versioned, course: course)
         end
-        let(:listing_without_version) do
-          create(:course_assessment_marketplace_listing, course: course)
+
+        def container
+          ActsAsTenant.without_tenant do
+            Course::Assessment::Marketplace::PreviewContainerService.container_course
+          end
         end
 
-        it 'enqueues a rebuild when the source assessment is deleted' do
+        def container_assessment_count
+          ActsAsTenant.without_tenant { container.assessments.count }
+        end
+
+        # Gives +listing+ a snapshot in the CONTAINER, where a real published one lives. The
+        # `:versioned` factory's stand-in snapshot sits in the origin course instead, which the
+        # course-deletion examples cannot use: destroying the course would take the snapshot with it
+        # and trip the version row's foreign key — a collision the production layout makes impossible.
+        #
+        # @return [Course::Assessment] the snapshot
+        def snapshot_in_container(listing)
+          snapshot = ActsAsTenant.with_tenant(container.instance) do
+            create(:assessment, course: container)
+          end
+          version = create(:course_assessment_marketplace_listing_version,
+                           listing: listing, assessment: snapshot,
+                           published_at: listing.first_published_at || Time.zone.now,
+                           published_by: listing.publisher)
+          listing.update!(current_version: version)
+          snapshot
+        end
+
+        it 'points the listing at a fresh draft copy in the marketplace container' do
           listed_assessment = listing.authoring_assessment
 
+          listed_assessment.destroy!
+
+          copy = listing.reload.authoring_assessment
+          expect(copy).to be_present
+          expect(copy.id).not_to eq(listed_assessment.id)
+          expect(ActsAsTenant.without_tenant { copy.course }).to eq(container)
+          expect(listing).not_to be_orphaned
+          # The assessment the user deleted is gone. Re-pointing is not undeletion.
+          expect(Course::Assessment.where(id: listed_assessment.id)).to be_empty
+          # A published copy in the container would be visible to previewers. Holds because
+          # ObjectDuplicationService's object-mode default is `unpublish_all: true`.
+          expect(copy.published).to be(false)
+        end
+
+        it 'clones the snapshot rather than the assessment being deleted' do
+          listed_assessment = listing.authoring_assessment
+          snapshot = ActsAsTenant.without_tenant { listing.current_version.assessment }
+          snapshot_title = snapshot.title
+          listed_assessment.update!(title: 'Drifted since publication')
+
+          listed_assessment.destroy!
+
+          copy = listing.reload.authoring_assessment
+          expect(copy).to be_present
+          expect(copy.title).to eq(snapshot_title)
+          expect(copy.id).not_to eq(snapshot.id)
+          expect(snapshot.reload).to be_persisted
+          # The clone inherits the snapshot's duplication root rather than starting a tree of its own,
+          # so everything descended from the original source stays comparable for plagiarism. The link
+          # rows are what must not cross an instance boundary, and `#initialize_duplicate` handles that.
+          expect(copy.linkable_tree_id).to eq(snapshot.linkable_tree_id)
+        end
+
+        it 'cuts no version and leaves the current version alone' do
+          listed_assessment = listing.authoring_assessment
+          current_version_id = listing.current_version_id
+
           expect { listed_assessment.destroy! }.
-            to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob).
-            with(listing.id, current_user: User.system)
+            not_to(change { Course::Assessment::Marketplace::ListingVersion.where(listing_id: listing.id).count })
+          expect(listing.reload.current_version_id).to eq(current_version_id)
         end
 
-        # A course deletion cascades to its assessments through Ruby `dependent: :destroy`, so the one
-        # hook on the assessment covers both ways a listing can lose its source.
-        #
-        # The snapshot is placed OUTSIDE the origin course, which is where a real one lives (the
-        # marketplace container). The `:versioned` factory's same-course stand-in cannot be used here:
-        # deleting the course would try to delete the snapshot too and trip the version's foreign key,
-        # a collision the production layout makes impossible.
-        it 'enqueues a rebuild when the whole source course is deleted' do
-          version = create(:course_assessment_marketplace_listing_version,
-                           listing: listing_without_version,
-                           assessment: create(:assessment, course: create(:course)),
-                           published_at: Time.zone.now,
-                           published_by: listing_without_version.publisher)
-          listing_without_version.update!(current_version: version)
+        # The in-transaction proof. The re-point is visible mid-destroy — which an `after_commit` job
+        # could never manage — and a rollback takes the copy with it, leaving the listing pointing at
+        # the assessment that survived.
+        it 'unwinds the copy when the destroy that triggered it fails' do
+          listed_assessment = listing.authoring_assessment
+          original_id = listing.authoring_assessment_id
+          copies_before = container_assessment_count
 
-          expect { course.destroy! }.
-            to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob).
-            with(listing_without_version.id, current_user: User.system)
+          ActiveRecord::Base.transaction(requires_new: true) do
+            listed_assessment.destroy!
+
+            expect(listing.reload.authoring_assessment).to be_present
+            expect(listing.reload.authoring_assessment_id).not_to eq(original_id)
+
+            raise ActiveRecord::Rollback
+          end
+
+          expect(listing.reload.authoring_assessment_id).to eq(original_id)
+          expect(listed_assessment.reload).to be_persisted
+          expect(container_assessment_count).to eq(copies_before)
         end
 
-        # There is nothing to rebuild FROM: the rebuild duplicates the latest snapshot, and this
-        # listing has never published one. It stays orphaned, and the admin's only route is deletion.
-        it 'enqueues nothing for a listing that has never published a version' do
+        # A course deletion cascades to its assessments through Ruby `dependent: :destroy`
+        # (course -> categories -> tabs -> assessments), so the one hook on the assessment is the
+        # single choke point for both ways a listing loses its source.
+        it 'points the listing at a container copy when the whole origin course is deleted' do
+          listing_in_course = create(:course_assessment_marketplace_listing, course: course)
+          snapshot = snapshot_in_container(listing_in_course)
+
+          course.destroy!
+
+          copy = listing_in_course.reload.authoring_assessment
+          expect(copy).to be_present
+          expect(copy.id).not_to eq(snapshot.id)
+          expect(ActsAsTenant.without_tenant { copy.course }).to eq(container)
+          expect(listing_in_course).not_to be_orphaned
+        end
+
+        # One transaction, two listings: whichever assessment is destroyed first must not leave the
+        # second's re-point unrun, and the two must not collide over the container.
+        it 'points every listing in a deleted course at its own container copy' do
+          first = create(:course_assessment_marketplace_listing, course: course)
+          second = create(:course_assessment_marketplace_listing, course: course)
+          snapshot_in_container(first)
+          snapshot_in_container(second)
+
+          course.destroy!
+
+          expect(first.reload).not_to be_orphaned
+          expect(second.reload).not_to be_orphaned
+          expect(first.authoring_assessment_id).not_to eq(second.authoring_assessment_id)
+          [first, second].each do |listing|
+            expect(ActsAsTenant.without_tenant { listing.authoring_assessment.course }).to eq(container)
+          end
+        end
+
+        # There is nothing to clone FROM, so this listing is left orphaned — and it is the DB foreign
+        # key that nullifies the column, not a Ruby callback (see the association guard below). Its
+        # only route out is the admin's deletion.
+        it 'orphans a listing that has never published a version' do
           versionless = create(:course_assessment_marketplace_listing, course: course)
+          listed_assessment = versionless.authoring_assessment
 
-          expect { versionless.authoring_assessment.destroy! }.
-            not_to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob)
+          expect { listed_assessment.destroy! }.to change(Course::Assessment, :count).by(-1)
+
+          expect(versionless.reload).to be_orphaned
+          expect(Course::Assessment::Marketplace::Listing.where(id: versionless.id)).to exist
         end
 
-        it 'enqueues nothing when the assessment authors no listing at all' do
-          expect { assessment.destroy! }.
-            not_to have_enqueued_job(Course::Assessment::Marketplace::RestoreAuthoringJob)
+        it 'destroys an assessment that authors no listing without cloning anything' do
+          assessment
+
+          expect { assessment.destroy! }.to change(Course::Assessment, :count).by(-1)
         end
       end
     end
