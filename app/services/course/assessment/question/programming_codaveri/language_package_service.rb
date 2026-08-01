@@ -61,6 +61,40 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
 
   private
 
+  # Extracts filename and content of a data file and append it to the
+  # [:additionalFiles] array for the problem management API request body.
+  #
+  # @param [Pathname] filename The pathname of the file.
+  # @param [String] content The content of the file.
+  def extract_supporting_file(filename, content)
+    supporting_file_object = default_codaveri_data_file_template
+
+    supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
+    supporting_file_object[:path] = filename.to_s
+    # `content` is read straight out of the zip and may be frozen (rubyzip returns a frozen empty
+    # string literal for zero-byte entries), so tag the encoding on a copy rather than in place.
+    utf8_content = content.dup.force_encoding('UTF-8')
+    if utf8_encodable?(filename, utf8_content)
+      supporting_file_object[:content] = utf8_content
+      supporting_file_object[:encoding] = 'utf8'
+    else
+      supporting_file_object[:content] = Base64.strict_encode64(content)
+      supporting_file_object[:encoding] = 'base64'
+    end
+
+    @data_files.append(supporting_file_object)
+  end
+
+  # Whether a supporting file may be sent to Codaveri as plaintext 'utf8' rather than 'base64'.
+  # Concrete services may narrow this further; see the Java package service.
+  #
+  # @param [Pathname] filename The pathname of the file.
+  # @param [String] utf8_content The content of the file, tagged as UTF-8.
+  # @return [Boolean]
+  def utf8_encodable?(_filename, utf8_content)
+    utf8_content.valid_encoding?
+  end
+
   # Defines the default solution template as indicated in the Codevari API problem management spec.
   #
   # @return [Hash]
