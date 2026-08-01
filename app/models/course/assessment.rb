@@ -19,9 +19,7 @@ class Course::Assessment < ApplicationRecord
   after_create :set_linkable_tree_id
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab
-  # See #rebuild_marketplace_listing_authoring for why the pair is split across the two callbacks.
-  before_destroy :remember_orphaned_marketplace_listing
-  after_commit :rebuild_marketplace_listing_authoring, on: :destroy
+  before_destroy :repoint_marketplace_listing_authoring
 
   enum :randomization, { prepared: 0 }
 
@@ -85,12 +83,9 @@ class Course::Assessment < ApplicationRecord
   has_one :gradebook_assessment_contribution,
           class_name: 'Course::Gradebook::AssessmentContribution',
           dependent: :destroy, inverse_of: :assessment
-  # `dependent: :nullify`, NOT `:destroy`: deleting the source assessment must ORPHAN the listing,
-  # not destroy it along with its version chain and every adopter's adoption record. The model
-  # callback fires before the DB, so this and the FK's `on_delete: :nullify` must move together.
   has_one :marketplace_listing, class_name: 'Course::Assessment::Marketplace::Listing',
                                 foreign_key: :authoring_assessment_id,
-                                inverse_of: :authoring_assessment, dependent: :nullify
+                                inverse_of: :authoring_assessment
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
   has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
@@ -410,33 +405,28 @@ class Course::Assessment < ApplicationRecord
 
   private
 
-  # The listing this assessment authors, if losing it would orphan a listing that can be rebuilt.
-  def remember_orphaned_marketplace_listing
+  # Hands the listing a fresh authoring copy before this assessment goes, so it is never observably
+  # orphaned. Clones the listing's latest SNAPSHOT (never this assessment, which is about to be
+  # destroyed) into the marketplace container and re-points `authoring_assessment` at the clone.
+  #
+  # Returns early, rather than raising, when there is no version to clone from: such a listing has
+  # nothing to rebuild from and is left to orphan through `fk_caml_authoring_assessment_id`. The early
+  # return also keeps an assessment that authors no listing from provisioning the preview instance and
+  # container course inside an ordinary delete.
+  def repoint_marketplace_listing_authoring
     listing = marketplace_listing
-    @orphaned_marketplace_listing_id = listing&.current_version_id ? listing.id : nil
-  end
+    return if listing.nil? || listing.current_version_id.nil?
 
-  # Rebuilds the listing's authoring copy in the marketplace container as soon as its source is gone.
-  # Every course-facing path reads that copy, so until it is back the listing is off the marketplace
-  # and cannot publish a new version — which an admin would otherwise learn only by visiting the
-  # listings table. Doing it automatically makes the manual "Rebuild source assessment" a retry only.
-  #
-  # This is the single choke point for both ways a listing loses its source: a course deletion
-  # cascades to its assessments through Ruby `dependent: :destroy` (course -> categories -> tabs ->
-  # assessments), so it arrives here too.
-  #
-  # `after_commit`, never `after_destroy`: a course deletion destroys every one of its assessments
-  # inside one transaction, so a job enqueued mid-destroy could be picked up before the deletion is
-  # durable — or after a sibling's failure rolled the whole thing back, rebuilding a listing that was
-  # never orphaned at all.
-  #
-  # `User.system` because there is no acting user in a cascade, and the rebuild has to be attributable
-  # to something: the job stamps the duplicated copy's creator and the listing's updater.
-  def rebuild_marketplace_listing_authoring
-    return if @orphaned_marketplace_listing_id.nil?
-
-    Course::Assessment::Marketplace::RestoreAuthoringJob.
-      perform_later(@orphaned_marketplace_listing_id, current_user: User.system)
+    ActsAsTenant.without_tenant do
+      container = Course::Assessment::Marketplace::PreviewContainerService.container_course
+      source = listing.current_version.assessment
+      User.with_stamper(User.system) do
+        copy = Course::Duplication::ObjectDuplicationService.duplicate_objects(
+          source.course, container, source, current_user: User.system
+        )
+        listing.update!(authoring_assessment: copy)
+      end
+    end
   end
 
   # Parents the assessment under its duplicated parent tab, if it exists.

@@ -17,6 +17,26 @@ RSpec.describe Course::Assessment::Marketplace::PreviewContainerService, type: :
         expect(first.read_attribute(:host)).to eq(described_class::PREVIEW_INSTANCE_HOST)
         expect(first.name).to eq(described_class::PREVIEW_INSTANCE_NAME)
       end
+
+      it 'finds an existing preview instance whose host differs only by case' do
+        existing = described_class.preview_instance
+        original_host = existing.read_attribute(:host)
+        existing.update_column(:host, original_host.upcase)
+
+        expect { described_class.preview_instance }.not_to change(Instance, :count)
+        expect(described_class.preview_instance).to eq(existing)
+      ensure
+        existing&.update_column(:host, original_host) if original_host
+      end
+
+      # Two callers can both miss the lookup and both insert, and the loser must recover rather than
+      # raise. Exercised by calling the insert directly against an instance that already exists, which
+      # is exactly the loser's position: the insert collides and the rescue re-reads.
+      it 'recovers when another caller has already inserted the preview instance' do
+        existing = described_class.preview_instance
+
+        expect(described_class.send(:create_preview_instance)).to eq(existing)
+      end
     end
 
     describe '.container_course' do

@@ -10,8 +10,9 @@
 # destination course that assessment lives in. A purge must never touch another course's content.
 #
 # Purging an unlisted listing destroys the listing, its versions and their container snapshots, but
-# NOT the authoring assessment those snapshots were copied from — so unlike the orphaned case the
-# content survives and can be published afresh.
+# NOT an authoring assessment that lives in somebody's course — so the content survives and can be
+# published afresh. An authoring copy the marketplace itself owns (one the re-point put in the
+# container) has no owner left once the listing is gone, so that one is reclaimed with the snapshots.
 class Course::Assessment::Marketplace::PurgeService
   # @param [Course::Assessment::Marketplace::Listing] listing
   # @raise [ArgumentError] if the listing is not purgeable
@@ -34,8 +35,10 @@ class Course::Assessment::Marketplace::PurgeService
     ActsAsTenant.without_tenant do
       Course::Assessment::Marketplace::Listing.transaction do
         snapshot_ids = @listing.versions.pluck(:assessment_id)
+        # Read before the destroy: `marketplace_hosted?` needs the pointer this is about to remove.
+        container_copy_id = @listing.authoring_assessment_id if @listing.marketplace_hosted?
         @listing.destroy!
-        destroy_snapshots(snapshot_ids)
+        destroy_container_assessments(snapshot_ids + [container_copy_id].compact)
       end
     end
     nil
@@ -46,11 +49,11 @@ class Course::Assessment::Marketplace::PurgeService
   # Ordering is load-bearing, and it is why the ids are collected before the listing is destroyed:
   # `course_assessment_marketplace_listing_versions.assessment_id` carries a plain FK with no
   # `on_delete`, so destroying a snapshot while its version row still references it raises
-  # PG::ForeignKeyViolation. Destroy the listing first (its `versions` cascade), then the snapshots.
+  # PG::ForeignKeyViolation. Destroy the listing first (its `versions` cascade), then the assessments.
   #
-  # Skipping this second step would leak the snapshots: nothing else references them, so the
-  # container course would grow forever with no reclaim path.
-  def destroy_snapshots(snapshot_ids)
-    Course::Assessment.where(id: snapshot_ids).each(&:destroy!)
+  # Skipping this second step would leak them: nothing else references a snapshot or a reclaimed
+  # authoring copy, so the container course would grow forever with no reclaim path.
+  def destroy_container_assessments(assessment_ids)
+    Course::Assessment.where(id: assessment_ids).each(&:destroy!)
   end
 end
