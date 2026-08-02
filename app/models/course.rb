@@ -26,6 +26,9 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :published, inclusion: { in: [true, false] }
   validates :enrollable, inclusion: { in: [true, false] }
   validates :preview, inclusion: { in: [true, false] }
+  # Mirrors `index_courses_on_instance_id_one_preview`. `scope:` is load-bearing: Rails builds the
+  # uniqueness query from `unscoped`, which strips the `acts_as_tenant` default scope.
+  validates :preview, uniqueness: { scope: :instance_id }, if: :preview?
   validates :time_zone, length: { maximum: 255 }, allow_nil: true
   validates :creator, presence: true
   validates :updater, presence: true
