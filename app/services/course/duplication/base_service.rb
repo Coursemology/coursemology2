@@ -32,8 +32,9 @@ class Course::Duplication::BaseService
 
   # Hands every duplicated assessment its own copy so it can record a marketplace adoption. Copies
   # made outside +Course::Assessment::Marketplace::DuplicationJob+ -- selected object duplications
-  # and full course duplications that happen to carry a listed assessment along -- are adoptions
-  # too, and the listing has to know about them to reach every course holding a copy.
+  # and full course duplications that happen to carry an ADOPTED assessment along, most often a
+  # course rolled forward for a new batch of students -- are adoptions too, and the listing has to know
+  # about them to reach every course holding a copy.
   #
   # This sweep lives in the duplication service rather than in a model's +after_duplicate_save+
   # hook because that hook only runs for the top-level objects of an object duplication, and never
