@@ -23,7 +23,10 @@ class Course::Assessment::Marketplace::PreviewContainerService
       find_preview_instance || create_preview_instance
     end
 
-    # @return [Course] the single `preview: true` container course in the preview instance.
+    # @return [Course] the container course in the preview instance.
+    #
+    # The flag alone is a unique key here: `index_courses_on_instance_id_one_preview` allows at most
+    # one preview course per instance, so there is no second candidate to disambiguate against.
     def container_course
       instance = preview_instance
       ActsAsTenant.with_tenant(instance) do
@@ -56,20 +59,31 @@ class Course::Assessment::Marketplace::PreviewContainerService
     # `published/gamified/enrollable: false` keep the container out of every listing, level and
     # self-enrolment path: it holds the marketplace's snapshots, so it must never surface as a
     # course in its own right. Previewers are attached to it explicitly, one at a time.
+    #
+    # Both rescues re-read for the reason `create_preview_instance` gives, and the savepoint for the
+    # same reason: the model validation loses the race, the index settles it.
     def create_container_course(instance)
-      User.with_stamper(User.system) do
-        Course.create!(
-          instance: instance,
-          title: PREVIEW_COURSE_TITLE,
-          description: 'System container for marketplace version snapshots and hands-on previews.',
-          preview: true,
-          published: false,
-          gamified: false,
-          enrollable: false,
-          creator: User.system,
-          updater: User.system
-        )
+      ApplicationRecord.transaction(requires_new: true) do
+        User.with_stamper(User.system) do
+          Course.create!(
+            instance: instance,
+            title: PREVIEW_COURSE_TITLE,
+            description: 'System container for marketplace version snapshots and hands-on previews.',
+            preview: true,
+            published: false,
+            gamified: false,
+            enrollable: false,
+            creator: User.system,
+            updater: User.system
+          )
+        end
       end
+    rescue ActiveRecord::RecordNotUnique
+      Course.find_by!(preview: true)
+    rescue ActiveRecord::RecordInvalid => e
+      raise e if e.record.errors[:preview].empty?
+
+      Course.find_by!(preview: true)
     end
   end
 end

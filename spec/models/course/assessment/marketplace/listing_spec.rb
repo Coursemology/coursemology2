@@ -321,6 +321,14 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
     # reports marketplace visibility. A rebuilt listing can go on to be unlisted, so neither answer
     # can be read off the other.
     describe '#marketplace_hosted?' do
+      # `index_courses_on_instance_id_one_preview` allows one preview course per instance, so each
+      # example brings its own — built inside it, since the factory reads through the tenant scope.
+      def hosted_listing
+        ActsAsTenant.with_tenant(create(:instance)) do
+          create(:course_assessment_marketplace_listing, course: create(:course, preview: true))
+        end
+      end
+
       it 'is false while the authoring copy lives in an ordinary course' do
         listing = create(:course_assessment_marketplace_listing)
         expect(listing).not_to be_marketplace_hosted
@@ -329,14 +337,11 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
       # Keyed off `Course#preview`, never off a specific instance id — the same rule
       # PreviewContainerService documents, so a container in any instance reports correctly.
       it 'is true once the authoring copy lives in a preview container course' do
-        container = create(:course, preview: true)
-        listing = create(:course_assessment_marketplace_listing, course: container)
-
-        expect(listing).to be_marketplace_hosted
+        expect(hosted_listing).to be_marketplace_hosted
       end
 
       it 'stays true for a marketplace-hosted listing that is later unlisted' do
-        listing = create(:course_assessment_marketplace_listing, course: create(:course, preview: true))
+        listing = hosted_listing
         listing.update!(published: false)
 
         expect(listing.admin_state).to eq('unlisted')
@@ -360,7 +365,7 @@ RSpec.describe Course::Assessment::Marketplace::Listing, type: :model do
       end
 
       it 'is false for an orphaned listing, which has no authoring copy at all' do
-        listing = create(:course_assessment_marketplace_listing, course: create(:course, preview: true))
+        listing = hosted_listing
         listing.authoring_assessment.destroy!
 
         expect(listing.reload).not_to be_marketplace_hosted
