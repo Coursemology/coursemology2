@@ -127,8 +127,11 @@ RSpec.describe Course::Assessment::Marketplace, type: :model do
     end
 
     context 'when the course is a preview (content-frozen) sandbox' do
-      let(:course) { create(:course, preview: true) }
-      let(:assessment) { create(:assessment, course: course) }
+      # Its own instance: `index_courses_on_instance_id_one_preview` allows one preview course each,
+      # and the default instance is shared with every other example in this suite.
+      let(:preview_instance) { create(:instance) }
+      let(:course) { ActsAsTenant.with_tenant(preview_instance) { create(:course, preview: true) } }
+      let(:assessment) { ActsAsTenant.with_tenant(preview_instance) { create(:assessment, course: course) } }
 
       context 'and the user is the previewer (a course manager)' do
         let(:course_user) { create(:course_manager, course: course) }
