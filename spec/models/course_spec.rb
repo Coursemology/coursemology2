@@ -362,10 +362,14 @@ RSpec.describe Course, type: :model do
         expect(course.errors[:preview]).to be_present
       end
 
+      # Validated inside its own instance: `preview` is unique per instance, and acts_as_tenant
+      # rewrites `instance_id` to the current tenant on validation, so building there is not enough.
       it 'is valid when preview is true' do
-        course = build(:course)
-        course.preview = true
-        expect(course).to be_valid
+        ActsAsTenant.with_tenant(create(:instance)) do
+          course = build(:course)
+          course.preview = true
+          expect(course).to be_valid
+        end
       end
     end
   end

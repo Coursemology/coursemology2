@@ -60,6 +60,31 @@ RSpec.describe Course::Assessment::Marketplace::PreviewContainerService, type: :
                  end)
       end
 
+      # The invariant that lets the lookup key off the flag alone. Both limbs: the model validation,
+      # then `index_courses_on_instance_id_one_preview` underneath it once validations are skipped.
+      it 'is the only preview course its instance can hold' do
+        container = described_class.container_course
+
+        ActsAsTenant.with_tenant(described_class.preview_instance) do
+          expect { create(:course, preview: true) }.to raise_error(ActiveRecord::RecordInvalid)
+
+          duplicate = container.dup
+          duplicate.title = 'Another preview course'
+          expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+      end
+
+      # The loser of a concurrent insert re-reads rather than raising, same contract as the instance.
+      it 'recovers when another caller has already created the container' do
+        container = described_class.container_course
+
+        recovered = ActsAsTenant.with_tenant(described_class.preview_instance) do
+          described_class.send(:create_container_course, described_class.preview_instance)
+        end
+
+        expect(recovered).to eq(container)
+      end
+
       # The container holds every published version snapshot, so it must never surface as a course
       # in its own right — not in a listing, not via self-enrolment, not to any user but the system
       # one. Previewers are attached explicitly, one at a time.
