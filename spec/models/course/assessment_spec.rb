@@ -547,6 +547,79 @@ RSpec.describe Course::Assessment do
       end
     end
 
+    # Only content that came THROUGH the marketplace propagates: a copy descended from an adoption
+    # stays reachable by version reminders and counts as a course using the listing, while copies of
+    # the publisher's own authoring assessment are not adoptions at all.
+    describe '#record_marketplace_adoption' do
+      let(:destination_course) { create(:course) }
+      let(:copy) { create(:assessment, course: destination_course) }
+      let(:duplicating_user) { create(:user) }
+      let(:listing) { create(:course_assessment_marketplace_listing, :versioned, course: course) }
+
+      def record(source, destination = destination_course)
+        source.record_marketplace_adoption(copy, destination, duplicating_user)
+        Course::Assessment::Marketplace::Adoption.find_by(duplicated_assessment_id: copy.id)
+      end
+
+      # Nobody chose the listing here — the publisher is duplicating their own assessment, whether
+      # into next semester's course or a colleague's. Recording it would let a listing with no
+      # adopters at all show an adoption count that climbs every term.
+      it 'records nothing for a copy of the assessment that authors the listing' do
+        expect(record(listing.authoring_assessment)).to be_nil
+      end
+
+      it 'records nothing for an assessment with neither a listing nor an adoption' do
+        expect(record(create(:assessment, course: course))).to be_nil
+      end
+
+      # The roll-forward case: next semester's course carries a copy of a copy. That source holds no
+      # listing of its own, so the chain runs through its adoption row -- without it the new copy
+      # drops out of the listing's reach and never sees a version reminder again.
+      context 'when the source is itself an adopted copy' do
+        let(:adopted) { create(:assessment, course: create(:course)) }
+        let!(:source_adoption) do
+          create(:course_assessment_marketplace_adoption,
+                 listing: listing, destination_course: adopted.course,
+                 duplicated_assessment: adopted, adopted_version_at: 30.days.ago.change(usec: 0))
+        end
+
+        it 'records the copy against the same listing' do
+          adoption = record(adopted)
+
+          expect(adoption).to be_present
+          expect(adoption.listing).to eq(listing)
+          expect(adoption.destination_course).to eq(destination_course)
+        end
+
+        # The copy holds whatever vintage its source held, NOT the listing's latest -- crediting it
+        # with the served version would silently mark a stale copy as up to date.
+        it 'inherits the vintage its source holds rather than the served one' do
+          adoption = record(adopted)
+
+          expect(adoption.adopted_version_at).
+            to be_within(1.second).of(source_adoption.adopted_version_at)
+        end
+
+        # Unlisting is a visibility decision. Severing the chain there would strand copies that
+        # already exist and can still be updated.
+        it 'records the row even once the listing is off the marketplace' do
+          listing.update!(published: false)
+
+          expect(record(adopted)).to be_present
+        end
+
+        # Publishing duplicates the source INTO the container to cut a snapshot. That is the listing
+        # growing a version, not a course adopting it.
+        it 'records nothing when the copy lands in the marketplace container' do
+          container = ActsAsTenant.without_tenant do
+            Course::Assessment::Marketplace::PreviewContainerService.container_course
+          end
+
+          expect(record(adopted, container)).to be_nil
+        end
+      end
+    end
+
     describe 'in-transaction marketplace authoring re-point' do
       # The re-point enqueues nothing, but the env default is `:background_thread` — a real thread
       # sharing this example's connection — and these examples assert on row counts in the container.
