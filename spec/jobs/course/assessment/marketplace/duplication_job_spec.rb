@@ -362,19 +362,6 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
       end
     end
 
-    # Grandchildren-excluded: an adoption is written for copies of a *listed* assessment, and a copy
-    # is never itself listed, so duplicating an already-adopted copy writes no second-generation row.
-    it 'does not write an adoption for an ordinary ObjectDuplicationService copy' do
-      run
-      copy = destination_course.assessments.order(:created_at).last
-      third_course = create(:course)
-      expect do
-        Course::Duplication::ObjectDuplicationService.duplicate_objects(
-          destination_course, third_course, copy, current_user: user
-        )
-      end.not_to change(Course::Assessment::Marketplace::Adoption, :count)
-    end
-
     # The sidebar entry point sends no tab, and a tab from another course can be sent by an
     # out-of-date URL. Neither may leave the redirect pointing at a tab the user cannot open.
     describe 'when the requested tab is absent or foreign' do
@@ -429,11 +416,11 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
       end
     end
 
-    # A listed assessment can leave its course by paths that do not go through this job: an
-    # instructor duplicating selected objects, or a full course duplication that carries the
-    # listed assessment along. Those copies must obey the same two rules as the job's copies --
-    # the listing stays singular, and the destination course is recorded as an adopter.
-    describe 'manual duplication of a listed assessment' do
+    # Marketplace content leaves a course by paths that do not go through this job: an instructor
+    # duplicating selected objects, or a full course duplication carrying the assessment along. Both
+    # must keep the listing singular, and both must record the destination as an adopter -- but only
+    # for content that came THROUGH the marketplace, which is what separates these two describes.
+    describe 'manual duplication of the assessment that authors a listing' do
       let(:manual_destination) { create(:course) }
 
       before { listing }
@@ -460,14 +447,11 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
           expect(copy.marketplace_listing).to be_nil
         end
 
-        it 'records the destination course as an adopter' do
-          copy = nil
-          expect { copy = duplicate_selected_objects }.
-            to change(Course::Assessment::Marketplace::Adoption, :count).by(1)
-          adoption = Course::Assessment::Marketplace::Adoption.order(:id).last
-          expect(adoption.listing).to eq(listing)
-          expect(adoption.destination_course).to eq(manual_destination)
-          expect(adoption.duplicated_assessment).to eq(copy)
+        # The publisher handing their own assessment to somebody directly bypassed the marketplace
+        # entirely, so the marketplace has no adoption to record.
+        it 'records no adoption' do
+          expect { duplicate_selected_objects }.
+            not_to change(Course::Assessment::Marketplace::Adoption, :count)
         end
       end
 
@@ -481,13 +465,65 @@ RSpec.describe Course::Assessment::Marketplace::DuplicationJob, type: :job do
           expect(new_course.assessments.map(&:marketplace_listing)).to all(be_nil)
         end
 
-        it 'records the new course as an adopter' do
-          new_course = nil
-          expect { new_course = duplicate_whole_course }.
-            to change(Course::Assessment::Marketplace::Adoption, :count).by(1)
-          adoption = Course::Assessment::Marketplace::Adoption.order(:id).last
+        # The publisher rolling their own course forward. Recorded, this would let a listing nobody
+        # has adopted show an adoption count that climbs by one every semester its author re-runs.
+        it 'records no adoption' do
+          expect { duplicate_whole_course }.
+            not_to change(Course::Assessment::Marketplace::Adoption, :count)
+        end
+      end
+    end
+
+    # The other half: an ADOPTED copy carried along by ordinary duplication. This is the semester
+    # roll-forward, and the copy it makes both counts as a course using the listing and stays
+    # reachable by the listing's version reminders.
+    describe 'manual duplication of an adopted copy' do
+      let(:adopting_course) { create(:course) }
+
+      # The real import path, so the copy carries a genuine adoption row rather than a hand-built one.
+      def adopt
+        described_class.perform_now([listing.id], adopting_course,
+                                    adopting_course.assessment_categories.first.tabs.first.id,
+                                    current_user: user)
+        adopting_course.assessments.order(:created_at).last
+      end
+
+      context 'when duplicating selected objects' do
+        it 'records the destination course as an adopter of the same listing' do
+          adopted = adopt
+          onward_destination = create(:course)
+          copy = nil
+
+          expect do
+            copy = Course::Duplication::ObjectDuplicationService.duplicate_objects(
+              adopting_course, onward_destination, adopted, current_user: user
+            )
+          end.to change { listing.reload.adoption_count }.from(1).to(2)
+
+          adoption = Course::Assessment::Marketplace::Adoption.
+                     find_by(duplicated_assessment_id: copy.id)
           expect(adoption.listing).to eq(listing)
-          expect(adoption.destination_course).to eq(new_course)
+          expect(adoption.destination_course).to eq(onward_destination)
+          # The vintage its source held, so the copy is told it is behind once a newer version lands.
+          expect(adoption.adopted_version_at).
+            to be_within(1.second).of(listing.current_version.published_at)
+        end
+      end
+
+      context 'when duplicating the whole course' do
+        it 'records the new course as an adopter of the same listing' do
+          adopt
+
+          new_course = nil
+          expect do
+            new_course = Course::Duplication::CourseDuplicationService.duplicate_course(
+              adopting_course, current_user: user, new_title: "#{adopting_course.title} copy"
+            )
+          end.to change { listing.reload.adoption_count }.from(1).to(2)
+
+          adoption = Course::Assessment::Marketplace::Adoption.
+                     find_by(destination_course_id: new_course.id)
+          expect(adoption.listing).to eq(listing)
         end
       end
     end

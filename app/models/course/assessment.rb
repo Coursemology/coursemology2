@@ -295,29 +295,40 @@ class Course::Assessment < ApplicationRecord
     questions.any?(&:csv_downloadable?)
   end
 
-  # Records +duplicate+, a copy of this assessment, as an adoption of this assessment's marketplace
-  # listing. Every copy of a listed assessment is an adoption, whichever duplication path produced
-  # it, so this is called by the duplication services rather than by the marketplace's own job.
+  # Records +duplicate+, a copy of this assessment, against the marketplace listing its content came
+  # from. Called by the duplication services rather than by the marketplace's own job, because a copy
+  # of an adopted assessment is made by ordinary duplication -- rolling a course forward for the new
+  # semester, copying a selection of objects across -- and a copy the listing cannot reach is a copy
+  # it can never send a version reminder to.
+  #
+  # Keyed off this assessment's own ADOPTION ROW, so only content that came through the marketplace
+  # propagates. An assessment that AUTHORS a listing is deliberately not a source here: copies of it
+  # are the publisher's own -- their course rolled forward, or the assessment handed to a colleague
+  # directly -- made without anyone choosing the listing, so counting them would let a listing nobody
+  # adopted show a rising adoption count.
   #
   # The listing itself is never carried over -- +initialize_duplicate+ below does not duplicate the
-  # +marketplace_listing+ association -- so a copy always starts out unlisted.
+  # +marketplace_listing+ association -- so a copy always starts out unlisted, which is exactly why a
+  # copy of a copy has to find its listing through the source's adoption row rather than its own.
   #
   # @param [Course::Assessment] duplicate The saved copy of this assessment.
   # @param [Course] destination_course The course the copy was duplicated into.
   # @param [User] current_user The user who triggered the duplication.
   def record_marketplace_adoption(duplicate, destination_course, current_user)
-    return unless marketplace_listing&.published?
     # Publishing duplicates the source INTO the container to cut a snapshot. That is the listing
     # growing a version, not a course adopting it, so the container is never an adopter.
     return if destination_course.preview?
 
+    source_adoption = Course::Assessment::Marketplace::Adoption.find_by(duplicated_assessment_id: id)
+    return if source_adoption.nil?
+
     Course::Assessment::Marketplace::Adoption.create!(
-      listing: marketplace_listing,
+      listing: source_adoption.listing,
       destination_course: destination_course,
       duplicated_assessment: duplicate,
-      # Stamped here rather than at the call site: this is the single writer of adoption rows, and the
-      # adopter's "your copy is behind" banner has nothing to compare against without it.
-      adopted_version_at: marketplace_listing.current_version&.published_at,
+      # The vintage the SOURCE holds, not what the listing currently serves: crediting a rolled-forward
+      # copy with the latest version would silently mark stale content as up to date.
+      adopted_version_at: source_adoption.adopted_version_at,
       creator: current_user,
       updater: current_user
     )
