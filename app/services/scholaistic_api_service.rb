@@ -6,11 +6,11 @@ class ScholaisticApiService
     end
 
     def edit_assessment_details_path(assessment_id)
-      "/administration/assessments/#{assessment_id}/details"
+      "/administration/assessments/#{assessment_id}/edit"
     end
 
     def edit_assessment_path(assessment_id)
-      "/administration/assessments/#{assessment_id}"
+      "/administration/assessments/#{assessment_id}/edit"
     end
 
     def assessment_path(assessment_id)
@@ -22,7 +22,7 @@ class ScholaisticApiService
     end
 
     def submissions_path(assessment_id)
-      "/administration/assessments/#{assessment_id}/submissions"
+      "/administration/assessments/#{assessment_id}"
     end
 
     def manage_submission_path(assessment_id, submission_id)
