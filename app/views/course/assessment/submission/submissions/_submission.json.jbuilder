@@ -56,4 +56,12 @@ json.submission do
   json.basePoints assessment.base_exp
   json.bonusPoints assessment.time_bonus_exp
   json.pointsAwarded submission.current_points_awarded
+
+  # Marketplace preview sandbox only: hand back the auto-grading job this very request enqueued
+  # (Course::Assessment::Submission#auto_grading_job) so the preview page can poll it and show the
+  # marks in place. Absent outside a preview course, and absent on any request that did not itself
+  # finalise the submission.
+  if current_course.preview? && submission.auto_grading_job
+    json.autoGradingJobUrl job_path(submission.auto_grading_job.job)
+  end
 end

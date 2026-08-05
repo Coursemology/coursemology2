@@ -13,6 +13,7 @@ import gradingResults from './gradingResults';
 import history from './history';
 import liveFeedbackChats from './liveFeedbackChats';
 import posts from './posts';
+import previewAutograding from './previewAutograding';
 import questions from './questions';
 import questionsFlags from './questionsFlags';
 import recorder from './recorder';
@@ -35,6 +36,7 @@ const submissionReducer = combineReducers({
   gradingResults,
   liveFeedbackChats,
   posts,
+  previewAutograding,
   questions,
   questionsFlags,
   submission,

@@ -2,6 +2,7 @@ import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
+import { redirectToNotFound } from 'lib/hooks/router/redirect';
 
 import actionTypes, { workflowStates } from '../constants';
 import {
@@ -10,6 +11,7 @@ import {
 } from '../reducers/answerFlags';
 import { historyActions } from '../reducers/history';
 import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
+import { previewAutogradingStarted } from '../reducers/previewAutograding';
 import { scribingActions } from '../reducers/scribing';
 import translations from '../translations';
 
@@ -65,7 +67,7 @@ export function getJobStatus(jobUrl) {
   return GlobalAPI.jobs.get(jobUrl);
 }
 
-export function fetchSubmission(id, onGetMonitoringSessionId) {
+export function fetchSubmission(id, onGetMonitoringSessionId, onError) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
 
@@ -102,11 +104,32 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           }),
         );
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });
         dispatch(resetExistingAnswerFlags());
+        // Optional: lets a caller distinguish *why* the refetch failed. The marketplace preview
+        // banner uses it to tell a purged sandbox (404) apart from an ordinary failure.
+        onError?.(error);
       });
   };
+}
+
+// The submission page's own load, as opposed to a refetch from somewhere already on the page. A 404
+// here means there is no such submission under this assessment — a typed, stale or guessed URL —
+// and without this the page renders its normal shell with empty state, which reads as a broken page
+// rather than a wrong address.
+//
+// Deliberately a separate thunk rather than folding the 404 into `fetchSubmission`. The marketplace
+// preview banner refetches through `fetchSubmission` and reads the very same 404 as a purged sandbox,
+// for which it has its own message (`previewAutogradingSandboxGone`); redirecting on every 404
+// centrally would navigate that banner away instead.
+export function loadSubmissionPage(id, onGetMonitoringSessionId) {
+  return (dispatch) =>
+    dispatch(
+      fetchSubmission(id, onGetMonitoringSessionId, (error) => {
+        if (error?.response?.status === 404) redirectToNotFound();
+      }),
+    );
 }
 
 export function autogradeSubmission(id) {
@@ -148,6 +171,16 @@ export function finalise(submissionId, rawAnswers) {
           window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
+        // Marketplace preview sandbox only: the backend hands back the auto-grading job it just
+        // enqueued, so PreviewAutogradingBanner can poll it and refresh the marks in place. The key
+        // is absent everywhere else, which is what keeps this inert in real courses.
+        if (data.submission?.autoGradingJobUrl) {
+          dispatch(
+            previewAutogradingStarted({
+              jobUrl: data.submission.autoGradingJobUrl,
+            }),
+          );
+        }
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
@@ -230,7 +263,7 @@ export function unmark(submissionId) {
   };
 }
 
-export function publish(submissionId, grades, exp) {
+export function publish(submissionId, grades, exp, isPreview) {
   const payload = {
     submission: {
       answers: grades,
@@ -246,7 +279,13 @@ export function publish(submissionId, grades, exp) {
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.PUBLISH_SUCCESS, payload: data });
-        dispatch(setNotification(translations.updateSuccess));
+        dispatch(
+          setNotification(
+            isPreview
+              ? translations.previewPublishSuccess
+              : translations.updateSuccess,
+          ),
+        );
       })
       .catch((error) => {
         dispatch({ type: actionTypes.PUBLISH_FAILURE });
