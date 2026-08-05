@@ -166,6 +166,7 @@ class User < ApplicationRecord
                        timeline_algorithm: invitation.timeline_algorithm ||
                           invitation.course&.default_timeline_algorithm,
                        external_id: invitation.external_id.presence,
+                       source_invitation: invitation,
                        creator: self,
                        updater: self)
   end

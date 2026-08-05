@@ -7,6 +7,12 @@ module Course::UniqueExternalIdConcern
   extend ActiveSupport::Concern
 
   included do
+    # The invitation this record is being created from, if any. A record inheriting its external ID
+    # from the invitation that created it is not a conflict, so that invitation is excluded from the
+    # uniqueness check. Callers that set this must confirm or destroy the invitation in the same
+    # transaction, otherwise the two records are left sharing an external ID.
+    attr_accessor :source_invitation
+
     before_validation :normalize_external_id
 
     validate :validate_unique_external_id_within_course, if: -> { new_record? || external_id_changed? }
@@ -35,6 +41,7 @@ module Course::UniqueExternalIdConcern
   def external_id_taken_by_invitation?
     query = Course::UserInvitation.unconfirmed.where(course_id: course_id, external_id: external_id)
     query = query.where.not(id: id) if is_a?(Course::UserInvitation)
+    query = query.where.not(id: source_invitation.id) if source_invitation&.persisted?
     query.exists?
   end
 

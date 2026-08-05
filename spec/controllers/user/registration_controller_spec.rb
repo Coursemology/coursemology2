@@ -154,6 +154,51 @@ RSpec.describe User::RegistrationsController, type: :controller do
           end
         end
       end
+
+      context 'when signing up through a course invitation' do
+        requires_login
+
+        let(:course) { create(:course) }
+        let(:email) { generate(:email) }
+        let!(:invitation) do
+          create(:course_user_invitation, course: course, email: email, external_id: external_id)
+        end
+
+        before { allow(controller).to receive(:verify_recaptcha).and_return(true) }
+
+        subject do
+          post :create, params: {
+            invitation: invitation.invitation_key,
+            user: { name: 'New Student', email: email,
+                    password: 'lolololol', password_confirmation: 'lolololol' }
+          }
+        end
+
+        shared_examples 'a successful enrolment' do
+          it 'creates the user, enrols them once and confirms the invitation' do
+            expect { subject }.to change(User, :count).by(1).and change(CourseUser, :count).by(1)
+
+            new_user = User.order(:created_at).last
+            course_user = CourseUser.find_by(course: course, user: new_user)
+            expect(course_user).to be_present
+            expect(course_user.external_id).to eq(external_id)
+            expect(invitation.reload).to be_confirmed
+            expect(invitation.confirmer).to eq(new_user)
+          end
+        end
+
+        context 'when the invitation has no external_id' do
+          let(:external_id) { nil }
+
+          it_behaves_like 'a successful enrolment'
+        end
+
+        context 'when the invitation has an external_id' do
+          let(:external_id) { 'A0123456X' }
+
+          it_behaves_like 'a successful enrolment'
+        end
+      end
     end
   end
 end
