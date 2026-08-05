@@ -853,5 +853,46 @@ RSpec.describe Course::GradebookController, type: :controller do
         expect(external_titles).to eq(%w[Alpha Zeta])
       end
     end
+
+    context 'in the marketplace preview sandbox' do
+      # Own instance: at most one `preview: true` course may exist per instance.
+      let(:instance) { create(:instance) }
+      let(:preview_course) { create(:course, preview: true) }
+      let(:previewer) { create(:course_manager, course: preview_course).user }
+
+      before { controller_sign_in(controller, previewer) }
+
+      it 'forbids reading the gradebook' do
+        expect do
+          get :index, params: { course_id: preview_course.id, format: :json }
+        end.to raise_error(CanCan::AccessDenied)
+      end
+
+      it 'also forbids updating gradebook weights' do
+        # `authorize_read_gradebook!` is a `before_action` with no `only:` scoping
+        # (gradebook_controller.rb:5), so it gates #update_weights too, ahead of that
+        # action's own `authorize! :manage_gradebook_weights` check — read access is a
+        # prerequisite for write access on this controller. Task 1's `cannot
+        # :read_gradebook` therefore blocks this action as a side effect, which is
+        # consistent with (and reinforces) this plan's goal.
+        expect do
+          patch :update_weights, params: { course_id: preview_course.id, weights: [] }, format: :json
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context 'when a system administrator visits the preview sandbox gradebook' do
+      # Own instance: at most one `preview: true` course may exist per instance.
+      let(:instance) { create(:instance) }
+      let(:preview_course) { create(:course, preview: true) }
+      let(:admin) { create(:administrator) }
+
+      before { controller_sign_in(controller, admin) }
+
+      it 'is not denied (admins are exempt from the preview restriction)' do
+        get :index, params: { course_id: preview_course.id }, format: :json
+        expect(response).to be_successful
+      end
+    end
   end
 end

@@ -184,6 +184,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
   end
 
   def send_email_after_publishing(send_email)
+    # Prevents preview attempt submissions from sending emails.
+    return if assessment.course.preview?
+
     return unless send_email && persisted? && !assessment.autograded? &&
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?

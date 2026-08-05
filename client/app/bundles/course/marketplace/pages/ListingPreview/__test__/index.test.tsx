@@ -1,9 +1,22 @@
 import { createMockAdapter } from 'mocks/axiosMock';
-import { fireEvent, render, screen, waitFor } from 'test-utils';
+import { fireEvent, render, screen, waitFor, within } from 'test-utils';
 
 import CourseAPI from 'api/course';
+import { navigateTo } from 'lib/helpers/navigation';
+import toast from 'lib/hooks/toast';
 
 import ListingPreview from '../index';
+
+// jsdom seals the navigation surface (`window.location`, `location.href` and `location.assign` are
+// all non-configurable, and a real `href` assignment is swallowed silently), so the popup-blocked
+// branch is only assertable through this seam. See lib/helpers/navigation.
+jest.mock('lib/helpers/navigation', () => ({ navigateTo: jest.fn() }));
+
+const mockNavigateTo = navigateTo as jest.Mock;
+
+// The failure toast is asserted directly (not rendered), so a plain jest.fn() mock is enough —
+// unlike DuplicateConfirmation's toast, ours never carries a ReactNode payload.
+jest.mock('lib/hooks/toast', () => ({ success: jest.fn(), error: jest.fn() }));
 
 const mockNavigate = jest.fn();
 
@@ -37,9 +50,16 @@ jest.mock('../../../../container/CourseLoader', () => ({
 // real fetchListing run. Auto-mocking operations makes fetchListing return undefined, and Preload's
 // `while` callback then does `undefined.then` → "Cannot read properties of undefined (reading 'then')".
 const mock = createMockAdapter(CourseAPI.marketplace.client);
-beforeEach(() => mock.reset());
+beforeEach(() => {
+  mock.reset();
+  jest.clearAllMocks();
+});
 
 const LISTING_TITLE = 'Published, All Question Types';
+const DESCRIPTION_HTML = '<p>desc</p>';
+// Both the page's top-right action and the confirmation dialog's primary button carry this label,
+// which is why the dialog click is always scoped with `within(dialog)`.
+const TRY_IT_HANDS_ON = 'Try it hands-on';
 
 it('renders the read-only assessment config', async () => {
   const url = `/courses/${global.courseId}/marketplace/listings/7`;
@@ -164,7 +184,7 @@ it('carries from_tab into the per-question detail links', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: DESCRIPTION_HTML,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -201,7 +221,7 @@ it('navigates back to the marketplace carrying from_tab', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: DESCRIPTION_HTML,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -227,7 +247,7 @@ it('renders a back button to the marketplace index', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: DESCRIPTION_HTML,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -251,7 +271,7 @@ it('marks the page title as a preview', async () => {
     id: 70,
     title: LISTING_TITLE,
     destinationTabs: [],
-    description: '<p>desc</p>',
+    description: DESCRIPTION_HTML,
     gradingMode: 'manual',
     baseExp: 0,
     bonusExp: 0,
@@ -268,4 +288,176 @@ it('marks the page title as a preview', async () => {
   // A "Preview" chip sits beside the title so the read-only listing detail page is never mistaken
   // for the real assessment it mirrors.
   expect(screen.getByText('Preview')).toBeVisible();
+});
+
+it('opens the hands-on preview interstitial', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: DESCRIPTION_HTML,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  fireEvent.click(screen.getByRole('button', { name: TRY_IT_HANDS_ON }));
+
+  const dialog = await screen.findByRole('dialog');
+  expect(within(dialog).getByText(/separate sandbox/)).toBeVisible();
+});
+
+it('confirming posts to launch_preview and points the opened tab at the returned url', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: DESCRIPTION_HTML,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+  const previewUrl =
+    'https://preview.sandbox.test/courses/9/assessments/3/attempt';
+  // `TryItHandsOnButton` launches by the listing's own id (70), not the route param (7) —
+  // mirroring how `DuplicateConfirmation` on this same page keys its duplicate request off
+  // `listing.id`.
+  mock
+    .onPost(
+      `/courses/${global.courseId}/marketplace/listings/70/launch_preview`,
+    )
+    .reply(200, { url: previewUrl });
+
+  // A fake tab standing in for the one `window.open('', '_blank')` returns synchronously with the
+  // click, before the launch_preview request resolves.
+  const tab = { location: {} as { href?: string }, close: jest.fn() };
+  const openSpy = jest
+    .spyOn(window, 'open')
+    .mockReturnValue(tab as unknown as Window);
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  fireEvent.click(screen.getByRole('button', { name: TRY_IT_HANDS_ON })); // trigger
+
+  const dialog = await screen.findByRole('dialog');
+  fireEvent.click(
+    within(dialog).getByRole('button', { name: TRY_IT_HANDS_ON }),
+  ); // confirm — same label as the trigger, so scoped to the dialog
+
+  // Opened synchronously with the click, not after the response lands.
+  expect(openSpy).toHaveBeenCalledWith('', '_blank');
+
+  await waitFor(() => expect(mock.history.post).toHaveLength(1));
+  await waitFor(() => expect(tab.location.href).toBe(previewUrl));
+  // The marketplace tab stays put; only the blocked-popup fallback navigates it.
+  expect(mockNavigateTo).not.toHaveBeenCalled();
+
+  openSpy.mockRestore();
+});
+
+it('navigates in place when the browser blocks the popup', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: DESCRIPTION_HTML,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+  const previewUrl =
+    'https://preview.sandbox.test/courses/9/assessments/3/attempt';
+  mock
+    .onPost(
+      `/courses/${global.courseId}/marketplace/listings/70/launch_preview`,
+    )
+    .reply(200, { url: previewUrl });
+
+  // A blocked popup: `window.open` returns null even though the call rode the click's user gesture.
+  const openSpy = jest.spyOn(window, 'open').mockReturnValue(null);
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  fireEvent.click(screen.getByRole('button', { name: TRY_IT_HANDS_ON }));
+
+  const dialog = await screen.findByRole('dialog');
+  fireEvent.click(
+    within(dialog).getByRole('button', { name: TRY_IT_HANDS_ON }),
+  );
+
+  await waitFor(() => expect(mock.history.post).toHaveLength(1));
+
+  // Degrades to same-tab navigation rather than leaving a dead button, and stays silent — the
+  // launch itself succeeded, so an error toast would be a lie.
+  await waitFor(() => expect(mockNavigateTo).toHaveBeenCalledWith(previewUrl));
+  expect(toast.error).not.toHaveBeenCalled();
+
+  openSpy.mockRestore();
+});
+
+it('closes the tab and toasts an error when the launch fails', async () => {
+  const url = `/courses/${global.courseId}/marketplace/listings/7`;
+  mock.onGet(url).reply(200, {
+    id: 70,
+    title: LISTING_TITLE,
+    destinationTabs: [],
+    description: DESCRIPTION_HTML,
+    gradingMode: 'manual',
+    baseExp: 0,
+    bonusExp: 0,
+    showMcqMrqSolution: false,
+    showRubricToStudents: false,
+    gradedTestCases: '',
+    typeCounts: {},
+    questions: [],
+  });
+  mock
+    .onPost(
+      `/courses/${global.courseId}/marketplace/listings/70/launch_preview`,
+    )
+    .reply(500);
+
+  const tab = { location: {} as { href?: string }, close: jest.fn() };
+  const openSpy = jest
+    .spyOn(window, 'open')
+    .mockReturnValue(tab as unknown as Window);
+
+  render(<ListingPreview />, { at: [url] });
+
+  await waitFor(() => expect(screen.getByText(LISTING_TITLE)).toBeVisible());
+  fireEvent.click(screen.getByRole('button', { name: TRY_IT_HANDS_ON }));
+
+  const dialog = await screen.findByRole('dialog');
+  fireEvent.click(
+    within(dialog).getByRole('button', { name: TRY_IT_HANDS_ON }),
+  );
+
+  // Never strand the user on a blank about:blank tab.
+  await waitFor(() => expect(tab.close).toHaveBeenCalled());
+  expect(toast.error).toHaveBeenCalled();
+
+  openSpy.mockRestore();
 });

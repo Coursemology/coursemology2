@@ -9,4 +9,9 @@ class CsrfTokenController < ApplicationController
   def publicly_accessible?
     true
   end
+
+  # Every mutating request the previewer makes needs a token first.
+  def preview_sandbox_accessible?
+    true
+  end
 end

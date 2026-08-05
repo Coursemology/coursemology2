@@ -34,7 +34,15 @@ module Course::AssessmentMarketplaceAbilityComponent
       # super chain, so a `cannot` here takes precedence. This line is load-bearing.
       cannot :access_marketplace, Course, id: course.id
     end
-    restrict_preview_course_content if course.preview?
+    return unless course.preview?
+
+    # Order matters: restrict_preview_course_reads's broad `:manage` cannot/can pair on
+    # Course::Assessment::Submission is defined BEFORE restrict_preview_course_content's narrower,
+    # verb-specific `:delete_submission`/`:reset_own_preview_submission` rules, so the latter — being
+    # defined LATER — keeps final precedence over those two specific verbs (CanCan evaluates rules in
+    # reverse-definition order: last defined wins).
+    restrict_preview_course_reads
+    restrict_preview_course_content
   end
 
   # Access is per-person, not per-current-course-role: anyone who is baseline-capable (manages/owns
@@ -71,13 +79,39 @@ module Course::AssessmentMarketplaceAbilityComponent
   # and Course::CourseAbilityComponent in the `define_permissions` super chain: AbilityHost.components
   # is ordered by file path, and `_` (0x5F) sorts before `s` (0x73). Do not rename or move this file.
   def restrict_preview_course_content
-    assessments_in_course = { tab: { category: { course_id: course.id } } }
     cannot [:update, :destroy], Course::Assessment, assessments_in_course
     cannot :delete_all_submissions, Course::Assessment, assessments_in_course
+    # `:delete_submission` is revoked wholesale (not scoped to `creator_id`) because every
+    # previewer shares this one container course as a `manager`, and a manager's blanket
+    # `allow_manager_delete_assessment_submissions` would otherwise let them delete ANY
+    # previewer's submission, not just their own. Self-service reset of one's OWN submission is
+    # therefore a distinct, narrowly-scoped verb below, rather than a `creator_id`-scoped carve-out
+    # of `:delete_submission`.
     cannot :delete_submission, Course::Assessment::Submission, assessment: assessments_in_course
+    can :reset_own_preview_submission, Course::Assessment::Submission,
+        creator_id: user.id, assessment: assessments_in_course
     PREVIEW_FROZEN_QUESTION_TYPES.each do |question_class|
       cannot [:create, :update, :destroy], question_class
     end
+  end
+
+  def assessments_in_course
+    { tab: { category: { course_id: course.id } } }
+  end
+
+  # In a `preview` sandbox course, previewers are enrolled as `manager` of a container course SHARED
+  # by every other previewer in the whole instance (see PreviewContainerService). A manager's
+  # ordinary abilities would let them read/grade/publish ANY other previewer's submission, list every
+  # submission for any assessment in the sandbox, see the aggregate gradebook, and browse the full
+  # roster of everyone who has ever previewed anything here — none of which is any given previewer's
+  # business. Revoke it all, then carve back exactly their own submission.
+  def restrict_preview_course_reads
+    cannot :manage, Course::Assessment::Submission, assessment: assessments_in_course
+    can :manage, Course::Assessment::Submission, creator_id: user.id, assessment: assessments_in_course
+    cannot :view_all_submissions, Course::Assessment, assessments_in_course
+    cannot :read_gradebook, Course, id: course.id
+    cannot [:show_users, :manage_users], Course, id: course.id
+    cannot :manage, CourseUser
   end
 
   def allow_managers_access_marketplace

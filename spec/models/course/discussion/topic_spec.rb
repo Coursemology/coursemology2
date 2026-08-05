@@ -53,6 +53,41 @@ RSpec.describe Course::Discussion::Topic, type: :model do
       end
     end
 
+    describe '#mark_as_pending' do
+      let(:course) { create(:course) }
+      # The actable is built with the same course on purpose: `:course_discussion_topic`'s default
+      # actable is a forum topic that brings its OWN course, and Course::Forum::Topic#set_course then
+      # overwrites `course_id` with the forum's — so a bare `course:` here is silently discarded and
+      # the topic ends up in a different, non-preview course.
+      let(:discussion_topic) do
+        create(:course_discussion_topic, course: course, actable: build(:forum_topic, course: course))
+      end
+
+      it 'marks the topic as pending staff reply' do
+        expect(discussion_topic.mark_as_pending).to be_truthy
+        expect(discussion_topic.reload.pending_staff_reply).to eq(true)
+      end
+
+      context 'when the topic is in the marketplace preview sandbox' do
+        # Own instance: at most one `preview: true` course may exist per instance.
+        let(:instance) { create(:instance) }
+        let(:course) { create(:course, preview: true) }
+
+        it 'leaves the topic unmarked' do
+          discussion_topic.mark_as_pending
+
+          expect(discussion_topic.reload.pending_staff_reply).to eq(false)
+        end
+
+        # The writers treat a falsey return as a failure worth rolling the whole post creation back
+        # (see Course::Discussion::PostsConcern#update_topic_pending_status), so suppression must
+        # report success.
+        it 'still reports success' do
+          expect(discussion_topic.mark_as_pending).to be_truthy
+        end
+      end
+    end
+
     describe '#ensure_subscribed_by' do
       context 'when the user has subscribed to a topic' do
         let!(:discussion_topic_subscription) do

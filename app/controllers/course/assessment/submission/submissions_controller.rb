@@ -9,6 +9,21 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   include Course::Assessment::LiveFeedback::ThreadConcern
   include Course::Assessment::LiveFeedback::MessageConcern
 
+  # What a marketplace previewer may do here (see ApplicationPreviewSandboxConcern). Every one of
+  # these rides on `load_and_authorize_resource :submission` or an explicit `authorize!` against
+  # `@submission`, which the preview ability confines to `creator_id: user.id` — so allowing the action
+  # does not widen which submission it can reach. `create` is the exception and vets the assessment
+  # itself.
+  #
+  # Deliberately absent: every collection action. `publish_all`, `force_submit_all`, `unsubmit_all`,
+  # `download_all` and friends authorize against `@assessment` on verbs a manager's blanket
+  # `can :manage, Course::Assessment` already satisfies, so in a course every previewer shares they
+  # would reach every other previewer's submission. The live-feedback actions are absent too:
+  # `fetch_live_feedback_chat` reads a thread from a bare `answer_id` with no authorization at all.
+  PREVIEWER_ACTIONS = [
+    :create, :edit, :update, :auto_grade, :reevaluate_answer, :generate_feedback, :reload_answer
+  ].to_set.freeze
+
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
@@ -323,6 +338,18 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
           perform_later(current_user, submission_ids, @assessment).job
 
     render partial: 'jobs/submitted', locals: { job: job }
+  end
+
+  protected
+
+  def preview_sandbox_accessible?
+    return false unless PREVIEWER_ACTIONS.include?(action_name.to_sym)
+    # `create` backs the `attempt` route and mints the submission every other action here is scoped
+    # to, so it is the one that has to vet the assessment. Without this, guessing a container
+    # assessment id would hand the guesser a submission on it and legitimise everything downstream.
+    return true unless action_name.to_sym == :create
+
+    previewable_assessment?(params[:assessment_id])
   end
 
   private

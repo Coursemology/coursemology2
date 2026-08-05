@@ -45,12 +45,20 @@ class Course::CoursesController < Course::Controller
     #
     # To re-enable, restore the original condition.
     @home_redirects_to_learn = false
+
+    @preview_sandbox_admin = current_course.preview? && current_user&.administrator?
+    @preview_restricted = current_course.preview? && !@preview_sandbox_admin
   end
 
   protected
 
   def publicly_accessible?
     Set[:index, :show, :sidebar].include?(action_name.to_sym)
+  end
+
+  # The layout payload is fetched on every course page, so the previewer's submission page needs it.
+  def preview_sandbox_accessible?
+    action_name.to_sym == :sidebar
   end
 
   private

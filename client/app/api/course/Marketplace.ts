@@ -60,6 +60,16 @@ export default class MarketplaceAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/listings/${id}`);
   }
 
+  launchPreview(id: number): Promise<AxiosResponse<{ url: string }>> {
+    return this.client.post(`${this.#urlPrefix}/listings/${id}/launch_preview`);
+  }
+
+  resetPreviewSubmission(assessmentId: number): Promise<AxiosResponse> {
+    return this.client.patch(
+      `/courses/${this.courseId}/assessments/${assessmentId}/preview_submission`,
+    );
+  }
+
   fetchQuestion(listingId: number, questionId: number): Promise<AxiosResponse> {
     return this.client.get(
       `${this.#urlPrefix}/listings/${listingId}/questions/${questionId}`,

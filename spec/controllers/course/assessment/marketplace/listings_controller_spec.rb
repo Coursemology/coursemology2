@@ -234,7 +234,7 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
 
       before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
 
-      # Published through the real service: `#show` renders the container SNAPSHOT (design §4.2),
+      # Published through the real service: `#show` renders the container SNAPSHOT,
       # so the question must exist on the snapshot, not just the authoring copy.
       let!(:listing) do
         assessment = create(:assessment, course: create(:course))
@@ -246,6 +246,9 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         get :show, params: { course_id: course, id: listing.id, format: :json }
         expect(response).to have_http_status(:ok)
         body = response.parsed_body
+        # Must be the listing's own id, not the assessment's — TryItHandsOnButton and
+        # DuplicateConfirmation POST back with this id to endpoints keyed on `Listing#id`.
+        expect(body['id']).to eq(listing.id)
         expect(body).to include('title', 'gradingMode', 'showMcqMrqSolution', 'showRubricToStudents', 'gradedTestCases')
         # The listing preview reports the human-readable question type, matching the per-question chips.
         readable_type = I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
@@ -317,6 +320,52 @@ RSpec.describe Course::Assessment::Marketplace::ListingsController, type: :contr
         row = response.parsed_body['listings'].find { |l| l['id'] == versioned.id }
 
         expect(row['questionCount']).to eq(1)
+      end
+    end
+
+    describe 'POST #launch_preview' do
+      before { create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager.user) }
+
+      let!(:listing) { create(:course_assessment_marketplace_listing, :versioned, published: true) }
+
+      it 'provisions the preview and returns the attempt url' do
+        post :launch_preview, params: { course_id: course, id: listing.id, format: :json }
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body['url']).to be_present
+      end
+
+      context 'when the manager is not on the allow-list' do
+        # Outer `before` above already granted the rule; wipe it so the marketplace gate itself
+        # (not the base :read gate, which a manager already passes) is what denies this request.
+        before { Course::Assessment::Marketplace::AllowlistRule.delete_all }
+
+        it 'denies access' do
+          expect do
+            post :launch_preview, params: { course_id: course, id: listing.id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when the listing is unpublished' do
+        let!(:listing) { create(:course_assessment_marketplace_listing, published: false) }
+
+        it 'denies access' do
+          expect do
+            post :launch_preview, params: { course_id: course, id: listing.id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      # A preview attempts the snapshot, so a published listing that has none has nothing to
+      # rehearse. Denied at the controller rather than left to fail on a nil inside provisioning.
+      context 'when the listing has no snapshot' do
+        let!(:listing) { create(:course_assessment_marketplace_listing, published: true) }
+
+        it 'denies access' do
+          expect do
+            post :launch_preview, params: { course_id: course, id: listing.id, format: :json }
+          end.to raise_exception(CanCan::AccessDenied)
+        end
       end
     end
   end

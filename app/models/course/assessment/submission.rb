@@ -9,6 +9,13 @@ class Course::Assessment::Submission < ApplicationRecord
 
   attr_accessor :has_unsubmitted_or_draft_answer
 
+  # The AutoGradingJob enqueued by *this* instance's finalising save, if it performed one. Assigned
+  # by `auto_grade_submission`'s after-commit block, which the `save` runs before the controller
+  # renders — so the response can hand the client a job url to poll (see the marketplace preview
+  # sandbox). Nil on every other request, since it lives only on the in-memory instance that made
+  # the transition.
+  attr_reader :auto_grading_job
+
   acts_as_experience_points_record
 
   FORCE_SUBMIT_DELAY = 5.minutes
@@ -217,6 +224,30 @@ class Course::Assessment::Submission < ApplicationRecord
     !!@unsubmitting
   end
 
+  # Marketplace preview sandbox only: unconditionally clears every answer back to a fresh blank
+  # attempt and forces the submission's own state back to a pristine :attempting, regardless
+  # of what state the submission was in beforehand (including if it is already :attempting).
+  #
+  # This deliberately does not reuse WorkflowEventConcern#unsubmit/#recreate_current_answers.
+  # `recreate_current_answers` skip answers that are still `attempting?`, passes the old answer
+  # as `last_attempt` (which is not necessary), keeps audit history, and cannot be called when
+  # the submission is already :attempting.
+  def reset_preview!
+    transaction do
+      # Flip the submission's own state to :attempting FIRST (in memory only; not saved yet). Every
+      # new blank answer built below defaults to :attempting too, and Answer#validate_assessment_state
+      # requires `submission.attempting?` for an :attempting answer to be valid — reassigning after
+      # the loop (rather than before) would make each `new_answer.save!` fail validation, since the
+      # in-memory submission (shared with its answers via `inverse_of`) would still read as
+      # :submitted/:graded/:published at that point.
+      reset_preview_workflow_attributes
+      reset_preview_answers
+      answers.reload
+
+      save!
+    end
+  end
+
   def submission_view_blocked?(course_user)
     !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user&.student?
   end
@@ -346,13 +377,46 @@ class Course::Assessment::Submission < ApplicationRecord
 
   private
 
+  # See Submission#reset_preview!.
+  def reset_preview_workflow_attributes
+    self.workflow_state = 'attempting'
+    self.points_awarded = nil
+    self.draft_points_awarded = nil
+    self.awarded_at = nil
+    self.awarder = nil
+    self.submitted_at = nil
+    self.publisher = nil
+    self.published_at = nil
+  end
+
+  # See Submission#reset_preview!.
+  #
+  # Unlike recreate_current_answers (unsubmit, real courses), the answers are DESTROYED here, not
+  # just flipped to non-current.
+  #
+  # Every answer goes, not just the current ones: answers already flipped to non-current by an
+  # earlier finalise/unsubmit round are the "Past Answers" trace the reset is meant to erase.
+  # The fresh blanks are built from `current_answers` (one per question) BEFORE anything is
+  # destroyed, and `stale_answers` is snapshotted first so the new rows are never in that list.
+  def reset_preview_answers
+    stale_answers = answers.to_a
+
+    current_answers.each do |current_answer|
+      new_answer = current_answer.question.attempt(current_answer.submission)
+      new_answer.current_answer = true
+      new_answer.save!
+    end
+
+    stale_answers.each(&:destroy!)
+  end
+
   # Queues the submission for auto grading, after the submission has changed to the submitted state.
   def auto_grade_submission
     return unless saved_change_to_workflow_state?
 
     execute_after_commit do
       # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
-      auto_grade!(only_ungraded: true)
+      @auto_grading_job = auto_grade!(only_ungraded: true)
     end
   end
 

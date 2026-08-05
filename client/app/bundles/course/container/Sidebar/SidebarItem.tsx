@@ -87,7 +87,7 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
   );
 };
 
-const HomeSidebarItem = (props: { to: string }): JSX.Element => {
+const HomeSidebarItem = (props: { to?: string }): JSX.Element => {
   return (
     <SidebarItem
       of={{

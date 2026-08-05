@@ -6,14 +6,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   include Course::Assessment::Question::KoditsuQuestionConcern
   include Course::Assessment::KoditsuAssessmentInvitationConcern
 
-  before_action :load_submissions, only: [:show]
+  before_action :load_submissions, only: [:show], unless: :crumb_request?
   after_action :create_koditsu_invitation_job, only: [:update]
   after_action :create_fetch_koditsu_submissions_job, only: [:update]
 
   include Course::Assessment::MonitoringConcern
   include Course::Statistics::CountsConcern
 
-  before_action :load_question_duplication_data, only: [:show, :reorder]
+  before_action :load_question_duplication_data, only: [:show, :reorder], unless: :crumb_request?
 
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
@@ -37,6 +37,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def show
     @assessment_time = @assessment.time_for(current_course_user)
     return render 'authenticate' unless can_access_assessment?
+    return render 'crumb' if crumb_request?
 
     @question_assessments = @assessment.question_assessments.with_question_actables
     @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
@@ -255,6 +256,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   protected
 
+  # Both breadcrumb handles on a preview submission page fetch `show`, so the previewer needs it —
+  # but only for a title, and only for the snapshot they were handed. Not the page: a previewer is a
+  # `manager`, and `show` serves a manager the whole authoring surface. The index is not here either:
+  # it is the whole container, one row per published snapshot and per restored authoring copy, each
+  # with an Attempt button.
+  def preview_sandbox_accessible?
+    crumb_request? && previewable_assessment?(params[:id])
+  end
+
   def load_assessment_options
     return super if skip_tab_filter?
 
@@ -262,6 +272,17 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   private
+
+  # Whether this `show` is asking only for what a breadcrumb renders — the assessment's title and its
+  # tab's. Both crumb handles on any assessment page fetch `show`, and so does the assessment page
+  # itself; one endpoint serving both is what made the marketplace sandbox's crumb allowance a licence
+  # to read the authoring surface. Splitting them on the request rather than on the viewer keeps the
+  # payload the same for everyone and saves the page's ~50 queries on a fetch that renders two strings.
+  #
+  # @return [Boolean]
+  def crumb_request?
+    action_name.to_sym == :show && params[:crumb].present?
+  end
 
   # Drives the view-only version badge on the container course's assessment index. Every published
   # snapshot keeps its original title and shares one tab, so without it an admin sees an

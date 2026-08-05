@@ -23,6 +23,21 @@ class Course::Assessment::Marketplace::PreviewContainerService
       find_preview_instance || create_preview_instance
     end
 
+    # Whether `instance` is the dedicated preview instance. The preview sandbox lock keys off this
+    # rather than off `Course#preview`, because it also has to confine a previewer on the courseless
+    # pages of this instance (`/courses`, `/role_requests`), where there is no course to read a flag
+    # from. The container is the only course here, so the instance is the wider of two circles
+    # that enclose the same content.
+    #
+    # Case-insensitive to match `find_preview_instance`: an instance that lookup resolves but this
+    # predicate rejects would silently leave the sandbox lock disengaged.
+    #
+    # @param [Instance, nil] instance
+    # @return [Boolean]
+    def preview_instance?(instance)
+      instance&.read_attribute(:host)&.downcase == PREVIEW_INSTANCE_HOST.downcase
+    end
+
     # @return [Course] the container course in the preview instance.
     #
     # The flag alone is a unique key here: `index_courses_on_instance_id_one_preview` allows at most

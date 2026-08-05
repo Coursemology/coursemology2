@@ -303,6 +303,7 @@ Rails.application.routes.draw do
           resource :marketplace_adoption, only: [] do
             post 'apply_latest_version' => 'marketplace_adoptions#apply_latest_version'
           end
+          resource :preview_submission, only: [:update], controller: 'marketplace/preview_submissions'
 
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy] do
@@ -637,6 +638,7 @@ Rails.application.routes.draw do
         get 'marketplace' => 'listings#index', as: :marketplace
         resources :listings, only: [:show], path: 'marketplace/listings' do
           post 'duplicate', on: :collection
+          post 'launch_preview', on: :member
           resources :questions, only: [:show]
         end
       end

@@ -18,6 +18,12 @@ class Course::UserNotificationsController < Course::Controller
     Set[:fetch].include?(action_name.to_sym)
   end
 
+  # `PopupNotifier` polls `fetch` on every course page and dismisses through `mark_as_read`; both are
+  # scoped to the previewer's own notifications, `mark_as_read` by `load_and_authorize_resource`.
+  def preview_sandbox_accessible?
+    Set[:fetch, :mark_as_read].include?(action_name.to_sym)
+  end
+
   private
 
   # Fetches the first unread popup `UserNotification` for the current course and returns JSON data

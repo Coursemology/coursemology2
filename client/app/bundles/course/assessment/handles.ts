@@ -3,7 +3,11 @@ import { getIdFromUnknown } from 'utilities';
 
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 
-import { fetchAssessment, fetchAssessments } from './operations/assessments';
+import {
+  fetchAssessment,
+  fetchAssessmentCrumb,
+  fetchAssessments,
+} from './operations/assessments';
 
 const getTabTitle = async (
   categoryId?: number,
@@ -23,7 +27,7 @@ const getTabTitle = async (
 const getTabTitleFromAssessmentId = async (
   assessmentId: number,
 ): Promise<CrumbPath> => {
-  const data = await fetchAssessment(assessmentId);
+  const data = await fetchAssessmentCrumb(assessmentId);
 
   return {
     activePath: data.tabUrl.split('&tab')[0],
@@ -62,7 +66,7 @@ export const assessmentHandle: DataHandle = (match) => {
 
   return {
     getData: async (): Promise<string> => {
-      const data = await fetchAssessment(assessmentId);
+      const data = await fetchAssessmentCrumb(assessmentId);
       return data.title;
     },
   };
