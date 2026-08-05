@@ -137,6 +137,36 @@ RSpec.describe CourseUser, type: :model do
           expect(student).to be_valid
         end
       end
+
+      context 'when the course user is created from an invitation' do
+        let!(:invitation) { create(:course_user_invitation, course: course, external_id: 'invited-id') }
+
+        # The invitation is confirmed in the same transaction that saves the course user, so a course
+        # user inheriting its external_id is not a conflict with the invitation it came from.
+        it 'is valid despite the still-unconfirmed invitation holding the same external_id' do
+          student = build(:course_student, course: course, external_id: 'invited-id',
+                                           source_invitation: invitation)
+          expect(student).to be_valid
+        end
+
+        it 'is still invalid when a different pending invitation holds the external_id' do
+          other_invitation = create(:course_user_invitation, course: course, external_id: 'other-id')
+          student = build(:course_student, course: course, external_id: other_invitation.external_id,
+                                           source_invitation: invitation)
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+
+        it 'is still invalid when an enrolled course user holds the external_id' do
+          existing = create(:course_student, course: course, external_id: 'enrolled-id')
+          student = build(:course_student, course: course, external_id: existing.external_id,
+                                           source_invitation: invitation)
+          expect(student).not_to be_valid
+          expect(student.errors[:external_id]).
+            to include(I18n.t('activerecord.errors.models.course_user.attributes.external_id.taken'))
+        end
+      end
     end
 
     describe '.staff' do
