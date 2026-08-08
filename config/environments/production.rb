@@ -145,6 +145,9 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   #
   config.x.default_host = ENV['RAILS_HOSTNAME']
+  # The `:sidekiq` symbol resolves to the adapter shipped by the Sidekiq gem (since Sidekiq 7.3.3 it
+  # takes over the symbol from Rails' built-in adapter, which Rails 8.1 deprecates), so this already
+  # uses the gem-provided adapter — no change needed for the Rails 8 upgrade.
   config.active_job.queue_adapter = :sidekiq
 
   # Rails 6.0.5.1 security patch

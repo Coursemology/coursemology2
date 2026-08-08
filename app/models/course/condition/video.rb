@@ -120,13 +120,14 @@ class Course::Condition::Video < ApplicationRecord
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow
     # allow the above query to work without #reload
+    conditional_type = ActiveRecord::Base.with_connection { |c| c.quote(conditional.class.name) }
     Course::Video.joins(<<-SQL)
       INNER JOIN
         (SELECT cca.video_id
           FROM course_condition_videos cca INNER JOIN course_conditions cc
             ON cc.actable_type = 'Course::Condition::Video' AND cc.actable_id = cca.id
             WHERE cc.conditional_id = #{conditional.id}
-              AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
+              AND cc.conditional_type = #{conditional_type}
         ) ids
       ON ids.video_id = course_videos.id
     SQL

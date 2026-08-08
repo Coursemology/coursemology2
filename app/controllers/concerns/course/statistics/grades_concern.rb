@@ -5,7 +5,7 @@ module Course::Statistics::GradesConcern
   def grade_statistics_hash
     return {} if @assessments.empty? || @all_students.empty?
 
-    grades_info = ActiveRecord::Base.connection.execute("
+    grades_info = ActiveRecord::Base.lease_connection.execute("
       SELECT ca.assessment_id AS id, AVG(ca.grade) AS avg, STDDEV(ca.grade) AS stdev
       FROM (
         SELECT cas.creator_id, cas.assessment_id, SUM(caa.grade) AS grade

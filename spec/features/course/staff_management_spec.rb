@@ -77,7 +77,10 @@ RSpec.feature 'Courses: Staff Management', js: true do
         within find("tr.course_user_#{staff_to_change.id}") do
           find('div.course_user_role').click
         end
-        page.all('li.MuiMenuItem-root')[3].click # option id "role-#{staff_to_change.id}-owner" can't be targeted...
+        # The MUI role menu scales in; `page.all` doesn't wait for it and a positional `[3]` is brittle
+        # (see spec/README.md pitfalls). Let the animation settle, then target the option by its role text.
+        wait_for_animation
+        find('li.MuiMenuItem-root', text: 'Owner').click
 
         expect_toastify("Updated #{new_name}'s role to Owner.")
 

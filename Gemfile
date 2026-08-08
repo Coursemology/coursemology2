@@ -11,7 +11,7 @@ gem 'csv'
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
-gem 'rails', '~> 7.2.3.2'
+gem 'rails', '~> 8.0.0'
 
 # Use PostgreSQL for the backend
 gem 'pg'
