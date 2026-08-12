@@ -175,7 +175,7 @@ end
 # Sidekiq also loaded in :test so job specs can exercise the real Sidekiq client/server path
 # (serialization + middleware) instead of only the in-process :background_thread adapter.
 group :production, :test do
-  gem 'sidekiq', '~> 7.3.10'
+  gem 'sidekiq', '~> 8.1.6'
 end
 
 # Multitenancy
