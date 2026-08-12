@@ -47,8 +47,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           expect(JSON.parse(response.body)).to have_key('id')
         end
 
-        it 'sends an email notification to the admin', type: :mailer do
-          subject
+        it 'sends an email notification to the admin', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
@@ -121,8 +121,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           expect(request.reload.workflow_state).to eq('approved')
         end
 
-        it 'sends an approval email notification', type: :mailer do
-          subject
+        it 'sends an approval email notification', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
@@ -151,8 +151,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           expect(request.user.instance_users.first.reload.role).to eq(user.role)
         end
 
-        it 'sends a rejection email', type: :mailer do
-          subject
+        it 'sends a rejection email', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
           email_body = ActionMailer::Base.deliveries.first.
@@ -185,8 +185,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           expect(request.user.instance_users.first.reload.role).to eq(user.role)
         end
 
-        it 'sends a rejection email with the message', type: :mailer do
-          subject
+        it 'sends a rejection email with the message', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
           email_body = ActionMailer::Base.deliveries.

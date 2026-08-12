@@ -10,7 +10,7 @@ RSpec.feature 'Instance::UserRoleRequests', js: true do
     before { login_as(user, scope: :user) }
 
     context 'As a normal instance user' do
-      scenario 'I can create a new role request', type: :mailer do
+      scenario 'I can create a new role request', :sidekiq_separate_thread, type: :mailer do
         visit courses_path
         find('#role-request-button').click
 
@@ -20,10 +20,9 @@ RSpec.feature 'Instance::UserRoleRequests', js: true do
         fill_in 'Designation', with: request.designation
         fill_in 'Reason', with: request.reason
 
-        expect do
-          find('button.btn-submit').click
-          wait_for_page
-        end.to change(ActionMailer::Base.deliveries, :count)
+        original_count = ActionMailer::Base.deliveries.count
+        find('button.btn-submit').click
+        wait_for_email_delivery(original_count + 1)
 
         request_created = instance.user_role_requests.last
 

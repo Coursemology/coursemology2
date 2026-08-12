@@ -284,8 +284,8 @@ RSpec.describe User do
         with_tenant(:instance) do
           before { ActionMailer::Base.deliveries.clear }
 
-          it 'uses the current tenant host in the reset password URL' do
-            subject.send_reset_password_instructions
+          it 'uses the current tenant host in the reset password URL', :sidekiq_same_thread do
+            perform_sidekiq_jobs { subject.send_reset_password_instructions }
             email = ActionMailer::Base.deliveries.last
             expect(email.body.encoded).to include(instance.host)
           end

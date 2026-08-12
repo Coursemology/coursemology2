@@ -26,12 +26,12 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :mailer do
           end
         end
 
-        context 'when type is email' do
+        context 'when type is email', :sidekiq_same_thread do
           before do
             allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
-          subject { activity.notify(user, :email).save }
+          subject { perform_sidekiq_jobs { activity.notify(user, :email).save } }
 
           it 'sends an email to user' do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -57,12 +57,12 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :mailer do
           end
         end
 
-        context 'when type is email' do
+        context 'when type is email', :sidekiq_same_thread do
           before do
             allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
-          subject { activity.notify(course, :email).save }
+          subject { perform_sidekiq_jobs { activity.notify(course, :email).save } }
 
           it 'sends emails to course users' do
             expect { subject }.

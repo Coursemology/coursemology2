@@ -53,7 +53,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
           expect(response.status).to eq(200)
         end
 
-        context 'when other users are subscribed to notifications', type: :mailer do
+        context 'when other users are subscribed to notifications', :sidekiq_same_thread, type: :mailer do
           let(:annotation) do
             create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
           end
@@ -64,13 +64,13 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
           end
 
           it 'sends email notifications' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+            expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(1)
           end
 
           context 'when the new comment is posted as delayed post' do
             let!(:workflow_state) { 'delayed' }
             it 'does not send email notifications' do
-              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+              expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(0)
             end
           end
 
@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
             end
 
             it 'does not send email notifications' do
-              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+              expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(0)
             end
           end
         end

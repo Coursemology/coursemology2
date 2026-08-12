@@ -17,14 +17,16 @@ RSpec.describe Course::AssessmentNotifier, type: :mailer do
       end
     end
 
-    describe '#assessment_submitted' do
+    describe '#assessment_submitted', :sidekiq_same_thread do
       let(:course) { create(:course) }
       let!(:course_creator) { course.course_users.first }
       let!(:course_user) { create(:course_user, course: course) }
       let(:user) { course_user.user }
       let!(:submission) { create(:submission, course: course, creator: user) }
 
-      subject { Course::AssessmentNotifier.assessment_submitted(user, course_user, submission) }
+      subject do
+        perform_sidekiq_jobs { Course::AssessmentNotifier.assessment_submitted(user, course_user, submission) }
+      end
 
       it 'does not send email notifications' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)

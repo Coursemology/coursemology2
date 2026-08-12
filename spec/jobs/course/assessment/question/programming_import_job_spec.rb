@@ -22,18 +22,19 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
         have_enqueued_job(subject).exactly(:once)
     end
 
-    it 'imports the templates' do
-      subject.perform_now(question, attachment, time_limit)
-      expect(question.template_files).not_to be_empty
+    it 'imports the templates', :sidekiq_same_thread do
+      perform_sidekiq_jobs { subject.perform_later(question, attachment, time_limit) }
+      expect(question.reload.template_files).not_to be_empty
     end
 
-    it 'imports the test cases' do
-      subject.perform_now(question, attachment, time_limit)
-      expect(question.test_cases).not_to be_empty
+    it 'imports the test cases', :sidekiq_same_thread do
+      perform_sidekiq_jobs { subject.perform_later(question, attachment, time_limit) }
+      expect(question.reload.test_cases).not_to be_empty
     end
 
-    it 'does not create codaveri question' do
-      subject.perform_now(question, attachment, time_limit)
+    it 'does not create codaveri question', :sidekiq_same_thread do
+      perform_sidekiq_jobs { subject.perform_later(question, attachment, time_limit) }
+      question.reload
 
       expect(question.codaveri_id).to eq(nil)
       expect(question.codaveri_status).to eq(nil)
@@ -69,8 +70,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
         Excon.stubs.clear
       end
 
-      it 'creates codaveri question' do
-        subject.perform_now(question, attachment, time_limit)
+      it 'creates codaveri question', :sidekiq_same_thread do
+        perform_sidekiq_jobs { subject.perform_later(question, attachment, time_limit) }
+        question.reload
 
         expect(question.codaveri_id).to eq('6311a0548c57aae93d260927')
         expect(question.codaveri_status).to eq(200)
