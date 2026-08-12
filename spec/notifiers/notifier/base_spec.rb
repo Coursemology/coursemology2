@@ -27,12 +27,12 @@ RSpec.describe Notifier::Base, type: :mailer do
       let(:notifier) { self.class::DummyNotifier.new }
       let(:template) { 'activity_mailer/test_email' }
 
-      context 'when notifying a user' do
+      context 'when notifying a user', :sidekiq_same_thread do
         before do
           allow(notifier).to receive(:notification_view_path).and_return(template)
         end
 
-        subject { notifier.dummy_created(user, user, user) }
+        subject { perform_sidekiq_jobs { notifier.dummy_created(user, user, user) } }
 
         it 'creates an activity' do
           expect { subject }.to change { user.activities.count }.by(1)
@@ -53,12 +53,12 @@ RSpec.describe Notifier::Base, type: :mailer do
         end
       end
 
-      context 'when notifying a course' do
+      context 'when notifying a course', :sidekiq_same_thread do
         before do
           allow(notifier).to receive(:notification_view_path).and_return(template)
         end
 
-        subject { notifier.dummy_updated(user, user, course) }
+        subject { perform_sidekiq_jobs { notifier.dummy_updated(user, user, course) } }
 
         it 'creates an activity' do
           expect { subject }.to change { user.activities.count }.by(1)

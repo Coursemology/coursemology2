@@ -5,7 +5,9 @@ RSpec.describe Course::AnnouncementNotifier, type: :mailer do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    describe '#new_announcement' do
+    # Run through the real Sidekiq processor so MailDeliveryJobs are delivered deterministically
+    # (exactly once), making the ActionMailer::Base.deliveries.count assertions reliable.
+    describe '#new_announcement', :sidekiq_same_thread do
       let(:course) { create(:course) }
       let!(:course_user) { create(:course_manager, course: course) }
       let!(:course_user_manager) { course_user.user }
@@ -27,7 +29,9 @@ RSpec.describe Course::AnnouncementNotifier, type: :mailer do
         allow_any_instance_of(Course::Announcement).to receive(:setup_opening_reminders)
       end
 
-      subject { Course::AnnouncementNotifier.new_announcement(course_user_manager, announcement) }
+      subject do
+        perform_sidekiq_jobs { Course::AnnouncementNotifier.new_announcement(course_user_manager, announcement) }
+      end
 
       it 'sends a course notification' do
         expect { subject }.to change(course.notifications, :count).by(1)

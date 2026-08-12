@@ -23,9 +23,11 @@ RSpec.describe Course::Survey::ReminderService, type: :mailer do
     let(:unresponded_student_phantom_email) { unresponded_student_phantom.user.email }
     let(:responded_student_email) { responded_student.user.email }
 
-    describe '#closing_reminder' do
+    describe '#closing_reminder', :sidekiq_same_thread do
       subject do
-        Course::Survey::ReminderService.closing_reminder(survey, survey.closing_reminder_token)
+        perform_sidekiq_jobs do
+          Course::Survey::ReminderService.closing_reminder(survey, survey.closing_reminder_token)
+        end
       end
 
       def set_survey_email_setting(setting, regular, phantom)

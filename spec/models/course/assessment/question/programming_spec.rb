@@ -132,6 +132,7 @@ RSpec.describe Course::Assessment::Question::Programming do
               expect { subject.save }.to \
                 have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).exactly(:once)
               expect(subject.reload.import_job).not_to eq(old_job_id)
+              expect(subject.import_job_id).to be_present
             end
 
             it 'reverts the change to the attachment' do

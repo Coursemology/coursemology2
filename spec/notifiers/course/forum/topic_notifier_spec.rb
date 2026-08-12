@@ -30,8 +30,10 @@ RSpec.describe Course::Forum::TopicNotifier, type: :mailer do
       email_setting.update!(regular: regular, phantom: phantom)
     end
 
-    describe '#new_topic' do
-      subject { Course::Forum::TopicNotifier.topic_created(user, course_user, topic) }
+    describe '#new_topic', :sidekiq_same_thread do
+      subject do
+        perform_sidekiq_jobs { Course::Forum::TopicNotifier.topic_created(user, course_user, topic) }
+      end
 
       it 'sends a course notification' do
         expect { subject }.to change(course.notifications, :count).by(1)

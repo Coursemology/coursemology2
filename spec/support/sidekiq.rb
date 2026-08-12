@@ -42,7 +42,7 @@ module SidekiqTestSupport
   # All queues the app's jobs use (queue_as), plus the delayed_* variants produced dynamically.
   QUEUES = %w[
     highest default delayed_medium_high delayed_high delayed_medium_low delayed_low
-    duplication lowest
+    duplication lowest mailers
   ].freeze
 
   # Sidekiq::Processor REQUIRES a "death handler" block — its run loop calls `@callback.call(self)`

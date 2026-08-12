@@ -14,7 +14,7 @@ RSpec.describe Course::Assessment::Answer::CommentNotifier, type: :mailer do
       email_setting.update!(regular: regular, phantom: phantom)
     end
 
-    describe '#annotation_replied' do
+    describe '#annotation_replied', :sidekiq_same_thread do
       let(:user) { create(:user) }
       let(:course) { create(:course) }
       let(:course_creator) { course.course_users.first }
@@ -40,7 +40,9 @@ RSpec.describe Course::Assessment::Answer::CommentNotifier, type: :mailer do
         code_annotation.acting_as.ensure_subscribed_by(user)
         code_annotation.acting_as.ensure_subscribed_by(course_creator.user)
       end
-      subject { Course::Assessment::Answer::CommentNotifier.annotation_replied(post) }
+      subject do
+        perform_sidekiq_jobs { Course::Assessment::Answer::CommentNotifier.annotation_replied(post) }
+      end
 
       it 'sends email notifications' do
         expect { subject }.to change(ActionMailer::Base.deliveries, :count).by(2)

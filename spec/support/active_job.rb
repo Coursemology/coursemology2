@@ -33,18 +33,30 @@ module ActiveJob::TestGroupHelpers
   end
 end
 
-# Since message deliveries use the test delivery engine, all deferred deliver calls must also call
-# +deliver_now+ so that the +ActionMailer::Base.deliveries.count+ attribute will also be
-# incremented.
+# Since message deliveries use the test delivery engine, deferred deliver calls also call
+# +deliver_now+ so that the +ActionMailer::Base.deliveries.count+ attribute is incremented (the
+# default in-test adapters don't reliably run +MailDeliveryJob+).
+#
+# EXCEPTION: under the Sidekiq harness (:sidekiq_same_thread / :sidekiq_separate_thread) the real
+# +MailDeliveryJob+ runs through the processor and delivers exactly once, so the synchronous
+# +deliver_now+ here is skipped to avoid double-counting deliveries. Specs asserting on
+# +deliveries.count+ get reliable counts by wrapping the mail-triggering action in
+# +perform_sidekiq_jobs { ... }+.
 module ActionMailer::MessageDelivery::TestDeliveryHelpers
   def deliver_later(_ = {})
-    deliver_now
+    deliver_now unless sidekiq_harness_active?
     super
   end
 
   def deliver_later!(_ = {})
-    deliver_now!
+    deliver_now! unless sidekiq_harness_active?
     super
+  end
+
+  private
+
+  def sidekiq_harness_active?
+    ActiveJob::Base.queue_adapter.instance_of?(::ActiveJob::QueueAdapters::SidekiqAdapter)
   end
 end
 ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)
@@ -108,6 +120,16 @@ module TrackableJob::SpecHelpers
     return unless ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
 
     ActiveJob::Base.queue_adapter.clear_enqueued_jobs
+  end
+
+  # Polls until at least +count+ emails have been delivered, or the Capybara wait time elapses. Under
+  # the :sidekiq_separate_thread harness a mail job enqueued by the Capybara server thread is delivered
+  # out-of-band by the worker thread, so feature specs must wait for it rather than assert immediately.
+  # (ActionMailer::Base.deliveries is shared across threads, so the worker's delivery is visible here.)
+  def wait_for_email_delivery(count = 1, timeout: Capybara.default_max_wait_time)
+    deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + timeout
+    sleep 0.5 until ActionMailer::Base.deliveries.count >= count ||
+                    Process.clock_gettime(Process::CLOCK_MONOTONIC) > deadline
   end
 end
 

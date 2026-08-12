@@ -48,7 +48,7 @@ RSpec.describe User::EmailsController, type: :controller do
       end
     end
 
-    describe '#send_confirmation', type: :mailer do
+    describe '#send_confirmation', :sidekiq_same_thread, type: :mailer do
       let!(:email) { create(:user_email, email_traits, user: user, primary: false) }
       subject { post :send_confirmation, params: { id: email } }
 
@@ -56,7 +56,7 @@ RSpec.describe User::EmailsController, type: :controller do
         let(:email_traits) { :confirmed }
 
         it 'does not send any confirmations' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
         it 'sets an error message' do
@@ -70,10 +70,8 @@ RSpec.describe User::EmailsController, type: :controller do
       context 'when the email is not confirmed' do
         let(:email_traits) { :unconfirmed }
 
-        with_active_job_queue_adapter(:test) do
-          it 'sends out a confirmation email' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
-          end
+        it 'sends out a confirmation email' do
+          expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
 
         it { is_expected.to have_http_status(:ok) }

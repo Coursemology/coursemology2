@@ -24,8 +24,8 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           is_expected.to have_http_status(:ok)
         end
 
-        it 'sends an email notification to course owner', type: :mailer do
-          subject
+        it 'sends an email notification to course owner', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
@@ -126,14 +126,13 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           expect(course_user.name).to eq(course_user_params[:name])
         end
 
-        it 'sends an acceptance email notification', type: :mailer do
-          subject
+        it 'sends an acceptance email notification', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
-          # When enrol request is created, 2 emails are sent (one to enrollee and one to course staff).
-          # When enrol request is approved, 1 email is sent to enrollee.
-          expect(ActionMailer::Base.deliveries.count).to eq(3)
+          # Only the approval's email is delivered here (the request-creation emails from setup are not
+          # run by this block), so assert on that specific email rather than a total count.
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_added_email.subject')
         end
@@ -173,12 +172,11 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           expect(course_user).to be_nil
         end
 
-        it 'sends a rejection email', type: :mailer do
-          subject
+        it 'sends a rejection email', :sidekiq_same_thread, type: :mailer do
+          perform_sidekiq_jobs { subject }
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
-          expect(ActionMailer::Base.deliveries.count).to eq(3)
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_rejected_email.subject')
         end

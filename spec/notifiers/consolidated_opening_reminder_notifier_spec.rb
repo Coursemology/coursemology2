@@ -5,7 +5,7 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :mailer do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    describe '#opening_reminder' do
+    describe '#opening_reminder', :sidekiq_same_thread do
       def set_consolidated_opening_reminder_setting(component, category_id, setting, regular, phantom)
         email_setting = course.
                         setting_emails.
@@ -32,7 +32,9 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :mailer do
           create(:course_video, course: course, start_at: 1.hour.from_now, published: true)
         end
 
-        subject { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        subject do
+          perform_sidekiq_jobs { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        end
 
         it 'sends a course notification' do
           expect { subject }.to change(course.notifications, :count).by(1)
@@ -99,7 +101,9 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :mailer do
           end
         end
 
-        subject { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        subject do
+          perform_sidekiq_jobs { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        end
 
         it 'sends a course notification' do
           expect { subject }.to change(course.notifications, :count).by(1)
@@ -138,7 +142,9 @@ RSpec.describe Course::ConsolidatedOpeningReminderNotifier, type: :mailer do
           end
         end
 
-        subject { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        subject do
+          perform_sidekiq_jobs { Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course) }
+        end
 
         it 'does not send a course notification' do
           expect { subject }.to change(course.notifications, :count).by(0)

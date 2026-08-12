@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::ReminderService, type: :mailer do
     let(:student_regular_email) { student_regular.user.email }
     let(:student_phantom_email) { student_phantom.user.email }
 
-    describe '#closing_reminder' do
+    describe '#closing_reminder', :sidekiq_same_thread do
       let(:assessment) do
         create(:assessment, :published, :with_text_response_question, course: course, end_at: 2.days.from_now)
       end
@@ -28,8 +28,10 @@ RSpec.describe Course::Assessment::ReminderService, type: :mailer do
       end
 
       subject do
-        Course::Assessment::ReminderService.
-          closing_reminder(assessment, assessment.closing_reminder_token)
+        perform_sidekiq_jobs do
+          Course::Assessment::ReminderService.
+            closing_reminder(assessment, assessment.closing_reminder_token)
+        end
       end
 
       context 'when "assessment closing" emails are enabled' do

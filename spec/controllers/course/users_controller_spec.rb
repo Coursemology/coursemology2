@@ -73,8 +73,8 @@ RSpec.describe Course::UsersController, type: :controller do
           expect(subject).to have_http_status(:ok)
         end
 
-        it 'does not send a notification email to the user', type: :mailer do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        it 'does not send a notification email to the user', :sidekiq_same_thread, type: :mailer do
+          expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
         context 'when the user cannot be saved' do
@@ -211,16 +211,16 @@ RSpec.describe Course::UsersController, type: :controller do
 
         it { is_expected.to have_http_status(:ok) }
 
-        it 'only emails users whose suspension status changed', type: :mailer do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        it 'only emails users whose suspension status changed', :sidekiq_same_thread, type: :mailer do
+          expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(1)
           expect(ActionMailer::Base.deliveries.last.to).to include(active_student.user.email)
         end
 
         context 'when all targeted users are already suspended' do
           let(:target_ids) { [already_suspended.id] }
 
-          it 'sends no emails', type: :mailer do
-            expect { subject }.not_to(change { ActionMailer::Base.deliveries.count })
+          it 'sends no emails', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.not_to(change { ActionMailer::Base.deliveries.count })
           end
         end
 
@@ -229,8 +229,8 @@ RSpec.describe Course::UsersController, type: :controller do
 
           it { is_expected.to have_http_status(:bad_request) }
 
-          it 'makes no changes', type: :mailer do
-            expect { subject }.to \
+          it 'makes no changes', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.to \
               not_change { active_student.reload.is_suspended }.
               and(not_change { ActionMailer::Base.deliveries.count })
           end
@@ -242,8 +242,8 @@ RSpec.describe Course::UsersController, type: :controller do
 
           it { is_expected.to have_http_status(:bad_request) }
 
-          it 'makes no changes', type: :mailer do
-            expect { subject }.to \
+          it 'makes no changes', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.to \
               not_change { active_student.reload.is_suspended }.
               and(not_change { other_course_user.reload.is_suspended }).
               and(not_change { ActionMailer::Base.deliveries.count })
@@ -282,16 +282,16 @@ RSpec.describe Course::UsersController, type: :controller do
 
         it { is_expected.to have_http_status(:ok) }
 
-        it 'only emails users whose suspension status changed', type: :mailer do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        it 'only emails users whose suspension status changed', :sidekiq_same_thread, type: :mailer do
+          expect { perform_sidekiq_jobs { subject } }.to change { ActionMailer::Base.deliveries.count }.by(1)
           expect(ActionMailer::Base.deliveries.last.to).to include(suspended_student.user.email)
         end
 
         context 'when all targeted users are already active' do
           let(:target_ids) { [active_student.id] }
 
-          it 'sends no emails', type: :mailer do
-            expect { subject }.not_to(change { ActionMailer::Base.deliveries.count })
+          it 'sends no emails', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.not_to(change { ActionMailer::Base.deliveries.count })
           end
         end
 
@@ -300,8 +300,8 @@ RSpec.describe Course::UsersController, type: :controller do
 
           it { is_expected.to have_http_status(:bad_request) }
 
-          it 'makes no changes', type: :mailer do
-            expect { subject }.to \
+          it 'makes no changes', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.to \
               not_change { suspended_student.reload.is_suspended }.
               and(not_change { ActionMailer::Base.deliveries.count })
           end
@@ -313,8 +313,8 @@ RSpec.describe Course::UsersController, type: :controller do
 
           it { is_expected.to have_http_status(:bad_request) }
 
-          it 'makes no changes', type: :mailer do
-            expect { subject }.to \
+          it 'makes no changes', :sidekiq_same_thread, type: :mailer do
+            expect { perform_sidekiq_jobs { subject } }.to \
               not_change { suspended_student.reload.is_suspended }.
               and(not_change { other_course_user.reload.is_suspended }).
               and(not_change { ActionMailer::Base.deliveries.count })

@@ -413,6 +413,12 @@ RSpec.describe Course::Assessment::Submission do
         email_setting.update!(regular: regular, phantom: phantom)
       end
 
+      # Runs the graded-email MailDeliveryJob through the real Sidekiq processor so it delivers exactly
+      # once, making the ActionMailer::Base.deliveries.count assertions reliable (needs :sidekiq_same_thread).
+      def publish_and_deliver
+        perform_sidekiq_jobs { submission.publish! }
+      end
+
       it 'propagates the graded state to its answers' do
         expect(submission.answers.all?(&:submitted?)).to be(true)
         submission.publish!
@@ -431,11 +437,11 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
-      it 'sends an email notification', type: :mailer do
-        expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      it 'sends an email notification', :sidekiq_same_thread, type: :mailer do
+        expect { publish_and_deliver }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      context 'when a user unsubscribes', type: :mailer do
+      context 'when a user unsubscribes', :sidekiq_same_thread, type: :mailer do
         before do
           setting_email = course.
                           setting_emails.
@@ -446,32 +452,32 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'does not send an email notification to the user' do
-          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { publish_and_deliver }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
       context 'when "submission graded" email setting is disabled for regular students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, true) }
 
-        it 'does not send email notifications to the regular students' do
-          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        it 'does not send email notifications to the regular students', :sidekiq_same_thread do
+          expect { publish_and_deliver }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
       context 'when "submission graded" email setting is disabled for phantom students', type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, true, false) }
 
-        it 'does not send email notifications to phantom students' do
+        it 'does not send email notifications to phantom students', :sidekiq_same_thread do
           course_student1.update(phantom: true)
-          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { publish_and_deliver }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
-      context 'when "submission graded" setting is disabled for everyone', type: :mailer do
+      context 'when "submission graded" setting is disabled for everyone', :sidekiq_same_thread, type: :mailer do
         before { set_assessment_email_setting(course, category_id, :grades_released, false, false) }
 
         it 'does not send email notifications to the users' do
-          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          expect { publish_and_deliver }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
 
