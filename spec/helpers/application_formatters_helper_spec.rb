@@ -393,6 +393,49 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
 
+    context 'when text contains tags carrying content in their attributes' do
+      it 'keeps uploaded images' do
+        html = '<p>My answer</p><figure class="image"><img src="/attachments/123" alt="My diagram"></figure>'
+        expect(helper.clean_html_text(html)).to eq("My answer\n<img src=\"/attachments/123\" alt=\"My diagram\">")
+      end
+
+      it 'keeps inline images' do
+        html = '<p>Refer to <img src="/attachments/9" alt="chart"> above</p>'
+        expect(helper.clean_html_text(html)).to eq('Refer to <img src="/attachments/9" alt="chart"> above')
+      end
+
+      it 'keeps embedded videos' do
+        html = '<figure class="media"><oembed url="https://youtu.be/abc123"></oembed></figure>'
+        expect(helper.clean_html_text(html)).to eq('<oembed url="https://youtu.be/abc123"></oembed>')
+      end
+
+      it 'keeps videos embedded by older editors' do
+        html = '<iframe src="https://www.youtube.com/embed/abc123" width="560"></iframe>'
+        expect(helper.clean_html_text(html)).to eq('<iframe src="https://www.youtube.com/embed/abc123"></iframe>')
+      end
+
+      it 'is not blank when the text is only an image' do
+        html = '<figure class="image"><img src="/attachments/123"></figure>'
+        expect(helper.clean_html_text_blank?(html)).to eq(false)
+      end
+
+      it 'drops the presentational attributes of the tags it keeps' do
+        html = '<img src="/attachments/1" alt="Graph" width="200" height="100" style="width:50%" class="image_resized">'
+        expect(helper.clean_html_text(html)).to eq('<img src="/attachments/1" alt="Graph">')
+      end
+
+      it 'drops event handler attributes of the tags it keeps' do
+        html = '<img src="/attachments/1" onerror="alert(1)" onload="alert(2)">'
+        expect(helper.clean_html_text(html)).to eq('<img src="/attachments/1">')
+      end
+
+      it 'strips the surrounding formatting tags' do
+        html = '<figure class="image image_resized"><img src="/attachments/1">' \
+               '<figcaption>A caption</figcaption></figure>'
+        expect(helper.clean_html_text(html)).to eq('<img src="/attachments/1">A caption')
+      end
+    end
+
     context 'when text contains HTML entities' do
       it 'decodes &nbsp; to space' do
         html = '<p>Hello&nbsp;World</p>'
@@ -413,6 +456,28 @@ RSpec.describe ApplicationFormattersHelper do
         html = '<p>&#34;Quote&#34;</p>'
         expect(helper.clean_html_text(html)).to eq('"Quote"')
       end
+
+      it 'decodes angle brackets typed as text' do
+        html = '<p>if a &lt; b &amp;&amp; b &gt; c</p>'
+        expect(helper.clean_html_text(html)).to eq('if a < b && b > c')
+      end
+
+      it 'decodes text that looks like a tag without treating it as one' do
+        html = '<p>use the &lt;img&gt; tag</p>'
+        expect(helper.clean_html_text(html)).to eq('use the <img> tag')
+      end
+
+      it 'does not decode entities inside the attributes of the tags it keeps' do
+        html = '<p>Tom &amp; Jerry</p><img src="/attachments/1?x=1&amp;y=2" alt="Tom &amp; Jerry">'
+        expect(helper.clean_html_text(html)).
+          to eq("Tom & Jerry\n<img src=\"/attachments/1?x=1&amp;y=2\" alt=\"Tom &amp; Jerry\">")
+      end
+
+      it 'does not decode entities in attributes following an angle bracket in an attribute' do
+        html = '<img src="/attachments/1" alt="a &gt; b" title="Tom &amp; Jerry">'
+        expect(helper.clean_html_text(html)).
+          to eq('<img src="/attachments/1" alt="a > b" title="Tom &amp; Jerry">')
+      end
     end
 
     context 'when text contains paragraph and line breaks' do
@@ -426,6 +491,12 @@ RSpec.describe ApplicationFormattersHelper do
         html = '<p>Line 1<br />Line 2</p>'
         result = helper.clean_html_text(html)
         expect(result).to eq("Line 1\nLine 2")
+      end
+
+      it 'preserves unclosed and self-closing line breaks as newlines' do
+        html = '<p>Line 1<br>Line 2<br/>Line 3</p>'
+        result = helper.clean_html_text(html)
+        expect(result).to eq("Line 1\nLine 2\nLine 3")
       end
 
       it 'handles complex HTML with mixed content' do

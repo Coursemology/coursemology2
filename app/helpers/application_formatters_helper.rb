@@ -85,19 +85,56 @@ module ApplicationFormattersHelper
     format('%<hours>02dH%<minutes>02dM%<seconds>02dS', hours: hours, minutes: minutes, seconds: seconds)
   end
 
+  # Tags that survive +clean_html_text+ instead of being stripped.
+  #
+  # These elements are empty or void: everything they contribute lives in their attributes
+  # (an uploaded image's +src+, an embedded video's +url+), so stripping them discards content
+  # rather than merely dropping formatting. Presentational tags remain stripped, since the text
+  # they wrap is kept.
+  #
+  # See ApplicationHtmlFormattersHelper::SANITIZATION_FILTER_WHITELIST for what may actually
+  # reach the database: <oembed> is what CKEditor's media embed writes, while <iframe> only
+  # appears in rich text saved by older editors.
+  CLEAN_HTML_TEXT_ALLOWED_TAGS = ['img', 'oembed', 'iframe', 'embed', 'audio', 'video', 'source'].freeze
+
+  # Attributes kept on CLEAN_HTML_TEXT_ALLOWED_TAGS. Only those identifying or describing the
+  # embedded resource are retained; sizing and styling attributes are formatting, so they go.
+  CLEAN_HTML_TEXT_ALLOWED_ATTRIBUTES = ['src', 'srcset', 'url', 'alt', 'title'].freeze
+
+  # Tags that end a visual line, and so become a newline in the plain text output. CKEditor emits
+  # bare <br>, but rich text saved by older editors uses <br /> and <br/>.
+  CLEAN_HTML_TEXT_LINE_BREAK_TAGS = /<br\s*\/?>|<\/(?:p|figure)>/i
+
+  # Splits sanitized HTML into tags and the text between them, so that entities are only decoded in
+  # the latter. Matching up to the first '>' is not enough: the HTML5 serializer escapes '&', '"' and
+  # non-breaking spaces in attribute values but leaves '<' and '>' alone, so an image whose alt text
+  # reads 'a > b' would otherwise be cut in half and the attributes after the cut wrongly decoded.
+  # Quoted values are therefore skipped over, which is safe as the serializer always double-quotes
+  # attributes and escapes any '"' within them.
+  CLEAN_HTML_TEXT_TAGS = /(<[^>"]*(?:"[^"]*"[^>"]*)*>)/
+
   # Formats rich text fields for CSV export by stripping HTML tags and decoding HTML entities.
   # Rich text fields are saved as HTML in the database (from WYSIWYG editors), so this helper
   # converts them to plain text suitable for CSV files by removing HTML markup and decoding
   # entities like &nbsp;, &amp;, etc.
   #
+  # Tags in CLEAN_HTML_TEXT_ALLOWED_TAGS are kept verbatim, as stripping them would drop the
+  # content itself and not just its formatting.
+  #
   # @param [String] text The rich text (HTML) to format
-  # @param [Boolean] preserve_newlines Whether to preserve paragraph/line breaks (default: true)
-  # @return [String] Plain text with HTML tags removed and entities decoded
+  # @return [String] Plain text with formatting HTML tags removed and entities decoded
   def clean_html_text(text)
     return '' unless text
 
-    cleaned_text = text.gsub('</p>', "</p>\n").gsub('<br />', "<br />\n")
-    HTMLEntities.new.decode(ActionController::Base.helpers.strip_tags(cleaned_text)).strip
+    cleaned_text = text.gsub(CLEAN_HTML_TEXT_LINE_BREAK_TAGS) { |tag| "#{tag}\n" }
+    sanitized = strip_formatting_html_tags(cleaned_text)
+
+    entities = HTMLEntities.new
+    decoded = sanitized.split(CLEAN_HTML_TEXT_TAGS).map do |part|
+      part.start_with?('<') ? part : entities.decode(part)
+    end.join
+
+    decoded.strip
   end
   alias_method :format_rich_text_for_csv, :clean_html_text
 
@@ -108,5 +145,21 @@ module ApplicationFormattersHelper
   # @return [Boolean] true if the text is blank after stripping HTML
   def clean_html_text_blank?(text)
     clean_html_text(text).blank?
+  end
+
+  private
+
+  # Strips every HTML tag except CLEAN_HTML_TEXT_ALLOWED_TAGS, keeping the text the stripped tags
+  # wrapped. Note that the sanitizer is instantiated per call because it is not thread-safe, and that
+  # +sanitize+ cannot be used here: ApplicationHtmlFormattersHelper overrides it with a pipeline
+  # that ignores the tag and attribute options.
+  #
+  # @param [String] text The rich text (HTML) to strip
+  # @return [String] Sanitized HTML fragment containing only the allowed tags and allow-listed attributes
+  def strip_formatting_html_tags(text)
+    sanitizer = Rails::HTML::Sanitizer.best_supported_vendor.safe_list_sanitizer.new
+    sanitizer.sanitize(text,
+                       tags: CLEAN_HTML_TEXT_ALLOWED_TAGS,
+                       attributes: CLEAN_HTML_TEXT_ALLOWED_ATTRIBUTES)
   end
 end
