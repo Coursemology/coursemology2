@@ -144,7 +144,7 @@ module Extensions::Conditional::ActiveRecord::Base
     private
 
     def on_condition_change
-      execute_after_commit { rebuild_satisfiability_graph(course) }
+      ActiveRecord.after_all_transactions_commit { rebuild_satisfiability_graph(course) }
     end
 
     # Rebuild the satisfiability graph for the given course.

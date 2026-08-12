@@ -350,7 +350,7 @@ class Course::Assessment::Submission < ApplicationRecord
   def auto_grade_submission
     return unless saved_change_to_workflow_state?
 
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
       auto_grade!(only_ungraded: true)
     end
@@ -361,7 +361,7 @@ class Course::Assessment::Submission < ApplicationRecord
   def retrieve_codaveri_feedback
     return unless saved_change_to_workflow_state?
 
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       auto_feedback!
     end
   end

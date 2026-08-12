@@ -31,8 +31,6 @@ gem 'workflow'
 gem 'workflow-activerecord', '>= 4.1', '< 7.0'
 # Add creator_id and updater_id attributes to models
 gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git'
-# Allow actions to be deferred until after a record is committed.
-gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 # Upstream v1.1.1 (supports Rails 7.0/7.1/7.2/8.0); retires the Coursemology fork.
 # TODO: bump to upstream master (v1.2.0) for Rails 8.1 during that upgrade — v1.1.1 ships no 8.1 patch.

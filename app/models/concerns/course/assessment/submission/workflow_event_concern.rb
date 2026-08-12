@@ -188,7 +188,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
                   submission_graded_email_enabled? &&
                   submission_graded_email_subscribed?
 
-    execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
+    ActiveRecord.after_all_transactions_commit { Course::Mailer.submission_graded_email(self).deliver_later }
   end
 
   def submission_graded_email_enabled?

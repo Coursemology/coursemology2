@@ -43,7 +43,7 @@ class Course::Condition::Achievement < ApplicationRecord
   def self.on_dependent_status_change(achievement)
     return unless achievement.saved_changes.any? || achievement.destroyed?
 
-    achievement.execute_after_commit { evaluate_conditional_for(achievement.course_user) }
+    ActiveRecord.after_all_transactions_commit { evaluate_conditional_for(achievement.course_user) }
   end
 
   def initialize_duplicate(duplicator, other)

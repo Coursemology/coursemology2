@@ -162,7 +162,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def create_or_update_codaveri_problem
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       import_job =
         Course::Assessment::Question::CodaveriImportJob.perform_later(self, attachment)
       update_column(:import_job_id, import_job.job_id)
@@ -196,7 +196,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def evaluate_package
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       import_job =
         Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment, max_time_limit)
       update_column(:import_job_id, import_job.job_id)
@@ -211,7 +211,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     new_attachment = attachment
     restore_attachment_change
 
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       new_attachment.save!
       import_job =
         Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment, max_time_limit)

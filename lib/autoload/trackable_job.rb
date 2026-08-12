@@ -34,7 +34,7 @@ module TrackableJob
     def signal_finished
       return unless saved_change_to_status?
 
-      execute_after_commit { signal }
+      ActiveRecord.after_all_transactions_commit { signal }
     end
 
     def job_in_sidekiq?
