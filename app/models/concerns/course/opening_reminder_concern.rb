@@ -33,7 +33,7 @@ module Course::OpeningReminderConcern
     # Determine whether or not to send the opening reminder.
     send_opening_reminder = start_at && should_send_opening_reminder
 
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       if send_opening_reminder
         opening_reminder_job_class.set(wait_until: start_at).
           perform_later(updater, self, opening_reminder_token)
@@ -44,7 +44,7 @@ module Course::OpeningReminderConcern
   # Determines whether the opening reminder should be sent. Reminders always should be sent unless
   # the start_at and the old start_at dates are both in the past.
   #
-  # Note: This should be invoked outside of the +execute_after_commit+ block, as
+  # Note: This should be invoked outside of the +ActiveRecord.after_all_transactions_commit+ block, as
   # ActiveRecord::Dirty methods and attributes are not applied as the record has been saved.
   #
   # @return [Boolean] True if an opening reminder should be sent

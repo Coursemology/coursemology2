@@ -36,7 +36,7 @@ class Course::EnrolRequestsController < Course::ComponentController
     @enrol_request.transaction do
       course_user = @enrol_request.create_course_user(course_user_params)
       if course_user.persisted? && @enrol_request.update(approve: true)
-        @enrol_request.execute_after_commit { Course::Mailer.user_added_email(course_user).deliver_later }
+        ActiveRecord.after_all_transactions_commit { Course::Mailer.user_added_email(course_user).deliver_later }
         approve_success
       else
         approve_failure(course_user)
@@ -47,7 +47,7 @@ class Course::EnrolRequestsController < Course::ComponentController
 
   def reject
     if @enrol_request.update(reject: true)
-      @enrol_request.execute_after_commit do
+      ActiveRecord.after_all_transactions_commit do
         Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
       end
       reject_success

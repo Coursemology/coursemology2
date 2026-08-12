@@ -140,9 +140,6 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     afm (1.0.0)
-    after_commit_action (1.1.0)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
     ast (2.4.3)
     aws-eventstream (1.4.0)
     aws-partitions (1.1271.0)
@@ -662,7 +659,6 @@ DEPENDENCIES
   activerecord-import (>= 0.2.0)
   activerecord-userstamp!
   acts_as_tenant
-  after_commit_action
   aws-sdk-cloudwatch
   aws-sdk-core
   aws-sdk-s3

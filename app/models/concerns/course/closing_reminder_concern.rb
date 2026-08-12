@@ -23,7 +23,7 @@ module Course::ClosingReminderConcern
 
     return unless new_end_at && (new_end_at > Time.zone.now)
 
-    execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       # Send notification one day before the closing date
       closing_reminder_job_class.set(wait_until: new_end_at - 1.day).
         perform_later(self, closing_reminder_token)

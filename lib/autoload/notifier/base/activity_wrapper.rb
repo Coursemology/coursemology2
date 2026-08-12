@@ -29,6 +29,6 @@ class Notifier::Base::ActivityWrapper < SimpleDelegator
   private
 
   def send_pending_email
-    execute_after_commit { @notifier.send(:send_pending_emails) }
+    ActiveRecord.after_all_transactions_commit { @notifier.send(:send_pending_emails) }
   end
 end

@@ -41,7 +41,7 @@ class Course::Condition::Survey < ApplicationRecord
   def self.on_dependent_status_change(response)
     return unless response.saved_changes.key?(:submitted_at)
 
-    response.execute_after_commit { evaluate_conditional_for(response.course_user) }
+    ActiveRecord.after_all_transactions_commit { evaluate_conditional_for(response.course_user) }
   end
 
   def initialize_duplicate(duplicator, other)

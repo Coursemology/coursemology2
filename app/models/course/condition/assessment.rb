@@ -56,7 +56,7 @@ class Course::Condition::Assessment < ApplicationRecord
     return unless submission.saved_changes.key?(:workflow_state) ||
                   submission.saved_changes.key?(:last_graded_time)
 
-    submission.execute_after_commit do
+    ActiveRecord.after_all_transactions_commit do
       evaluate_conditional_for(submission.course_user)
     end
   end
