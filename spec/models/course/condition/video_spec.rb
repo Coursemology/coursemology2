@@ -183,6 +183,127 @@ RSpec.describe Course::Condition::Video, type: :model do
       end
     end
 
+    describe '#compute_satisfaction_information' do
+      let(:video) { create(:video, :published, course: course, duration: 70) }
+      let(:course_user1) { create(:course_user, course: course) }
+      let(:course_user2) { create(:course_user, course: course) }
+      let(:course_user3) { create(:course_user, course: course) }
+
+      context 'without minimum grade percentage' do
+        subject { create(:course_condition_video, video: video) }
+
+        context 'when all users have watched the video' do
+          before do
+            create(:video_submission, video: video, creator: course_user1.user)
+            create(:video_submission, video: video, creator: course_user2.user)
+            create(:video_submission, video: video, creator: course_user3.user)
+          end
+
+          it 'returns true for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, true])
+          end
+        end
+
+        context 'when one user has not watched the video and the rest have' do
+          before do
+            create(:video_submission, video: video, creator: course_user1.user)
+            create(:video_submission, video: video, creator: course_user3.user)
+          end
+
+          it 'returns false for that user and true for the rest' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, false, true])
+          end
+        end
+
+        context 'when all users have not watched the video' do
+          it 'returns false for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+      end
+
+      context 'with minimum watch percentage' do
+        let(:submission1) { create(:video_submission, video: video, creator: course_user1.user) }
+        let(:submission2) { create(:video_submission, video: video, creator: course_user2.user) }
+        let(:submission3) { create(:video_submission, video: video, creator: course_user3.user) }
+
+        context 'when all users have met the minimum watch percentage' do
+          subject { create(:course_condition_video, video: video, minimum_watch_percentage: 50) }
+
+          before do
+            create(:video_session, :with_events_unclosed, submission: submission1)
+            create(:video_session, :with_events_paused, submission: submission1)
+            create(:video_session, :with_events_unclosed, submission: submission2)
+            create(:video_session, :with_events_paused, submission: submission2)
+            create(:video_session, :with_events_unclosed, submission: submission3)
+            create(:video_session, :with_events_paused, submission: submission3)
+          end
+
+          it 'returns true for all users' do
+            # Sets percent_watched to 88
+            submission1.update_statistic
+            submission2.update_statistic
+            submission3.update_statistic
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, true])
+          end
+        end
+
+        context 'when only one user does not meet the minimum watch percentage' do
+          subject { create(:course_condition_video, video: video, minimum_watch_percentage: 50) }
+
+          before do
+            create(:video_session, :with_events_unclosed, submission: submission1)
+            create(:video_session, :with_events_paused, submission: submission1)
+            create(:video_session, :with_events_unclosed, submission: submission2)
+            create(:video_session, :with_events_paused, submission: submission2)
+          end
+
+          it 'returns false for that user and true for rest' do
+            # Sets percent_watched to 88
+            submission1.update_statistic
+            submission2.update_statistic
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([true, true, false])
+          end
+        end
+
+        context 'all users do not meet the minimum watch percentage' do
+          subject { create(:course_condition_video, video: video, minimum_watch_percentage: 90) }
+
+          before do
+            create(:video_session, :with_events_unclosed, submission: submission1)
+            create(:video_session, :with_events_paused, submission: submission1)
+            create(:video_session, :with_events_unclosed, submission: submission2)
+            create(:video_session, :with_events_paused, submission: submission2)
+            create(:video_session, :with_events_unclosed, submission: submission3)
+            create(:video_session, :with_events_paused, submission: submission3)
+          end
+
+          it 'returns false for all users' do
+            # Sets percent_watched to 88
+            submission1.update_statistic
+            submission2.update_statistic
+            submission3.update_statistic
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+
+        context 'all users did not watch the video (i.e. no submissions)' do
+          subject { create(:course_condition_video, video: video, minimum_watch_percentage: 10) }
+
+          it 'returns false for all users' do
+            expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                             course_user3])).to eq([false, false, false])
+          end
+        end
+      end
+    end
+
     describe '#dependent_object' do
       it 'returns the correct dependent video object' do
         expect(subject.dependent_object).to eq(subject.video)
