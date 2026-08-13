@@ -664,7 +664,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
     t.datetime "published_at", precision: nil
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
-    t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.datetime "last_graded_time", precision: nil, default: "2021-11-09 00:08:09"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -744,7 +744,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
     t.index ["scholaistic_assessment_id"], name: "idx_on_scholaistic_assessment_id_60ce66b4ce"
   end
 
-  create_table "course_condition_surveys", id: :serial, force: :cascade do |t|
+  create_table "course_condition_surveys", force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
   end
@@ -774,7 +774,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
 
   create_table "course_discussion_post_codaveri_feedbacks", force: :cascade do |t|
     t.bigint "post_id", null: false
-    t.integer "status"
+    t.integer "status", default: 0
     t.text "codaveri_feedback_id", null: false
     t.text "original_feedback", null: false
     t.integer "rating"
@@ -1737,7 +1737,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
-    t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-10-24 10:31:32"
+    t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-11-09 00:08:09"
     t.integer "default_timeline_algorithm", default: 0, null: false
     t.string "koditsu_workspace_id"
     t.uuid "ssid_folder_id"
@@ -2145,8 +2145,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
   add_foreign_key "course_condition_scholaistic_assessments", "course_scholaistic_assessments", column: "scholaistic_assessment_id"
-  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
-  add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
+  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id"
+  add_foreign_key "course_condition_videos", "course_videos", column: "video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
@@ -2223,8 +2223,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
   add_foreign_key "course_groups", "course_group_categories", column: "group_category_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
-  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
-  add_foreign_key "course_learning_rate_records", "course_users", name: "fk_course_learning_rate_records_course_user_id"
+  add_foreign_key "course_learning_maps", "courses"
+  add_foreign_key "course_learning_rate_records", "course_users"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"
