@@ -2,6 +2,7 @@
 class Course::DuplicationJob < ApplicationJob
   include TrackableJob
   include Rails.application.routes.url_helpers
+
   queue_as :duplication
 
   protected

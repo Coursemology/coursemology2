@@ -179,8 +179,6 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   #
   # @return [Hash<User, CourseUser>]
   def course_users_hash
-    @course_users_hash ||= forum_participants.each_with_object({}) do |course_user, hash|
-      hash[course_user.user] = course_user
-    end
+    @course_users_hash ||= forum_participants.to_h { |course_user| [course_user.user, course_user] }
   end
 end

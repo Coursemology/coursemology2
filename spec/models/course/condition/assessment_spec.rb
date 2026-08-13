@@ -40,7 +40,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
-                                                                'course/condition/assessment'\
+                                                                'course/condition/assessment' \
                                                                 '.attributes.assessment.unique_dependency'))
         end
       end
@@ -72,7 +72,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         it 'is not valid' do
           expect(subject).to_not be_valid
           expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
-                                                                'course/condition/assessment.'\
+                                                                'course/condition/assessment.' \
                                                                 'attributes.assessment.cyclic_dependency'))
         end
       end

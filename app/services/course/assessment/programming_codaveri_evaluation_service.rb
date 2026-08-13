@@ -2,6 +2,7 @@
 # Sets up a programming evaluation, queues it for execution by codaveri evaluators, then returns the results.
 class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable Metrics/ClassLength
   include Course::Assessment::Question::CodaveriQuestionConcern
+
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT

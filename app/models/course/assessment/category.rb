@@ -2,6 +2,7 @@
 # Represents a category of assessments. This is typically 'Mission' and 'Training'.
 class Course::Assessment::Category < ApplicationRecord
   include Course::ModelComponentHost::Component
+
   has_one_folder
 
   validates :title, length: { maximum: 255 }, presence: true

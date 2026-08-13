@@ -306,7 +306,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(@new_content.description).to eq @content.description
         end
 
-        it 'keeps the original updater/creator and updated/created time'\
+        it 'keeps the original updater/creator and updated/created time' \
            'for folders and materials' do
           # Check material's updater/creator and updated/created time
           expect(@new_content.updated_at).to eq @content.updated_at
@@ -321,7 +321,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(@new_folders.map(&:creator_id)).to match_array @original_folders.map(&:creator_id)
         end
 
-        it 'keeps the original updater/creator and updated/created time'\
+        it 'keeps the original updater/creator and updated/created time' \
            'for attachment references' do
           expect(@new_content.attachment.updated_at).to eq @content.attachment.updated_at
           expect(@new_content.attachment.updater).to eq @content.attachment.updater

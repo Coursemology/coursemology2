@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Ability
   include CanCan::Ability
+
   attr_reader :user, :course, :course_user, :instance_user, :session
 
   # Load all components which declare abilities.

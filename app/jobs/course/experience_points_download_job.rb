@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsDownloadJob < ApplicationJob
   include TrackableJob
+
   queue_as :lowest
   retry_on StandardError, attempts: 0
 

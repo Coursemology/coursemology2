@@ -73,8 +73,8 @@ class Course::Video < ApplicationRecord
 
   scope :unwatched_by, (lambda do |user|
     where.not(id: Course::Video::Submission.
-      by_user(user).
-      pluck(Arel.sql('DISTINCT video_id')))
+                  by_user(user).
+                  pluck(Arel.sql('DISTINCT video_id')))
   end)
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.
@@ -87,8 +87,8 @@ class Course::Video < ApplicationRecord
   scope :video_after, (lambda do |video|
     candidates = from_tab(video.tab_id).
                  joins(lesson_plan_item: :default_reference_time).
-                 where('course_reference_times.start_at > :start_at OR '\
-                       '(course_reference_times.start_at = :start_at AND '\
+                 where('course_reference_times.start_at > :start_at OR ' \
+                       '(course_reference_times.start_at = :start_at AND ' \
                        'course_lesson_plan_items.title > :title)',
                        start_at: video.start_at,
                        title: video.title)

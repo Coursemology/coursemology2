@@ -37,6 +37,7 @@ module ActsAsTenant::TestGroupHelpers
 
   module ControllerHelpers
     include ModelHelpers
+
     # Sets the current tenant and host when running this group of tests.
     #
     # @param [Symbol] tenant The symbol containing the tenant to use for this group of
@@ -54,6 +55,7 @@ module ActsAsTenant::TestGroupHelpers
 
   module FeatureHelpers
     include ModelHelpers
+
     # Sets the current tenant and host when running this group of tests.
     #
     # @param [Symbol] tenant The symbol containing the tenant to use for this group of

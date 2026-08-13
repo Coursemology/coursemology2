@@ -2,6 +2,7 @@
 class Course::Condition::Assessment < ApplicationRecord
   include ActiveSupport::NumberHelper
   include DuplicationStateTrackingConcern
+
   acts_as_condition
 
   # Trigger for evaluating the satisfiability of conditionals for a course user

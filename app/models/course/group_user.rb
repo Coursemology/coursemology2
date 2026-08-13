@@ -17,7 +17,7 @@ class Course::GroupUser < ApplicationRecord
   belongs_to :group, class_name: 'Course::Group', inverse_of: :group_users
 
   scope :order_by_course_user_name, lambda {
-                                      joins('LEFT OUTER JOIN course_users ON '\
+                                      joins('LEFT OUTER JOIN course_users ON ' \
                                             'course_users.id = course_group_users.course_user_id').
                                         order('name ASC')
                                     }

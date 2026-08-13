@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Forum < ApplicationRecord
   extend FriendlyId
+
   friendly_id :slug_candidates, use: :scoped, scope: :course
 
   validates :name, length: { maximum: 255 }, presence: true

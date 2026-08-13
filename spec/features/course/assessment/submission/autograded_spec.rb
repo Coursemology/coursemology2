@@ -41,7 +41,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded', js: true do
         click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(page).to have_selector('div.alert-success',
-                                      text: 'course.assessment.submission.submissions.update.'\
+                                      text: 'course.assessment.submission.submissions.update.' \
                                             'success')
         expect(page).to have_checked_field(option)
       end

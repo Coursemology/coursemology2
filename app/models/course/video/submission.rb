@@ -70,7 +70,7 @@ class Course::Video::Submission < ApplicationRecord
     return unless existing_submission
 
     errors.clear
-    errors.add(:base, I18n.t('activerecord.errors.models.course/video/submission.'\
+    errors.add(:base, I18n.t('activerecord.errors.models.course/video/submission.' \
                              'submission_already_exists'))
   end
 

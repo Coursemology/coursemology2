@@ -7,6 +7,7 @@ class User < ApplicationRecord
   include UserSearchConcern
   include TimeZoneConcern
   include Generic::CollectionConcern
+
   model_stamper
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
@@ -132,6 +133,7 @@ class User < ApplicationRecord
       instance_users.where(role: [:instructor, :administrator]).exists?
     end
   end
+
   # Pick the default email and set it as primary email. This method would immediately set the
   # attributes in the database.
   #

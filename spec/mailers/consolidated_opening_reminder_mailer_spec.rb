@@ -57,15 +57,15 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
     end
 
     it 'sets the correct subject' do
-      expect(mail.subject).to eq(I18n.t('notifiers.course.'\
-                                        'consolidated_opening_reminder_notifier.'\
+      expect(mail.subject).to eq(I18n.t('notifiers.course.' \
+                                        'consolidated_opening_reminder_notifier.' \
                                         'opening_reminder.course_notifications.email.subject'))
     end
 
     it 'includes the assessments' do
-      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                     'consolidated_opening_reminder_notifier.'\
-                                                     'opening_reminder.course_notifications.'\
+      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                     'consolidated_opening_reminder_notifier.' \
+                                                     'opening_reminder.course_notifications.' \
                                                      'course.assessment.section_header'))
 
       assessments.each do |assessment|
@@ -74,9 +74,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
     end
 
     it 'includes the surveys' do
-      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                     'consolidated_opening_reminder_notifier.'\
-                                                     'opening_reminder.course_notifications.'\
+      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                     'consolidated_opening_reminder_notifier.' \
+                                                     'opening_reminder.course_notifications.' \
                                                      'course.survey.section_header'))
 
       surveys.each do |survey|
@@ -85,9 +85,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
     end
 
     it 'includes the videos' do
-      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                     'consolidated_opening_reminder_notifier.'\
-                                                     'opening_reminder.course_notifications.'\
+      expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                     'consolidated_opening_reminder_notifier.' \
+                                                     'opening_reminder.course_notifications.' \
                                                      'course.video.section_header'))
 
       videos.each do |video|
@@ -113,9 +113,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'does not include the assessments in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -124,9 +124,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the surveys in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -135,9 +135,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the videos in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.video.section_header'))
 
         videos.each do |video|
@@ -152,9 +152,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the assessments in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -163,9 +163,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the surveys in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -174,9 +174,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'doees not include the videos in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.video.section_header'))
 
         videos.each do |video|
@@ -191,9 +191,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the assessments in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -202,9 +202,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'does not include the surveys in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -213,9 +213,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the videos in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.video.section_header'))
 
         videos.each do |video|
@@ -230,9 +230,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'does not include the assessments in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -241,9 +241,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the surveys in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -252,9 +252,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the videos in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.video.section_header'))
 
         videos.each do |video|
@@ -267,9 +267,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       before { set_consolidated_opening_reminder_setting(:videos, nil, :opening_reminder, false, true) }
 
       it 'includes the assessments in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -278,9 +278,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the surveys in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -289,9 +289,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'doees not include the videos in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.video.section_header'))
 
         videos.each do |video|
@@ -304,9 +304,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       before { set_consolidated_opening_reminder_setting(:surveys, nil, :opening_reminder, false, true) }
 
       it 'includes the assessments in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.assessment.section_header'))
 
         assessments.each do |assessment|
@@ -315,9 +315,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'does not include the surveys in the email notification' do
-        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.'\
-                                                           'consolidated_opening_reminder_notifier.'\
-                                                           'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to_not include(I18n.t('notifiers.course.' \
+                                                           'consolidated_opening_reminder_notifier.' \
+                                                           'opening_reminder.course_notifications.' \
                                                            'course.survey.section_header'))
 
         surveys.each do |survey|
@@ -326,9 +326,9 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
       end
 
       it 'includes the videos in the email notification' do
-        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.'\
-                                                       'consolidated_opening_reminder_notifier.'\
-                                                       'opening_reminder.course_notifications.'\
+        expect(mail.body.raw_source).to include(I18n.t('notifiers.course.' \
+                                                       'consolidated_opening_reminder_notifier.' \
+                                                       'opening_reminder.course_notifications.' \
                                                        'course.video.section_header'))
 
         videos.each do |video|

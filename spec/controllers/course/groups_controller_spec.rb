@@ -12,9 +12,8 @@ RSpec.describe Course::Group::GroupsController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update, as: :json,
-                       params: { course_id: course, group_category_id: group_category, id: group }.
-                         reverse_merge(group_attributes)
+        params = { course_id: course, group_category_id: group_category, id: group }
+        patch :update, as: :json, params: params.reverse_merge(group_attributes)
       end
 
       context 'when name is present' do

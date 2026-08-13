@@ -2,6 +2,7 @@
 class Course::Admin::ComponentSettingsController < Course::Admin::Controller
   include Course::KoditsuWorkspaceConcern
   include Course::SsidFolderConcern
+
   before_action :load_settings
 
   def edit

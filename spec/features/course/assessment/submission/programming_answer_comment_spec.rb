@@ -67,12 +67,12 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           another_line_annotation_button.click
           expect(page).to have_tag('div.annotation-form', count: 2)
 
-          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.' \
                               'annotation_form.reset'), match: :first
           expect(page).to have_tag('.annotation-form', count: 1)
 
           fill_in_rails_summernote answer_selector, annotation
-          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.' \
                               'annotation_form.submit')
           wait_for_ajax
         end
@@ -93,7 +93,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         annotation_text = 'annotation'
         fill_in_rails_summernote '.annotation-form', annotation_text
         within find_form('.annotation-form') do
-          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.' \
                               'annotation_form.submit')
         end
 

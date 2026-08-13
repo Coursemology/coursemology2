@@ -89,8 +89,7 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
 
         it 'places phantom students before non-phantom students, each group sorted alphabetically' do
           users = service.send(:course_users)
-          non_phantoms = users.reject(&:phantom?)
-          phantoms = users.select(&:phantom?)
+          phantoms, non_phantoms = users.partition(&:phantom?)
 
           expect(users.index(phantoms.last)).to be < users.index(non_phantoms.first)
           expect(non_phantoms.map(&:name)).to eq(non_phantoms.map(&:name).sort)

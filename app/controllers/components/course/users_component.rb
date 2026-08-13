@@ -7,7 +7,6 @@ class Course::UsersComponent < SimpleDelegator
     false
   end
 
-
   def sidebar_items
     main_sidebar_items + admin_sidebar_items
   end

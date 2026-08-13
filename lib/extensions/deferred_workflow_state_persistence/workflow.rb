@@ -7,6 +7,7 @@ module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter; end
 
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter::DeferredActiveRecord
   extend ActiveSupport::Concern
+
   included do
     include WorkflowActiverecord
     include InstanceMethods

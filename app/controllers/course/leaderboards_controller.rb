@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::LeaderboardsController < Course::ComponentController
   include Course::LeaderboardsHelper
+
   before_action :check_component_settings
   before_action :preload_course_levels, only: [:index]
   before_action :fetch_course_users, only: [:index]

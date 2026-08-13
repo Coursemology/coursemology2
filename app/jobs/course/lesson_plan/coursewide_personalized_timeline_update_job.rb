@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob < ApplicationJob
   include Course::LessonPlan::PersonalizationConcern
+
   queue_as :lowest
 
   def perform(lesson_plan_item)

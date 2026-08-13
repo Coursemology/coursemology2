@@ -63,8 +63,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
           subject
           is_expected.to have_http_status(:bad_request)
           json_response = JSON.parse(response.body, { symbolize_names: true })
-          expect(json_response[:errors][:base]).to include(I18n.t('activerecord.errors.models.'\
-                                                                  'instance/user_role_request.attributes.'\
+          expect(json_response[:errors][:base]).to include(I18n.t('activerecord.errors.models.' \
+                                                                  'instance/user_role_request.attributes.' \
                                                                   'base.existing_pending_request'))
         end
       end

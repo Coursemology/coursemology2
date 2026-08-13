@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::Programming < ApplicationRecord
   include Course::Assessment::Question::CodaveriQuestionConcern
+
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
@@ -147,6 +148,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   MAX_TOTAL_FILE_SIZE = 2.megabytes
+
   private
 
   def validate_total_file_size
