@@ -558,12 +558,6 @@ GEM
     rubocop-ast (1.50.0)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
-    rubocop-rails (2.36.0)
-      activesupport (>= 4.2.0)
-      lint_roller (~> 1.1)
-      rack (>= 1.1)
-      rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.44.0, < 2.0)
     ruby-oembed (0.18.1)
     ruby-openai (7.3.1)
       event_stream_parser (>= 0.3.0, < 2.0.0)
@@ -726,8 +720,7 @@ DEPENDENCIES
   rspec-rails (~> 8)
   rspec-retry
   rspec_junit_formatter
-  rubocop (~> 1.89)
-  rubocop-rails
+  rubocop (~> 1.89.0)
   ruby-oembed
   ruby-openai
   rubyzip (~> 3.3)
