@@ -408,6 +408,30 @@ jobs:
           name: Run FactoryBot lint
           command: bundle exec rake factory_bot:lint
 
+  rubylint:
+    executor: ruby_with_postgres
+
+    steps:
+      - checkout
+      - rehydrate_ruby_deps
+
+      - run:
+          name: Run RuboCop checks
+          command: |
+            mkdir -p ~/rubocop
+            bundle exec rubocop --parallel --format progress \
+              --format junit --display-only-failed --out ~/rubocop/rubocop.xml
+            status=$?
+            echo $status > ~/rubocop/rubocop_exit_status
+            exit 0
+
+      - store_test_results:
+          path: ~/rubocop
+
+      - run:
+          name: Fail job if RuboCop failed
+          command: |
+            exit "$(cat ~/rubocop/rubocop_exit_status)"
   jslint:
     executor: node
 
@@ -489,6 +513,7 @@ workflows:
   build_and_test_and_lint:
     jobs:
       - jslint
+      - rubylint
       - jstest
       - build_client
       - i18n_en

@@ -111,7 +111,7 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails', '~> 8'
 
-  gem 'rubocop', '~> 1.89'
+  gem 'rubocop', '~> 1.89.0'
 
   # Factory Bot for factories
   # fix for https://github.com/thoughtbot/factory_bot/issues/1690
@@ -142,7 +142,6 @@ end
 group :ci do
   gem 'rspec-retry'
   gem 'rspec_junit_formatter'
-  gem 'rubocop-rails'
 end
 
 group :development, :production, :test do

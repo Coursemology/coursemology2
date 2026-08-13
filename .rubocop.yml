@@ -1,5 +1,5 @@
 inherit_from:
-  - .rubocop.unhound.yml
+  - .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
@@ -10,7 +10,7 @@ AllCops:
     - 'db/migrate/*'
     - 'vendor/bundle/**/*'
     - 'client/**/*'
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.3
 
 Bundler/OrderedGems:
   Enabled: false
@@ -27,6 +27,11 @@ Layout/FirstHashElementIndentation:
 Layout/LineLength:
   Max: 120
 
+Lint/AmbiguousBlockAssociation:
+  # Jbuilder templates are a DSL where `json.foo bar do ... end` is idiomatic.
+  Exclude:
+    - '**/*.jbuilder'
+
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
@@ -40,11 +45,22 @@ Metrics/MethodLength:
   Max: 15
   CountAsOne: ['array', 'hash', 'heredoc']
 
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
 Style/AsciiComments:
   AllowedChars: ['©', '├', '─', '└']
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    reduce:
+    inject: 'reduce'
+    find:
+    detect: 'find'
 
 Style/Documentation:
   Enabled: false
