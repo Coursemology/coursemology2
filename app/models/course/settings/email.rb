@@ -12,15 +12,15 @@ class Course::Settings::Email < ApplicationRecord
 
   enum :component, { announcements: 0, assessments: 1, forums: 2, surveys: 3, users: 4, videos: 5 }
   enum :setting, { new_announcement: 0,
-                  opening_reminder: 1,
-                  closing_reminder: 2,
-                  closing_reminder_summary: 3,
-                  grades_released: 4,
-                  new_comment: 5,
-                  new_submission: 6,
-                  new_topic: 7,
-                  post_replied: 8,
-                  new_enrol_request: 9 }
+                   opening_reminder: 1,
+                   closing_reminder: 2,
+                   closing_reminder_summary: 3,
+                   grades_released: 4,
+                   new_comment: 5,
+                   new_submission: 6,
+                   new_topic: 7,
+                   post_replied: 8,
+                   new_enrol_request: 9 }
 
   DEFAULT_EMAIL_COURSE_SETTINGS = [{ announcements: :new_announcement },
                                    { forums: :new_topic },

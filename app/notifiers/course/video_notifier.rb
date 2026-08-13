@@ -5,5 +5,4 @@ class Course::VideoNotifier < Notifier::Base
       notify(video.course, :feed).
       save!
   end
-
 end

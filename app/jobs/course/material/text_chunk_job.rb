@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Material::TextChunkJob < ApplicationJob
   include TrackableJob
+
   queue_as :default
 
   protected

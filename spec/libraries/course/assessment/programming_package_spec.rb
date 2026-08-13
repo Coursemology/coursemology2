@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
   self::ADDITIONAL_PACKAGE_PATH = File.join(Rails.root,
                                             'spec/fixtures/course/programming_question_template_with_add_files.zip')
   self::EMPTY_PACKAGE_PATH = File.join(Rails.root,
-                                       'spec/fixtures/course/'\
+                                       'spec/fixtures/course/' \
                                        'empty_programming_question_template.zip')
 
   def temp_package_path

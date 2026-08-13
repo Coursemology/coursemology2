@@ -11,7 +11,8 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
       current_course_user
     )
 
-    @scholaistic_assessments = @scholaistic_assessments.includes(lesson_plan_item: :default_reference_time).sort_by do |assessment|
+    assessments = @scholaistic_assessments.includes(lesson_plan_item: :default_reference_time)
+    @scholaistic_assessments = assessments.sort_by do |assessment|
       [assessment.start_at.to_i, assessment.title, assessment.id]
     end
 

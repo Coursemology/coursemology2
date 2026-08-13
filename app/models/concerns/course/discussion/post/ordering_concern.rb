@@ -8,6 +8,7 @@ module Course::Discussion::Post::OrderingConcern
   # the second is the children of the array.
   class PostSort
     include Enumerable
+
     delegate :each, to: :@sorted
     delegate :length, to: :@sorted
     delegate :flatten, to: :@sorted

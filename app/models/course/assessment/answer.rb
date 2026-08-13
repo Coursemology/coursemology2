@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer < ApplicationRecord
   include Workflow
+
   actable optional: true, inverse_of: :answer
 
   workflow do

@@ -51,7 +51,7 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:experience_points_record]).
             to include(I18n.
-              t('activerecord.errors.models.course/assessment/submission.'\
+              t('activerecord.errors.models.course/assessment/submission.' \
                 'attributes.experience_points_record.inconsistent_user'))
         end
       end
@@ -69,7 +69,7 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:base]).
             to include(I18n.
-              t('activerecord.errors.models.course/assessment/submission.'\
+              t('activerecord.errors.models.course/assessment/submission.' \
                 'submission_already_exists'))
         end
       end
@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject).not_to be_valid
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
-                t('activerecord.errors.models.course/assessment/submission.'\
+                t('activerecord.errors.models.course/assessment/submission.' \
                   'attributes.experience_points_record.absent_award_attributes'))
           end
         end
@@ -96,7 +96,7 @@ RSpec.describe Course::Assessment::Submission do
             expect(subject).not_to be_valid
             expect(subject.errors.messages[:experience_points_record]).
               to include(I18n.
-                t('activerecord.errors.models.course/assessment/submission.'\
+                t('activerecord.errors.models.course/assessment/submission.' \
                   'attributes.experience_points_record.absent_award_attributes'))
           end
         end

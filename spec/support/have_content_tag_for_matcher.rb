@@ -8,6 +8,7 @@ module ContentTag::TestExampleHelpers; end
 
 module ContentTag::TestExampleHelpers::FeatureHelpers
   include ActionView::RecordIdentifier
+
   def content_tag_selector(resource, options = {})
     additional_classes = ".#{Array(options[:class]).join('.')}" if options[:class]
     "#{additional_classes}.#{dom_class(resource)}\##{dom_id(resource)}"
@@ -16,6 +17,7 @@ end
 
 RSpec::Matchers.define :have_content_tag_for do |resource|
   include ContentTag::TestExampleHelpers::FeatureHelpers
+
   match do |page|
     expect(page).to have_selector(content_tag_selector(resource))
   end
@@ -23,6 +25,7 @@ end
 
 RSpec::Matchers.define :have_no_content_tag_for do |resource|
   include ContentTag::TestExampleHelpers::FeatureHelpers
+
   match do |page|
     expect(page).to have_no_selector(content_tag_selector(resource))
   end

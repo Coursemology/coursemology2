@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module Course::Group::GroupManagerConcern
   extend ActiveSupport::Concern
+
   def manageable_groups
     @manageable_groups ||= current_course.groups.accessible_by(current_ability, :manage)
   end

@@ -96,6 +96,6 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   def validate_multiple_choice_has_correct_solution
     return true if skip_grading
 
-    errors.add(:options, :no_correct_option) if options.select(&:correct?).empty?
+    errors.add(:options, :no_correct_option) if options.none?(&:correct?)
   end
 end

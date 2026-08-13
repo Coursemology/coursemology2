@@ -4,7 +4,7 @@ class Course::ConditionsController < Course::ComponentController
   helper_method :success_action
 
   def success_action
-    raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
+    raise NotImplementedError, 'To be implemented by the condition controllers of a specific' \
                                'conditional.'
   end
 
@@ -16,7 +16,7 @@ class Course::ConditionsController < Course::ComponentController
   # To retrieve and set the conditional,
   #     @conditional = Course::Achievement.find(params[:achievement_id])
   def set_conditional
-    raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
+    raise NotImplementedError, 'To be implemented by the condition controllers of a specific' \
                                'conditional.'
   end
 

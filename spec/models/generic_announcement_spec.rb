@@ -64,7 +64,7 @@ RSpec.describe GenericAnnouncement, type: :model do
       it 'orders system announcements before instance announcements' do
         announcements = GenericAnnouncement.with_instance([nil, instance])
         instance_announcements = announcements.drop_while { |a| a.is_a?(System::Announcement) }
-        all_instance = instance_announcements.all? { |a| a.is_a?(Instance::Announcement) }
+        all_instance = instance_announcements.all?(Instance::Announcement)
         expect(all_instance).to be_truthy
       end
     end

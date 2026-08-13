@@ -188,7 +188,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
   class LogSubscriber < ActiveSupport::LogSubscriber
     def enqueue(event)
-      message = "[Background Thread] Enqueued job: #{event.payload[:job]}, "\
+      message = "[Background Thread] Enqueued job: #{event.payload[:job]}, " \
                 "call stack:\n#{event.payload[:caller][20..].join("\n")}"
       debug(message)
     end
@@ -212,8 +212,8 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     end
 
     def pool_statistics(event)
-      "pool size: #{event.payload[:pool_size]}, "\
-        "running jobs: #{event.payload[:running_jobs]}, "\
+      "pool size: #{event.payload[:pool_size]}, " \
+        "running jobs: #{event.payload[:running_jobs]}, " \
         "pending jobs: #{event.payload[:pending_jobs]}"
     end
   end

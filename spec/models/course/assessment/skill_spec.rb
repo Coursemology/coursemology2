@@ -18,8 +18,8 @@ RSpec.describe Course::Assessment::Skill do
           let(:skill_branch) { build(:course_assessment_skill_branch) }
           it 'adds a :consistent_course error on :course' do
             expect(subject).not_to be_valid
-            expect(subject.errors[:course]).to include(I18n.t('activerecord.errors.models.course/'\
-                                                              'assessment/skill.attributes.course.'\
+            expect(subject.errors[:course]).to include(I18n.t('activerecord.errors.models.course/' \
+                                                              'assessment/skill.attributes.course.' \
                                                               'consistent_course'))
           end
         end

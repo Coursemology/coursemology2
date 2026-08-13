@@ -39,6 +39,7 @@ end
 # Settings for the codaveri component.
 class Course::Settings::CodaveriComponent < Course::Settings::Component
   include ActiveModel::Conversion
+
   validates_with Course::Settings::CodaveriComponentValidator
 
   def self.component_class

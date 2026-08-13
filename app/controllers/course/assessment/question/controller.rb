@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Controller < Course::Assessment::ComponentController
   include Course::Assessment::KoditsuAssessmentConcern
+
   before_action :authorize_assessment
   before_action :authorize_create_question_in_koditsu, only: [:new, :create]
 

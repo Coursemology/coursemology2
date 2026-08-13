@@ -6,6 +6,7 @@ RSpec.describe RouteOverridesHelper, type: :helper do
     RouteOverridesHelper.send(:map_route, :some_long_helper, to: :some_short_helper)
     Class.new do
       include RouteOverridesHelper
+
       def some_short_helper_path(*); end
     end
   end

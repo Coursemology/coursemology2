@@ -30,7 +30,7 @@ RSpec.describe Course::Video::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:experience_points_record]).
             to include(I18n.
-              t('activerecord.errors.models.course/video/submission.'\
+              t('activerecord.errors.models.course/video/submission.' \
                 'attributes.experience_points_record.inconsistent_user'))
         end
       end
@@ -43,7 +43,7 @@ RSpec.describe Course::Video::Submission do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:base]).
             to include(I18n.
-              t('activerecord.errors.models.course/video/submission.'\
+              t('activerecord.errors.models.course/video/submission.' \
                 'submission_already_exists'))
         end
       end

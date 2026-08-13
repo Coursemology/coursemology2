@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
+
   skip_authorize_resource :course, only: [:show, :index, :sidebar]
 
   def index

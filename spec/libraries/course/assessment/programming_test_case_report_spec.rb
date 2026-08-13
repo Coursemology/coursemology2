@@ -147,7 +147,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
   context 'when given a report with test case meta information' do
     let(:report_path) do
-      File.join(Rails.root, 'spec/fixtures/course/'\
+      File.join(Rails.root, 'spec/fixtures/course/' \
                             'programming_single_test_suite_report_meta.xml')
     end
 
@@ -218,7 +218,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
   context 'when given a report with meta information attached to test case tags' do
     let(:report_path) do
-      File.join(Rails.root, 'spec/fixtures/course/'\
+      File.join(Rails.root, 'spec/fixtures/course/' \
                             'programming_single_test_suite_report_test_case_meta.xml')
     end
 
@@ -288,7 +288,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
   context 'when given a report with information attached to test case properties' do
     let(:report_path) do
-      File.join(Rails.root, 'spec/fixtures/course/'\
+      File.join(Rails.root, 'spec/fixtures/course/' \
                             'programming_properties_test_report.xml')
     end
 
@@ -362,7 +362,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
   # output meta
   context 'when given a report with various kinds of output data' do
     let(:report_path) do
-      File.join(Rails.root, 'spec/fixtures/course/'\
+      File.join(Rails.root, 'spec/fixtures/course/' \
                             'programming_messages_test_report.xml')
     end
 
@@ -470,7 +470,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
   context 'when given a report with test cases with errors' do
     let(:report_path) do
-      File.join(Rails.root, 'spec/fixtures/course/'\
+      File.join(Rails.root, 'spec/fixtures/course/' \
                             'programming_single_test_suite_report.xml')
     end
 

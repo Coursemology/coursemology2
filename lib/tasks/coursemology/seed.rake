@@ -65,8 +65,8 @@ namespace :coursemology do
         # Create assessment with programming Question
         template_file = FactoryBot.build(
           :course_assessment_question_programming_template_file,
-          content: "# return True if you want the test to pass\n# each test passes"\
-                   "in the test type and a number\ndef test_result(test_types, numbers):"\
+          content: "# return True if you want the test to pass\n# each test passes" \
+                   "in the test type and a number\ndef test_result(test_types, numbers):" \
                    "\n    return True", filename: 'template.py', question: nil
         )
         test_cases = test_case_properties.map do |t|

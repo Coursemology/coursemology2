@@ -15,6 +15,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   MEMORY_LIMIT = nil
 
   include DuplicationStateTrackingConcern
+
   attr_accessor :max_time_limit, :skip_process_package
 
   acts_as :question, class_name: 'Course::Assessment::Question'

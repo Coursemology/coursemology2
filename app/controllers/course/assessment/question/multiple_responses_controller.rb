@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponsesController < Course::Assessment::Question::Controller
   include Course::Assessment::Question::MultipleResponsesConcern
+
   build_and_authorize_new_question :multiple_response_question,
                                    class: Course::Assessment::Question::MultipleResponse, only: [:new, :create]
   load_and_authorize_resource :multiple_response_question,
