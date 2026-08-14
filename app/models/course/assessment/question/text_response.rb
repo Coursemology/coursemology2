@@ -146,6 +146,10 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     else
       self.solutions = duplicator.duplicate(other.solutions)
     end
+
+    # A text response is never a context CONSUMER, but it can be a sibling-answer SOURCE, so it still needs
+    # the source fix-up pass when duplicated (see Course::Assessment::Question#initialize_grading_context_duplicates).
+    initialize_grading_context_duplicates(duplicator, other)
   end
 
   def build_at_least_one_group_one_point

@@ -201,8 +201,10 @@ class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics
   end
 
   # Duplicates this question's grading contexts (see Course::Assessment::Question::GradingContext). Called from
-  # each rubric-gradable actable's #initialize_duplicate with +other+ = the source actable being duplicated.
-  #   * As a CONSUMER: deep-copy the contexts this question pulls from onto the duplicate.
+  # the #initialize_duplicate of every type that can consume contexts (RBR, forum) OR be a sibling-answer
+  # source (text response), with +other+ = the source actable being duplicated.
+  #   * As a CONSUMER: deep-copy the contexts this question pulls from onto the duplicate (no-op for source-only
+  #     types, which have none).
   #   * As a SOURCE: re-point any already-duplicated contexts that reference this question, so a duplicate
   #     consumer pulls from the duplicate source. Together with GradingContext#initialize_duplicate, the source
   #     linkage is preserved regardless of which of the two questions is duplicated first.

@@ -52,9 +52,6 @@ module Course::Assessment::Submission::AnswersConcern
     ActiveRecord::Base.transaction do
       new_answers_group_by_actables.each_key do |key|
         key.constantize.import! new_answers_group_by_actables[key], recursive: true
-        if key.constantize == Course::Assessment::Answer::RubricBasedResponse
-          new_answers_group_by_actables[key].each(&:create_category_grade_instances)
-        end
       end
     end
   end

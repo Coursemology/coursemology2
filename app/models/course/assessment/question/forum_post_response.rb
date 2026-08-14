@@ -59,6 +59,12 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
+
+    # active_rubric lives on the polymorphic question; the dup'd acting_as carries the source's
+    # active_rubric_id over, so replace it with a duplicate of the source rubric (re-homed to the destination
+    # course by Course::Rubric#initialize_duplicate) instead of sharing the source's. Only rubric-mode forum
+    # questions have one; a default-mode question leaves it nil.
+    self.active_rubric = duplicator.duplicate(other.active_rubric) if other.active_rubric
     initialize_grading_context_duplicates(duplicator, other)
   end
 

@@ -12,17 +12,5 @@ FactoryBot.define do
             assessment: assessment).question
     end
     answer_text { 'This is a sample response to the rubric question.' }
-
-    trait :with_selections do
-      after(:build) do |answer, _evaluator|
-        question = answer.question.specific
-        question.categories.each do |category|
-          selection = build(:course_assessment_answer_rubric_based_response_selection,
-                            answer: answer,
-                            category: category)
-          answer.selections << selection
-        end
-      end
-    end
   end
 end
