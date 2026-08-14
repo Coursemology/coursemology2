@@ -1,8 +1,18 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/abcSize
 class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageService <
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   include Course::Assessment::Question::CodaveriQuestionConcern
+
+  QUOTE_CHARACTERS = ['"', "'"].freeze
+
+  # `tests/prepend` of a generated Java package is the instructor's prepend, a newline, the contents
+  # of java_autograde_pre.java, and a trailing newline -- see
+  # Course::Assessment::Question::Programming::Java::JavaPackageService#generate_zip_file. Those
+  # autograding definitions are ours rather than the instructor's, so they are stripped back out
+  # before the evaluator config is sent to Codaveri. Measured from the file itself so that editing
+  # java_autograde_pre.java cannot silently desynchronise this.
+  AUTOGRADE_DEFINITION_LENGTH =
+    File.size(Course::Assessment::Question::Programming::Java::JavaPackageService::AUTOGRADE_PRE_PATH) + 2
 
   def process_solutions
     extract_main_solution
@@ -55,8 +65,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
       test_case_name, prefix, expression = test_case
 
       first_comma_index = find_unenclosed_comma_index(expression)
-      lhs_expression = expression[..first_comma_index - 1].strip
-      rhs_expression = expression[first_comma_index + 1..].strip
+      lhs_expression = expression[..(first_comma_index - 1)].strip
+      rhs_expression = expression[(first_comma_index + 1)..].strip
 
       cleaned_prefix = prefix.lines.reject do |line|
         line.include?('ITestResult') || line.include?('setAttribute') ||
@@ -142,7 +152,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
   end
 
   def extract_print_functions_from(prepend_file_content)
-    autograding_definition = prepend_file_content[-6256..]
+    autograding_definition = prepend_file_content[-AUTOGRADE_DEFINITION_LENGTH..]
 
     autograding_lines = autograding_definition.lines[-44..-5].join
 
@@ -150,11 +160,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
   end
 
   def strip_autograding_definition_from(file_content)
-    # we strip away all the definitions inside the Autograder class defined within prepend,
-    # which has 6256 characters. Those definitions are defined within our java_autograded_pre.java
-    # and not needed to be sent to Codaveri
-
-    file_content[..-6256]
+    # Drop the trailing autograding definitions, keeping only the instructor's own prepend.
+    file_content[..-AUTOGRADE_DEFINITION_LENGTH]
   end
 
   def find_unenclosed_comma_index(input)
@@ -165,7 +172,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
 
       case char
       when '(', '{', '['
-        stack.push(char) unless stack.last == '"' || stack.last == "'"
+        stack.push(char) unless QUOTE_CHARACTERS.include?(stack.last)
       when ')'
         stack.pop if stack.last == '('
       when '}'
@@ -176,7 +183,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
         if stack.last == char
           stack.pop
         else
-          stack.push(char) unless stack.last == '"' || stack.last == "'"
+          stack.push(char) unless QUOTE_CHARACTERS.include?(stack.last)
         end
       when ','
         return index if stack.empty?
@@ -186,4 +193,3 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     input.length
   end
 end
-# rubocop:enable Metrics/abcSize

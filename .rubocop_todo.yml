@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: RequireParenthesesForMethodChains.
-Lint/AmbiguousRange:
-  Exclude:
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-
 # Offense count: 3
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches, IgnoreDuplicateElseBranch.
 Lint/DuplicateBranch:
@@ -68,14 +61,13 @@ Lint/NoReturnInBeginEndBlocks:
     - 'app/controllers/course/assessment/submission/answer/programming/annotations_controller.rb'
     - 'app/helpers/course/assessment/assessments_helper.rb'
 
-# Offense count: 3
+# Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/NonAtomicFileOperation:
   Exclude:
     - 'config/initializers/send_file.rb'
-    - 'spec/libraries/course/assessment/programming_package_spec.rb'
 
-# Offense count: 18
+# Offense count: 16
 # This cop supports safe autocorrection (--autocorrect).
 Lint/RedundantCopDisableDirective:
   Exclude:
@@ -91,8 +83,6 @@ Lint/RedundantCopDisableDirective:
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/language_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
     - 'app/services/course/assessment/submission/ssid_plagiarism_service.rb'
     - 'app/services/course/survey/reminder_service.rb'
     - 'lib/extensions/attachable/active_record/base.rb'
@@ -620,12 +610,11 @@ Style/ArrayIntersect:
     - 'app/models/course/assessment.rb'
     - 'app/models/course/reference_time.rb'
 
-# Offense count: 2
+# Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: MinBranchesCount.
 Style/CaseLikeIf:
   Exclude:
-    - 'app/services/course/assessment/question/programming_import_service.rb'
     - 'lib/autoload/filename_validator.rb'
 
 # Offense count: 11
@@ -851,7 +840,7 @@ Style/MinMaxComparison:
     - 'app/services/course/duplication/object_duplication_service.rb'
     - 'lib/autoload/duplicator.rb'
 
-# Offense count: 10
+# Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowMethodComparison, ComparisonsThreshold.
 Style/MultipleComparison:
@@ -863,8 +852,6 @@ Style/MultipleComparison:
     - 'app/models/user.rb'
     - 'app/services/course/assessment/koditsu_assessment_invitation_service.rb'
     - 'app/services/course/assessment/question/programming/language_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
 
 # Offense count: 11
 # Configuration parameters: AllowedClasses.
@@ -922,7 +909,7 @@ Style/RedundantConstantBase:
     - 'config/environments/production.rb'
     - 'lib/tasks/coursemology/stats_setup.rake'
 
-# Offense count: 21
+# Offense count: 20
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantLineContinuation:
   Exclude:
@@ -944,7 +931,6 @@ Style/RedundantLineContinuation:
     - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
     - 'spec/models/course/assessment/question/text_response_comprehension_solution_spec.rb'
     - 'spec/services/course/skills_mastery_preload_service_spec.rb'
 
@@ -1023,7 +1009,7 @@ Style/SuperArguments:
     - 'lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
     - 'spec/support/acts_as_tenant.rb'
 
-# Offense count: 19
+# Offense count: 18
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
 # AllowedMethods: define_method
@@ -1045,7 +1031,6 @@ Style/SymbolProc:
     - 'app/controllers/jobs_controller.rb'
     - 'app/controllers/system/admin/instance/components_controller.rb'
     - 'app/controllers/system/admin/instance/user_invitations_controller.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
 
 # Offense count: 20
 # This cop supports safe autocorrection (--autocorrect).

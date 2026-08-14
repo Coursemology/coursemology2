@@ -133,11 +133,12 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [String] test_case_name The name of the test case.
   # @return [Symbol]
   def infer_test_case_type(test_case_name)
-    if test_case_name =~ /public/i
+    case test_case_name
+    when /public/i
       :public_test
-    elsif test_case_name =~ /evaluation/i
+    when /evaluation/i
       :evaluation_test
-    elsif test_case_name =~ /private/i
+    when /private/i
       :private_test
     end
   end
