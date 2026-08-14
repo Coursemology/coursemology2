@@ -234,7 +234,9 @@ class Course::Assessment::ProgrammingPackage
   #   file.
   def get_folder_files(folder_path)
     ensure_file_open!
-    @file.glob("#{folder_path}/**/*").to_h do |entry|
+    # Nested directories are stored as their own entries by some zip tools, and reading one
+    # yields Zip::NullInputStream, which does not respond to #read.
+    @file.glob("#{folder_path}/**/*").reject(&:directory?).to_h do |entry|
       entry_file_name = Pathname.new(entry.name)
       file_name = entry_file_name.relative_path_from(folder_path)
       [file_name, entry.get_input_stream(&:read)]
