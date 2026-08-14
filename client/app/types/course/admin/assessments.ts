@@ -6,6 +6,8 @@ export interface AssessmentSettingsData {
   categories: AssessmentCategory[];
   canCreateCategories: boolean;
   maxProgrammingTimeLimit?: number;
+  rubricGradingPromptEnabled: boolean;
+  rubricGradingPrompt?: string;
 }
 
 export interface AssessmentCategory {
@@ -62,6 +64,8 @@ export interface AssessmentSettingsPostData {
     allow_randomization?: AssessmentSettingsData['allowRandomization'];
     allow_mrq_options_randomization?: AssessmentSettingsData['allowMrqOptionsRandomization'];
     programming_max_time_limit: AssessmentSettingsData['maxProgrammingTimeLimit'];
+    rubric_grading_prompt_enabled?: AssessmentSettingsData['rubricGradingPromptEnabled'];
+    rubric_grading_prompt?: AssessmentSettingsData['rubricGradingPrompt'];
     assessment_categories_attributes?: {
       id: AssessmentCategory['id'];
       title: AssessmentCategory['title'];

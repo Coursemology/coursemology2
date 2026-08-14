@@ -262,6 +262,27 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
     settings(:course_assessments_component).programming_max_time_limit = time
   end
 
+  # Whether the course-wide grading prompt is applied during rubric AI grading. Independent of the prompt
+  # text so toggling off preserves the text for later re-enabling.
+  def rubric_grading_prompt_enabled
+    settings(:course_assessments_component).rubric_grading_prompt_enabled || false
+  end
+
+  def rubric_grading_prompt_enabled=(enabled)
+    settings(:course_assessments_component).rubric_grading_prompt_enabled =
+      ActiveRecord::Type::Boolean.new.cast(enabled)
+  end
+
+  # Course-wide prompt prepended before each question's own grading prompt during rubric AI grading, applied
+  # only when rubric_grading_prompt_enabled (see Course::Rubric::RubricAdapter#grading_prompt).
+  def rubric_grading_prompt
+    settings(:course_assessments_component).rubric_grading_prompt
+  end
+
+  def rubric_grading_prompt=(prompt)
+    settings(:course_assessments_component).rubric_grading_prompt = prompt.presence
+  end
+
   def codaveri_feedback_workflow
     settings(:course_codaveri_component).feedback_workflow
   end

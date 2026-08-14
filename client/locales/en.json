@@ -500,6 +500,15 @@
   "course.admin.AssessmentSettings.programmingQuestionSettings": {
     "defaultMessage": "Programming Question settings"
   },
+  "course.admin.AssessmentSettings.rubricGrading": {
+    "defaultMessage": "AI Rubric Grading"
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptHint": {
+    "defaultMessage": "When a question with a grading rubric is autograded with AI, these instructions will be inserted before the question's specific grading prompt."
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptRequired": {
+    "defaultMessage": "Please enter a grading prompt, or disable the course-wide grading prompt."
+  },
   "course.admin.AssessmentSettings.seconds": {
     "defaultMessage": "s"
   },
@@ -514,6 +523,9 @@
   },
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
+  },
+  "course.admin.AssessmentSettings.useRubricGradingPrompt": {
+    "defaultMessage": "Use course-wide grading prompt"
   },
   "course.admin.CodaveriSettings.codaveriModel": {
     "defaultMessage": "Model"

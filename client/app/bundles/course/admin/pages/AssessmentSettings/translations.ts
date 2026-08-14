@@ -58,6 +58,24 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.enableMcqChoicesRandomisations',
     defaultMessage: 'Randomise MCQ choices',
   },
+  rubricGrading: {
+    id: 'course.admin.AssessmentSettings.rubricGrading',
+    defaultMessage: 'AI Rubric Grading',
+  },
+  useRubricGradingPrompt: {
+    id: 'course.admin.AssessmentSettings.useRubricGradingPrompt',
+    defaultMessage: 'Use course-wide grading prompt',
+  },
+  rubricGradingPromptHint: {
+    id: 'course.admin.AssessmentSettings.rubricGradingPromptHint',
+    defaultMessage:
+      "When a question with a grading rubric is autograded with AI, these instructions will be inserted before the question's specific grading prompt.",
+  },
+  rubricGradingPromptRequired: {
+    id: 'course.admin.AssessmentSettings.rubricGradingPromptRequired',
+    defaultMessage:
+      'Please enter a grading prompt, or disable the course-wide grading prompt.',
+  },
   deleteCategoryPromptAction: {
     id: 'course.admin.AssessmentSettings.deleteCategoryPromptAction',
     defaultMessage: 'Delete {title} category',

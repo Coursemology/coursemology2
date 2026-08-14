@@ -31,6 +31,13 @@ const AssessmentsSettingsForm = forwardRef<
       .nullable()
       .typeError(t(translations.maxTimeLimitRequired))
       .min(1, t(translations.positiveMaxTimeLimitRequired)),
+    rubricGradingPrompt: yup.string().when('rubricGradingPromptEnabled', {
+      is: true,
+      then: yup
+        .string()
+        .trim()
+        .required(t(translations.rubricGradingPromptRequired)),
+    }),
   });
 
   return (
@@ -42,7 +49,7 @@ const AssessmentsSettingsForm = forwardRef<
       onSubmit={props.onSubmit}
       validates={validationSchema}
     >
-      {(control): JSX.Element => (
+      {(control, watch): JSX.Element => (
         <>
           <Section sticksToNavbar title={t(translations.assessmentSettings)}>
             {/* Randomized Assessment is temporarily hidden (PR#5406) */}
@@ -135,6 +142,49 @@ const AssessmentsSettingsForm = forwardRef<
                 </Typography>
               </div>
             )}
+          </Section>
+
+          <Section sticksToNavbar title={t(translations.rubricGrading)}>
+            <Controller
+              control={control}
+              name="rubricGradingPromptEnabled"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={props.disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.useRubricGradingPrompt)}
+                />
+              )}
+            />
+
+            <Typography
+              className={
+                watch('rubricGradingPromptEnabled') ? '' : 'opacity-50'
+              }
+              color="text.secondary"
+              variant="body2"
+            >
+              {t(translations.rubricGradingPromptHint)}
+            </Typography>
+
+            <Controller
+              control={control}
+              name="rubricGradingPrompt"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  disabled={
+                    props.disabled || !watch('rubricGradingPromptEnabled')
+                  }
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  multiline
+                  rows={6}
+                  variant="outlined"
+                />
+              )}
+            />
           </Section>
 
           <Section

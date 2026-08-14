@@ -52,6 +52,8 @@ export const updateAssessmentSettings = async (
       allow_randomization: data.allowRandomization,
       allow_mrq_options_randomization: data.allowMrqOptionsRandomization,
       programming_max_time_limit: data.maxProgrammingTimeLimit,
+      rubric_grading_prompt_enabled: data.rubricGradingPromptEnabled,
+      rubric_grading_prompt: data.rubricGradingPrompt,
       assessment_categories_attributes: data.categories.map((category) => ({
         id: category.id,
         title: category.title,

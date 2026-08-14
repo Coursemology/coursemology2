@@ -500,6 +500,15 @@
   "course.admin.AssessmentSettings.programmingQuestionSettings": {
     "defaultMessage": "프로그래밍 질문 설정"
   },
+  "course.admin.AssessmentSettings.rubricGrading": {
+    "defaultMessage": "AI 루브릭 채점"
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptHint": {
+    "defaultMessage": "채점 루브릭이 있는 문제를 AI로 자동 채점할 때, 이 지침이 해당 문제의 개별 채점 프롬프트 앞에 삽입됩니다."
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptRequired": {
+    "defaultMessage": "채점 프롬프트를 입력하거나 코스 전체 채점 프롬프트를 비활성화하세요."
+  },
   "course.admin.AssessmentSettings.seconds": {
     "defaultMessage": "초"
   },
@@ -514,6 +523,9 @@
   },
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "{tab}로"
+  },
+  "course.admin.AssessmentSettings.useRubricGradingPrompt": {
+    "defaultMessage": "코스 전체 채점 프롬프트 사용"
   },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "일부"
