@@ -500,6 +500,15 @@
   "course.admin.AssessmentSettings.programmingQuestionSettings": {
     "defaultMessage": "编程题设置"
   },
+  "course.admin.AssessmentSettings.rubricGrading": {
+    "defaultMessage": "AI 评分标准评分"
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptHint": {
+    "defaultMessage": "当带有评分标准的题目由 AI 自动评分时，这些说明将被插入到该题目专属评分提示之前。"
+  },
+  "course.admin.AssessmentSettings.rubricGradingPromptRequired": {
+    "defaultMessage": "请输入评分提示，或停用课程级评分提示。"
+  },
   "course.admin.AssessmentSettings.seconds": {
     "defaultMessage": "秒"
   },
@@ -514,6 +523,9 @@
   },
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "到 {tab}"
+  },
+  "course.admin.AssessmentSettings.useRubricGradingPrompt": {
+    "defaultMessage": "使用课程级评分提示"
   },
   "course.admin.CodaveriSettings.codaveriModel": {
     "defaultMessage": "模型"

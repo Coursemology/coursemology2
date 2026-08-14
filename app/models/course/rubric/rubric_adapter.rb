@@ -19,8 +19,11 @@ class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
     end.join("\n\n")
   end
 
+  # The course-wide grading prompt (set in the assessment settings page) is prepended before the question's
+  # own grading prompt when enabled and present, so shared grading guidance applies to every rubric-graded
+  # question in the course. Either part may be blank; the separator only appears when both are present.
   def grading_prompt
-    @rubric.grading_prompt
+    [course_grading_prompt, @rubric.grading_prompt.presence].compact.join("\n\n")
   end
 
   def model_answer
@@ -61,5 +64,14 @@ class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
       'additionalProperties' => false,
       'description' => "Selected criterion and explanation for #{field_name} #{category.name}"
     }
+  end
+
+  private
+
+  def course_grading_prompt
+    course = @rubric.course
+    return nil unless course.rubric_grading_prompt_enabled
+
+    course.rubric_grading_prompt.presence
   end
 end

@@ -28,6 +28,21 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
       end
     end
 
+    describe '#update persisting the course-wide rubric grading prompt' do
+      subject do
+        patch :update, as: :json, params: {
+          course_id: course,
+          course: { rubric_grading_prompt_enabled: true, rubric_grading_prompt: 'Grade generously' }
+        }
+      end
+
+      it 'stores the prompt and enable flag on the course settings' do
+        expect(subject).to render_template(:edit)
+        expect(course.reload.rubric_grading_prompt).to eq('Grade generously')
+        expect(course.reload.rubric_grading_prompt_enabled).to be(true)
+      end
+    end
+
     describe 'moving actions' do
       let!(:category1) { create(:course_assessment_category, course: course) }
       let!(:category2) { create(:course_assessment_category, course: course) }
