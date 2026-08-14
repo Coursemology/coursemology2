@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/abcSize
-class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService < \
+class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService <
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def process_solutions
     extract_main_solution
@@ -167,7 +166,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
   def assertion_types_regex
     multi_arg = ->(s) { top_level_split(s, ',').map(&:strip) }
-    single_arg = ->(s) { s.strip }
+    single_arg = lambda(&:strip)
     {
       Equal: ->(s) { multi_arg.call(s).join(' == ') }, # lambda s: ' == '.join(multi_arg(s)),
       NotEqual: ->(s) { multi_arg.call(s).join(' != ') }, # lambda s: ' != '.join(multi_arg(s)),
@@ -212,9 +211,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
     # Capture last part and return if result becomes valid.
     if start_idx < text.length
       parts << text[start_idx...text.length]
-      return parts if parts.length == 2 || parts.length == 3
+      return parts if [2, 3].include?(parts.length)
     end
     raise TypeError, "ill-formatted text: #{text}"
   end
 end
-# rubocop:enable Metrics/abcSize

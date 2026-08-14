@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
 
   def temp_package_path
     package_dir = Rails.application.config.x.temp_folder.join('spec/packages')
-    FileUtils.mkdir_p(package_dir) unless Dir.exist?(package_dir)
+    FileUtils.mkdir_p(package_dir)
     package_dir.join("programming_package_#{SecureRandom.hex}").to_s
   end
 

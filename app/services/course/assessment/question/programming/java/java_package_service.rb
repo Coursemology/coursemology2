@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
+  # The autograding definitions appended to `tests/prepend` of every generated Java package.
+  # The Codaveri Java package service strips them back out, and relies on this path to know how
+  # long they are, so keep it the single source of truth.
+  AUTOGRADE_PRE_PATH = File.join(File.expand_path(__dir__), 'java_autograde_pre.java').freeze
+
   def initialize(params)
     @test_params = test_params params if params.present?
     super
@@ -121,7 +126,6 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   def generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
     autograde_build_path = File.join(File.expand_path(__dir__), 'java_build.xml').freeze
-    autograde_pre_path = File.join(File.expand_path(__dir__), 'java_autograde_pre.java').freeze
     autograde_run_path = File.join(File.expand_path(__dir__), 'RunTests.java').freeze
     makefile_path = File.join(File.expand_path(__dir__), 'java_simple_makefile').freeze
     standard_makefile_path = File.join(File.expand_path(__dir__), 'java_standard_makefile').freeze
@@ -148,7 +152,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       zip.put_next_entry 'tests/prepend'
       zip.print @test_params[:prepend]
       zip.print "\n"
-      zip.print File.read(autograde_pre_path)
+      zip.print File.read(AUTOGRADE_PRE_PATH)
       zip.print "\n"
 
       zip.put_next_entry 'tests/append'
