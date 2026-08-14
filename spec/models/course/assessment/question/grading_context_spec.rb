@@ -70,31 +70,36 @@ RSpec.describe Course::Assessment::Question::GradingContext do
         end
       end
 
-      context 'with a sibling_question_answer context' do
-        let(:source_question) do
-          create(:course_assessment_question_forum_post_response, assessment: assessment)
-        end
+      # A sibling source can be any question that provides_grading_context? (a rubric-graded forum question, or a
+      # plain text response that is only a source), so the linkage must survive duplication for both kinds.
+      {
+        'a forum question' => :course_assessment_question_forum_post_response,
+        'a text response' => :course_assessment_question_text_response
+      }.each do |source_desc, source_factory|
+        context "with a sibling_question_answer context sourced from #{source_desc}" do
+          let(:source_question) { create(source_factory, assessment: assessment) }
 
-        before do
-          described_class.create!(
-            question: consumer.acting_as, context_type: 'sibling_question_answer',
-            source: source_question.acting_as, identifier: 'sibling'
-          )
-        end
+          before do
+            described_class.create!(
+              question: consumer.acting_as, context_type: 'sibling_question_answer',
+              source: source_question.acting_as, identifier: 'sibling'
+            )
+          end
 
-        # The Duplicator imposes no order on the two co-duplicated questions, so the source linkage must hold
-        # whichever is processed first.
-        [%i[source_question consumer], %i[consumer source_question]].each do |order|
-          it "re-points the duplicate context at the duplicate source (order: #{order.join(' then ')})" do
-            originals = order.map { |name| send(name) }
-            dup_by_original = originals.zip(duplicate(originals)).to_h
-            dup_consumer = dup_by_original[consumer]
-            dup_source = dup_by_original[source_question]
+          # The Duplicator imposes no order on the two co-duplicated questions, so the source linkage must hold
+          # whichever is processed first.
+          [%i[source_question consumer], %i[consumer source_question]].each do |order|
+            it "re-points the duplicate context at the duplicate source (order: #{order.join(' then ')})" do
+              originals = order.map { |name| send(name) }
+              dup_by_original = originals.zip(duplicate(originals)).to_h
+              dup_consumer = dup_by_original[consumer]
+              dup_source = dup_by_original[source_question]
 
-            context = dup_consumer.grading_contexts.find { |c| c.context_type == 'sibling_question_answer' }
-            expect(context.identifier).to eq('sibling')
-            expect(context.source).to eq(dup_source.acting_as)
-            expect(context.source).not_to eq(source_question.acting_as)
+              context = dup_consumer.grading_contexts.find { |c| c.context_type == 'sibling_question_answer' }
+              expect(context.identifier).to eq('sibling')
+              expect(context.source).to eq(dup_source.acting_as)
+              expect(context.source).not_to eq(source_question.acting_as)
+            end
           end
         end
       end

@@ -59,6 +59,29 @@ RSpec.describe Course::Assessment::Question::ForumPostResponse do
       end
     end
 
+    describe 'duplication of active_rubric' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:question) do
+        create(:course_assessment_question_forum_post_response, assessment: assessment)
+      end
+
+      before do
+        rubric = create(:course_rubric, course: course, questions: [question.acting_as])
+        question.acting_as.update_columns(grading_mode: 'rubric', active_rubric_id: rubric.id)
+      end
+
+      subject(:duplicate) do
+        Duplicator.new([], destination_course: course, current_course: course).duplicate(question)
+      end
+
+      it 'gives the duplicate its own rubric of identical content rather than sharing the source rubric' do
+        expect(duplicate.active_rubric).to be_present
+        expect(duplicate.active_rubric).not_to eq(question.active_rubric)
+        expect(duplicate.active_rubric.canonical_content_hash).to eq(question.active_rubric.content_hash)
+      end
+    end
+
     describe 'validations' do
       subject { build(:course_assessment_question_forum_post_response) }
 

@@ -8,10 +8,10 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
   # record, so they are stashed during #assign_params and persisted once the answer itself saves.
   after_save :persist_grading_selections, if: -> { @pending_grading_selections.present? }
 
+  # Deprecated link to the v1 response selection model. Remains because v1 tables will not be removed.
+  # Replaced by an indirect link via Answer -> Rubric::AnswerEvaluation -> Rubric::AnswerEvaluation::Selection
   has_many :selections, class_name: 'Course::Assessment::Answer::RubricBasedResponseSelection',
                         dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
-
-  accepts_nested_attributes_for :selections, allow_destroy: true
 
   # Specific implementation of Course::Assessment::Answer#reset_answer
   def reset_answer
@@ -83,23 +83,6 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
       )
       rubric.categories.each { |category| grading.selections.create!(category_id: category.id) }
       grading
-    end
-  end
-
-  def create_category_grade_instances
-    answer.class.transaction do
-      new_category_selections = question.specific.categories.map do |category|
-        {
-          answer_id: id,
-          category_id: category.id,
-          criterion_id: nil,
-          grade: nil,
-          explanation: nil
-        }
-      end
-
-      selections = Course::Assessment::Answer::RubricBasedResponseSelection.insert_all(new_category_selections)
-      raise ActiveRecord::Rollback if !new_category_selections.empty? && (selections.nil? || selections.rows.empty?)
     end
   end
 
