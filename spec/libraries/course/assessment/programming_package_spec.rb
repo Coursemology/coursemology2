@@ -9,6 +9,11 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
   self::EMPTY_PACKAGE_PATH = File.join(Rails.root,
                                        'spec/fixtures/course/' \
                                        'empty_programming_question_template.zip')
+  # Built with the `zip` CLI so that nested directories are stored as their own entries, which is
+  # what archivers such as Finder and Info-ZIP produce. Reading such an entry yields
+  # Zip::NullInputStream, which does not respond to #read.
+  self::NESTED_PACKAGE_PATH =
+    File.join(Rails.root, 'spec/fixtures/course/programming_question_template_nested_directories.zip')
 
   def temp_package_path
     package_dir = Rails.application.config.x.temp_folder.join('spec/packages')
@@ -122,6 +127,15 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
     it 'loads all the submission files' do
       expect(subject.submission_files).to eq(Pathname.new('__init__.py') => '')
     end
+
+    context 'when the package contains nested directories' do
+      let(:package_path) { self.class::NESTED_PACKAGE_PATH }
+
+      it 'loads the nested files and skips the directory entries' do
+        expect(subject.submission_files.keys).to match_array([Pathname.new('template.py'),
+                                                              Pathname.new('pkg/__init__.py')])
+      end
+    end
   end
 
   describe '#submission_files=' do
@@ -139,6 +153,34 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
                                                       Pathname.new('prepend.py'),
                                                       Pathname.new('append.py'),
                                                       Pathname.new('autograde.py')])
+    end
+
+    context 'when the package contains nested directories' do
+      let!(:package_path) { self.class::NESTED_PACKAGE_PATH }
+
+      it 'loads the nested files and skips the directory entries' do
+        expect(subject.test_files.keys).
+          to match_array([Pathname.new('prepend.py'),
+                          Pathname.new('append.py'),
+                          Pathname.new('autograde.py'),
+                          Pathname.new('__pycache__/autograde.cpython-34.pyc')])
+      end
+
+      it 'reads the content of the nested files' do
+        expect(subject.test_files[Pathname.new('__pycache__/autograde.cpython-34.pyc')]).
+          to eq("\x00\x01\x02\xFF".b)
+      end
+    end
+  end
+
+  describe '#solution_files' do
+    context 'when the package contains nested directories' do
+      let(:package_path) { self.class::NESTED_PACKAGE_PATH }
+
+      it 'loads the nested files and skips the directory entries' do
+        expect(subject.solution_files.keys).to match_array([Pathname.new('template.py'),
+                                                            Pathname.new('pkg/__init__.py')])
+      end
     end
   end
 
