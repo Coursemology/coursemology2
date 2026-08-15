@@ -1223,6 +1223,12 @@
   "course.assessment.AssessmentForm.afterSubmissionGraded": {
     "defaultMessage": "After submission is graded and published"
   },
+  "course.assessment.AssessmentForm.allowLateSubmission": {
+    "defaultMessage": "Allow submissions after the deadline"
+  },
+  "course.assessment.AssessmentForm.allowLateSubmissionHint": {
+    "defaultMessage": "When enabled, students may keep working past the deadline and their submissions are marked as late during grading. When disabled, once the deadline passes, students can no longer begin new submissions and any in-progress submissions are automatically finalised."
+  },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "Allow submission with incorrect answers"
   },
@@ -4111,6 +4117,15 @@
   },
   "course.assessment.submission.studentView": {
     "defaultMessage": "Student View"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, one {# hour} other {# hours}} {mins, plural, =0 {} one {# minute} other {# minutes}} {secs, plural, =0 {} one {# second} other {# seconds}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{mins, plural, one {# minute} other {# minutes}} {secs, plural, =0 {} one {# second} other {# seconds}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
+    "defaultMessage": "{secs, plural, one {# second} other {# seconds}}"
   },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "Submission for this assessment cannot be viewed once finalised."

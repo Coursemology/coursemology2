@@ -1223,6 +1223,12 @@
   "course.assessment.AssessmentForm.afterSubmissionGraded": {
     "defaultMessage": "제출 후 채점 및 발표"
   },
+  "course.assessment.AssessmentForm.allowLateSubmission": {
+    "defaultMessage": "마감 기한 이후 제출 허용"
+  },
+  "course.assessment.AssessmentForm.allowLateSubmissionHint": {
+    "defaultMessage": "활성화하면 학생은 마감 기한이 지난 후에도 계속 작업할 수 있으며, 제출물은 채점 시 지각으로 표시됩니다. 비활성화하면 마감 기한이 지난 후에는 학생이 새로운 제출을 시작할 수 없고, 진행 중인 제출물은 자동으로 최종 제출됩니다."
+  },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "잘못된 답안의 제출 허용"
   },
@@ -4096,6 +4102,15 @@
   },
   "course.assessment.submission.studentView": {
     "defaultMessage": "학생 보기"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, other {#시간}} {mins, plural, =0 {} other {#분}} {secs, plural, =0 {} other {#초}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{mins, plural, other {#분}} {secs, plural, =0 {} other {#초}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
+    "defaultMessage": "{secs, plural, other {#초}}"
   },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "이 평가의 제출물은 최종화된 후에는 볼 수 없습니다."

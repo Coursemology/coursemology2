@@ -1223,6 +1223,12 @@
   "course.assessment.AssessmentForm.afterSubmissionGraded": {
     "defaultMessage": "在提交被评分并发布后"
   },
+  "course.assessment.AssessmentForm.allowLateSubmission": {
+    "defaultMessage": "允许在截止日期后提交"
+  },
+  "course.assessment.AssessmentForm.allowLateSubmissionHint": {
+    "defaultMessage": "启用后，学生可以在截止日期后继续作答，其提交内容将在评分时被标记为迟交。禁用后，一旦截止日期过去，学生将无法开始新的提交，任何进行中的提交都会被自动定稿。"
+  },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "允许提交错误答案"
   },
@@ -4090,6 +4096,15 @@
   },
   "course.assessment.submission.studentView": {
     "defaultMessage": "学生视角"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, other {#小时}} {mins, plural, =0 {} other {#分钟}} {secs, plural, =0 {} other {#秒}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{mins, plural, other {#分钟}} {secs, plural, =0 {} other {#秒}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
+    "defaultMessage": "{secs, plural, other {#秒}}"
   },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "此测验的内容提交后将无法查看。"

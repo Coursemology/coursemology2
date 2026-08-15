@@ -11,6 +11,10 @@ interface Props {
   forceSubmitRemainingTime: number;
 }
 
+// The countdown display only formats up to 24 hours (hours are shown modulo 24), so the banner is
+// hidden while more than a day remains and appears once the deadline is within 24 hours.
+const HIDE_ABOVE_MS = 24 * 60 * 60 * 1000;
+
 export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
   const hours = Math.floor(remainingTime / 1000 / 60 / 60) % 24;
   const minutes = Math.floor(remainingTime / 1000 / 60) % 60;
@@ -83,6 +87,10 @@ const TimeLimitBanner: FC<Props> = (props) => {
 
     return () => clearInterval(interval);
   }, [forceSubmitRemainingTime]);
+
+  // The interval above keeps currentRemainingTime fresh, so this flips on automatically once the
+  // deadline comes within 24h without needing a separate timer.
+  if (currentRemainingTime > HIDE_ABOVE_MS) return null;
 
   let TimeBanner: JSX.Element;
 

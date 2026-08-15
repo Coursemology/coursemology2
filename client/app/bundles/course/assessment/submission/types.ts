@@ -39,6 +39,7 @@ export interface AssessmentState {
   gamified: boolean;
   isCodaveriEnabled: boolean;
   isKoditsuEnabled: boolean;
+  isLateSubmissionAllowed: boolean;
   liveFeedbackEnabled: boolean;
   passwordProtected: boolean;
   questionIds: number[];
@@ -48,6 +49,9 @@ export interface AssessmentState {
   showRubricToStudents: boolean;
   showPrivate: boolean;
   skippable: boolean;
+  // Server-provided milliseconds from load until force submission; consumers anchor it to the local
+  // clock. Null when the submission is never force-submitted.
+  forceSubmitRemainingTime?: number | null;
   tabId: number;
   tabbedView: boolean;
   timeLimit?: number;

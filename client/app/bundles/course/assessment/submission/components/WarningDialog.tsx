@@ -16,6 +16,7 @@ import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBann
 import { getAssessment } from '../selectors/assessments';
 import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
+import { getForceSubmitRemainingTime } from '../utils/timer';
 
 const WarningDialog: FC = () => {
   const { t } = useTranslation();
@@ -23,18 +24,21 @@ const WarningDialog: FC = () => {
   const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
 
-  const { timeLimit, passwordProtected: isExamMode } = assessment;
+  const { passwordProtected: isExamMode } = assessment;
   const { workflowState, attemptedAt } = submission;
 
   const isAttempting = workflowState === workflowStates.Attempting;
-  const isTimedMode = isAttempting && !!timeLimit;
+
+  // Milliseconds until force submission — the earlier of time-limit expiry and the effective end
+  // date, as computed by the server. The same value the countdown banner uses, so both agree.
+  const forceSubmitRemainingTime = getForceSubmitRemainingTime(
+    submission,
+    assessment,
+  );
+  const isTimedMode = forceSubmitRemainingTime != null;
 
   const startTime = new Date(attemptedAt).getTime();
   const currentTime = new Date().getTime();
-
-  const submissionTimeLimitAt = isTimedMode
-    ? startTime + timeLimit * 60 * 1000
-    : null;
 
   const isNewSubmission =
     currentTime - startTime < TIME_LAPSE_NEW_SUBMISSION_MS;
@@ -43,8 +47,8 @@ const WarningDialog: FC = () => {
   const [timedNotice, setTimedNotice] = useState(isTimedMode);
 
   const remainingTime =
-    isTimedMode && submissionTimeLimitAt! > currentTime
-      ? submissionTimeLimitAt! - currentTime
+    forceSubmitRemainingTime && forceSubmitRemainingTime > 0
+      ? forceSubmitRemainingTime
       : null;
 
   let dialogTitle: string = '';
@@ -53,9 +57,7 @@ const WarningDialog: FC = () => {
   if (examNotice && timedNotice) {
     dialogTitle = t(translations.timedExamDialogTitle, {
       isNewSubmission,
-      remainingTime: remainingTimeDisplay(
-        isNewSubmission ? timeLimit! * 60 * 1000 : remainingTime ?? 0,
-      ),
+      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
     });
     dialogMessage = t(translations.timedExamDialogMessage, {
@@ -67,9 +69,7 @@ const WarningDialog: FC = () => {
   } else if (timedNotice) {
     dialogTitle = t(translations.timedAssessmentDialogTitle, {
       isNewSubmission,
-      remainingTime: remainingTimeDisplay(
-        isNewSubmission ? timeLimit! * 60 * 1000 : remainingTime ?? 0,
-      ),
+      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
     });
     dialogMessage = t(translations.timedAssessmentDialogMessage, {

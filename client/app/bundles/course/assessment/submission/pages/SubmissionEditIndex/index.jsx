@@ -38,6 +38,7 @@ import {
   submissionShape,
 } from '../../propTypes';
 import translations from '../../translations';
+import { getForceSubmitRemainingTime } from '../../utils/timer';
 
 import BlockedSubmission from './BlockedSubmission';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
@@ -68,13 +69,14 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderTimeLimitBanner() {
-    const { assessment, submission, submissionTimeLimitAt } = this.props;
+    const { assessment, forceSubmitRemainingTime } = this.props;
 
+    // forceSubmitRemainingTime already accounts for both the time limit and the deadline, and is null
+    // unless the submission is attempting. The banner hides itself while more than 24h remain.
     return (
-      assessment.timeLimit &&
-      !assessment.isKoditsuEnabled &&
-      submission.workflowState === 'attempting' && (
-        <TimeLimitBanner submissionTimeLimitAt={submissionTimeLimitAt} />
+      forceSubmitRemainingTime != null &&
+      !assessment.isKoditsuEnabled && (
+        <TimeLimitBanner forceSubmitRemainingTime={forceSubmitRemainingTime} />
       )
     );
   }
@@ -216,13 +218,10 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const hasSubmissionTimeLimit =
-    submission.submission.workflowState === workflowStates.Attempting &&
-    submission.assessment.timeLimit;
-  const submissionTimeLimitAt = hasSubmissionTimeLimit
-    ? new Date(submission.submission.attemptedAt).getTime() +
-      submission.assessment.timeLimit * 60 * 1000
-    : null;
+  const forceSubmitRemainingTime = getForceSubmitRemainingTime(
+    submission.submission,
+    submission.assessment,
+  );
 
   return {
     assessment: submission.assessment,
