@@ -79,6 +79,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const passwordProtected = watch('password_protected');
   const sessionProtected = watch('session_protected');
   const hasTimeLimit = watch('has_time_limit');
+  const endAt = watch('end_at');
   const allowPartialSubmission = watch('allow_partial_submission');
 
   const monitoring = watch('monitoring.enabled');
@@ -339,6 +340,21 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               )}
             />
           )}
+
+          <Controller
+            control={control}
+            name="is_late_submission_allowed"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                description={t(translations.allowLateSubmissionHint)}
+                // The toggle only has an effect with a deadline, and cannot be enforced on Koditsu.
+                disabled={disabled || !endAt || isKoditsuAssessmentEnabled}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.allowLateSubmission)}
+              />
+            )}
+          />
 
           <Typography>{t(translations.description)}</Typography>
 

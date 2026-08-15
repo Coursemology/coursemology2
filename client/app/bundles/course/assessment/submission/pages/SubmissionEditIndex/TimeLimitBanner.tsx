@@ -8,7 +8,7 @@ import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../../constants';
 import translations from '../../translations';
 
 interface Props {
-  submissionTimeLimitAt: number;
+  forceSubmitRemainingTime: number;
 }
 
 export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
@@ -56,22 +56,23 @@ export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
 };
 
 const TimeLimitBanner: FC<Props> = (props) => {
-  const { submissionTimeLimitAt } = props;
-  const initialCurrentTime = new Date().getTime();
-  const initialRemainingTime = submissionTimeLimitAt - initialCurrentTime;
+  const { forceSubmitRemainingTime } = props;
 
-  const [currentRemainingTime, setCurrentRemainingTime] =
-    useState(initialRemainingTime);
+  const [currentRemainingTime, setCurrentRemainingTime] = useState(
+    forceSubmitRemainingTime,
+  );
   const [currentBufferTime, setCurrentBufferTime] = useState(
-    initialRemainingTime + BUFFER_TIME_TO_FORCE_SUBMIT_MS,
+    forceSubmitRemainingTime + BUFFER_TIME_TO_FORCE_SUBMIT_MS,
   );
 
   useEffect(() => {
+    // Anchor the server-provided duration to the local clock once per value, then count down.
+    const forceSubmitAt = Date.now() + forceSubmitRemainingTime;
     const interval = setInterval(() => {
       const currentTime = new Date().getTime();
-      const remainingSeconds = submissionTimeLimitAt - currentTime;
+      const remainingSeconds = forceSubmitAt - currentTime;
       const remainingBufferSeconds =
-        submissionTimeLimitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS - currentTime;
+        forceSubmitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS - currentTime;
 
       setCurrentRemainingTime(remainingSeconds);
 
@@ -81,7 +82,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [submissionTimeLimitAt]);
+  }, [forceSubmitRemainingTime]);
 
   let TimeBanner: JSX.Element;
 

@@ -15,6 +15,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # This finalises all current answers as well.
   def finalise(_ = nil)
     self.submitted_at = Time.zone.now
+    # Clear any unsubmission exemption: the submission is being finalised again, so deadline
+    # enforcement and force submission apply once more if it is ever unsubmitted afresh.
+    self.unsubmitted_at = nil
     save!
 
     answers.reload # Reload answers after saving
@@ -71,6 +74,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarded_at = nil
     self.awarder = nil
     self.submitted_at = nil
+    # Mark this as a staff-permitted redo: it becomes exempt from deadline enforcement and force
+    # submission until finalised again. submitted_at is nilled (statistics depend on that), so this
+    # separate timestamp is what distinguishes an unsubmitted submission from a fresh attempt.
+    self.unsubmitted_at = Time.zone.now
     self.publisher = nil
     self.published_at = nil
   end

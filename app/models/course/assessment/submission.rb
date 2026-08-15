@@ -243,6 +243,18 @@ class Course::Assessment::Submission < ApplicationRecord
       perform_later(assessment, id, creator)
   end
 
+  # The absolute time at which this submission should be force-submitted, being the earlier of its
+  # time-limit expiry and the assessment deadline (each of which may be absent). Returns nil when
+  # neither applies, i.e. the submission is never force-submitted. The deadline component honours the
+  # submitter's personalised timeline. Does not include any grace period; the scheduler adds that.
+  #
+  # @return [Time, nil]
+  def force_submit_at
+    deadline = assessment.submission_deadline_for(course_user)
+    time_limit_at = assessment.time_limit && (created_at + assessment.time_limit.minutes)
+    [deadline, time_limit_at].compact.min
+  end
+
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
   # assigned to the submission for randomized assessment.
   #

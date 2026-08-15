@@ -203,7 +203,7 @@ VisibleSubmissionEditIndex.propTypes = {
     }),
   }),
   assessment: assessmentShape,
-  submissionTimeLimitAt: PropTypes.number,
+  forceSubmitRemainingTime: PropTypes.number,
   intl: PropTypes.object.isRequired,
   submission: submissionShape,
   isLoading: PropTypes.bool.isRequired,
@@ -226,7 +226,7 @@ function mapStateToProps({ assessments: { submission } }) {
 
   return {
     assessment: submission.assessment,
-    submissionTimeLimitAt,
+    forceSubmitRemainingTime,
     submission: submission.submission,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
