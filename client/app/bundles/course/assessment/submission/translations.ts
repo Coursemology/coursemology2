@@ -719,7 +719,7 @@ const translations = defineMessages({
     {secs, plural, =0 {} one {# second} other {# seconds}}',
   },
   seconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
+    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds',
     defaultMessage: '{secs, plural, one {# second} other {# seconds}}',
   },
 });

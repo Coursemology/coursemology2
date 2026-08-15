@@ -15,7 +15,6 @@ import actionTypes, {
   EVALUATE_POLL_INTERVAL_MILLISECONDS,
   FEEDBACK_POLL_INTERVAL_MILLISECONDS,
   formNames,
-  workflowStates,
 } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import { getInitialAnswer } from '../../selectors/answers';
@@ -26,7 +25,10 @@ import { getQuestions } from '../../selectors/questions';
 import { getSubmission } from '../../selectors/submissions';
 import translations from '../../translations';
 import { HistoryViewData } from '../../types';
-import { setTimerForForceSubmission } from '../../utils/timer';
+import {
+  getForceSubmitRemainingTime,
+  setTimerForForceSubmission,
+} from '../../utils/timer';
 
 import AutogradeSubmissionButton from './components/button/AutogradeSubmissionButton';
 import FinaliseButton from './components/button/FinaliseButton';
@@ -61,8 +63,7 @@ const SubmissionForm: FC<Props> = (props) => {
   );
   const initialValues = useAppSelector(getInitialAnswer);
 
-  const { autograded, timeLimit, tabbedView, questionIds } = assessment;
-  const { workflowState, attemptedAt } = submission;
+  const { autograded, tabbedView, questionIds } = assessment;
 
   const answerIds = Object.values(questions).map(
     (question) => question.answerId,
@@ -72,11 +73,10 @@ const SubmissionForm: FC<Props> = (props) => {
 
   const submissionId = getSubmissionId();
 
-  const hasSubmissionTimeLimit =
-    workflowState === workflowStates.Attempting && timeLimit;
-  const submissionTimeLimitAt = hasSubmissionTimeLimit
-    ? new Date(attemptedAt).getTime() + timeLimit * 60 * 1000
-    : null;
+  const forceSubmitRemainingTime = getForceSubmitRemainingTime(
+    submission,
+    assessment,
+  );
 
   const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
@@ -136,13 +136,15 @@ const SubmissionForm: FC<Props> = (props) => {
   }, [initialValues]);
 
   useEffect(() => {
-    if (submissionTimeLimitAt) {
-      setTimerForForceSubmission(
-        submissionTimeLimitAt,
-        handleSubmit((data) => onSubmit({ ...data })),
-      );
-    }
-  }, [submissionTimeLimitAt]);
+    if (forceSubmitRemainingTime == null) return undefined;
+
+    // setTimerForForceSubmission returns a teardown that clears its interval. Return it so the timer
+    // is torn down when the submission page unmounts, rather than left running after navigation.
+    return setTimerForForceSubmission(
+      forceSubmitRemainingTime,
+      handleSubmit((data) => onSubmit({ ...data })),
+    );
+  }, [forceSubmitRemainingTime]);
 
   const scrollToRef = useRef(null);
 
