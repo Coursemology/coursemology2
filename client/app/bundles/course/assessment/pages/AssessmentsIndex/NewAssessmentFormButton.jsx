@@ -124,6 +124,7 @@ class NewAssessmentFormButton extends Component {
       autograded: false,
       is_koditsu_enabled: false,
       block_student_viewing_after_submitted: false,
+      is_late_submission_allowed: true,
       skippable: false,
       allow_partial_submission: false,
       show_mcq_answer: true,

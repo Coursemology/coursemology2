@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_04_222525) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
   enable_extension "vector"
 
@@ -665,6 +665,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
     t.datetime "last_graded_time", precision: nil, default: "2021-11-09 00:08:09"
+    t.datetime "unsubmitted_at"
+    t.datetime "force_submit_scheduled_at"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -716,6 +718,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_02_000000) do
     t.boolean "show_rubric_to_students"
     t.uuid "ssid_folder_id"
     t.integer "linkable_tree_id", default: 0, null: false
+    t.boolean "is_late_submission_allowed", default: true, null: false
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["linkable_tree_id"], name: "index_course_assessments_on_linkable_tree_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"

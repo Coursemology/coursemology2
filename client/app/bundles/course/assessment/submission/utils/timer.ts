@@ -1,15 +1,14 @@
 import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../constants';
 
 export const setTimerForForceSubmission = (
-  submissionTimeLimitAt: number,
+  forceSubmitRemainingTime: number,
   handleSubmit: () => Promise<void>,
 ): (() => void) => {
+  // Anchor the server-provided duration to the local clock once, here, rather than trusting an
+  // absolute timestamp against a possibly-skewed clock.
+  const forceSubmitAt = Date.now() + forceSubmitRemainingTime;
   const interval = setInterval(() => {
-    const currentTime = new Date().getTime();
-    const remainingSeconds =
-      submissionTimeLimitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS - currentTime;
-
-    if (remainingSeconds < 0) {
+    if (Date.now() > forceSubmitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS) {
       handleSubmit();
       clearInterval(interval);
     }

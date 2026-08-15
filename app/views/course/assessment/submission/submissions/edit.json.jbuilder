@@ -20,6 +20,11 @@ json.assessment do
   json.showMcqAnswer !@assessment.allow_partial_submission || @assessment.show_mcq_answer
   json.showEvaluation @assessment.show_evaluation
   json.blockStudentViewingAfterSubmitted @assessment.block_student_viewing_after_submitted
+  json.isLateSubmissionAllowed @assessment.is_late_submission_allowed
+  # Absolute epoch (ms) past which this submission may no longer be edited; the client force-submits
+  # at this time. Computed for the submitter (honouring personal times), null when late submissions
+  # are allowed or no deadline applies.
+  json.submissionDeadlineAt @assessment.submission_deadline_for(@submission.course_user)&.to_i&.*(1000)
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?

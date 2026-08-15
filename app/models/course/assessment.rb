@@ -24,6 +24,7 @@ class Course::Assessment < ApplicationRecord
   enum :randomization, { prepared: 0 }
 
   validates :autograded, inclusion: { in: [true, false] }
+  validates :is_late_submission_allowed, inclusion: { in: [true, false] }
   validates :session_password, length: { maximum: 255 }, allow_nil: true
   validates :tabbed_view, inclusion: { in: [true, false] }
   validates :view_password, length: { maximum: 255 }, allow_nil: true
@@ -98,6 +99,10 @@ class Course::Assessment < ApplicationRecord
   validate :selected_test_type_for_grading
 
   scope :published, -> { where(published: true) }
+
+  # Assessments that force-submit attempting submissions once time runs out — either timed, or with
+  # late submissions disallowed (deadline-enforced). Such submissions have a force-submit time.
+  scope :to_force_submit, -> { where('time_limit IS NOT NULL OR is_late_submission_allowed = FALSE') }
 
   # @!attribute [r] maximum_grade
   #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'
@@ -275,6 +280,34 @@ class Course::Assessment < ApplicationRecord
   # @override ConditionalInstanceMethods#satisfiable?
   def satisfiable?
     published?
+  end
+
+  # The point past which +course_user+ may no longer create or edit a submission. Returns nil when
+  # late submissions are allowed (the default) or when the assessment has no closing time, meaning
+  # there is no deadline to enforce. Reads the personalised time so personal times and non-default
+  # reference timelines are respected.
+  #
+  # @param [CourseUser] course_user
+  # @return [Time, nil]
+  def submission_deadline_for(course_user)
+    return nil if is_late_submission_allowed
+
+    time_for(course_user).end_at
+  end
+
+  # Whether editing or creating a submission should now be blocked for +course_user+. This is the
+  # raw deadline plus a grace period equal to FORCE_SUBMIT_DELAY: a submission stays editable right
+  # up until the moment it would be force-submitted. The grace matters because the client fires its
+  # own force-submit +finalise+ slightly after the deadline (and it carries the latest answers); a
+  # hard cut-off at the exact deadline would 403 that request and lose the student's final work.
+  # Network latency and minor clock skew on genuine last-second saves are covered for free.
+  #
+  # @param [CourseUser] course_user
+  # @return [Boolean]
+  def submission_deadline_passed_for?(course_user)
+    deadline = submission_deadline_for(course_user)
+    deadline.present? &&
+      (deadline + Course::Assessment::Submission::FORCE_SUBMIT_DELAY) < Time.zone.now
   end
 
   # The password to prevent from viewing the assessment.

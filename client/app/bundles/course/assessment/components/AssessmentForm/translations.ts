@@ -60,6 +60,18 @@ const translations = defineMessages({
     defaultMessage:
       'Students will only be able to view their submissions after their grades have been published.',
   },
+  allowLateSubmission: {
+    id: 'course.assessment.AssessmentForm.allowLateSubmission',
+    defaultMessage: 'Allow submissions after the deadline',
+  },
+  allowLateSubmissionHint: {
+    id: 'course.assessment.AssessmentForm.allowLateSubmissionHint',
+    defaultMessage:
+      'When enabled, students may keep working past the deadline and their submissions are marked \
+as late during grading. When disabled, once the deadline passes, students can no longer begin new submissions and any in-progress \
+submissions are automatically finalised.',
+  },
+
   usePublic: {
     id: 'course.assessment.AssessmentForm.usePublic',
     defaultMessage: 'Public test cases',
