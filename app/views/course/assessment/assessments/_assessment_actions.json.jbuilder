@@ -33,6 +33,10 @@ elsif attempting_submission.present?
 elsif submitted_submission.present?
   status = 'submitted'
   action_url = edit_course_assessment_submission_path(current_course, assessment, submitted_submission)
+elsif assessment.submission_deadline_passed_for?(current_course_user)
+  # End date passed on an assessment that disallows late submissions, and no submission exists: the
+  # student can no longer start one. No action URL — the frontend shows a disabled button.
+  status = 'closed'
 else
   status = 'open'
   action_url = course_assessment_attempt_path(current_course, assessment)

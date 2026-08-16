@@ -130,6 +130,7 @@ if can_attempt && assessment.folder.materials.exists?
 end
 
 if can_observe
+  json.isLateSubmissionAllowed assessment.is_late_submission_allowed
   json.showMcqMrqSolution assessment.show_mcq_mrq_solution
   json.showRubricToStudents assessment.show_rubric_to_students
   json.gradedTestCases display_graded_test_types(assessment)

@@ -1224,10 +1224,10 @@
     "defaultMessage": "After submission is graded and published"
   },
   "course.assessment.AssessmentForm.allowLateSubmission": {
-    "defaultMessage": "Allow submissions after the deadline"
+    "defaultMessage": "Allow submissions after end date"
   },
   "course.assessment.AssessmentForm.allowLateSubmissionHint": {
-    "defaultMessage": "When enabled, students may keep working past the deadline and their submissions are marked as late during grading. When disabled, once the deadline passes, students can no longer begin new submissions and any in-progress submissions are automatically finalised."
+    "defaultMessage": "When enabled, students may keep working past the end date and their submissions are marked as late during grading. When disabled, once the end date passes, students can no longer begin new submissions and any in-progress submissions are automatically finalised."
   },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "Allow submission with incorrect answers"
@@ -2975,6 +2975,9 @@
   "course.assessment.show.searchTargetAssessment": {
     "defaultMessage": "Search target assessment"
   },
+  "course.assessment.show.isLateSubmissionAllowed": {
+    "defaultMessage": "Allow submissions after end date"
+  },
   "course.assessment.show.showMcqMrqSolution": {
     "defaultMessage": "Show MCQ/MRQ solutions"
   },
@@ -4288,6 +4291,9 @@
   },
   "course.assessments.index.attempt": {
     "defaultMessage": "Attempt"
+  },
+  "course.assessments.index.noLongerAcceptingSubmissions": {
+    "defaultMessage": "This assessment is no longer accepting new submissions."
   },
   "course.assessments.index.autograded": {
     "defaultMessage": "Autograded"

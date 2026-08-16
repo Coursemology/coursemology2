@@ -187,6 +187,24 @@ const AssessmentShowHeader = (
           </Button>
         </Link>
       )}
+
+      {assessment.status === 'closed' && (
+        <Tooltip
+          disableInteractive
+          title={t(translations.noLongerAcceptingSubmissions)}
+        >
+          {/* A disabled button does not emit hover events, so the tooltip anchors to a wrapper. */}
+          <span className="ml-4">
+            <Button
+              aria-label={t(translations.attempt)}
+              disabled
+              variant="contained"
+            >
+              {t(translations.attempt)}
+            </Button>
+          </span>
+        </Tooltip>
+      )}
     </div>
   );
 };

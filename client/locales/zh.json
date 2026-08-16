@@ -1224,10 +1224,10 @@
     "defaultMessage": "在提交被评分并发布后"
   },
   "course.assessment.AssessmentForm.allowLateSubmission": {
-    "defaultMessage": "允许在截止日期后提交"
+    "defaultMessage": "允许在结束时间后提交"
   },
   "course.assessment.AssessmentForm.allowLateSubmissionHint": {
-    "defaultMessage": "启用后，学生可以在截止日期后继续作答，其提交内容将在评分时被标记为迟交。禁用后，一旦截止日期过去，学生将无法开始新的提交，任何进行中的提交都会被自动定稿。"
+    "defaultMessage": "启用后，学生可以在结束时间后继续作答，其提交内容将在评分时被标记为迟交。禁用后，一旦结束时间过去，学生将无法开始新的提交，任何进行中的提交都会被自动定稿。"
   },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "允许提交错误答案"
@@ -2957,6 +2957,9 @@
   "course.assessment.show.searchTargetAssessment": {
     "defaultMessage": "搜索目标测验"
   },
+  "course.assessment.show.isLateSubmissionAllowed": {
+    "defaultMessage": "允许在结束时间后提交"
+  },
   "course.assessment.show.showMcqMrqSolution": {
     "defaultMessage": "显示多选题解决方案"
   },
@@ -4264,6 +4267,9 @@
   },
   "course.assessments.index.attempt": {
     "defaultMessage": "尝试"
+  },
+  "course.assessments.index.noLongerAcceptingSubmissions": {
+    "defaultMessage": "此测验不再接受新的提交。"
   },
   "course.assessments.index.autograded": {
     "defaultMessage": "自动评分"
