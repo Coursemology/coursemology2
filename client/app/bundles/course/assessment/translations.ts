@@ -147,6 +147,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.resume',
     defaultMessage: 'Resume',
   },
+  noLongerAcceptingSubmissions: {
+    id: 'course.assessments.index.noLongerAcceptingSubmissions',
+    defaultMessage: 'This assessment is no longer accepting new submissions.',
+  },
   unlock: {
     id: 'course.assessments.index.unlock',
     defaultMessage: 'Unlock',
@@ -373,6 +377,10 @@ const translations = defineMessages({
   baseExp: {
     id: 'course.assessment.show.baseExp',
     defaultMessage: 'Base EXP',
+  },
+  isLateSubmissionAllowed: {
+    id: 'course.assessment.show.isLateSubmissionAllowed',
+    defaultMessage: 'Allow submissions after end date',
   },
   showMcqMrqSolution: {
     id: 'course.assessment.show.showMcqMrqSolution',

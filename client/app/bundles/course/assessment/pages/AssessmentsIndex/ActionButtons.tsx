@@ -16,6 +16,7 @@ import UnavailableMessage from './UnavailableMessage';
 
 export const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
   attempting: translations.resume,
+  closed: translations.attempt,
   locked: translations.unlock,
   open: translations.attempt,
   submitted: translations.view,
@@ -46,6 +47,26 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
             {t(ACTION_LABELS[assessment.status])}
           </Button>
         </Link>
+      )}
+
+      {assessment.status === 'closed' && (
+        <Tooltip
+          disableInteractive
+          title={t(translations.noLongerAcceptingSubmissions)}
+        >
+          {/* A disabled button does not emit hover events, so the tooltip anchors to a wrapper. */}
+          <span className="mr-4">
+            <Button
+              aria-label={t(translations.attempt)}
+              className="min-w-[8.5rem]"
+              disabled
+              size="small"
+              variant="contained"
+            >
+              {t(translations.attempt)}
+            </Button>
+          </span>
+        </Tooltip>
       )}
 
       {assessment.editUrl && (

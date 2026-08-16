@@ -85,6 +85,19 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
 
         {assessment.permissions.canObserve && (
           <>
+            {/* The setting only matters when the assessment has an end date to enforce. */}
+            {assessment.endAt && (
+              <TableRow>
+                <TableCell variant="head">
+                  {t(translations.isLateSubmissionAllowed)}
+                </TableCell>
+
+                <TableCell>
+                  {assessment.isLateSubmissionAllowed ? '✅' : '❌'}
+                </TableCell>
+              </TableRow>
+            )}
+
             <TableRow>
               <TableCell variant="head">
                 {t(translations.showMcqMrqSolution)}

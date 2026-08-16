@@ -62,13 +62,13 @@ const translations = defineMessages({
   },
   allowLateSubmission: {
     id: 'course.assessment.AssessmentForm.allowLateSubmission',
-    defaultMessage: 'Allow submissions after the deadline',
+    defaultMessage: 'Allow submissions after end date',
   },
   allowLateSubmissionHint: {
     id: 'course.assessment.AssessmentForm.allowLateSubmissionHint',
     defaultMessage:
-      'When enabled, students may keep working past the deadline and their submissions are marked \
-as late during grading. When disabled, once the deadline passes, students can no longer begin new submissions and any in-progress \
+      'When enabled, students may keep working past the end date and their submissions are marked \
+as late during grading. When disabled, once the end date passes, students can no longer begin new submissions and any in-progress \
 submissions are automatically finalised.',
   },
 

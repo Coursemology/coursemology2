@@ -10,7 +10,13 @@ export interface PersonalTimeData {
 }
 
 interface AssessmentActionsData {
-  status: 'locked' | 'attempting' | 'submitted' | 'open' | 'unavailable';
+  status:
+    | 'locked'
+    | 'attempting'
+    | 'submitted'
+    | 'open'
+    | 'unavailable'
+    | 'closed';
   actionButtonUrl: string | null;
   monitoringUrl?: string;
   statisticsUrl?: string;
@@ -202,6 +208,7 @@ export interface AssessmentData extends AssessmentActionsData {
   isKoditsuAssessmentEnabled?: boolean;
   isSyncedWithKoditsu?: boolean;
   isStudent: boolean;
+  isLateSubmissionAllowed?: boolean;
   showMcqMrqSolution?: boolean;
   showRubricToStudents?: boolean;
   gradedTestCases?: string;
