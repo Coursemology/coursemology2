@@ -52,9 +52,9 @@ json.submission do
 
   # When late submissions are disallowed, the submission is force-submitted at the deadline, so it
   # can land a moment after end_at without being "late" in any meaningful sense. By construction
-  # nothing can be late in that mode, so never flag it.
-  json.late assessment.is_late_submission_allowed && end_at && submission.submitted_at &&
-            submission.submitted_at.iso8601 > end_at
+  # nothing can be late in that mode, so never flag it. (end_at and submitted_at are both Time here.)
+  json.late assessment.is_late_submission_allowed && end_at.present? && submission.submitted_at.present? &&
+            submission.submitted_at > end_at
 
   json.basePoints assessment.base_exp
   json.bonusPoints assessment.time_bonus_exp

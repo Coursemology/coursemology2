@@ -11,8 +11,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
+  before_action :force_submit_if_overdue!, only: [:edit]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :check_password, only: [:edit, :update]
+  before_action :check_submission_deadline!, only: [:update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :check_zombie_jobs, only: [:edit, :update]
   # Questions may be added to assessments with existing submissions.
@@ -364,6 +366,27 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def authorize_assessment!
     authorize!(:attempt, @assessment)
+
+    return unless @assessment.submission_deadline_passed_for?(current_course_user) && cannot?(:manage, @assessment)
+
+    render(json: { error: I18n.t('course.assessment.submission.submissions.deadline_passed') },
+           status: :forbidden) and return
+  end
+
+  # Fail-safe: if this submission should already have been force-submitted (e.g. its scheduled job was
+  # lost) but is still attempting, finalise it before authorization runs, so the page never opens as a
+  # resumable attempt that is past due. Runs before +authorize_submission!+ so that, once submitted,
+  # the student is authorized to read (not update) it.
+  #
+  # Only the submission's own creator triggers this: an instructor or admin opening a student's
+  # in-progress attempt must not force-submit it on the student's behalf.
+  #
+  # If the submission has been unsubmitted (which can only be done by an instructor or admin),
+  # this is skipped because the instructor has explicitly authorized the student to continue working on it.
+  def force_submit_if_overdue!
+    return unless @submission.creator_id == current_user.id
+
+    @submission.force_submit! if @submission.force_submit_overdue?
   end
 
   def reload_answer_params

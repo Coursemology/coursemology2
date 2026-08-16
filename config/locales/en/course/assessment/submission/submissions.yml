@@ -1,0 +1,8 @@
+en:
+  course:
+    assessment:
+      submission:
+        submissions:
+          deadline_passed: >-
+            The submission deadline for this assessment has passed. This assessment no longer
+            accepts new or edited submissions.

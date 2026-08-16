@@ -1,0 +1,8 @@
+ko:
+  course:
+    assessment:
+      submission:
+        submissions:
+          deadline_passed: >-
+            이 평가의 제출 마감 기한이 지났습니다. 이 평가는 더 이상 새로운 제출이나 제출물
+            수정을 허용하지 않습니다.
