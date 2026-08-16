@@ -11,11 +11,18 @@ class Course::Assessment::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
+  # Grace period between a submission's force-submit time and the job actually finalising it, during
+  # which the student's own client may still submit (its answers carry the latest work).
   FORCE_SUBMIT_DELAY = 5.minutes
+
+  # A submission is only given a scheduled force-submit job at creation if it falls due within this
+  # horizon. Anything further out is left to ScheduleExpiringSubmissionsJob to pick up once due,
+  # so a job never sits in the queue longer than this (bounding how stale its arguments can become).
+  FORCE_SUBMIT_SCHEDULING_HORIZON = 6.hours
 
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
-  after_create :create_force_submission_job, if: :attempting?
+  after_create :schedule_force_submission, if: :attempting?
 
   workflow do
     state :attempting do
@@ -235,24 +242,93 @@ class Course::Assessment::Submission < ApplicationRecord
       extending(Course::Assessment::QuestionsConcern)
   end
 
-  def create_force_submission_job
-    return unless assessment.time_limit
+  # Schedules the force-submit job for this submission if it falls due within the scheduling horizon.
+  def schedule_force_submission
+    return if force_submit_at.nil? || force_submit_at > Time.zone.now + FORCE_SUBMIT_SCHEDULING_HORIZON
 
+    enqueue_force_submit_job
+  end
+
+  # Enqueues the force-submit job to run at the grace-adjusted force-submit time (never in the past),
+  # and records the force-submit time it was scheduled for so the sweep can skip it until that time
+  # changes.
+  # A redundant re-schedule is harmless: the job re-checks live state.
+  def enqueue_force_submit_job
     Course::Assessment::Submission::ForceSubmitTimedSubmissionJob.
-      set(wait_until: created_at + assessment.time_limit.minutes + FORCE_SUBMIT_DELAY).
-      perform_later(assessment, id, creator)
+      set(wait_until: [force_submit_job_at, Time.zone.now].max).
+      perform_later(assessment, id)
+    update_column(:force_submit_scheduled_at, force_submit_at)
+  end
+
+  # Whether a force-submit job has already been scheduled for the submission's current force-submit
+  # time. False after the deadline (or personal time) changes, so the sweep reschedules.
+  #
+  # @return [Boolean]
+  def force_submit_job_scheduled?
+    force_submit_scheduled_at.present? && force_submit_at.present? &&
+      (force_submit_scheduled_at - force_submit_at).abs < 1.second
   end
 
   # The absolute time at which this submission should be force-submitted, being the earlier of its
-  # time-limit expiry and the assessment deadline (each of which may be absent). Returns nil when
-  # neither applies, i.e. the submission is never force-submitted. The deadline component honours the
-  # submitter's personalised timeline. Does not include any grace period; the scheduler adds that.
+  # time-limit expiry and the effective submission deadline (each of which may be absent). Returns nil
+  # when neither applies, i.e. the submission is never force-submitted. The deadline component honours
+  # the submitter's personalised timeline. Does not include the grace period.
+  #
+  # A submission that has been unsubmitted by staff is exempt: the student is redoing it with explicit
+  # permission, so it has no deadline and is never force-submitted.
   #
   # @return [Time, nil]
   def force_submit_at
+    return nil if unsubmitted_at.present?
+
     deadline = assessment.submission_deadline_for(course_user)
     time_limit_at = assessment.time_limit && (created_at + assessment.time_limit.minutes)
     [deadline, time_limit_at].compact.min
+  end
+
+  # When the force-submit job is meant to run: the force-submit time plus the grace period. Nil when
+  # the submission is never force-submitted.
+  #
+  # @return [Time, nil]
+  def force_submit_job_at
+    force_submit_at&.+(FORCE_SUBMIT_DELAY)
+  end
+
+  # Whether this submission should already have been force-submitted (its force-submit time plus grace
+  # has passed) but is still attempting — its job never ran, or has yet to. Used as the edit-page
+  # fail-safe and by the scheduling sweep.
+  #
+  # @return [Boolean]
+  def force_submit_overdue?
+    return false unless attempting?
+
+    run_at = force_submit_job_at
+    run_at.present? && run_at < Time.zone.now
+  end
+
+  # Whether editing this submission should be blocked for +course_user+. Unlike creation, editing an
+  # existing attempt is allowed until the deadline plus a grace period equal to FORCE_SUBMIT_DELAY:
+  # the client fires its own force-submit +finalise+ (carrying the latest answers) just after the
+  # deadline, so a hard cut-off at the exact deadline would 403 that request and lose the final work;
+  # network latency and minor clock skew on genuine last-second saves are covered for free. An
+  # unsubmitted submission is exempt — staff have permitted the redo — so it is always editable.
+  #
+  # @param [CourseUser] course_user
+  # @return [Boolean]
+  def editing_deadline_passed_for?(course_user)
+    return false if unsubmitted_at.present?
+
+    deadline = assessment.submission_deadline_for(course_user)
+    deadline.present? && (deadline + FORCE_SUBMIT_DELAY) < Time.zone.now
+  end
+
+  # Finalises the submission on the student's behalf. Shared by the scheduled job, the scheduling
+  # sweep, and the edit-page fail-safe so all three submit identically and are attributed to the
+  # student.
+  def force_submit!
+    User.with_stamper(creator) do
+      ActiveRecord::Base.transaction { update!('finalise' => 'true') }
+    end
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer

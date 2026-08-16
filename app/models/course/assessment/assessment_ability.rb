@@ -97,6 +97,23 @@ module Course::Assessment::AssessmentAbility
     allow_read_own_assessment_answers
     allow_read_own_submission_question
     allow_manage_annotations_for_own_assessment_submissions
+    disallow_late_assessment_submission
+  end
+
+  # Revokes editing an attempting submission once the deadline has passed on an assessment that
+  # disallows late submissions. Declared last so these `cannot` rules override the `can` grants from
+  # `define_all_assessment_permissions`. Students only: staff run their own permission set and are
+  # never subject to this. Reading the submission is unaffected — only edits are blocked.
+  def disallow_late_assessment_submission
+    cannot :update, Course::Assessment::Submission do |submission|
+      submission.editing_deadline_passed_for?(course_user)
+    end
+    cannot [:update, :submit_answer], Course::Assessment::Answer do |answer|
+      answer.submission.editing_deadline_passed_for?(course_user)
+    end
+    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse do |text_response|
+      text_response.answer.submission.editing_deadline_passed_for?(course_user)
+    end
   end
 
   def allow_read_published_assessments

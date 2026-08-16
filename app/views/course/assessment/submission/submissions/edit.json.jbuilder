@@ -26,7 +26,7 @@ json.assessment do
   # timeline). Null when the submission is never force-submitted. Sending the remaining duration
   # rather than an absolute timestamp lets the client anchor to its own clock, so a skewed client
   # clock does not fire the force-submit early or late.
-  force_submit_at = @submission.force_submit_at
+  force_submit_at = @submission.attempting? ? @submission.force_submit_at : nil
   json.forceSubmitRemainingTime force_submit_at && ((force_submit_at - Time.zone.now) * 1000).round
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?

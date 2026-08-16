@@ -295,19 +295,16 @@ class Course::Assessment < ApplicationRecord
     time_for(course_user).end_at
   end
 
-  # Whether editing or creating a submission should now be blocked for +course_user+. This is the
-  # raw deadline plus a grace period equal to FORCE_SUBMIT_DELAY: a submission stays editable right
-  # up until the moment it would be force-submitted. The grace matters because the client fires its
-  # own force-submit +finalise+ slightly after the deadline (and it carries the latest answers); a
-  # hard cut-off at the exact deadline would 403 that request and lose the student's final work.
-  # Network latency and minor clock skew on genuine last-second saves are covered for free.
+  # Whether the deadline has strictly passed for +course_user+. Used to block *creating* a new
+  # submission: there is no in-progress work to preserve, so the deadline is enforced exactly with no
+  # grace. Editing an existing submission is more lenient — see
+  # Course::Assessment::Submission#editing_deadline_passed_for?.
   #
   # @param [CourseUser] course_user
   # @return [Boolean]
   def submission_deadline_passed_for?(course_user)
     deadline = submission_deadline_for(course_user)
-    deadline.present? &&
-      (deadline + Course::Assessment::Submission::FORCE_SUBMIT_DELAY) < Time.zone.now
+    deadline.present? && deadline < Time.zone.now
   end
 
   # The password to prevent from viewing the assessment.

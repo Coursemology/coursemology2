@@ -7,6 +7,7 @@ class Course::Assessment::Submission::Answer::AnswersController <
 
   before_action :authorize_submission!
   before_action :check_password, only: [:update]
+  before_action :check_submission_deadline!, only: [:update, :submit_answer]
 
   def show
     authorize! :read, @answer

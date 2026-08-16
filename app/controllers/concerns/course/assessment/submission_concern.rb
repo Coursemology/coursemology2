@@ -22,6 +22,19 @@ module Course::Assessment::SubmissionConcern
     render json: { newSessionUrl: new_session_path }
   end
 
+  # Blocks editing an attempting submission once the assessment deadline has passed (only when the
+  # assessment disallows late submissions). Staff who can manage the assessment are exempt. The
+  # submission is force-submitted at the deadline through ForceSubmitTimedSubmissionJob; this guard
+  # closes the race window before that job lands and rejects direct API calls.
+  def check_submission_deadline!
+    return unless @submission.attempting?
+    return if can?(:manage, @assessment)
+    return unless @submission.editing_deadline_passed_for?(current_course_user)
+
+    render json: { error: I18n.t('course.assessment.submission.submissions.deadline_passed') },
+           status: :forbidden
+  end
+
   def authentication_service
     @authentication_service ||=
       Course::Assessment::SessionAuthenticationService.new(@assessment, current_session_id, @submission)

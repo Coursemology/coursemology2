@@ -15,3 +15,11 @@ user_email_database_cleanup_job:
   cron: '0 0 1 * *'
   class: 'UserEmailDatabaseCleanupJob'
   queue: 'default'
+
+# Schedule force-submit jobs for attempting submissions whose force-submit time is imminent but were
+# not scheduled at creation (long-lived attempts, or past-due submissions whose job was lost).
+# Runs on the 10th minute of each hour to deconflict with the ConsolidatedItemEmailJob.
+schedule_expiring_submissions_job:
+  cron: '10 * * * *'
+  class: 'Course::Assessment::Submission::ScheduleExpiringSubmissionsJob'
+  queue: 'default'

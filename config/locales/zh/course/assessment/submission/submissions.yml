@@ -1,0 +1,7 @@
+zh:
+  course:
+    assessment:
+      submission:
+        submissions:
+          deadline_passed: >-
+            此测验的提交截止日期已过。此测验不再接受新的提交或对提交内容的修改。

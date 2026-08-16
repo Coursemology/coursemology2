@@ -49,7 +49,7 @@ RSpec.describe Course::Assessment, type: :model do
       end
     end
 
-    describe '#submission_deadline_passed_for?' do
+    describe '#submission_deadline_passed_for? (strict, for creation)' do
       subject { assessment.submission_deadline_passed_for?(student) }
 
       context 'when late submissions are disallowed and the deadline has passed' do
@@ -68,13 +68,13 @@ RSpec.describe Course::Assessment, type: :model do
         it { is_expected.to be false }
       end
 
-      context 'when the deadline passed but is still within the force-submit grace period' do
+      context 'when the deadline passed but only just (within the force-submit grace period)' do
         let(:assessment) do
           create(:assessment, course: course, end_at: 1.minute.ago, is_late_submission_allowed: false)
         end
 
-        it 'is not yet considered passed, so the client force-submit can still land' do
-          is_expected.to be false
+        it 'is strictly passed — creation gets no grace' do
+          is_expected.to be true
         end
       end
 
