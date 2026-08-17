@@ -52,6 +52,9 @@ RSpec.describe Course::Assessment::Submission::ScheduleExpiringSubmissionsJob, t
       context 'when a submission is past due (its scheduled job was lost)' do
         let(:end_at) { (10.minutes + delay).before(Time.zone.now) }
 
+        # The attempt was begun before the deadline it has since blown past.
+        before { submission.update_column(:created_at, 1.hour.ago) }
+
         it 'schedules an immediate force-submit job' do
           run
           jobs = enqueued_for(submission)

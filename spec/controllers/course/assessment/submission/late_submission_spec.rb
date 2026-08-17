@@ -68,9 +68,11 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#edit fail-safe for an overdue submission' do
       let(:end_at) { 20.minutes.ago }
+      # The student began before the deadline, which has since passed while they were still attempting.
       let!(:submission) do
         create(:submission, :attempting, assessment: assessment,
-                                         creator: student.user, course_user: student)
+                                         creator: student.user, course_user: student).
+          tap { |s| s.update_column(:created_at, 1.hour.ago) }
       end
 
       subject do
@@ -99,6 +101,22 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         before { submission.update_column(:unsubmitted_at, Time.zone.now) }
 
         it 'does not force-submit it' do
+          expect { subject }.not_to(change { submission.reload.workflow_state })
+          expect(submission.reload).to be_attempting
+        end
+      end
+
+      context 'when staff started a test run after the deadline had passed' do
+        let(:staff) { create(:course_teaching_assistant, course: course) }
+        # Created now, i.e. after the passed end date — the deadline does not apply to it.
+        let!(:submission) do
+          create(:submission, :attempting, assessment: assessment,
+                                           creator: staff.user, course_user: staff)
+        end
+
+        before { controller_sign_in(controller, staff.user) }
+
+        it 'does not force-submit the staff test submission' do
           expect { subject }.not_to(change { submission.reload.workflow_state })
           expect(submission.reload).to be_attempting
         end

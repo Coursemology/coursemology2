@@ -12,9 +12,11 @@ RSpec.describe Course::Assessment::Submission::ForceSubmitTimedSubmissionJob, ty
       create(:assessment, :with_mcq_question, course: course,
                                               end_at: end_at, is_late_submission_allowed: false)
     end
+    # The attempt was begun before the (now-passed) deadline.
     let!(:submission) do
       create(:submission, :attempting, assessment: assessment,
-                                       creator: student.user, course_user: student)
+                                       creator: student.user, course_user: student).
+        tap { |s| s.update_column(:created_at, 2.hours.ago) }
     end
 
     def run
