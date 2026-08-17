@@ -62,6 +62,34 @@ RSpec.describe Course::Assessment::Submission, type: :model do
           is_expected.to be_nil
         end
       end
+
+      context 'when the submission was created after the deadline (e.g. a staff test run)' do
+        let(:late_allowed) { false }
+        let(:end_at) { 20.minutes.ago }
+
+        it 'does not enforce the already-passed deadline' do
+          is_expected.to be_nil
+        end
+
+        context 'but a time limit still applies' do
+          let(:time_limit) { 30 }
+
+          it 'still enforces the time limit from creation' do
+            is_expected.to be_within(1.second).of(submission.created_at + 30.minutes)
+          end
+        end
+      end
+
+      context 'when the submission was created before a since-passed deadline' do
+        let(:late_allowed) { false }
+        let(:end_at) { 20.minutes.ago }
+
+        before { submission.update_column(:created_at, 1.hour.ago) }
+
+        it 'still enforces the deadline (the student began in time)' do
+          is_expected.to be_within(1.second).of(end_at)
+        end
+      end
     end
 
     describe 'the unsubmit and finalise events' do
@@ -90,6 +118,8 @@ RSpec.describe Course::Assessment::Submission, type: :model do
 
     describe '#force_submit_overdue?' do
       let(:late_allowed) { false }
+      # An overdue attempt was necessarily begun before its deadline.
+      before { submission.update_column(:created_at, 1.hour.ago) }
 
       context 'when past the force-submit time plus grace' do
         let(:end_at) { (10.minutes + delay).before(Time.zone.now) }

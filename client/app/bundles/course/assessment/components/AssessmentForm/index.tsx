@@ -341,20 +341,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             />
           )}
 
-          <Controller
-            control={control}
-            name="is_late_submission_allowed"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                description={t(translations.allowLateSubmissionHint)}
-                // The toggle only has an effect with a deadline, and cannot be enforced on Koditsu.
-                disabled={disabled || !endAt || isKoditsuAssessmentEnabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.allowLateSubmission)}
-              />
-            )}
-          />
+          {/* The setting only has an effect with an end date, so it is hidden without one. */}
+          {endAt && (
+            <Controller
+              control={control}
+              name="is_late_submission_allowed"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  description={t(translations.allowLateSubmissionHint)}
+                  // Cannot be enforced on Koditsu.
+                  disabled={disabled || isKoditsuAssessmentEnabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.allowLateSubmission)}
+                />
+              )}
+            />
+          )}
 
           <Typography>{t(translations.description)}</Typography>
 

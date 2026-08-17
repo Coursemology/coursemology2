@@ -274,14 +274,17 @@ class Course::Assessment::Submission < ApplicationRecord
   # when neither applies, i.e. the submission is never force-submitted. The deadline component honours
   # the submitter's personalised timeline. Does not include the grace period.
   #
-  # A submission that has been unsubmitted by staff is exempt: the student is redoing it with explicit
-  # permission, so it has no deadline and is never force-submitted.
+  # Exempt from the deadline (returns nil) when the submission has been unsubmitted by staff (a
+  # permitted redo). The deadline is also ignored when the submission was created after it had already
+  # passed — students cannot do this (creation is blocked), but staff can start a test run at any time,
+  # and such a run should behave as if there were no end date rather than be finalised immediately.
   #
   # @return [Time, nil]
   def force_submit_at
     return nil if unsubmitted_at.present?
 
     deadline = assessment.submission_deadline_for(course_user)
+    deadline = nil if deadline && created_at > deadline
     time_limit_at = assessment.time_limit && (created_at + assessment.time_limit.minutes)
     [deadline, time_limit_at].compact.min
   end
