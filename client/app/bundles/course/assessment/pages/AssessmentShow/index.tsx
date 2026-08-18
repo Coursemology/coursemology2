@@ -5,6 +5,7 @@ import {
   isUnauthenticatedAssessmentData,
 } from 'types/course/assessment/assessments';
 
+import { redirectToNotFoundIfMissing } from 'api/ErrorHandling';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
@@ -19,8 +20,16 @@ const AssessmentShow = (): JSX.Element => {
   const id = parseInt(params?.assessmentId ?? '', 10) || undefined;
   if (!id) throw new Error(`AssessmentShow was loaded with ID: ${id}.`);
 
-  const fetchAssessmentWithId = (): Promise<FetchAssessmentData> =>
-    fetchAssessment(id);
+  const fetchAssessmentWithId = async (): Promise<FetchAssessmentData> => {
+    try {
+      return await fetchAssessment(id);
+    } catch (error) {
+      // An ID that matches no assessment in this course 404s from the backend. Show the
+      // not-found page rather than `Preload`'s generic fetching error.
+      redirectToNotFoundIfMissing(error);
+      throw error;
+    }
+  };
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchAssessmentWithId}>

@@ -1,5 +1,6 @@
 import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
+import { redirectToNotFoundIfMissing } from 'api/ErrorHandling';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
@@ -102,7 +103,12 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           }),
         );
       })
-      .catch(() => {
+      .catch((error) => {
+        // An ID that matches no submission in this assessment 404s from the backend. The
+        // page has nothing to render for it, so show the not-found page instead of an
+        // empty attempt page.
+        if (redirectToNotFoundIfMissing(error)) return;
+
         dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });
         dispatch(resetExistingAnswerFlags());
       });

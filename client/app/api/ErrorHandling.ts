@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { AUTH_USER_MANAGER } from 'lib/components/wrappers/AuthProvider';
 import {
@@ -36,4 +36,21 @@ export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
     // Should open a new window and login
     redirectToForbidden();
   if (isComponentNotFoundResponse(response)) redirectToNotFound();
+};
+
+/**
+ * Redirects to the not-found page if `error` is a 404 response, and returns whether it
+ * did, so callers can skip their own error handling.
+ *
+ * The backend 404s when a resource doesn't exist under the parent resource in the URL,
+ * even if it exists under another parent, so this covers both a nonexistent ID and an
+ * ID belonging to someone else's course or assessment.
+ *
+ * This is opt-in rather than part of `redirectIfMatchesErrorIn` because some endpoints
+ * legitimately 404 as part of their normal flow, and expect to handle it themselves.
+ */
+export const redirectToNotFoundIfMissing = (error: unknown): boolean => {
+  const missing = (error as AxiosError)?.response?.status === 404;
+  if (missing) redirectToNotFound();
+  return missing;
 };
