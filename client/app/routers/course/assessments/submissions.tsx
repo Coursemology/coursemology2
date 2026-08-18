@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
@@ -25,6 +25,12 @@ const submissionsRouter: Translated<RouteObject> = (_) => ({
     {
       path: ':submissionId',
       children: [
+        {
+          // A submission on its own has no page of its own to show, so send it to
+          // the attempt page instead of rendering an empty outlet.
+          index: true,
+          element: <Navigate replace to="edit" />,
+        },
         {
           path: 'edit',
           lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
