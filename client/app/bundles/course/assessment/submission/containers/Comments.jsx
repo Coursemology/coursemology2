@@ -66,6 +66,7 @@ class VisibleComments extends Component {
               <AiFeedbackCommentCard
                 key={`${post.id}-${post.createdAt}`}
                 acceptComment={(value) => acceptComment(post.id, value)}
+                deleteComment={() => deleteComment(post.id)}
                 post={post}
                 rateComment={(rating) => rateComment(post.id, rating)}
                 rejectComment={(value) => rejectComment(post.id, value)}

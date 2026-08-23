@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { grey, orange } from '@mui/material/colors';
 
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
@@ -27,13 +28,15 @@ interface RateableGeneratedCommentCardProps {
   createdAt: string | number | Date;
   canUpdate: boolean;
   currentRating: number | null;
-  // Persist the numeric rating (or null to clear it via the "Back" action). Called before the accept/reject
-  // post action.
+  // Persist the numeric rating (or null to clear it via the "Back" action). Called before a rated
+  // accept/reject; callers whose endpoints bundle the rating into the accept/reject call can no-op this.
   onRate: (rating: number | null) => Promise<void>;
-  // Publish the post (take it out of draft); the server snapshots the edited content into the rating.
-  onAccept: (editValue: string) => Promise<void>;
-  // Persist the edit then delete the post; the before-destroy hook snapshots the edited content.
-  onReject: (editValue: string) => Promise<void>;
+  // Publish the post (take it out of draft). The rating reached here is the score the staff member gave, for
+  // callers that bundle it into the publish call; others rely on #onRate having persisted it.
+  onAccept: (editValue: string, rating: number) => Promise<void>;
+  // Delete the post. +rating+ is null for a direct delete (the trash button, no rating) and the given score
+  // for a rated reject from edit mode.
+  onReject: (editValue: string, rating: number | null) => Promise<void>;
 }
 
 const translations = defineMessages({
@@ -48,7 +51,7 @@ const translations = defineMessages({
   rejectConfirmation: {
     id: 'lib.components.RateableGeneratedCommentCard.deleteConfirmation',
     defaultMessage:
-      'Are you sure you wish to reject and delete this message? You will not be able to retrieve this anymore.',
+      'Are you sure you wish to delete this AI-generated comment? You will not be able to retrieve it anymore.',
   },
   pleaseImprove: {
     id: 'lib.components.RateableGeneratedCommentCard.pleaseImprove',
@@ -61,6 +64,10 @@ const translations = defineMessages({
   reject: {
     id: 'lib.components.RateableGeneratedCommentCard.reject',
     defaultMessage: 'Reject',
+  },
+  delete: {
+    id: 'lib.components.RateableGeneratedCommentCard.delete',
+    defaultMessage: 'Delete without rating',
   },
   revert: {
     id: 'lib.components.RateableGeneratedCommentCard.revert',
@@ -132,7 +139,7 @@ const RateableGeneratedCommentCard: FC<RateableGeneratedCommentCardProps> = (
     }
     setIsSaving(true);
     onRate(rating)
-      .then(() => onAccept(editValue))
+      .then(() => onAccept(editValue, rating))
       .then(() => {
         toast.success(t(translations.publishSuccess));
       })
@@ -142,10 +149,11 @@ const RateableGeneratedCommentCard: FC<RateableGeneratedCommentCardProps> = (
       });
   };
 
+  // Rated reject (the Reject button in edit mode) persists the score and edited text, then deletes.
   const onConfirmReject = (): void => {
     setIsRejecting(true);
     onRate(rating)
-      .then(() => onReject(editValue))
+      .then(() => onReject(editValue, rating))
       .then(() => {
         toast.success(t(translations.rejectSuccess));
       })
@@ -154,6 +162,20 @@ const RateableGeneratedCommentCard: FC<RateableGeneratedCommentCardProps> = (
         setRejectConfirmation(false);
         setIsRejecting(false);
       });
+  };
+
+  // Direct delete (the trash button, no rating). DeleteButton owns the confirmation; this just deletes the
+  // original post and surfaces the result.
+  const onDirectDelete = async (): Promise<void> => {
+    setIsRejecting(true);
+    try {
+      await onReject(text, null);
+      toast.success(t(translations.rejectSuccess));
+    } catch {
+      toast.error(t(translations.rejectFailure));
+    } finally {
+      setIsRejecting(false);
+    }
   };
 
   // "Back" clears the rating: nullify it on the server and collapse to the un-rated (rate-to-continue) state.
@@ -293,12 +315,32 @@ const RateableGeneratedCommentCard: FC<RateableGeneratedCommentCardProps> = (
         }}
       >
         <CardHeader
+          action={
+            canUpdate && (
+              <DeleteButton
+                className="delete-comment"
+                color="default"
+                confirmMessage={t(translations.rejectConfirmation)}
+                disabled={isRejecting || isSaving}
+                loading={isRejecting}
+                onClick={onDirectDelete}
+                size="small"
+                tooltip={t(translations.delete)}
+              />
+            )
+          }
           avatar={avatar}
-          className="p-2"
+          className="p-2 w-full"
           subheader={formatLongDateTime(createdAt)}
           subheaderTypographyProps={{ display: 'block' }}
+          sx={{
+            '& .MuiCardHeader-action': {
+              alignSelf: 'center',
+              margin: 0,
+            },
+          }}
           title={t(translations.title)}
-          titleTypographyProps={{ display: 'block', marginright: 20 }}
+          titleTypographyProps={{ display: 'block' }}
         />
       </div>
       <div style={{ wordWrap: 'break-word', padding: 7 }}>

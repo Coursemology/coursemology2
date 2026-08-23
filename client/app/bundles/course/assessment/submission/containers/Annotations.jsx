@@ -90,8 +90,6 @@ class VisibleAnnotations extends Component {
                 <CodaveriCommentCard
                   key={post.id}
                   deleteComment={(rating) => deleteComment(post.id, rating)}
-                  editValue={commentForms.posts[post.id]}
-                  handleChange={(value) => handleUpdateChange(post.id, value)}
                   post={post}
                   updateComment={updateCodaveriFeedback}
                 />

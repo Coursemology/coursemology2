@@ -3776,24 +3776,6 @@
   "course.assessment.submission.liveFeedbackSuccess": {
     "defaultMessage": "Question {questionIndex}: Feedback successfully generated."
   },
-  "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
-    "defaultMessage": "Finalise and Post Feedback"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "Please help to improve the feedback below!"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "Please rate to continue!"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.reject": {
-    "defaultMessage": "Reject Feedback"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.rejectConfirmation": {
-    "defaultMessage": "Are you sure you wish to reject and delete this feedback? You will not be able to retrieve this anymore."
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.revert": {
-    "defaultMessage": "Revert Feedback"
-  },
   "course.assessment.submission.comment.CommentCard.cancel": {
     "defaultMessage": "Cancel"
   },
@@ -4720,24 +4702,6 @@
   },
   "course.courses.TodoIgnoreButton.ignoreSuccess": {
     "defaultMessage": "Pending task successfully ignored"
-  },
-  "course.discussion.topics.CodaveriCommentCard.approve": {
-    "defaultMessage": "Finalise and Post Feedback"
-  },
-  "course.discussion.topics.CodaveriCommentCard.deleteConfirmation": {
-    "defaultMessage": "Are you sure you wish to reject and delete this feedback? You will not be able to retrieve this anymore."
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "Please help to improve the feedback below!"
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "Please rate to continue!"
-  },
-  "course.discussion.topics.CodaveriCommentCard.reject": {
-    "defaultMessage": "Reject Feedback"
-  },
-  "course.discussion.topics.CodaveriCommentCard.revert": {
-    "defaultMessage": "Revert Feedback"
   },
   "course.discussion.topics.CommentCard.cancel": {
     "defaultMessage": "Cancel"
@@ -8216,8 +8180,11 @@
   "lib.components.RateableGeneratedCommentCard.clearFailure": {
     "defaultMessage": "Failed to clear rating."
   },
+  "lib.components.RateableGeneratedCommentCard.delete": {
+    "defaultMessage": "Delete without rating"
+  },
   "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
-    "defaultMessage": "Are you sure you wish to reject and delete this message? You will not be able to retrieve this anymore."
+    "defaultMessage": "Are you sure you wish to delete this AI-generated comment? You will not be able to retrieve it anymore."
   },
   "lib.components.RateableGeneratedCommentCard.emptyError": {
     "defaultMessage": "Feedback cannot be empty."
