@@ -41,7 +41,7 @@ class Course::Settings::Email < ApplicationRecord
 
   # A set of email settings that students are able to manage.
   STUDENT_SETTING = Set[:opening_reminder, :closing_reminder, :grades_released, :new_comment,
-                        :new_topic, :post_replied, ].map { |v| settings[v] }.freeze
+                        :new_topic, :post_replied ].map { |v| settings[v] }.freeze
 
   # A set of email settings that managers are able to manage.
   MANAGER_SETTING = Set[:opening_reminder, :closing_reminder_summary, :new_comment, :new_submission, :new_topic,

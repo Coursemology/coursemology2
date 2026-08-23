@@ -28,7 +28,7 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
 
     case line_numbers
     when Range
-      line_begin = line_numbers.min < 0 ? 0 : line_numbers.min
+      line_begin = [line_numbers.min, 0].max
       lines[line_begin..line_numbers.max]
     when Integer
       lines[line_numbers]

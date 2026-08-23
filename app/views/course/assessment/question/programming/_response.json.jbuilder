@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 json.redirectAssessmentUrl course_assessment_path(current_course, @assessment)
 
-if check_import_job?
-  json.importJobUrl job_path(@programming_question.import_job)
-end
+json.importJobUrl job_path(@programming_question.import_job) if check_import_job?
 
 if redirect_to_edit
   json.id @programming_question.id

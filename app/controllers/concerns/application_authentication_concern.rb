@@ -22,7 +22,7 @@ module ApplicationAuthenticationConcern
   end
 
   def token_from_request
-    @token_from_request ||= get_token_from_bearer || get_token_from_cookies
+    @token_from_request ||= token_from_bearer || token_from_cookies
   end
 
   def current_decoded_token
@@ -46,7 +46,7 @@ module ApplicationAuthenticationConcern
     @decoded_token.decoded_token
   end
 
-  def get_token_from_bearer
+  def token_from_bearer
     authorization_header_elements = request.headers['Authorization']&.split
 
     # render json: REQUIRES_AUTHENTICATION, status: :unauthorized and return unless authorization_header_elements
@@ -65,7 +65,7 @@ module ApplicationAuthenticationConcern
     token
   end
 
-  def get_token_from_cookies
+  def token_from_cookies
     cookies.encrypted[:access_token]
   end
 end

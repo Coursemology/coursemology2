@@ -134,9 +134,9 @@ module Course::Video::WatchStatisticsConcern
   # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times
   # of closed intervals.
   def handle_unclosed_interval(result, last_start, video_duration)
-    if [result[:end].size, 0].include? result[:start].size
-      result
-    elsif last_start.session.last_video_time > correct_interval(last_start, last_start, video_duration)
+    return result if [result[:end].size, 0].include?(result[:start].size)
+
+    if last_start.session.last_video_time > correct_interval(last_start, last_start, video_duration)
       result[:end] << last_start.session.last_video_time
     else
       result[:start].pop

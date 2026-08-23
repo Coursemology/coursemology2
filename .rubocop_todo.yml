@@ -92,12 +92,6 @@ Lint/RedundantCopDisableDirective:
     - 'spec/support/reference_timelines_helper.rb'
     - 'spec/support/stubs/ssid/api_stubs.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-
 # Offense count: 2
 Lint/ReturnInVoidContext:
   Exclude:
@@ -112,12 +106,6 @@ Lint/SafeNavigationConsistency:
     - 'app/views/course/assessment/answer/programming/_programming.json.jbuilder'
 
 # Offense count: 1
-# Configuration parameters: AllowRBSInlineAnnotation.
-Lint/SelfAssignment:
-  Exclude:
-    - 'spec/libraries/has_one_many_attachments_spec.rb'
-
-# Offense count: 1
 Lint/StructNewOverride:
   Exclude:
     - 'lib/autoload/coursemology_docker_container.rb'
@@ -129,11 +117,6 @@ Lint/StructNewOverride:
 Lint/SymbolConversion:
   Exclude:
     - 'app/controllers/concerns/signals/emission_concern.rb'
-
-# Offense count: 1
-Lint/UnmodifiedReduceAccumulator:
-  Exclude:
-    - 'app/models/concerns/course/assessment/questions_concern.rb'
 
 # Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
@@ -159,25 +142,6 @@ Lint/UselessConstantScoping:
     - 'app/services/scholaistic_api_service.rb'
     - 'lib/autoload/coursemology_docker_container.rb'
     - 'lib/extensions/attachable/active_record/base.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/UselessMethodDefinition:
-  Exclude:
-    - 'app/models/course/settings/survey_component.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/UselessOr:
-  Exclude:
-    - 'app/services/course/assessment/question/codaveri_problem_generation_service.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: CheckForMethodsWithNoSideEffects.
-Lint/Void:
-  Exclude:
-    - 'app/models/concerns/course/video/watch_statistics_concern.rb'
 
 # Offense count: 99
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes, Max.
@@ -455,11 +419,6 @@ Metrics/PerceivedComplexity:
     - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
     - 'app/services/course/assessment/reminder_service.rb'
     - 'app/services/course/assessment/submission/statistics_download_service.rb'
-
-# Offense count: 2
-Naming/AccessorMethodName:
-  Exclude:
-    - 'app/controllers/concerns/application_authentication_concern.rb'
 
 # Offense count: 24
 # This cop supports safe autocorrection (--autocorrect).
@@ -800,14 +759,6 @@ Style/HashEachMethods:
     - 'spec/libraries/course/conditional/user_satisfiability_graph_spec.rb'
 
 # Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/IfUnlessModifier:
-  Exclude:
-    - 'app/controllers/course/assessment/question/text_responses_controller.rb'
-    - 'app/jobs/course/assessment/submission/auto_feedback_job.rb'
-    - 'app/views/course/assessment/question/programming/_response.json.jbuilder'
-
-# Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/MapIntoArray:
   Exclude:
@@ -831,14 +782,6 @@ Style/MapToSet:
     - 'app/models/course/survey/response.rb'
     - 'app/models/instance/user_role_request.rb'
     - 'lib/tasks/db/add_missing_email_settings.rake'
-
-# Offense count: 3
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/MinMaxComparison:
-  Exclude:
-    - 'app/models/course/assessment/answer/programming_file.rb'
-    - 'app/services/course/duplication/object_duplication_service.rb'
-    - 'lib/autoload/duplicator.rb'
 
 # Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
@@ -945,25 +888,6 @@ Style/RedundantParentheses:
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpArgument:
-  Exclude:
-    - 'app/helpers/application_html_formatters_helper.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpEscape:
-  Exclude:
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantSelf:
-  Exclude:
-    - 'app/models/course/assessment/answer/multiple_response.rb'
-    - 'app/models/course/lesson_plan/item.rb'
-
 # Offense count: 13
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantStringEscape:
@@ -1058,11 +982,3 @@ Style/TernaryParentheses:
     - 'lib/tasks/coursemology/seed_600_gradebook.rake'
     - 'lib/tasks/coursemology/seed_gradebook.rake'
     - 'spec/libraries/coursemology_docker_container_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, diff_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'app/models/course/settings/email.rb'

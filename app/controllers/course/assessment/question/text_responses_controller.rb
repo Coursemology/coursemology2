@@ -8,9 +8,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   before_action :load_question_assessment, only: [:edit, :update]
 
   def new
-    if params[:file_upload] == 'true'
-      @text_response_question.hide_text = true
-    end
+    @text_response_question.hide_text = true if params[:file_upload] == 'true'
     return unless params[:comprehension] == 'true'
 
     @text_response_question.is_comprehension = true

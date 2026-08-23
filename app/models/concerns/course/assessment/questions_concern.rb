@@ -62,9 +62,7 @@ module Course::Assessment::QuestionsConcern
     correctly_answered_questions = correctly_answered_questions(submission)
     return first if correctly_answered_questions.empty?
 
-    reduce(nil) do |_, question|
-      break question unless correctly_answered_questions.include?(question)
-    end
+    find { |question| correctly_answered_questions.exclude?(question) }
   end
 
   private
