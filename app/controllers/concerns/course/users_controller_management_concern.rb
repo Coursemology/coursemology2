@@ -90,7 +90,9 @@ module Course::UsersControllerManagementConcern
 
       to_notify = to_suspend.reject(&:is_suspended?)
       to_suspend.update_all(is_suspended: true)
-      to_notify.each { |cu| Course::Mailer.user_suspended_email(cu).deliver_later }
+      ActiveRecord.after_all_transactions_commit do
+        to_notify.each { |cu| Course::Mailer.user_suspended_email(cu).deliver_later }
+      end
 
       head :ok
     end
@@ -107,7 +109,9 @@ module Course::UsersControllerManagementConcern
 
       to_notify = to_unsuspend.select(&:is_suspended?)
       to_unsuspend.update_all(is_suspended: false)
-      to_notify.each { |cu| Course::Mailer.user_unsuspended_email(cu).deliver_later }
+      ActiveRecord.after_all_transactions_commit do
+        to_notify.each { |cu| Course::Mailer.user_unsuspended_email(cu).deliver_later }
+      end
 
       head :ok
     end
