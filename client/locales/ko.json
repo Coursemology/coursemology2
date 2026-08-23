@@ -3767,24 +3767,6 @@
   "course.assessment.submission.codaveriAutogradeFailure": {
     "defaultMessage": "Codaveri에서 코드를 평가하는 동안 오류가 발생했습니다. 몇 분 후에 코드를 다시 제출하거나 네트워크 응답의 오류 메시지를 확인하세요."
   },
-  "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
-    "defaultMessage": "피드백 최종화 및 게시"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "아래 피드백을 개선하는 데 도움을 주세요!"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "계속하려면 평가하세요!"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.reject": {
-    "defaultMessage": "피드백 거부"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.rejectConfirmation": {
-    "defaultMessage": "이 피드백을 거부하고 삭제하시겠습니까? 삭제한 피드백은 복구할 수 없습니다."
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.revert": {
-    "defaultMessage": "피드백 되돌리기"
-  },
   "course.assessment.submission.comment.CommentCard.cancel": {
     "defaultMessage": "취소"
   },
@@ -4702,24 +4684,6 @@
   },
   "course.courses.TodoIgnoreButton.ignoreSuccess": {
     "defaultMessage": "보류 중인 작업이 성공적으로 무시되었습니다"
-  },
-  "course.discussion.topics.CodaveriCommentCard.approve": {
-    "defaultMessage": "피드백 확정 및 게시"
-  },
-  "course.discussion.topics.CodaveriCommentCard.deleteConfirmation": {
-    "defaultMessage": "이 피드백을 거부하고 삭제하시겠습니까? 삭제한 피드백은 복구할 수 없습니다."
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "아래 피드백을 개선해주세요!"
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "계속하려면 평가해 주세요!"
-  },
-  "course.discussion.topics.CodaveriCommentCard.reject": {
-    "defaultMessage": "피드백 거부"
-  },
-  "course.discussion.topics.CodaveriCommentCard.revert": {
-    "defaultMessage": "피드백 되돌리기"
   },
   "course.discussion.topics.CommentCard.cancel": {
     "defaultMessage": "취소"
@@ -8183,8 +8147,11 @@
   "lib.components.RateableGeneratedCommentCard.clearFailure": {
     "defaultMessage": "평가 지우기 실패."
   },
+  "lib.components.RateableGeneratedCommentCard.delete": {
+    "defaultMessage": "평가 없이 삭제"
+  },
   "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
-    "defaultMessage": "이 메시지를 거부하고 삭제하시겠습니까? 삭제한 메시지는 복구할 수 없습니다."
+    "defaultMessage": "이 AI 생성 댓글을 삭제하시겠습니까? 삭제한 댓글은 복구할 수 없습니다."
   },
   "lib.components.RateableGeneratedCommentCard.emptyError": {
     "defaultMessage": "피드백은 비워둘 수 없습니다."

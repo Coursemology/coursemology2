@@ -3764,24 +3764,6 @@
   "course.assessment.submission.liveFeedbackSuccess": {
     "defaultMessage": "问题 {questionIndex}：反馈生成成功。"
   },
-  "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
-    "defaultMessage": "完成并发布反馈"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "请帮助改进下面的反馈！"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "请评价以继续！"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.reject": {
-    "defaultMessage": "拒绝反馈"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.rejectConfirmation": {
-    "defaultMessage": "你确定要拒绝并删除此反馈吗？你将无法再检索它。"
-  },
-  "course.assessment.submission.comment.CodaveriCommentCard.revert": {
-    "defaultMessage": "复原反馈"
-  },
   "course.assessment.submission.comment.CommentCard.cancel": {
     "defaultMessage": "取消"
   },
@@ -4696,24 +4678,6 @@
   },
   "course.courses.TodoIgnoreButton.ignoreSuccess": {
     "defaultMessage": "挂起的任务已被忽略"
-  },
-  "course.discussion.topics.CodaveriCommentCard.approve": {
-    "defaultMessage": "完成并发布反馈"
-  },
-  "course.discussion.topics.CodaveriCommentCard.deleteConfirmation": {
-    "defaultMessage": "你确定要拒绝并删除此反馈吗？你将无法再检索它。"
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseImprove": {
-    "defaultMessage": "请帮助改进以下反馈！"
-  },
-  "course.discussion.topics.CodaveriCommentCard.pleaseRate": {
-    "defaultMessage": "请评价以继续！"
-  },
-  "course.discussion.topics.CodaveriCommentCard.reject": {
-    "defaultMessage": "拒绝反馈"
-  },
-  "course.discussion.topics.CodaveriCommentCard.revert": {
-    "defaultMessage": "回复反馈"
   },
   "course.discussion.topics.CommentCard.cancel": {
     "defaultMessage": "取消"
@@ -8177,8 +8141,11 @@
   "lib.components.RateableGeneratedCommentCard.clearFailure": {
     "defaultMessage": "无法清除评分。"
   },
+  "lib.components.RateableGeneratedCommentCard.delete": {
+    "defaultMessage": "不评分直接删除"
+  },
   "lib.components.RateableGeneratedCommentCard.deleteConfirmation": {
-    "defaultMessage": "你确定要拒绝并删除此消息吗？你将无法再检索它。"
+    "defaultMessage": "你确定要删除此 AI 生成的评论吗？你将无法再检索它。"
   },
   "lib.components.RateableGeneratedCommentCard.emptyError": {
     "defaultMessage": "反馈不能为空。"

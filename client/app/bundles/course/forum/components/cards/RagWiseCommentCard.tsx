@@ -37,8 +37,12 @@ const RagWiseCommentCard: FC<Props> = ({ post, canManage }) => {
       onRate={(rating): Promise<void> =>
         dispatch(updateRagWiseRating(post.postUrl, rating))
       }
-      onReject={async (editValue): Promise<void> => {
-        await dispatch(updateForumTopicPost(post.postUrl, editValue));
+      onReject={async (editValue, rating): Promise<void> => {
+        // A rated reject persists the edited answer before deleting; a direct delete (no rating) has no edit
+        // to snapshot, so just delete.
+        if (rating !== null) {
+          await dispatch(updateForumTopicPost(post.postUrl, editValue));
+        }
         await dispatch(
           deleteForumTopicPost(post.postUrl, post.id, post.topicId),
         );

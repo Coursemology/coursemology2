@@ -17,8 +17,9 @@ interface Props {
 }
 
 /**
- * Wires the shared rateable card to the discussion (rubric feedback) endpoints. Accept publishes the post;
- * reject persists the edit then deletes it -- the server snapshots the edited feedback in both cases.
+ * Wires the shared rateable card to the discussion (rubric feedback) endpoints. Accept publishes the post; a
+ * rated reject persists the edited feedback (snapshotted server-side) then deletes it, while a direct delete
+ * (no rating) simply deletes -- there is no edit to snapshot.
  */
 const AiFeedbackCommentCard: FC<Props> = ({ post }) => {
   const dispatch = useAppDispatch();
@@ -35,8 +36,12 @@ const AiFeedbackCommentCard: FC<Props> = ({ post }) => {
       onRate={(rating): Promise<void> =>
         dispatch(updateAiFeedbackRating(post, rating))
       }
-      onReject={async (editValue): Promise<void> => {
-        await dispatch(updatePost(post, editValue));
+      onReject={async (editValue, rating): Promise<void> => {
+        // A rated reject persists the edited feedback so the before-destroy hook can snapshot it; a direct
+        // delete (no rating) has nothing to snapshot, so skip the update and just delete.
+        if (rating !== null) {
+          await dispatch(updatePost(post, editValue));
+        }
         await dispatch(deletePost(post));
       }}
       postId={post.id}
