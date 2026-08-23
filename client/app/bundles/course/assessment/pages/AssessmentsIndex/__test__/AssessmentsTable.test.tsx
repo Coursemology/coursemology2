@@ -44,6 +44,7 @@ const listData = (
     bonusAttributes: false,
     endTimes: false,
     canCreateAssessments: true,
+    canImportAssessments: true,
     tabId: 1,
     tabTitle: 'Assessments: Default',
     tabUrl: '/courses/1/assessments',

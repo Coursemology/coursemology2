@@ -505,5 +505,70 @@ RSpec.describe Course::Assessment::AssessmentsController, type: :controller do
         expect(response.parsed_body['marketplaceUpdate']['canUpdateInPlace']).to be(false)
       end
     end
+
+    # The "Import Assessments" button only links into the marketplace, whose access is allow-listed
+    # per person. It used to ride on `canCreateAssessments`, so every manager saw a button that led
+    # straight to a 403.
+    describe 'GET #index — canImportAssessments' do
+      # Nothing rolls back here, so an `everyone` rule leaked by an earlier spec file would grant
+      # access to the not-allow-listed users below. Same cleanup as assessment_marketplace_ability_spec.
+      before do
+        Course::Assessment::Marketplace::AllowlistRule.delete_all
+        Course::Assessment::Marketplace::AccessBlock.delete_all
+      end
+
+      def display_for(target_course)
+        get :index, as: :json, params: { course_id: target_course.id }
+        response.parsed_body['display']
+      end
+
+      it 'grants it to a system admin' do
+        controller_sign_in(controller, admin)
+
+        expect(display_for(course)).to include('canImportAssessments' => true)
+      end
+
+      context 'as a course manager' do
+        let(:manager) { create(:course_manager, course: course).user }
+
+        before { controller_sign_in(controller, manager) }
+
+        # The regression: creating assessments and reaching the marketplace are separate permissions.
+        it 'withholds it from a manager who is not allow-listed, who may still create assessments' do
+          display = display_for(course)
+
+          expect(display).to include('canCreateAssessments' => true)
+          expect(display).to include('canImportAssessments' => false)
+        end
+
+        it 'grants it once the manager is allow-listed' do
+          create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager)
+
+          expect(display_for(course)).to include('canImportAssessments' => true)
+        end
+
+        it 'withholds it from an allow-listed manager who is blocked' do
+          create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager)
+          create(:course_assessment_marketplace_access_block, user: manager)
+
+          expect(display_for(course)).to include('canImportAssessments' => false)
+        end
+
+        # The marketplace controller is a `ComponentController`, so the destination 404s when the
+        # course has the component switched off, however the ability resolves.
+        it 'withholds it when the course has the marketplace component disabled' do
+          create(:course_assessment_marketplace_allowlist_rule, rule_type: :user, user: manager)
+          course.set_component_enabled_boolean!(:course_assessment_marketplace_component, false)
+
+          expect(display_for(course)).to include('canImportAssessments' => false)
+        end
+      end
+
+      it 'withholds it from a course student' do
+        controller_sign_in(controller, create(:course_student, course: course).user)
+
+        expect(display_for(course)).to include('canImportAssessments' => false)
+      end
+    end
   end
 end
