@@ -43,7 +43,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService # rubocop:d
   private
 
   def initialize(assessment, params, language, version) # rubocop:disable Metrics/AbcSize
-    custom_prompt = params[:custom_prompt].to_s || ''
+    custom_prompt = params[:custom_prompt].to_s
     @payload = {
       userId: assessment.creator_id.to_s,
       courseName: assessment.course.title,

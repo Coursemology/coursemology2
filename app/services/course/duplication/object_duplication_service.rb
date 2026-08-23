@@ -27,7 +27,7 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
     # @return [Float] Time difference between the +start_at+ of both courses.
     def time_shift(source_course, destination_course)
       shift = destination_course.start_at - source_course.start_at
-      shift >= 0 ? shift : 0
+      [shift, 0].max
     end
   end
 

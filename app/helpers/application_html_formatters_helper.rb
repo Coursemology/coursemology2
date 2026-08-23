@@ -242,7 +242,7 @@ module ApplicationHtmlFormattersHelper
   def process_ckeditor_rich_text_with_pipeline(pipeline, text)
     text_with_updated_code_tag = remove_internal_adjacent_code_tags(text)
     format_with_pipeline(pipeline, text_with_updated_code_tag).
-      gsub(/<table>/, '<table class="table table-bordered">') # Add lines to tables
+      gsub('<table>', '<table class="table table-bordered">') # Add lines to tables
   end
 
   # Filters the given text through the given pipeline.

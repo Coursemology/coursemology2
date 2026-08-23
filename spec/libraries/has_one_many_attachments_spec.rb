@@ -96,7 +96,9 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
     describe '#attachment=' do
       context 'when the same attachment is specified' do
-        before { attachable.attachment = attachable.attachment }
+        # The self-assignment is the subject of this test: assigning the current attachment back
+        # must be a no-op.
+        before { attachable.attachment = attachable.attachment } # rubocop:disable Lint/SelfAssignment
 
         it 'does not change the attachment' do
           expect(attachable.attachment_changed?).to be(false)

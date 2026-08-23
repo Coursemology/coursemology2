@@ -255,8 +255,8 @@ class Course::LessonPlan::Item < ApplicationRecord
   end
 
   def link_default_reference_time
-    self.default_reference_time.reference_timeline = course.default_reference_timeline
-    self.default_reference_time.lesson_plan_item = self
+    default_reference_time.reference_timeline = course.default_reference_timeline
+    default_reference_time.lesson_plan_item = self
   end
 
   def validate_only_one_default_reference_time

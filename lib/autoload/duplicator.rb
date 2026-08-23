@@ -62,7 +62,7 @@ class Duplicator
     # config/application.rb could be unsuitable as `Time.zone.local` does not work there.
     max_time = Time.zone.local(9999, 12, 31, 0, 0, 0)
     shifted_time = original_time + @time_shift_amount
-    shifted_time < max_time ? shifted_time : max_time
+    [shifted_time, max_time].min
   end
 
   # Checks if an item has been duplicated.

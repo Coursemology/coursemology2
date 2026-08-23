@@ -24,7 +24,7 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
     self.random_seed ||= Random.new_seed
     save
 
-    self.random_seed
+    random_seed
   end
 
   def compare_answer(other_answer)

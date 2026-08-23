@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'csv'
-require 'set'
 
 # This concern includes methods required to parse the invitations data.
 # This can either be from a form, or a CSV file.
@@ -178,7 +177,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   end
 
   def normalize_header(value)
-    value&.strip&.downcase&.gsub(/[\s_\-]+/, '')
+    value&.strip&.downcase&.gsub(/[\s_-]+/, '')
   end
 
   def build_header_map!(row)

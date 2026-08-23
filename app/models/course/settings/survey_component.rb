@@ -2,10 +2,6 @@
 class Course::Settings::SurveyComponent < Course::Settings::Component
   include Course::Settings::LessonPlanSettingsConcern
 
-  def lesson_plan_item_settings
-    super
-  end
-
   def showable_in_lesson_plan?
     settings.lesson_plan_items ? settings.lesson_plan_items['enabled'] : true
   end
