@@ -103,6 +103,8 @@ export interface AssessmentsListData {
     bonusAttributes: boolean;
     endTimes: boolean;
     canCreateAssessments: boolean;
+    /** Whether the user may reach the marketplace the import button links to. */
+    canImportAssessments: boolean;
     tabId: number;
     tabTitle: string;
     tabUrl: string;

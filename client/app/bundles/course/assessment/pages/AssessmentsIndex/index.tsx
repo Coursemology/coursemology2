@@ -30,23 +30,26 @@ const AssessmentsIndex = (): JSX.Element => {
       {(data, refreshable): JSX.Element => (
         <Page
           actions={
-            data.display.canCreateAssessments && (
+            (data.display.canCreateAssessments ||
+              data.display.canImportAssessments) && (
               <>
                 <ImportAssessmentsButton
-                  canImport={data.display.canCreateAssessments}
+                  canImport={data.display.canImportAssessments}
                   tabId={data.display.tabId}
                 />
-                <NewAssessmentFormButton
-                  key={data.display.tabId}
-                  // @ts-ignore: component is still written in JSX
-                  canManageMonitor={data.display.canManageMonitor}
-                  categoryId={data.display.category.id}
-                  gamified={data.display.isGamified}
-                  isKoditsuExamEnabled={data.display.isKoditsuExamEnabled}
-                  monitoringEnabled={data.display.isMonitoringEnabled}
-                  randomizationAllowed={data.display.allowRandomization}
-                  tabId={data.display.tabId}
-                />
+                {data.display.canCreateAssessments && (
+                  <NewAssessmentFormButton
+                    key={data.display.tabId}
+                    // @ts-ignore: component is still written in JSX
+                    canManageMonitor={data.display.canManageMonitor}
+                    categoryId={data.display.category.id}
+                    gamified={data.display.isGamified}
+                    isKoditsuExamEnabled={data.display.isKoditsuExamEnabled}
+                    monitoringEnabled={data.display.isMonitoringEnabled}
+                    randomizationAllowed={data.display.allowRandomization}
+                    tabId={data.display.tabId}
+                  />
+                )}
               </>
             )
           }

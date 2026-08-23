@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 achievements_enabled = !current_component_host[:course_achievements_component].nil?
+marketplace_enabled = !current_component_host[:course_assessment_marketplace_component].nil?
 submissions_hash = @assessments.to_h { |assessment| [assessment.id, assessment.submissions] }
 # Empty for every course except the marketplace's snapshot container viewed by a system admin.
 marketplace_versions = defined?(@marketplace_versions) ? @marketplace_versions : {}
@@ -15,6 +16,12 @@ json.display do
   json.endTimes show_end_at?
   json.canCreateAssessments can?(:create, Course::Assessment.new(tab: @tab))
   json.canManageMonitor @can_manage_monitor && @monitoring_component_enabled
+
+  # Gates the "Import Assessments" button, which only links into the marketplace. Marketplace access
+  # is per-person allow-listed (see Course::AssessmentMarketplaceAbilityComponent) and not implied by
+  # `:create` on assessments, so a manager without it would otherwise be sent to a 403. Mirrors the
+  # gate on the marketplace sidebar item in Course::AssessmentMarketplaceComponent.
+  json.canImportAssessments marketplace_enabled && can?(:access_marketplace, current_course)
 
   # True only in the marketplace's snapshot container, viewed by a system admin. Switches on the
   # container-only Listing/Version/Source columns and the search toolbar — every other course's
