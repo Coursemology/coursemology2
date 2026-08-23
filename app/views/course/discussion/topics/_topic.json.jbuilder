@@ -5,8 +5,8 @@ json.postList topic.posts.ordered_topologically.flatten.each do |post|
   json.partial! 'course/discussion/posts/post', post: post if can_grade || post.published?
 end
 
+can_toggle_pending = can?(:manage, topic)
 json.topicPermissions do
-  can_toggle_pending = can?(:manage, topic)
   json.canTogglePending can_toggle_pending
   json.canMarkAsRead current_course_user&.student? unless can_toggle_pending
 end
@@ -14,4 +14,7 @@ end
 json.topicSettings do
   json.isPending topic.pending_staff_reply?
   json.isUnread topic.unread?(current_user)
+  if can_toggle_pending || !current_course_user&.student?
+    json.isAiGeneratedPending topic.latest_post_ai_generated_draft?
+  end
 end

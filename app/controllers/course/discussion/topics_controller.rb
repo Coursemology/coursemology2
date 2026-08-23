@@ -28,7 +28,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = if current_course_user&.student?
                 unread_topics_for_student
               else
-                all_topics.pending_staff_reply
+                hide_ai_generated_comments(all_topics.pending_staff_reply)
               end
 
     render_topics_list_data
@@ -40,7 +40,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
   end
 
   def my_students_pending
-    @topics = my_students_topics.pending_staff_reply
+    @topics = hide_ai_generated_comments(my_students_topics.pending_staff_reply)
     render_topics_list_data
   end
 

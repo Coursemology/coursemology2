@@ -66,6 +66,21 @@ RSpec.describe Course::Discussion::TopicsController do
           subject
           expect(topics).to contain_exactly(pending_topic)
         end
+
+        context 'and the course hides AI-generated comments' do
+          before do
+            course.settings(Course::Discussion::TopicsComponent.key).is_showing_ai_generated_comments = false
+            course.save!
+            create(:course_discussion_post, topic: pending_topic,
+                                            is_ai_generated: true, workflow_state: :draft,
+                                            created_at: 1.hour.from_now)
+          end
+
+          it 'excludes topics whose latest post is an AI-generated draft' do
+            subject
+            expect(topics).to be_empty
+          end
+        end
       end
 
       context 'when a course student visits the page' do

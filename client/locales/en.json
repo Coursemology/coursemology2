@@ -650,6 +650,12 @@
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
   },
+  "course.admin.CommentsSettings.showAiGeneratedComments": {
+    "defaultMessage": "Show AI-generated pending comments"
+  },
+  "course.admin.CommentsSettings.showAiGeneratedCommentsHint": {
+    "defaultMessage": "When disabled, topics awaiting review for AI-generated feedback are excluded from the 'Pending' and 'My Students Pending' tabs. The comments still appear normally elsewhere."
+  },
   "course.admin.ComponentSettings.componentSettings": {
     "defaultMessage": "Components settings"
   },

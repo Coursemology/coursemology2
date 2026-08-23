@@ -650,6 +650,12 @@
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "댓글 설정"
   },
+  "course.admin.CommentsSettings.showAiGeneratedComments": {
+    "defaultMessage": "AI 생성 검토 대기 댓글 표시"
+  },
+  "course.admin.CommentsSettings.showAiGeneratedCommentsHint": {
+    "defaultMessage": "비활성화하면, AI 생성 피드백에 대한 검토 대기 주제가 '검토 대기' 및 '내 학생 검토 대기' 탭에서 제외됩니다. 해당 댓글은 다른 곳에서는 정상적으로 표시됩니다."
+  },
   "course.admin.ComponentSettings.componentSettings": {
     "defaultMessage": "컴포넌트 설정"
   },

@@ -27,5 +27,20 @@ RSpec.describe Course::Admin::Discussion::TopicSettingsController do
         end
       end
     end
+
+    describe '#update persisting is_showing_ai_generated_comments' do
+      subject do
+        patch :update, format: :json, params: {
+          course_id: course, settings_topics_component: { is_showing_ai_generated_comments: false }
+        }
+      end
+
+      it 'stores the flag on the topics component settings' do
+        expect(subject).to render_template(:edit)
+        expect(
+          course.reload.settings(Course::Discussion::TopicsComponent.key).is_showing_ai_generated_comments
+        ).to be(false)
+      end
+    end
   end
 end

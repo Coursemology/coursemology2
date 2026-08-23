@@ -56,6 +56,24 @@ class Course::Discussion::Topic < ApplicationRecord
 
   scope :pending_staff_reply, -> { where(pending_staff_reply: true) }
 
+  # Excludes topics whose most recent post (by created_at) is an AI-generated draft. Such a topic surfaced
+  # as pending only because unreviewed AI feedback (e.g. rubric grading) was added and no human has posted
+  # since -- a staff reply/publish clears the pending flag, and a later student post becomes the latest
+  # post. Used to drop these from the staff pending counts/lists when the course hides AI comments.
+  #
+  # The NOT EXISTS is correlated to each candidate topic (this scope is always chained onto an already
+  # course- and pending-scoped relation), so the database inspects only that topic's own posts instead of
+  # scanning every AI draft in the instance.
+  scope :without_ai_draft_latest_post, lambda {
+    where(
+      'NOT EXISTS (SELECT 1 FROM course_discussion_posts ai_draft ' \
+      'WHERE ai_draft.topic_id = course_discussion_topics.id ' \
+      'AND ai_draft.is_ai_generated = TRUE AND ai_draft.workflow_state = ? ' \
+      'AND ai_draft.created_at = (SELECT MAX(p.created_at) FROM course_discussion_posts p ' \
+      'WHERE p.topic_id = course_discussion_topics.id))', 'draft'
+    )
+  }
+
   # Return if a user has subscribed to this topic
   #
   # @param [User] user The user to check
@@ -94,5 +112,14 @@ class Course::Discussion::Topic < ApplicationRecord
 
     self.pending_staff_reply = false
     save
+  end
+
+  # Whether this topic's most recent post is an AI-generated draft -- the per-topic counterpart of
+  # .without_ai_draft_latest_post. Surfaced to the comments UI so its optimistic pending-count updates can
+  # skip topics that the staff pending count already excludes when the course hides AI comments. Reads from
+  # the loaded posts association (preloaded by the topic list actions), so it adds no query.
+  def latest_post_ai_generated_draft?
+    latest_post = posts.max_by(&:created_at)
+    latest_post.present? && latest_post.is_ai_generated? && latest_post.draft?
   end
 end

@@ -650,6 +650,12 @@
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "评论设置"
   },
+  "course.admin.CommentsSettings.showAiGeneratedComments": {
+    "defaultMessage": "显示 AI 生成的待处理评论"
+  },
+  "course.admin.CommentsSettings.showAiGeneratedCommentsHint": {
+    "defaultMessage": "停用后，等待审核 AI 生成反馈的主题将从「待处理」和「我的学生待处理」标签页中排除。这些评论仍会在其他位置正常显示。"
+  },
   "course.admin.ComponentSettings.componentSettings": {
     "defaultMessage": "组件设置"
   },

@@ -17,7 +17,7 @@ class Course::Admin::Discussion::TopicSettingsController < Course::Admin::Contro
   private
 
   def topic_settings_params
-    params.require(:settings_topics_component).permit(:title, :pagination)
+    params.require(:settings_topics_component).permit(:title, :pagination, :is_showing_ai_generated_comments)
   end
 
   def component
