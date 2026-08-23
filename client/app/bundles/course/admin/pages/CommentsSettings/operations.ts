@@ -20,6 +20,7 @@ export const updateCommentsSettings = async (
     settings_topics_component: {
       title: data.title,
       pagination: data.pagination,
+      is_showing_ai_generated_comments: data.isShowingAiGeneratedComments,
     },
   };
 

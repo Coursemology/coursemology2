@@ -7,6 +7,7 @@ import {
   CommentTabInfo,
   CommentTabTypes,
   CommentTopicData,
+  CommentTopicEntity,
 } from 'types/course/comments';
 import {
   createEntityStore,
@@ -35,6 +36,18 @@ import {
   UPDATE_POST,
   UpdatePostAction,
 } from './types';
+
+// A topic contributes to the staff pending counts unless the course hides AI-generated comments and this
+// topic's latest post is an AI draft -- the server already excludes such topics from those counts, so the
+// optimistic updates below must leave the staff counts untouched for them.
+const affectsStaffPendingCount = (
+  state: CommentState,
+  topic: CommentTopicEntity,
+): boolean =>
+  !(
+    state.tabs.isShowingAiGeneratedComments === false &&
+    topic.topicSettings.isAiGeneratedPending
+  );
 
 const initialState: CommentState = {
   topicCount: 0,
@@ -112,32 +125,38 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
         };
         saveEntityToStore(draft.topicList, newTopic);
 
-        // To update pending bubble count shown on the comment tabs.
-        if (topic.topicSettings.isPending) {
-          if (
-            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
-            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
-          ) {
-            draft.tabs.myStudentUnreadCount! -= 1;
-            draft.tabs.allStaffUnreadCount! -= 1;
-          } else if (
-            draft.pageState.tabValue === CommentTabTypes.PENDING ||
-            draft.pageState.tabValue === CommentTabTypes.ALL
-          ) {
-            draft.tabs.allStaffUnreadCount! -= 1;
-          }
-        } else if (!topic.topicSettings.isPending) {
-          if (
-            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
-            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
-          ) {
-            draft.tabs.myStudentUnreadCount! += 1;
-            draft.tabs.allStaffUnreadCount! += 1;
-          } else if (
-            draft.pageState.tabValue === CommentTabTypes.PENDING ||
-            draft.pageState.tabValue === CommentTabTypes.ALL
-          ) {
-            draft.tabs.allStaffUnreadCount! += 1;
+        // To update pending bubble count shown on the comment tabs. When the course hides AI-generated
+        // comments, an AI-draft topic is excluded from the staff counts server-side (yet still listed in
+        // All/My Students), so toggling it here must not shift those counts.
+        if (affectsStaffPendingCount(draft, topic)) {
+          if (topic.topicSettings.isPending) {
+            if (
+              draft.pageState.tabValue ===
+                CommentTabTypes.MY_STUDENTS_PENDING ||
+              draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
+            ) {
+              draft.tabs.myStudentUnreadCount! -= 1;
+              draft.tabs.allStaffUnreadCount! -= 1;
+            } else if (
+              draft.pageState.tabValue === CommentTabTypes.PENDING ||
+              draft.pageState.tabValue === CommentTabTypes.ALL
+            ) {
+              draft.tabs.allStaffUnreadCount! -= 1;
+            }
+          } else if (!topic.topicSettings.isPending) {
+            if (
+              draft.pageState.tabValue ===
+                CommentTabTypes.MY_STUDENTS_PENDING ||
+              draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
+            ) {
+              draft.tabs.myStudentUnreadCount! += 1;
+              draft.tabs.allStaffUnreadCount! += 1;
+            } else if (
+              draft.pageState.tabValue === CommentTabTypes.PENDING ||
+              draft.pageState.tabValue === CommentTabTypes.ALL
+            ) {
+              draft.tabs.allStaffUnreadCount! += 1;
+            }
           }
         }
       }
@@ -173,14 +192,19 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
             ...topic.topicSettings,
             isPending: false,
             isUnread: false,
+            isAiGeneratedPending: false,
           },
         };
         saveEntityToStore(draft.topicList, newTopic);
 
         // To update pending bubble count shown on the comment tabs.
         // When a new post of a topic is created, mark_as_pending is marked as false
-        // in the backend side.
-        if (topic.topicSettings.isPending) {
+        // in the backend side. A topic already excluded from the staff counts (hidden AI draft) was never
+        // counted, so it must not be decremented here either.
+        if (
+          affectsStaffPendingCount(draft, topic) &&
+          topic.topicSettings.isPending
+        ) {
           if (
             draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
             draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS

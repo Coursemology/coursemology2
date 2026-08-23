@@ -7,6 +7,8 @@ json.tabs do
     json.myStudentExist my_students_exist
     json.myStudentUnreadCount my_students_unread_count if my_students_exist
     json.allStaffUnreadCount all_staff_unread_count
+    # Lets the client's optimistic pending-count updates skip AI-draft topics that these counts exclude.
+    json.isShowingAiGeneratedComments showing_ai_generated_comments?
   elsif current_course_user&.student?
     json.allStudentUnreadCount all_student_unread_count
   end

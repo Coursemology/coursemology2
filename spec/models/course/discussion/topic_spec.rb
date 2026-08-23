@@ -228,5 +228,81 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         end
       end
     end
+
+    describe '.without_ai_draft_latest_post' do
+      let(:topic) { create(:course_discussion_topic) }
+      subject(:result) { Course::Discussion::Topic.without_ai_draft_latest_post }
+
+      def post_at(time, **attrs)
+        create(:course_discussion_post, topic: topic, created_at: time, **attrs)
+      end
+
+      context 'when the most recent post is an AI-generated draft' do
+        before do
+          post_at(2.hours.ago)
+          post_at(1.hour.ago, is_ai_generated: true, workflow_state: :draft)
+        end
+
+        it 'excludes the topic' do
+          expect(result).not_to include(topic)
+        end
+      end
+
+      context 'when a human post is more recent than the AI draft' do
+        before do
+          post_at(2.hours.ago, is_ai_generated: true, workflow_state: :draft)
+          post_at(1.hour.ago)
+        end
+
+        it 'includes the topic' do
+          expect(result).to include(topic)
+        end
+      end
+
+      context 'when the most recent AI post is published rather than a draft' do
+        before { post_at(1.hour.ago, is_ai_generated: true, workflow_state: :published) }
+
+        it 'includes the topic' do
+          expect(result).to include(topic)
+        end
+      end
+
+      context 'with only human posts' do
+        before { post_at(1.hour.ago) }
+
+        it 'includes the topic' do
+          expect(result).to include(topic)
+        end
+      end
+    end
+
+    describe '#latest_post_ai_generated_draft?' do
+      let(:topic) { create(:course_discussion_topic) }
+
+      def post_at(time, **attrs)
+        create(:course_discussion_post, topic: topic, created_at: time, **attrs)
+      end
+
+      it 'is true when the most recent post is an AI-generated draft' do
+        post_at(2.hours.ago)
+        post_at(1.hour.ago, is_ai_generated: true, workflow_state: :draft)
+        expect(topic.reload.latest_post_ai_generated_draft?).to be(true)
+      end
+
+      it 'is false when a human post is more recent' do
+        post_at(2.hours.ago, is_ai_generated: true, workflow_state: :draft)
+        post_at(1.hour.ago)
+        expect(topic.reload.latest_post_ai_generated_draft?).to be(false)
+      end
+
+      it 'is false when the most recent AI post is published' do
+        post_at(1.hour.ago, is_ai_generated: true, workflow_state: :published)
+        expect(topic.reload.latest_post_ai_generated_draft?).to be(false)
+      end
+
+      it 'is false with no posts' do
+        expect(topic.latest_post_ai_generated_draft?).to be(false)
+      end
+    end
   end
 end

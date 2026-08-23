@@ -14,20 +14,40 @@ module Course::Discussion::TopicsHelper
     format_code_block(code, file.answer.question.actable.language, [line_start, 1].max)
   end
 
+  # Whether the course shows AI-generated comments in the staff pending counts/lists (set in the comments
+  # settings admin page). Defaults to true, preserving the existing behaviour of surfacing them.
+  #
+  # @return [Boolean]
+  def showing_ai_generated_comments?
+    value = current_course.settings(Course::Discussion::TopicsComponent.key).is_showing_ai_generated_comments
+    value.nil? || value
+  end
+
+  # Applies the "hide AI-generated comments" filter to a pending-topics relation, dropping topics whose
+  # latest post is an unreviewed AI draft, unless the course shows AI-generated comments.
+  #
+  # @param [ActiveRecord::Relation] topics A relation of pending topics.
+  # @return [ActiveRecord::Relation]
+  def hide_ai_generated_comments(topics)
+    showing_ai_generated_comments? ? topics : topics.without_ai_draft_latest_post
+  end
+
   # Returns the count of topics pending staff reply.
   #
   # @return [Integer] Returns the count of topics pending staff reply.
   def all_staff_unread_count
-    @all_staff_unread_count ||= current_course.discussion_topics.
-                                globally_displayed.pending_staff_reply.distinct.count
+    @all_staff_unread_count ||= hide_ai_generated_comments(
+      current_course.discussion_topics.globally_displayed.pending_staff_reply
+    ).distinct.count
   end
 
   def my_students_unread_count
     @my_students_unread_count ||=
       if current_course_user
         my_student_ids = current_course_user.my_students.pluck(:user_id)
-        topics = current_course.discussion_topics.globally_displayed.pending_staff_reply.distinct.
-                 includes(actable: [:submission, file: { answer: :submission }])
+        topics = hide_ai_generated_comments(
+          current_course.discussion_topics.globally_displayed.pending_staff_reply
+        ).distinct.includes(actable: [:submission, file: { answer: :submission }])
         topics.select { |topic| from_user(topic, my_student_ids) }.count
       else
         0

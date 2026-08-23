@@ -29,6 +29,7 @@ export interface CommentSettings {
 export interface CommentTopicSettings {
   isPending: boolean;
   isUnread: boolean;
+  isAiGeneratedPending: boolean;
   topicCount: number;
 }
 
@@ -37,6 +38,7 @@ export interface CommentTabInfo {
   myStudentUnreadCount?: number;
   allStaffUnreadCount?: number;
   allStudentUnreadCount?: number;
+  isShowingAiGeneratedComments?: boolean;
 }
 
 export interface CommentTopicListData {

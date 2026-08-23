@@ -5,6 +5,7 @@ import { CommentsSettingsData } from 'types/course/admin/comments';
 import { number, object, string } from 'yup';
 
 import Section from 'lib/components/core/layouts/Section';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -81,6 +82,23 @@ const CommentsSettingsForm = forwardRef<
               />
             )}
           />
+
+          <Controller
+            control={control}
+            name="isShowingAiGeneratedComments"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                disabled={props.disabled}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.showAiGeneratedComments)}
+              />
+            )}
+          />
+
+          <Typography className="!mt-2" color="text.secondary" variant="body2">
+            {t(translations.showAiGeneratedCommentsHint)}
+          </Typography>
         </Section>
       )}
     </Form>
