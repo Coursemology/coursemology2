@@ -1,26 +1,30 @@
-import { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-
 import Page from 'lib/components/core/layouts/Page';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { lessonPlanTypesGroups } from 'lib/types';
+import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
-import { fields } from '../../constants';
 import ColumnVisibilityDropdown from '../../containers/ColumnVisibilityDropdown';
 import NewEventButton from '../../containers/LessonPlanLayout/NewEventButton';
 import NewMilestoneButton from '../../containers/LessonPlanLayout/NewMilestoneButton';
 import translations from '../../translations';
+import { LessonPlanEditColumn, LessonPlanGroup } from '../../types';
 
 import ItemRow from './ItemRow';
 import MilestoneRow from './MilestoneRow';
 
-const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
+interface LessonPlanEditProps {
+  groups: LessonPlanGroup[];
+  columnsVisible: Record<string, boolean>;
+  canManageLessonPlan: boolean;
+}
 
-export class LessonPlanEdit extends Component {
-  // eslint-disable-next-line class-methods-use-this
-  renderGroup = (group) => {
+export const LessonPlanEdit = (props: LessonPlanEditProps): JSX.Element => {
+  const { groups, columnsVisible, canManageLessonPlan } = props;
+
+  const { t } = useTranslation();
+  const courseId = getCourseId();
+
+  const renderGroup = (group: LessonPlanGroup): JSX.Element[] => {
     const { id, milestone, items } = group;
 
     const rows = items
@@ -34,7 +38,7 @@ export class LessonPlanEdit extends Component {
             published={item.published}
             startAt={item.start_at}
             title={item.title}
-            type={item.itemTypeKey}
+            type={item.itemTypeKey ?? ''}
           />
         ))
       : [];
@@ -45,7 +49,7 @@ export class LessonPlanEdit extends Component {
           key={`milestone-${id}`}
           groupId={id}
           id={milestone.id}
-          startAt={milestone.start_at}
+          startAt={milestone.start_at ?? null}
           title={milestone.title}
         />,
       );
@@ -54,65 +58,60 @@ export class LessonPlanEdit extends Component {
     return rows;
   };
 
-  renderTableHeader() {
-    const { columnsVisible } = this.props;
+  const headerFor = (field: LessonPlanEditColumn): JSX.Element => (
+    <th>{t(translations[field])}</th>
+  );
 
-    const headerFor = (field) => (
-      <th>
-        <FormattedMessage {...translations[field]} />
-      </th>
-    );
-    return (
-      <thead>
-        <tr>
-          {columnsVisible[ITEM_TYPE] ? headerFor(ITEM_TYPE) : null}
-          {headerFor(TITLE)}
-          {columnsVisible[START_AT] ? headerFor(START_AT) : null}
-          {columnsVisible[BONUS_END_AT] ? headerFor(BONUS_END_AT) : null}
-          {columnsVisible[END_AT] ? headerFor(END_AT) : null}
-          {columnsVisible[PUBLISHED] ? headerFor(PUBLISHED) : null}
-        </tr>
-      </thead>
-    );
-  }
-
-  render() {
-    const { groups } = this.props;
-    const courseId = getCourseId();
-
-    return (
-      <Page
-        actions={
-          this.props.canManageLessonPlan && (
-            <div className="space-x-4">
-              <NewMilestoneButton />
-              <NewEventButton />
-              <ColumnVisibilityDropdown />
-            </div>
-          )
-        }
-        backTo={`/courses/${courseId}/lesson_plan`}
-        title={<FormattedMessage {...translations.editLessonPlan} />}
-      >
-        <div className="mt-8">
-          <table className="border-separate border-spacing-x-4">
-            {this.renderTableHeader()}
-            <tbody>{groups.map(this.renderGroup)}</tbody>
-          </table>
-        </div>
-      </Page>
-    );
-  }
-}
-
-LessonPlanEdit.propTypes = {
-  groups: lessonPlanTypesGroups.isRequired,
-  columnsVisible: PropTypes.shape({}).isRequired,
-  canManageLessonPlan: PropTypes.bool.isRequired,
+  return (
+    <Page
+      actions={
+        canManageLessonPlan && (
+          <div className="space-x-4">
+            <NewMilestoneButton />
+            <NewEventButton />
+            <ColumnVisibilityDropdown />
+          </div>
+        )
+      }
+      backTo={`/courses/${courseId}/lesson_plan`}
+      title={t(translations.editLessonPlan)}
+    >
+      <div className="mt-8">
+        <table className="border-separate border-spacing-x-4">
+          <thead>
+            <tr>
+              {columnsVisible.ITEM_TYPE ? headerFor('ITEM_TYPE') : null}
+              <th>{t(translations.title)}</th>
+              {columnsVisible.START_AT ? headerFor('START_AT') : null}
+              {columnsVisible.BONUS_END_AT ? headerFor('BONUS_END_AT') : null}
+              {columnsVisible.END_AT ? headerFor('END_AT') : null}
+              {columnsVisible.PUBLISHED ? headerFor('PUBLISHED') : null}
+            </tr>
+          </thead>
+          <tbody>{groups.map(renderGroup)}</tbody>
+        </table>
+      </div>
+    </Page>
+  );
 };
 
-export default connect(({ lessonPlan }) => ({
-  groups: lessonPlan.lessonPlan.groups,
-  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
-  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
-}))(LessonPlanEdit);
+const ConnectedLessonPlanEdit = (): JSX.Element => {
+  const groups = useAppSelector((state) => state.lessonPlan.lessonPlan.groups);
+  // Field by field; see LessonPlanLayout.
+  const columnsVisible = useAppSelector(
+    (state) => state.lessonPlan.flags.editPageColumnsVisible,
+  );
+  const canManageLessonPlan = useAppSelector(
+    (state) => state.lessonPlan.flags.canManageLessonPlan,
+  );
+
+  return (
+    <LessonPlanEdit
+      canManageLessonPlan={canManageLessonPlan}
+      columnsVisible={columnsVisible}
+      groups={groups}
+    />
+  );
+};
+
+export default ConnectedLessonPlanEdit;

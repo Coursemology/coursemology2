@@ -1,5 +1,5 @@
+import { ChangeEvent } from 'react';
 import { Switch } from '@mui/material';
-import PropTypes from 'prop-types';
 
 const styles = {
   toggle: {
@@ -7,23 +7,26 @@ const styles = {
   },
 };
 
-const PublishedCell = (props) => {
-  const { published, onToggle } = props;
+interface PublishedCellProps {
+  published: boolean;
+  onToggle: (event: ChangeEvent<HTMLInputElement>, isToggled: boolean) => void;
+  disabled?: boolean;
+}
+
+const PublishedCell = (props: PublishedCellProps): JSX.Element => {
+  const { published, onToggle, disabled } = props;
+
   return (
     <td>
       <Switch
         checked={published}
         color="primary"
+        disabled={disabled}
         onChange={onToggle}
         style={styles.toggle}
       />
     </td>
   );
-};
-
-PublishedCell.propTypes = {
-  published: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
 };
 
 export default PublishedCell;
