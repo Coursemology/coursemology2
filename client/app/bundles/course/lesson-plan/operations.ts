@@ -55,29 +55,21 @@ export function createMilestone(
   };
 }
 
-export function updateMilestone(
-  id,
-  values,
-  successMessage,
-  failureMessage,
-  setError,
-): Operation {
+/**
+ * Reports whether the save succeeded and leaves the notification to the caller:
+ * a row that has already queued a newer edit suppresses the message so the user
+ * gets one verdict, from the last edit, rather than two.
+ */
+export function updateMilestone(id, values, setError): Operation<boolean> {
   return async (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
       .updateMilestone(id, { lesson_plan_milestone: values })
       .then((response) => {
-        dispatch({
-          type: actionTypes.MILESTONE_UPDATE_SUCCESS,
-          milestoneId: id,
-          milestone: response.data,
-        });
-        dispatch(actions.hideMilestoneForm());
-        setNotification(successMessage)(dispatch);
+        dispatch(actions.milestoneUpdated(response.data));
+        return true;
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.MILESTONE_UPDATE_FAILURE });
-        setNotification(failureMessage)(dispatch);
         if (error?.response?.data?.errors && setError) {
           setReactHookFormError(setError, error.response.data.errors);
         }
@@ -104,27 +96,17 @@ export function deleteMilestone(id, successMessage, failureMessage): Operation {
   };
 }
 
-export function updateItem(
-  id,
-  values,
-  successMessage,
-  failureMessage,
-): Operation {
+/** See `updateMilestone` for why the notification is the caller's. */
+export function updateItem(id, values): Operation<boolean> {
   return async (dispatch) => {
     dispatch({ type: actionTypes.ITEM_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
       .updateItem(id, { item: values })
       .then(() => {
-        dispatch({
-          type: actionTypes.ITEM_UPDATE_SUCCESS,
-          item: { id, ...values },
-        });
-        setNotification(successMessage)(dispatch);
+        dispatch(actions.itemUpdated({ id, ...values }));
+        return true;
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.ITEM_UPDATE_FAILURE });
-        setNotification(failureMessage)(dispatch);
-      });
+      .catch(() => false);
   };
 }
 
