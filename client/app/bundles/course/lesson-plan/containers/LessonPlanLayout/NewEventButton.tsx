@@ -1,12 +1,13 @@
-import { Component } from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { defineMessages } from 'react-intl';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { createEvent } from '../../operations';
-import { actions } from '../../store';
+import { EventFormValues, FormSubmitHandler } from '../../types';
+import EventFormDialog from '../EventFormDialog';
 
 const translations = defineMessages({
   newEvent: {
@@ -23,53 +24,55 @@ const translations = defineMessages({
   },
 });
 
-class NewEventButton extends Component {
-  createEventHandler = (data) => {
-    const { dispatch } = this.props;
-    const successMessage = <FormattedMessage {...translations.success} />;
-    const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(createEvent(data, successMessage, failureMessage));
-  };
-
-  showForm = () => {
-    const { dispatch, intl } = this.props;
-    return dispatch(
-      actions.showEventForm({
-        onSubmit: this.createEventHandler,
-        formTitle: intl.formatMessage(translations.newEvent),
-        initialValues: {
-          title: '',
-          event_type: '',
-          location: '',
-          description: '',
-          start_at: null,
-          end_at: null,
-          published: false,
-        },
-      }),
-    );
-  };
-
-  render() {
-    if (!this.props.canManageLessonPlan) return null;
-
-    const { intl } = this.props;
-
-    return (
-      <AddButton fixed onClick={this.showForm}>
-        {intl.formatMessage(translations.newEvent)}
-      </AddButton>
-    );
-  }
-}
-
-NewEventButton.propTypes = {
-  canManageLessonPlan: PropTypes.bool.isRequired,
-
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+const initialValues: EventFormValues = {
+  title: '',
+  event_type: '',
+  location: '',
+  description: '',
+  start_at: null,
+  end_at: null,
+  published: false,
 };
 
-export default connect(({ lessonPlan }) => ({
-  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
-}))(injectIntl(NewEventButton));
+const NewEventButton = (): JSX.Element | null => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const canManageLessonPlan = useAppSelector(
+    (state) => state.lessonPlan.flags.canManageLessonPlan,
+  );
+
+  const [formVisible, setFormVisible] = useState(false);
+
+  const createEventHandler: FormSubmitHandler<EventFormValues> = (
+    data,
+    setError,
+  ) =>
+    dispatch(
+      createEvent(
+        data,
+        t(translations.success),
+        t(translations.failure),
+        setError,
+      ),
+    );
+
+  if (!canManageLessonPlan) return null;
+
+  return (
+    <>
+      <AddButton fixed onClick={(): void => setFormVisible(true)}>
+        {t(translations.newEvent)}
+      </AddButton>
+
+      <EventFormDialog
+        formTitle={t(translations.newEvent)}
+        initialValues={initialValues}
+        onClose={(): void => setFormVisible(false)}
+        onSubmit={createEventHandler}
+        open={formVisible}
+      />
+    </>
+  );
+};
+
+export default NewEventButton;

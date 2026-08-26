@@ -1,61 +1,61 @@
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import FormDialogue from 'lib/components/form/FormDialogue';
 
-import { actions } from '../../store';
+import { FormSubmitHandler, MilestoneFormValues } from '../../types';
 
 import MilestoneForm from './MilestoneForm';
 
-const MilestoneFormDialog = ({
-  visible,
-  disabled,
-  formTitle,
-  initialValues,
-  onSubmit,
-  dispatch,
-}) => {
+interface MilestoneFormDialogProps {
+  open: boolean;
+  onClose: () => void;
+  formTitle?: string;
+  initialValues: MilestoneFormValues;
+  onSubmit: FormSubmitHandler<MilestoneFormValues>;
+}
+
+/**
+ * Controlled by whoever opens it: the owner supplies the handler and the initial
+ * values, and the dialog closes itself once `onSubmit` reports success. The
+ * handler used to be stashed in the Redux store, which is not serialisable.
+ */
+const MilestoneFormDialog = (props: MilestoneFormDialogProps): JSX.Element => {
+  const { open, onClose, formTitle, initialValues, onSubmit } = props;
+
   const [isDirty, setIsDirty] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit: FormSubmitHandler<MilestoneFormValues> = async (
+    data,
+    setError,
+  ) => {
+    setSubmitting(true);
+    try {
+      const succeeded = await onSubmit(data, setError);
+      if (succeeded) onClose();
+      return succeeded;
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <FormDialogue
-      disabled={disabled}
+      disabled={submitting}
       form="milestone-form"
-      hideForm={() => dispatch(actions.hideMilestoneForm())}
-      open={visible}
+      hideForm={onClose}
+      open={open}
       skipConfirmation={!isDirty}
       title={formTitle}
     >
       <MilestoneForm
-        {...{ initialValues, onSubmit, disabled }}
+        disabled={submitting}
+        initialValues={initialValues}
         onDirtyChange={setIsDirty}
+        onSubmit={handleSubmit}
       />
     </FormDialogue>
   );
 };
 
-MilestoneFormDialog.defaultProps = {
-  visible: false,
-  disabled: false,
-};
-
-MilestoneFormDialog.propTypes = {
-  visible: PropTypes.bool,
-  disabled: PropTypes.bool,
-  formTitle: PropTypes.string,
-  initialValues: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-    start_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-  }),
-  onSubmit: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
-
-export default connect(({ lessonPlan }) => ({
-  ...lessonPlan.milestoneForm,
-}))(MilestoneFormDialog);
+export default MilestoneFormDialog;

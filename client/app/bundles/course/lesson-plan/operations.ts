@@ -5,7 +5,6 @@ import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
 import actionTypes from './constants';
-import { actions } from './store';
 
 export function fetchLessonPlan(): Operation {
   return async (dispatch) => {
@@ -32,7 +31,7 @@ export function createMilestone(
   successMessage,
   failureMessage,
   setError,
-): Operation {
+): Operation<boolean> {
   return async (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -42,8 +41,8 @@ export function createMilestone(
           type: actionTypes.MILESTONE_CREATE_SUCCESS,
           milestone: response.data,
         });
-        dispatch(actions.hideMilestoneForm());
         setNotification(successMessage)(dispatch);
+        return true;
       })
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_CREATE_FAILURE });
@@ -51,6 +50,7 @@ export function createMilestone(
         if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
+        return false;
       });
   };
 }
@@ -73,6 +73,7 @@ export function updateMilestone(id, values, setError): Operation<boolean> {
         if (error?.response?.data?.errors && setError) {
           setReactHookFormError(setError, error.response.data.errors);
         }
+        return false;
       });
   };
 }
@@ -115,7 +116,7 @@ export function createEvent(
   successMessage,
   failureMessage,
   setError,
-): Operation {
+): Operation<boolean> {
   return async (dispatch) => {
     dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -125,8 +126,8 @@ export function createEvent(
           type: actionTypes.EVENT_CREATE_SUCCESS,
           event: response.data,
         });
-        dispatch(actions.hideEventForm());
         setNotification(successMessage)(dispatch);
+        return true;
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_CREATE_FAILURE });
@@ -134,6 +135,7 @@ export function createEvent(
         if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
+        return false;
       });
   };
 }
@@ -144,7 +146,7 @@ export function updateEvent(
   successMessage,
   failureMessage,
   setError,
-): Operation {
+): Operation<boolean> {
   return async (dispatch) => {
     dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
@@ -155,8 +157,8 @@ export function updateEvent(
           eventId,
           event: response.data,
         });
-        dispatch(actions.hideEventForm());
         setNotification(successMessage)(dispatch);
+        return true;
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_UPDATE_FAILURE });
@@ -164,6 +166,7 @@ export function updateEvent(
         if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
+        return false;
       });
   };
 }

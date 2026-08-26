@@ -1,53 +1,39 @@
 import { defineMessages } from 'react-intl';
 
-import { fields } from './constants';
-
-const {
-  ITEM_TYPE,
-  TITLE,
-  START_AT,
-  BONUS_END_AT,
-  END_AT,
-  PUBLISHED,
-  LOCATION,
-  DESCRIPTION,
-  EVENT_TYPE,
-} = fields;
-
 const translations = defineMessages({
-  [ITEM_TYPE]: {
+  ITEM_TYPE: {
     id: 'course.lessonPlan.itemType',
     defaultMessage: 'Type',
   },
-  [EVENT_TYPE]: {
+  eventType: {
     id: 'course.lessonPlan.eventType',
     defaultMessage: 'Event Type',
   },
-  [TITLE]: {
+  title: {
     id: 'course.lessonPlan.title',
     defaultMessage: 'Title',
   },
-  [DESCRIPTION]: {
+  description: {
     id: 'course.lessonPlan.description',
     defaultMessage: 'Description',
   },
-  [LOCATION]: {
+  location: {
     id: 'course.lessonPlan.location',
     defaultMessage: 'Location',
   },
-  [START_AT]: {
+  START_AT: {
     id: 'course.lessonPlan.startAt',
     defaultMessage: 'Start At *',
   },
-  [BONUS_END_AT]: {
+  BONUS_END_AT: {
     id: 'course.lessonPlan.bonusEndAt',
     defaultMessage: 'Bonus End At',
   },
-  [END_AT]: {
+  END_AT: {
     id: 'course.lessonPlan.endAt',
     defaultMessage: 'End At',
   },
-  [PUBLISHED]: {
+  PUBLISHED: {
     id: 'course.lessonPlan.published',
     defaultMessage: 'Published',
   },

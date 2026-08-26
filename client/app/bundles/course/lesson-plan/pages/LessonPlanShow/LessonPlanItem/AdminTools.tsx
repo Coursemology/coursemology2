@@ -1,16 +1,20 @@
-/* eslint-disable camelcase */
-import { PureComponent } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useState } from 'react';
+import { defineMessages } from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
-import PropTypes from 'prop-types';
 
 import { showDeleteConfirmation } from 'lib/actions';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
+import EventFormDialog from '../../../containers/EventFormDialog';
 import { deleteEvent, updateEvent } from '../../../operations';
-import { actions } from '../../../store';
+import {
+  EventFormValues,
+  FormSubmitHandler,
+  LessonPlanEventItem,
+} from '../../../types';
 
 const translations = defineMessages({
   editEvent: {
@@ -39,108 +43,92 @@ const styles = {
   tools: {
     top: 16,
     right: 20,
-    position: 'absolute',
+    position: 'absolute' as const,
   },
 };
 
-class AdminTools extends PureComponent {
-  deleteEventHandler = () => {
-    const {
-      dispatch,
-      intl,
-      item: { id, eventId },
-    } = this.props;
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteEvent(id, eventId, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
+interface AdminToolsProps {
+  item: LessonPlanEventItem;
+}
+
+const AdminTools = (props: AdminToolsProps): JSX.Element | null => {
+  const { item } = props;
+
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const canManageLessonPlan = useAppSelector(
+    (state) => state.lessonPlan.flags.canManageLessonPlan,
+  );
+
+  const [formVisible, setFormVisible] = useState(false);
+
+  const deleteEventHandler = (): void => {
+    const handleDelete = (): Promise<void> =>
+      dispatch(
+        deleteEvent(
+          item.id,
+          item.eventId,
+          t(translations.deleteSuccess),
+          t(translations.deleteFailure),
+        ),
+      );
+
+    dispatch(showDeleteConfirmation(handleDelete));
   };
 
-  showEditEventDialog = () => {
-    const { dispatch, intl, item } = this.props;
-    const {
-      title,
-      lesson_plan_item_type,
-      location,
-      description,
-      start_at,
-      end_at,
-      published,
-    } = item;
+  const updateEventHandler: FormSubmitHandler<EventFormValues> = (
+    data,
+    setError,
+  ) =>
+    dispatch(
+      updateEvent(
+        item.eventId,
+        data,
+        t(translations.updateSuccess),
+        t(translations.updateFailure),
+        setError,
+      ),
+    );
 
-    return dispatch(
-      actions.showEventForm({
-        onSubmit: this.updateEventHandler,
-        formTitle: intl.formatMessage(translations.editEvent),
-        initialValues: {
+  if (!canManageLessonPlan || item.eventId === undefined) return null;
+
+  const {
+    title,
+    lesson_plan_item_type: itemType,
+    location,
+    description,
+    start_at: startAt,
+    end_at: endAt,
+    published,
+  } = item;
+
+  return (
+    <span style={styles.tools}>
+      <IconButton onClick={(): void => setFormVisible(true)}>
+        <Edit />
+      </IconButton>
+
+      <IconButton color="error" onClick={deleteEventHandler}>
+        <Delete />
+      </IconButton>
+
+      <EventFormDialog
+        formTitle={t(translations.editEvent)}
+        initialValues={{
           title,
           location,
           description,
-          start_at,
-          end_at,
+          start_at: startAt,
+          end_at: endAt,
           published,
-          event_type: lesson_plan_item_type[0],
-        },
-      }),
-    );
-  };
-
-  updateEventHandler = (data) => {
-    const {
-      dispatch,
-      intl,
-      item: { eventId },
-    } = this.props;
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateEvent(eventId, data, successMessage, failureMessage));
-  };
-
-  render() {
-    const {
-      item: { eventId },
-      canManageLessonPlan,
-    } = this.props;
-    if (!canManageLessonPlan || eventId === undefined) {
-      return null;
-    }
-
-    return (
-      <span style={styles.tools}>
-        <IconButton onClick={this.showEditEventDialog}>
-          <Edit />
-        </IconButton>
-
-        <IconButton color="error" onClick={this.deleteEventHandler}>
-          <Delete />
-        </IconButton>
-      </span>
-    );
-  }
-}
-
-AdminTools.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.number,
-    eventId: PropTypes.number,
-    title: PropTypes.string,
-    published: PropTypes.bool,
-    location: PropTypes.string,
-    description: PropTypes.string,
-    start_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
-  canManageLessonPlan: PropTypes.bool.isRequired,
-
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+          event_type: itemType?.[0],
+        }}
+        onClose={(): void => setFormVisible(false)}
+        onSubmit={updateEventHandler}
+        open={formVisible}
+      />
+    </span>
+  );
 };
 
-export default connect(({ lessonPlan }) => ({
-  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
-}))(injectIntl(AdminTools));
+export default AdminTools;

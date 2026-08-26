@@ -1,16 +1,15 @@
-import { Component } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { MouseEvent, useState, useTransition } from 'react';
+import { defineMessages } from 'react-intl';
 import Done from '@mui/icons-material/Done';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Button, MenuItem, MenuList, Popover } from '@mui/material';
-import PropTypes from 'prop-types';
 
-import { fields } from '../../constants';
+import { LESSON_PLAN_EDIT_COLUMNS } from 'course/lesson-plan/types';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { actions } from '../../store';
 import fieldTranslations from '../../translations';
-
-const { ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
 const translations = defineMessages({
   label: {
@@ -19,82 +18,69 @@ const translations = defineMessages({
   },
 });
 
-class ColumnVisibilityDropdown extends Component {
-  constructor(props) {
-    super(props);
+const ColumnVisibilityDropdown = (): JSX.Element => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const columnsVisible = useAppSelector(
+    (state) => state.lessonPlan.flags.editPageColumnsVisible,
+  );
 
-    this.state = {
-      open: false,
-    };
-  }
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // Showing a hidden type mounts its rows' date pickers, which is heavy; as a
+  // transition that render is interruptible rather than blocking the click.
+  const [, startTransition] = useTransition();
 
-  handleClick = (event) => {
+  const handleClick = (event: MouseEvent<HTMLElement>): void => {
     // This prevents ghost click.
     event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    });
+    setAnchorEl(event.currentTarget);
   };
 
-  handleRequestClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
+  return (
+    <>
+      <Button
+        color="secondary"
+        endIcon={<KeyboardArrowDown />}
+        onClick={handleClick}
+        variant="contained"
+      >
+        {t(translations.label)}
+      </Button>
 
-  render() {
-    const { dispatch, columnsVisible } = this.props;
-
-    return (
-      <>
-        <Button
-          color="secondary"
-          endIcon={<KeyboardArrowDown />}
-          onClick={this.handleClick}
-          variant="contained"
-        >
-          <FormattedMessage {...translations.label} />
-        </Button>
-
-        <Popover
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          onClose={this.handleRequestClose}
-          open={this.state.open}
-          transformOrigin={{ horizontal: 'left', vertical: 'top' }}
-        >
-          <MenuList style={{ maxHeight: 450 }}>
-            {[ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED].map(
-              (field) => {
-                const isVisible = columnsVisible[field];
-                return (
-                  <MenuItem
-                    key={field}
-                    onClick={() =>
-                      dispatch(actions.setColumnVisibility(field, !isVisible))
-                    }
-                    style={{ display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormattedMessage {...fieldTranslations[field]} />
-                    {isVisible && <Done />}
-                  </MenuItem>
-                );
-              },
-            )}
-          </MenuList>
-        </Popover>
-      </>
-    );
-  }
-}
-
-ColumnVisibilityDropdown.propTypes = {
-  columnsVisible: PropTypes.shape({}).isRequired,
-  dispatch: PropTypes.func.isRequired,
+      <Popover
+        anchorEl={anchorEl}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        onClose={(): void => setAnchorEl(null)}
+        open={Boolean(anchorEl)}
+        transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+      >
+        <MenuList style={{ maxHeight: 450 }}>
+          {LESSON_PLAN_EDIT_COLUMNS.map((field) => {
+            const isVisible = columnsVisible[field];
+            return (
+              <MenuItem
+                key={field}
+                onClick={(): void => {
+                  startTransition(() => {
+                    dispatch(
+                      actions.setColumnVisibility({
+                        field,
+                        isVisible: !isVisible,
+                      }),
+                    );
+                  });
+                }}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                {t(fieldTranslations[field])}
+                {isVisible && <Done />}
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+      </Popover>
+    </>
+  );
 };
 
-export default connect(({ lessonPlan }) => ({
-  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
-}))(ColumnVisibilityDropdown);
+export default ColumnVisibilityDropdown;

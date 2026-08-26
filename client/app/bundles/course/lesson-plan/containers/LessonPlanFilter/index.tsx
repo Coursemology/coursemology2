@@ -1,10 +1,11 @@
-import { Component } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { MouseEvent, useState, useTransition } from 'react';
+import { defineMessages } from 'react-intl';
 import Done from '@mui/icons-material/Done';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import { Button, MenuItem, MenuList, Popover } from '@mui/material';
-import PropTypes from 'prop-types';
+
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { actions } from '../../store';
 import TranslatedItemType from '../TranslatedItemType';
@@ -16,86 +17,72 @@ const translations = defineMessages({
   },
 });
 
-class LessonPlanFilter extends Component {
-  constructor(props) {
-    super(props);
+const LessonPlanFilter = (): JSX.Element | null => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const visibility = useAppSelector(
+    (state) => state.lessonPlan.lessonPlan.visibilityByType,
+  );
 
-    this.state = {
-      open: false,
-    };
-  }
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // Showing a hidden type mounts its rows' date pickers, which is heavy; as a
+  // transition that render is interruptible rather than blocking the click.
+  const [, startTransition] = useTransition();
 
-  handleClick = (event) => {
+  const itemTypes = Object.keys(visibility);
+  if (itemTypes.length < 1) return null;
+
+  const handleClick = (event: MouseEvent<HTMLElement>): void => {
     // This prevents ghost click.
     event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    });
+    setAnchorEl(event.currentTarget);
   };
 
-  handleRequestClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
+  return (
+    <>
+      <Button
+        color="secondary"
+        endIcon={<KeyboardArrowUp />}
+        onClick={handleClick}
+        variant="contained"
+      >
+        {t(translations.filter)}
+      </Button>
 
-  render() {
-    const { dispatch, visibility } = this.props;
-    const itemTypes = Object.keys(visibility);
-
-    if (itemTypes.length < 1) {
-      return null;
-    }
-
-    return (
-      <>
-        <Button
-          color="secondary"
-          endIcon={<KeyboardArrowUp />}
-          onClick={this.handleClick}
-          variant="contained"
-        >
-          <FormattedMessage {...translations.filter} />
-        </Button>
-        <Popover
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          onClose={this.handleRequestClose}
-          open={this.state.open}
-          transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          <MenuList>
-            {itemTypes.map((itemType) => {
-              const isVisible = visibility[itemType];
-              return (
-                <MenuItem
-                  key={itemType}
-                  onClick={() =>
+      <Popover
+        anchorEl={anchorEl}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        onClose={(): void => setAnchorEl(null)}
+        open={Boolean(anchorEl)}
+        transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuList>
+          {itemTypes.map((itemType) => {
+            const isVisible = visibility[itemType];
+            return (
+              <MenuItem
+                key={itemType}
+                onClick={(): void => {
+                  startTransition(() => {
                     dispatch(
-                      actions.setItemTypeVisibility(itemType, !isVisible),
-                    )
-                  }
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <TranslatedItemType type={itemType} />
-                  {isVisible && <Done />}
-                </MenuItem>
-              );
-            })}
-          </MenuList>
-        </Popover>
-      </>
-    );
-  }
-}
-
-LessonPlanFilter.propTypes = {
-  visibility: PropTypes.shape({}).isRequired,
-  dispatch: PropTypes.func.isRequired,
+                      actions.setItemTypeVisibility({
+                        itemType,
+                        isVisible: !isVisible,
+                      }),
+                    );
+                  });
+                }}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <TranslatedItemType type={itemType} />
+                {isVisible && <Done />}
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+      </Popover>
+    </>
+  );
 };
 
-export default connect(({ lessonPlan }) => ({
-  visibility: lessonPlan.lessonPlan.visibilityByType,
-}))(LessonPlanFilter);
+export default LessonPlanFilter;
