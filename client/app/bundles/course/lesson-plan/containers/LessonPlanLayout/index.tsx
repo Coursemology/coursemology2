@@ -1,24 +1,20 @@
-import { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ListSubheader } from '@mui/material';
-import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import { lessonPlanTypesGroups } from 'lib/types';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { fetchLessonPlan } from '../../operations';
 import translations from '../../translations';
-import EventFormDialog from '../EventFormDialog';
 import LessonPlanFilter from '../LessonPlanFilter';
 import LessonPlanNav from '../LessonPlanNav';
-import MilestoneFormDialog from '../MilestoneFormDialog';
 
 const styles = {
   tools: {
-    position: 'fixed',
+    position: 'fixed' as const,
     bottom: 12,
     right: 24,
     display: 'flex',
@@ -31,54 +27,41 @@ const styles = {
   },
 };
 
-class LessonPlanLayout extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
+const LessonPlanLayout = (): JSX.Element => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  // Selected field by field: the slice object gets a new identity on every change
+  // to it, so selecting it whole would re-render the whole routed page — via
+  // `Outlet` — each time an item is saved or a filter is toggled.
+  const isLoading = useAppSelector(
+    (state) => state.lessonPlan.lessonPlan.isLoading,
+  );
+  const groups = useAppSelector((state) => state.lessonPlan.lessonPlan.groups);
+
+  useEffect(() => {
     dispatch(fetchLessonPlan());
-  }
+  }, []);
 
-  render() {
-    const { isLoading, groups } = this.props;
+  if (isLoading) return <LoadingIndicator />;
 
-    if (isLoading) return <LoadingIndicator />;
+  if (!groups || groups.length < 1)
+    return <ListSubheader disableSticky>{t(translations.empty)}</ListSubheader>;
 
-    if (!groups || groups.length < 1)
-      return (
-        <ListSubheader disableSticky>
-          <FormattedMessage {...translations.empty} />
-        </ListSubheader>
-      );
+  return (
+    <div style={styles.mainBody}>
+      <Outlet />
 
-    return (
-      <div style={styles.mainBody}>
-        <Outlet />
-
-        <div style={styles.tools}>
-          <LessonPlanNav />
-          <LessonPlanFilter />
-        </div>
-
-        <DeleteConfirmation />
-        <EventFormDialog />
-        <MilestoneFormDialog />
+      <div style={styles.tools}>
+        <LessonPlanNav />
+        <LessonPlanFilter />
       </div>
-    );
-  }
-}
 
-LessonPlanLayout.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  groups: lessonPlanTypesGroups.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
+      <DeleteConfirmation />
+    </div>
+  );
 };
 
 const handle = translations.lessonPlan;
 
-export default Object.assign(
-  connect(({ lessonPlan }) => ({
-    isLoading: lessonPlan.lessonPlan.isLoading,
-    groups: lessonPlan.lessonPlan.groups,
-  }))(LessonPlanLayout),
-  { handle },
-);
+export default Object.assign(LessonPlanLayout, { handle });

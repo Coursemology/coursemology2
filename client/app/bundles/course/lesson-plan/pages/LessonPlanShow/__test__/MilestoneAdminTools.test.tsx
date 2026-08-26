@@ -1,15 +1,26 @@
-import { fireEvent, render, waitFor } from 'test-utils';
+import { AppState } from 'store';
+import { fireEvent, render, RenderResult, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 
+import { MilestoneOrPlaceholder } from '../../../types';
 import MilestoneAdminTools from '../MilestoneAdminTools';
 
-const renderElement = (canManageLessonPlan, milestone) => {
-  const state = { lessonPlan: { flags: { canManageLessonPlan } } };
-  return render(<MilestoneAdminTools milestone={milestone} />, { state });
-};
+// `Partial<AppState>` only allows omitting whole slices, and these tests seed
+// just the few fields the component reads, so the shape is asserted.
+const stateWith = (canManageLessonPlan: boolean): Partial<AppState> =>
+  ({
+    lessonPlan: { flags: { canManageLessonPlan } },
+  }) as unknown as Partial<AppState>;
+
+const renderElement = (
+  canManageLessonPlan: boolean,
+  milestone: MilestoneOrPlaceholder,
+): RenderResult =>
+  render(<MilestoneAdminTools milestone={milestone} />, {
+    state: stateWith(canManageLessonPlan),
+  });
 
 describe('<MilestoneAdminTools />', () => {
   it('hides admin tools for dummy milestone', async () => {
@@ -59,7 +70,7 @@ describe('<MilestoneAdminTools />', () => {
           }}
         />
       </>,
-      { state: { lessonPlan: { flags: { canManageLessonPlan: true } } } },
+      { state: stateWith(true) },
     );
 
     fireEvent.click((await page.findAllByRole('button'))[1]);
@@ -84,17 +95,14 @@ describe('<MilestoneAdminTools />', () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateMilestone');
 
     const page = render(
-      <>
-        <MilestoneFormDialog />
-        <MilestoneAdminTools
-          milestone={{
-            id: milestoneId,
-            title: milestoneTitle,
-            start_at: milestoneStart,
-          }}
-        />
-      </>,
-      { state: { lessonPlan: { flags: { canManageLessonPlan: true } } } },
+      <MilestoneAdminTools
+        milestone={{
+          id: milestoneId,
+          title: milestoneTitle,
+          start_at: milestoneStart,
+        }}
+      />,
+      { state: stateWith(true) },
     );
 
     fireEvent.click((await page.findAllByRole('button'))[0]);

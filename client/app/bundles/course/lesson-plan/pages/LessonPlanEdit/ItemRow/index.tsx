@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import { setNotification } from 'lib/actions';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
@@ -74,20 +75,46 @@ const ItemRow = (props: ItemRowProps): JSX.Element | null => {
     (state) => state.lessonPlan.flags.editPageColumnsVisible,
   );
 
-  // Changes queued but not yet sent. Merged so that editing several fields of the
-  // same row results in one request rather than one per field.
+  // Edits the user has made that have not been sent yet.
   const pendingRef = useRef<LessonPlanItemUpdate>({});
-  // The latest value we know for each field, whether or not it has been saved yet.
-  // Guards against re-sending a value the user has already queued.
-  const latestValuesRef = useRef<LessonPlanItemUpdate>({});
   // At most one request per row may be in flight.
   const inFlightRef = useRef(false);
   const [saving, setSaving] = useState(false);
+  // Bumped to remount the pickers after a failed save, to put the saved values
+  // back on screen: the store never changed, so nothing else would.
+  const [revision, setRevision] = useState(0);
 
-  const flush = (context: SaveContext): void => {
+  const savedValues: Record<LessonPlanItemUpdateField, ItemValue> = {
+    start_at: startAt as ItemValue,
+    bonus_end_at: bonusEndAt as ItemValue,
+    end_at: endAt as ItemValue,
+    published,
+  };
+
+  /** The subset of `payload` that actually differs from what is saved. */
+  const changedFromSaved = (
+    payload: LessonPlanItemUpdate,
+  ): LessonPlanItemUpdate =>
+    Object.entries(payload).reduce<LessonPlanItemUpdate>(
+      (acc, [field, value]) => {
+        const key = field as LessonPlanItemUpdateField;
+        if (sameValue(savedValues[key], value)) return acc;
+        return { ...acc, [key]: value };
+      },
+      {},
+    );
+
+  // Mirrored so the debounced call always runs the newest closure: it is
+  // created once, and needs the props as they are when it fires rather than
+  // when it was made.
+  const flushRef = useRef<() => void>(() => {});
+
+  const flush = (): void => {
     if (inFlightRef.current) return;
 
-    const payload = pendingRef.current;
+    // Diffed here rather than when queued: an in-flight request may have moved
+    // the saved state on since, and after a failure it will not have.
+    const payload = changedFromSaved(pendingRef.current);
     pendingRef.current = {};
 
     if (Object.keys(payload).length === 0) {
@@ -95,46 +122,44 @@ const ItemRow = (props: ItemRowProps): JSX.Element | null => {
       return;
     }
 
-    const successMessage = context.t(translations.updateSuccess, {
-      title: context.title,
-    });
-    const failureMessage = context.t(translations.updateFailed, {
-      title: context.title,
-    });
-
     inFlightRef.current = true;
-    context
-      .dispatch(updateItem(context.id, payload, successMessage, failureMessage))
-      .finally(() => {
-        inFlightRef.current = false;
-        if (Object.keys(pendingRef.current).length > 0) {
-          flush(context);
-        } else {
-          setSaving(false);
-        }
-      });
+    dispatch(updateItem(id, payload)).then((succeeded) => {
+      inFlightRef.current = false;
+
+      // A newer edit is already queued, so let it give the verdict instead —
+      // otherwise the user gets a failure followed by a success for one action.
+      const superseded = Object.keys(pendingRef.current).length > 0;
+
+      if (succeeded) {
+        dispatch(setNotification(t(translations.updateSuccess, { title })));
+      } else if (!superseded) {
+        setRevision((current) => current + 1);
+        dispatch(setNotification(t(translations.updateFailed, { title })));
+      }
+
+      if (superseded) {
+        flushRef.current();
+      } else {
+        setSaving(false);
+      }
+    });
   };
 
-  const debouncedFlush = useDebounce(flush, FIELD_LONG_DEBOUNCE_DELAY_MS, []);
+  useEffect(() => {
+    flushRef.current = flush;
+  });
+
+  const debouncedFlush = useDebounce(
+    () => flushRef.current(),
+    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    [],
+  );
 
   const queueUpdate = (payload: LessonPlanItemUpdate): void => {
-    const savedValues: Record<LessonPlanItemUpdateField, unknown> = {
-      start_at: startAt,
-      bonus_end_at: bonusEndAt,
-      end_at: endAt,
-      published,
-    };
-
     const changes = Object.entries(payload).reduce<LessonPlanItemUpdate>(
       (acc, [field, value]) => {
         const key = field as LessonPlanItemUpdateField;
         if (REQUIRED_FIELDS.includes(key) && !value) return acc;
-
-        const latest =
-          key in latestValuesRef.current
-            ? latestValuesRef.current[key]
-            : (savedValues[key] as ItemValue);
-        if (sameValue(latest, value)) return acc;
         return { ...acc, [key]: value };
       },
       {},
@@ -142,10 +167,16 @@ const ItemRow = (props: ItemRowProps): JSX.Element | null => {
 
     if (Object.keys(changes).length === 0) return;
 
-    latestValuesRef.current = { ...latestValuesRef.current, ...changes };
+    // With nothing queued or in flight the saved values are current, so a no-op
+    // can be dropped now rather than showing a spinner until the flush. While
+    // either is outstanding the saved values may still move, so the flush decides.
+    const settled =
+      !inFlightRef.current && !Object.keys(pendingRef.current).length;
+    if (settled && Object.keys(changedFromSaved(changes)).length === 0) return;
+
     pendingRef.current = { ...pendingRef.current, ...changes };
     setSaving(true);
-    debouncedFlush({ id, title, dispatch, t });
+    debouncedFlush();
   };
 
   const updatePublished = (_, isToggled: boolean): void =>
@@ -162,7 +193,7 @@ const ItemRow = (props: ItemRowProps): JSX.Element | null => {
 
   return (
     <tr>
-      {columnsVisible['ITEM_TYPE'] ? (
+      {columnsVisible.ITEM_TYPE ? (
         <td>
           <TranslatedItemType type={type} />
         </td>
@@ -173,20 +204,31 @@ const ItemRow = (props: ItemRowProps): JSX.Element | null => {
           {saving ? <LoadingIndicator size={20} /> : null}
         </div>
       </td>
-      {columnsVisible['START_AT'] ? (
-        <DateCell fieldName="start_at" fieldValue={startAt} {...dateProps} />
-      ) : null}
-      {columnsVisible['BONUS_END_AT'] ? (
+      {columnsVisible.START_AT ? (
         <DateCell
+          key={`start_at-${revision}`}
+          fieldName="start_at"
+          fieldValue={startAt}
+          {...dateProps}
+        />
+      ) : null}
+      {columnsVisible.BONUS_END_AT ? (
+        <DateCell
+          key={`bonus_end_at-${revision}`}
           fieldName="bonus_end_at"
           fieldValue={bonusEndAt}
           {...dateProps}
         />
       ) : null}
-      {columnsVisible['END_AT'] ? (
-        <DateCell fieldName="end_at" fieldValue={endAt} {...dateProps} />
+      {columnsVisible.END_AT ? (
+        <DateCell
+          key={`end_at-${revision}`}
+          fieldName="end_at"
+          fieldValue={endAt}
+          {...dateProps}
+        />
       ) : null}
-      {columnsVisible['PUBLISHED'] ? (
+      {columnsVisible.PUBLISHED ? (
         <PublishedCell
           disabled={saving}
           onToggle={updatePublished}

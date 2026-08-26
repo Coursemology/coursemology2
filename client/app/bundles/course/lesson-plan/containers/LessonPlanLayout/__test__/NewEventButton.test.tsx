@@ -1,13 +1,16 @@
+import { AppState } from 'store';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 
 import NewEventButton from '../NewEventButton';
 
+// `Partial<AppState>` only allows omitting whole slices, and these tests seed
+// just the few fields the component reads, so the shape is asserted.
+
 const state = {
   lessonPlan: { flags: { canManageLessonPlan: true } },
-};
+} as unknown as Partial<AppState>;
 
 const startAt = '01-01-2017 12:12';
 
@@ -25,13 +28,7 @@ describe('<NewEventButton />', () => {
   it('allows event to be created via EventFormDialog', async () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createEvent');
 
-    const page = render(
-      <>
-        <EventFormDialog />
-        <NewEventButton />
-      </>,
-      { state },
-    );
+    const page = render(<NewEventButton />, { state });
 
     fireEvent.click(await page.findByRole('button', { name: 'New Event' }));
 

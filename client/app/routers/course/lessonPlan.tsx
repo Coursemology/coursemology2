@@ -14,7 +14,6 @@ const lessonPlanRouter: Translated<RouteObject> = (_) => ({
     ).default;
 
     return {
-      // @ts-ignore `connect` throws error when cannot find `store` as direct parent
       element: <LessonPlanLayout />,
       handle: LessonPlanLayout.handle,
     };

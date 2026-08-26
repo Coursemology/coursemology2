@@ -11,10 +11,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 
-import { fields } from '../../constants';
 import translations from '../../translations';
-
-const { TITLE, DESCRIPTION, START_AT } = fields;
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
@@ -62,7 +59,7 @@ const MilestoneForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations[TITLE]} />}
+            label={<FormattedMessage {...translations.title} />}
             required
             variant="standard"
           />
@@ -80,7 +77,7 @@ const MilestoneForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations[DESCRIPTION]} />}
+            label={<FormattedMessage {...translations.description} />}
             multiline
             rows={2}
             variant="standard"
@@ -95,7 +92,7 @@ const MilestoneForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            label={<FormattedMessage {...translations[START_AT]} />}
+            label={<FormattedMessage {...translations.START_AT} />}
           />
         )}
       />

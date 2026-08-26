@@ -1,25 +1,42 @@
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import FormDialogue from 'lib/components/form/FormDialogue';
+import { useAppSelector } from 'lib/hooks/store';
 
-import { actions } from '../../store';
+import { EventFormValues, FormSubmitHandler } from '../../types';
 
 import EventForm from './EventForm';
 
-const EventFormDialog = ({
-  visible,
-  disabled,
-  formTitle,
-  initialValues,
-  onSubmit,
-  dispatch,
-  items,
-}) => {
-  const [isDirty, setIsDirty] = useState(false);
+interface EventFormDialogProps {
+  open: boolean;
+  onClose: () => void;
+  formTitle?: string;
+  initialValues: EventFormValues;
+  onSubmit: FormSubmitHandler<EventFormValues>;
+}
 
-  const { eventTypes, eventLocations } = items.reduce(
+interface EventSuggestions {
+  eventTypes: string[];
+  eventLocations: string[];
+}
+
+/**
+ * Controlled by whoever opens it: the owner supplies the handler and the initial
+ * values, and the dialog closes itself once `onSubmit` reports success. The
+ * handler used to be stashed in the Redux store, which is not serialisable.
+ *
+ * The existing event types and locations are still read from the store, since
+ * they are derived from the lesson plan itself rather than from the opener.
+ */
+const EventFormDialog = (props: EventFormDialogProps): JSX.Element => {
+  const { open, onClose, formTitle, initialValues, onSubmit } = props;
+
+  const [isDirty, setIsDirty] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const items = useAppSelector((state) => state.lessonPlan.lessonPlan.items);
+
+  const { eventTypes, eventLocations } = items.reduce<EventSuggestions>(
     (values, item) => {
       if (!item.eventId) {
         return values;
@@ -27,66 +44,47 @@ const EventFormDialog = ({
       if (item.location) {
         values.eventLocations.push(item.location);
       }
-      values.eventTypes.push(item.lesson_plan_item_type[0]);
+      if (item.lesson_plan_item_type?.[0]) {
+        values.eventTypes.push(item.lesson_plan_item_type[0]);
+      }
       return values;
     },
     { eventTypes: [], eventLocations: [] },
   );
 
+  const handleSubmit: FormSubmitHandler<EventFormValues> = async (
+    data,
+    setError,
+  ) => {
+    setSubmitting(true);
+    try {
+      const succeeded = await onSubmit(data, setError);
+      if (succeeded) onClose();
+      return succeeded;
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <FormDialogue
-      disabled={disabled}
+      disabled={submitting}
       form="event-form"
-      hideForm={() => dispatch(actions.hideEventForm())}
-      open={visible}
+      hideForm={onClose}
+      open={open}
       skipConfirmation={!isDirty}
       title={formTitle}
     >
       <EventForm
-        {...{ initialValues, onSubmit, disabled }}
+        disabled={submitting}
         eventLocations={[...new Set(eventLocations)]}
         eventTypes={[...new Set(eventTypes)]}
+        initialValues={initialValues}
         onDirtyChange={setIsDirty}
+        onSubmit={handleSubmit}
       />
     </FormDialogue>
   );
 };
 
-EventFormDialog.defaultProps = {
-  visible: false,
-  disabled: false,
-};
-
-EventFormDialog.propTypes = {
-  visible: PropTypes.bool,
-  disabled: PropTypes.bool,
-  formTitle: PropTypes.string,
-  initialValues: PropTypes.shape({
-    id: PropTypes.number,
-    eventId: PropTypes.number,
-    title: PropTypes.string,
-    event_type: PropTypes.string,
-    location: PropTypes.string,
-    description: PropTypes.string,
-    start_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-    published: PropTypes.bool,
-  }),
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      eventId: PropTypes.number,
-      location: PropTypes.string,
-      lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  onSubmit: PropTypes.func.isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
-
-export default connect(({ lessonPlan }) => ({
-  ...lessonPlan.eventForm,
-  items: lessonPlan.lessonPlan.items,
-}))(EventFormDialog);
+export default EventFormDialog;

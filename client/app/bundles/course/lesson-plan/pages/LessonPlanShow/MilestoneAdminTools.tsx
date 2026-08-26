@@ -1,16 +1,20 @@
-/* eslint-disable camelcase */
-import { PureComponent } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useState } from 'react';
+import { defineMessages } from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
-import PropTypes from 'prop-types';
 
-import { showDeleteConfirmation } from 'lib/actions';
+import { setNotification, showDeleteConfirmation } from 'lib/actions';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
+import MilestoneFormDialog from '../../containers/MilestoneFormDialog';
 import { deleteMilestone, updateMilestone } from '../../operations';
-import { actions } from '../../store';
+import {
+  FormSubmitHandler,
+  MilestoneFormValues,
+  MilestoneOrPlaceholder,
+} from '../../types';
 
 const translations = defineMessages({
   editMilestone: {
@@ -35,89 +39,87 @@ const translations = defineMessages({
   },
 });
 
-class MilestoneAdminTools extends PureComponent {
-  deleteMilestoneHandler = () => {
-    const {
-      dispatch,
-      intl,
-      milestone: { id },
-    } = this.props;
-    const successMessage = intl.formatMessage(translations.deleteSuccess);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
-    const handleDelete = () =>
-      dispatch(deleteMilestone(id, successMessage, failureMessage));
-    return dispatch(showDeleteConfirmation(handleDelete));
-  };
-
-  showEditMilestoneDialog = () => {
-    const {
-      dispatch,
-      intl,
-      milestone: { title, description, start_at },
-    } = this.props;
-
-    return dispatch(
-      actions.showMilestoneForm({
-        onSubmit: this.updateMilestoneHandler,
-        formTitle: intl.formatMessage(translations.editMilestone),
-        initialValues: { title, description, start_at },
-      }),
-    );
-  };
-
-  updateMilestoneHandler = (data, setError) => {
-    const {
-      dispatch,
-      intl,
-      milestone: { id },
-    } = this.props;
-
-    const successMessage = intl.formatMessage(translations.updateSuccess);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(
-      updateMilestone(id, data, successMessage, failureMessage, setError),
-    );
-  };
-
-  render() {
-    const { milestone, canManageLessonPlan } = this.props;
-    if (!milestone.id || !canManageLessonPlan) {
-      return null;
-    }
-
-    return (
-      <span>
-        <IconButton onClick={this.showEditMilestoneDialog}>
-          <Edit />
-        </IconButton>
-
-        <IconButton color="error" onClick={this.deleteMilestoneHandler}>
-          <Delete />
-        </IconButton>
-      </span>
-    );
-  }
+interface MilestoneAdminToolsProps {
+  milestone: MilestoneOrPlaceholder;
 }
 
-MilestoneAdminTools.propTypes = {
-  milestone: PropTypes.shape({
-    id: PropTypes.number,
-    description: PropTypes.string,
-    start_at: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.instanceOf(Date),
-    ]),
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.node, // Allow node containing translation
-    ]),
-  }),
-  canManageLessonPlan: PropTypes.bool,
+const MilestoneAdminTools = (
+  props: MilestoneAdminToolsProps,
+): JSX.Element | null => {
+  const { milestone } = props;
 
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const canManageLessonPlan = useAppSelector(
+    (state) => state.lessonPlan.flags.canManageLessonPlan,
+  );
+
+  const [formVisible, setFormVisible] = useState(false);
+
+  const deleteMilestoneHandler = (): void => {
+    const handleDelete = (): Promise<void> =>
+      dispatch(
+        deleteMilestone(
+          milestone.id,
+          t(translations.deleteSuccess),
+          t(translations.deleteFailure),
+        ),
+      );
+
+    dispatch(showDeleteConfirmation(handleDelete));
+  };
+
+  const updateMilestoneHandler: FormSubmitHandler<MilestoneFormValues> = async (
+    data,
+    setError,
+  ) => {
+    // `updateMilestone` reports the outcome and leaves the message to us; see
+    // the operation for why.
+    const succeeded = await dispatch(
+      updateMilestone(milestone.id, data, setError),
+    );
+
+    dispatch(
+      setNotification(
+        succeeded
+          ? t(translations.updateSuccess)
+          : t(translations.updateFailure),
+      ),
+    );
+
+    return succeeded;
+  };
+
+  if (!milestone.id || !canManageLessonPlan) return null;
+
+  const { title, description, start_at: startAt } = milestone;
+  // Only the synthesised milestone carries a node title, and it is filtered out
+  // by the guard above, so anything reaching the form is a plain string.
+  const editableTitle = typeof title === 'string' ? title : undefined;
+
+  return (
+    <span>
+      <IconButton onClick={(): void => setFormVisible(true)}>
+        <Edit />
+      </IconButton>
+
+      <IconButton color="error" onClick={deleteMilestoneHandler}>
+        <Delete />
+      </IconButton>
+
+      <MilestoneFormDialog
+        formTitle={t(translations.editMilestone)}
+        initialValues={{
+          title: editableTitle,
+          description: description ?? undefined,
+          start_at: startAt,
+        }}
+        onClose={(): void => setFormVisible(false)}
+        onSubmit={updateMilestoneHandler}
+        open={formVisible}
+      />
+    </span>
+  );
 };
 
-export default connect(({ lessonPlan }) => ({
-  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
-}))(injectIntl(MilestoneAdminTools));
+export default MilestoneAdminTools;

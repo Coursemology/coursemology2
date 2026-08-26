@@ -1,7 +1,7 @@
+import { AppState } from 'store';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 
 import NewMilestoneButton from '../NewMilestoneButton';
 
@@ -13,21 +13,18 @@ const milestoneData = {
   start_at: new Date(startAt),
 };
 
+// `Partial<AppState>` only allows omitting whole slices, and these tests seed
+// just the few fields the component reads, so the shape is asserted.
+
 const state = {
   lessonPlan: { flags: { canManageLessonPlan: true } },
-};
+} as unknown as Partial<AppState>;
 
 describe('<NewMilestoneButton />', () => {
   it('allows milestone to be created via MilestoneFormDialog', async () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createMilestone');
 
-    const page = render(
-      <>
-        <NewMilestoneButton />
-        <MilestoneFormDialog />
-      </>,
-      { state },
-    );
+    const page = render(<NewMilestoneButton />, { state });
 
     fireEvent.click(await page.findByRole('button', { name: 'New Milestone' }));
 

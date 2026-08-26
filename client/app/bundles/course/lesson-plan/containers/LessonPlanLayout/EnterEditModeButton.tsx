@@ -1,8 +1,9 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
   enterEditMode: {
@@ -11,15 +12,17 @@ const translations = defineMessages({
   },
 });
 
-const EnterEditModeButton = () => {
+const EnterEditModeButton = (): JSX.Element => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const courseId = getCourseId();
+
   return (
     <Button
-      onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit`)}
+      onClick={(): void => navigate(`/courses/${courseId}/lesson_plan/edit`)}
       variant="outlined"
     >
-      <FormattedMessage {...translations.enterEditMode} />
+      {t(translations.enterEditMode)}
     </Button>
   );
 };

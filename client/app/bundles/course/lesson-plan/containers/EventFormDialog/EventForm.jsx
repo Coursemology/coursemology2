@@ -13,18 +13,7 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import formTranslations from 'lib/translations/form';
 
-import { fields } from '../../constants';
 import translations from '../../translations';
-
-const {
-  TITLE,
-  EVENT_TYPE,
-  LOCATION,
-  DESCRIPTION,
-  START_AT,
-  END_AT,
-  PUBLISHED,
-} = fields;
 
 const styles = {
   columns: {
@@ -103,7 +92,7 @@ const EventForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations[TITLE]} />}
+            label={<FormattedMessage {...translations.title} />}
             required
             variant="standard"
           />
@@ -119,7 +108,7 @@ const EventForm = (props) => {
               field={field}
               fieldState={fieldState}
               fullWidth
-              label={<FormattedMessage {...translations[EVENT_TYPE]} />}
+              label={<FormattedMessage {...translations.eventType} />}
               options={eventTypes}
               selectOnFocus
               style={styles.eventType}
@@ -135,7 +124,7 @@ const EventForm = (props) => {
               field={field}
               fieldState={fieldState}
               fullWidth
-              label={<FormattedMessage {...translations[LOCATION]} />}
+              label={<FormattedMessage {...translations.location} />}
               options={eventLocations}
               selectOnFocus
               style={styles.eventType}
@@ -155,7 +144,7 @@ const EventForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations[DESCRIPTION]} />}
+            label={<FormattedMessage {...translations.description} />}
             multiline
             rows={2}
             variant="standard"
@@ -171,7 +160,7 @@ const EventForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              label={<FormattedMessage {...translations[START_AT]} />}
+              label={<FormattedMessage {...translations.START_AT} />}
               style={styles.oneColumn}
             />
           )}
@@ -184,7 +173,7 @@ const EventForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              label={<FormattedMessage {...translations[END_AT]} />}
+              label={<FormattedMessage {...translations.END_AT} />}
               style={styles.oneColumn}
             />
           )}
@@ -198,7 +187,7 @@ const EventForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            label={<FormattedMessage {...translations[PUBLISHED]} />}
+            label={<FormattedMessage {...translations.PUBLISHED} />}
             style={styles.toggle}
           />
         )}

@@ -1,16 +1,21 @@
-import { fireEvent, render, waitFor } from 'test-utils';
+import { AppState } from 'store';
+import { fireEvent, render, RenderResult, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 
+import { LessonPlanEventItem } from '../../../../types';
 import AdminTools from '../AdminTools';
+
+// `Partial<AppState>` only allows omitting whole slices, and these tests seed
+// just the few fields the component reads, so the shape is asserted.
 
 const state = {
   lessonPlan: { flags: { canManageLessonPlan: true } },
-};
+} as unknown as Partial<AppState>;
 
-const renderElement = (item) => render(<AdminTools item={item} />, { state });
+const renderElement = (item: LessonPlanEventItem): RenderResult =>
+  render(<AdminTools item={item} />, { state });
 
 describe('<AdminTools />', () => {
   it('does not show admin menu for lesson plan events', async () => {
@@ -57,20 +62,16 @@ describe('<AdminTools />', () => {
     };
 
     const page = render(
-      <>
-        <EventFormDialog />
-
-        <AdminTools
-          item={{
-            eventId,
-            title: eventData.title,
-            start_at: eventData.start_at,
-            end_at: eventData.end_at,
-            published: eventData.published,
-            lesson_plan_item_type: [eventData.event_type],
-          }}
-        />
-      </>,
+      <AdminTools
+        item={{
+          eventId,
+          title: eventData.title,
+          start_at: eventData.start_at,
+          end_at: eventData.end_at,
+          published: eventData.published,
+          lesson_plan_item_type: [eventData.event_type],
+        }}
+      />,
       { state },
     );
 
