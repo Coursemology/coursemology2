@@ -43,16 +43,27 @@ class User::RegistrationsController < Devise::RegistrationsController
       return
     end
 
+    # Validate the enrolment target *before* +super+. Devise's +create+ renders via +respond_with+,
+    # and since Rails 8.1 +head+ raises +AbstractController::DoubleRenderError+ when a response body
+    # has already been set, so these guards can no longer run after it.
+    #
+    # Checking first is also correct on its own terms: a non-local +return+ out of a transaction
+    # block commits the transaction (Rails 7.1+), so the previous ordering created the user account
+    # and *then* returned 404/403, leaving an orphaned registration behind.
+    enrol_course = nil
+    enrol_course_id = invitation_params[:enrol_course_id].presence
+    if enrol_course_id
+      enrol_course = Course.find_by(id: enrol_course_id)
+      return head :not_found unless enrol_course
+
+      # this endpoint is accessible to unauthenticated users, so authorize! isn't used
+      return head :forbidden unless enrol_course.published && enrol_course.enrollable
+    end
+
     User.transaction do
       super
 
-      if resource.persisted? && invitation_params[:enrol_course_id]
-        enrol_course = Course.find_by(id: invitation_params[:enrol_course_id])
-        head :not_found and return unless enrol_course
-
-        # this endpoint is accessible to unauthenticated users, so authorize! isn't used
-        head :forbidden and return unless enrol_course.published && enrol_course.enrollable
-
+      if resource.persisted? && enrol_course
         @enrol_request = Course::EnrolRequest.create!(
           user: @user,
           course_id: invitation_params[:enrol_course_id],

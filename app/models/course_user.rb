@@ -147,7 +147,8 @@ class CourseUser < ApplicationRecord
   #   obtained the current experience points first.
   scope :ordered_by_experience_points, (lambda do
     all.calculated(:experience_points, :last_experience_points_record).
-      order('experience_points DESC, last_experience_points_record ASC')
+      order(calculated_expression(:experience_points).desc,
+            calculated_expression(:last_experience_points_record).asc)
   end)
 
   # Order course_users by achievement count for use in the course leaderboard.
@@ -155,7 +156,8 @@ class CourseUser < ApplicationRecord
   #   obtained the current achievement count first.
   scope :ordered_by_achievement_count, (lambda do
     all.calculated(:achievement_count, :last_obtained_achievement).
-      order('achievement_count DESC, last_obtained_achievement ASC')
+      order(calculated_expression(:achievement_count).desc,
+            calculated_expression(:last_obtained_achievement).asc)
   end)
 
   scope :order_alphabetically, ->(direction = :asc) { order(name: direction) }

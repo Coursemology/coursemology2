@@ -11,7 +11,7 @@ gem 'csv'
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
-gem 'rails', '~> 8.0.0'
+gem 'rails', '~> 8.1.0'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -32,9 +32,10 @@ gem 'workflow-activerecord', '>= 4.1', '< 7.0'
 # Add creator_id and updater_id attributes to models
 gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git'
 # Allow declaring the calculated attributes of a record
-# Upstream v1.1.1 (supports Rails 7.0/7.1/7.2/8.0); retires the Coursemology fork.
-# TODO: bump to upstream master (v1.2.0) for Rails 8.1 during that upgrade — v1.1.1 ships no 8.1 patch.
-gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes.git', ref: 'ecaf6c9'
+# Upstream v1.2.0 — first ref shipping rails_8_1_patches.rb
+# NOTE: v1.2.0 also carries a broken Relation#calculate override — neutralised
+# in config/initializers/calculated_attributes_patch.rb; read that before bumping this ref again.
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes.git', ref: '992fdd9'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
