@@ -1,15 +1,22 @@
 import moment from 'lib/moment';
 
+import {
+  LessonPlanGroup,
+  LessonPlanItem,
+  LessonPlanMilestone,
+  VisibilitySetting,
+} from '../types';
+
 /**
  * Adds a new attribute itemTypeKey to the lesson plan item.
  * itemTypeKey has two functions:
  * 1. It serves as key for the visibilityByType hash
  * 2. It is used as the display string for the 'type' of the item.
  */
-export function generateTypeKey(item) {
+export function generateTypeKey(item: LessonPlanItem): LessonPlanItem {
   return {
     ...item,
-    itemTypeKey: item.lesson_plan_item_type.join(': '),
+    itemTypeKey: (item.lesson_plan_item_type ?? []).join(': '),
   };
 }
 
@@ -24,15 +31,20 @@ export function generateTypeKey(item) {
  * This becomes the visibilitySetting hash { 'Standard Assessment: Tab 2': false } where the key
  * is in the same format as itemTypeKey.
  */
-export function generateVisibilitySettings(visibilitySettings) {
-  const newVisibilitySettings = {};
+export function generateVisibilitySettings(
+  visibilitySettings: VisibilitySetting[],
+): Record<string, boolean> {
+  const newVisibilitySettings: Record<string, boolean> = {};
   visibilitySettings.forEach((setting) => {
     newVisibilitySettings[setting.setting_key.join(': ')] = setting.visible;
   });
   return newVisibilitySettings;
 }
 
-function sortByStartAt(a, b) {
+function sortByStartAt(
+  a: { start_at?: LessonPlanItem['start_at'] },
+  b: { start_at?: LessonPlanItem['start_at'] },
+): number {
   const aStartAt = moment(a.start_at);
   if (aStartAt.isAfter(b.start_at)) {
     return 1;
@@ -44,60 +56,60 @@ function sortByStartAt(a, b) {
 }
 
 /**
- * Groups lesson plan items under their respective milestones.
- * An item falls under a milestone if the milestone is the latest milestone
- * to have an earlier start_at date-time than the item.
- * Items that precedes all milestones are grouped with an empty milestone.
- * Items are sorted by startAt, then itemTypeKey, then title.
- *
- * @param {Array} items
- * @param {Array} milestones
- * @return {Array.<{ milestone: Object, items: Array }>}
+ * Groups lesson plan items under the milestone they fall after. Items before the
+ * first milestone are grouped on their own.
  */
-export function groupItemsUnderMilestones(items, milestones) {
+export function groupItemsUnderMilestones(
+  items: LessonPlanItem[],
+  milestones: LessonPlanMilestone[],
+): LessonPlanGroup[] {
   const sortedMilestones = [...milestones].sort(sortByStartAt);
   const sortedItems = [...items].sort((a, b) => {
     const startAtSortResult = sortByStartAt(a, b);
     if (startAtSortResult !== 0) {
       return startAtSortResult;
     }
-    const itemTypeSortResult = a.itemTypeKey.localeCompare(b.itemTypeKey);
+    const itemTypeSortResult = (a.itemTypeKey ?? '').localeCompare(
+      b.itemTypeKey ?? '',
+    );
     if (itemTypeSortResult !== 0) {
       return itemTypeSortResult;
     }
     return a.title.localeCompare(b.title);
   });
 
-  const groups = [];
-  const group = { id: null, milestone: null, items: [] };
+  const groups: LessonPlanGroup[] = [];
+  let milestone: LessonPlanMilestone | null = null;
+  let groupItems: LessonPlanItem[] = [];
 
-  // Adds current group to groups and resets group
-  const addGroup = () => {
-    if (group.items.length > 0 || group.milestone) {
-      const milestoneId = group.milestone ? group.milestone.id : 'ungrouped';
-      group.id = `milestone-group-${milestoneId}`;
-      groups.push({ ...group });
+  // Adds the current group to groups and resets it
+  const addGroup = (): void => {
+    if (groupItems.length > 0 || milestone) {
+      groups.push({
+        id: `milestone-group-${milestone ? milestone.id : 'ungrouped'}`,
+        milestone,
+        items: groupItems,
+      });
 
-      group.id = null;
-      group.milestone = null;
-      group.items = [];
+      milestone = null;
+      groupItems = [];
     }
   };
 
-  sortedMilestones.forEach((milestone) => {
+  sortedMilestones.forEach((nextMilestone) => {
     // Group items that come before the current milestone under the previous milestone
     while (
       sortedItems.length > 0 &&
-      moment(sortedItems[0].start_at).isBefore(milestone.start_at)
+      moment(sortedItems[0].start_at).isBefore(nextMilestone.start_at)
     ) {
-      group.items.push(sortedItems.shift());
+      groupItems.push(sortedItems.shift() as LessonPlanItem);
     }
     // Finalize the group, then start a new group with the current milestone
     addGroup();
-    group.milestone = milestone;
+    milestone = nextMilestone;
   });
   // The remaining items belong with the last milestone
-  group.items = group.items.concat(sortedItems);
+  groupItems = groupItems.concat(sortedItems);
   addGroup();
 
   return groups;
@@ -109,14 +121,13 @@ export function groupItemsUnderMilestones(items, milestones) {
  * as read from the given visibilitySettings.
  *
  * All other items are visible by default.
- *
- * @param {Array} items
- * @param {{itemTypeKey: Boolean}} visibilitySettings keyed by itemTypeKey
- * @return {Object}
  */
-export function initializeVisibility(items, visibilitySettings) {
-  const itemTypes = new Set(items.map((item) => item.itemTypeKey));
-  const visibility = {};
+export function initializeVisibility(
+  items: LessonPlanItem[],
+  visibilitySettings: Record<string, boolean>,
+): Record<string, boolean> {
+  const itemTypes = new Set(items.map((item) => item.itemTypeKey ?? ''));
+  const visibility: Record<string, boolean> = {};
   itemTypes.forEach((itemType) => {
     const hasVisibilitySetting = Object.prototype.hasOwnProperty.call(
       visibilitySettings,

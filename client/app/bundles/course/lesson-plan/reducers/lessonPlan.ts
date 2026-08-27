@@ -1,6 +1,13 @@
-import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import actionTypes from '../constants';
+import {
+  LessonPlanEventItem,
+  LessonPlanGroup,
+  LessonPlanItem,
+  LessonPlanItemUpdate,
+  LessonPlanMilestone,
+  LessonPlanPayload,
+} from '../types';
 
 import {
   generateTypeKey,
@@ -9,7 +16,15 @@ import {
   initializeVisibility,
 } from './utils';
 
-const initialState = {
+export interface LessonPlanState {
+  items: LessonPlanItem[];
+  milestones: LessonPlanMilestone[];
+  groups: LessonPlanGroup[];
+  visibilityByType: Record<string, boolean>;
+  isLoading: boolean;
+}
+
+const initialState: LessonPlanState = {
   items: [],
   milestones: [],
   groups: [],
@@ -17,101 +32,141 @@ const initialState = {
   isLoading: false,
 };
 
-export default function (state = initialState, action) {
-  switch (action.type) {
-    case actionTypes.SET_ITEM_TYPE_VISIBILITY: {
-      const visibilityByType = {
-        ...state.visibilityByType,
-        [action.itemType]: action.isVisible,
-      };
-      return { ...state, visibilityByType };
-    }
-    case actionTypes.LOAD_LESSON_PLAN_REQUEST: {
-      return { ...state, isLoading: true };
-    }
-    case actionTypes.LOAD_LESSON_PLAN_FAILURE: {
-      return { ...state, isLoading: false };
-    }
-    case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
-      const items = action.items.map(generateTypeKey);
+/**
+ * Ids arrive as both numbers and strings depending on the payload, so they are
+ * compared as strings, matching the `reducer-helpers` this slice replaced.
+ */
+const findById = <T extends { id?: number | string | null }>(
+  array: T[],
+  id?: number | string | null,
+): number => array.findIndex((element) => String(element.id) === String(id));
+
+/**
+ * Merges `element` into the matching entry, or appends it. The merge matters:
+ * an item update carries only the fields that changed, and the rest of the row
+ * must survive.
+ */
+const updateOrAppend = <T extends { id?: number | string | null }>(
+  array: T[],
+  element: T,
+): T[] => {
+  const index = findById(array, element.id);
+  if (index === -1) return [...array, element];
+
+  const updated = [...array];
+  updated[index] = { ...updated[index], ...element };
+  return updated;
+};
+
+const deleteIfFound = <T extends { id?: number | string | null }>(
+  array: T[],
+  id?: number | string | null,
+): T[] => {
+  const index = findById(array, id);
+  if (index === -1) return array;
+
+  return array.filter((_, position) => position !== index);
+};
+
+export const lessonPlanSlice = createSlice({
+  name: 'lessonPlan',
+  initialState,
+  reducers: {
+    setItemTypeVisibility(
+      state,
+      action: PayloadAction<{ itemType: string; isVisible: boolean }>,
+    ) {
+      const { itemType, isVisible } = action.payload;
+      state.visibilityByType[itemType] = isVisible;
+    },
+
+    loadRequested(state) {
+      state.isLoading = true;
+    },
+
+    loadFailed(state) {
+      state.isLoading = false;
+    },
+
+    loadSucceeded(state, action: PayloadAction<LessonPlanPayload>) {
+      const items = action.payload.items.map(generateTypeKey);
       const visibilitySettings = generateVisibilitySettings(
-        action.visibilitySettings,
+        action.payload.visibilitySettings,
       );
-      return {
-        ...state,
+
+      state.items = items;
+      state.milestones = action.payload.milestones;
+      state.groups = groupItemsUnderMilestones(
         items,
-        milestones: action.milestones,
-        groups: groupItemsUnderMilestones(items, action.milestones),
-        visibilityByType: initializeVisibility(items, visibilitySettings),
-        isLoading: false,
-      };
-    }
-    case actionTypes.ITEM_UPDATE_SUCCESS: {
-      const item = action.item.lesson_plan_item_type
-        ? generateTypeKey(action.item)
-        : action.item;
-      const items = updateOrAppend(state.items, item);
-      return {
-        ...state,
-        items,
-        groups: groupItemsUnderMilestones(items, state.milestones),
-      };
-    }
-    case actionTypes.MILESTONE_CREATE_SUCCESS: {
-      const milestones = [...state.milestones, action.milestone];
-      return {
-        ...state,
-        milestones,
-        groups: groupItemsUnderMilestones(state.items, milestones),
-      };
-    }
-    case actionTypes.MILESTONE_UPDATE_SUCCESS: {
-      const milestones = updateOrAppend(state.milestones, action.milestone);
-      return {
-        ...state,
-        milestones,
-        groups: groupItemsUnderMilestones(state.items, milestones),
-      };
-    }
-    case actionTypes.MILESTONE_DELETE_SUCCESS: {
-      const milestones = deleteIfFound(state.milestones, action.milestoneId);
-      return {
-        ...state,
-        milestones,
-        groups: groupItemsUnderMilestones(state.items, milestones),
-      };
-    }
-    case actionTypes.EVENT_CREATE_SUCCESS: {
-      const items = [...state.items, generateTypeKey(action.event)];
-      const { visibilityByType } = state;
-      return {
-        ...state,
-        items,
-        groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items, visibilityByType),
-      };
-    }
-    case actionTypes.EVENT_UPDATE_SUCCESS: {
-      const items = updateOrAppend(state.items, generateTypeKey(action.event));
-      const { visibilityByType } = state;
-      return {
-        ...state,
-        items,
-        groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items, visibilityByType),
-      };
-    }
-    case actionTypes.EVENT_DELETE_SUCCESS: {
-      const items = deleteIfFound(state.items, action.itemId);
-      const { visibilityByType } = state;
-      return {
-        ...state,
-        items,
-        groups: groupItemsUnderMilestones(items, state.milestones),
-        visibilityByType: initializeVisibility(items, visibilityByType),
-      };
-    }
-    default:
-      return state;
-  }
-}
+        action.payload.milestones,
+      );
+      state.visibilityByType = initializeVisibility(items, visibilitySettings);
+      state.isLoading = false;
+    },
+
+    itemUpdated(
+      state,
+      action: PayloadAction<LessonPlanItemUpdate & { id: number }>,
+    ) {
+      const payload = action.payload as LessonPlanItem;
+      const item = payload.lesson_plan_item_type
+        ? generateTypeKey(payload)
+        : payload;
+
+      state.items = updateOrAppend(state.items, item);
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+    },
+
+    milestoneCreated(state, action: PayloadAction<LessonPlanMilestone>) {
+      state.milestones = [...state.milestones, action.payload];
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+    },
+
+    milestoneUpdated(state, action: PayloadAction<LessonPlanMilestone>) {
+      state.milestones = updateOrAppend(state.milestones, action.payload);
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+    },
+
+    milestoneDeleted(state, action: PayloadAction<number>) {
+      state.milestones = deleteIfFound(state.milestones, action.payload);
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+    },
+
+    eventCreated(state, action: PayloadAction<LessonPlanEventItem>) {
+      state.items = [
+        ...state.items,
+        generateTypeKey(action.payload as LessonPlanItem),
+      ];
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+      state.visibilityByType = initializeVisibility(
+        state.items,
+        state.visibilityByType,
+      );
+    },
+
+    eventUpdated(state, action: PayloadAction<LessonPlanEventItem>) {
+      state.items = updateOrAppend(
+        state.items,
+        generateTypeKey(action.payload as LessonPlanItem),
+      );
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+      state.visibilityByType = initializeVisibility(
+        state.items,
+        state.visibilityByType,
+      );
+    },
+
+    eventDeleted(state, action: PayloadAction<number>) {
+      state.items = deleteIfFound(state.items, action.payload);
+      state.groups = groupItemsUnderMilestones(state.items, state.milestones);
+      state.visibilityByType = initializeVisibility(
+        state.items,
+        state.visibilityByType,
+      );
+    },
+  },
+});
+
+export const lessonPlanActions = lessonPlanSlice.actions;
+
+export default lessonPlanSlice.reducer;

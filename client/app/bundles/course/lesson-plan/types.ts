@@ -1,11 +1,18 @@
 import { ReactNode } from 'react';
 import { UseFormSetError } from 'react-hook-form';
-import { AppDispatch } from 'store';
-
-import { MessageTranslator } from 'lib/hooks/useTranslation';
 
 /** A datetime as it arrives from the server, or as constructed by the pickers. */
 export type LessonPlanDate = string | Date | null;
+
+/** A column rendered on the lesson plan edit page, used in toggling visibility. */
+export const LESSON_PLAN_EDIT_COLUMNS = [
+  'ITEM_TYPE',
+  'START_AT',
+  'BONUS_END_AT',
+  'END_AT',
+  'PUBLISHED',
+] as const;
+export type LessonPlanEditColumn = (typeof LESSON_PLAN_EDIT_COLUMNS)[number];
 
 /**
  * A partial update to a lesson plan item. Dates are ISO strings, or `null` when
@@ -109,30 +116,6 @@ export type FormSubmitHandler<Values> = (
   setError: UseFormSetError<Values & Record<string, unknown>>,
 ) => Promise<boolean>;
 
-/**
- * What a queued request needs. Passed to the debounced flush as an argument so
- * that it never closes over props that may have moved on since the edit was
- * queued.
- */
-export interface SaveContext {
-  id: number;
-  title: string;
-  dispatch: AppDispatch;
-  t: MessageTranslator;
-}
-
-/**
- * The parts of the lesson plan slice these pages read. The reducers are still
- * JavaScript, so `combineReducers` cannot infer their shape and selectors have
- * to assert it. Drop the assertions once the reducers are converted.
- */
-export interface LessonPlanSliceState {
-  visibilityByType: Record<string, boolean>;
-  items: LessonPlanItem[];
-  isLoading: boolean;
-  groups: LessonPlanGroup[];
-}
-
 /** Items grouped under the milestone they fall after; see `groupItemsUnderMilestones`. */
 export interface LessonPlanGroup {
   id: string;
@@ -140,7 +123,19 @@ export interface LessonPlanGroup {
   items: LessonPlanItem[];
 }
 
-export interface LessonPlanFlagsState {
-  canManageLessonPlan: boolean;
-  editPageColumnsVisible: Record<string, boolean>;
+/** An item type's visibility as the server sends it, keyed by its type path. */
+export interface VisibilitySetting {
+  setting_key: string[];
+  visible: boolean;
+}
+
+/** The payload of a lesson plan fetch. */
+export interface LessonPlanPayload {
+  items: LessonPlanItem[];
+  milestones: LessonPlanMilestone[];
+  visibilitySettings: VisibilitySetting[];
+  flags: {
+    canManageLessonPlan: boolean;
+    milestonesExpanded: string;
+  };
 }
