@@ -16,6 +16,10 @@ const endAt = '02-02-2017';
 // outlast it.
 const AFTER_DEBOUNCE = { timeout: 5000 };
 
+// Shared with the event form's yup schema, so the inline grid and the dialog
+// report the same thing.
+const ORDERING_ERROR = 'Must be after Start Date';
+
 const settleDebounce = (): Promise<void> =>
   new Promise((resolve) => {
     setTimeout(resolve, FIELD_LONG_DEBOUNCE_DELAY_MS + 500);
@@ -196,6 +200,47 @@ describe('<ItemRow />', () => {
     fireEvent.change(retryInput, { target: { value: '06-06-2017' } });
 
     await waitFor(() => expect(spy).toHaveBeenCalledTimes(2), AFTER_DEBOUNCE);
+  });
+
+  it('holds an end date that precedes the start date, and reports it', async () => {
+    const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
+
+    const page = renderItemRow();
+
+    // startAt is 01-01-2017, so this end date would be rejected by the server.
+    const input = await page.findByDisplayValue(endAt);
+    fireEvent.change(input, { target: { value: '01-01-2016' } });
+
+    expect(await page.findByText(ORDERING_ERROR)).toBeVisible();
+
+    await settleDebounce();
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('sends the end date once the ordering is corrected', async () => {
+    const url = `/courses/${global.courseId}/lesson_plan/items/${itemData.id}`;
+    mock.onPatch(url).reply(200);
+
+    const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
+
+    const page = renderItemRow();
+
+    const input = await page.findByDisplayValue(endAt);
+    fireEvent.change(input, { target: { value: '01-01-2016' } });
+    await page.findByText(ORDERING_ERROR);
+
+    fireEvent.change(input, { target: { value: '03-03-2017' } });
+
+    await waitFor(
+      () =>
+        expect(spy).toHaveBeenCalledWith(itemData.id, {
+          item: { end_at: '2017-03-02T16:00:00.000Z' },
+        }),
+      AFTER_DEBOUNCE,
+    );
+
+    expect(page.queryByText(ORDERING_ERROR)).not.toBeInTheDocument();
   });
 
   it('shows a saving indicator until the update resolves', async () => {
