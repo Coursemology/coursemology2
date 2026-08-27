@@ -61,7 +61,8 @@ class Course::Group < ApplicationRecord
   end)
 
   scope :ordered_by_experience_points, (lambda do
-    all.calculated(:average_experience_points).order('average_experience_points DESC')
+    all.calculated(:average_experience_points).
+      order(calculated_expression(:average_experience_points).desc)
   end)
 
   # Order course_users by achievement count for use in the group leaderboard.
@@ -69,7 +70,8 @@ class Course::Group < ApplicationRecord
   #   obtained the current achievement count first.
   scope :ordered_by_average_achievement_count, (lambda do
     all.calculated(:average_achievement_count, :last_obtained_achievement).
-      order('average_achievement_count DESC, last_obtained_achievement ASC')
+      order(calculated_expression(:average_achievement_count).desc,
+            calculated_expression(:last_obtained_achievement).asc)
   end)
 
   scope :ordered_by_name, -> { order(name: :asc) }

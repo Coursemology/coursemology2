@@ -47,11 +47,11 @@ RSpec.describe Course::Assessment::Question::RubricBasedResponsesController, typ
                 criterions_attributes: {
                   '0' => {
                     grade: 0,
-                    explanation: nil
+                    explanation: ''
                   },
                   '1' => {
                     grade: 1,
-                    explanation: nil
+                    explanation: ''
                   }
                 }
               }

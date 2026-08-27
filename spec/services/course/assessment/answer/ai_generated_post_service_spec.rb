@@ -124,7 +124,7 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
           expect do
             service.create_ai_generated_draft_post
           end.to change { Course::Discussion::Post.count }.by(1)
-          post = Course::Discussion::Post.last
+          post = submission_question.posts.reload.last
           expect(post.text).to eq('draft post')
           expect(post.is_ai_generated).to be true
           expect(post.workflow_state).to eq('draft')
@@ -190,7 +190,7 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
           rating = grading_evaluation.ratings.last
           expect(rating.rating).to be_nil
           expect(rating.original_feedback).to eq('generated feedback')
-          expect(rating.post).to eq(Course::Discussion::Post.last)
+          expect(rating.post).to eq(submission_question.posts.reload.last)
           expect(rating.creator).to eq(User.system)
         end
       end
