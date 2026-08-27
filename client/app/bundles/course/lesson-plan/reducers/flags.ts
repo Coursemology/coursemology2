@@ -1,36 +1,51 @@
-import actionTypes, { fields } from '../constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export const initialState = {
+import { LessonPlanEditColumn } from '../types';
+
+import { lessonPlanActions } from './lessonPlan';
+
+export interface LessonPlanFlagsState {
+  canManageLessonPlan: boolean;
+  milestonesExpanded: string;
+  editPageColumnsVisible: Record<LessonPlanEditColumn, boolean>;
+}
+
+export const initialState: LessonPlanFlagsState = {
   canManageLessonPlan: false,
   milestonesExpanded: 'current',
   editPageColumnsVisible: {
-    [fields.ITEM_TYPE]: true,
-    [fields.START_AT]: true,
-    [fields.BONUS_END_AT]: false,
-    [fields.END_AT]: true,
-    [fields.PUBLISHED]: true,
+    ITEM_TYPE: true,
+    START_AT: true,
+    BONUS_END_AT: false,
+    END_AT: true,
+    PUBLISHED: true,
   },
 };
 
-export default function (state = initialState, action) {
-  const { type } = action;
+export const flagsSlice = createSlice({
+  name: 'lessonPlanFlags',
+  initialState,
+  reducers: {
+    setColumnVisibility(
+      state,
+      action: PayloadAction<{ field: string; isVisible: boolean }>,
+    ) {
+      const { field, isVisible } = action.payload;
+      state.editPageColumnsVisible[field] = isVisible;
+    },
+  },
+  // The flags arrive with the lesson plan itself, so this slice listens to the
+  // load rather than owning a fetch of its own.
+  extraReducers: (builder) => {
+    builder.addCase(lessonPlanActions.loadSucceeded, (state, action) => {
+      const { flags } = action.payload;
+      state.canManageLessonPlan = flags.canManageLessonPlan;
+      state.milestonesExpanded =
+        flags.milestonesExpanded || initialState.milestonesExpanded;
+    });
+  },
+});
 
-  switch (type) {
-    case actionTypes.SET_COLUMN_VISIBILITY: {
-      const editPageColumnsVisible = {
-        ...state.editPageColumnsVisible,
-        [action.field]: action.isVisible,
-      };
-      return { ...state, editPageColumnsVisible };
-    }
-    case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
-      const nextState = { ...state, ...action.flags };
-      if (!nextState.milestonesExpanded) {
-        nextState.milestonesExpanded = initialState.milestonesExpanded;
-      }
-      return nextState;
-    }
-    default:
-      return state;
-  }
-}
+export const flagsActions = flagsSlice.actions;
+
+export default flagsSlice.reducer;
