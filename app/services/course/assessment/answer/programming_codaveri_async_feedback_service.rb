@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
   CODAVERI_LANGUAGE_MAPPING = {
     en: 'english',
     zh: 'chinese'
@@ -116,7 +116,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     end
   end
 
-  def save_annotation(file, feedback_line) # rubocop:disable Metrics/AbcSize
+  def save_annotation(file, feedback_line)
     feedback_id = feedback_line['id']
     linenum = feedback_line['linenum'].to_i
     feedback = feedback_line['feedback']

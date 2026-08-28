@@ -31,7 +31,7 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     end
   end
 
-  def update_specific_answer_type_params(answer) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+  def update_specific_answer_type_params(answer)
     answer_actable_class = answer.actable.class.name
     scalar_params = []
     array_params = {}

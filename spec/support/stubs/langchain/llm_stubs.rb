@@ -9,7 +9,7 @@ module Langchain::LlmStubs
   end
 
   class OpenAiStub < Langchain::LLM::Base
-    def chat(messages: [], **_kwargs) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    def chat(messages: [], **_kwargs)
       system_message = messages.find { |msg| msg[:role] == 'system' }&.dig(:content) || ''
       user_message = messages.find { |msg| msg[:role] == 'user' }&.dig(:content) || ''
 

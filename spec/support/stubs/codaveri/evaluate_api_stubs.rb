@@ -1,4 +1,3 @@
-# rubocop: disable Metrics/ModuleLength
 # frozen_string_literal: true
 module Codaveri::EvaluateApiStubs
   def evaluate_success_final_result
@@ -391,4 +390,3 @@ module Codaveri::EvaluateApiStubs
     :evaluate_wrong_answer_final_result,
     :test_cases_id_from_factory
 end
-# rubocop: enable Metrics/ModuleLength

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::CSharp::CSharpPackageService < # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
   Course::Assessment::Question::Programming::LanguagePackageService
   def submission_templates
     [

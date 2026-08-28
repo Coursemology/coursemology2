@@ -64,7 +64,7 @@ class Course::Story
     PersonalTime.new(@course_user, @id, reference_time.start_at)
   end
 
-  def has_personal_times? # rubocop:disable Naming/PredicateName
+  def has_personal_times?
     true
   end
 

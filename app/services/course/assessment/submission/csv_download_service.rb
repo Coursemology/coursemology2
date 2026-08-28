@@ -75,7 +75,7 @@ class Course::Assessment::Submission::CsvDownloadService
             I18n.t('csv.assessment_submissions.headers.status')]
   end
 
-  def submissions_csv_row(csv, submission, course_user) # rubocop:disable Metrics/AbcSize
+  def submissions_csv_row(csv, submission, course_user)
     row_array = [course_user.name,
                  course_user.user.email,
                  course_user.role,

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Ssid::ApiStubs # rubocop:disable Metrics/ModuleLength
+module Ssid::ApiStubs
   CREATE_FOLDER_SUCCESS = {
     status: 200,
     body: {

@@ -56,7 +56,7 @@ module Course::Discussion::TopicsHelper
 
   # This replaces what the `from_user` scopes in the specific models were doing when getting
   # my_students_unread_count, for better performance.
-  def from_user(topic, my_student_ids) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  def from_user(topic, my_student_ids)
     case topic.actable_type
     when 'Course::Assessment::SubmissionQuestion'
       my_student_ids.include?(topic&.actable&.submission&.creator_id)

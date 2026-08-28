@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/AbcSize
 class Course::Assessment::ProgrammingTestCaseReportBuilder
   def self.build_dummy_report(test_type, test_cases, file_type)
     builder = Nokogiri::XML::Builder.new do |xml|
@@ -33,4 +32,3 @@ class Course::Assessment::ProgrammingTestCaseReportBuilder
     builder.to_xml
   end
 end
-# rubocop:enable Metrics/AbcSize

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Submission::SsidPlagiarismService
   include Course::SsidFolderConcern
 
   POLL_INTERVAL_SECONDS = 2

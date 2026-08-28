@@ -89,7 +89,7 @@ class Duplicator
   #
   # @param [#initialize_duplicate] source_object The object to be duplicated.
   # @return duplicated_object A reference to the duplicated object.
-  def duplicate_object(source_object) # rubocop:disable Metrics/AbcSize
+  def duplicate_object(source_object)
     return nil unless source_object
 
     @duplicated_objects.fetch(source_object) do |key|

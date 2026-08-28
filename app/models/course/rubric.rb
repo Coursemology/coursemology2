@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Rubric < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Course::Rubric < ApplicationRecord
   include DuplicationStateTrackingConcern
   include Course::Rubric::CopyOnWriteConcern
 

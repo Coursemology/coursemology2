@@ -39,7 +39,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
 
   private
 
-  def init_language_package_service(params) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+  def init_language_package_service(params)
     @language_package_service =
       case @language
       when Coursemology::Polyglot::Language::Python

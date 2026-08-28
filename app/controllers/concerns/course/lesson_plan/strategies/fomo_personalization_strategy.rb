@@ -15,7 +15,7 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
   # @param [Hash] precomputed_data The default data precomputed by precompute_data.
   # @param [Set<Number>|nil] items_to_shift Set of item ids to shift. If provided, only items with ids in this set will
   #   be shifted.
-  def execute(course_user, precomputed_data, items_to_shift = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def execute(course_user, precomputed_data, items_to_shift = nil)
     return if precomputed_data[:learning_rate_ema].nil?
 
     @course_tz = course_user.course.time_zone

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::RubricsController < Course::Assessment::QuestionsController # rubocop:disable Metrics/ClassLength
+class Course::Assessment::RubricsController < Course::Assessment::QuestionsController
   load_resource :rubric, class: 'Course::Rubric', through: :question,
                          except: [:index, :rubric_answers, :grading_contexts, :answer_grading_contexts]
 

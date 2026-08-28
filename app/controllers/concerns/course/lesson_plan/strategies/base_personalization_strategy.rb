@@ -28,7 +28,7 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   #
   # @param [CourseUser] course_user The course user to compute data for.
   # @return [Hash] Precomputed data to aid execution.
-  def precompute_data(course_user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def precompute_data(course_user)
     submitted_items = lesson_plan_items_submission_time_hash(course_user)
     items = lesson_plan_items_with_sorted_times_for(course_user)
     items_affecting_personal_times = items.select(&:affects_personal_times?)

@@ -364,7 +364,7 @@ class Course::Assessment < ApplicationRecord
     )
   end
 
-  def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize
     copy_attributes(other, duplicator)
     target_tab = initialize_duplicate_tab(duplicator, other)
     self.folder = duplicator.duplicate(other.folder)

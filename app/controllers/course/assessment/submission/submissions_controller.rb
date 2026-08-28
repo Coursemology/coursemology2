@@ -40,7 +40,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     @course_users = current_course.course_users.order_phantom_user.order_alphabetically
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     authorize! :access, @assessment
 
     existing_submission = @assessment.submissions.find_by(creator: current_user)
@@ -419,7 +419,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
   # TODO: Remove this method after found the cause of the dead jobs.
-  def check_zombie_jobs # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  def check_zombie_jobs
     return unless @submission.attempting? || @submission.submitted?
 
     submitted_answers = @submission.answers.where(workflow_state: 'submitted')

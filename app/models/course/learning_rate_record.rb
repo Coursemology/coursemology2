@@ -13,7 +13,7 @@ class Course::LearningRateRecord < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   # Implicitly asserts that effective_min <= effective_max as well
-  def learning_rate_between_effective_min_and_max # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def learning_rate_between_effective_min_and_max
     # We return if any of the three attributes is nil, since that will be handled by the presence check
     return if learning_rate.nil? || effective_min.nil? || effective_max.nil?
     return if effective_min <= learning_rate && learning_rate <= effective_max

@@ -8,7 +8,7 @@ module Course::Assessment::Submission::MonitoringConcern
     after_action :stop_monitoring_session_if_submitted, only: [:update]
   end
 
-  def should_monitor? # rubocop:disable Metrics/CyclomaticComplexity
+  def should_monitor?
     monitoring_component_enabled? &&
       current_user.id == @submission.creator_id &&
       current_course_user&.student? &&

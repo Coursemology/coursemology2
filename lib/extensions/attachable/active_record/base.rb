@@ -51,7 +51,7 @@ module Extensions::Attachable::ActiveRecord::Base
     #   associated with the attachments. Updating description will result in attachments changing.
     #
     #   To change the provided logic, you can override `description_attachment_references_changes`.
-    def has_many_attachments(options = {}) # rubocop:disable Naming/PredicateName
+    def has_many_attachments(options = {})
       include HasManyAttachments
 
       return unless options[:on]
@@ -62,7 +62,7 @@ module Extensions::Attachable::ActiveRecord::Base
       HasManyAttachments.define_attachment_references_readers(attachable_columns)
     end
 
-    def has_one_attachment # rubocop:disable Naming/PredicateName
+    def has_one_attachment
       include HasOneAttachment
     end
   end

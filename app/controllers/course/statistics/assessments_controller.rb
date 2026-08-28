@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Statistics::AssessmentsController < Course::Statistics::Controller # rubocop:disable Metrics/ClassLength
+class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
   include Course::Statistics::UsersConcern

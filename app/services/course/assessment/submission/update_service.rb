@@ -98,7 +98,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @questions_to_attempt ||= @submission.questions
   end
 
-  def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def update_submission
     @submission.class.transaction do
       unless unsubmit? || unmark?
         update_answers_params&.each do |answer_params|

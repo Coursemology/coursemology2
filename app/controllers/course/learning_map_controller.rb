@@ -91,7 +91,7 @@ class Course::LearningMapController < Course::ComponentController
     generate_node_depths(nodes)
   end
 
-  def generate_all_node_relations # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def generate_all_node_relations
     relations = init_all_node_relations
     node_ids_to_children = relations[:node_ids_to_children]
     node_ids_to_parents = relations[:node_ids_to_parents]
@@ -131,7 +131,7 @@ class Course::LearningMapController < Course::ComponentController
     { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
   end
 
-  def generate_nodes_from_conditionals(all_node_relations) # rubocop:disable Metrics/AbcSize
+  def generate_nodes_from_conditionals(all_node_relations)
     node_ids_to_children = all_node_relations[:node_ids_to_children]
     node_ids_to_parents = all_node_relations[:node_ids_to_parents]
     node_ids_to_unlock_level = all_node_relations[:node_ids_to_unlock_level]

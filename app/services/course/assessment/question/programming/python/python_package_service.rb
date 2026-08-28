@@ -160,7 +160,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     File.join(__dir__, filename).freeze
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
+  def zip_test_files(test_type, zip)
     # Print test class preamble
     test_class_name = "#{test_type}_tests_grader".camelize
     class_definition = <<~PYTHON

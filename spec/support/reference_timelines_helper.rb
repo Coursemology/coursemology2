@@ -13,7 +13,6 @@ module ReferenceTimelinesTestHelper
   # @param time_shift [ActiveSupport::Duration] number of days expected to be between the times in both timelines
   # @return [Boolean] `true` if both timelines are similar to each other
   #
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def similar_timelines?(timeline1, timeline2, time_shift = 0.day)
     return false unless timeline1.title == timeline2.title
 
@@ -32,7 +31,6 @@ module ReferenceTimelinesTestHelper
 
     true
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   private
 
