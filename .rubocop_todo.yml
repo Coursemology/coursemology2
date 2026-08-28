@@ -14,28 +14,6 @@ Lint/DuplicateBranch:
     - 'app/models/course/settings/lesson_plan_items.rb'
     - 'spec/support/i18n.rb'
 
-# Offense count: 19
-# Configuration parameters: AllowComments, AllowEmptyLambdas.
-Lint/EmptyBlock:
-  Exclude:
-    - 'spec/components/course/controller_component_host_spec.rb'
-    - 'spec/controllers/course/assessment/assessments_component_spec.rb'
-    - 'spec/controllers/course/assessment/condition/achievements_controller_spec.rb'
-    - 'spec/controllers/course/assessment/condition/assessments_controller_spec.rb'
-    - 'spec/controllers/course/assessment/condition/levels_controller_spec.rb'
-    - 'spec/controllers/course/assessment/condition/surveys_controller_spec.rb'
-    - 'spec/controllers/course/conditions_controller_spec.rb'
-    - 'spec/controllers/user_login_spec.rb'
-    - 'spec/factories/course_assessment_question_scribings.rb'
-    - 'spec/factories/course_condition_assessments.rb'
-    - 'spec/factories/course_survey_questions.rb'
-    - 'spec/factories/system_announcements.rb'
-    - 'spec/helpers/course/assessment/answer/programming_test_case_helper.rb'
-    - 'spec/helpers/course/assessment/submissions_helper_spec.rb'
-    - 'spec/jobs/application_job_spec.rb'
-    - 'spec/libraries/has_many_inverse_through_spec.rb'
-    - 'spec/models/instance/announcement_spec.rb'
-
 # Offense count: 8
 # Configuration parameters: AllowComments.
 Lint/EmptyClass:
@@ -66,31 +44,6 @@ Lint/NoReturnInBeginEndBlocks:
 Lint/NonAtomicFileOperation:
   Exclude:
     - 'config/initializers/send_file.rb'
-
-# Offense count: 16
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'app/controllers/concerns/application_user_time_zone_concern.rb'
-    - 'app/controllers/concerns/course/lesson_plan/strategies/base_personalization_strategy.rb'
-    - 'app/controllers/concerns/course/lesson_plan/strategies/otot_personalization_strategy.rb'
-    - 'app/controllers/course/assessment/submission/submissions_controller.rb'
-    - 'app/controllers/course/courses_controller.rb'
-    - 'app/controllers/system/admin/instance/courses_controller.rb'
-    - 'app/models/course/story.rb'
-    - 'app/services/course/assessment/answer/programming_codaveri_auto_grading_service.rb'
-    - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
-    - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming/language_package_service.rb'
-    - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/submission/ssid_plagiarism_service.rb'
-    - 'app/services/course/survey/reminder_service.rb'
-    - 'lib/extensions/attachable/active_record/base.rb'
-    - 'lib/extensions/materials/active_record/base.rb'
-    - 'spec/controllers/course/forum/forums_controller_spec.rb'
-    - 'spec/support/devise.rb'
-    - 'spec/support/reference_timelines_helper.rb'
-    - 'spec/support/stubs/ssid/api_stubs.rb'
 
 # Offense count: 2
 Lint/ReturnInVoidContext:
@@ -143,238 +96,55 @@ Lint/UselessConstantScoping:
     - 'lib/autoload/coursemology_docker_container.rb'
     - 'lib/extensions/attachable/active_record/base.rb'
 
-# Offense count: 99
+# Offense count: 11
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes, Max.
 Metrics/AbcSize:
   Exclude:
-    - 'app/channels/course/monitoring/live_monitoring_channel.rb'
-    - 'app/controllers/concerns/application_user_concern.rb'
     - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
     - 'app/controllers/concerns/course/scholaistic/concern.rb'
-    - 'app/controllers/concerns/course/statistics/counts_concern.rb'
-    - 'app/controllers/course/assessment/assessments_controller.rb'
-    - 'app/controllers/course/assessment/question_bundle_assignments_controller.rb'
-    - 'app/controllers/course/assessment/submission/submissions_controller.rb'
-    - 'app/controllers/course/assessment/submission_question/comments_controller.rb'
-    - 'app/controllers/course/controller.rb'
-    - 'app/controllers/course/courses_controller.rb'
-    - 'app/controllers/course/discussion/posts_controller.rb'
-    - 'app/controllers/course/forum/posts_controller.rb'
-    - 'app/controllers/course/group/group_categories_controller.rb'
-    - 'app/controllers/course/lesson_plan/items_controller.rb'
-    - 'app/controllers/course/material/materials_controller.rb'
-    - 'app/controllers/course/object_duplications_controller.rb'
-    - 'app/controllers/course/plagiarism/assessments_controller.rb'
-    - 'app/controllers/course/scholaistic/scholaistic_assessments_controller.rb'
-    - 'app/controllers/course/scholaistic/submissions_controller.rb'
-    - 'app/controllers/course/statistics/assessments_controller.rb'
-    - 'app/controllers/course/user_invitations_controller.rb'
-    - 'app/controllers/course/users_controller.rb'
-    - 'app/controllers/course/video/submission/sessions_controller.rb'
-    - 'app/controllers/system/admin/instance/users_controller.rb'
-    - 'app/controllers/system/admin/users_controller.rb'
-    - 'app/controllers/user/registrations_controller.rb'
-    - 'app/controllers/users_controller.rb'
-    - 'app/jobs/course/assessment/answer/programming_codaveri_feedback_job.rb'
-    - 'app/jobs/video_statistic_update_job.rb'
-    - 'app/mailers/course/mailer.rb'
-    - 'app/models/components/course/conditions_ability_component.rb'
-    - 'app/models/components/course/course_ability_component.rb'
-    - 'app/models/components/course/materials_ability_component.rb'
-    - 'app/models/components/course/scholaistic_ability_component.rb'
-    - 'app/models/concerns/course/duplication_concern.rb'
-    - 'app/models/concerns/course/video/watch_statistics_concern.rb'
-    - 'app/models/course/assessment/answer.rb'
-    - 'app/models/course/assessment/answer/forum_post_response.rb'
-    - 'app/models/course/assessment/answer/text_response.rb'
-    - 'app/models/course/assessment/category.rb'
-    - 'app/models/course/assessment/question/programming.rb'
-    - 'app/models/course/assessment/tab.rb'
     - 'app/models/course/lesson_plan/item.rb'
-    - 'app/models/course/material.rb'
-    - 'app/models/course/material/folder.rb'
-    - 'app/models/user/email.rb'
-    - 'app/notifiers/course/announcement_notifier.rb'
     - 'app/notifiers/course/assessment/answer/comment_notifier.rb'
     - 'app/notifiers/course/assessment/submission_question/comment_notifier.rb'
     - 'app/notifiers/course/assessment_notifier.rb'
-    - 'app/notifiers/course/forum/post_notifier.rb'
-    - 'app/notifiers/course/forum/topic_notifier.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
-    - 'app/services/course/assessment/answer/programming_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
-    - 'app/services/course/assessment/programming_codaveri_evaluation_service.rb'
     - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
     - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
-    - 'app/services/course/assessment/reminder_service.rb'
-    - 'app/services/course/assessment/submission/ssid_zip_download_service.rb'
-    - 'app/services/course/duplication/course_duplication_service.rb'
-    - 'app/services/course/experience_points_download_service.rb'
-    - 'app/services/course/skills_mastery_preload_service.rb'
-    - 'app/services/course/survey/reminder_service.rb'
-    - 'lib/autoload/send_file.rb'
-    - 'lib/tasks/db/migrate_email_settings.rake'
 
-# Offense count: 44
+# Offense count: 5
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
   Exclude:
-    - 'app/channels/course/monitoring/heartbeat_channel.rb'
-    - 'app/channels/course/monitoring/live_monitoring_channel.rb'
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
-    - 'app/controllers/course/assessment/question/multiple_responses_controller.rb'
-    - 'app/controllers/course/assessment/question/programming_controller.rb'
-    - 'app/controllers/course/forum/forums_controller.rb'
-    - 'app/controllers/course/forum/posts_controller.rb'
-    - 'app/controllers/course/group/group_categories_controller.rb'
-    - 'app/controllers/course/learning_map_controller.rb'
-    - 'app/controllers/course/plagiarism/assessments_controller.rb'
-    - 'app/controllers/course/statistics/aggregate_controller.rb'
     - 'app/controllers/course/user_invitations_controller.rb'
-    - 'app/mailers/course/mailer.rb'
     - 'app/models/course/assessment.rb'
-    - 'app/models/course/assessment/answer.rb'
-    - 'app/models/course/assessment/answer/forum_post_response.rb'
-    - 'app/models/course/assessment/answer/programming.rb'
-    - 'app/models/course/assessment/question/text_response.rb'
     - 'app/models/course/assessment/submission.rb'
-    - 'app/models/course/discussion/post.rb'
-    - 'app/models/course/experience_points/forum_disbursement.rb'
-    - 'app/models/course/forum/topic.rb'
-    - 'app/models/course/lesson_plan/item.rb'
-    - 'app/models/course/material.rb'
-    - 'app/models/course/material/folder.rb'
-    - 'app/models/course/video.rb'
-    - 'app/models/course_user.rb'
-    - 'app/models/user.rb'
-    - 'app/services/course/assessment/answer/programming_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
     - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
-    - 'app/services/course/assessment/question/koditsu_question_service.rb'
-    - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
-    - 'app/services/course/assessment/submission/ssid_zip_download_service.rb'
-    - 'app/services/course/assessment/submission/statistics_download_service.rb'
-    - 'app/services/scholaistic_api_service.rb'
-    - 'lib/autoload/active_job/queue_adapters/background_thread_adapter.rb'
-    - 'lib/autoload/course/assessment/programming_package.rb'
-    - 'lib/autoload/coursemology_docker_container.rb'
-    - 'spec/support/stubs/langchain/llm_stubs.rb'
 
-# Offense count: 43
+# Offense count: 3
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/CyclomaticComplexity:
   Exclude:
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
     - 'app/controllers/concerns/course/scholaistic/concern.rb'
-    - 'app/controllers/course/assessment/assessments_controller.rb'
-    - 'app/controllers/course/assessment/submission/submissions_controller.rb'
-    - 'app/controllers/course/assessment/submission_question/comments_controller.rb'
-    - 'app/controllers/course/courses_controller.rb'
-    - 'app/controllers/course/discussion/posts_controller.rb'
-    - 'app/controllers/course/forum/posts_controller.rb'
-    - 'app/controllers/course/scholaistic/scholaistic_assessments_controller.rb'
-    - 'app/controllers/course/statistics/assessments_controller.rb'
-    - 'app/controllers/course/user_invitations_controller.rb'
-    - 'app/controllers/course/video/submission/sessions_controller.rb'
-    - 'app/controllers/user/registrations_controller.rb'
-    - 'app/mailers/course/mailer.rb'
-    - 'app/models/components/course/course_ability_component.rb'
-    - 'app/models/components/course/duplication_ability_component.rb'
-    - 'app/models/components/course/experience_points_records_ability_component.rb'
-    - 'app/models/concerns/course/assessment/submission/todo_concern.rb'
-    - 'app/models/course/assessment/question/programming.rb'
     - 'app/models/course/lesson_plan/item.rb'
-    - 'app/models/course/settings/lesson_plan_items.rb'
-    - 'app/notifiers/course/assessment/answer/comment_notifier.rb'
-    - 'app/notifiers/course/assessment/submission_question/comment_notifier.rb'
-    - 'app/notifiers/course/assessment_notifier.rb'
-    - 'app/notifiers/course/forum/post_notifier.rb'
-    - 'app/notifiers/course/forum/topic_notifier.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
-    - 'app/services/course/assessment/question/mrq_generation_service.rb'
-    - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/programming_codaveri_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
-    - 'app/services/course/assessment/reminder_service.rb'
-    - 'app/services/course/assessment/submission/statistics_download_service.rb'
-    - 'app/services/instance/user_invitation_service.rb'
 
-# Offense count: 59
+# Offense count: 5
 # Configuration parameters: CountComments, Max, CountAsOne, AllowedMethods, AllowedPatterns.
 Metrics/MethodLength:
   Exclude:
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
-    - 'app/controllers/concerns/course/lesson_plan/personalization_concern.rb'
     - 'app/controllers/concerns/course/scholaistic/concern.rb'
-    - 'app/controllers/concerns/course/statistics/counts_concern.rb'
-    - 'app/controllers/concerns/course/statistics/grades_concern.rb'
-    - 'app/controllers/course/assessment/assessments_controller.rb'
-    - 'app/controllers/course/assessment/question/multiple_responses_controller.rb'
-    - 'app/controllers/course/assessment/submission/submissions_controller.rb'
-    - 'app/controllers/course/courses_controller.rb'
-    - 'app/controllers/course/plagiarism/assessments_controller.rb'
-    - 'app/controllers/course/scholaistic/scholaistic_assessments_controller.rb'
-    - 'app/controllers/course/scholaistic/submissions_controller.rb'
-    - 'app/controllers/course/user_invitations_controller.rb'
-    - 'app/controllers/course/users_controller.rb'
-    - 'app/controllers/course/video/submission/sessions_controller.rb'
-    - 'app/controllers/user/registrations_controller.rb'
-    - 'app/controllers/users_controller.rb'
-    - 'app/jobs/course/assessment/answer/programming_codaveri_feedback_job.rb'
-    - 'app/mailers/course/mailer.rb'
-    - 'app/models/components/course/course_ability_component.rb'
-    - 'app/models/concerns/course/assessment/new_submission_concern.rb'
     - 'app/models/course/lesson_plan/item.rb'
-    - 'app/notifiers/course/assessment/answer/comment_notifier.rb'
-    - 'app/notifiers/course/assessment/submission_question/comment_notifier.rb'
-    - 'app/notifiers/course/assessment_notifier.rb'
-    - 'app/notifiers/course/forum/post_notifier.rb'
-    - 'app/notifiers/course/forum/topic_notifier.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/course/assessment/answer/programming_codaveri_async_feedback_service.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
     - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/programming_codaveri_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri_service.rb'
-    - 'app/services/course/assessment/reminder_service.rb'
-    - 'app/services/course/duplication/course_duplication_service.rb'
-    - 'app/services/course/survey/reminder_service.rb'
-    - 'app/services/instance/user_invitation_service.rb'
-    - 'app/services/rag_wise/chunking_service.rb'
-    - 'app/uploaders/image_uploader.rb'
-    - 'lib/autoload/duplicator.rb'
-    - 'lib/extensions/attachable/active_record/base.rb'
-    - 'lib/tasks/db/migrate_email_settings.rake'
-    - 'spec/services/course/user_invitation_service_spec.rb'
 
-# Offense count: 8
+# Offense count: 1
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ModuleLength:
   Exclude:
-    - 'app/controllers/concerns/course/statistics/submissions_concern.rb'
-    - 'app/controllers/concerns/course/users_controller_management_concern.rb'
-    - 'app/models/components/course/surveys_ability_component.rb'
-    - 'app/models/concerns/course/assessment/submission/workflow_event_concern.rb'
     - 'app/models/course/assessment/assessment_ability.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
-    - 'lib/extensions/attachable/active_record/base.rb'
 
 # Offense count: 4
 # Configuration parameters: Max, CountKeywordArgs, MaxOptionalParameters.
@@ -384,41 +154,12 @@ Metrics/ParameterLists:
     - 'app/models/ability.rb'
     - 'app/services/course/assessment/programming_evaluation_service.rb'
 
-# Offense count: 37
+# Offense count: 2
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/PerceivedComplexity:
   Exclude:
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
-    - 'app/controllers/concerns/course/assessment/submission/monitoring_concern.rb'
     - 'app/controllers/concerns/course/scholaistic/concern.rb'
-    - 'app/controllers/course/assessment/assessments_controller.rb'
-    - 'app/controllers/course/assessment/submission_question/comments_controller.rb'
-    - 'app/controllers/course/courses_controller.rb'
-    - 'app/controllers/course/discussion/posts_controller.rb'
-    - 'app/controllers/course/forum/posts_controller.rb'
-    - 'app/controllers/course/scholaistic/scholaistic_assessments_controller.rb'
-    - 'app/controllers/course/user_invitations_controller.rb'
-    - 'app/controllers/course/video/submission/sessions_controller.rb'
-    - 'app/controllers/user/registrations_controller.rb'
-    - 'app/mailers/course/mailer.rb'
-    - 'app/models/components/course/course_ability_component.rb'
-    - 'app/models/concerns/course/assessment/submission/todo_concern.rb'
-    - 'app/models/course/assessment/answer.rb'
-    - 'app/models/course/assessment/question/programming.rb'
     - 'app/models/course/lesson_plan/item.rb'
-    - 'app/notifiers/course/assessment/answer/comment_notifier.rb'
-    - 'app/notifiers/course/assessment/submission_question/comment_notifier.rb'
-    - 'app/notifiers/course/assessment_notifier.rb'
-    - 'app/notifiers/course/forum/post_notifier.rb'
-    - 'app/notifiers/course/forum/topic_notifier.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
-    - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming_codaveri/python/python_package_service.rb'
-    - 'app/services/course/assessment/reminder_service.rb'
-    - 'app/services/course/assessment/submission/statistics_download_service.rb'
 
 # Offense count: 24
 # This cop supports safe autocorrection (--autocorrect).
@@ -795,23 +536,6 @@ Style/MultipleComparison:
     - 'app/models/user.rb'
     - 'app/services/course/assessment/koditsu_assessment_invitation_service.rb'
     - 'app/services/course/assessment/question/programming/language_package_service.rb'
-
-# Offense count: 11
-# Configuration parameters: AllowedClasses.
-Style/OneClassPerFile:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'app/models/course/settings/codaveri_component.rb'
-    - 'app/services/concerns/course/user_invitation_service/email_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
-    - 'app/services/concerns/instance/user_invitation_service/email_invitation_concern.rb'
-    - 'app/services/concerns/instance/user_invitation_service/parse_invitation_concern.rb'
-    - 'app/services/concerns/instance/user_invitation_service/process_invitation_concern.rb'
-    - 'config/initializers/action_cable_acts_as_tenant.rb'
-    - 'lib/extensions/deferred_workflow_state_persistence/workflow.rb'
-    - 'lib/extensions/polyglot_with_database/coursemology/polyglot/language.rb'
 
 # Offense count: 26
 Style/OpenStructUse:

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller
   include Course::Assessment::Question::RubricBasedResponseControllerConcern
   include Course::Assessment::Question::GradingContextParamsConcern
 

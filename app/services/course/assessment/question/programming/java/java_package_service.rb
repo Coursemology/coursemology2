@@ -235,7 +235,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     end
   end
 
-  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize
+  def zip_test_files(test_type, zip)
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string

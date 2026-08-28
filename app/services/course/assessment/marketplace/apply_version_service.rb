@@ -125,7 +125,6 @@ class Course::Assessment::Marketplace::ApplyVersionService
   # hide an assessment, nor move it out from under the manager who filed it. Unlock conditions and
   # link-tree membership are untouched for a stronger reason — they reference this course's objects,
   # so the snapshot's would be meaningless.
-  # rubocop:disable Metrics/AbcSize
   def copy_attributes!(temp, version)
     @assessment.title = resolved_title(temp.title, version)
     @assessment.description = temp.description
@@ -143,7 +142,6 @@ class Course::Assessment::Marketplace::ApplyVersionService
     @assessment.affects_personal_times = temp.affects_personal_times
     @assessment.save!
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Collision rule excluding this assessment itself. Its own old title is exactly what it
   # is replacing, so it must not count as a collision.

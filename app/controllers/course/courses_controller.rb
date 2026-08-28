@@ -61,7 +61,7 @@ class Course::CoursesController < Course::Controller
       permit(:title, :description, :status, :start_at, :end_at, :logo)
   end
 
-  def load_todos # rubocop:disable Metrics/AbcSize
+  def load_todos
     return unless current_course_user&.student?
 
     todos = Course::LessonPlan::Todo.pending_for(current_course_user).
@@ -89,7 +89,7 @@ class Course::CoursesController < Course::Controller
                          to_h { |survey| [survey.survey_id, survey] }
   end
 
-  def load_items_with_timeline # rubocop:disable Metrics/CyclomaticComplexity
+  def load_items_with_timeline
     return unless current_course_user&.student?
 
     item_ids = [*@video_todos&.map { |todo| todo.item.id },

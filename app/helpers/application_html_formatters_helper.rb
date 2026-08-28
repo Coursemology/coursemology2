@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ModuleLength
 module ApplicationHtmlFormattersHelper
   # Constants that defines the size/lines limit of the code
   MAX_CODE_SIZE = 50 * 1024 # 50 KB
@@ -285,4 +284,3 @@ module ApplicationHtmlFormattersHelper
     end
   end
 end
-# rubocop:enable Metrics/ModuleLength

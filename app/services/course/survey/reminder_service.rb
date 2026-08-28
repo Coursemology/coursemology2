@@ -59,7 +59,6 @@ class Course::Survey::ReminderService
   #   If empty, all students will be selected.
   # @param [Boolean] include_unsubscribed Whether to include unsubscribed students in the reminder (forced reminder).
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the survey.
-  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   def uncompleted_subscribed_students(survey, course_user_ids, include_unsubscribed)
     course_users = survey.course.course_users
     course_users = course_users.where(id: course_user_ids) unless course_user_ids.empty?
@@ -82,5 +81,4 @@ class Course::Survey::ReminderService
                    where('course_user_email_unsubscriptions.course_settings_email_id = ?', email_enabled.id)
     Set.new(students) - Set.new(unsubscribed) - Set.new(submitted)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 end

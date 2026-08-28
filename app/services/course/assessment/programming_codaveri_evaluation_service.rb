@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Sets up a programming evaluation, queues it for execution by codaveri evaluators, then returns the results.
-class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable Metrics/ClassLength
+class Course::Assessment::ProgrammingCodaveriEvaluationService
   include Course::Assessment::Question::CodaveriQuestionConcern
 
   # The default timeout for the job to finish.
@@ -292,7 +292,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
     )
   end
 
-  def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity
+  def build_evaluation_result
     stdout = @codaveri_evaluation_results.map(&:stdout).reject(&:empty?).join("\n")
     stderr = @codaveri_evaluation_results.map(&:stderr).reject(&:empty?).join("\n")
     exit_code = (@codaveri_evaluation_results.map(&:success).all? { |n| n == 1 }) ? 0 : 2

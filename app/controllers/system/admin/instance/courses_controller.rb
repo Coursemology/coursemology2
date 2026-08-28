@@ -24,7 +24,7 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
     params.permit(:search)[:search]
   end
 
-  def preload_courses # rubocop:disable Metrics/AbcSize
+  def preload_courses
     @courses = @instance.courses.search(search_param).calculated(:active_user_count, :user_count)
     @courses = @courses.active_in_past_7_days if ActiveRecord::Type::Boolean.new.cast(params[:active])
 

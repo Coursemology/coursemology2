@@ -24,7 +24,7 @@ namespace :db do
     end
 
     # Non-assessment
-    def create_default_email_settings # rubocop:disable Metrics/MethodLength
+    def create_default_email_settings
       course_with_email_settings = Course.includes(:setting_emails).
                                    joins("LEFT JOIN course_settings_emails \
                                     ON course_settings_emails.course_id = courses.id \

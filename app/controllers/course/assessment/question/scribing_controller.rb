@@ -19,7 +19,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
     end
   end
 
-  def create # rubocop:disable Metrics/MethodLength
+  def create
     if file_is_pdf?
       respond_to do |format|
         if pdf_import_service.save

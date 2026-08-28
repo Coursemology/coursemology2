@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question < ApplicationRecord
   include Course::SanitizeDescriptionConcern
 
   actable optional: true

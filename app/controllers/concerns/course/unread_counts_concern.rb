@@ -44,7 +44,7 @@ module Course::UnreadCountsConcern
     end
   end
 
-  def unread_comments_count # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  def unread_comments_count
     self.class.include Course::Discussion::TopicsHelper
 
     is_staff_with_students = current_course_user&.staff? && !current_course_user.my_students.empty?

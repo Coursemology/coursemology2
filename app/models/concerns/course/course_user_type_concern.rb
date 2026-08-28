@@ -17,7 +17,6 @@ module Course::CourseUserTypeConcern
     end
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def course_users_by_type(type, user)
     case type
     when COURSE_USER_TYPES[:my_students]
@@ -34,5 +33,4 @@ module Course::CourseUserTypeConcern
       students.without_phantom_users # :students is the default type
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 end

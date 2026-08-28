@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::GradebookController < Course::ComponentController # rubocop:disable Metrics/ClassLength
+class Course::GradebookController < Course::ComponentController
   include Course::Gradebook::WeightParsingConcern
 
   before_action :authorize_read_gradebook!

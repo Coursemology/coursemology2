@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ProgrammingCodaveri::Go::GoPackageService < # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::ProgrammingCodaveri::Go::GoPackageService <
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def process_solutions
     extract_main_solution
@@ -99,7 +99,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Go::GoPackageService < 
 
   # Extracts test cases from the built dummy reports and append all the test cases to the
   # [:IOTestcases] array for the problem management API request body.
-  def extract_test_cases # rubocop:disable Metrics/AbcSize
+  def extract_test_cases
     test_cases_with_id = preload_question_test_cases
     @package.test_reports.each do |test_type, test_report|
       Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases.each do |test_case|

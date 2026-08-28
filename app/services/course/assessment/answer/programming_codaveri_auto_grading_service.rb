@@ -121,7 +121,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   #   grading result to store the test results in.
   # @param [Array<Struct>] evaluation_results The evaluation results from Codaveri API Response.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
-  def build_test_case_records_from_test_results(question, auto_grading, evaluation_results) # rubocop:disable Metrics/AbcSize
+  def build_test_case_records_from_test_results(question, auto_grading, evaluation_results)
     test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
     evaluation_results.map do |result|
       test_case = find_test_case(test_cases, result.index)

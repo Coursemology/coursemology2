@@ -28,7 +28,7 @@ module Course::LessonPlan::LearningRateConcern
   #   their submitted time, if relevant/available.
   # @param [Float] alpha Alpha value used in exponential moving average computation.
   # @return [Float|nil] Learning rate exponential moving average, if computable.
-  def compute_learning_rate_ema(course_user, items_affecting_personal_times, submitted_items, alpha = 0.4) # rubocop:disable Metrics/AbcSize
+  def compute_learning_rate_ema(course_user, items_affecting_personal_times, submitted_items, alpha = 0.4)
     submitted_items_affecting_personal_times = items_affecting_personal_times.
                                                select { |i| i.id.in? submitted_items.keys }.
                                                select { |i| i.time_for(course_user).end_at.present? }
@@ -67,7 +67,7 @@ module Course::LessonPlan::LearningRateConcern
   # @param [Float] min_learning_rate The minimum overall learning rate.
   # @param [Float] max_learning_rate The maximum overall learning rate.
   # @return [Array<Float>] An array pair containing [min learning rate, max learning rate].
-  def compute_learning_rate_effective_limits(course_user, items, submitted_items, min_learning_rate, max_learning_rate) # rubocop:disable Metrics/AbcSize
+  def compute_learning_rate_effective_limits(course_user, items, submitted_items, min_learning_rate, max_learning_rate)
     course_start = items.first.start_at
     course_end = items.last.start_at
     last_submitted_item = items.reverse_each.lazy.

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::CodaveriProblemGenerationService # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::CodaveriProblemGenerationService
   POLL_INTERVAL_SECONDS = 2
   MAX_POLL_RETRIES = 1000
 
@@ -42,7 +42,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService # rubocop:d
 
   private
 
-  def initialize(assessment, params, language, version) # rubocop:disable Metrics/AbcSize
+  def initialize(assessment, params, language, version)
     custom_prompt = params[:custom_prompt].to_s
     @payload = {
       userId: assessment.creator_id.to_s,

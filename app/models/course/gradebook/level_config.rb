@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Gradebook::LevelConfig < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Course::Gradebook::LevelConfig < ApplicationRecord
   belongs_to :course, inverse_of: :gradebook_level_config
 
   validates :weight, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }

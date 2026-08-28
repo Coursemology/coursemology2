@@ -11,7 +11,7 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
     end
   end
 
-  def update # rubocop:disable Metrics/AbcSize
+  def update
     if @settings.update(settings_components_params) && current_course.save
       is_koditsu_enabled = settings_components_params['enabled_component_ids'].
                            include?('course_koditsu_platform_component')

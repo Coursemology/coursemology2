@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ForumPostResponsesController < Course::Assessment::Question::Controller # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::ForumPostResponsesController < Course::Assessment::Question::Controller
   include Course::Assessment::Question::GradingContextParamsConcern
 
   build_and_authorize_new_question :forum_post_response_question,

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ModuleLength
 module Course::Assessment::Question::KoditsuQuestionConcern
   extend ActiveSupport::Concern
   include Course::Assessment::KoditsuAssessmentConcern
@@ -146,4 +145,3 @@ module Course::Assessment::Question::KoditsuQuestionConcern
     }
   end
 end
-# rubocop:enable Metrics/ModuleLength

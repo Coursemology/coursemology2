@@ -35,15 +35,41 @@ Lint/AmbiguousBlockAssociation:
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
+Lint/EmptyBlock:
+  Exclude:
+    - 'spec/**/*'
+
+# The Metrics limits below are deliberately more permissive than RuboCop's defaults.
+# They were calibrated against the existing code base so that the cops flag genuine outliers.
 Metrics/AbcSize:
-  Max: 20
+  Max: 35
+  # Rails code reads the same attribute repeatedly (`current_course`, `submission.assessment`);
+  # counting each read separately inflates the score without indicating real complexity.
+  CountRepeatedAttributes: false
 
 Metrics/BlockLength:
   Enabled: false
 
-Metrics/MethodLength:
-  Max: 15
+Metrics/ClassLength:
+  Max: 200
   CountAsOne: ['array', 'hash', 'heredoc']
+  CountComments: false
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/MethodLength:
+  Max: 30
+  CountAsOne: ['array', 'hash', 'heredoc']
+  CountComments: false
+
+Metrics/ModuleLength:
+  Max: 200
+  CountAsOne: ['array', 'hash', 'heredoc']
+  CountComments: false
+
+Metrics/PerceivedComplexity:
+  Max: 15
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
@@ -77,6 +103,9 @@ Style/LambdaCall:
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
+
+Style/OneClassPerFile:
+  Enabled: false
 
 Style/ParallelAssignment:
   Enabled: false

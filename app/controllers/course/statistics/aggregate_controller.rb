@@ -109,7 +109,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
                                      :start_at, :end_at)
   end
 
-  def user_submission_array # rubocop:disable Metrics/AbcSize
+  def user_submission_array
     submission_data_arr = Course::Assessment::Submission.joins(creator: :course_users).
                           where(assessment_id: assessment_info_array.map { |i| i[0] },
                                 course_users: { course_id: current_course.id, role: :student }).

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::AssessmentMarketplaceComponent do
-  controller(Course::Controller) {} # rubocop:disable Lint/EmptyBlock
+  controller(Course::Controller) {}
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do

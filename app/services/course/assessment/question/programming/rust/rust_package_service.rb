@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::Rust::RustPackageService < # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::Programming::Rust::RustPackageService <
   Course::Assessment::Question::Programming::LanguagePackageService
   def submission_templates
     [

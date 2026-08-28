@@ -16,7 +16,6 @@ class Course::Video::ReminderService
 
   private
 
-  # rubocop:disable Metrics/AbcSize
   def unattempted_subscribed_students(video, email_enabled)
     course_users = video.course.course_users
     students = if email_enabled.regular && email_enabled.phantom
@@ -34,5 +33,4 @@ class Course::Video::ReminderService
 
     Set.new(students) - Set.new(submitted) - Set.new(unsubscribed)
   end
-  # rubocop:enable Metrics/AbcSize
 end
