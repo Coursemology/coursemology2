@@ -25,13 +25,6 @@ class SidekiqAdminConstraint
     user.present? && user.administrator?
   end
 
-  # True when the request carries no usable credential at all. Lets the router bounce visitors to
-  # the sign in page while still 404ing signed-in non-admins, who have nothing to gain from being
-  # told the dashboard is there.
-  def signed_out?
-    current_user_from_token.blank?
-  end
-
   private
 
   attr_reader :request

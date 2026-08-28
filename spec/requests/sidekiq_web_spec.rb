@@ -39,6 +39,18 @@ RSpec.describe 'Sidekiq Web dashboard' do
       end
     end
 
+    # The controller that runs the authorization code flow inherits ApplicationController, whose
+    # multitenancy before_action rejects a host that is not a known instance.
+    before { host! instance.host }
+
+    # The authorization code flow reads these; the deployed values live in credentials.
+    before do
+      allow(Keycloak).to receive_messages(auth_server_url: 'http://keycloak.test', realm: 'coursemology')
+      allow(Rails.application.credentials).to receive(:dig).and_call_original
+      allow(Rails.application.credentials).to receive(:dig).
+        with(:keycloak, :frontend, :client_id).and_return('frontend-client')
+    end
+
     # The dashboard's retry, kill and delete buttons are POSTs, so every rule below has to hold for
     # more than GET.
     WRITE_METHODS = [:post, :put, :patch, :delete].freeze
@@ -76,9 +88,8 @@ RSpec.describe 'Sidekiq Web dashboard' do
         end
       end
 
-      # Neither route matches, so the router raises ActionController::RoutingError and the exception
-      # middleware turns it into a 404 - the same answer as any path the app does not serve, which
-      # is the point: the dashboard is not advertised to people who cannot open it.
+      # A credential the app accepts, refused on the role: sending them round Keycloak would only
+      # return them to the same answer, so this short-circuits without leaving the app.
       context 'when the user is signed in but not an administrator' do
         it 'does not route to the dashboard' do
           get '/sidekiq', headers: bearer('user-token')
@@ -111,41 +122,127 @@ RSpec.describe 'Sidekiq Web dashboard' do
         end
       end
 
+      # No usable credential, so there is someone to sign in: start the authorization code flow at
+      # Keycloak rather than at the client app's sign in page, which cannot mint the cookie.
       context 'when the user is not signed in' do
-        it 'redirects to the sign in page, returning here afterwards' do
+        it 'starts the authorization code flow' do
           get '/sidekiq'
 
-          # See Other, so the browser fetches the sign in page with GET and does not cache its way
-          # past the dashboard once signed in.
-          expect(response).to have_http_status(:see_other)
-          expect(response).to redirect_to('/users/sign_in?next=%2Fsidekiq')
+          expect(response).to have_http_status(:redirect)
+          expect(redirect_query['client_id']).to eq(['frontend-client'])
+          expect(redirect_query['redirect_uri']).to eq(["http://#{instance.host}/sidekiq"])
+          expect(redirect_query['response_type']).to eq(['code'])
+          expect(redirect_query['code_challenge_method']).to eq(['S256'])
+          expect(redirect_query['code_challenge'].first).to be_present
+          expect(redirect_query['state'].first).to be_present
           expect(Sidekiq::Web).to_not have_received(:call)
         end
 
-        # A session that lapses while the dashboard is open should send its owner to sign in, not
-        # 404 them the moment they press one of its buttons.
+        it 'starts the flow for a token the auth server does not recognise' do
+          get '/sidekiq', headers: bearer('forged-token')
+
+          expect(response).to have_http_status(:redirect)
+          expect(response.location).to start_with('http://keycloak.test/realms/coursemology')
+        end
+
+        # Only a browser navigation can go round Keycloak; a lapsed dashboard button press cannot.
         WRITE_METHODS.each do |method|
-          it "redirects #{method.to_s.upcase} requests to the sign in page" do
+          it "does not route #{method.to_s.upcase} requests to the dashboard" do
             public_send(method, '/sidekiq/retries')
 
-            expect(response).to have_http_status(:see_other)
-            expect(response).to redirect_to('/users/sign_in?next=%2Fsidekiq%2Fretries')
+            expect(response).to have_http_status(:not_found)
             expect(Sidekiq::Web).to_not have_received(:call)
           end
         end
 
-        it 'preserves the requested path and query in the next URL' do
-          get '/sidekiq/retries?count=25'
+        # A cancelled login must not be answered by starting the flow again.
+        it 'does not restart the flow when Keycloak hands back an error' do
+          get '/sidekiq', params: { error: 'access_denied' }
 
-          expect(response).to redirect_to('/users/sign_in?next=%2Fsidekiq%2Fretries%3Fcount%3D25')
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      # The half that a redirect to the client app's sign in page could never do: the callback lands
+      # on Rails, so the access_token cookie can be written before the dashboard is served.
+      context 'when Keycloak calls back with an authorization code' do
+        # Runs the real first leg so that state and the PKCE verifier are the ones in the session.
+        def start_flow
+          get '/sidekiq'
+          CGI.parse(URI.parse(response.location).query.to_s)['state'].first
+        end
+
+        def stub_exchange(token)
+          exchanged = instance_double(Net::HTTPOK, body: { access_token: token }.to_json)
+          allow(exchanged).to receive(:is_a?).with(Net::HTTPSuccess).and_return(true)
+          allow(Net::HTTP).to receive(:post_form).and_return(exchanged)
+        end
+
+        it 'admits an administrator and leaves them a usable cookie' do
+          state = start_flow
+          stub_exchange('admin-token')
+
+          get '/sidekiq', params: { code: 'an-authorization-code', state: state }
+
+          expect(response).to redirect_to('/sidekiq')
+
+          # The whole point: the next request now carries a credential the constraint accepts.
+          get '/sidekiq'
+          expect(response).to have_http_status(:ok)
+          expect(Sidekiq::Web).to have_received(:call)
+        end
+
+        it 'sends the verifier and the registered redirect URI to the token endpoint' do
+          state = start_flow
+          stub_exchange('admin-token')
+
+          get '/sidekiq', params: { code: 'an-authorization-code', state: state }
+
+          expect(Net::HTTP).to have_received(:post_form).with(
+            URI.parse('http://keycloak.test/realms/coursemology/protocol/openid-connect/token'),
+            hash_including(grant_type: 'authorization_code',
+                           code: 'an-authorization-code',
+                           client_id: 'frontend-client',
+                           redirect_uri: "http://#{instance.host}/sidekiq")
+          )
+        end
+
+        it 'refuses a non-administrator who signed in successfully' do
+          state = start_flow
+          stub_exchange('user-token')
+
+          get '/sidekiq', params: { code: 'an-authorization-code', state: state }
+
+          expect(response).to have_http_status(:not_found)
           expect(Sidekiq::Web).to_not have_received(:call)
         end
 
-        it 'redirects when the token is not one the auth server recognises' do
-          get '/sidekiq', headers: bearer('forged-token')
+        it 'refuses a mismatched state' do
+          start_flow
+          stub_exchange('admin-token')
 
-          expect(response).to redirect_to('/users/sign_in?next=%2Fsidekiq')
-          expect(Sidekiq::Web).to_not have_received(:call)
+          get '/sidekiq', params: { code: 'an-authorization-code', state: 'not-the-state' }
+
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it 'refuses a code with no flow in the session' do
+          stub_exchange('admin-token')
+
+          get '/sidekiq', params: { code: 'an-authorization-code', state: 'anything' }
+
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it 'refuses when the token endpoint rejects the exchange' do
+          state = start_flow
+          failed = instance_double(Net::HTTPBadRequest, body: '{}')
+          allow(failed).to receive(:is_a?).with(Net::HTTPSuccess).and_return(false)
+          allow(Net::HTTP).to receive(:post_form).and_return(failed)
+
+          get '/sidekiq', params: { code: 'an-authorization-code', state: state }
+
+          expect(response).to have_http_status(:not_found)
         end
       end
 
@@ -160,8 +257,12 @@ RSpec.describe 'Sidekiq Web dashboard' do
         expect(response).to have_http_status(:not_found)
 
         get '/sidekiq'
-        expect(response).to redirect_to('/users/sign_in?next=%2Fsidekiq')
+        expect(response).to have_http_status(:redirect)
       end
+    end
+
+    def redirect_query
+      CGI.parse(URI.parse(response.location).query.to_s)
     end
 
     def bearer(token)

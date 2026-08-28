@@ -91,22 +91,10 @@ Rails.application.routes.draw do
       mount Sidekiq::Web, at: '/sidekiq'
     end
 
-    # Signed-out visitors are sent to sign in, and `next` brings them back here once they are
-    # through Keycloak. Signed-in non-admins match neither route and fall through to the usual
-    # 404, so the dashboard is not advertised to people who cannot open it.
-    #
-    # 303, so that whatever method was sent, the browser is told unambiguously to GET the sign in
-    # page. It also keeps the response uncacheable, unlike the 301 `redirect` defaults to, which a
-    # browser would hold on to and keep replaying after the visitor had signed in.
-    sign_in_redirect = redirect(status: 303) do |_params, request|
-      "/users/sign_in?next=#{CGI.escape(request.fullpath)}"
-    end
-
-    constraints ->(request) { SidekiqAdminConstraint.new(request).signed_out? } do
-      # Every method, not just GET: the dashboard's own buttons (retry, kill, delete) are POSTs, so
-      # a session that lapses while it is open should send its owner to sign in rather than 404.
-      match '/sidekiq(/*rest)', to: sign_in_redirect, via: :all
-    end
+    # Anyone the constraint turns away lands here to be signed in through Keycloak, because a
+    # server-rendered page cannot mint the access_token cookie the constraint reads, and so cannot
+    # be fixed by redirecting to the client app's sign in page. See the controller.
+    match '/sidekiq(/*rest)', to: 'system/admin/sidekiq_sessions#show', via: :all
   end
 
   resources :announcements, only: [:index] do
