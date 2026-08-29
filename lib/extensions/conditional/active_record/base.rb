@@ -61,6 +61,20 @@ module Extensions::Conditional::ActiveRecord::Base
       end
     end
 
+    # Computes the unlock rate for the specified course users.
+    #
+    # @param [Array<CourseUser>] course_users The course users that conditions are being checked on
+    # @return [Double] the unlock rate depending on whether each user meets the necessary conditions
+    def compute_unlock_rate(course_users)
+      return 1.0 if conditions.empty? || course_users.empty?
+
+      num_users_unlocked = compute_overall_satisfaction_count(course_users).reduce do |current_num, count|
+        current_num + 1 if sufficient_number_to_unlock?(count)
+      end
+
+      1.0 * num_users_unlocked / course_users.length
+    end
+
     # Permit the conditional for the given course user.
     #
     # @param [CourseUser] _course_user The course user in which the conditional is to unlock for
@@ -112,6 +126,25 @@ module Extensions::Conditional::ActiveRecord::Base
         current_course, conditional_satisfiability_evaluation_time
       )
     end
+
+    # Computes the number of conditions each course user satisfies
+    def compute_overall_satisfaction_count(course_users)
+      overall_satisfaction_count = Array.new(course_users.length, 0)
+
+      conditions.each do |condition|
+        condition.compute_satisfaction_information(course_users).each_with_index do |did_satisfy_condition, index|
+          overall_satisfaction_count[index] += 1 if did_satisfy_condition
+        end
+      end
+
+      overall_satisfaction_count
+    end
+
+    # Determines whether the specified condition count is sufficient to unlock this conditional
+    def sufficient_number_to_unlock?(_condition_count)
+      (satisfiability_type.to_s == :at_least_one_condition.to_s && count >= 1) ||
+        (satisfiability_type.to_s == :all_conditions.to_s && count == conditions.length)
+    end
   end
 
   module ConditionInstanceMethods
@@ -139,6 +172,10 @@ module Extensions::Conditional::ActiveRecord::Base
     # @return [Boolean] true if the condition is met and false otherwise
     def satisfied_by?(_user)
       raise NotImplementedError, 'Subclasses must implement a satisfied_by? method.'
+    end
+
+    def compute_satisfaction_information(_users)
+      raise NotImplementedError, 'Subclasses must implement a compute_satisfaction_information method.'
     end
 
     private

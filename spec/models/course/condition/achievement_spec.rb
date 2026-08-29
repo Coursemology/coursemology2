@@ -149,6 +149,48 @@ RSpec.describe Course::Condition::Achievement, type: :model do
       end
     end
 
+    describe '#compute_satisfaction_information' do
+      let(:achievement) { create(:achievement) }
+      let(:course_user1) { create(:course_user, course: course) }
+      let(:course_user2) { create(:course_user, course: course) }
+      let(:course_user3) { create(:course_user, course: course) }
+
+      context 'when all users have the achievement' do
+        before do
+          create(:course_user_achievement, course_user: course_user1, achievement: achievement)
+          create(:course_user_achievement, course_user: course_user2, achievement: achievement)
+          create(:course_user_achievement, course_user: course_user3, achievement: achievement)
+        end
+
+        it 'returns true for all users' do
+          subject.achievement = achievement
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, true, true])
+        end
+      end
+
+      context 'when one user does not have the achievement while the rest have it' do
+        before do
+          create(:course_user_achievement, course_user: course_user1, achievement: achievement)
+          create(:course_user_achievement, course_user: course_user3, achievement: achievement)
+        end
+
+        it 'returns false for that user and true for the rest' do
+          subject.achievement = achievement
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, false, true])
+        end
+      end
+
+      context 'when all users do not have the achievement' do
+        it 'returns false for all users' do
+          subject.achievement = achievement
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([false, false, false])
+        end
+      end
+    end
+
     describe '#dependent_object' do
       it 'returns the correct dependent achievement object' do
         expect(subject.dependent_object).to eq(subject.achievement)
