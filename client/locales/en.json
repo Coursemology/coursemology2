@@ -4172,6 +4172,9 @@
   "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
     "defaultMessage": "{secs, plural, one {# second} other {# seconds}}"
   },
+  "course.assessment.submission.SubmissionEditIndex.observingAttemptWarning": {
+    "defaultMessage": "This user has not yet finalised their submission. Edits made on this page will affect answers directly, which can influence auto grading results."
+  },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "Submission for this assessment cannot be viewed once finalised."
   },

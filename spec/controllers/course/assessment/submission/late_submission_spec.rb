@@ -145,5 +145,36 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         expect(JSON.parse(subject.body)['submission']['late']).to be true
       end
     end
+
+    describe '#edit force-submit countdown' do
+      render_views
+
+      let(:end_at) { 30.minutes.from_now }
+      let!(:submission) do
+        create(:submission, :attempting, assessment: assessment,
+                                         creator: student.user, course_user: student)
+      end
+
+      subject do
+        get :edit, params: {
+          course_id: course, assessment_id: assessment, id: submission, format: :json
+        }
+        JSON.parse(response.body)['assessment']['forceSubmitRemainingTime']
+      end
+
+      it 'sends the remaining time to the creator' do
+        is_expected.to be_within(5_000).of(30.minutes.in_milliseconds)
+      end
+
+      context 'when a grading instructor (not the creator) opens the attempt' do
+        let(:manager) { create(:course_manager, course: course) }
+
+        before { controller_sign_in(controller, manager.user) }
+
+        it 'does not send a countdown (their timer must never auto-submit the student)' do
+          is_expected.to be_nil
+        end
+      end
+    end
   end
 end

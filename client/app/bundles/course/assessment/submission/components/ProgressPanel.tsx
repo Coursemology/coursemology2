@@ -13,6 +13,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
 import { workflowStates } from '../constants';
+import ObservingAttemptAlert from '../pages/SubmissionEditIndex/ObservingAttemptAlert';
 import { submissionShape } from '../propTypes';
 import translations from '../translations';
 
@@ -69,6 +70,8 @@ const ProgressPanel = (props): JSX.Element => {
           {t(translations.lateSubmission)}
         </Alert>
       )}
+
+      <ObservingAttemptAlert />
 
       <Table style={styles.table}>
         <TableBody>

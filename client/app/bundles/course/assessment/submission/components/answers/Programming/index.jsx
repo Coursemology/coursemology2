@@ -79,8 +79,10 @@ const Programming = (props) => {
   const submission = useAppSelector(getSubmission);
   const isAttempting = submission.workflowState === workflowStates.Attempting;
 
+  // Get Help is a one-on-one conversation between the student and Codaveri, so the chat panel is
+  // shown only to the submission's own creator, never to staff viewing the attempt.
   const isLiveFeedbackChatOpen =
-    liveFeedbackChatForAnswer?.isLiveFeedbackChatOpen;
+    liveFeedbackChatForAnswer?.isLiveFeedbackChatOpen && submission.isCreator;
   const fileSubmission = question.fileSubmission;
   const isSavingAnswer = useAppSelector((state) =>
     getIsSavingAnswer(state, answerId),
