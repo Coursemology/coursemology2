@@ -47,8 +47,12 @@ const ActionButtonsRow: FC<Props> = (props) => {
   ].filter(Boolean);
 
   const rightAlignedButtons = [
+    // Get Help is a one-on-one conversation between the student and Codaveri, so it is offered only
+    // to the submission's own creator. Staff audit it through the Get Help History chip instead of
+    // posting into the student's thread.
     question.type === questionTypes.Programming &&
-      question.liveFeedbackEnabled && (
+      question.liveFeedbackEnabled &&
+      submission.isCreator && (
         <LiveFeedbackButton key="get-help" answerId={question.answerId} />
       ),
   ].filter(Boolean);

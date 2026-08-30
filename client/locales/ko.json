@@ -4157,6 +4157,9 @@
   "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
     "defaultMessage": "{secs, plural, other {#초}}"
   },
+  "course.assessment.submission.SubmissionEditIndex.observingAttemptWarning": {
+    "defaultMessage": "이 사용자는 아직 제출물을 최종 제출하지 않았습니다. 이 페이지에서 수정한 내용은 답안에 직접 반영되며, 자동 채점 결과에 영향을 줄 수 있습니다."
+  },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "이 평가의 제출물은 최종화된 후에는 볼 수 없습니다."
   },

@@ -26,7 +26,14 @@ json.assessment do
   # timeline). Null when the submission is never force-submitted. Sending the remaining duration
   # rather than an absolute timestamp lets the client anchor to its own clock, so a skewed client
   # clock does not fire the force-submit early or late.
-  force_submit_at = @submission.attempting? ? @submission.force_submit_at : nil
+  #
+  # Only sent to the submission's own creator: this value drives the client-side auto-submit timer
+  # (and the countdown banner), which must fire only for the student taking the assessment. A grader
+  # or instructor merely viewing an in-progress attempt must never trigger a finalise, so they get
+  # nil and no timer — matching the creator-only #edit fail-safe. The background job enforces the
+  # deadline server-side regardless.
+  is_creator = current_user.id == @submission.creator_id
+  force_submit_at = (@submission.attempting? && is_creator) ? @submission.force_submit_at : nil
   json.forceSubmitRemainingTime force_submit_at && ((force_submit_at - Time.zone.now) * 1000).round
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?

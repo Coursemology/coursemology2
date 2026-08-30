@@ -4151,6 +4151,9 @@
   "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
     "defaultMessage": "{secs, plural, other {#秒}}"
   },
+  "course.assessment.submission.SubmissionEditIndex.observingAttemptWarning": {
+    "defaultMessage": "该用户尚未最终提交其作答。在此页面所做的修改将直接影响答案，并可能影响自动评分结果。"
+  },
   "course.assessment.submission.submissionBlocked": {
     "defaultMessage": "此测验的内容提交后将无法查看。"
   },

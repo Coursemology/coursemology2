@@ -705,6 +705,12 @@ const translations = defineMessages({
     defaultMessage:
       'Submission for this assessment cannot be viewed once finalised.',
   },
+  observingAttemptWarning: {
+    id: 'course.assessment.submission.SubmissionEditIndex.observingAttemptWarning',
+    defaultMessage:
+      'This user has not yet finalised their submission. Edits made on this \
+page will affect answers directly, which can influence auto grading results.',
+  },
   hoursMinutesSeconds: {
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds',
     defaultMessage:
