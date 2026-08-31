@@ -82,12 +82,10 @@ Lint/UselessAssignment:
     - 'spec/factories/course_assessment_question_multiple_responses.rb'
     - 'spec/features/system/admin/components_settings_spec.rb'
 
-# Offense count: 25
+# Offense count: 23
 Lint/UselessConstantScoping:
   Exclude:
     - 'app/helpers/application_html_formatters_helper.rb'
-    - 'app/models/concerns/course/video/submission/statistic/cikgo_task_completion_concern.rb'
-    - 'app/models/concerns/course/video/watch_statistics_concern.rb'
     - 'app/models/course/monitoring/heartbeat.rb'
     - 'app/services/cikgo/service.rb'
     - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
@@ -177,7 +175,7 @@ Naming/BlockForwarding:
     - 'lib/extensions/database_event/active_record/base.rb'
     - 'spec/support/sidekiq.rb'
 
-# Offense count: 24
+# Offense count: 23
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional
@@ -202,7 +200,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/controllers/course/survey/surveys_controller.rb'
     - 'app/controllers/course/user_invitations_controller.rb'
     - 'app/controllers/course/video/topics_controller.rb'
-    - 'app/controllers/course/video/videos_controller.rb'
     - 'app/controllers/jobs_controller.rb'
     - 'app/helpers/course/assessment/assessments_helper.rb'
     - 'app/helpers/course/assessment/submissions_helper.rb'
@@ -486,7 +483,7 @@ Style/HashAsLastArrayItem:
     - 'spec/support/stubs/codaveri/feedback_api_stubs.rb'
     - 'spec/support/stubs/ssid/api_stubs.rb'
 
-# Offense count: 9
+# Offense count: 8
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowedReceivers.
 # AllowedReceivers: Thread.current
@@ -494,7 +491,6 @@ Style/HashEachMethods:
   Exclude:
     - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
     - 'app/controllers/course/group/group_categories_controller.rb'
-    - 'app/models/concerns/course/video/watch_statistics_concern.rb'
     - 'app/models/course/experience_points/forum_disbursement.rb'
     - 'lib/tasks/db/populate_assessment_links.rake'
     - 'spec/libraries/course/conditional/user_satisfiability_graph_spec.rb'
@@ -601,11 +597,10 @@ Style/RedundantLineContinuation:
     - 'spec/models/course/assessment/question/text_response_comprehension_solution_spec.rb'
     - 'spec/services/course/skills_mastery_preload_service_spec.rb'
 
-# Offense count: 8
+# Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantParentheses:
   Exclude:
-    - 'app/models/course/video/submission.rb'
     - 'app/services/concerns/course/user_invitation_service/process_invitation_concern.rb'
     - 'app/services/course/assessment/koditsu_assessment_invitation_service.rb'
     - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
@@ -680,7 +675,7 @@ Style/SymbolProc:
     - 'app/controllers/system/admin/instance/components_controller.rb'
     - 'app/controllers/system/admin/instance/user_invitations_controller.rb'
 
-# Offense count: 20
+# Offense count: 19
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowSafeAssignment.
 # SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
@@ -692,7 +687,6 @@ Style/TernaryParentheses:
     - 'app/controllers/course/learning_map_controller.rb'
     - 'app/controllers/course/lesson_plan/items_controller.rb'
     - 'app/controllers/course/material/folders_controller.rb'
-    - 'app/models/concerns/course/video/watch_statistics_concern.rb'
     - 'app/models/course/assessment/answer/programming.rb'
     - 'app/models/course/assessment/answer/programming_file.rb'
     - 'app/models/course/user_invitation.rb'

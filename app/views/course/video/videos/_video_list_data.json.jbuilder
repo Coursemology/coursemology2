@@ -27,7 +27,7 @@ json.videoChildrenExist video.children_exist? if can_manage
 
 if can_analyze
   json.watchCount @video_submission_count_hash ? @video_submission_count_hash[video.id] : video.student_submission_count
-  json.percentWatched video.statistic&.percent_watched
+  json.percentWatched @percent_watched_hash ? @percent_watched_hash[video.id] : video.statistic&.percent_watched
 end
 
 json.permissions do

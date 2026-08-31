@@ -12,7 +12,7 @@ json.videos @videos do |video|
 end
 
 json.metadata do
-  json.currentTabId @tab.id
+  json.currentTabId @current_tab.id
   json.studentsCount @course_students.count
   json.isCurrentCourseUser current_course_user.present?
   json.isStudent current_course_user&.student?

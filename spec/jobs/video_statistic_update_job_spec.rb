@@ -34,6 +34,37 @@ RSpec.describe VideoStatisticUpdateJob do
         end
       end
 
+      context 'memory footprint' do
+        let(:student) { create(:course_student, course: course).user }
+        let!(:submission) { create(:video_submission, video: video, creator: student) }
+
+        # Counts the rows ActiveRecord turns into objects, per class, while the block runs.
+        def instantiated_records
+          counts = Hash.new(0)
+          subscriber = ActiveSupport::Notifications.subscribe('instantiation.active_record') do |*, payload|
+            counts[payload[:class_name]] += payload[:record_count]
+          end
+          yield
+          counts
+        ensure
+          ActiveSupport::Notifications.unsubscribe(subscriber)
+        end
+
+        # Regression: the job used to filter with `Enumerable#select` on an unscoped relation, so it
+        # loaded EVERY video and submission in the database (it is not tenant-scoped) before
+        # discarding the cached ones. The cost scaled with total table size rather than with the
+        # amount of stale data, which is what exhausted the worker's memory in production.
+        it 'does not load already-cached records' do
+          perform_job # caches everything, so a second run has no work to do
+
+          counts = instantiated_records { perform_job }
+
+          expect(counts['Course::Video']).to eq(0)
+          expect(counts['Course::Video::Submission']).to eq(0)
+          expect(counts['Course::Video::Submission::Statistic']).to eq(0)
+        end
+      end
+
       context 'submission statistics' do
         let(:student) { create(:course_student, course: course).user }
         let!(:submission) { create(:video_submission, video: video, creator: student) }

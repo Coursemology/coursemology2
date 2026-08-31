@@ -10,11 +10,13 @@ class Course::Video::VideosController < Course::Video::Controller
         @can_analyze = can_for_videos_in_current_course? :analyze
         @can_manage = can_for_videos_in_current_course? :manage
 
-        preload_student_submission_count if @can_analyze
+        if @can_analyze
+          preload_student_submission_count
+          preload_percent_watched
+        end
         preload_video_item
         @videos = @videos.
                   from_tab(current_tab).
-                  includes(:statistic).
                   with_submissions_by(current_user)
 
         @course_students = current_course.course_users.students
@@ -71,13 +73,13 @@ class Course::Video::VideosController < Course::Video::Controller
   end
 
   def current_tab
-    @tab ||= if @video&.tab.present?
-               @video.tab
-             elsif params[:tab].present?
-               Course::Video::Tab.find(params[:tab])
-             else
-               current_course.default_video_tab
-             end
+    @current_tab ||= if @video&.tab.present?
+                       @video.tab
+                     elsif params[:tab].present?
+                       Course::Video::Tab.find(params[:tab])
+                     else
+                       current_course.default_video_tab
+                     end
   end
 
   def load_video_tabs
@@ -100,5 +102,10 @@ class Course::Video::VideosController < Course::Video::Controller
                                    to_h do |video|
       [video.id, video.student_submission_count]
     end
+  end
+
+  def preload_percent_watched
+    @percent_watched_hash = Course::Video::Statistic.where(video: @videos).
+                            pluck(:video_id, :percent_watched).to_h
   end
 end
