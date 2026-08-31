@@ -35,6 +35,7 @@ module Course::Video::WatchStatisticsConcern
   private
 
   EVENT_TYPES = { start: ['play', 'seek_end'], end: ['pause', 'seek_start', 'end'] }.freeze
+  private_constant :EVENT_TYPES
 
   # The scope for events to compute statistics with.
   #
@@ -67,9 +68,9 @@ module Course::Video::WatchStatisticsConcern
   #
   # @return [Hash<Symbol, [Integer]>] The hash containing arrays of start times and end times.
   def start_and_end_times
-    video_duration = (is_a? Course::Video) ? duration : video.duration
+    video_duration = is_a?(Course::Video) ? duration : video.duration
     result = { start: [], end: [] }
-    relevant_events_scope.all_start_and_end_events.to_a.group_by { |d| d[:session_id] }.each do |_, session_events|
+    relevant_events_scope.all_start_and_end_events.to_a.group_by { |d| d[:session_id] }.each_value do |session_events|
       session_intervals = filter_interval_events(session_events, video_duration)
       result[:start] += session_intervals[:start]
       result[:end] += session_intervals[:end]

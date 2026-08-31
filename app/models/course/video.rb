@@ -126,13 +126,13 @@ class Course::Video < ApplicationRecord
     sessions.exists? || posts.exists?
   end
 
+  # Averages in SQL rather than loading every statistic row: each row carries a +watch_freq+ integer
+  # array sized to the video's duration, none of which is needed to average a single column.
+  #
+  # This previously read `sum / size` over two Integers, which floor-divides.
   def calculate_percent_watched
-    submission_statistics = Course::Video::Submission::Statistic.where(submission: submissions)
-    if submission_statistics.blank?
-      0
-    else
-      (submission_statistics.map(&:percent_watched).sum / submission_statistics.size).round
-    end
+    Course::Video::Submission::Statistic.where(submission: submissions).
+      average(:percent_watched)&.floor || 0
   end
 
   # @override ConditionalInstanceMethods#permitted_for!

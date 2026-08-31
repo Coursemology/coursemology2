@@ -96,6 +96,28 @@ RSpec.describe Course::Video, type: :model do
 
         expect(video1.calculate_percent_watched).to eq(76)
       end
+
+      # Regression: this used to load every submission statistic and average them in Ruby. Each of
+      # those rows carries a watch_freq integer array with one element per second of video, so a
+      # popular video pulled megabytes into memory to produce a single number. The average is now
+      # computed in SQL, which must instantiate no statistic objects at all.
+      it 'averages in the database without loading statistic rows' do
+        submission1.update_statistic
+        submission2.update_statistic
+
+        instantiated = 0
+        subscriber = ActiveSupport::Notifications.subscribe('instantiation.active_record') do |*, payload|
+          instantiated += payload[:record_count] if payload[:class_name] == 'Course::Video::Submission::Statistic'
+        end
+        result = begin
+          video1.calculate_percent_watched
+        ensure
+          ActiveSupport::Notifications.unsubscribe(subscriber)
+        end
+
+        expect(result).to eq(76)
+        expect(instantiated).to eq(0)
+      end
     end
 
     describe '#next_video' do

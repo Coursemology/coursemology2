@@ -9,6 +9,7 @@ module Course::Video::Submission::Statistic::CikgoTaskCompletionConcern
   private
 
   COMPLETED_MINIMUM_WATCH_PERCENTAGE = 90
+  private_constant :COMPLETED_MINIMUM_WATCH_PERCENTAGE
 
   delegate :edit_course_video_submission_url, to: 'Rails.application.routes.url_helpers'
 
