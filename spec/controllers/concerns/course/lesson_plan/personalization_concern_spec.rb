@@ -194,5 +194,39 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
       # No test for OTOT since as of right now, OTOT is composed of stragglers and fomo
     end
+
+    context 'when the course has many course users' do
+      let!(:course_users) do
+        create_list(:course_user, 3, course: course, timeline_algorithm: 'fomo').each do |course_user|
+          create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
+        end
+      end
+
+      it 'shifts the item for every course user' do
+        dummy_controller.send(:update_personalized_timeline_for_item, yet_to_open_assessment.lesson_plan_item)
+
+        course_users.each do |course_user|
+          expect(course_user.personal_times.count).to eq(1)
+        end
+      end
+
+      # The users are streamed with find_each rather than preloaded, so nothing here may fall back
+      # to querying each user's course individually. Loading them through the association keeps
+      # `course` set on each record via inverse_of; querying CourseUser directly would not, and the
+      # N+1 would be invisible without this assertion since the strategies read course.time_zone.
+      it 'does not query the course once per user' do
+        queries = 0
+        subscriber = ActiveSupport::Notifications.subscribe('sql.active_record') do |*, payload|
+          queries += 1 if payload[:sql].match?(/FROM "courses"/)
+        end
+        begin
+          dummy_controller.send(:update_personalized_timeline_for_item, yet_to_open_assessment.lesson_plan_item)
+        ensure
+          ActiveSupport::Notifications.unsubscribe(subscriber)
+        end
+
+        expect(queries).to eq(1) # the single Course.find, and nothing per user
+      end
+    end
   end
 end
