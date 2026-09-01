@@ -83,6 +83,25 @@ module Capybara::TestGroupHelpers
       find_field(field_name).send_keys([:control, 'a']).send_keys(date.gsub(' ', ''))
     end
 
+    # https://stackoverflow.com/questions/38049020/how-to-test-file-attachment-on-hidden-input-using-capybara
+
+    # NOTE: Using `make_visible: true` with `attach_file` is flaky — Capybara sometimes fails with
+    # a Capybara::ExpectationNotMet error even when the file input exists and is targeted correctly.
+    # Instead, we use JavaScript to explicitly change the file input's CSS and make it visible.
+    # This workaround ensures consistent behavior across browsers and environments.
+
+    # @param [Array<String>|String] paths The path(s) of the file(s) to attach.
+    # @param [String] selector The selector of the hidden file input.
+    def attach_files_to_hidden_input(paths, selector: 'input[type="file"]')
+      # Wait for file input to be in the DOM (even if hidden)
+      expect(page).to have_selector(selector, visible: false)
+      input = find(selector, visible: false)
+      page.execute_script("arguments[0].style.display = 'block';", input)
+
+      # Attach files to the (now visible) input
+      input.attach_file(paths)
+    end
+
     # Special helper to find a react-toastify message
     #
     # Since capybara's `find` has a default timeout until the element is found, this helps
