@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  # Candidate items examined per batch by #upcoming_lesson_plan_items_exist?. Small because each
+  # candidate carries one personal time per course user.
+  CANDIDATE_ITEM_BATCH_SIZE = 20
+
   include Course::SearchConcern
   include Course::DuplicationConcern
   include Course::CourseComponentsConcern
@@ -320,11 +324,14 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def upcoming_lesson_plan_items_exist?
-    opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
-    opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
-      course_users.any? do |course_user|
-        item.time_for(course_user).start_at.between?(Time.zone.now, 1.day.from_now)
-      end
+    now = Time.zone.now
+    window_end = now + 1.day
+    # find_each returns a lazy enumerator, so `any?` stops at the first batch that answers the
+    # question instead of materialising every candidate.
+    items_opening_between(now, window_end).find_each(batch_size: CANDIDATE_ITEM_BATCH_SIZE).any? do |item|
+      next false unless item.actable.include_in_consolidated_email?(:opening_reminder)
+
+      course_users.any? { |course_user| item.time_for(course_user).start_at.between?(now, window_end) }
     end
   end
 
@@ -414,5 +421,30 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return if num_defaults <= 1 # Could be 0 if item is new
 
     errors.add(:reference_timelines, :must_have_at_most_one_default)
+  end
+
+  # Published items with some time — personal or reference — falling in the window.
+  #
+  # This is a superset of the items actually upcoming for a course user, not an answer on its own:
+  # +time_for+ returns either the user's personal time or a reference time, so an item that is
+  # upcoming for somebody necessarily has one of those rows in the window. The caller still decides
+  # per user. Narrowing here keeps the Ruby pass — and its per-item email-setting lookup — off the
+  # entire lesson plan, which is nearly all of the work for a course with nothing opening.
+  #
+  # +preload+ rather than +eager_load+ deliberately: personal times exist per item *per course
+  # user*, so joining them alongside reference times in one query multiplies the two into an
+  # items x users x timelines result set.
+  def items_opening_between(from, to)
+    lesson_plan_items.published.
+      where(
+        'EXISTS (SELECT 1 FROM course_personal_times pt
+                  WHERE pt.lesson_plan_item_id = course_lesson_plan_items.id
+                    AND pt.start_at BETWEEN :from AND :to)
+         OR EXISTS (SELECT 1 FROM course_reference_times rt
+                     WHERE rt.lesson_plan_item_id = course_lesson_plan_items.id
+                       AND rt.start_at BETWEEN :from AND :to)',
+        from: from, to: to
+      ).
+      preload(:personal_times, :reference_times, :actable)
   end
 end
