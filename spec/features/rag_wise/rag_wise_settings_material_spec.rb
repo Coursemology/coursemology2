@@ -21,11 +21,7 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         docx_file = File.join(Rails.root, '/spec/fixtures/files/one-page-word-document.docx')
         unsupported_file_type = File.join(Rails.root, '/spec/fixtures/files/template_file')
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([txt_file,
-                                                                pdf_file,
-                                                                ipynb_file,
-                                                                docx_file,
-                                                                unsupported_file_type], make_visible: true)
+        attach_files_to_hidden_input([txt_file, pdf_file, ipynb_file, docx_file, unsupported_file_type])
         find('button#material-upload-form-upload-button').click
         wait_for_page
 
@@ -50,7 +46,7 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         pdf_file = File.join(Rails.root, '/spec/fixtures/files/two-page-document-with-text.pdf')
         pdf_file_name = 'two-page-document-with-text.pdf'
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([pdf_file], make_visible: true)
+        attach_files_to_hidden_input([pdf_file])
         find('button#material-upload-form-upload-button').click
         wait_for_page
         file = parent_folder.materials.first
@@ -83,8 +79,7 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         ipynb_file = File.join(Rails.root, '/spec/fixtures/files/template_ipynb.ipynb')
         docx_file = File.join(Rails.root, '/spec/fixtures/files/one-page-word-document.docx')
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([pdf_file, txt_file, ipynb_file, docx_file],
-                                                               make_visible: true)
+        attach_files_to_hidden_input([pdf_file, txt_file, ipynb_file, docx_file])
         find('button#material-upload-form-upload-button').click
         wait_for_page
         first_file = parent_folder.materials.first
@@ -118,7 +113,7 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         txt_file = File.join(Rails.root, '/spec/fixtures/files/text.txt')
         txt_file_name = 'text.txt'
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([txt_file], make_visible: true)
+        attach_files_to_hidden_input([txt_file])
         find('button#material-upload-form-upload-button').click
         wait_for_page
 
