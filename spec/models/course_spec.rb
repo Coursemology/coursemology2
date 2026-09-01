@@ -372,5 +372,110 @@ RSpec.describe Course, type: :model do
         end
       end
     end
+
+    # Drives ConsolidatedItemEmailJob: a course only gets an opening reminder when this is true.
+    # "Upcoming" is per course user — the effective time is the user's personal time if they have
+    # one, otherwise the reference time for their timeline — so an item can be upcoming for nobody
+    # even when its reference time is imminent.
+    describe '#upcoming_lesson_plan_items_exist?' do
+      let(:course) { create(:course) }
+      let!(:course_user) { create(:course_user, course: course) }
+      let!(:video) { create(:course_video, course: course, start_at: start_at, published: published) }
+      let(:start_at) { 1.hour.from_now }
+      let(:published) { true }
+
+      # Every course user needs one: `create(:course)` also makes an owner, and a user without a
+      # personal time falls back to the reference time, which would keep the item upcoming.
+      def move_personal_times_to(new_start_at)
+        course.course_users.each do |user|
+          personal_time = video.find_or_create_personal_time_for(user)
+          personal_time.start_at = new_start_at
+          personal_time.save!
+        end
+      end
+
+      def disable_opening_reminder_emails
+        course.setting_emails.
+          where(component: :videos, course_assessment_category_id: nil, setting: :opening_reminder).
+          first.update!(regular: false, phantom: false)
+      end
+
+      it 'is true when a published item opens within the next day' do
+        expect(course.upcoming_lesson_plan_items_exist?).to be true
+      end
+
+      context 'when the item opens beyond the next day' do
+        let(:start_at) { 100.hours.from_now }
+
+        it { expect(course.upcoming_lesson_plan_items_exist?).to be false }
+      end
+
+      context 'when the item has already opened' do
+        let(:start_at) { 1.hour.ago }
+
+        it { expect(course.upcoming_lesson_plan_items_exist?).to be false }
+      end
+
+      context 'when the item is unpublished' do
+        let(:published) { false }
+
+        it { expect(course.upcoming_lesson_plan_items_exist?).to be false }
+      end
+
+      it 'is false when every user has a personal time beyond the next day' do
+        move_personal_times_to(100.hours.from_now)
+
+        expect(course.upcoming_lesson_plan_items_exist?).to be false
+      end
+
+      context 'when the reference time is beyond the next day' do
+        let(:start_at) { 100.hours.from_now }
+
+        it 'is true when users have a personal time within the next day' do
+          move_personal_times_to(1.hour.from_now)
+
+          expect(course.upcoming_lesson_plan_items_exist?).to be true
+        end
+      end
+
+      it 'is false when opening reminder emails are disabled for the component' do
+        disable_opening_reminder_emails
+
+        expect(course.upcoming_lesson_plan_items_exist?).to be false
+      end
+
+      it 'is false when the course has no course users' do
+        course.course_users.destroy_all
+
+        expect(course.reload.upcoming_lesson_plan_items_exist?).to be false
+      end
+
+      # Regression: this used to load every published item in the course — with personal and
+      # reference times joined in one query, so items x course users x timelines rows — and filter
+      # in Ruby, calling into the course's email settings once per item. The work scaled with the
+      # size of the lesson plan rather than with how much of it was actually opening, and the job
+      # runs this hourly for every course in a midnight time zone.
+      context 'when nothing is opening within the next day' do
+        let(:start_at) { 100.hours.from_now }
+        let!(:other_items) do
+          create_list(:course_video, 5, course: course, start_at: 200.hours.from_now, published: true)
+        end
+
+        it 'does not load any lesson plan items' do
+          counts = Hash.new(0)
+          subscriber = ActiveSupport::Notifications.subscribe('instantiation.active_record') do |*, payload|
+            counts[payload[:class_name]] += payload[:record_count]
+          end
+          result = begin
+            course.upcoming_lesson_plan_items_exist?
+          ensure
+            ActiveSupport::Notifications.unsubscribe(subscriber)
+          end
+
+          expect(result).to be false
+          expect(counts['Course::LessonPlan::Item']).to eq(0)
+        end
+      end
+    end
   end
 end
