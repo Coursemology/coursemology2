@@ -75,6 +75,11 @@ RSpec.describe User::RegistrationsController, type: :controller do
         }
       end
 
+      # Resolves the user an example just registered, by the address it submitted.
+      def registered_user(address)
+        User::Email.find_by!(email: address).user
+      end
+
       context 'user registration is successful' do
         requires_login
 
@@ -134,7 +139,7 @@ RSpec.describe User::RegistrationsController, type: :controller do
               post :create, params: valid_user_params.merge(enrol_course_id: course.id)
             end.to change(Course::EnrolRequest, :count).by(1)
 
-            new_user = User.order(:created_at).last
+            new_user = registered_user(valid_user_params[:user][:email])
             enrol_request = Course::EnrolRequest.find_by(course: course, user: new_user)
             expect(enrol_request).to be_present
             expect(enrol_request.workflow_state).to eq('pending')
@@ -146,7 +151,7 @@ RSpec.describe User::RegistrationsController, type: :controller do
             it 'auto-approves the request and creates a CourseUser' do
               post :create, params: valid_user_params.merge(enrol_course_id: course.id)
 
-              new_user = User.order(:created_at).last
+              new_user = registered_user(valid_user_params[:user][:email])
               enrol_request = Course::EnrolRequest.find_by(course: course, user: new_user)
               expect(enrol_request.workflow_state).to eq('approved')
               expect(CourseUser.find_by(course: course, user: new_user)).to be_present
@@ -178,7 +183,7 @@ RSpec.describe User::RegistrationsController, type: :controller do
           it 'creates the user, enrols them once and confirms the invitation' do
             expect { subject }.to change(User, :count).by(1).and change(CourseUser, :count).by(1)
 
-            new_user = User.order(:created_at).last
+            new_user = registered_user(email)
             course_user = CourseUser.find_by(course: course, user: new_user)
             expect(course_user).to be_present
             expect(course_user.external_id).to eq(external_id)
