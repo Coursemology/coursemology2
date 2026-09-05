@@ -164,3 +164,31 @@ test.describe('course landing page for a returning authenticated user', () => {
     await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
   });
 });
+
+test.describe('signing in from a publicly accessible course page', () => {
+  let course: { id: number };
+
+  test.beforeEach(async () => {
+    course = await manufacture({ course: { traits: ['published'] } });
+  });
+
+  test('returns the user to the course they were viewing', async ({
+    signInPage: page,
+  }) => {
+    const user = await page.manufactureUser();
+
+    await page.goto(`/courses/${course.id}`);
+    await page.getByRole('button', { name: 'Sign in' }).click();
+
+    await page.waitForURL(/localhost:8443/, { timeout: 30_000 });
+    await page.getByPlaceholder('Email').fill(user.email);
+    await page.getByPlaceholder('Password').fill(user.password);
+    await page.getByRole('button', { name: 'Sign in' }).click();
+
+    // Not the origin, which would bounce them on to whichever course they
+    // happened to open last.
+    await expect(page).toHaveURL(new RegExp(`/courses/${course.id}`), {
+      timeout: 30_000,
+    });
+  });
+});

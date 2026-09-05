@@ -95,8 +95,9 @@ export const useAuthAdapter = (): AuthAdapterProps => {
   const { signinRedirect, signoutRedirect, signoutSilent, ...otherProps } =
     useAuth();
 
+  // Return the user to the page they signed in from, not to the origin.
   const adaptedSignInRedirect = (args?: SigninRedirectArgs): Promise<void> =>
-    signinRedirect({ redirect_uri: window.origin, ...args });
+    signinRedirect({ redirect_uri: window.location.href, ...args });
 
   const adaptedSignOutRedirect = (args?: SignoutRedirectArgs): Promise<void> =>
     signoutRedirect({ post_logout_redirect_uri: window.origin, ...args });
