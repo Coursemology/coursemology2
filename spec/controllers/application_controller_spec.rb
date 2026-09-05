@@ -167,6 +167,57 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
+  describe '#handle_authentication_error' do
+    with_tenant(:instance) do
+      run_rescue
+
+      before do
+        # Isolates the rescue handler: without this, resolving the user would
+        # reach out to Keycloak for the JWKS.
+        allow(controller).to receive(:current_user).and_return(nil)
+
+        # Rails only emits a deletion header for a cookie the request actually
+        # carried, so both cases need one present to tell the outcomes apart.
+        request.cookies[:access_token] = 'a-previously-issued-token'
+
+        def controller.index
+          raise AuthenticationError
+        end
+      end
+
+      context 'when the request presented a bearer token' do
+        before do
+          request.headers['Authorization'] = 'Bearer an-expired-token'
+          get :index
+        end
+
+        it 'returns HTTP status 401' do
+          expect(response.status).to eq(401)
+        end
+
+        it 'leaves the access token cookie alone' do
+          # The bearer token failed, which says nothing about the cookie. Images
+          # already on the page depend on it and cannot present a bearer at all.
+          expect(response.cookies).not_to have_key('access_token')
+        end
+      end
+
+      context 'when the request presented no bearer token' do
+        before { get :index }
+
+        it 'returns HTTP status 401' do
+          expect(response.status).to eq(401)
+        end
+
+        it 'deletes the access token cookie' do
+          # Here the cookie was the failing credential, so clearing it is right.
+          expect(response.cookies).to have_key('access_token')
+          expect(response.cookies['access_token']).to be_nil
+        end
+      end
+    end
+  end
+
   describe ApplicationComponentsConcern do
     with_tenant(:instance) do
       context 'when the action raises a Coursemology::ComponentNotFoundError' do

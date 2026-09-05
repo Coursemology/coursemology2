@@ -49,8 +49,12 @@ class ApplicationController < ActionController::Base
     render json: { error: "Can't verify CSRF token authenticity - #{exception.message}" }, status: :forbidden
   end
 
+  # Only clear the cookie when the cookie itself was the credential that failed.
+  #
+  # A request presenting a bearer token carries its own credential, and a bad one
+  # says nothing about the cookie.
   def handle_authentication_error(exception)
-    cookies.delete(:access_token)
+    cookies.delete(:access_token) unless token_from_bearer
     @exception = exception
     render json: { error: exception.message }, status: :unauthorized
   end
