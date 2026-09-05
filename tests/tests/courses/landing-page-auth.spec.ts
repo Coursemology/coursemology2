@@ -57,6 +57,11 @@ const watchAttachmentResponses = (page: Page, id: string): number[] => {
   return statuses;
 };
 
+const getAccessTokenCookie = async (
+  page: Page,
+): Promise<{ name: string } | undefined> =>
+  (await page.context().cookies()).find((c) => c.name === ATTACHMENT_COOKIE);
+
 const expectAttachmentToLoad = async (statuses: number[]): Promise<void> => {
   await expect
     .poll(() => statuses.length, {
@@ -190,5 +195,54 @@ test.describe('signing in from a publicly accessible course page', () => {
     await expect(page).toHaveURL(new RegExp(`/courses/${course.id}`), {
       timeout: 30_000,
     });
+  });
+});
+
+test.describe('signing out', () => {
+  let course: { id: number };
+  let attachmentId: string;
+
+  test.beforeEach(async () => {
+    const attachment = await manufacture({ attachment_reference: {} });
+    attachmentId = attachment.id;
+
+    course = await manufacture({
+      course: {
+        traits: ['published'],
+        description: `<p>Welcome</p><img src="/attachments/${attachmentId}">`,
+      },
+    });
+  });
+
+  test('clears the access token cookie', async ({ authedPage: page }) => {
+    // Visiting the landing page mints the cookie, so it is definitely present
+    // before we sign out and the assertion below cannot pass vacuously.
+    await page.goto(`/courses/${course.id}`);
+    await expect.poll(() => getAccessTokenCookie(page)).toBeDefined();
+
+    await page.signOut();
+
+    // The cookie is httponly, so nothing on the page can remove it. Only the
+    // server call in `handleLogout` can, and if that call is ever dropped or
+    // sequenced after `signoutRedirect` this is what catches it.
+    await expect.poll(() => getAccessTokenCookie(page)).toBeUndefined();
+  });
+
+  test('leaves no credential behind for subresource requests', async ({
+    authedPage: page,
+  }) => {
+    await page.goto(`/courses/${course.id}`);
+
+    // Requested through the context rather than the page, so it carries the
+    // cookie and no Authorization header - exactly what an <img> sends.
+    const whileSignedIn = await page.request.get(`/attachments/${attachmentId}`);
+    expect(whileSignedIn.ok()).toBe(true);
+
+    await page.signOut();
+
+    // The symptom that prompted this: a signed-out user whose surviving cookie
+    // still authenticated them to the backend for up to an hour.
+    const afterSignOut = await page.request.get(`/attachments/${attachmentId}`);
+    expect(afterSignOut.status()).toBe(401);
   });
 });
