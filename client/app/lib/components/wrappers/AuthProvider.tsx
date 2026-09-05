@@ -4,7 +4,6 @@ import {
   AuthProvider as OIDCAuthProvider,
   useAuth,
 } from 'react-oidc-context';
-import Cookies from 'js-cookie';
 import {
   type SigninRedirectArgs,
   type SignoutRedirectArgs,
@@ -13,6 +12,7 @@ import {
   UserManager,
   WebStorageStateStore,
 } from 'oidc-client-ts';
+import { revokeAccessTokenCookie } from 'utilities/authentication';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -108,11 +108,21 @@ export const useAuthAdapter = (): AuthAdapterProps => {
   // Not supported yet as signoutCallback from oidc-client-ts is not called in react-oidc-context.
   // Has been fixed in v3.1.0 in react-oidc-context but not released yet.
 
+  /**
+   * Every teardown step has to happen before `signoutRedirect`, which navigates the document away:
+   * anything sequenced after it is racing page teardown and may simply not run.
+   *
+   * The server call is awaited rather than fired and forgotten for the same reason - an in-flight
+   * request is cancelled by the navigation. It is awaited for delivery, not for its result: a user
+   * signing out should never be shown an error, and the cookie's own JWT lapses shortly anyway, so
+   * a failure is swallowed and sign out continues.
+   */
   const handleLogout = async (): Promise<void> => {
+    await revokeAccessTokenCookie().catch(() => undefined);
     await otherProps.removeUser();
-    await adaptedSignOutRedirect();
     localStorage.clear();
-    Cookies.remove('access_token');
+
+    await adaptedSignOutRedirect();
   };
 
   return {
