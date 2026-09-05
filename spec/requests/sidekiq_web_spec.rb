@@ -274,17 +274,5 @@ RSpec.describe 'Sidekiq Web dashboard' do
     def bearer(token)
       { 'Authorization' => "Bearer #{token}" }
     end
-
-    # Mirrors ApplicationUserConcern#add_token_to_cookie: a browser's copy of the access token is an
-    # encrypted, httponly cookie, so build one exactly as the app writes it. The ciphertext has to
-    # be escaped the way Rails escapes it on the way out, otherwise any '+' it happens to contain
-    # is read back as a space and decryption fails for roughly half of all generated tokens.
-    def access_token_cookie(token)
-      env = Rack::MockRequest.env_for('/', 'HTTP_HOST' => 'test.host').merge(Rails.application.env_config)
-      jar = ActionDispatch::Cookies::CookieJar.build(ActionDispatch::Request.new(env), {})
-      jar.encrypted[:access_token] = token
-
-      { 'HTTP_COOKIE' => "access_token=#{Rack::Utils.escape(jar[:access_token])}" }
-    end
   end
 end

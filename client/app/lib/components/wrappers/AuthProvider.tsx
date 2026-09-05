@@ -4,7 +4,6 @@ import {
   AuthProvider as OIDCAuthProvider,
   useAuth,
 } from 'react-oidc-context';
-import Cookies from 'js-cookie';
 import {
   type SigninRedirectArgs,
   type SignoutRedirectArgs,
@@ -13,6 +12,7 @@ import {
   UserManager,
   WebStorageStateStore,
 } from 'oidc-client-ts';
+import { revokeAccessTokenCookie } from 'utilities/authentication';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -108,11 +108,29 @@ export const useAuthAdapter = (): AuthAdapterProps => {
   // Not supported yet as signoutCallback from oidc-client-ts is not called in react-oidc-context.
   // Has been fixed in v3.1.0 in react-oidc-context but not released yet.
 
+  /**
+   * The order here is load-bearing in both directions, and there is no third step to slot in
+   * between them.
+   *
+   * `revokeAccessTokenCookie` must come first and must be awaited. The cookie is httponly, so that
+   * request is the only thing in the system that can clear it, and `signoutRedirect` navigates the
+   * document away - an in-flight request is cancelled with it. It is awaited for delivery, not for
+   * its result: a failure is swallowed, since a user signing out should never be shown an error and
+   * the cookie's own JWT lapses shortly regardless.
+   *
+   * Nothing may clear stored auth state before `signoutRedirect`. It reads the stored user itself
+   * to build `id_token_hint`, and removes the user itself once it has. Clearing storage first
+   * leaves the hint out of the request, and Keycloak then prompts for confirmation rather than
+   * ending the session - so a user who does not complete that prompt stays signed in upstream.
+   */
   const handleLogout = async (): Promise<void> => {
-    await otherProps.removeUser();
+    await revokeAccessTokenCookie().catch((error) => {
+      // Swallowed so a failure never blocks signing out, but never silently: swallowing this once
+      // hid a revocation that was not happening at all.
+      console.warn('Access token cookie was not revoked on sign out', error);
+    });
+
     await adaptedSignOutRedirect();
-    localStorage.clear();
-    Cookies.remove('access_token');
   };
 
   return {
