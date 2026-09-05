@@ -20,11 +20,13 @@ module AuthenticationPerformersTestHelpers
     expect(page).to have_css('div[data-testid="user-menu-button"]')
   end
 
+  # The Logout button this used to click was Keycloak's logout confirmation page, shown only because
+  # the client cleared its stored auth state before signoutRedirect could read the ID token out of
+  # it. With id_token_hint restored, Keycloak ends the session without prompting.
   def logout(*_)
     find('div[data-testid="user-menu-button"]').click
     wait_for_animation
     find('li', text: 'Sign out').click
-    click_button('Logout')
     expect(page).to_not have_css('div[data-testid="user-menu-button"]')
   end
 

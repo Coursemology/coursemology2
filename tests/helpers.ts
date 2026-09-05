@@ -140,10 +140,18 @@ export const test = base.extend<TestFixtures>({
 
     await extend(use, page.originalPage, {
       user,
+      // The third click this used to need was Keycloak's logout confirmation page, which only
+      // appeared because `handleLogout` cleared stored auth state before `signoutRedirect` could
+      // read the ID token out of it. With `id_token_hint` restored, Keycloak ends the session
+      // without prompting, as it did before the Keycloak migration.
       signOut: async () => {
         await page.getUserMenuButton().click();
         await page.getByRole('button', { name: 'Sign out' }).click();
-        await page.getByRole('button', { name: 'Logout' }).click();
+
+        // Sign out revokes the cookie, then round-trips through Keycloak back to the origin. The
+        // click alone returns long before any of that lands, so wait for the destination or every
+        // assertion after `signOut()` races it. (Callers already on `/` get no wait from this.)
+        await page.waitForURL('/');
       },
     });
   },

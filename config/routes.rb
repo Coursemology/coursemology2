@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   }
 
   get 'csrf_token' => 'csrf_token#csrf_token'
+  delete 'access_token' => 'access_token#destroy'
 
   # Sidekiq's own dashboard, gated on the same access token as the rest of the app rather than on
   # separate HTTP Basic credentials. Guarded because the sidekiq gems are in the :production (and
