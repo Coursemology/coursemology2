@@ -256,6 +256,12 @@ RSpec.describe 'Sidekiq Web dashboard' do
         get '/sidekiq', headers: bearer('user-token')
         expect(response).to have_http_status(:not_found)
 
+        # ApplicationUserConcern#refresh_token_cookie mints the cookie from any bearer a publicly
+        # accessible action accepts, and SidekiqSessionsController is one, so the request above
+        # left the non-admin's own token behind in the jar. A browser never sends a bearer to a
+        # router-mounted dashboard, so drop it to model the anonymous visit this asserts on.
+        cookies.delete('access_token')
+
         get '/sidekiq'
         expect(response).to have_http_status(:redirect)
       end

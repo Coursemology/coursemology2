@@ -83,15 +83,16 @@ export default class BaseAPI {
 
   #createAxiosInstance(): AxiosInstance {
     const client = axios.create({
-      headers: {
-        Accept: 'application/json',
-        Authorization: getAuthorizationToken(),
-      },
+      headers: { Accept: 'application/json' },
       params: { format: 'json' },
     });
 
     client.interceptors.request.use(async (config) => {
       config.withCredentials = true;
+
+      // Read the token per request, not once when this instance is created.
+      config.headers.Authorization = getAuthorizationToken();
+
       appendRequestURLIfOnSEB(config);
       if (config.method === 'get') return config;
 
