@@ -12,3 +12,10 @@ export const getUserToken = (): string => {
   const user = User.fromStorageString(oidcStorage);
   return user.access_token;
 };
+
+/**
+ * Whether a signed-in session was ever stored, regardless of whether its access
+ * token has since expired.
+ */
+export const hasStoredUser = (): boolean =>
+  Boolean(localStorage.getItem(OIDC_STORAGE_KEY));

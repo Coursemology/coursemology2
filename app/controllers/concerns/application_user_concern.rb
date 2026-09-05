@@ -5,6 +5,7 @@ module ApplicationUserConcern
 
   included do
     before_action :authenticate!, unless: :publicly_accessible?
+    before_action :refresh_token_cookie, if: :publicly_accessible?
     rescue_from CanCan::AccessDenied, with: :handle_access_denied
     helper_method :url_to_user_or_course_user
   end
@@ -41,6 +42,20 @@ module ApplicationUserConcern
 
     update_user_tracked_fields
     add_token_to_cookie
+  end
+
+  # Refreshes the +access_token+ cookie on actions that skip +authenticate!+.
+  #
+  # That cookie is the only credential a browser-issued subresource request can
+  # carry, since plain content tags like <img> cannot send an Authorization header.
+  # This left such assets on the  course landing page (Course::CoursesController#show)
+  # failing with 401 for signed-in users returning after a gap.
+  #
+  # Only refresh from a bearer token. A request authenticated by the cookie
+  # alone would otherwise rewrite the cookie with its own value, extending the
+  # lifetime of a JWT that may already be expired.
+  def refresh_token_cookie
+    add_token_to_cookie if token_from_bearer && current_user
   end
 
   def add_token_to_cookie
