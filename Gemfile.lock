@@ -253,9 +253,9 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-multipart (1.1.0)
+    faraday-multipart (1.2.0)
       multipart-post (~> 2.0)
-    faraday-net_http (3.4.2)
+    faraday-net_http (3.4.4)
       net-http (~> 0.5)
     ffi (1.17.4)
     filename (0.1.2)
@@ -561,7 +561,7 @@ GEM
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     ruby-oembed (0.18.1)
-    ruby-openai (7.3.1)
+    ruby-openai (8.3.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
@@ -724,7 +724,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 1.89.0)
   ruby-oembed
-  ruby-openai
+  ruby-openai (~> 8.3)
   rubyzip (~> 3.3)
   rwordnet!
   sanitize (>= 4.6.3)

@@ -44,67 +44,17 @@ RSpec.describe Course::Rubric::LlmService do
         end
         expect(result['feedback']).to include('Mock feedback')
       end
-    end
 
-    # describe '#format_rubric_categories' do
-    #   it 'formats categories and criteria correctly' do
-    #     result = subject.format_rubric_categories(question)
-    #     categories.each do |cat|
-    #       max_grade = cat.criterions.maximum(:grade) || 0
-    #       expect(result).to include("<CATEGORY id=\"#{cat.id}\" name=\"#{cat.name}\" max_grade=\"#{max_grade}\">")
-    #       cat.criterions.each do |crit|
-    #         expect(result).to include("<BAND id=\"#{crit.id}\" grade=\"#{crit.grade}\">#{crit.explanation}</BAND>")
-    #       end
-    #     end
-    #   end
-    # end
+      it 'delegates the model call to the injected LLM adapter' do
+        adapter = instance_double(Course::Rubric::LlmAdapter::Gpt5Point6LunaAdapter)
+        service = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter, adapter)
+        expect(adapter).to receive(:structured_completion).with(
+          messages: an_instance_of(Array),
+          schema: an_instance_of(Hash),
+          schema_name: 'rubric_grading_response'
+        ).and_return({ 'category_grades' => {}, 'feedback' => 'ok' })
 
-    describe '#parse_llm_response' do
-      let(:valid_json) do
-        category_fields = categories.map do |category|
-          "\"category_#{category.id}\": {
-            \"criterion_id_with_grade\":
-              \"criterion_#{category.criterions.first.id}_grade_#{category.criterions.first.grade}\",
-            \"explanation\": \"selection explanation\"
-          }"
-        end.join(',')
-
-        <<~JSON
-          {
-            "category_grades": { #{category_fields} },
-            "feedback": "feedback"
-          }
-        JSON
-      end
-      let(:invalid_json) { '{ "category_grades": [{ "missing": "closing bracket" }' }
-
-      let(:output_parser) do
-        schema = rubric_adapter.generate_dynamic_schema
-        Langchain::OutputParsers::StructuredOutputParser.from_json_schema(schema)
-      end
-
-      context 'with valid JSON' do
-        it 'returns the parsed output' do
-          result = subject.parse_llm_response(valid_json, output_parser)
-          expect(result).to eq(JSON.parse(valid_json))
-        end
-      end
-      context 'with invalid JSON' do
-        it 'attempts to fix and parse the response' do
-          result = subject.parse_llm_response(invalid_json, output_parser)
-          categories.each do |category|
-            field_name = "category_#{category.id}"
-            expect(result['category_grades'][field_name]).to be_present
-            criterion_id_with_grade = result['category_grades'][field_name]['criterion_id_with_grade']
-            expect(criterion_id_with_grade).to match(/criterion_(\d+)_grade_(\d+)/)
-            criterion_id, grade = criterion_id_with_grade.match(/criterion_(\d+)_grade_(\d+)/).captures
-            criterion = category.criterions.find { |c| c.id == criterion_id.to_i }
-            expect(criterion).to be_present
-            expect(grade.to_i).to eq(criterion.grade)
-            expect(result['category_grades'][field_name]['explanation']).to be_a(String)
-          end
-          expect(result['feedback']).to be_a(String)
-        end
+        expect(service.evaluate['feedback']).to eq('ok')
       end
     end
   end
