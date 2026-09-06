@@ -222,6 +222,7 @@ gem 'ffi', '>= 1.14.2'
 gem 'pgvector'
 gem 'neighbor'
 gem 'langchainrb'
-gem 'ruby-openai'
+# >= 8.0 for the Responses API (client.responses), used by reasoning models (gpt-5.x) in rubric grading.
+gem 'ruby-openai', '~> 8.3'
 gem 'pdf-reader'
 gem 'docx'
