@@ -30,7 +30,7 @@ module Course::Rubric::LlmAdapter::OpenAiResponsesApiConcern
 
   def request_parameters(messages, schema, schema_name)
     {
-      **request_options,
+      **effective_request_options,
       model: model,
       input: messages,
       # The Responses API stores responses for 30 days by default (unlike Chat Completions, which does not
