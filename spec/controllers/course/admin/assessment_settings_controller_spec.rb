@@ -28,6 +28,60 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
       end
     end
 
+    describe 'AI grading model settings' do
+      let(:ai_settings) do
+        { rubric_grading_model: 'gpt-5.6-sol',
+          rubric_grading_model_options_enabled: true,
+          rubric_grading_model_options: '{"reasoning":{"effort":"high"}}',
+          rubric_grading_system_prompt_enabled: true,
+          rubric_grading_system_prompt: 'Grade strictly.' }
+      end
+      subject do
+        patch :update, format: :json, params: { course_id: course, course: ai_settings }
+      end
+
+      context 'when the user is a system administrator' do
+        let(:user) { create(:administrator) }
+
+        it 'persists the model configuration' do
+          expect(subject).to render_template(:edit)
+          expect(course.reload.rubric_grading_model).to eq('gpt-5.6-sol')
+          expect(course.rubric_grading_model_options_enabled).to be(true)
+          expect(course.rubric_grading_model_options).to eq('{"reasoning":{"effort":"high"}}')
+          expect(course.rubric_grading_system_prompt_enabled).to be(true)
+          expect(course.rubric_grading_system_prompt).to eq('Grade strictly.')
+        end
+
+        it 'rejects options that are not valid JSON' do
+          patch :update, format: :json, params: {
+            course_id: course, course: { rubric_grading_model_options: '{not json' }
+          }
+          expect(response).to have_http_status(:bad_request)
+          expect(course.reload.rubric_grading_model_options).to be_nil
+        end
+
+        it 'rejects an unsupported model' do
+          patch :update, format: :json, params: {
+            course_id: course, course: { rubric_grading_model: 'gpt-4o-mini-transcribe' }
+          }
+          expect(response).to have_http_status(:bad_request)
+          expect(course.reload.rubric_grading_model).to be_nil
+        end
+      end
+
+      context 'when the user only manages the course' do
+        # The course creator is an owner, not an instance or system admin.
+        it 'declines the change instead of applying it' do
+          subject
+          expect(course.reload.rubric_grading_model).to be_nil
+          expect(course.rubric_grading_model_options_enabled).to be(false)
+          expect(course.rubric_grading_model_options).to be_nil
+          expect(course.rubric_grading_system_prompt_enabled).to be(false)
+          expect(course.rubric_grading_system_prompt).to be_nil
+        end
+      end
+    end
+
     describe '#update persisting the course-wide rubric grading prompt' do
       subject do
         patch :update, as: :json, params: {

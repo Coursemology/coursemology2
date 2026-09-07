@@ -6,7 +6,7 @@ RSpec.describe Course::Rubric::LlmAdapter::Gpt5Point6LunaAdapter do
   let(:client) { instance_double(OpenAI::Client, responses: responses) }
   subject(:adapter) { described_class.new }
 
-  before { allow(Course::Rubric::Llm).to receive(:responses_client).and_return(client) }
+  before { allow(Course::Rubric::LlmService::LlmAdapter).to receive(:responses_client).and_return(client) }
 
   let(:schema) { { 'type' => 'object', 'properties' => {}, 'required' => [] } }
   let(:messages) { [{ role: 'system', content: 'grade' }, { role: 'user', content: 'answer' }] }

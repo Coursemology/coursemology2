@@ -458,6 +458,9 @@
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "탭을 이동하는 동안 오류가 발생했습니다."
   },
+  "course.admin.AssessmentSettings.gradingModel": {
+    "defaultMessage": "채점 모델"
+  },
   "course.admin.AssessmentSettings.maxProgrammingTimeLimit": {
     "defaultMessage": "최대 평가 시간 제한"
   },
@@ -466,6 +469,15 @@
   },
   "course.admin.AssessmentSettings.maxTimeLimitRequired": {
     "defaultMessage": "최대 프로그래밍 시간 제한이 필요합니다"
+  },
+  "course.admin.AssessmentSettings.modelOptionsHint": {
+    "defaultMessage": "선택한 모델의 자체 옵션을 완전히 대체하므로, 필요한 모든 옵션을 지정해야 합니다(예: {example})."
+  },
+  "course.admin.AssessmentSettings.modelOptionsMustBeJsonObject": {
+    "defaultMessage": "모델 옵션은 유효한 JSON 객체여야 합니다."
+  },
+  "course.admin.AssessmentSettings.modelOptionsRequired": {
+    "defaultMessage": "모델 옵션을 입력하거나 모델 옵션 재정의를 비활성화하세요."
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "평가를 이동한 후 삭제"
@@ -515,6 +527,12 @@
   "course.admin.AssessmentSettings.standardOutputsAndStandardErrors": {
     "defaultMessage": "표준 출력 및 표준 오류"
   },
+  "course.admin.AssessmentSettings.systemPromptOverrideHint": {
+    "defaultMessage": "기본 제공되는 루브릭 채점 시스템 프롬프트를 완전히 대체합니다. 이는 아래의 코스 전체 채점 프롬프트가 아니라, 그 프롬프트를 비롯한 루브릭 채점 모델의 모든 입력을 감싸는 최상위 지침입니다."
+  },
+  "course.admin.AssessmentSettings.systemPromptRequired": {
+    "defaultMessage": "시스템 프롬프트를 입력하거나 시스템 프롬프트 재정의를 비활성화하세요."
+  },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "이 카테고리에는 다음이 포함됩니다:"
   },
@@ -524,8 +542,14 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "{tab}로"
   },
+  "course.admin.AssessmentSettings.useModelOptions": {
+    "defaultMessage": "모델 옵션 재정의"
+  },
   "course.admin.AssessmentSettings.useRubricGradingPrompt": {
     "defaultMessage": "코스 전체 채점 프롬프트 사용"
+  },
+  "course.admin.AssessmentSettings.useSystemPrompt": {
+    "defaultMessage": "시스템 프롬프트 재정의"
   },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "일부"

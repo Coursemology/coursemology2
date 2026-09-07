@@ -54,6 +54,16 @@ export const updateAssessmentSettings = async (
       programming_max_time_limit: data.maxProgrammingTimeLimit,
       rubric_grading_prompt_enabled: data.rubricGradingPromptEnabled,
       rubric_grading_prompt: data.rubricGradingPrompt,
+      // Omitted entirely for viewers who cannot manage them, so we never send fields the server would drop.
+      ...(data.canManageAiGradingSettings && {
+        rubric_grading_model: data.rubricGradingModel,
+        rubric_grading_model_options_enabled:
+          data.rubricGradingModelOptionsEnabled,
+        rubric_grading_model_options: data.rubricGradingModelOptions,
+        rubric_grading_system_prompt_enabled:
+          data.rubricGradingSystemPromptEnabled,
+        rubric_grading_system_prompt: data.rubricGradingSystemPrompt,
+      }),
       assessment_categories_attributes: data.categories.map((category) => ({
         id: category.id,
         title: category.title,

@@ -8,6 +8,18 @@ export interface AssessmentSettingsData {
   maxProgrammingTimeLimit?: number;
   rubricGradingPromptEnabled: boolean;
   rubricGradingPrompt?: string;
+  // AI model configuration, restricted to instance and system admins. When the viewer may not manage it the
+  // flag is false and the fields below are absent from the payload entirely.
+  canManageAiGradingSettings: boolean;
+  availableGradingModels?: string[];
+  rubricGradingModel?: string;
+  rubricGradingModelOptionsEnabled?: boolean;
+  rubricGradingModelOptions?: string;
+  rubricGradingSystemPromptEnabled?: boolean;
+  rubricGradingSystemPrompt?: string;
+  // The built-in prompt an override replaces, and the placeholders both are interpolated with.
+  defaultGradingSystemPrompt?: string;
+  gradingSystemPromptVariables?: string[];
 }
 
 export interface AssessmentCategory {
@@ -66,6 +78,12 @@ export interface AssessmentSettingsPostData {
     programming_max_time_limit: AssessmentSettingsData['maxProgrammingTimeLimit'];
     rubric_grading_prompt_enabled?: AssessmentSettingsData['rubricGradingPromptEnabled'];
     rubric_grading_prompt?: AssessmentSettingsData['rubricGradingPrompt'];
+    // Only sent when the viewer may manage them; the server drops them from the permitted params otherwise.
+    rubric_grading_model?: AssessmentSettingsData['rubricGradingModel'];
+    rubric_grading_model_options_enabled?: AssessmentSettingsData['rubricGradingModelOptionsEnabled'];
+    rubric_grading_model_options?: AssessmentSettingsData['rubricGradingModelOptions'];
+    rubric_grading_system_prompt_enabled?: AssessmentSettingsData['rubricGradingSystemPromptEnabled'];
+    rubric_grading_system_prompt?: AssessmentSettingsData['rubricGradingSystemPrompt'];
     assessment_categories_attributes?: {
       id: AssessmentCategory['id'];
       title: AssessmentCategory['title'];

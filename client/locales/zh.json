@@ -458,6 +458,9 @@
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "移动标签时出错。"
   },
+  "course.admin.AssessmentSettings.gradingModel": {
+    "defaultMessage": "评分模型"
+  },
   "course.admin.AssessmentSettings.maxProgrammingTimeLimit": {
     "defaultMessage": "最长判题时间限制"
   },
@@ -466,6 +469,15 @@
   },
   "course.admin.AssessmentSettings.maxTimeLimitRequired": {
     "defaultMessage": "请输入最长判题时间限制"
+  },
+  "course.admin.AssessmentSettings.modelOptionsHint": {
+    "defaultMessage": "将完全替换所选模型自身的选项，因此需要指定所有必需的选项（例如 {example}）。"
+  },
+  "course.admin.AssessmentSettings.modelOptionsMustBeJsonObject": {
+    "defaultMessage": "模型选项必须是有效的 JSON 对象。"
+  },
+  "course.admin.AssessmentSettings.modelOptionsRequired": {
+    "defaultMessage": "请输入模型选项，或停用模型选项覆盖。"
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "移动测验并删除"
@@ -515,6 +527,12 @@
   "course.admin.AssessmentSettings.standardOutputsAndStandardErrors": {
     "defaultMessage": "标准输出和错误"
   },
+  "course.admin.AssessmentSettings.systemPromptOverrideHint": {
+    "defaultMessage": "完全替换内置的评分标准评分系统提示。这并非下方的课程级评分提示，而是统摄该提示以及评分标准评分模型所有其他输入的顶层指令。"
+  },
+  "course.admin.AssessmentSettings.systemPromptRequired": {
+    "defaultMessage": "请输入系统提示，或停用系统提示覆盖。"
+  },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "此类别包含："
   },
@@ -524,8 +542,14 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "到 {tab}"
   },
+  "course.admin.AssessmentSettings.useModelOptions": {
+    "defaultMessage": "覆盖模型选项"
+  },
   "course.admin.AssessmentSettings.useRubricGradingPrompt": {
     "defaultMessage": "使用课程级评分提示"
+  },
+  "course.admin.AssessmentSettings.useSystemPrompt": {
+    "defaultMessage": "覆盖系统提示"
   },
   "course.admin.CodaveriSettings.codaveriModel": {
     "defaultMessage": "模型"

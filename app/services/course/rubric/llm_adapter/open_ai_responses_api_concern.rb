@@ -25,7 +25,7 @@ module Course::Rubric::LlmAdapter::OpenAiResponsesApiConcern
   private
 
   def client
-    Course::Rubric::Llm.responses_client
+    Course::Rubric::LlmService::LlmAdapter.responses_client
   end
 
   def request_parameters(messages, schema, schema_name)

@@ -61,8 +61,20 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
     params.require([:source_category_id, :destination_category_id])
   end
 
+  # Which model rubric grading runs on, its request options and any system prompt override are admin-only
+  # (see Course::AssessmentsAbilityComponent). They are dropped from the permitted set rather than merely
+  # hidden in the UI, so a hand-crafted request from a course manager cannot change them.
+  def ai_grading_settings_params
+    return [] unless can?(:manage, :ai_grading_settings)
+
+    [:rubric_grading_model,
+     :rubric_grading_model_options_enabled, :rubric_grading_model_options,
+     :rubric_grading_system_prompt_enabled, :rubric_grading_system_prompt]
+  end
+
   def category_params
     params.require(:course).permit(
+      *ai_grading_settings_params,
       :show_public_test_cases_output,
       :show_stdout_and_stderr,
       # Randomized Assessment is temporarily hidden (PR#5406)
