@@ -344,6 +344,81 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
+      # The finalise transaction commits the student's work, so nothing derived from it — the
+      # personalised timeline, the notification, the Cikgo push — may be able to roll it back. The
+      # first two also leave the request entirely, as jobs, because they call out to a third party
+      # or walk the whole course.
+      describe 'work deferred past the finalise transaction' do
+        # Created up front so that only the finalise itself is observed: creating a submission
+        # notifies too, and would otherwise land inside the transaction under test.
+        before { submission }
+
+        # The notification is only sent when the student submits for themselves, so the stamper has
+        # to be the creator — as it is on every path that reaches here in production.
+        def finalise
+          User.with_stamper(submission.creator) { submission.update!('finalise' => 'true') }
+        end
+
+        def rolled_back_finalise
+          User.with_stamper(submission.creator) do
+            ActiveRecord::Base.transaction do
+              submission.update!('finalise' => 'true')
+              raise ActiveRecord::Rollback
+            end
+          end
+        end
+
+        with_active_job_queue_adapter(:test) do
+          context 'when the course is pushed to Cikgo' do
+            before { allow(submission).to receive(:should_publish_task_completion?).and_return(true) }
+
+            it 'enqueues the Cikgo push instead of calling out during the request' do
+              expect(submission).not_to receive(:publish_task_completion!)
+
+              expect { finalise }.
+                to have_enqueued_job(Course::Assessment::Submission::PublishTaskCompletionJob).
+                exactly(:once)
+            end
+
+            it 'does not enqueue the push when the finalise is rolled back' do
+              expect { rolled_back_finalise }.
+                not_to have_enqueued_job(Course::Assessment::Submission::PublishTaskCompletionJob)
+            end
+          end
+
+          it 'enqueues the personalised timeline recomputation rather than running it inline' do
+            expect { finalise }.
+              to have_enqueued_job(Course::LessonPlan::PersonalizedTimelineUpdateJob).exactly(:once)
+          end
+
+          it 'does not enqueue the recomputation when the finalise is rolled back' do
+            expect { rolled_back_finalise }.
+              not_to have_enqueued_job(Course::LessonPlan::PersonalizedTimelineUpdateJob)
+          end
+        end
+
+        # Asserted through the activity record rather than the notifier, which is reached through
+        # Notifier::Base.method_missing and so cannot be a verified double. The notification stays on
+        # the request — its own work is enqueuing mail delivery — so this only checks that it is out
+        # of the transaction.
+        it 'writes the submission activity only once the transaction has committed' do
+          activities = Activity.count
+
+          User.with_stamper(submission.creator) do
+            ActiveRecord::Base.transaction do
+              submission.update!('finalise' => 'true')
+              expect(Activity.count).to eq(activities)
+            end
+          end
+
+          expect(Activity.count).to eq(activities + 1)
+        end
+
+        it 'does not write the activity when the finalise is rolled back' do
+          expect { rolled_back_finalise }.not_to change(Activity, :count)
+        end
+      end
+
       context 'when one of the answers is finalised' do
         before do
           answer = submission.answers.sample

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::WorkflowEventConcern
   extend ActiveSupport::Concern
-  include Course::LessonPlan::PersonalizationConcern
   include Course::Assessment::Submission::CikgoTaskCompletionConcern
 
   included do
@@ -30,7 +29,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     # NB: We are not recomputing on unsubmission because unsubmit is not done by the student
     #     It will recompute again when resubmission occurs. This also prevents the timings for
     #     the unsubmitted item from changing e.g. from other submissions that the student has done.
-    update_personalized_timeline_for_user(course_user)
+    enqueue_personalized_timeline_update
   end
 
   # Handles the marking of a submission.
@@ -103,6 +102,21 @@ module Course::Assessment::Submission::WorkflowEventConcern
   end
 
   private
+
+  # Recomputes the submitter's personalised timeline out of band.
+  #
+  # The recomputation reads every lesson plan item in the course and writes a personal time per
+  # shiftable item, so it is kept out of the transaction that commits the student's work: a failure
+  # there used to roll the whole finalise back (see
+  # docs/personal_time_duplicate_incident_summary.md). Enqueued after commit so the job also reads a
+  # committed submission — +submitted_items+ is meant to include this one.
+  def enqueue_personalized_timeline_update
+    submitter = course_user
+
+    ActiveRecord.after_all_transactions_commit do
+      Course::LessonPlan::PersonalizedTimelineUpdateJob.perform_later(submitter)
+    end
+  end
 
   # finalise event (from attempting) - Assign 0 points as there are no questions.
   def assign_zero_experience_points

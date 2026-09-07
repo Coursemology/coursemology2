@@ -27,6 +27,14 @@ module Course::Assessment::Submission::NotificationConcern
     return if assessment.autograded?
     return unless course_user.student?
 
-    Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
+    # Building the activity walks the submitter's groups to find managers and subtracts the
+    # unsubscribed ones, then writes the activity and its notifications. None of that needs to be in
+    # the transaction that commits the student's work: an unsent notification is recoverable
+    # attention, a rolled back submission is lost work. It stays on the request rather than becoming
+    # a job of its own, since its real work is enqueuing mail delivery jobs — already deferred to
+    # after commit by Notifier::Base::ActivityWrapper.
+    ActiveRecord.after_all_transactions_commit do
+      Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
+    end
   end
 end

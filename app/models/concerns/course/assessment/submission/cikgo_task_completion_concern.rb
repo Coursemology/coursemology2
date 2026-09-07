@@ -10,18 +10,27 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   extend ActiveSupport::Concern
 
   included do
-    after_save :publish_task_completion, if: -> { should_publish_task_completion? && saved_change_to_workflow_state? }
+    after_save :enqueue_publish_task_completion,
+               if: -> { should_publish_task_completion? && saved_change_to_workflow_state? }
   end
 
+  # Pushes the status, absorbing failures the way the controller's +edit+ hook needs: logged, and
+  # fatal only outside production so a broken Cikgo integration is noticed in development.
   def publish_task_completion
+    publish_task_completion!
+  rescue StandardError => e
+    Rails.logger.error("Cikgo: Cannot publish task completion for submission #{id}: #{e}")
+    raise e unless Rails.env.production?
+  end
+
+  # Pushes the status and lets failures propagate, for callers that can act on them —
+  # +PublishTaskCompletionJob+, where Sidekiq retries and Rollbar records.
+  def publish_task_completion!
     Cikgo::ResourcesService.mark_task!(status, lesson_plan_item, {
       user_id: creator_id_on_cikgo,
       url: submission_url,
       score: grade&.to_i
     })
-  rescue StandardError => e
-    Rails.logger.error("Cikgo: Cannot publish task completion for submission #{id}: #{e}")
-    raise e unless Rails.env.production?
   end
 
   def should_publish_task_completion?
@@ -30,6 +39,14 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   end
 
   private
+
+  # Hands the push to a job once the transaction that changed the status has committed, so the
+  # request neither waits on Cikgo nor fails because of it. See +PublishTaskCompletionJob+.
+  def enqueue_publish_task_completion
+    ActiveRecord.after_all_transactions_commit do
+      Course::Assessment::Submission::PublishTaskCompletionJob.perform_later(self)
+    end
+  end
 
   delegate :edit_course_assessment_submission_url, to: 'Rails.application.routes.url_helpers'
 
