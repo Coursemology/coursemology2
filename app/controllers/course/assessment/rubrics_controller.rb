@@ -138,9 +138,10 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     question_adapter = Course::Assessment::Question::QuestionAdapter.new(mock_answer.question)
     rubric_adapter = Course::Rubric::RubricAdapter.new(@rubric)
     answer_adapter = Course::Assessment::Question::MockAnswer::AnswerAdapter.new(mock_answer, @mock_answer_evaluation)
+    llm_adapter = Course::Rubric::LlmService::LlmAdapter.for_course(@rubric.course)
 
     # Mock answers have no submission, so their context is the author-supplied content on the mock answer.
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).
+    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter, llm_adapter).
                    evaluate(context: mock_answer.grading_context_prompt)
     answer_adapter.save_llm_results(llm_response)
 
@@ -159,9 +160,10 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     question_adapter = Course::Assessment::Question::QuestionAdapter.new(answer.question)
     rubric_adapter = Course::Rubric::RubricAdapter.new(@rubric)
     answer_adapter = Course::Assessment::Answer::RubricPlaygroundAnswerAdapter.new(answer, @answer_evaluation)
+    llm_adapter = Course::Rubric::LlmService::LlmAdapter.for_course(@rubric.course)
 
     # The playground mirrors real grading, so it sees the same resolved context (from the answer's submission).
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).
+    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter, llm_adapter).
                    evaluate(context: resolved_context(answer))
     answer_adapter.save_llm_results(llm_response)
 

@@ -458,6 +458,9 @@
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "An error occurred while moving the tabs."
   },
+  "course.admin.AssessmentSettings.gradingModel": {
+    "defaultMessage": "Grading model"
+  },
   "course.admin.AssessmentSettings.maxProgrammingTimeLimit": {
     "defaultMessage": "Maximum evaluation time limit"
   },
@@ -466,6 +469,15 @@
   },
   "course.admin.AssessmentSettings.maxTimeLimitRequired": {
     "defaultMessage": "Maximum programming time limit is required"
+  },
+  "course.admin.AssessmentSettings.modelOptionsHint": {
+    "defaultMessage": "Replaces the selected model's own options entirely, so specify every required option, for example {example}."
+  },
+  "course.admin.AssessmentSettings.modelOptionsMustBeJsonObject": {
+    "defaultMessage": "Model options must be a valid JSON object."
+  },
+  "course.admin.AssessmentSettings.modelOptionsRequired": {
+    "defaultMessage": "Please enter the model options, or disable the model options override."
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "Move assessments then delete"
@@ -515,6 +527,12 @@
   "course.admin.AssessmentSettings.standardOutputsAndStandardErrors": {
     "defaultMessage": "Standard outputs and Standard errors"
   },
+  "course.admin.AssessmentSettings.systemPromptOverrideHint": {
+    "defaultMessage": "Replaces the built-in rubric grading system prompt entirely. This is NOT the course-wide grading prompt below, but the top-level instructions that frame it and all other inputs to the rubric grading model."
+  },
+  "course.admin.AssessmentSettings.systemPromptRequired": {
+    "defaultMessage": "Please enter a system prompt, or disable the system prompt override."
+  },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "This category contains:"
   },
@@ -524,8 +542,14 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
   },
+  "course.admin.AssessmentSettings.useModelOptions": {
+    "defaultMessage": "Override model options"
+  },
   "course.admin.AssessmentSettings.useRubricGradingPrompt": {
     "defaultMessage": "Use course-wide grading prompt"
+  },
+  "course.admin.AssessmentSettings.useSystemPrompt": {
+    "defaultMessage": "Override system prompt"
   },
   "course.admin.CodaveriSettings.codaveriModel": {
     "defaultMessage": "Model"

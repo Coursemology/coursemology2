@@ -71,6 +71,45 @@ export default defineMessages({
     defaultMessage:
       "When a question with a grading rubric is autograded with AI, these instructions will be inserted before the question's specific grading prompt.",
   },
+  gradingModel: {
+    id: 'course.admin.AssessmentSettings.gradingModel',
+    defaultMessage: 'Grading model',
+  },
+  useModelOptions: {
+    id: 'course.admin.AssessmentSettings.useModelOptions',
+    defaultMessage: 'Override model options',
+  },
+  modelOptionsHint: {
+    id: 'course.admin.AssessmentSettings.modelOptionsHint',
+    defaultMessage:
+      "Replaces the selected model's own options entirely, so specify every required option, for example {example}.",
+  },
+  modelOptionsMustBeJsonObject: {
+    id: 'course.admin.AssessmentSettings.modelOptionsMustBeJsonObject',
+    defaultMessage: 'Model options must be a valid JSON object.',
+  },
+  modelOptionsRequired: {
+    id: 'course.admin.AssessmentSettings.modelOptionsRequired',
+    defaultMessage: 'Please enter the model options, or disable the override.',
+  },
+  useSystemPrompt: {
+    id: 'course.admin.AssessmentSettings.useSystemPrompt',
+    defaultMessage: 'Override system prompt',
+  },
+  systemPromptOverrideHint: {
+    id: 'course.admin.AssessmentSettings.systemPromptOverrideHint',
+    defaultMessage:
+      'Replaces the built-in rubric grading system prompt entirely (shown below for reference). This is NOT the course-wide grading prompt below, but the top-level instructions that frame it and all other inputs to the rubric grading model.',
+  },
+  systemPromptVariablesHint: {
+    id: 'course.admin.AssessmentSettings.systemPromptVariablesHint',
+    defaultMessage:
+      'An override is filled in exactly like the built-in prompt: {variables} are substituted before the request is sent, and they are the only way these inputs reach the model — the answer being graded is sent separately.',
+  },
+  systemPromptRequired: {
+    id: 'course.admin.AssessmentSettings.systemPromptRequired',
+    defaultMessage: 'Please enter a system prompt, or disable the override.',
+  },
   rubricGradingPromptRequired: {
     id: 'course.admin.AssessmentSettings.rubricGradingPromptRequired',
     defaultMessage:

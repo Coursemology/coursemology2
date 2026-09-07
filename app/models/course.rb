@@ -39,6 +39,9 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
   validates :ssid_folder_id, uniqueness: { if: :ssid_folder_id_changed? }, allow_nil: true
+  validate :validate_rubric_grading_model
+  validate :validate_rubric_grading_model_options
+  validate :validate_rubric_grading_system_prompt
 
   enum :default_timeline_algorithm, CourseUser.timeline_algorithms
 
@@ -287,6 +290,85 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
     settings(:course_assessments_component).rubric_grading_prompt = prompt.presence
   end
 
+  # The model rubric grading runs on, blank meaning the LlmAdapter's DEFAULT_MODEL. Admin-only (see
+  # Course::AssessmentsAbilityComponent), as are the two settings below.
+  def rubric_grading_model
+    settings(:course_assessments_component).rubric_grading_model
+  end
+
+  def rubric_grading_model=(model)
+    settings(:course_assessments_component).rubric_grading_model = model.presence
+  end
+
+  # Whether the course replaces the chosen model's request options. Off means the model's own defaults apply.
+  def rubric_grading_model_options_enabled
+    settings(:course_assessments_component).rubric_grading_model_options_enabled || false
+  end
+
+  def rubric_grading_model_options_enabled=(enabled)
+    settings(:course_assessments_component).rubric_grading_model_options_enabled =
+      ActiveRecord::Type::Boolean.new.cast(enabled)
+  end
+
+  # Raw JSON that *replaces* the chosen model's own request options (temperature, reasoning effort, ...).
+  # A wholesale replacement rather than a merge, so what is sent is exactly what the author sees. Kept as
+  # text so an invalid draft round-trips back to the author instead of being silently dropped; parsed at the
+  # point of use by #rubric_grading_model_options_hash.
+  def rubric_grading_model_options
+    settings(:course_assessments_component).rubric_grading_model_options
+  end
+
+  def rubric_grading_model_options=(options)
+    settings(:course_assessments_component).rubric_grading_model_options = options.presence
+  end
+
+  # @return [Hash] the parsed overrides, or {} when unset or unparseable (validation rejects the latter on
+  #   save, so this only guards settings written before validation existed).
+  def rubric_grading_model_options_hash
+    parsed = JSON.parse(rubric_grading_model_options.to_s)
+    # Deep, because the options are passed to the API client as keyword-ish symbol-keyed data, nested
+    # options (e.g. reasoning.effort) included.
+    parsed.is_a?(Hash) ? parsed.deep_symbolize_keys : {}
+  rescue JSON::ParserError
+    {}
+  end
+
+  # Whether the course replaces the built-in grading system prompt. Off means the built-in prompt applies.
+  def rubric_grading_system_prompt_enabled
+    settings(:course_assessments_component).rubric_grading_system_prompt_enabled || false
+  end
+
+  def rubric_grading_system_prompt_enabled=(enabled)
+    settings(:course_assessments_component).rubric_grading_system_prompt_enabled =
+      ActiveRecord::Type::Boolean.new.cast(enabled)
+  end
+
+  # The full replacement for the model's request options, or nil to leave the model's own in place.
+  # @return [Hash, nil]
+  def rubric_grading_model_options_override
+    return nil unless rubric_grading_model_options_enabled
+
+    # Validation rejects an enabled-but-empty override on save; this guards settings written before that
+    # validation existed, where {} would wipe the model's own options rather than leave them in place.
+    rubric_grading_model_options_hash.presence
+  end
+
+  # The replacement grading system prompt, or nil to leave the built-in one in place.
+  # @return [String, nil]
+  def rubric_grading_system_prompt_override
+    rubric_grading_system_prompt_enabled ? rubric_grading_system_prompt.presence : nil
+  end
+
+  # Replaces the built-in rubric grading system prompt wholesale. Distinct from +rubric_grading_prompt+,
+  # which is course-wide guidance injected *into* the built-in prompt rather than a replacement for it.
+  def rubric_grading_system_prompt
+    settings(:course_assessments_component).rubric_grading_system_prompt
+  end
+
+  def rubric_grading_system_prompt=(prompt)
+    settings(:course_assessments_component).rubric_grading_system_prompt = prompt.presence
+  end
+
   def codaveri_feedback_workflow
     settings(:course_codaveri_component).feedback_workflow
   end
@@ -398,6 +480,38 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def validate_rubric_grading_model
+    return if rubric_grading_model.blank?
+    return if Course::Rubric::LlmService::LlmAdapter.available_models.include?(rubric_grading_model)
+
+    errors.add(:rubric_grading_model, "is not a supported grading model: #{rubric_grading_model}")
+  end
+
+  # Only structural validity is enforced -- the keys a model accepts are the provider's business, and the
+  # request would fail loudly there anyway. Blankness, however, is not harmless: an enabled-but-blank
+  # override parses to {} and would *replace* the model's own options with nothing (silently dropping, say,
+  # a reasoning model's effort setting), so an enabled override must actually carry options.
+  def validate_rubric_grading_model_options
+    if rubric_grading_model_options.blank?
+      errors.add(:rubric_grading_model_options, 'must be present when the model options override is enabled') if
+        rubric_grading_model_options_enabled
+      return
+    end
+
+    errors.add(:rubric_grading_model_options, 'must be a JSON object') unless
+      JSON.parse(rubric_grading_model_options).is_a?(Hash)
+  rescue JSON::ParserError
+    errors.add(:rubric_grading_model_options, 'must be valid JSON')
+  end
+
+  # Same reasoning as above: an enabled-but-blank system prompt would send the model no instructions at all.
+  def validate_rubric_grading_system_prompt
+    return unless rubric_grading_system_prompt_enabled
+    return if rubric_grading_system_prompt.present?
+
+    errors.add(:rubric_grading_system_prompt, 'must be present when the system prompt override is enabled')
+  end
 
   # Set default values
   def set_defaults

@@ -50,15 +50,34 @@ RSpec.describe Course::Rubric::LlmService::LlmAdapter do
         expect(described_class.for_course(course).model).to eq('gpt-5.6-terra')
       end
 
-      it 'layers configured options over the model defaults, leaving unset keys alone' do
+      it 'carries the course system prompt override, which LlmService reads off the adapter' do
+        expect(described_class.for_course(course).system_prompt_override).to be_nil
+
+        course.update!(rubric_grading_system_prompt_enabled: true, rubric_grading_system_prompt: 'Grade strictly.')
+        expect(described_class.for_course(course).system_prompt_override).to eq('Grade strictly.')
+      end
+
+      it 'keeps the built-in system prompt while the override is disabled' do
+        course.update!(rubric_grading_system_prompt: 'Grade strictly.')
+        expect(described_class.for_course(course).system_prompt_override).to be_nil
+      end
+
+      it 'replaces the model defaults with the configured options rather than merging them' do
         course.update!(rubric_grading_model: 'gpt-5.6-sol',
-                       rubric_grading_model_options: '{"reasoning":{"effort":"high"},"max_output_tokens":2048}')
+                       rubric_grading_model_options_enabled: true,
+                       rubric_grading_model_options: '{"max_output_tokens":2048}')
         adapter = described_class.for_course(course)
 
         expect(adapter.request_options).to eq({ reasoning: { effort: 'low' } })
-        expect(adapter.effective_request_options).to eq(
-          { reasoning: { effort: 'high' }, max_output_tokens: 2048 }
-        )
+        expect(adapter.effective_request_options).to eq({ max_output_tokens: 2048 })
+      end
+
+      it "keeps the model's own options while the override is disabled" do
+        course.update!(rubric_grading_model: 'gpt-5.6-sol',
+                       rubric_grading_model_options: '{"max_output_tokens":2048}')
+        adapter = described_class.for_course(course)
+
+        expect(adapter.effective_request_options).to eq({ reasoning: { effort: 'low' } })
       end
     end
   end

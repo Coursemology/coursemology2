@@ -26,7 +26,10 @@ RSpec.describe Course::Rubric::LlmService do
     let(:answer_adapter) do
       Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer, active_rubric)
     end
-    subject { Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter) }
+    let(:llm_adapter) { Course::Rubric::LlmService::LlmAdapter.for_course(assessment.course) }
+    subject do
+      Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter, llm_adapter)
+    end
 
     describe '#evaluate' do
       it 'calls the LLM with the formatted prompt and returns the parsed LLM response' do
@@ -46,7 +49,7 @@ RSpec.describe Course::Rubric::LlmService do
       end
 
       it 'delegates the model call to the injected LLM adapter' do
-        adapter = instance_double(Course::Rubric::LlmAdapter::Gpt5Point6LunaAdapter)
+        adapter = instance_double(Course::Rubric::LlmAdapter::Gpt5Point6LunaAdapter, system_prompt_override: nil)
         service = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter, adapter)
         expect(adapter).to receive(:structured_completion).with(
           messages: an_instance_of(Array),

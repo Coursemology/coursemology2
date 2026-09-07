@@ -36,8 +36,10 @@ class Course::Rubric::ApplyEvaluationsJob < ApplicationJob
     question_adapter = Course::Assessment::Question::QuestionAdapter.new(answer.question)
     rubric_adapter = Course::Rubric::RubricAdapter.new(rubric)
     answer_adapter = Course::Assessment::Answer::RubricPlaygroundAnswerAdapter.new(answer, evaluation)
+    llm_adapter = Course::Rubric::LlmService::LlmAdapter.for_course(rubric.course)
 
-    llm_response = Course::Rubric::LlmService.new(question_adapter, rubric_adapter, answer_adapter).evaluate
+    llm_response = Course::Rubric::LlmService.
+                   new(question_adapter, rubric_adapter, answer_adapter, llm_adapter).evaluate
     answer_adapter.save_llm_results(llm_response)
     evaluation.reload
   end

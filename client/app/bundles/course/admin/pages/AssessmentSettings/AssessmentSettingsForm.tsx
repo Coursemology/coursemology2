@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -38,7 +39,51 @@ const AssessmentsSettingsForm = forwardRef<
         .trim()
         .required(t(translations.rubricGradingPromptRequired)),
     }),
+    // Mirrors the server-side check: the options must parse to a JSON object when they are in use. Which
+    // keys a model accepts is the provider's business, so only shape is validated.
+    rubricGradingModelOptions: yup
+      .string()
+      .nullable()
+      .when('rubricGradingModelOptionsEnabled', {
+        is: true,
+        then: yup
+          .string()
+          .trim()
+          .required(t(translations.modelOptionsRequired))
+          .test(
+            'is-json-object',
+            t(translations.modelOptionsMustBeJsonObject),
+            (value) => {
+              try {
+                const parsed = JSON.parse(value ?? '');
+                return (
+                  typeof parsed === 'object' &&
+                  parsed !== null &&
+                  !Array.isArray(parsed)
+                );
+              } catch {
+                return false;
+              }
+            },
+          ),
+      }),
+    rubricGradingSystemPrompt: yup
+      .string()
+      .nullable()
+      .when('rubricGradingSystemPromptEnabled', {
+        is: true,
+        then: yup
+          .string()
+          .trim()
+          .required(t(translations.systemPromptRequired)),
+      }),
   });
+
+  // The server resolves an unconfigured course to the default model, so there is no "use default" entry --
+  // the picker always shows the model that grading will actually run on.
+  const gradingModels = (props.data.availableGradingModels ?? []).map(
+    (model) => ({ label: model, value: model }),
+  );
 
   return (
     <Form
@@ -145,6 +190,138 @@ const AssessmentsSettingsForm = forwardRef<
           </Section>
 
           <Section sticksToNavbar title={t(translations.rubricGrading)}>
+            {props.data.canManageAiGradingSettings && (
+              <>
+                <Subsection title={t(translations.gradingModel)}>
+                  <Controller
+                    control={control}
+                    name="rubricGradingModel"
+                    render={({ field, fieldState }): JSX.Element => (
+                      <FormSelectField
+                        disabled={props.disabled}
+                        field={field}
+                        fieldState={fieldState}
+                        margin="0px"
+                        native
+                        options={gradingModels}
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                </Subsection>
+
+                <Controller
+                  control={control}
+                  name="rubricGradingModelOptionsEnabled"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormCheckboxField
+                      disabled={props.disabled}
+                      field={field}
+                      fieldState={fieldState}
+                      label={t(translations.useModelOptions)}
+                    />
+                  )}
+                />
+
+                <Typography
+                  className={
+                    watch('rubricGradingModelOptionsEnabled')
+                      ? ''
+                      : 'opacity-50'
+                  }
+                  color="text.secondary"
+                  variant="body2"
+                >
+                  {t(translations.modelOptionsHint, {
+                    example: '{"reasoning": {"effort": "high"}}',
+                  })}
+                </Typography>
+
+                <Controller
+                  control={control}
+                  name="rubricGradingModelOptions"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={
+                        props.disabled ||
+                        !watch('rubricGradingModelOptionsEnabled')
+                      }
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      InputProps={{
+                        className: 'font-mono text-[1.3rem]',
+                        // The browser's resize grabber on the raw textarea escapes the field's outline.
+                        sx: { '& textarea': { resize: 'none' } },
+                      }}
+                      multiline
+                      rows={4}
+                      spellCheck={false}
+                      variant="outlined"
+                    />
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="rubricGradingSystemPromptEnabled"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormCheckboxField
+                      disabled={props.disabled}
+                      field={field}
+                      fieldState={fieldState}
+                      label={t(translations.useSystemPrompt)}
+                    />
+                  )}
+                />
+
+                <div
+                  className={
+                    watch('rubricGradingSystemPromptEnabled')
+                      ? 'space-y-3'
+                      : 'space-y-3 opacity-50'
+                  }
+                >
+                  <Typography color="text.secondary" variant="body2">
+                    {t(translations.systemPromptOverrideHint)}
+                  </Typography>
+
+                  <Typography color="text.secondary" variant="body2">
+                    {t(translations.systemPromptVariablesHint, {
+                      variables: (props.data.gradingSystemPromptVariables ?? [])
+                        .map((variable) => `{${variable}}`)
+                        .join(', '),
+                    })}
+                  </Typography>
+                </div>
+
+                <Controller
+                  control={control}
+                  name="rubricGradingSystemPrompt"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={
+                        props.disabled ||
+                        !watch('rubricGradingSystemPromptEnabled')
+                      }
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      InputProps={{
+                        className: 'font-mono text-[1.3rem]',
+                        // The browser's resize grabber on the raw textarea escapes the field's outline.
+                        sx: { '& textarea': { resize: 'none' } },
+                      }}
+                      multiline
+                      placeholder={props.data.defaultGradingSystemPrompt}
+                      rows={6}
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </>
+            )}
+
             <Controller
               control={control}
               name="rubricGradingPromptEnabled"

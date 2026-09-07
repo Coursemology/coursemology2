@@ -22,9 +22,10 @@ class Course::Rubric::LlmService
     end
   end
 
-  # @param llm_adapter [Course::Rubric::LlmService::LlmAdapter] the model to grade with (defaults to the
-  #   course's current grading model).
-  def initialize(question_adapter, rubric_adapter, answer_adapter, llm_adapter = Course::Rubric::Llm.build)
+  # @param llm_adapter [Course::Rubric::LlmService::LlmAdapter] the model to grade with, carrying the
+  #   course's configuration. Callers build it with LlmAdapter.for_course(rubric.course) so grading follows
+  #   the course's settings everywhere -- including the playground, which must behave like real grading.
+  def initialize(question_adapter, rubric_adapter, answer_adapter, llm_adapter)
     @question_adapter = question_adapter
     @rubric_adapter = rubric_adapter
     @answer_adapter = answer_adapter
@@ -61,8 +62,27 @@ class Course::Rubric::LlmService
 
   private
 
+  # The built-in system prompt, unless the course replaces it wholesale (the override rides on the LLM
+  # adapter, alongside the rest of the course's model configuration).
+  #
+  # An override is interpolated with exactly the same variables as the built-in prompt (see
+  # .system_prompt_variables), and that is the *only* way the graded material reaches the model: the user
+  # message carries the student's answer and nothing else, so the question, rubric categories, model answer,
+  # course-wide prompt and linked context exist only as placeholders in this template. An override that
+  # omits a placeholder withholds that input from the model -- one with no placeholders at all leaves it
+  # grading an answer it cannot see the question for. The settings UI therefore shows the built-in template
+  # and its placeholders to whoever writes an override.
+  def system_prompt
+    override = @llm_adapter.system_prompt_override
+    return self.class.system_prompt if override.blank?
+
+    Langchain::Prompt::PromptTemplate.new(
+      template: override, input_variables: self.class.system_prompt.input_variables, validate_template: false
+    )
+  end
+
   def build_messages(context)
-    formatted_system_prompt = self.class.system_prompt.format(
+    formatted_system_prompt = system_prompt.format(
       question_title: @question_adapter.question_title,
       question_description: @question_adapter.question_description,
       rubric_categories: @rubric_adapter.formatted_rubric_categories,

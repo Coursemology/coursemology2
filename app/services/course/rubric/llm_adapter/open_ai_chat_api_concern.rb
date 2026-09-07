@@ -42,7 +42,7 @@ module Course::Rubric::LlmAdapter::OpenAiChatApiConcern
 
   # Must be a Langchain::LLM -- OutputFixingParser requires one to build its prompt.
   def client
-    Course::Rubric::Llm.chat_client
+    Course::Rubric::LlmService::LlmAdapter.chat_client
   end
 
   def structured_chat(messages, schema, schema_name)
