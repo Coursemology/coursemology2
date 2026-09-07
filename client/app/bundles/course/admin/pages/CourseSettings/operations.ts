@@ -90,3 +90,21 @@ export const unsuspendCourse = async (): Promise<void> => {
     throw error;
   }
 };
+
+export const authorizeModelConfiguration = async (): Promise<void> => {
+  try {
+    await CourseAPI.admin.course.authorizeModelConfiguration();
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const revokeModelConfiguration = async (): Promise<void> => {
+  try {
+    await CourseAPI.admin.course.revokeModelConfiguration();
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};

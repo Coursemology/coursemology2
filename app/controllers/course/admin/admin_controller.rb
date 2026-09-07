@@ -42,6 +42,21 @@ class Course::Admin::AdminController < Course::Admin::Controller
     head :no_content
   end
 
+  # Opens the AI grading model settings (Course Settings > Assessments) to this course's managers and
+  # owners. Gated on :ai_grading_settings_authorization rather than :ai_grading_settings, so staff who hold
+  # the latter through this very flag cannot extend or revoke it themselves.
+  def authorize_model_configuration
+    authorize!(:manage, :ai_grading_settings_authorization)
+    current_course.update!(is_model_configuration_authorized: true)
+    head :no_content
+  end
+
+  def revoke_model_configuration
+    authorize!(:manage, :ai_grading_settings_authorization)
+    current_course.update!(is_model_configuration_authorized: false)
+    head :no_content
+  end
+
   private
 
   def course_setting_params

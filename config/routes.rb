@@ -188,6 +188,9 @@ Rails.application.routes.draw do
         patch 'suspend' => 'admin#suspend'
         patch 'unsuspend' => 'admin#unsuspend'
 
+        patch 'authorize_model_configuration' => 'admin#authorize_model_configuration'
+        patch 'revoke_model_configuration' => 'admin#revoke_model_configuration'
+
         get 'time_zones' => 'admin#time_zones'
 
         get 'components' => 'component_settings#edit'

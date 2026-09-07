@@ -69,6 +69,29 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
         end
       end
 
+      context 'when the user is an Instance Administrator' do
+        # The model settings sit above instance admins; only system admins hold them by default.
+        let(:user) do
+          create(:user).tap { |u| u.instance_users.find_by(instance: instance).update!(role: :administrator) }
+        end
+
+        it 'declines the change instead of applying it' do
+          subject
+          expect(course.reload.rubric_grading_model).to be_nil
+          expect(course.rubric_grading_system_prompt).to be_nil
+        end
+      end
+
+      context 'when the course authorizes its staff to configure the model' do
+        let(:course) { create(:course, creator: user, is_model_configuration_authorized: true) }
+
+        it 'lets the course owner persist the model configuration' do
+          expect(subject).to render_template(:edit)
+          expect(course.reload.rubric_grading_model).to eq('gpt-5.6-sol')
+          expect(course.rubric_grading_system_prompt).to eq('Grade strictly.')
+        end
+      end
+
       context 'when the user only manages the course' do
         # The course creator is an owner, not an instance or system admin.
         it 'declines the change instead of applying it' do

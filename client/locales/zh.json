@@ -477,7 +477,7 @@
     "defaultMessage": "模型选项必须是有效的 JSON 对象。"
   },
   "course.admin.AssessmentSettings.modelOptionsRequired": {
-    "defaultMessage": "请输入模型选项，或停用模型选项覆盖。"
+    "defaultMessage": "请输入模型选项，或停用该覆盖。"
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "移动测验并删除"
@@ -528,10 +528,13 @@
     "defaultMessage": "标准输出和错误"
   },
   "course.admin.AssessmentSettings.systemPromptOverrideHint": {
-    "defaultMessage": "完全替换内置的评分标准评分系统提示。这并非下方的课程级评分提示，而是统摄该提示以及评分标准评分模型所有其他输入的顶层指令。"
+    "defaultMessage": "完全替换内置的评分标准评分系统提示（下方显示以供参考）。这并非下方的课程级评分提示，而是统摄该提示以及评分标准评分模型所有其他输入的顶层指令。"
   },
   "course.admin.AssessmentSettings.systemPromptRequired": {
-    "defaultMessage": "请输入系统提示，或停用系统提示覆盖。"
+    "defaultMessage": "请输入系统提示，或停用该覆盖。"
+  },
+  "course.admin.AssessmentSettings.systemPromptVariablesHint": {
+    "defaultMessage": "覆盖后的提示与内置提示一样会被填充：发送请求前会替换 {variables}，而这些输入只能通过这些占位符传给模型（待评分的答案则单独发送）。"
   },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "此类别包含："
@@ -692,6 +695,15 @@
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "允许用户发送注册请求"
   },
+  "course.admin.CourseSettings.authorizeModelConfiguration": {
+    "defaultMessage": "允许课程教职人员配置模型设置"
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationFailure": {
+    "defaultMessage": "授予课程教职人员配置模型设置权限时发生错误。"
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationSuccess": {
+    "defaultMessage": "本课程的教职人员现在可以配置模型设置。"
+  },
   "course.admin.CourseSettings.clearChanges": {
     "defaultMessage": "清除更改"
   },
@@ -773,6 +785,15 @@
   "course.admin.CourseSettings.invalidTimeFormat": {
     "defaultMessage": "无效的日期 和/或 时间"
   },
+  "course.admin.CourseSettings.modelConfigurationAccess": {
+    "defaultMessage": "AI 评分模型配置"
+  },
+  "course.admin.CourseSettings.modelConfigurationAuthorizedDescription": {
+    "defaultMessage": "本课程的管理者和拥有者可以在“评估”标签页中配置 AI 评分标准评分模型及其请求选项和系统提示。撤销后将恢复为仅系统管理员可更改。"
+  },
+  "course.admin.CourseSettings.modelConfigurationUnauthorizedDescription": {
+    "defaultMessage": "AI 评分标准评分模型及其请求选项和系统提示在“评估”标签页中配置。除非在下方明确授权课程教职人员访问，否则本课程仅系统管理员可以更改这些设置。"
+  },
   "course.admin.CourseSettings.offsetTimesPromptText": {
     "defaultMessage": "本课程的开始日期将向 {backwardOrForward} 偏移{days} 天、{hours} 小时 {mins} 分钟。 你是否也想改变本课程中所有项目（例如测验、视频、调查和课程计划）的时间（开始、结束和奖励结束日期）？"
   },
@@ -793,6 +814,15 @@
   },
   "course.admin.CourseSettings.publishedDescription": {
     "defaultMessage": "该课程将出现在 Coursemology 的公共课程页面上，并且可以搜索到。"
+  },
+  "course.admin.CourseSettings.revokeModelConfiguration": {
+    "defaultMessage": "撤销课程教职人员对模型设置的访问权限"
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationFailure": {
+    "defaultMessage": "撤销课程教职人员对模型设置的访问权限时发生错误。"
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationSuccess": {
+    "defaultMessage": "本课程的教职人员已无法配置模型设置。"
   },
   "course.admin.CourseSettings.startTimeRequired": {
     "defaultMessage": "开始时间是必需的。"

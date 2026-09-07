@@ -42,4 +42,12 @@ export default class CourseAdminAPI extends BaseAdminAPI {
   unsuspend(): Promise<AxiosResponse> {
     return this.client.patch(`${this.urlPrefix}/unsuspend`);
   }
+
+  authorizeModelConfiguration(): Promise<AxiosResponse> {
+    return this.client.patch(`${this.urlPrefix}/authorize_model_configuration`);
+  }
+
+  revokeModelConfiguration(): Promise<AxiosResponse> {
+    return this.client.patch(`${this.urlPrefix}/revoke_model_configuration`);
+  }
 }

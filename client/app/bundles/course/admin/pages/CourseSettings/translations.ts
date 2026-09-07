@@ -209,6 +209,47 @@ export default defineMessages({
     id: 'course.admin.CourseSettings.invalidTimeFormat',
     defaultMessage: 'Invalid Date and/or Time',
   },
+  modelConfigurationAccess: {
+    id: 'course.admin.CourseSettings.modelConfigurationAccess',
+    defaultMessage: 'AI grading model configuration',
+  },
+  modelConfigurationUnauthorizedDescription: {
+    id: 'course.admin.CourseSettings.modelConfigurationUnauthorizedDescription',
+    defaultMessage:
+      'The AI rubric grading model, its request options and its system prompt are configured under Assessments. Only system administrators can change them for this course, unless access for course staff is explicitly authorized below.',
+  },
+  modelConfigurationAuthorizedDescription: {
+    id: 'course.admin.CourseSettings.modelConfigurationAuthorizedDescription',
+    defaultMessage:
+      "This course's managers and owners can configure the AI rubric grading model, its request options and its system prompt under Assessments. Revoking returns them to system administrators only.",
+  },
+  authorizeModelConfiguration: {
+    id: 'course.admin.CourseSettings.authorizeModelConfiguration',
+    defaultMessage: 'Allow course staff to configure model settings',
+  },
+  authorizeModelConfigurationSuccess: {
+    id: 'course.admin.CourseSettings.authorizeModelConfigurationSuccess',
+    defaultMessage: "This course's staff can now configure model settings.",
+  },
+  authorizeModelConfigurationFailure: {
+    id: 'course.admin.CourseSettings.authorizeModelConfigurationFailure',
+    defaultMessage:
+      'An error occurred while allowing course staff to configure model settings.',
+  },
+  revokeModelConfiguration: {
+    id: 'course.admin.CourseSettings.revokeModelConfiguration',
+    defaultMessage: 'Revoke course staff access to model settings',
+  },
+  revokeModelConfigurationSuccess: {
+    id: 'course.admin.CourseSettings.revokeModelConfigurationSuccess',
+    defaultMessage:
+      "This course's staff can no longer configure model settings.",
+  },
+  revokeModelConfigurationFailure: {
+    id: 'course.admin.CourseSettings.revokeModelConfigurationFailure',
+    defaultMessage:
+      'An error occurred while revoking course staff access to model settings.',
+  },
   suspension: {
     id: 'course.admin.CourseSettings.suspension',
     defaultMessage: 'Access suspension',

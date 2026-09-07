@@ -477,7 +477,7 @@
     "defaultMessage": "모델 옵션은 유효한 JSON 객체여야 합니다."
   },
   "course.admin.AssessmentSettings.modelOptionsRequired": {
-    "defaultMessage": "모델 옵션을 입력하거나 모델 옵션 재정의를 비활성화하세요."
+    "defaultMessage": "모델 옵션을 입력하거나 재정의를 비활성화하세요."
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "평가를 이동한 후 삭제"
@@ -528,10 +528,13 @@
     "defaultMessage": "표준 출력 및 표준 오류"
   },
   "course.admin.AssessmentSettings.systemPromptOverrideHint": {
-    "defaultMessage": "기본 제공되는 루브릭 채점 시스템 프롬프트를 완전히 대체합니다. 이는 아래의 코스 전체 채점 프롬프트가 아니라, 그 프롬프트를 비롯한 루브릭 채점 모델의 모든 입력을 감싸는 최상위 지침입니다."
+    "defaultMessage": "기본 제공되는 루브릭 채점 시스템 프롬프트를 완전히 대체합니다(참고용으로 아래에 표시됨). 이는 아래의 코스 전체 채점 프롬프트가 아니라, 그 프롬프트를 비롯한 루브릭 채점 모델의 모든 입력을 감싸는 최상위 지침입니다."
   },
   "course.admin.AssessmentSettings.systemPromptRequired": {
-    "defaultMessage": "시스템 프롬프트를 입력하거나 시스템 프롬프트 재정의를 비활성화하세요."
+    "defaultMessage": "시스템 프롬프트를 입력하거나 재정의를 비활성화하세요."
+  },
+  "course.admin.AssessmentSettings.systemPromptVariablesHint": {
+    "defaultMessage": "재정의한 프롬프트도 기본 프롬프트와 똑같이 채워집니다. 요청을 보내기 전에 {variables} 이(가) 치환되며, 이러한 입력이 모델에 전달되는 경로는 이것뿐입니다(채점 대상 답안은 별도로 전송됩니다)."
   },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "이 카테고리에는 다음이 포함됩니다:"
@@ -692,6 +695,15 @@
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "사용자가 등록 요청을 보낼 수 있도록 허용"
   },
+  "course.admin.CourseSettings.authorizeModelConfiguration": {
+    "defaultMessage": "코스 스태프가 모델 설정을 구성하도록 허용"
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationFailure": {
+    "defaultMessage": "코스 스태프에게 모델 설정 구성 권한을 부여하는 중 오류가 발생했습니다."
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationSuccess": {
+    "defaultMessage": "이제 이 코스의 스태프가 모델 설정을 구성할 수 있습니다."
+  },
   "course.admin.CourseSettings.clearChanges": {
     "defaultMessage": "변경 사항 지우기"
   },
@@ -773,6 +785,15 @@
   "course.admin.CourseSettings.invalidTimeFormat": {
     "defaultMessage": "유효하지 않은 날짜 및/또는 시간"
   },
+  "course.admin.CourseSettings.modelConfigurationAccess": {
+    "defaultMessage": "AI 채점 모델 설정"
+  },
+  "course.admin.CourseSettings.modelConfigurationAuthorizedDescription": {
+    "defaultMessage": "이 코스의 관리자와 소유자는 평가 탭에서 AI 루브릭 채점 모델과 그 요청 옵션 및 시스템 프롬프트를 설정할 수 있습니다. 권한을 취소하면 다시 시스템 관리자만 변경할 수 있게 됩니다."
+  },
+  "course.admin.CourseSettings.modelConfigurationUnauthorizedDescription": {
+    "defaultMessage": "AI 루브릭 채점 모델과 그 요청 옵션 및 시스템 프롬프트는 평가 탭에서 설정합니다. 아래에서 코스 스태프에게 접근 권한을 명시적으로 부여하지 않는 한, 이 코스에서는 시스템 관리자만 변경할 수 있습니다."
+  },
   "course.admin.CourseSettings.offsetTimesPromptText": {
     "defaultMessage": "이 강좌의 시작 날짜가 {backwardOrForward}로 {days}일, {hours}시간, {mins}분 변경됩니다. 이 강좌의 모든 항목(예: 평가, 비디오, 설문 및 교육 계획)의 타이밍(시작, 종료 및 보너스 종료 날짜)도 함께 변경하시겠습니까?"
   },
@@ -793,6 +814,15 @@
   },
   "course.admin.CourseSettings.publishedDescription": {
     "defaultMessage": "이 강좌는 코스몰로지의 공개 강좌 페이지에 표시되어 검색 가능합니다."
+  },
+  "course.admin.CourseSettings.revokeModelConfiguration": {
+    "defaultMessage": "코스 스태프의 모델 설정 접근 권한 취소"
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationFailure": {
+    "defaultMessage": "코스 스태프의 모델 설정 접근 권한을 취소하는 중 오류가 발생했습니다."
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationSuccess": {
+    "defaultMessage": "이제 이 코스의 스태프는 모델 설정을 구성할 수 없습니다."
   },
   "course.admin.CourseSettings.startTimeRequired": {
     "defaultMessage": "시작 시각이 필요합니다."

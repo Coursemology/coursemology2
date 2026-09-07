@@ -8,6 +8,9 @@ module Course::DuplicationConcern
     self.title = duplicator.options[:new_title]
     self.creator = duplicator.options[:current_user]
     self.registration_key = nil
+    # An admin's decision about one course, not a property of its content -- and the duplicate may well land
+    # in another instance, whose admins never made it. The grading model settings themselves still carry over.
+    self.is_model_configuration_authorized = false
     material_folders << duplicator.duplicate(other.root_folder)
   end
 
