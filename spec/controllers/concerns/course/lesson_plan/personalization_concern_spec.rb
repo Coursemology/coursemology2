@@ -197,9 +197,15 @@ RSpec.describe Course::LessonPlan::PersonalizationConcern do
 
     context 'when the course has many course users' do
       let!(:course_users) do
-        create_list(:course_user, 3, course: course, timeline_algorithm: 'fomo').each do |course_user|
+        users = create_list(:course_user, 3, course: course, timeline_algorithm: 'fomo')
+        users.each do |course_user|
           create(:course_assessment_submission, assessment: assessment, creator: course_user.user).tap(&:finalise!)
         end
+        # Each finalise enqueues a PersonalizedTimelineUpdateJob for its submitter. Settle them
+        # before the example runs, so the coursewide recomputation under test is not racing three
+        # per-user recomputations over the same rows.
+        wait_for_enqueued_jobs
+        users
       end
 
       it 'shifts the item for every course user' do

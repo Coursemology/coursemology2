@@ -122,6 +122,17 @@ module TrackableJob::SpecHelpers
     ActiveJob::Base.queue_adapter.clear_enqueued_jobs
   end
 
+  # Blocks until every job enqueued so far has finished.
+  #
+  # Unlike +wait_for_job+, this does not skip the example. Use it when setup enqueues work whose
+  # effects the example depends on — the background thread adapter otherwise runs those jobs
+  # concurrently with the example body, and only joins them once the example is over.
+  def wait_for_enqueued_jobs
+    return unless ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
+
+    ActiveJob::Base.queue_adapter.wait_for_jobs
+  end
+
   # Polls until at least +count+ emails have been delivered, or the Capybara wait time elapses. Under
   # the :sidekiq_separate_thread harness a mail job enqueued by the Capybara server thread is delivered
   # out-of-band by the worker thread, so feature specs must wait for it rather than assert immediately.
