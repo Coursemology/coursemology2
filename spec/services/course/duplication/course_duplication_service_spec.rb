@@ -63,6 +63,17 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_course.registration_key).to be_nil
         end
 
+        context 'when the source course lets its staff configure the grading model' do
+          let(:course) { create(:course, :with_logo, is_model_configuration_authorized: true) }
+
+          it 'does not carry the authorization over, but keeps the grading model settings' do
+            course.update!(rubric_grading_model: 'gpt-5.6-sol')
+
+            expect(new_course.is_model_configuration_authorized).to be false
+            expect(new_course.rubric_grading_model).to eq('gpt-5.6-sol')
+          end
+        end
+
         it 'sets the creator of the new course to the current user' do
           expect(new_course.creator).to eq admin
           expect(new_course.creator).not_to eq course.creator

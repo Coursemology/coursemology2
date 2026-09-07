@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_28_084949) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_07_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -1734,6 +1734,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_28_084949) do
     t.boolean "enrollable", default: false, null: false
     t.boolean "gamified", default: true, null: false
     t.integer "instance_id", null: false
+    t.boolean "is_model_configuration_authorized", default: false, null: false
     t.boolean "is_suspended", default: false, null: false
     t.string "koditsu_workspace_id"
     t.text "logo"

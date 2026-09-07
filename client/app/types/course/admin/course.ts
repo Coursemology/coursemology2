@@ -16,6 +16,10 @@ export interface CourseInfo {
   userSuspensionMessage?: string;
   isSuspended: boolean;
   courseSuspensionMessage?: string;
+  // Whether this course's staff may configure the AI grading model, and whether the viewer may change that.
+  // Only instance and system administrators can, so the section renders on that flag alone.
+  isModelConfigurationAuthorized: boolean;
+  canAuthorizeModelConfiguration: boolean;
 }
 
 export interface CourseAdminItem {

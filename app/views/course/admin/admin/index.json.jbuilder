@@ -15,6 +15,10 @@ json.advanceStartAtDurationDays current_course.advance_start_at_duration_days
 json.canDelete can?(:destroy, current_course)
 json.userSuspensionMessage current_course.user_suspension_message.blank? ? '' : current_course.user_suspension_message
 json.isSuspended current_course.is_suspended
+
+# Whether this course's staff may configure the AI grading model, and whether the viewer may change that.
+json.isModelConfigurationAuthorized current_course.is_model_configuration_authorized
+json.canAuthorizeModelConfiguration can?(:manage, :ai_grading_settings_authorization)
 if current_course.course_suspension_message.blank?
   json.courseSuspensionMessage ''
 else

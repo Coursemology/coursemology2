@@ -477,7 +477,7 @@
     "defaultMessage": "Model options must be a valid JSON object."
   },
   "course.admin.AssessmentSettings.modelOptionsRequired": {
-    "defaultMessage": "Please enter the model options, or disable the model options override."
+    "defaultMessage": "Please enter the model options, or disable the override."
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "Move assessments then delete"
@@ -528,10 +528,13 @@
     "defaultMessage": "Standard outputs and Standard errors"
   },
   "course.admin.AssessmentSettings.systemPromptOverrideHint": {
-    "defaultMessage": "Replaces the built-in rubric grading system prompt entirely. This is NOT the course-wide grading prompt below, but the top-level instructions that frame it and all other inputs to the rubric grading model."
+    "defaultMessage": "Replaces the built-in rubric grading system prompt entirely (shown below for reference). This is NOT the course-wide grading prompt below, but the top-level instructions that frame it and all other inputs to the rubric grading model."
   },
   "course.admin.AssessmentSettings.systemPromptRequired": {
-    "defaultMessage": "Please enter a system prompt, or disable the system prompt override."
+    "defaultMessage": "Please enter a system prompt, or disable the override."
+  },
+  "course.admin.AssessmentSettings.systemPromptVariablesHint": {
+    "defaultMessage": "An override is filled in exactly like the built-in prompt: {variables} are substituted before the request is sent, and they are the only way these inputs reach the model — the answer being graded is sent separately."
   },
   "course.admin.AssessmentSettings.thisCategoryContains": {
     "defaultMessage": "This category contains:"
@@ -692,6 +695,15 @@
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "Allow users to send enrolment requests"
   },
+  "course.admin.CourseSettings.authorizeModelConfiguration": {
+    "defaultMessage": "Allow course staff to configure model settings"
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationFailure": {
+    "defaultMessage": "An error occurred while allowing course staff to configure model settings."
+  },
+  "course.admin.CourseSettings.authorizeModelConfigurationSuccess": {
+    "defaultMessage": "This course's staff can now configure model settings."
+  },
   "course.admin.CourseSettings.clearChanges": {
     "defaultMessage": "Clear changes"
   },
@@ -773,6 +785,15 @@
   "course.admin.CourseSettings.invalidTimeFormat": {
     "defaultMessage": "Invalid Date and/or Time"
   },
+  "course.admin.CourseSettings.modelConfigurationAccess": {
+    "defaultMessage": "AI grading model configuration"
+  },
+  "course.admin.CourseSettings.modelConfigurationAuthorizedDescription": {
+    "defaultMessage": "This course's managers and owners can configure the AI rubric grading model, its request options and its system prompt under Assessments. Revoking returns them to system administrators only."
+  },
+  "course.admin.CourseSettings.modelConfigurationUnauthorizedDescription": {
+    "defaultMessage": "The AI rubric grading model, its request options and its system prompt are configured under Assessments. Only system administrators can change them for this course, unless access for course staff is explicitly authorized below."
+  },
   "course.admin.CourseSettings.offsetTimesPromptText": {
     "defaultMessage": "The start date of this course will be shifted {backwardOrForward} by {days} days, {hours} hours, and {mins} minutes. Would you like to shift the timing (start, end and bonus end dates) for all items (eg Assessment, Video, Survey and Lesson plan) in this course too?"
   },
@@ -793,6 +814,15 @@
   },
   "course.admin.CourseSettings.publishedDescription": {
     "defaultMessage": "This course will appear and be searchable in Coursemology's public courses page."
+  },
+  "course.admin.CourseSettings.revokeModelConfiguration": {
+    "defaultMessage": "Revoke course staff access to model settings"
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationFailure": {
+    "defaultMessage": "An error occurred while revoking course staff access to model settings."
+  },
+  "course.admin.CourseSettings.revokeModelConfigurationSuccess": {
+    "defaultMessage": "This course's staff can no longer configure model settings."
   },
   "course.admin.CourseSettings.startTimeRequired": {
     "defaultMessage": "Start time is required."

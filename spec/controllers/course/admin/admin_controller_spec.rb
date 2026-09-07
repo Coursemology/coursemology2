@@ -104,6 +104,70 @@ RSpec.describe Course::Admin::AdminController do
       end
     end
 
+    describe 'model configuration authorization' do
+      # The course creator is an owner, not an instance or system admin.
+      let(:owner) { create(:course_owner, course: course).user }
+      let(:instance_admin) do
+        create(:user).tap { |u| u.instance_users.find_by(instance: instance).update!(role: :administrator) }
+      end
+
+      describe '#authorize_model_configuration' do
+        subject { patch :authorize_model_configuration, params: { course_id: course } }
+
+        context 'when the user is a System Administrator' do
+          let(:user) { create(:administrator) }
+
+          it 'opens the model settings to course staff' do
+            subject
+            expect(course.reload.is_model_configuration_authorized).to be true
+          end
+        end
+
+        context 'when the user is an Instance Administrator' do
+          # Deliberately not enough: the model settings are a system-level lever.
+          let(:user) { instance_admin }
+
+          it 'declines' do
+            expect { subject }.to raise_exception(CanCan::AccessDenied)
+            expect(course.reload.is_model_configuration_authorized).to be false
+          end
+        end
+
+        context 'when the user is a Course Owner' do
+          let(:user) { owner }
+
+          it 'declines, so staff cannot grant themselves access' do
+            expect { subject }.to raise_exception(CanCan::AccessDenied)
+            expect(course.reload.is_model_configuration_authorized).to be false
+          end
+        end
+      end
+
+      describe '#revoke_model_configuration' do
+        let(:course) { create(:course, is_model_configuration_authorized: true) }
+        subject { patch :revoke_model_configuration, params: { course_id: course } }
+
+        context 'when the user is a System Administrator' do
+          let(:user) { create(:administrator) }
+
+          it 'closes the model settings to course staff' do
+            subject
+            expect(course.reload.is_model_configuration_authorized).to be false
+          end
+        end
+
+        context 'when the user is a Course Owner' do
+          # Being granted access does not include the power to keep or extend it.
+          let(:user) { owner }
+
+          it 'declines' do
+            expect { subject }.to raise_exception(CanCan::AccessDenied)
+            expect(course.reload.is_model_configuration_authorized).to be true
+          end
+        end
+      end
+    end
+
     describe '#suspend' do
       subject { patch :suspend, params: { course_id: course } }
 

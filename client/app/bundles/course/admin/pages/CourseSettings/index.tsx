@@ -12,9 +12,11 @@ import { useItemsReloader } from '../../components/SettingsNavigation';
 
 import CourseSettingsForm from './CourseSettingsForm';
 import {
+  authorizeModelConfiguration,
   deleteCourse,
   fetchCourseSettings,
   fetchTimeZones,
+  revokeModelConfiguration,
   suspendCourse,
   unsuspendCourse,
   updateCourseLogo,
@@ -119,6 +121,39 @@ const CourseSettings = (): JSX.Element => {
       .finally(() => setSubmitting(false));
   };
 
+  const handleModelConfigurationAuthorization = (authorize: boolean): void => {
+    setSubmitting(true);
+
+    const request = authorize
+      ? authorizeModelConfiguration
+      : revokeModelConfiguration;
+
+    request()
+      .then(() => {
+        formRef.current?.resetByMerging?.({
+          isModelConfigurationAuthorized: authorize,
+        });
+        toast.success(
+          t(
+            authorize
+              ? translations.authorizeModelConfigurationSuccess
+              : translations.revokeModelConfigurationSuccess,
+          ),
+        );
+        setReloadForm((value) => !value);
+      })
+      .catch(() => {
+        toast.error(
+          t(
+            authorize
+              ? translations.authorizeModelConfigurationFailure
+              : translations.revokeModelConfigurationFailure,
+          ),
+        );
+      })
+      .finally(() => setSubmitting(false));
+  };
+
   return (
     <Preload
       render={<LoadingIndicator />}
@@ -130,7 +165,13 @@ const CourseSettings = (): JSX.Element => {
           ref={formRef}
           data={settings}
           disabled={submitting}
+          onAuthorizeModelConfiguration={(): void =>
+            handleModelConfigurationAuthorization(true)
+          }
           onDeleteCourse={handleDeleteCourse}
+          onRevokeModelConfiguration={(): void =>
+            handleModelConfigurationAuthorization(false)
+          }
           onSubmit={handleSubmit}
           onSuspendCourse={handleSuspendCourse}
           onUnsuspendCourse={handleUnsuspendCourse}

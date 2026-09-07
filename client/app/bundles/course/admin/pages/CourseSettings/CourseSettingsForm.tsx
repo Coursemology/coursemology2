@@ -32,6 +32,8 @@ interface CourseSettingsFormProps {
   onDeleteCourse: () => void;
   onSuspendCourse: () => void;
   onUnsuspendCourse: () => void;
+  onAuthorizeModelConfiguration: () => void;
+  onRevokeModelConfiguration: () => void;
   onUploadCourseLogo: (image: File, onSuccess: () => void) => void;
   disabled: boolean;
 }
@@ -331,6 +333,38 @@ const CourseSettingsForm = forwardRef<
               />
             </Subsection>
           </Section>
+
+          {props.data.canAuthorizeModelConfiguration && (
+            <Section
+              sticksToNavbar
+              title={t(translations.modelConfigurationAccess)}
+            >
+              <Typography variant="body2">
+                {props.data.isModelConfigurationAuthorized
+                  ? t(translations.modelConfigurationAuthorizedDescription)
+                  : t(translations.modelConfigurationUnauthorizedDescription)}
+              </Typography>
+
+              {props.data.isModelConfigurationAuthorized ? (
+                <Button
+                  color="warning"
+                  disabled={props.disabled}
+                  onClick={props.onRevokeModelConfiguration}
+                  variant="outlined"
+                >
+                  {t(translations.revokeModelConfiguration)}
+                </Button>
+              ) : (
+                <Button
+                  disabled={props.disabled}
+                  onClick={props.onAuthorizeModelConfiguration}
+                  variant="outlined"
+                >
+                  {t(translations.authorizeModelConfiguration)}
+                </Button>
+              )}
+            </Section>
+          )}
 
           <Section sticksToNavbar title={t(translations.suspension)}>
             <Typography variant="body2">
