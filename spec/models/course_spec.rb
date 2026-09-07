@@ -373,6 +373,58 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    describe 'the AI grading model configuration' do
+      let(:course) { create(:course) }
+
+      it 'accepts a supported model and rejects an unsupported one' do
+        course.rubric_grading_model = 'gpt-5.6-sol'
+        expect(course).to be_valid
+
+        course.rubric_grading_model = 'gpt-4o-mini-transcribe'
+        expect(course).not_to be_valid
+        expect(course.errors[:rubric_grading_model]).to be_present
+      end
+
+      it 'rejects model options that are not a JSON object' do
+        course.rubric_grading_model_options = '{not json'
+        expect(course).not_to be_valid
+
+        course.rubric_grading_model_options = '[1, 2]'
+        expect(course).not_to be_valid
+        expect(course.errors[:rubric_grading_model_options]).to be_present
+      end
+
+      # An enabled-but-blank override would replace the model's own options with {} rather than being
+      # ignored, silently dropping e.g. a reasoning model's effort setting.
+      it 'requires model options when the model options override is enabled' do
+        course.rubric_grading_model_options_enabled = true
+        course.rubric_grading_model_options = '   '
+        expect(course).not_to be_valid
+        expect(course.errors[:rubric_grading_model_options]).to be_present
+
+        course.rubric_grading_model_options = '{"top_p":0.5}'
+        expect(course).to be_valid
+      end
+
+      it 'requires a system prompt when the system prompt override is enabled' do
+        course.rubric_grading_system_prompt_enabled = true
+        course.rubric_grading_system_prompt = '   '
+        expect(course).not_to be_valid
+        expect(course.errors[:rubric_grading_system_prompt]).to be_present
+
+        course.rubric_grading_system_prompt = 'Grade strictly.'
+        expect(course).to be_valid
+      end
+
+      it 'leaves blank settings alone while their overrides are disabled' do
+        course.rubric_grading_model_options = nil
+        course.rubric_grading_system_prompt = nil
+        expect(course).to be_valid
+        expect(course.rubric_grading_model_options_override).to be_nil
+        expect(course.rubric_grading_system_prompt_override).to be_nil
+      end
+    end
+
     # Drives ConsolidatedItemEmailJob: a course only gets an opening reminder when this is true.
     # "Upcoming" is per course user — the effective time is the user's personal time if they have
     # one, otherwise the reference time for their timeline — so an item can be upcoming for nobody
