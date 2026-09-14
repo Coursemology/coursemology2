@@ -87,18 +87,52 @@ class Course::Assessment::Question::ProgrammingUpgrade < ApplicationRecord
   scope :in_flight, -> { where(workflow_state: [:pending, :running, :reverting]) }
   scope :stale, -> { in_flight.where(updated_at: ...STALE_AFTER.ago) }
 
+  # @return [Boolean] Whether this row is in a non-terminal state.
+  def in_progress?
+    %w[pending running reverting].include?(workflow_state)
+  end
+
   # Whether an upgrade or revert is currently running for this row, blocking a new one.
   #
-  # A row that has been in flight beyond +STALE_AFTER+ does not block: its job is presumed lost.
+  # A row that has been in progress beyond +STALE_AFTER+ does not block: its job is presumed lost.
   #
   # @return [Boolean]
   def in_flight?
-    %w[pending running reverting].include?(workflow_state) && !stale?
+    in_progress? && !stale?
   end
 
-  # @return [Boolean] Whether this row has been in flight long enough to be presumed a zombie.
+  # @return [Boolean] Whether this row has been in progress long enough to be presumed a zombie.
   def stale?
-    updated_at < STALE_AFTER.ago
+    in_progress? && updated_at < STALE_AFTER.ago
+  end
+
+  # Brings this row in line with the import job it is waiting on, and reaps it if that job appears to
+  # have been lost. Call before serving data, the way the plagiarism page queries SSID before
+  # rendering, so a lost job cannot pin a question in a running state forever.
+  #
+  # A successful revert destroys the row: the pre-upgrade state has been restored, so there is nothing
+  # left to track and the question falls back to its language-derived state.
+  #
+  # @return [self, nil] nil if the row was destroyed, i.e. a revert succeeded.
+  def refresh!
+    return self unless in_progress?
+
+    # The job's own outcome is checked before +stale?+: a job that finished is authoritative however
+    # long the row has been sitting there, and only a job that never reported back is a zombie.
+    if job&.completed?
+      return nil if reverting? && destroy!
+
+      complete!
+    elsif job&.errored? || stale?
+      fail!
+    else
+      return self # Still waiting on the import job.
+    end
+
+    # Workflow events only write the attribute in this app — see
+    # +Extensions::DeferredWorkflowStatePersistence+ — so a transition has to be saved explicitly.
+    save!
+    self
   end
 
   # Whether this row still describes the question's current package. A row stops being authoritative

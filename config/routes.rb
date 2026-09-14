@@ -588,6 +588,13 @@ Rails.application.routes.draw do
         get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
       end
 
+      namespace :programming_upgrade do
+        resources :questions, only: [:index, :create] do
+          get 'upgrades', on: :collection, action: 'fetch_upgrades'
+          post 'revert', on: :member
+        end
+      end
+
       namespace :plagiarism do
         resources :assessments, only: [:index] do
           post 'plagiarism_checks', on: :collection

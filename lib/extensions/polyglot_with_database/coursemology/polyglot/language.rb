@@ -37,6 +37,25 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
       concrete_languages.each(&:instance)
     end
 
+    # The valid upgrade targets for every language, keyed by language id, computed in a single pass.
+    #
+    # Rendering a page of programming questions would otherwise call +upgrade_targets+ once per row,
+    # and each call reloads the whole table through +family_siblings+.
+    #
+    # @return [Hash{Integer => Array<Coursemology::Polyglot::Language>}]
+    def upgrade_targets_by_language_id
+      all.to_a.group_by(&:polyglot_name).flat_map do |_, family|
+        targets = enabled_newest_first(family)
+        family.map { |language| [language.id, targets] }
+      end.to_h
+    end
+
+    # @param [Array<Coursemology::Polyglot::Language>] languages
+    # @return [Array<Coursemology::Polyglot::Language>] The non-deprecated ones, newest first.
+    def enabled_newest_first(languages)
+      languages.select(&:enabled).sort_by(&:comparable_polyglot_version).reverse
+    end
+
     private
 
     # Finds or creates the root instance for languages of this class.
@@ -79,9 +98,11 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
   # Non-deprecated languages in the same family, newest first. These are the valid targets when
   # migrating a question off its current language.
   #
+  # Use +.upgrade_targets_by_language_id+ instead when resolving targets for many languages at once.
+  #
   # @return [Array<Coursemology::Polyglot::Language>]
   def upgrade_targets
-    family_siblings.select(&:enabled).sort_by(&:comparable_polyglot_version).reverse
+    self.class.enabled_newest_first(family_siblings)
   end
 
   # The newest non-deprecated language in the same family.

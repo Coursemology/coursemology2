@@ -171,6 +171,10 @@ const translations = defineMessages({
     id: 'course.courses.SidebarItem.discussionTopics',
     defaultMessage: 'Comments',
   },
+  sidebar_programming_upgrades: {
+    id: 'course.courses.SidebarItem.programmingUpgrades',
+    defaultMessage: 'Upgrade Programming Questions',
+  },
   sidebar_experience_points: {
     id: 'course.courses.SidebarItem.experiencePoints',
     defaultMessage: 'Experience Points',

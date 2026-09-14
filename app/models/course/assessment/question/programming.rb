@@ -15,6 +15,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   MEMORY_LIMIT = nil
 
   include DuplicationStateTrackingConcern
+  include Generic::CollectionConcern
 
   attr_accessor :max_time_limit, :skip_process_package
 

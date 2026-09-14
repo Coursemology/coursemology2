@@ -42,6 +42,10 @@ class Course::AssessmentsComponent < SimpleDelegator
   end
 
   def admin_sidebar_items
+    skills_sidebar_items + programming_upgrade_sidebar_items
+  end
+
+  def skills_sidebar_items
     return [] unless can?(:read, Course::Assessment::Skill.new(course: current_course))
 
     [
@@ -51,6 +55,20 @@ class Course::AssessmentsComponent < SimpleDelegator
         type: :admin,
         weight: 8,
         path: course_assessments_skills_path(current_course)
+      }
+    ]
+  end
+
+  def programming_upgrade_sidebar_items
+    return [] unless can?(:manage, :programming_upgrades)
+
+    [
+      {
+        key: :sidebar_programming_upgrades,
+        icon: :programming,
+        type: :admin,
+        weight: 9,
+        path: course_programming_upgrade_questions_path(current_course)
       }
     ]
   end

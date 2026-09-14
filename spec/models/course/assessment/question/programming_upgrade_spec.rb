@@ -35,46 +35,48 @@ RSpec.describe Course::Assessment::Question::ProgrammingUpgrade do
     describe 'workflow' do
       subject { create(:course_assessment_question_programming_upgrade, question: question) }
 
+      # Workflow events only write the attribute in this app (see DeferredWorkflowStatePersistence),
+      # so a transition is not persisted until the record is saved. Assert on a reload throughout, or
+      # these specs pass against in-memory state that never reaches the database.
+      def transition!(event)
+        subject.public_send(:"#{event}!")
+        subject.save!
+        subject.reload
+      end
+
       it 'starts pending' do
-        expect(subject).to be_pending
+        expect(subject.reload).to be_pending
       end
 
       it 'transitions pending -> running -> completed' do
-        subject.run!
-        expect(subject).to be_running
-        subject.complete!
-        expect(subject).to be_completed
+        expect(transition!(:run)).to be_running
+        expect(transition!(:complete)).to be_completed
       end
 
       # A question with no attachment never spawns an import job, so the upgrade is done as soon as
       # the language change commits.
       it 'allows pending to complete directly' do
-        subject.complete!
-        expect(subject).to be_completed
+        expect(transition!(:complete)).to be_completed
       end
 
       it 'allows a completed row to be restarted when the question is upgraded again' do
-        subject.complete!
-        subject.start!
-        expect(subject).to be_pending
+        transition!(:complete)
+        expect(transition!(:start)).to be_pending
       end
 
       it 'allows a failed row to be restarted when the target is changed' do
-        subject.fail!
-        subject.start!
-        expect(subject).to be_pending
+        transition!(:fail)
+        expect(transition!(:start)).to be_pending
       end
 
       it 'allows a failed row to be reverted, and returns to failed if the revert fails' do
-        subject.fail!
-        subject.revert!
-        expect(subject).to be_reverting
-        subject.fail!
-        expect(subject).to be_failed
+        transition!(:fail)
+        expect(transition!(:revert)).to be_reverting
+        expect(transition!(:fail)).to be_failed
       end
 
       it 'does not allow a completed row to be reverted' do
-        subject.complete!
+        transition!(:complete)
         expect { subject.revert! }.to raise_error(Workflow::NoTransitionAllowed)
       end
     end
