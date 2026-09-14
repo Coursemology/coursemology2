@@ -112,7 +112,7 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails', '~> 8'
 
-  gem 'rubocop', '~> 1.89.0'
+  gem 'rubocop', '~> 1.90.0'
 
   # Factory Bot for factories
   # fix for https://github.com/thoughtbot/factory_bot/issues/1690
