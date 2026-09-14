@@ -54,6 +54,66 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
     end
   end
 
+  # Language version as an integer array, for numeric (not lexicographic) comparison.
+  #
+  # String comparison gets this wrong: '2.10' < '2.9' as strings, but [2, 10] > [2, 9].
+  # Version-less languages (the legacy 'C/C++' and 'JavaScript' rows) yield [], which sorts first.
+  #
+  # @return [Array<Integer>]
+  def comparable_polyglot_version
+    polyglot_version&.split('.')&.map(&:to_i) || []
+  end
+
+  # Every language in the same family, including self. A family is all versions sharing a
+  # +polyglot_name+ ('Python 3.13' and 'Python 3.14' are both 'python').
+  #
+  # Note this is derived at runtime rather than read off +parent_id+ (NULL on every row) or +weight+
+  # (a serial assigned by a manually-run rake task, so live values drift from the intended order).
+  # The table holds a couple of dozen rows, so loading it is cheaper than the indirection.
+  #
+  # @return [Array<Coursemology::Polyglot::Language>]
+  def family_siblings
+    Coursemology::Polyglot::Language.all.select { |language| language.polyglot_name == polyglot_name }
+  end
+
+  # Non-deprecated languages in the same family, newest first. These are the valid targets when
+  # migrating a question off its current language.
+  #
+  # @return [Array<Coursemology::Polyglot::Language>]
+  def upgrade_targets
+    family_siblings.select(&:enabled).sort_by(&:comparable_polyglot_version).reverse
+  end
+
+  # The newest non-deprecated language in the same family.
+  #
+  # Deliberately filters on +enabled+, unlike +latest?+ in db:set_polyglot_language_weights. Today
+  # the newest member of every family happens to be non-deprecated, so the two agree, but relying on
+  # that would break silently the day a newest version is deprecated.
+  #
+  # @return [Coursemology::Polyglot::Language, nil] nil if every language in the family is deprecated.
+  def latest_in_family
+    upgrade_targets.first
+  end
+
+  # Whether this language has been retired and can no longer be assigned to a question.
+  #
+  # @return [Boolean]
+  def deprecated?
+    !enabled
+  end
+
+  # Whether a question on this language should be moved to a different version.
+  #
+  # True when a newer non-deprecated version exists. Also true when this language is itself
+  # deprecated and any non-deprecated sibling is available — in that case the target may be a *lower*
+  # version, which is intended: a deprecated language has to be migrated off regardless of direction.
+  #
+  # @return [Boolean]
+  def upgradable?
+    latest = latest_in_family
+    latest.present? && latest != self
+  end
+
   private
 
   # Sets the record as readonly if this is the root record

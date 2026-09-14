@@ -3,12 +3,11 @@ namespace :db do
   # This rake updates the weight column in the polyglot_languages table,
   # changing the order in which languages are displayed in drop-down menus.
 
-  def comparable_polyglot_version(language)
-    language.polyglot_version&.split('.')&.map(&:to_i) || []
-  end
-
+  # NB: +comparable_polyglot_version+ lives on the language model itself (see
+  # lib/extensions/polyglot_with_database/coursemology/polyglot/language.rb) so this task and the
+  # application order versions identically.
   def version_compare(lang1, lang2)
-    comparable_polyglot_version(lang1) <=> comparable_polyglot_version(lang2)
+    lang1.comparable_polyglot_version <=> lang2.comparable_polyglot_version
   end
 
   # to be populated once we query the languages

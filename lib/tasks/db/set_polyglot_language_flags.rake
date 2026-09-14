@@ -60,6 +60,11 @@ namespace :db do
       Coursemology::Polyglot::Language::Python::Python3Point14
     ].freeze
 
+  # NOTE: `latest?` in set_polyglot_language_weights.rake picks the highest version in each language
+  # family without checking `enabled`. That is correct only while the newest member of every family is
+  # non-deprecated, which holds today. Deprecating a family's newest version here would make that
+  # helper report a deprecated language as the latest. Not expected to happen (we deprecate old
+  # versions, not new ones), but if it ever does, teach `latest?` to skip disabled languages.
   DEPRECATED_LANGUAGES =
     [
       Coursemology::Polyglot::Language::Python::Python2Point7,

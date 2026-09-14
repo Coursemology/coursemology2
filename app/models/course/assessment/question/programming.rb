@@ -45,9 +45,22 @@ class Course::Assessment::Question::Programming < ApplicationRecord
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
   has_many :test_cases, class_name: 'Course::Assessment::Question::ProgrammingTestCase',
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
+  has_many :upgrades, class_name: 'Course::Assessment::Question::ProgrammingUpgrade',
+                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   def auto_gradable?
     !test_cases.empty?
+  end
+
+  # The upgrade record describing the package currently attached to this question, if any.
+  #
+  # Upgrades are keyed on (question, package), so a question that has had its package replaced keeps
+  # the older rows as inert history and this returns nil — correct, since reverting the language alone
+  # would no longer restore a state that ever worked.
+  #
+  # @return [Course::Assessment::Question::ProgrammingUpgrade, nil]
+  def upgrade
+    upgrades.find_by(attachment_id: attachment&.attachment_id)
   end
 
   def edit_online?
