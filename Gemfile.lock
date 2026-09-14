@@ -419,7 +419,7 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.6.3)
-    pgvector (0.3.2)
+    pgvector (0.3.3)
     pp (0.6.4)
       prettyprint
     pragmatic_segmenter (0.3.24)
