@@ -4727,6 +4727,9 @@
   "course.courses.SidebarItem.scholaistic.assessments": {
     "defaultMessage": "角色扮演评估"
   },
+  "course.courses.SidebarItem.programmingUpgrades": {
+    "defaultMessage": "升级编程题目"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "忽视"
   },
@@ -6421,6 +6424,81 @@
   },
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "某些选定的测验已经完成了抄袭检查。运行新的抄袭检查将删除之前的结果。"
+  },
+  "course.programmingUpgrade.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.programmingUpgrade.assessment": {
+    "defaultMessage": "评估"
+  },
+  "course.programmingUpgrade.deprecatedLanguage": {
+    "defaultMessage": "此版本已弃用，应尽快升级。"
+  },
+  "course.programmingUpgrade.editQuestion": {
+    "defaultMessage": "查看 / 编辑题目"
+  },
+  "course.programmingUpgrade.header": {
+    "defaultMessage": "升级编程题目"
+  },
+  "course.programmingUpgrade.language": {
+    "defaultMessage": "语言"
+  },
+  "course.programmingUpgrade.noUpgradeAvailable": {
+    "defaultMessage": "此语言没有更新的版本。"
+  },
+  "course.programmingUpgrade.question": {
+    "defaultMessage": "题目"
+  },
+  "course.programmingUpgrade.regradeWarning": {
+    "defaultMessage": "{questionCount, plural, other {这 # 道自动评分题目}}已有提交记录。升级将重新导入其程序包，并重新评分约 {answerCount, plural, other {# 份已提交答案}}，且仅重新计算这些提交的系统发放 EXP。请注意，手动发放的 EXP 不会更新。您确定要继续吗？"
+  },
+  "course.programmingUpgrade.revert": {
+    "defaultMessage": "还原为 {language}"
+  },
+  "course.programmingUpgrade.revertFailed": {
+    "defaultMessage": "无法还原此题目。"
+  },
+  "course.programmingUpgrade.revertStarted": {
+    "defaultMessage": "正在将题目还原为先前的语言。"
+  },
+  "course.programmingUpgrade.searchPlaceholder": {
+    "defaultMessage": "按题目或评估标题搜索"
+  },
+  "course.programmingUpgrade.status": {
+    "defaultMessage": "状态"
+  },
+  "course.programmingUpgrade.statusDeprecated": {
+    "defaultMessage": "已弃用"
+  },
+  "course.programmingUpgrade.statusImportFailed": {
+    "defaultMessage": "导入失败"
+  },
+  "course.programmingUpgrade.statusOk": {
+    "defaultMessage": "正常"
+  },
+  "course.programmingUpgrade.statusPending": {
+    "defaultMessage": "进行中"
+  },
+  "course.programmingUpgrade.statusUpgradable": {
+    "defaultMessage": "可升级"
+  },
+  "course.programmingUpgrade.submissionCount": {
+    "defaultMessage": "# 提交"
+  },
+  "course.programmingUpgrade.upgrade": {
+    "defaultMessage": "升级"
+  },
+  "course.programmingUpgrade.upgradeFailed": {
+    "defaultMessage": "无法开始升级。"
+  },
+  "course.programmingUpgrade.upgradeRejected": {
+    "defaultMessage": "已跳过 {count, plural, other {# 道题目}}。"
+  },
+  "course.programmingUpgrade.upgradeSelected": {
+    "defaultMessage": "升级所选项 ({count})"
+  },
+  "course.programmingUpgrade.upgradeStarted": {
+    "defaultMessage": "已开始 {count, plural, other {# 项升级}}。"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "成就数（总计：{courseAchievementCount}）"

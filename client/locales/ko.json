@@ -4733,6 +4733,9 @@
   "course.courses.SidebarItem.scholaistic.assessments": {
     "defaultMessage": "롤플레잉 평가"
   },
+  "course.courses.SidebarItem.programmingUpgrades": {
+    "defaultMessage": "프로그래밍 문제 업그레이드"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "무시"
   },
@@ -6427,6 +6430,81 @@
   },
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "선택한 평가 중 일부는 이미 완료된 표절 검사가 있습니다. 새 표절 검사를 실행하면 이전 결과가 제거됩니다."
+  },
+  "course.programmingUpgrade.actions": {
+    "defaultMessage": "작업"
+  },
+  "course.programmingUpgrade.assessment": {
+    "defaultMessage": "평가"
+  },
+  "course.programmingUpgrade.deprecatedLanguage": {
+    "defaultMessage": "이 버전은 지원이 중단되었으므로 업그레이드해야 합니다."
+  },
+  "course.programmingUpgrade.editQuestion": {
+    "defaultMessage": "문제 보기 / 편집"
+  },
+  "course.programmingUpgrade.header": {
+    "defaultMessage": "프로그래밍 문제 업그레이드"
+  },
+  "course.programmingUpgrade.language": {
+    "defaultMessage": "언어"
+  },
+  "course.programmingUpgrade.noUpgradeAvailable": {
+    "defaultMessage": "이 언어에는 더 최신 버전이 없습니다."
+  },
+  "course.programmingUpgrade.question": {
+    "defaultMessage": "문제"
+  },
+  "course.programmingUpgrade.regradeWarning": {
+    "defaultMessage": "{questionCount, plural, other {이 자동 채점 문제 #개}}에 기존 제출물이 있습니다. 업그레이드하면 패키지를 다시 가져오고 제출된 답안 약 {answerCount, plural, other {#개}}를 재채점하며, 해당 제출물에 대해 시스템이 지급한 EXP만 다시 계산됩니다. 수동으로 지급한 EXP는 갱신되지 않습니다. 계속하시겠습니까?"
+  },
+  "course.programmingUpgrade.revert": {
+    "defaultMessage": "{language}(으)로 되돌리기"
+  },
+  "course.programmingUpgrade.revertFailed": {
+    "defaultMessage": "문제를 되돌릴 수 없습니다."
+  },
+  "course.programmingUpgrade.revertStarted": {
+    "defaultMessage": "문제를 이전 언어로 되돌리는 중입니다."
+  },
+  "course.programmingUpgrade.searchPlaceholder": {
+    "defaultMessage": "문제 또는 평가 제목으로 검색"
+  },
+  "course.programmingUpgrade.status": {
+    "defaultMessage": "상태"
+  },
+  "course.programmingUpgrade.statusDeprecated": {
+    "defaultMessage": "지원 중단됨"
+  },
+  "course.programmingUpgrade.statusImportFailed": {
+    "defaultMessage": "가져오기 실패"
+  },
+  "course.programmingUpgrade.statusOk": {
+    "defaultMessage": "정상"
+  },
+  "course.programmingUpgrade.statusPending": {
+    "defaultMessage": "진행 중"
+  },
+  "course.programmingUpgrade.statusUpgradable": {
+    "defaultMessage": "업그레이드 가능"
+  },
+  "course.programmingUpgrade.submissionCount": {
+    "defaultMessage": "# 제출물"
+  },
+  "course.programmingUpgrade.upgrade": {
+    "defaultMessage": "업그레이드"
+  },
+  "course.programmingUpgrade.upgradeFailed": {
+    "defaultMessage": "업그레이드를 시작할 수 없습니다."
+  },
+  "course.programmingUpgrade.upgradeRejected": {
+    "defaultMessage": "{count, plural, other {문제 #개}}를 건너뛰었습니다."
+  },
+  "course.programmingUpgrade.upgradeSelected": {
+    "defaultMessage": "선택 항목 업그레이드 ({count})"
+  },
+  "course.programmingUpgrade.upgradeStarted": {
+    "defaultMessage": "업그레이드 {count, plural, other {#건}}을 시작했습니다."
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "성과 개수 (총계: {courseAchievementCount})"

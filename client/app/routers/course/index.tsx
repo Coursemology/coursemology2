@@ -13,6 +13,7 @@ import lessonPlanRouter from './lessonPlan';
 import marketplaceRouter from './marketplace';
 import materialsRouter from './materials';
 import plagiarismRouter from './plagiarism';
+import programmingUpgradeRouter from './programmingUpgrade';
 import scholaisticRouter from './scholaistic';
 import statisticsRouter from './statistics';
 import surveysRouter from './surveys';
@@ -49,6 +50,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     marketplaceRouter(t),
     materialsRouter(t),
     plagiarismRouter(t),
+    programmingUpgradeRouter(t),
     statisticsRouter(t),
     surveysRouter(t),
     usersRouter(t),

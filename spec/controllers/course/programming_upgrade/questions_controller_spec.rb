@@ -47,6 +47,50 @@ RSpec.describe Course::ProgrammingUpgrade::QuestionsController, type: :controlle
         expect(row).not_to have_key('upgradeTargets')
       end
 
+      describe 'default ordering' do
+        let(:py6) { Coursemology::Polyglot::Language::Python::Python3Point6.instance }
+        let(:py14) { Coursemology::Polyglot::Language::Python::Python3Point14.instance }
+        let(:java8) { Coursemology::Polyglot::Language::Java::Java8.instance }
+
+        def question_on(language)
+          create(:course_assessment_question_programming,
+                 assessment: assessment, language: language, template_package: true)
+        end
+
+        def upgrade_in(state, question)
+          create(:course_assessment_question_programming_upgrade, state, question: question)
+        end
+
+        it 'puts the rows needing attention first' do
+          ok = question_on(py9).tap { |q| upgrade_in(:completed, q) }
+          failed = question_on(py9).tap { |q| upgrade_in(:failed, q) }
+          pending = question_on(py9).tap { |q| upgrade_in(:running, q) }
+          deprecated = question_on(py6)
+          upgradable = question_on(py9)
+          latest = question_on(py14)
+
+          subject
+          ids = JSON.parse(response.body)['questions'].map { |q| q['id'] }
+
+          expect(ids - [question.id]).to eq(
+            [failed.id, pending.id, deprecated.id, upgradable.id, ok.id, latest.id]
+          )
+        end
+
+        # 'Python 3.9' sorts after 'Python 3.10' as a string, so this would fail on a naive name sort.
+        it 'orders by language name, then oldest version first' do
+          py10 = Coursemology::Polyglot::Language::Python::Python3Point10.instance
+          newer = question_on(py10)
+          other_family = question_on(java8)
+
+          subject
+          ids = JSON.parse(response.body)['questions'].map { |q| q['id'] }
+
+          # Java before Python by name; within Python, 3.9 (the pre-existing question) before 3.10.
+          expect(ids).to eq([other_family.id, question.id, newer.id])
+        end
+      end
+
       # Resolving targets per row would reload the whole language table once per question.
       it 'resolves upgrade targets for every row in one query' do
         create(:course_assessment_question_programming,

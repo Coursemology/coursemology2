@@ -42,9 +42,11 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
     # Rendering a page of programming questions would otherwise call +upgrade_targets+ once per row,
     # and each call reloads the whole table through +family_siblings+.
     #
+    # @param [Array<Coursemology::Polyglot::Language>] languages Pass an already-loaded collection to
+    #   avoid re-reading the table when the caller needs it for other things too.
     # @return [Hash{Integer => Array<Coursemology::Polyglot::Language>}]
-    def upgrade_targets_by_language_id
-      all.to_a.group_by(&:polyglot_name).flat_map do |_, family|
+    def upgrade_targets_by_language_id(languages = all.to_a)
+      languages.group_by(&:polyglot_name).flat_map do |_, family|
         targets = enabled_newest_first(family)
         family.map { |language| [language.id, targets] }
       end.to_h

@@ -4751,6 +4751,9 @@
   "course.courses.SidebarItem.scholaistic.assessments": {
     "defaultMessage": "Role-Playing Assessments"
   },
+  "course.courses.SidebarItem.programmingUpgrades": {
+    "defaultMessage": "Upgrade Programming Questions"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "Ignore"
   },
@@ -6463,6 +6466,81 @@
   },
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "Some of the selected assessments already have completed plagiarism checks. Running a new plagiarism check will remove the previous results."
+  },
+  "course.programmingUpgrade.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.programmingUpgrade.assessment": {
+    "defaultMessage": "Assessment"
+  },
+  "course.programmingUpgrade.deprecatedLanguage": {
+    "defaultMessage": "This version is deprecated and should be upgraded."
+  },
+  "course.programmingUpgrade.editQuestion": {
+    "defaultMessage": "View / Edit Question"
+  },
+  "course.programmingUpgrade.header": {
+    "defaultMessage": "Upgrade Programming Questions"
+  },
+  "course.programmingUpgrade.language": {
+    "defaultMessage": "Language"
+  },
+  "course.programmingUpgrade.noUpgradeAvailable": {
+    "defaultMessage": "No newer version is available for this language."
+  },
+  "course.programmingUpgrade.question": {
+    "defaultMessage": "Question"
+  },
+  "course.programmingUpgrade.regradeWarning": {
+    "defaultMessage": "There are existing submissions for {questionCount, plural, one {this autograded question} other {these # autograded questions}}. Upgrading will re-import {questionCount, plural, one {its package} other {their packages}} and regrade approximately {answerCount, plural, one {# submitted answer} other {# submitted answers}}, and only system-issued EXP for those submissions will be re-calculated. Note that manually-issued EXP will not be updated. Are you sure you wish to continue?"
+  },
+  "course.programmingUpgrade.revert": {
+    "defaultMessage": "Revert to {language}"
+  },
+  "course.programmingUpgrade.revertFailed": {
+    "defaultMessage": "Could not revert the question."
+  },
+  "course.programmingUpgrade.revertStarted": {
+    "defaultMessage": "Reverting the question to its previous language."
+  },
+  "course.programmingUpgrade.searchPlaceholder": {
+    "defaultMessage": "Search by question or assessment title"
+  },
+  "course.programmingUpgrade.status": {
+    "defaultMessage": "Status"
+  },
+  "course.programmingUpgrade.statusDeprecated": {
+    "defaultMessage": "Deprecated"
+  },
+  "course.programmingUpgrade.statusImportFailed": {
+    "defaultMessage": "Import Failed"
+  },
+  "course.programmingUpgrade.statusOk": {
+    "defaultMessage": "Ok"
+  },
+  "course.programmingUpgrade.statusPending": {
+    "defaultMessage": "Pending"
+  },
+  "course.programmingUpgrade.statusUpgradable": {
+    "defaultMessage": "Upgradable"
+  },
+  "course.programmingUpgrade.submissionCount": {
+    "defaultMessage": "# Submissions"
+  },
+  "course.programmingUpgrade.upgrade": {
+    "defaultMessage": "Upgrade"
+  },
+  "course.programmingUpgrade.upgradeFailed": {
+    "defaultMessage": "Could not start the upgrade."
+  },
+  "course.programmingUpgrade.upgradeRejected": {
+    "defaultMessage": "{count, plural, one {# question was} other {# questions were}} skipped."
+  },
+  "course.programmingUpgrade.upgradeSelected": {
+    "defaultMessage": "Upgrade Selected ({count})"
+  },
+  "course.programmingUpgrade.upgradeStarted": {
+    "defaultMessage": "Started {count, plural, one {# upgrade} other {# upgrades}}."
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"

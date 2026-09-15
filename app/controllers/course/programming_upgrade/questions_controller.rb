@@ -7,8 +7,8 @@ class Course::ProgrammingUpgrade::QuestionsController < Course::ProgrammingUpgra
     @questions = paged_questions
     refresh_upgrades(@questions)
     @submission_counts_hash = submission_counts_hash(@questions)
-    @languages = Coursemology::Polyglot::Language.all.to_a
-    @upgrade_targets_hash = Coursemology::Polyglot::Language.upgrade_targets_by_language_id
+    @languages = all_languages
+    @upgrade_targets_hash = upgrade_targets_hash
   end
 
   # Starts an upgrade for one or more questions. Accepts a target language per question so a bulk
@@ -46,6 +46,17 @@ class Course::ProgrammingUpgrade::QuestionsController < Course::ProgrammingUpgra
     Course::Assessment::Question::ProgrammingUpgradeService.new(current_course, current_user)
   end
 
+  # The language table is a couple of dozen rows and is needed by the ordering, the payload and the
+  # target resolution alike, so it is read once per request.
+  def all_languages
+    @all_languages ||= Coursemology::Polyglot::Language.all.to_a
+  end
+
+  def upgrade_targets_hash
+    @upgrade_targets_hash ||=
+      Coursemology::Polyglot::Language.upgrade_targets_by_language_id(all_languages)
+  end
+
   # Every programming question in the course. Kept free of preloads so it can also be counted.
   def question_scope
     Course::Assessment::Question::Programming.
@@ -63,8 +74,65 @@ class Course::ProgrammingUpgrade::QuestionsController < Course::ProgrammingUpgra
 
   def paged_questions
     upgradable_questions.
-      order('course_assessments.id, course_question_assessments.weight').
+      joins(:language).
+      joins(authoritative_upgrade_join).
+      order(Arel.sql("#{status_rank_sql}, #{language_rank_sql}, " \
+                     'course_assessments.id, course_question_assessments.weight')).
       paginated(page_param)
+  end
+
+  # Joins each question to the upgrade row describing its *current* package, matching
+  # +ProgrammingUpgrade.authoritative+. Neither join can fan out: +has_one_attachment+ caps a question
+  # at one reference, and upgrades are unique per (question, attachment).
+  def authoritative_upgrade_join
+    <<~SQL.squish
+      LEFT JOIN attachment_references
+        ON attachment_references.attachable_id = course_assessment_question_programming.id
+       AND attachment_references.attachable_type = 'Course::Assessment::Question::Programming'
+      LEFT JOIN course_assessment_question_programming_upgrades
+        ON course_assessment_question_programming_upgrades.question_id =
+           course_assessment_question_programming.id
+       AND course_assessment_question_programming_upgrades.attachment_id
+           IS NOT DISTINCT FROM attachment_references.attachment_id
+    SQL
+  end
+
+  # Surfaces the rows needing attention first: Import Failed, Pending, Deprecated, Upgradable, Ok,
+  # then rows with no chip at all.
+  #
+  # The WHEN order mirrors the chip's own precedence rather than the rank values — an upgrade row's
+  # state wins over the language-derived state, so a completed upgrade on a deprecated language reads
+  # (and sorts) as Ok, not Deprecated.
+  def status_rank_sql
+    upgrades = 'course_assessment_question_programming_upgrades.workflow_state'
+    latest_ids = upgrade_targets_hash.values.filter_map { |targets| targets.first&.id }.uniq
+
+    # A language absent from latest_ids is not the newest in its family, i.e. upgradable. Fully
+    # deprecated families have no latest, but their members are caught by the enabled check above.
+    upgradable = latest_ids.empty? ? 'TRUE' : "polyglot_languages.id NOT IN (#{latest_ids.join(',')})"
+
+    <<~SQL.squish
+      CASE
+        WHEN #{upgrades} = 'failed' THEN 0
+        WHEN #{upgrades} IN ('pending', 'running', 'reverting') THEN 1
+        WHEN #{upgrades} = 'completed' THEN 4
+        WHEN NOT polyglot_languages.enabled THEN 2
+        WHEN #{upgradable} THEN 3
+        ELSE 5
+      END
+    SQL
+  end
+
+  # Language name ascending, then oldest version first. Built in Ruby because the ordering is by
+  # numeric version rather than the string in `name` ('Python 3.9' sorts after 'Python 3.10'), and
+  # neither `weight` nor `parent_id` records it (see the language model).
+  def language_rank_sql
+    whens = all_languages.
+            sort_by { |language| [language.polyglot_name, language.comparable_polyglot_version] }.
+            each_with_index.map { |language, rank| "WHEN #{language.id} THEN #{rank}" }
+    return '0' if whens.empty?
+
+    "CASE course_assessment_question_programming.language_id #{whens.join(' ')} ELSE #{whens.size} END"
   end
 
   # Brings each question's upgrade row in line with its import job before rendering, so a lost job

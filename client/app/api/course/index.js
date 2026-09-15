@@ -23,6 +23,7 @@ import MaterialFoldersAPI from './MaterialFolders';
 import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
 import PlagiarismAPI from './Plagiarism';
+import ProgrammingUpgradeAPI from './ProgrammingUpgrade';
 import ReferenceTimelinesAPI from './ReferenceTimelines';
 import RubricsAPI from './Rubrics';
 import ScholaisticAPI from './Scholaistic';
@@ -61,6 +62,7 @@ const CourseAPI = {
   materialFolders: new MaterialFoldersAPI(),
   personalTimes: new PersonalTimesAPI(),
   plagiarism: new PlagiarismAPI(),
+  programmingUpgrade: new ProgrammingUpgradeAPI(),
   referenceTimelines: new ReferenceTimelinesAPI(),
   rubrics: new RubricsAPI(),
   statistics: StatisticsAPI,
