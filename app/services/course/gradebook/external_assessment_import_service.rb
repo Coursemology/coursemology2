@@ -14,7 +14,7 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
   BLANKISH = ['', '-', '–', '—'].freeze
   IDENTIFIER_MODES = %w[email external_id].freeze
 
-  # rubocop:disable Metrics/ParameterLists -- mirrors the controller's request shape; named kwargs are clearer than a struct
+  # rubocop:disable-next Metrics/ParameterLists -- mirrors the controller's request shape; named kwargs are clearer than a struct
   def initialize(course:, actor:, identifier_mode:, identifier_column:, csv_data:, mappings:)
     @course = course
     @actor = actor
@@ -23,7 +23,6 @@ class Course::Gradebook::ExternalAssessmentImportService # rubocop:disable Metri
     @csv_data = csv_data
     @mappings = mappings.map(&:symbolize_keys)
   end
-  # rubocop:enable Metrics/ParameterLists
 
   def targets
     @mappings.map { |m| m[:target] }

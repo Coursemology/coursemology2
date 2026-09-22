@@ -55,11 +55,11 @@ namespace :coursemology do
             {
               title: 'Problem Sets',
               assessments: [
-                { title: 'Problem Set 1',  max: 10 },
-                { title: 'Problem Set 2',  max: 10 },
-                { title: 'Problem Set 3',  max: 10 },
-                { title: 'Problem Set 4',  max: 10 },
-                { title: 'Problem Set 5',  max: 10 }
+                { title: 'Problem Set 1', max: 10 },
+                { title: 'Problem Set 2', max: 10 },
+                { title: 'Problem Set 3', max: 10 },
+                { title: 'Problem Set 4', max: 10 },
+                { title: 'Problem Set 5', max: 10 }
               ]
             },
             {
@@ -104,7 +104,7 @@ namespace :coursemology do
                      )
                    end
 
-        existing_tab = cat_i == 0 ? category.tabs.first : nil
+        existing_tab = (cat_i == 0) ? category.tabs.first : nil
 
         cat_def[:tabs].each_with_index do |tab_def, tab_i|
           tab = if existing_tab && tab_i == 0

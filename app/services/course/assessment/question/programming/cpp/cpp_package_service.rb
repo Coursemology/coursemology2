@@ -79,7 +79,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
   end
 
   def find_data_files_to_keep(attachment)
-    new_filenames = (@test_params[:data_files] || []).reject(&:nil?).map(&:original_filename)
+    new_filenames = (@test_params[:data_files] || []).compact.map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
@@ -225,7 +225,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    new_data_files = (@test_params[:data_files] || []).reject(&:nil?)
+    new_data_files = (@test_params[:data_files] || []).compact
     meta[:data_files] = get_data_files_meta(data_files_to_keep, new_data_files)
 
     [:public, :private, :evaluation].each do |test_type|

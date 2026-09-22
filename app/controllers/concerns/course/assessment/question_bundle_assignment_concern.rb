@@ -4,7 +4,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
 
   # All validations need to present a ValidationResult of this form, which will be consumed by the view.
   # This struct is loosely inspired by Rails' model validation, but heavily extended.
-  # rubocop:disable Layout/CommentIndentation
+  # rubocop:disable-next Layout/CommentIndentation
   ValidationResult = Struct.new(
     :type,              # Hard or soft
     :pass,              # Whether this should be displayed as a tick or cross on the validation summary
@@ -14,7 +14,6 @@ module Course::Assessment::QuestionBundleAssignmentConcern
                         # E.g. { (student, group): 'Lift: 1.4' }
     keyword_init: true
   )
-  # rubocop:enable Layout/CommentIndentation
 
   # Computations on a large set of QBAs are expensive, and we need a lean in-memory representation of a set of QBAs.
   #
@@ -91,7 +90,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
       # Naive strategy: For each group, add a random bundle
       AssignmentSet.new(@students, @group_bundles).tap do |assignment_set|
         @students.each do |student|
-          @group_bundles.each do |_, bundles|
+          @group_bundles.each_value do |bundles|
             assignment_set.add_assignment(student, bundles.sample)
           end
         end
@@ -201,8 +200,8 @@ module Course::Assessment::QuestionBundleAssignmentConcern
     end
 
     # We can't use the default I18n lazy lookups because this is a concern, so we roll our own.
-    def t_scoped(key, *args, **kwargs)
-      I18n.t("course.assessment.question_bundle_assignments.validations#{key}", *args, **kwargs)
+    def t_scoped(key, *, **)
+      I18n.t("course.assessment.question_bundle_assignments.validations#{key}", *, **)
     end
   end
 end
