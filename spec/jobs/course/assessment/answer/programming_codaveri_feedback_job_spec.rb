@@ -52,11 +52,10 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob do
                                                                 file_name_contents: [['template.py',
                                                                                       answer_contents]]).answer
     end
-    # rubocop:disable Layout/LineLength
+    # rubocop:disable-next Layout/LineLength
     let(:answer_contents) do
       "def to_rna(tagged_data):\r\n    tag_type = get_tag_type(tagged_data)\r\n    data     = get_data(tagged_data)\r\n    op       = get_op(\"to_rna\", (tag_type,))\r\n    return tag(\"rna\", op(data))\r\n\r\ndef is_same_dogma(tagged_data1, tagged_data2):\r\n    tag_type1 = get_tag_type(tagged_data1)\r\n    tag_type2 = get_tag_type(tagged_data2)\r\n    op        = get_op(\"is_same_dogma\", (tag_type1, tag_type2))\r\n    data1     = get_data(tagged_data1)\r\n    data2     = get_data(tagged_data2)\r\n    return op(data1, data2)"
     end
-    # rubocop:enable Layout/LineLength
     before do
       Excon.defaults[:mock] = true
     end

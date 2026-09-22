@@ -79,7 +79,7 @@ class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
   end
 
   def find_data_files_to_keep(attachment)
-    new_filenames = (@test_params[:data_files] || []).reject(&:nil?).map(&:original_filename)
+    new_filenames = (@test_params[:data_files] || []).compact.map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
@@ -91,7 +91,7 @@ class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable-next Metrics/AbcSize, Metrics/MethodLength
   def generate_zip_file(data_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
     makefile_path = get_file_path('c_sharp_makefile')
@@ -146,7 +146,6 @@ class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
 
     tmp
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Retrieves the absolute path of the file specified
   #
@@ -189,7 +188,7 @@ class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    new_data_files = (@test_params[:data_files] || []).reject(&:nil?)
+    new_data_files = (@test_params[:data_files] || []).compact
     meta[:data_files] = get_data_files_meta(data_files_to_keep, new_data_files)
 
     [:public, :private, :evaluation].each do |test_type|

@@ -58,7 +58,7 @@ class Course::ExternalAssessment < ApplicationRecord
 
   # Creates an external assessment and its gradebook contribution in one transaction.
   # Raises ActiveRecord::RecordInvalid on a duplicate title within the course.
-  # rubocop:disable Metrics/ParameterLists -- factory mirrors the model's columns; named kwargs are clearer than a struct
+  # rubocop:disable-next Metrics/ParameterLists -- factory mirrors the model's columns; named kwargs are clearer than a struct
   def self.create_for_course!(course:, title:, maximum_grade:, weight: 0,
                               floor_at_zero: true, cap_at_maximum: true)
     transaction do
@@ -71,7 +71,6 @@ class Course::ExternalAssessment < ApplicationRecord
       external
     end
   end
-  # rubocop:enable Metrics/ParameterLists
 
   private
 

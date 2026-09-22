@@ -232,12 +232,11 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
   # Parses a test case report.
   #
   # @param [String] report The report XML to parse.
-  # rubocop: disable Lint/MissingSuper
+  # rubocop: disable-next Lint/MissingSuper
   def initialize(report)
     report = report.gsub('&', '&amp;').gsub("\n", '&#10;') if report
     @report = Nokogiri::XML::DocumentFragment.parse(report)
   end
-  # rubocop: enable Lint/MissingSuper
 
   # Gets the set of test suites found in this report.
   #

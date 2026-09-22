@@ -110,7 +110,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   end
 
   def find_files_to_keep(file_type, attachment)
-    new_filenames = (@test_params[file_type] || []).reject(&:nil?).map(&:original_filename)
+    new_filenames = (@test_params[file_type] || []).compact.map(&:original_filename)
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
@@ -281,15 +281,15 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    new_data_files = (@test_params[:data_files] || []).reject(&:nil?)
+    new_data_files = (@test_params[:data_files] || []).compact
     meta[:data_files] = get_files_meta(data_files_to_keep, new_data_files)
 
     meta[:submit_as_file] = submit_as_file?
 
-    new_submission_files = (@test_params[:submission_files] || []).reject(&:nil?)
+    new_submission_files = (@test_params[:submission_files] || []).compact
     meta[:submission_files] = get_files_meta(submission_files_to_keep, new_submission_files)
 
-    new_solution_files = (@test_params[:solution_files] || []).reject(&:nil?)
+    new_solution_files = (@test_params[:solution_files] || []).compact
     meta[:solution_files] = get_files_meta(solution_files_to_keep, new_solution_files)
 
     [:public, :private, :evaluation].each do |test_type|

@@ -283,7 +283,6 @@ Style/ArgumentsForwarding:
   Exclude:
     - 'app/channels/concerns/application_cable_ability_concern.rb'
     - 'app/controllers/concerns/application_user_time_zone_concern.rb'
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
     - 'app/controllers/system/admin/courses_controller.rb'
     - 'app/helpers/course/controller_helper.rb'
     - 'app/models/attachment.rb'
@@ -338,21 +337,6 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Exclude:
     - 'lib/autoload/componentize.rb'
-
-# Offense count: 20
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowedReceivers.
-Style/CollectionCompact:
-  Exclude:
-    - 'app/services/course/assessment/question/programming/c_sharp/c_sharp_package_service.rb'
-    - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
-    - 'app/services/course/assessment/question/programming/go/go_package_service.rb'
-    - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
-    - 'app/services/course/assessment/question/programming/java_script/java_script_package_service.rb'
-    - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
-    - 'app/services/course/assessment/question/programming/r/r_package_service.rb'
-    - 'app/services/course/assessment/question/programming/rust/rust_package_service.rb'
-    - 'app/services/course/assessment/question/programming/type_script/type_script_package_service.rb'
 
 # Offense count: 11
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -489,7 +473,6 @@ Style/HashAsLastArrayItem:
 # AllowedReceivers: Thread.current
 Style/HashEachMethods:
   Exclude:
-    - 'app/controllers/concerns/course/assessment/question_bundle_assignment_concern.rb'
     - 'app/controllers/course/group/group_categories_controller.rb'
     - 'app/models/course/experience_points/forum_disbursement.rb'
     - 'lib/tasks/db/populate_assessment_links.rake'
@@ -697,6 +680,4 @@ Style/TernaryParentheses:
     - 'lib/autoload/duplicator.rb'
     - 'lib/extensions.rb'
     - 'lib/extensions/conditional/active_record/base.rb'
-    - 'lib/tasks/coursemology/seed_600_gradebook.rake'
-    - 'lib/tasks/coursemology/seed_gradebook.rake'
     - 'spec/libraries/coursemology_docker_container_spec.rb'
