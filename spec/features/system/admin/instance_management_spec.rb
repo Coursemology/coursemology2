@@ -75,16 +75,24 @@ RSpec.feature 'System: Administration: Instances', js: true do
       end
 
       scenario 'I can destroy an instance' do
-        create(:instance)
-        instance = Instance.order_for_display[1] # the 1st instance (Default) cannot be destroyed
+        # Destroy the instance this run created rather than an arbitrary pre-existing one. The
+        # shared test database accumulates instances, and `order_for_display[1]` returns the
+        # oldest of them, whose cascading destroy of leftover courses can outrun Capybara's wait.
+        instance_to_delete = create(:instance) # the default instance cannot be destroyed
         visit admin_instances_path
 
-        expect(page).to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
-        find("button.instance-delete-#{instance.id}").click
+        # The table paginates at 25 rows and a new instance sorts last by name, so filter the
+        # table down to it rather than relying on it being on the first page.
+        find_field('Search instance by name or host').set(instance_to_delete.name)
+        expect(page).to have_selector("div.instance_name_field_#{instance_to_delete.id}",
+                                      exact_text: instance_to_delete.name)
+        find("button.instance-delete-#{instance_to_delete.id}").click
         click_button('Delete')
 
-        expect(page).not_to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
-        expect_toastify("#{instance.name} was deleted.")
+        # Assert the toast before the row disappears: the toast auto-dismisses, so waiting on a
+        # slow row removal first would consume the wait window and lose it.
+        expect_toastify("#{instance_to_delete.name} was deleted.")
+        expect(page).not_to have_selector("div.instance_name_field_#{instance_to_delete.id}")
       end
     end
   end

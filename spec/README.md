@@ -12,7 +12,9 @@ First, make sure the test database is seeded before running any specs:
 RAILS_ENV=test bundle exec rake db:setup
 ```
 
-Then, make sure the [authentication server](../authentication/README.md) is running.
+Then, make sure the [authentication server](../authentication/README.md) is running. This is required for *any* feature spec, not just ones that exercise sign-in: our `login_as` helper is not Warden's — it drives the real Keycloak sign-in page and waits for the user menu to appear. If Keycloak is not up, every feature spec fails early on `visit new_user_session_path` with a `Selenium::WebDriver::Error::WebDriverError`, which looks like a browser problem rather than a missing service.
+
+Note that `docker compose up` in `authentication/` may try to pull `coursemology_auth` from a registry and fail, because the compose file names the image without a build context. If you have already built the image locally, start it with `docker compose up -d --pull never`.
 
 You can then run tests with:
 
@@ -98,6 +100,63 @@ context 'As a Instance Administrator' do
 This test can fail if the `courses` table contains too many records from previous runs, such that the ones generated in this run (which the test suite asserts for) are pushed to page 2 of the table, and therefore fail the test because they were not found on page 1.
 
 To prevent this issue, we recommend creating a records with a unique prefix for the current run, and filtering the table to only display records matching that prefix.
+
+The same accumulation makes it unsafe to *select* the records under test by querying the database. A scenario that picks, say, `User.human_users.normal.ordered_by_name.limit(3)` or `Instance.order_for_display[1]` gets whatever earlier runs happened to leave behind, not the records it created. Create the records the scenario needs, then assert against those.
+
+How to filter the table depends on which table component the page uses:
+
+```ruby
+# mui-datatables (e.g. the system admin users table): the field is behind a button
+find_button('Search').click
+find('div[aria-label="Search"]').find('input').set(prefix)
+wait_for_field_debouncing # this search round-trips to the server
+
+# lib/components/table (e.g. the instances and admin courses tables): the field is always
+# visible, found by its placeholder, and filters client-side
+find_field('Search instance by name or host').set(prefix)
+```
+
+### Asserting on Record Identity Rather Than Displayed Text
+
+Names and emails are not unique in the test database — factory sequences restart, so hundreds of leftover users share names like `user 1`, across different roles. An assertion such as "no *normal* user named `user 1` is visible" then fails as soon as an unrelated *administrator* with that name is legitimately on screen.
+
+Prefer the row's id-bearing class, and scope any text assertions inside it:
+
+```ruby
+expect(page).to have_selector("tr.system_user_#{admin_user.id}")
+expect(page).to have_no_selector("tr.system_user_#{normal_user.id}")
+
+within find("tr.system_user_#{admin_user.id}") do
+  expect(page).to have_selector('div.user_name', exact_text: admin_user.name)
+end
+```
+
+### `exact_text` With a Nil Value Silently Matches Everything
+
+Capybara drops the filter when `exact_text` is `nil` instead of raising, so the assertion quietly stops asserting what it was written to assert:
+
+```ruby
+# if user.email is nil, this becomes "no p.user_email may be visible at all"
+expect(page).to have_no_selector('p.user_email', exact_text: user.email)
+```
+
+It is easy to miss because such an assertion usually *passes* — vacuously. The tell in a failure message is a missing `with exact text ...` clause. `User#email` is a real source of `nil` here: it returns the **primary** address via `devise-multi_email`, and the user factory leaves no primary address when built with `emails_count: 0`. Assert on a value the scenario controls, or on record identity as above.
+
+### Server-Rendered Copy Is Not Translated in the Test Environment
+
+Rails `I18n` is stubbed to return the translation key, so a server-rendered view yields `common.mailers.greeting`, not the English string, and interpolation never happens. Asserting on translated server-side copy therefore tests nothing. Interpolation arguments are still *evaluated*, so a missing method on an object passed to `t` still raises — which is often the only coverage such a view has.
+
+The React frontend is unaffected: it renders real English, which is why feature specs can match on visible UI text and placeholders.
+
+### Toasts Auto-Dismiss, So Assert Them First
+
+`expect_toastify` must come before any negative assertion about the effect it reports. Capybara's negative matchers wait out the full timeout before passing, so putting one first burns the whole window and the toast is gone by the time it is looked for — surfacing as a confusing "Unable to find visible css `.Toastify`" rather than the real failure:
+
+```ruby
+click_button('Delete')
+expect_toastify("#{instance.name} was deleted.")            # first
+expect(page).not_to have_selector("div.instance_name_field_#{instance.id}") # then
+```
 
 ## Known Issues
 

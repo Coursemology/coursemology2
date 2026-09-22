@@ -205,13 +205,12 @@ module Capybara::CustomFinders
   #
   # We find the hidden node first, then we find the corresponding editor node.
   def try_find_ace(*args, **kwargs)
-    options = args.extract_options!.dup
-    return nil if options[:visible] == false
+    # Also guards against recursing back here through the `find` override below.
+    return nil if kwargs[:visible] == false
 
-    options[:visible] = false
-    args.push(options)
-
-    textarea = find(*args, **kwargs)
+    # The caller's own `find` has already waited for the visible node, so the hidden textarea
+    # is either in the DOM by now or absent; waiting again only slows down genuine failures.
+    textarea = find(*args, **kwargs, visible: false, wait: 0)
     textarea.find(:xpath, 'following-sibling::*').find(:css, '.ace_text-input', visible: false)
   rescue Capybara::ElementNotFound
     nil
@@ -221,13 +220,10 @@ module Capybara::CustomFinders
   #
   # We find the hidden node first, then we find the corresponding editor node.
   def try_find_textarea(*args, **kwargs)
-    options = args.extract_options!.dup
-    return nil if options[:visible] == false
+    # Also guards against recursing back here through the `find` override below.
+    return nil if kwargs[:visible] == false
 
-    options[:visible] = false
-    args.push(options)
-
-    textarea = find(*args, **kwargs)
+    textarea = find(*args, **kwargs, visible: false, wait: 0)
     textarea.find(:xpath, 'following-sibling::*').find(:css, '.note-editable')
   rescue Capybara::ElementNotFound
     nil

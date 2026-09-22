@@ -22,18 +22,28 @@ RSpec.feature 'System: Administration: Users', js: true do
       end
 
       scenario 'I can filter users by role and view only administrators' do
+        # Assert against users this run created, identified by id. The shared test database
+        # accumulates thousands of users whose names are not unique and whose `email` may be
+        # nil, and the table only renders 25 rows per page.
+        prefix = "role-filter-#{SecureRandom.hex(4)}"
+        normal_user = create(:user, name: "#{prefix} normal")
+        admin_user = create(:administrator, name: "#{prefix} admin")
+
         within find('p', text: 'Total Users', exact_text: false) do
           find_all('a').first.click
         end
 
-        User.human_users.normal.ordered_by_name.limit(3).each do |user|
-          expect(page).to have_no_selector('div.user_name', exact_text: user.name)
-          expect(page).to have_no_selector('p.user_email', exact_text: user.email)
-        end
+        # Searching narrows the (role-filtered) table to just this run's two users.
+        find_button('Search').click
+        find('div[aria-label="Search"]').find('input').set(prefix)
+        wait_for_field_debouncing # timeout for search debouncing
 
-        User.human_users.administrator.ordered_by_name.limit(3).each do |user|
-          expect(page).to have_selector('div.user_name', exact_text: user.name)
-          expect(page).to have_selector('p.user_email', exact_text: user.email)
+        expect(page).to have_selector("tr.system_user_#{admin_user.id}")
+        expect(page).to have_no_selector("tr.system_user_#{normal_user.id}")
+
+        within find("tr.system_user_#{admin_user.id}") do
+          expect(page).to have_selector('div.user_name', exact_text: admin_user.name)
+          expect(page).to have_selector('p.user_email', exact_text: admin_user.email)
         end
       end
 
