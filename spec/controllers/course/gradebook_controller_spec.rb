@@ -157,7 +157,7 @@ RSpec.describe Course::GradebookController, type: :controller do
           # Enable weighted view via the persisted course component setting, so the
           # controller's @settings.weighted_view_enabled reads true on the real request.
           gradebook_settings = Course::Settings::GradebookComponent.new(
-            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+            double(current_course: course, key: Course::GradebookComponent.key)
           )
           gradebook_settings.weighted_view_enabled = true
           course.save!
@@ -195,7 +195,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           gradebook_settings = Course::Settings::GradebookComponent.new(
-            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+            double(current_course: course, key: Course::GradebookComponent.key)
           )
           gradebook_settings.weighted_view_enabled = true
           course.save!
@@ -231,7 +231,7 @@ RSpec.describe Course::GradebookController, type: :controller do
 
         before do
           gradebook_settings = Course::Settings::GradebookComponent.new(
-            OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+            double(current_course: course, key: Course::GradebookComponent.key)
           )
           gradebook_settings.weighted_view_enabled = true
           course.save!

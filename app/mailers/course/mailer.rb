@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 # The mailer for course emails.
 class Course::Mailer < ApplicationMailer
+  # Stands in for the recipient when an email is addressed to a group of course users rather
+  # than to one of them, so the mailer layout's greeting has a name to render.
+  GroupRecipient = Struct.new(:name)
+
   # Sends an invitation email for the given invitation.
   #
   # @param [Course::UserInvitation] invitation The invitation which was generated.
@@ -75,7 +79,7 @@ class Course::Mailer < ApplicationMailer
     return unless email_enabled.regular || email_enabled.phantom
 
     @enrol_request = enrol_request
-    @recipient = OpenStruct.new(name: t('course.mailer.user_enrol_requested_email.recipients'))
+    @recipient = GroupRecipient.new(t('course.mailer.user_enrol_requested_email.recipients'))
 
     if email_enabled.regular && email_enabled.phantom
       managers = @course.managers.includes(:user)

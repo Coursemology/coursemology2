@@ -6,7 +6,7 @@ RSpec.describe Course::Settings::VideosComponent do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:settings) do
-      context = OpenStruct.new(current_course: course, key: Course::VideosComponent.key)
+      context = double(current_course: course, key: Course::VideosComponent.key)
       Course::Settings::VideosComponent.new(context)
     end
 

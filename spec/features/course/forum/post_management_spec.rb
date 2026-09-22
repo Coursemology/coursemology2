@@ -202,7 +202,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
       context 'When anonymous post is allowed' do
         before do
-          context = OpenStruct.new(current_course: course, key: Course::ForumsComponent.key)
+          context = double(current_course: course, key: Course::ForumsComponent.key)
           settings = Course::Settings::ForumsComponent.new(context)
           settings.allow_anonymous_post = true
           course.save
@@ -393,7 +393,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
       context 'When anonymous post is allowed' do
         before do
-          context = OpenStruct.new(current_course: course, key: Course::ForumsComponent.key)
+          context = double(current_course: course, key: Course::ForumsComponent.key)
           settings = Course::Settings::ForumsComponent.new(context)
           settings.allow_anonymous_post = true
           course.save

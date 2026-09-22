@@ -6,7 +6,7 @@ RSpec.describe Course::Settings::CodaveriComponent do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:settings) do
-      context = OpenStruct.new(current_course: course, key: Course::CodaveriComponent.key)
+      context = double(current_course: course, key: Course::CodaveriComponent.key)
       Course::Settings::CodaveriComponent.new(context)
     end
     let(:default_settings) { Course::Settings::CodaveriComponent.default_settings }

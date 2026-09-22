@@ -383,13 +383,6 @@ Style/FetchEnvVar:
     - 'config/initializers/smtp_settings.rb'
     - 'config/puma.rb'
 
-# Offense count: 4
-Style/FileOpen:
-  Exclude:
-    - 'spec/helpers/course/achievement/controller_helper_spec.rb'
-    - 'spec/services/course/assessment/submission/statistics_download_service_spec.rb'
-    - 'spec/uploaders/image_uploader_spec.rb'
-
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
 Style/FileWrite:
@@ -515,27 +508,6 @@ Style/MultipleComparison:
     - 'app/models/user.rb'
     - 'app/services/course/assessment/koditsu_assessment_invitation_service.rb'
     - 'app/services/course/assessment/question/programming/language_package_service.rb'
-
-# Offense count: 26
-Style/OpenStructUse:
-  Exclude:
-    - 'app/mailers/course/mailer.rb'
-    - 'spec/controllers/course/external_assessment_imports_controller_spec.rb'
-    - 'spec/controllers/course/external_assessments_controller_spec.rb'
-    - 'spec/controllers/course/gradebook_controller_spec.rb'
-    - 'spec/features/course/forum/post_management_spec.rb'
-    - 'spec/features/course/leaderboard_viewing_spec.rb'
-    - 'spec/helpers/application_notifications_helper_spec.rb'
-    - 'spec/helpers/consolidated_opening_reminder_mailer_helper_spec.rb'
-    - 'spec/libraries/materials_spec.rb'
-    - 'spec/models/course/assessment/assessment_ability_spec.rb'
-    - 'spec/models/course/settings/assessments_component_spec.rb'
-    - 'spec/models/course/settings/codaveri_component_spec.rb'
-    - 'spec/models/course/settings/gradebook_component_spec.rb'
-    - 'spec/models/course/settings/survey_component_spec.rb'
-    - 'spec/models/course/settings/videos_component_spec.rb'
-    - 'spec/services/course/user_invitation_service_spec.rb'
-    - 'spec/support/settings_on_rails.rb'
 
 # Offense count: 5
 # This cop supports safe autocorrection (--autocorrect).

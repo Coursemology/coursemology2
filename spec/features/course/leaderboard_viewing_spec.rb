@@ -67,7 +67,7 @@ RSpec.describe 'Course: Leaderboard: View', js: true do
         end
 
         before do
-          context = OpenStruct.new(current_course: course, key: Course::LeaderboardComponent.key)
+          context = double(current_course: course, key: Course::LeaderboardComponent.key)
           settings = Course::Settings::LeaderboardComponent.new(context)
           settings.enable_group_leaderboard = true
           course.save

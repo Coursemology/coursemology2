@@ -44,9 +44,9 @@ RSpec.describe ImageUploader, type: :model do
 
     context 'when the image format is invalid' do
       it 'raises an error' do
-        file = File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'), 'rb')
-        expect { uploader.store!(file) }.to raise_error(CarrierWave::IntegrityError)
-        file.close
+        File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'), 'rb') do |file|
+          expect { uploader.store!(file) }.to raise_error(CarrierWave::IntegrityError)
+        end
       end
     end
   end

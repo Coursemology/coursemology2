@@ -23,8 +23,8 @@ RSpec.describe 'Extension: Materials' do
     let(:file) { 'file.txt' }
     let(:files) do
       [
-        OpenStruct.new(original_filename: file,
-                       tempfile: Rails.root.join('spec/fixtures/files/text.txt'))
+        double(original_filename: file,
+               tempfile: Rails.root.join('spec/fixtures/files/text.txt'))
       ]
     end
     let(:assessment) { self.class::Assessment.new(assessment_attributes) }

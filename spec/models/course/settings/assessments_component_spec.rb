@@ -8,7 +8,7 @@ RSpec.describe Course::Settings::AssessmentsComponent do
     let(:category) { course.assessment_categories.first }
     let(:tab) { category.tabs.first }
     let(:settings) do
-      context = OpenStruct.new(current_course: course, key: Course::AssessmentsComponent.key)
+      context = double(current_course: course, key: Course::AssessmentsComponent.key)
       Course::Settings::AssessmentsComponent.new(context)
     end
 

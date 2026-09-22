@@ -21,9 +21,7 @@ RSpec.describe Course::Achievement::ControllerHelper do
         context 'when an achievement badge is uploaded' do
           let(:icon) { Rails.root.join('spec', 'fixtures', 'files', 'picture.jpg') }
           before do
-            file = File.open(icon, 'rb')
-            achievement.badge = file
-            file.close
+            File.open(icon, 'rb') { |file| achievement.badge = file }
           end
 
           it 'returns the path of the achievement badge' do
