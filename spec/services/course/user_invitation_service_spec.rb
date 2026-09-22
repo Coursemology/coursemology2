@@ -115,7 +115,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when a CSV file with a header is uploaded' do
         it 'accepts a CSV file with a header' do
           expect(subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
-            OpenStruct.new(attributes)
+            double(attributes)
           end)).map(&:size)).to eq([new_users.size, 0, existing_users.size, 0, 0, 0, 0])
 
           verify_users
@@ -125,7 +125,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
           it 'sends an email to everyone', type: :mailer do
             expect do
               subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
-                OpenStruct.new(attributes)
+                double(attributes)
               end))
             end.to change { ActionMailer::Base.deliveries.count }.by(user_attributes.length)
           end

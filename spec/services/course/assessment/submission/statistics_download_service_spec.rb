@@ -26,7 +26,7 @@ RSpec.describe Course::Assessment::Submission::StatisticsDownloadService do
           service = described_class.new(course, course_staff.user, nil)
           empty_path = service.generate
           expect(File.exist?(empty_path)).to be_truthy
-          line_count = File.open(empty_path, 'r').readlines.size
+          line_count = File.readlines(empty_path).size
           expect(line_count).to eq(1)
           service.cleanup
         end
@@ -36,7 +36,7 @@ RSpec.describe Course::Assessment::Submission::StatisticsDownloadService do
           service = described_class.new(course, course_staff.user, submission_ids)
           non_empty_path = service.generate
           expect(File.exist?(non_empty_path)).to be_truthy
-          line_count = File.open(non_empty_path, 'r').readlines.size
+          line_count = File.readlines(non_empty_path).size
           expect(line_count).to eq(1 + submission_ids.length)
           service.cleanup
         end

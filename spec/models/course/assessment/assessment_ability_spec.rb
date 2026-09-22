@@ -97,16 +97,16 @@ RSpec.describe Course::Assessment do
           create(:assessment, :published_with_all_question_types, :view_password, course: course)
         end
         let(:authenticated_session) do
-          session = OpenStruct.new(id: '1234')
-          service = Course::Assessment::AuthenticationService.new(assessment, session)
+          session_id = '1234'
+          service = Course::Assessment::AuthenticationService.new(assessment, session_id)
           service.authenticate(assessment.view_password)
-          session
+          session_id
         end
         let(:unauthenticated_session) do
-          session = OpenStruct.new(id: '1234')
-          service = Course::Assessment::AuthenticationService.new(assessment, session)
+          session_id = '1234'
+          service = Course::Assessment::AuthenticationService.new(assessment, session_id)
           service.authenticate('WRONG PASSWORD')
-          session
+          session_id
         end
 
         context 'when the session is authenticated' do

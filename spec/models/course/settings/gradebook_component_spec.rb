@@ -6,7 +6,7 @@ RSpec.describe Course::Settings::GradebookComponent do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:settings) do
-      context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+      context = double(current_course: course, key: Course::GradebookComponent.key)
       Course::Settings::GradebookComponent.new(context)
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Course::Settings::GradebookComponent do
         course.save!
         course.reload
         fresh = Course::Settings::GradebookComponent.new(
-          OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          double(current_course: course, key: Course::GradebookComponent.key)
         )
         expect(fresh.weighted_view_enabled).to eq(true)
       end

@@ -6,7 +6,7 @@ RSpec.describe Course::Settings::SurveyComponent do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:settings) do
-      context = OpenStruct.new(current_course: course, key: Course::SurveyComponent.key)
+      context = double(current_course: course, key: Course::SurveyComponent.key)
       Course::Settings::SurveyComponent.new(context)
     end
 

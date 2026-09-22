@@ -23,7 +23,7 @@ RSpec.describe Course::ExternalAssessmentImportsController, type: :controller do
 
     def enable_weighted_view!
       settings = Course::Settings::GradebookComponent.new(
-        OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+        double(current_course: course, key: Course::GradebookComponent.key)
       )
       settings.weighted_view_enabled = true
       course.save!

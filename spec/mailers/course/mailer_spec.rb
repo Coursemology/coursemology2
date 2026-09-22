@@ -76,6 +76,15 @@ RSpec.describe Course::Mailer, type: :mailer do
         expect(subject.subject).to eq(I18n.t('course.mailer.user_enrol_requested_email.subject'))
       end
 
+      # This email addresses the course staff as a group, so `@recipient` is a stand-in rather
+      # than a User. The mailer layout greets `@recipient` by name, so rendering both parts
+      # exercises the stand-in, and would raise if it could not answer `name`. Translations
+      # render as their keys here, so the greeting is asserted by key rather than English text.
+      it 'renders the greeting for the group recipient in both parts' do
+        expect(text).to include('common.mailers.greeting')
+        expect(html).to include('common.mailers.greeting')
+      end
+
       context 'when a user unsubscribes' do
         before do
           setting_email = course.

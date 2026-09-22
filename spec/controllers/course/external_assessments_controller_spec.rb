@@ -59,7 +59,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         end
 
         it 'persists a weight when weighted view is enabled' do
-          context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          context = double(current_course: course, key: Course::GradebookComponent.key)
           Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
           course.save!
 
@@ -89,7 +89,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         end
 
         it 'returns 422 on a non-numeric weight when weighted view is enabled' do
-          context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          context = double(current_course: course, key: Course::GradebookComponent.key)
           Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
           course.save!
 
@@ -112,7 +112,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
         end
 
         it "serializes the tab weightMode as 'equal' when weighted" do
-          context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+          context = double(current_course: course, key: Course::GradebookComponent.key)
           Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
           course.save!
 
@@ -212,7 +212,7 @@ RSpec.describe Course::ExternalAssessmentsController, type: :controller do
           end
 
           before do
-            context = OpenStruct.new(current_course: course, key: Course::GradebookComponent.key)
+            context = double(current_course: course, key: Course::GradebookComponent.key)
             Course::Settings::GradebookComponent.new(context).weighted_view_enabled = true
             course.save!
           end
