@@ -97,11 +97,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   end
 
   # Groups test cases by test case type. Each key returns an array of all the test cases
-  # of that type.
+  # of that type, ordered by identifier.
   #
   # @return [Hash] A hash of the test cases keyed by test case type.
   def test_cases_by_type
-    test_cases.group_by(&:test_case_type)
+    test_cases.group_by(&:test_case_type).transform_values { |cases| cases.sort_by(&:identifier) }
   end
 
   def files_downloadable?

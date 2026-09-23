@@ -3542,6 +3542,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "Name"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "All failed"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "All passed"
   },
@@ -10765,5 +10768,8 @@
   },
   "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
     "defaultMessage": "Could not load the grading contexts for this answer."
+  },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} passed"
   }
 }

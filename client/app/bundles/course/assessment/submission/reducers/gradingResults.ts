@@ -1,11 +1,15 @@
-// Reducer covering additional auto grading results on top of the grade itself
-// (e.g. solution evaluation results for text response questions, and the rubric category breakdown for
-// rubric-graded questions -- both keyed by question id).
-
-// TODO: Fold remaining auto grading results into this one (testCases for programming questions).
+// Reducer covering additional auto grading results on top of the numeric grade, namely:
+// - solution evaluation results for text response questions
+// - rubric category grade breakdown for rubric-graded questions
+// - test case breakdown for programming questions
+// All of these are keyed by question id, and their presence drives the corresponding UI in the submission view.
 import { createReducer } from '@reduxjs/toolkit';
 import { QuestionType } from 'types/course/assessment/question';
 import { AnswerData } from 'types/course/assessment/submission/answer';
+import {
+  ProgrammingAnswerData,
+  TestCasesState,
+} from 'types/course/assessment/submission/answer/programming';
 import { TextResponseSolutionResult } from 'types/course/assessment/submission/answer/textResponse';
 
 import actions from '../constants';
@@ -13,10 +17,19 @@ import { CategoryGradeType } from '../types';
 
 interface GradingResultsState {
   solutionResults: Record<string, TextResponseSolutionResult[]>;
-  // Rubric grade breakdown keyed by question id (consistent with solutionResults). Present for any
-  // rubric-graded answer; its presence drives the rubric UI in the submission view, regardless of type.
   categoryGrades: Record<number, CategoryGradeType[]>;
+  testCases: Record<number, TestCasesState>;
 }
+
+const testCasesFromAnswer = (
+  answer: ProgrammingAnswerData,
+): TestCasesState => ({
+  canReadTests: answer.canReadTests,
+  testCases: answer.testCases,
+  testResults: answer.testResults,
+  stdout: answer.stdout,
+  stderr: answer.stderr,
+});
 
 interface AnswerDataArrayAction {
   type:
@@ -75,6 +88,7 @@ export default createReducer<GradingResultsState>(
   {
     solutionResults: {},
     categoryGrades: {},
+    testCases: {},
   },
   (builder) => {
     builder.addMatcher(
@@ -104,6 +118,11 @@ export default createReducer<GradingResultsState>(
           if (answer.categoryGrades) {
             newCategoryGrades[answer.questionId] = answer.categoryGrades;
           }
+          if (answer.questionType === QuestionType.Programming) {
+            // Merged rather than replaced wholesale: not every action matched here carries an entry
+            // for every question, and dropping a question's test cases empties its panel.
+            state.testCases[answer.questionId] = testCasesFromAnswer(answer);
+          }
         });
         state.solutionResults = newSolutionResults;
         state.categoryGrades = newCategoryGrades;
@@ -130,6 +149,9 @@ export default createReducer<GradingResultsState>(
         if (answer.categoryGrades) {
           state.categoryGrades[answer.questionId] = answer.categoryGrades;
         }
+        if (answer.questionType === QuestionType.Programming) {
+          state.testCases[answer.questionId] = testCasesFromAnswer(answer);
+        }
       },
     );
 
@@ -153,7 +175,13 @@ export default createReducer<GradingResultsState>(
         );
       },
       (state, action) => {
-        // Clear the previous test results in the test case results display.
+        // Clear the previous test results, keeping the test case definitions so the panel still
+        // lists what would have been run.
+        if (state.testCases[action.questionId]) {
+          delete state.testCases[action.questionId].testResults;
+          delete state.testCases[action.questionId].stdout;
+          delete state.testCases[action.questionId].stderr;
+        }
         if (state.solutionResults[action.questionId]) {
           state.solutionResults[action.questionId] = state.solutionResults[
             action.questionId

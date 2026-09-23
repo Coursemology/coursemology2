@@ -35,7 +35,14 @@ const ProgrammingAnswerDetails = (
           file={file}
         />
       ))}
-      <TestCases testCase={answer.testCases} />
+      <TestCases
+        canReadTests={answer.canReadTests}
+        defaultExpanded={false}
+        stderr={answer.stderr}
+        stdout={answer.stdout}
+        testCases={answer.testCases}
+        testResults={answer.testResults}
+      />
       <CodaveriFeedbackStatus status={answer.codaveriFeedback} />
     </>
   );

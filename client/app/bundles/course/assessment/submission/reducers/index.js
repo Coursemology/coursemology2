@@ -20,7 +20,6 @@ import scribing from './scribing';
 import submission from './submission';
 import submissionFlags from './submissionFlags';
 import submissions from './submissions';
-import testCases from './testCases';
 import topics from './topics';
 
 const submissionReducer = combineReducers({
@@ -44,7 +43,6 @@ const submissionReducer = combineReducers({
   scribing,
   topics,
   grading,
-  testCases,
   history,
 });
 

@@ -6,13 +6,6 @@ const optionShape = PropTypes.shape({
   correct: PropTypes.bool,
 });
 
-export const testCaseShape = PropTypes.shape({
-  identifier: PropTypes.string.isRequired,
-  expression: PropTypes.string.isRequired,
-  expected: PropTypes.string.isRequired,
-  hint: PropTypes.string,
-});
-
 export const questionShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
