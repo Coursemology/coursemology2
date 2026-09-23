@@ -18,13 +18,35 @@ export interface ProgrammingContent {
 
 export type TestCaseType = 'public_test' | 'private_test' | 'evaluation_test';
 
-export interface TestCaseResult {
+/**
+ * A test case definition. Belongs to the question, and is the same for every grading run that was
+ * made against that version of the question.
+ */
+export interface TestCaseData {
+  id: number;
+  /** Only sent when the viewer may read tests. */
   identifier?: string;
   expression: string;
   expected: string;
+}
+
+/**
+ * The outcome of running one test case in one grading run. `id` is the id of the test case it is
+ * for, which is how it joins back to the corresponding {@link TestCaseData}.
+ */
+export interface TestCaseResultData {
+  id: number;
+  /** Only sent when the viewer may read this test case type's outputs. */
   output?: string;
   passed: boolean;
 }
+
+export type TestCasesByType = Partial<Record<TestCaseType, TestCaseData[]>>;
+
+/** Keyed by test case id within each type. */
+export type TestResultsByType = Partial<
+  Record<TestCaseType, Record<number, TestCaseResultData>>
+>;
 
 export interface Annotation {
   fileId: number;
@@ -48,11 +70,14 @@ export interface Post {
   codaveriFeedback: CodaveriFeedback;
 }
 
-export interface TestCase {
+/**
+ * Everything the test case panel needs for one answer: the definitions, the results of the grading
+ * run they were graded by (absent when the answer has not been graded), and that run's streams.
+ */
+export interface TestCasesState {
   canReadTests: boolean;
-  public_test?: TestCaseResult[];
-  private_test?: TestCaseResult[];
-  evaluation_test?: TestCaseResult[];
+  testCases: TestCasesByType;
+  testResults?: TestResultsByType;
   stdout?: string;
   stderr?: string;
 }
@@ -78,14 +103,11 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
     explanation: string[];
     failureType: TestCaseType;
   };
-  testCases: {
-    canReadTests: boolean;
-    public_test?: TestCaseResult[];
-    private_test?: TestCaseResult[];
-    evaluation_test?: TestCaseResult[];
-    stdout?: string;
-    stderr?: string;
-  };
+  canReadTests: boolean;
+  testCases: TestCasesByType;
+  testResults?: TestResultsByType;
+  stdout?: string;
+  stderr?: string;
   attemptsLeft?: number;
   autograding?: JobStatusResponse & {
     path?: string;

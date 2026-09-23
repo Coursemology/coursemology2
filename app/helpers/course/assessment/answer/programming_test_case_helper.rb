@@ -28,48 +28,48 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
     output || ''
   end
 
-  # If the test case type has a failed test case, return the first one.
+  # Organize the results of a grading run by test case type, keyed by the id of the test case each
+  # result is for.
   #
-  # @param [Hash] test_cases_by_type The test cases and their results keyed by type
-  # @return [Hash] Failed test case and its result, if any
-  def get_failed_test_cases_by_type(test_cases_and_results)
-    {}.tap do |result|
-      test_cases_and_results.each do |test_case_type, test_cases_and_results_of_type|
-        result[test_case_type] = get_first_failed_test(test_cases_and_results_of_type)
-      end
-    end
-  end
-
-  # Organize the test cases and test results into a hash, keyed by test case type.
-  #   If there is no test result, the test case key points to nil.
-  #   nil is needed to make sure test cases are still displayed before they have a test result.
-  #   Currently test_cases are ordered by sorting on the identifier of the ProgrammingTestCase.
-  # e.g. { 'public_test': { test_case_1: result_1, test_case_2: result_2, test_case_3: nil },
-  #        'private_test': { priv_case_1: priv_result_1 },
-  #        'evaluation_test': { eval_case1: eval_result_1 } }
+  # Joining on test case id rather than on the test case record itself means the definitions and the
+  # results can be serialized separately: a test case belongs to the question, a result belongs to
+  # one grading run, and the client re-joins them by id.
+  #
+  # A test case with no result is omitted -- it was added to the question after this run, so there
+  # is nothing to report for it. Where a run somehow holds more than one result for a test case, the
+  # first is kept.
+  #
+  # e.g. { 'public_test' => { 12 => result_12, 13 => result_13 },
+  #        'private_test' => { 14 => result_14 } }
   #
   # @param [Hash] test_cases_by_type The test cases keyed by type
-  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading Auto grading object
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading, nil] auto_grading Auto grading object
   # @return [Hash] The hash structure described above
-  def get_test_cases_and_results(test_cases_by_type, auto_grading)
-    results_hash = auto_grading ? auto_grading.test_results.includes(:test_case).group_by(&:test_case) : {}
-    test_cases_by_type.each do |type, test_cases|
-      test_cases_by_type[type] =
-        test_cases.map { |test_case| [test_case, results_hash[test_case]&.first] }.
-        sort_by { |test_case, _| test_case.identifier }.to_h
+  def get_test_results_by_type(test_cases_by_type, auto_grading)
+    results_by_test_case_id =
+      auto_grading ? auto_grading.test_results.group_by(&:test_case_id).transform_values(&:first) : {}
+
+    test_cases_by_type.transform_values do |test_cases|
+      test_cases.filter_map do |test_case|
+        result = results_by_test_case_id[test_case.id]
+        [test_case.id, result] if result
+      end.to_h
     end
   end
 
-  private
-
-  # Return a hash of the first failing test case and its test result
+  # If the test case type has a failed test case, return the first one with its result.
   #
-  # @param [Hash] test_cases_and_results_of_type A hash of test cases and results keyed by type
-  # @return [Hash] the failed test case and result, nil if all tests passed
-  def get_first_failed_test(test_cases_and_results_of_type)
-    test_cases_and_results_of_type.each do |test_case, test_result|
-      return [[test_case, test_result]].to_h if test_result && !test_result.passed?
+  # A test case with no result has not been run, and is not a failure.
+  #
+  # @param [Hash] test_cases_by_type The test cases keyed by type
+  # @param [Hash] test_results_by_type The results, as returned by +get_test_results_by_type+
+  # @return [Hash] Each type maps to a [test_case, test_result] pair, or nil if none failed
+  def get_first_failure_by_type(test_cases_by_type, test_results_by_type)
+    test_cases_by_type.to_h do |test_case_type, test_cases|
+      results = test_results_by_type[test_case_type] || {}
+      failed_test_case = test_cases.find { |test_case| results[test_case.id]&.passed? == false }
+
+      [test_case_type, failed_test_case && [failed_test_case, results[failed_test_case.id]]]
     end
-    nil
   end
 end

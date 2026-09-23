@@ -9,8 +9,9 @@ import {
 } from '../assessment/submission/answer/multipleResponse';
 import {
   ProgrammingFieldData,
-  TestCaseResult,
+  TestCasesByType,
   TestCaseType,
+  TestResultsByType,
 } from '../assessment/submission/answer/programming';
 import { ScribingFieldData } from '../assessment/submission/answer/scribing';
 import {
@@ -69,15 +70,6 @@ export interface Post {
   codaveriFeedback: CodaveriFeedback;
 }
 
-export interface TestCase {
-  canReadTests: boolean;
-  public_test?: TestCaseResult[];
-  private_test?: TestCaseResult[];
-  evaluation_test?: TestCaseResult[];
-  stdout?: string;
-  stderr?: string;
-}
-
 export interface CodaveriFeedback {
   jobId: string;
   jobStatus: keyof typeof JobStatus;
@@ -93,7 +85,11 @@ export interface ProgrammingAnswerDetails
     explanation: string[];
     failureType: TestCaseType;
   };
-  testCases: TestCase;
+  canReadTests: boolean;
+  testCases: TestCasesByType;
+  testResults?: TestResultsByType;
+  stdout?: string;
+  stderr?: string;
   attemptsLeft?: number;
   autograding?: JobStatusResponse & {
     path?: string;

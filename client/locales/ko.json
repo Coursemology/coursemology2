@@ -3530,6 +3530,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "이름"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "모두 실패함"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "모두 통과됨"
   },
@@ -10786,5 +10789,8 @@
   },
   "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
     "defaultMessage": "이 답변의 채점 컨텍스트를 불러올 수 없습니다."
+  },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} 통과"
   }
 }

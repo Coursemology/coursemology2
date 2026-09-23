@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FC, memo } from 'react';
 import { Close, Done } from '@mui/icons-material';
 import {
+  Alert,
   Chip,
   Table,
   TableBody,
@@ -9,91 +9,59 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { TestCaseResult } from 'types/course/assessment/submission/answer/programming';
-import { TestCase } from 'types/course/statistics/answer';
+import {
+  TestCaseData,
+  TestCaseResultData,
+  TestCasesByType,
+  TestCaseType,
+  TestResultsByType,
+} from 'types/course/assessment/submission/answer/programming';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import OutputStream from './OutputStream';
 import TestCaseRow from './TestCaseRow';
+import translations from './translations';
 
-const translations = defineMessages({
-  expression: {
-    id: 'course.assessment.submission.TestCaseView.experession',
-    defaultMessage: 'Expression',
-  },
-  expected: {
-    id: 'course.assessment.submission.TestCaseView.expected',
-    defaultMessage: 'Expected',
-  },
-  output: {
-    id: 'course.assessment.submission.TestCaseView.output',
-    defaultMessage: 'Output',
-  },
-  allPassed: {
-    id: 'course.assessment.submission.TestCaseView.allPassed',
-    defaultMessage: 'All passed',
-  },
-  allFailed: {
-    id: 'course.assessment.submission.TestCaseView.allFailed',
-    defaultMessage: 'All failed',
-  },
-  testCasesPassed: {
-    id: 'course.assessment.submission.TestCaseView.testCasesPassed',
-    defaultMessage: '{numPassed}/{numTestCases} passed',
-  },
-  publicTestCases: {
-    id: 'course.assessment.submission.TestCaseView.publicTestCases',
-    defaultMessage: 'Public Test Cases',
-  },
-  privateTestCases: {
-    id: 'course.assessment.submission.TestCaseView.privateTestCases',
-    defaultMessage: 'Private Test Cases',
-  },
-  evaluationTestCases: {
-    id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
-    defaultMessage: 'Evaluation Test Cases',
-  },
-  standardOutput: {
-    id: 'course.assessment.submission.TestCaseView.standardOutput',
-    defaultMessage: 'Standard Output',
-  },
-  standardError: {
-    id: 'course.assessment.submission.TestCaseView.standardError',
-    defaultMessage: 'Standard Error',
-  },
-  noOutputs: {
-    id: 'course.assessment.submission.TestCaseView.noOutputs',
-    defaultMessage: 'No outputs',
-  },
-});
-
-interface Props {
-  testCase: TestCase;
-}
+const PANEL_TITLES = {
+  public_test: 'publicTestCases',
+  private_test: 'privateTestCases',
+  evaluation_test: 'evaluationTestCases',
+} as const satisfies Record<TestCaseType, keyof typeof translations>;
 
 interface TestCaseComponentProps {
-  testCaseResults: TestCaseResult[];
-  testCaseType: string;
-}
-
-interface OutputStreamProps {
-  outputStreamType: 'standardOutput' | 'standardError';
-  output?: string;
+  testCaseType: TestCaseType;
+  testCases: TestCaseData[];
+  /** Absent when the answer has not been graded. */
+  testResults?: Record<number, TestCaseResultData>;
+  canReadTests: boolean;
+  showOutput: boolean;
+  /** Renders the "only staff can see this" subtitle. */
+  staffOnly: boolean;
+  defaultExpanded: boolean;
 }
 
 const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
-  const { testCaseResults, testCaseType } = props;
+  const {
+    testCaseType,
+    testCases,
+    testResults,
+    canReadTests,
+    showOutput,
+    staffOnly,
+    defaultExpanded,
+  } = props;
   const { t } = useTranslation();
 
-  // result.output might be undefined for private and evaluation test cases for students
-  const isProgrammingAnswerEvaluated =
-    testCaseResults.filter((result) => result.passed !== undefined).length > 0;
-
-  const numPassedTestCases = testCaseResults.filter(
-    (result) => result.passed,
+  // `testResults` is absent until the answer has been graded, and a test case added to the question
+  // after the grading run has no entry in it.
+  const isEvaluated = testCases.some(
+    (testCase) => testResults?.[testCase.id]?.passed !== undefined,
+  );
+  const numPassedTestCases = testCases.filter(
+    (testCase) => testResults?.[testCase.id]?.passed,
   ).length;
-  const numTestCases = testCaseResults.length;
 
   const AllTestCasesPassedChip: FC = () => (
     <Chip
@@ -110,7 +78,7 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
       color="warning"
       label={t(translations.testCasesPassed, {
         numPassed: numPassedTestCases,
-        numTestCases,
+        numTestCases: testCases.length,
       })}
       size="small"
       variant="outlined"
@@ -128,11 +96,11 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
   );
 
   const TestCasesIndicatorChip: FC = () => {
-    if (!isProgrammingAnswerEvaluated) {
+    if (!isEvaluated) {
       return <div />;
     }
 
-    if (numPassedTestCases === numTestCases) {
+    if (numPassedTestCases === testCases.length) {
       return <AllTestCasesPassedChip />;
     }
 
@@ -144,11 +112,11 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
   };
 
   const testCaseComponentClassName = (): string => {
-    if (!isProgrammingAnswerEvaluated) {
+    if (!isEvaluated) {
       return '';
     }
 
-    if (numPassedTestCases === numTestCases) {
+    if (numPassedTestCases === testCases.length) {
       return 'border-success';
     }
 
@@ -162,34 +130,39 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
   return (
     <Accordion
       className={testCaseComponentClassName()}
-      defaultExpanded={false}
+      defaultExpanded={defaultExpanded}
       disableGutters
       icon={<TestCasesIndicatorChip />}
       id={testCaseType}
-      title={t(translations[testCaseType])}
+      subtitle={staffOnly ? t(translations.staffOnlyTestCases) : undefined}
+      title={t(translations[PANEL_TITLES[testCaseType]])}
     >
       <Table className="table-fixed">
         <TableHead>
           <TableRow>
             <TableCell className="w-full">
-              <FormattedMessage {...translations.expression} />
+              {t(translations.expression)}
             </TableCell>
 
-            <TableCell className="w-full">
-              <FormattedMessage {...translations.expected} />
-            </TableCell>
+            <TableCell className="w-full">{t(translations.expected)}</TableCell>
 
-            <TableCell className="w-full">
-              <FormattedMessage {...translations.output} />
-            </TableCell>
+            {showOutput && (
+              <TableCell className="w-full">{t(translations.output)}</TableCell>
+            )}
 
             <TableCell className="w-24" />
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {testCaseResults.map((result) => (
-            <TestCaseRow key={result.identifier} result={result} />
+          {testCases.map((testCase) => (
+            <TestCaseRow
+              key={testCase.id}
+              canReadTests={canReadTests}
+              showOutput={showOutput}
+              testCase={testCase}
+              testResult={testResults?.[testCase.id]}
+            />
           ))}
         </TableBody>
       </Table>
@@ -197,65 +170,132 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
   );
 };
 
-const OutputStream: FC<OutputStreamProps> = (props) => {
-  const { outputStreamType, output } = props;
-  const { t } = useTranslation();
-  return (
-    <Accordion
-      defaultExpanded={false}
-      disabled={!output}
-      disableGutters
-      icon={
-        !output && (
-          <Chip
-            label={<FormattedMessage {...translations.noOutputs} />}
-            size="small"
-            variant="outlined"
-          />
-        )
-      }
-      id={outputStreamType}
-      title={t(translations[outputStreamType])}
-    >
-      <pre className="w-full">{output}</pre>
-    </Accordion>
-  );
-};
+export interface TestCasesProps {
+  canReadTests: boolean;
+  testCases: TestCasesByType;
+  testResults?: TestResultsByType;
+  stdout?: string;
+  stderr?: string;
 
-const TestCases: FC<Props> = (props) => {
-  const { testCase } = props;
+  /**
+   * Whether staff-only panels and columns are shown. The submission edit page passes its
+   * `graderView` flag so that "student view" previews what a student sees; contexts with no such
+   * toggle leave this at its default and render whatever the server chose to send.
+   */
+  graderView?: boolean;
+  /**
+   * Course setting: students may see the outputs of public test cases. Omit it where the payload has
+   * already been filtered for the viewer; the column is then shown only when a public result
+   * actually carries an output, rather than as a column of blanks.
+   */
+  showPublicTestCasesOutput?: boolean;
+  /** Course setting: students may see stdout/stderr. Omit it as above. */
+  showStdoutAndStderr?: boolean;
+  /** Assessment setting, already narrowed to "and the submission is published". */
+  showPrivateTestToStudents?: boolean;
+  showEvaluationTestToStudents?: boolean;
+
+  isAutograding?: boolean;
+  defaultExpanded?: boolean;
+}
+
+const TestCases: FC<TestCasesProps> = (props) => {
+  const {
+    canReadTests,
+    testCases,
+    testResults,
+    stdout,
+    stderr,
+    graderView = true,
+    showPublicTestCasesOutput,
+    showStdoutAndStderr,
+    showPrivateTestToStudents = true,
+    showEvaluationTestToStudents = true,
+    isAutograding = false,
+    defaultExpanded = true,
+  } = props;
+  const { t } = useTranslation();
+
+  const isStaffOnlyOutputsVisible = graderView && canReadTests;
+
+  // A caller that omits these settings is relying on the server having already filtered the payload
+  // for this viewer, so fall back to what the payload actually holds rather than to the permissive
+  // setting: neither of these is gated on data being present the way the panels below are, so a `true`
+  // default renders a column, or a pair of panels, that the server deliberately left empty.
+  const isPublicOutputVisible =
+    showPublicTestCasesOutput ??
+    Object.values(testResults?.public_test ?? {}).some(
+      (testResult) => testResult.output !== undefined,
+    );
+  const isOutputStreamVisible =
+    showStdoutAndStderr ?? (stdout !== undefined || stderr !== undefined);
+
+  const visibility: Record<
+    TestCaseType,
+    { visible: boolean; staffOnly: boolean; showOutput: boolean }
+  > = {
+    public_test: {
+      visible: true,
+      staffOnly: false,
+      showOutput: isStaffOnlyOutputsVisible || isPublicOutputVisible,
+    },
+    private_test: {
+      visible: isStaffOnlyOutputsVisible || showPrivateTestToStudents,
+      staffOnly: !showPrivateTestToStudents,
+      showOutput: isStaffOnlyOutputsVisible,
+    },
+    evaluation_test: {
+      visible: isStaffOnlyOutputsVisible || showEvaluationTestToStudents,
+      staffOnly: !showEvaluationTestToStudents,
+      showOutput: isStaffOnlyOutputsVisible,
+    },
+  };
+
+  const showOutputStreams = isStaffOnlyOutputsVisible || isOutputStreamVisible;
 
   return (
     <div className="my-5 space-y-5">
-      {testCase.public_test && testCase.public_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.public_test}
-          testCaseType="publicTestCases"
-        />
+      {isAutograding && (
+        <Alert severity="info">{t(translations.autogradeProgress)}</Alert>
       )}
 
-      {testCase.private_test && testCase.private_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.private_test}
-          testCaseType="privateTestCases"
-        />
+      {(Object.keys(PANEL_TITLES) as TestCaseType[]).map((testCaseType) => {
+        const testCasesOfType = testCases[testCaseType];
+        if (!testCasesOfType?.length || !visibility[testCaseType].visible) {
+          return null;
+        }
+
+        return (
+          <TestCaseComponent
+            key={testCaseType}
+            canReadTests={canReadTests}
+            defaultExpanded={defaultExpanded}
+            showOutput={visibility[testCaseType].showOutput}
+            staffOnly={visibility[testCaseType].staffOnly}
+            testCases={testCasesOfType}
+            testCaseType={testCaseType}
+            testResults={testResults?.[testCaseType]}
+          />
+        );
+      })}
+
+      {showOutputStreams && (
+        <>
+          <OutputStream
+            output={stdout}
+            outputStreamType="standardOutput"
+            staffOnly={showStdoutAndStderr === false}
+          />
+
+          <OutputStream
+            output={stderr}
+            outputStreamType="standardError"
+            staffOnly={showStdoutAndStderr === false}
+          />
+        </>
       )}
-
-      {testCase.evaluation_test && testCase.evaluation_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.evaluation_test}
-          testCaseType="evaluationTestCases"
-        />
-      )}
-
-      <OutputStream
-        output={testCase.stdout}
-        outputStreamType="standardOutput"
-      />
-
-      <OutputStream output={testCase.stderr} outputStreamType="standardError" />
     </div>
   );
 };
 
-export default TestCases;
+export default memo(TestCases);

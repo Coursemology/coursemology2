@@ -51,9 +51,6 @@ can_read_tests = can?(:read_tests, submission)
 show_private = can_read_tests || (submission.published? && assessment.show_private?)
 show_evaluation = can_read_tests || (submission.published? && assessment.show_evaluation?)
 
-test_cases_by_type = question.test_cases_by_type
-test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
-
 show_stdout_and_stderr = (can_read_tests || current_course.show_stdout_and_stderr) &&
                          auto_grading && auto_grading&.exit_code != 0
 
@@ -61,49 +58,63 @@ displayed_test_case_types = ['public_test']
 displayed_test_case_types << 'private_test' if show_private
 displayed_test_case_types << 'evaluation_test' if show_evaluation
 
+# Test case definitions and the results of grading against them are serialized separately, joined on
+# test case id: a test case belongs to the question, while a result belongs to one grading run.
+# Both hashes cover every type on the question -- the explanation below needs evaluation tests even
+# when they are not displayed -- but only the displayed types are rendered.
+test_cases_by_type = question.test_cases_by_type
+test_results_by_type = get_test_results_by_type(test_cases_by_type, auto_grading)
+
+json.canReadTests can_read_tests
+
 json.testCases do
-  json.canReadTests can_read_tests
   displayed_test_case_types.each do |test_case_type|
-    show_public = (test_case_type == 'public_test') && current_course.show_public_test_cases_output
-    show_testcase_outputs = can_read_tests || show_public
     json.set! test_case_type do
-      if test_cases_and_results[test_case_type].present?
-        json.array! test_cases_and_results[test_case_type] do |test_case, test_result|
-          json.identifier test_case.identifier if can_read_tests
-          json.expression test_case.expression
-          json.expected test_case.expected
-          if test_result
-            json.output get_output(test_result) if show_testcase_outputs
-            json.passed test_result.passed?
+      json.array!(test_cases_by_type[test_case_type] || []) do |test_case|
+        json.partial! 'course/assessment/answer/programming/test_case',
+                      test_case: test_case, can_read_tests: can_read_tests
+      end
+    end
+  end
+end
+
+# Absent entirely when the answer has not been graded, so that the client can tell "not yet run"
+# from "run, and every test case failed".
+if auto_grading
+  json.testResults do
+    displayed_test_case_types.each do |test_case_type|
+      show_public = (test_case_type == 'public_test') && current_course.show_public_test_cases_output
+      show_testcase_outputs = can_read_tests || show_public
+      json.set! test_case_type do
+        (test_results_by_type[test_case_type] || {}).each do |test_case_id, test_result|
+          json.set! test_case_id do
+            json.partial! 'course/assessment/answer/programming/test_result',
+                          test_result: test_result, show_output: show_testcase_outputs
           end
         end
       end
     end
   end
-
-  json.(auto_grading, :stdout, :stderr) if show_stdout_and_stderr
 end
 
-failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
+json.(auto_grading, :stdout, :stderr) if show_stdout_and_stderr
+
+first_failure_by_type = get_first_failure_by_type(test_cases_by_type, test_results_by_type)
 
 json.explanation do
   if attempt
     explanations = []
 
-    if failed_test_cases_by_type['public_test']
-      failed_test_cases_by_type['public_test'].each do |test_case, test_result|
-        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
-      end
+    if (failure = first_failure_by_type['public_test'])
+      explanations << format_ckeditor_rich_text(get_hint(*failure))
       json.failureType 'public_test'
 
-    elsif failed_test_cases_by_type['private_test']
-      failed_test_cases_by_type['private_test'].each do |test_case, test_result|
-        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
-      end
+    elsif (failure = first_failure_by_type['private_test'])
+      explanations << format_ckeditor_rich_text(get_hint(*failure))
       json.failureType 'private_test'
     end
 
-    passed_evaluation_tests = failed_test_cases_by_type['evaluation_test'].blank?
+    passed_evaluation_tests = first_failure_by_type['evaluation_test'].blank?
 
     json.correct attempt&.auto_grading && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
     json.explanations explanations

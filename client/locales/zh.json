@@ -3536,6 +3536,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "姓名"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "全部失败"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "全部通过"
   },
@@ -10780,5 +10783,8 @@
   },
   "course.assessment.question.rubricPlayground.loadAnswerContextsFailure": {
     "defaultMessage": "无法加载此答案的评分上下文。"
+  },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} 已通过"
   }
 }
