@@ -8,6 +8,7 @@ import { WithRequired } from 'types';
 
 import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
+import { ROUTER_FUTURE_FLAGS } from './future';
 import { protectedRoutes } from './redirects';
 import createAppRouter from './router';
 
@@ -258,7 +259,11 @@ const unauthenticatedRouter: Translated<RouteObject[]> = (t) =>
 const UnauthenticatedApp = (): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <RouterProvider router={createBrowserRouter(unauthenticatedRouter(t))} />
+    <RouterProvider
+      router={createBrowserRouter(unauthenticatedRouter(t), {
+        future: ROUTER_FUTURE_FLAGS,
+      })}
+    />
   );
 };
 
