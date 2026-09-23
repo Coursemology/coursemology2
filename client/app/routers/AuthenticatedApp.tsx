@@ -12,6 +12,7 @@ import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import courseRouter from './course';
 import courselessRouter from './courseless';
+import { ROUTER_FUTURE_FLAGS } from './future';
 import createAppRouter from './router';
 
 const authenticatedRouter: Translated<RouteObject[]> = (t) =>
@@ -52,7 +53,11 @@ const AuthenticatedApp = (): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <RouterProvider router={createBrowserRouter(authenticatedRouter(t))} />
+    <RouterProvider
+      router={createBrowserRouter(authenticatedRouter(t), {
+        future: ROUTER_FUTURE_FLAGS,
+      })}
+    />
   );
 };
 
