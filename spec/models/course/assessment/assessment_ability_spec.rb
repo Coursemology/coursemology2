@@ -40,6 +40,18 @@ RSpec.describe Course::Assessment do
              assessment: published_started_assessment, creator: coursemate.user)
     end
 
+    let(:coursemate_answer) { coursemate_submitted_submission.answers.first }
+    let(:other_course_assessment) { create(:assessment, course: create(:course)) }
+
+    # A new, unsaved question, built the way Course::Assessment::Question::Controller's
+    # build_and_authorize_new_question builds it before authorizing :new and :create: the actable and
+    # its base are both unsaved, linked to the assessment only through an in-memory question_assessment.
+    def build_new_question_for(assessment)
+      Course::Assessment::Question::Programming.new.tap do |question|
+        question.question_assessments.build(assessment: assessment)
+      end
+    end
+
     def get_text_response_answer_for(submission)
       submission.answers.latest_answers.select do |ans|
         ans.specific.instance_of?(Course::Assessment::Answer::TextResponse)
@@ -187,6 +199,10 @@ RSpec.describe Course::Assessment do
       it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
       it { is_expected.not_to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
 
+      # Creating questions is scoped to the course's assessments, as managing them is
+      it { is_expected.to be_able_to(:create, build_new_question_for(unpublished_assessment)) }
+      it { is_expected.not_to be_able_to(:create, build_new_question_for(other_course_assessment)) }
+
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:read, attempting_submission) }
       it { is_expected.to be_able_to(:grade, attempting_submission) }
@@ -241,6 +257,42 @@ RSpec.describe Course::Assessment do
       # Course Assessments
       it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
       it { is_expected.to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
+      it { is_expected.to be_able_to(:manage, unpublished_assessment) }
+
+      # Course Assessment Submissions -- the abilities the submission page itself is gated on
+      it { is_expected.to be_able_to(:read, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:read_tests, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:grade, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:update, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:reevaluate_answer, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:delete_submission, coursemate_submitted_submission) }
+      it { is_expected.to be_able_to(:delete_all_submissions, published_started_assessment) }
+
+      # Course Assessment Answers
+      it { is_expected.to be_able_to(:read, coursemate_answer) }
+      it { is_expected.to be_able_to(:grade, coursemate_answer) }
+      it { is_expected.to be_able_to(:update, coursemate_answer) }
+
+      # Course Assessment Questions
+      it { is_expected.to be_able_to(:read, unpublished_assessment.questions.first) }
+      it { is_expected.to be_able_to(:manage, unpublished_assessment.questions.first.specific) }
+      it { is_expected.to be_able_to(:create, build_new_question_for(unpublished_assessment)) }
+      it { is_expected.to be_able_to(:create, build_new_question_for(other_course_assessment)) }
+      it { is_expected.not_to be_able_to(:create, Course::Assessment::Question::Programming.new) }
+    end
+
+    # Guards the `administrator` filter on the grants above: an instance user who is not an admin of
+    # the instance must gain nothing from them.
+    context 'when the user is a normal Instance User' do
+      let(:user) { create(:instance_user).user }
+      let(:course_user) { nil }
+
+      it { is_expected.not_to be_able_to(:manage, unpublished_assessment) }
+      it { is_expected.not_to be_able_to(:read, coursemate_submitted_submission) }
+      it { is_expected.not_to be_able_to(:read_tests, coursemate_submitted_submission) }
+      it { is_expected.not_to be_able_to(:read, coursemate_answer) }
+      it { is_expected.not_to be_able_to(:manage, unpublished_assessment.questions.first.specific) }
+      it { is_expected.not_to be_able_to(:create, build_new_question_for(unpublished_assessment)) }
     end
   end
 end
