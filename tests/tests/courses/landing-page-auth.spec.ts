@@ -1,4 +1,4 @@
-import { test, expect, manufacture } from 'helpers';
+import { test, expect, manufacture, manufactureUser } from 'helpers';
 
 import type { Page } from '@playwright/test';
 
@@ -177,10 +177,13 @@ test.describe('signing in from a publicly accessible course page', () => {
     course = await manufacture({ course: { traits: ['published'] } });
   });
 
+  // Deliberately not `signInPage`: that fixture opens `/users/sign_in`, which fires off a
+  // redirect to Keycloak after `goto` has already resolved. Navigating to the course while that
+  // is in flight either aborts our `goto` or gets overtaken by it.
   test('returns the user to the course they were viewing', async ({
-    signInPage: page,
-  }) => {
-    const user = await page.manufactureUser();
+    page,
+  }, testInfo) => {
+    const user = await manufactureUser(testInfo.workerIndex);
 
     await page.goto(`/courses/${course.id}`);
     await page.getByRole('button', { name: 'Sign in' }).click();
