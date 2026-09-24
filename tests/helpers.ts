@@ -58,9 +58,28 @@ interface TestFixtures {
   authedPage: AuthenticatedPage;
 }
 
+interface WorkerFixtures {
+  apiContext: APIRequestContext;
+}
+
+// Module state is shared by every spec file a worker loads, but a file-level `beforeAll` in
+// this (imported, so evaluated once) module only attaches to the first of those files. Its
+// `afterAll` then disposed the context under whichever file ran next. A worker fixture lives
+// exactly as long as the worker.
 let apiContext: APIRequestContext;
 
 const getEmail = (index: number) => `${Date.now()}+${index}@example.org`;
+
+export const manufactureUser = async (workerIndex: number): Promise<User> => {
+  const email = getEmail(workerIndex);
+  const password = 'lolololol';
+
+  const { id, name, role } = await manufacture({
+    user: { emails_count: 0, email, password },
+  });
+
+  return { email, password, id, name, role };
+};
 
 const extend = <T extends Page>(
   use: (r: T) => Promise<void>,
@@ -68,7 +87,17 @@ const extend = <T extends Page>(
   extension: Omit<T, keyof Page>
 ) => use(Object.assign(page, extension) as T);
 
-export const test = base.extend<TestFixtures>({
+export const test = base.extend<TestFixtures, WorkerFixtures>({
+  apiContext: [
+    async ({ playwright }, use) => {
+      apiContext = await playwright.request.newContext({
+        baseURL: packageJSON.servers.serverURL,
+      });
+      await use(apiContext);
+      await apiContext.dispose();
+    },
+    { scope: 'worker', auto: true },
+  ],
   context: async ({ context }, use) => {
     await configureCoverage(context, use);
   },
@@ -101,16 +130,7 @@ export const test = base.extend<TestFixtures>({
       getEmailField: () => page.getByPlaceholder('Email'),
       getPasswordField: () => page.getByPlaceholder('Password'),
       getSignInButton: () => page.getByRole('button', { name: 'Sign In' }),
-      manufactureUser: async () => {
-        const email = getEmail(testInfo.workerIndex);
-        const password = 'lolololol';
-
-        const { id, name, role } = await manufacture({
-          user: { emails_count: 0, email, password },
-        });
-
-        return { email, password, id, name, role };
-      },
+      manufactureUser: () => manufactureUser(testInfo.workerIndex),
     });
   },
   signUpPage: async ({ page }, use, testInfo) => {
@@ -157,16 +177,6 @@ export const test = base.extend<TestFixtures>({
   },
 });
 
-test.beforeAll(async ({ playwright }) => {
-  apiContext = await playwright.request.newContext({
-    baseURL: packageJSON.servers.serverURL,
-  });
-});
-
-test.afterAll(async () => {
-  apiContext.dispose();
-});
-
 type FactoryPayload = Record<
   string,
   Record<string, unknown> & { traits?: string[] }
@@ -187,26 +197,29 @@ interface EmailPayload {
   body: string;
 }
 
-const getLastSentEmail = async (): Promise<EmailPayload | null> => {
-  const response = await apiContext.get('/test/last_sent_email');
-  const payload = await response.json();
-  if (!payload) return null;
+const getSentEmails = async (): Promise<EmailPayload[]> => {
+  const response = await apiContext.get('/test/sent_emails');
+  const payloads = await response.json();
 
-  return {
+  return payloads.map((payload) => ({
     sender: payload.header[1].unparsed_value,
     recipient: payload.header[2].unparsed_value,
     subject: payload.header[4].unparsed_value,
     body: payload.body.raw_source,
-  };
+  }));
 };
 
-export const expectLastSentEmail = async (
-  predicate: (email: EmailPayload | null) => boolean | null
+/**
+ * Searches every delivery rather than only the last one: the backend delivers mail on a pool of
+ * background threads, so an action that sends several emails finishes them in no fixed order.
+ */
+export const expectSentEmail = async (
+  predicate: (email: EmailPayload) => boolean
 ): Promise<EmailPayload> => {
-  let email : EmailPayload | null = null;
-  await expect.poll(async() => {
-    email = await getLastSentEmail();
-    return predicate(email);
+  let email: EmailPayload | undefined;
+  await expect.poll(async () => {
+    email = (await getSentEmails()).findLast(predicate);
+    return email;
   }, {
     intervals: [500, 1_000, 2_000, 5_000, 10_000],
     timeout: 15_000,

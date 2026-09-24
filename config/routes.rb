@@ -670,7 +670,7 @@ Rails.application.routes.draw do
     namespace :test do
       post 'create' => 'factories#create'
       delete 'clear_emails' => 'mailer#clear'
-      get 'last_sent_email' => 'mailer#last_sent'
+      get 'sent_emails' => 'mailer#sent'
     end
   end
 end

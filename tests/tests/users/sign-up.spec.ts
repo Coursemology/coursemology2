@@ -1,4 +1,4 @@
-import { expect, expectLastSentEmail, manufacture, test } from 'helpers';
+import { expect, expectSentEmail, manufacture, test } from 'helpers';
 import { servers } from '../../package.json';
 
 const getHrefURLFromString = (string: string): string | undefined =>
@@ -20,8 +20,7 @@ test.describe('unregistered user', () => {
     await expect.soft(page.getByText(email)).toBeVisible();
     await expect(page.getByText('check your email')).toBeVisible();
 
-    const confirmationEmail = await expectLastSentEmail((confirmationEmail) => 
-      confirmationEmail &&
+    const confirmationEmail = await expectSentEmail((confirmationEmail) =>
       confirmationEmail.recipient === email &&
       confirmationEmail.body.includes('confirmation_token'));
 
@@ -127,8 +126,7 @@ test.describe('user invited to 2 courses', () => {
     await expect.soft(page.getByText(email)).toBeVisible();
     await expect(page.getByText('check your email')).toBeVisible();
 
-    const confirmationEmail = await expectLastSentEmail((confirmationEmail) => 
-      confirmationEmail &&
+    const confirmationEmail = await expectSentEmail((confirmationEmail) =>
       confirmationEmail.recipient === email &&
       confirmationEmail.body.includes('confirmation_token'));
 
