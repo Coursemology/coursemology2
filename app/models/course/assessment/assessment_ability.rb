@@ -208,12 +208,28 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_manage_questions
-    question_assessments_current_course =
-      { question_assessments: { assessment: assessment_course_hash } }
+    allow_manage_questions_in({ question_assessments: { assessment: assessment_course_hash } })
+  end
 
+  # The question abilities, given the conditions that identify the questions in scope. Shared with the
+  # instance administrator grants below, which need the same abilities against a different scope.
+  #
+  # @param [Hash] questions_in_scope Conditions on Course::Assessment::Question.
+  def allow_manage_questions_in(questions_in_scope)
     # Currently only the read endpoint for generic questions is implemented
-    can :read, Course::Assessment::Question, question_assessments: { assessment: assessment_course_hash }
+    can :read, Course::Assessment::Question, questions_in_scope
 
+    question_actable_classes.each do |question_class|
+      can :manage, question_class, question: questions_in_scope
+    end
+    can :duplicate, Course::Assessment::Question, questions_in_scope
+    can :import_result, Course::Assessment::Question::Programming
+    can :codaveri_languages, Course::Assessment::Question::Programming
+    can :generate, Course::Assessment::Question::Programming
+  end
+
+  # Built per call rather than held in a constant, to avoid referencing the models at load time.
+  def question_actable_classes
     [
       Course::Assessment::Question::ForumPostResponse,
       Course::Assessment::Question::MultipleResponse,
@@ -222,14 +238,7 @@ module Course::Assessment::AssessmentAbility
       Course::Assessment::Question::RubricBasedResponse,
       Course::Assessment::Question::Scribing,
       Course::Assessment::Question::VoiceResponse
-    ].each do |question_class|
-      can :create, question_class
-      can :manage, question_class, question: question_assessments_current_course
-    end
-    can :duplicate, Course::Assessment::Question, question_assessments_current_course
-    can :import_result, Course::Assessment::Question::Programming
-    can :codaveri_languages, Course::Assessment::Question::Programming
-    can :generate, Course::Assessment::Question::Programming
+    ]
   end
 
   def allow_teaching_staff_grade_assessment_submissions
@@ -313,10 +322,35 @@ module Course::Assessment::AssessmentAbility
     can [:update, :submit_answer], Course::Assessment::Answer, submission: { assessment: assessment_course_hash }
   end
 
+  # An instance administrator operates the whole instance. They already hold `can :manage` over its
+  # courses and its course users (System::Admin::InstanceAdminAbilityComponent), so they can enrol
+  # themselves as a course owner whenever they like: withholding the assessment subjects below never
+  # denied them the access, it only forced that detour, while leaving them unable to open a submission
+  # they are responsible for. These grants make the access they already had reachable directly.
+  #
+  # `:manage` is a CanCanCan wildcard, so each grant also covers that subject's custom actions
+  # (:read_tests, :grade, :reevaluate_answer, :publish_grades, :delete_submission, and so on). That is
+  # the intent -- within the instances they administer, an instance admin should be able to do what a
+  # course owner can.
+  #
+  # AI grading settings are the deliberate exception and remain with system administrators alone; see
+  # Course::AssessmentsAbilityComponent.
   def allow_instance_admin_manage_assessments
     admin_instance_ids = user.instance_users.administrator.pluck(:instance_id)
-    can :manage, Course::Assessment, tab: { category: { course: { instance_id: admin_instance_ids } } }
-    can :manage, Course::Assessment::Tab, category: { course: { instance_id: admin_instance_ids } }
-    can :manage, Course::Assessment::Category, course: { instance_id: admin_instance_ids }
+    courses_in_scope = { course: { instance_id: admin_instance_ids } }
+    assessments_in_scope = { tab: { category: courses_in_scope } }
+
+    can :manage, Course::Assessment, assessments_in_scope
+    can :manage, Course::Assessment::Tab, category: courses_in_scope
+    can :manage, Course::Assessment::Category, courses_in_scope
+
+    can :manage, Course::Assessment::Submission, assessment: assessments_in_scope
+    can :manage, Course::Assessment::SubmissionQuestion, discussion_topic: courses_in_scope
+    can :manage, Course::Assessment::Answer, submission: { assessment: assessments_in_scope }
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation, discussion_topic: courses_in_scope
+
+    allow_manage_questions_in({ question_assessments: { assessment: assessments_in_scope } })
+    can :manage, Course::Assessment::Question::MockAnswer,
+        question: { question_assessments: { assessment: assessments_in_scope } }
   end
 end
