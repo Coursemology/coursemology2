@@ -167,6 +167,86 @@ RSpec.describe Course::Assessment::Answer::AiGeneratedPostService do
       end
     end
 
+    describe 'the course feedback workflow' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+      let(:service) { described_class.new(answer, 'generated feedback') }
+      let(:post) { submission_question.posts.reload.last }
+      before do
+        assessment.course.update!(rubric_grading_feedback_workflow: workflow)
+        allow(answer.submission).to receive(:submission_questions).and_return(double(find_by: submission_question))
+      end
+
+      context 'when the course generates no feedback' do
+        let(:workflow) { 'none' }
+
+        it 'writes no comment, leaving the answer graded all the same' do
+          expect { service.create_ai_generated_draft_post }.not_to(change { Course::Discussion::Post.count })
+        end
+      end
+
+      context 'when the course drafts feedback for approval' do
+        let(:workflow) { 'draft' }
+
+        it 'drafts the comment and leaves the topic pending' do
+          service.create_ai_generated_draft_post
+
+          expect(post.workflow_state).to eq('draft')
+          expect(post.topic.pending_staff_reply).to be true
+        end
+      end
+
+      context 'when the course publishes feedback on answer submission' do
+        let(:workflow) { 'publish_on_answer_submit' }
+
+        it 'publishes the comment without queueing it for staff' do
+          service.create_ai_generated_draft_post
+
+          expect(post.workflow_state).to eq('published')
+          expect(post.topic.pending_staff_reply).to be false
+        end
+
+        it 'still snapshots the generated text, leaving the rating unscored' do
+          evaluation = Course::Rubric::AnswerEvaluation.create!(answer: answer, evaluation_type: :grading,
+                                                                feedback: 'generated feedback')
+          service.create_ai_generated_draft_post
+
+          rating = evaluation.ratings.last
+          expect(rating.original_feedback).to eq('generated feedback')
+          expect(rating.rating).to be_nil
+        end
+
+        it 'drafts instead when the generation is staff-initiated' do
+          described_class.new(answer, 'generated feedback', force_draft: true).create_ai_generated_draft_post
+
+          expect(post.workflow_state).to eq('draft')
+          expect(post.topic.pending_staff_reply).to be true
+        end
+      end
+
+      context 'when the course publishes feedback on finalisation' do
+        let(:workflow) { 'publish_on_finalise' }
+
+        it 'holds the comment back while the submission is still being attempted' do
+          service.create_ai_generated_draft_post
+
+          expect(post.workflow_state).to eq('draft')
+        end
+
+        context 'once the submission has been finalised' do
+          let(:submission) { create(:submission, :submitted, assessment: assessment) }
+
+          it 'publishes the comment as it is generated' do
+            service.create_ai_generated_draft_post
+
+            expect(post.workflow_state).to eq('published')
+            expect(post.topic.pending_staff_reply).to be false
+          end
+        end
+      end
+    end
+
     describe 'AI feedback rating lifecycle' do
       let(:submission_question) do
         create(:course_assessment_submission_question, submission: submission, question: question.acting_as)

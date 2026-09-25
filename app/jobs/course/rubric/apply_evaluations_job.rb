@@ -23,7 +23,10 @@ class Course::Rubric::ApplyEvaluationsJob < ApplicationJob
     grading = Course::Rubric::GradingEvaluationMirrorService.mirror(answer, evaluation)
     grade = Course::Rubric::GradingEvaluationMirrorService.total_grade(grading, answer.question.maximum_grade)
     answer.update_column(:grade, grade)
-    Course::Assessment::Answer::AiGeneratedPostService.new(answer, grading.feedback).create_ai_generated_draft_post
+    # force_draft: applying from the playground is a staff action over a whole class of answers, so it
+    # drafts even where the course publishes student-triggered feedback automatically.
+    Course::Assessment::Answer::AiGeneratedPostService.
+      new(answer, grading.feedback, force_draft: true).create_ai_generated_draft_post
   end
 
   # Runs the LLM once for an answer with no (visible) playground evaluation for this rubric, populating a

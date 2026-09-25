@@ -6,6 +6,8 @@ export interface AssessmentSettingsData {
   categories: AssessmentCategory[];
   canCreateCategories: boolean;
   maxProgrammingTimeLimit?: number;
+  // How generated rubric feedback reaches students; see AiGeneratedPostService::FEEDBACK_WORKFLOWS.
+  rubricGradingFeedbackWorkflow: string;
   rubricGradingPromptEnabled: boolean;
   rubricGradingPrompt?: string;
   // AI model configuration, restricted to instance and system admins. When the viewer may not manage it the
@@ -76,6 +78,7 @@ export interface AssessmentSettingsPostData {
     allow_randomization?: AssessmentSettingsData['allowRandomization'];
     allow_mrq_options_randomization?: AssessmentSettingsData['allowMrqOptionsRandomization'];
     programming_max_time_limit: AssessmentSettingsData['maxProgrammingTimeLimit'];
+    rubric_grading_feedback_workflow?: AssessmentSettingsData['rubricGradingFeedbackWorkflow'];
     rubric_grading_prompt_enabled?: AssessmentSettingsData['rubricGradingPromptEnabled'];
     rubric_grading_prompt?: AssessmentSettingsData['rubricGradingPrompt'];
     // Only sent when the viewer may manage them; the server drops them from the permitted params otherwise.

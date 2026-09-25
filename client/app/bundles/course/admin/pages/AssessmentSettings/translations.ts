@@ -62,6 +62,31 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.rubricGrading',
     defaultMessage: 'AI Rubric Grading',
   },
+  feedbackWorkflow: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflow',
+    defaultMessage: 'Feedback comment delivery',
+  },
+  feedbackWorkflowHint: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflowHint',
+    defaultMessage:
+      'AI can generate personalised comments for each answer in addition to the numeric grade.',
+  },
+  feedbackWorkflowNone: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflowNone',
+    defaultMessage: 'Generate no comments',
+  },
+  feedbackWorkflowDraft: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflowDraft',
+    defaultMessage: 'Generate draft comments for staff approval',
+  },
+  feedbackWorkflowPublishOnAnswerSubmit: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflowPublishOnAnswerSubmit',
+    defaultMessage: 'Publish comments immediately',
+  },
+  feedbackWorkflowPublishOnFinalise: {
+    id: 'course.admin.AssessmentSettings.feedbackWorkflowPublishOnFinalise',
+    defaultMessage: 'Publish comments when submission is finalised',
+  },
   useRubricGradingPrompt: {
     id: 'course.admin.AssessmentSettings.useRubricGradingPrompt',
     defaultMessage: 'Use course-wide grading prompt',

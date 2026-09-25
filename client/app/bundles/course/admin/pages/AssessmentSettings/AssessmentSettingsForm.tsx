@@ -1,9 +1,10 @@
 import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
-import { InputAdornment, Typography } from '@mui/material';
+import { InputAdornment, RadioGroup, Typography } from '@mui/material';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import * as yup from 'yup';
 
+import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
@@ -321,6 +322,49 @@ const AssessmentsSettingsForm = forwardRef<
                 />
               </>
             )}
+            <Subsection
+              className="pb-6"
+              subtitle={t(translations.feedbackWorkflowHint)}
+              title={t(translations.feedbackWorkflow)}
+            >
+              <Controller
+                control={control}
+                name="rubricGradingFeedbackWorkflow"
+                render={({ field }): JSX.Element => (
+                  <RadioGroup className="space-y-5" {...field}>
+                    <RadioButton
+                      className="my-0"
+                      disabled={props.disabled}
+                      label={t(translations.feedbackWorkflowDraft)}
+                      value="draft"
+                    />
+
+                    <RadioButton
+                      className="my-0"
+                      disabled={props.disabled}
+                      label={t(translations.feedbackWorkflowPublishOnFinalise)}
+                      value="publish_on_finalise"
+                    />
+
+                    <RadioButton
+                      className="my-0"
+                      disabled={props.disabled}
+                      label={t(
+                        translations.feedbackWorkflowPublishOnAnswerSubmit,
+                      )}
+                      value="publish_on_answer_submit"
+                    />
+
+                    <RadioButton
+                      className="my-0"
+                      disabled={props.disabled}
+                      label={t(translations.feedbackWorkflowNone)}
+                      value="none"
+                    />
+                  </RadioGroup>
+                )}
+              />
+            </Subsection>
 
             <Controller
               control={control}

@@ -22,6 +22,7 @@ class Course::Assessment::Submission < ApplicationRecord
 
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
+  after_save :publish_ai_generated_feedback, if: :submitted?
   after_create :schedule_force_submission, if: :attempting?
 
   workflow do
@@ -444,6 +445,31 @@ class Course::Assessment::Submission < ApplicationRecord
     ActiveRecord.after_all_transactions_commit do
       # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
       auto_grade!(only_ungraded: true)
+    end
+  end
+
+  # Releases the AI rubric feedback drafted while this submission was being attempted, for courses that hold
+  # it back until the student finalises (see AiGeneratedPostService::PUBLISH_ON_FINALISE). Comments generated
+  # *by* finalising are published as they are created -- this callback runs before those grading jobs, so it
+  # only ever sees the earlier drafts.
+  def publish_ai_generated_feedback
+    return unless saved_change_to_workflow_state?
+    return unless assessment.course.rubric_grading_feedback_workflow ==
+                  Course::Assessment::Answer::AiGeneratedPostService::PUBLISH_ON_FINALISE
+
+    ActiveRecord.after_all_transactions_commit do
+      drafts = Course::Discussion::Post.where(topic: submission_questions.map(&:discussion_topic)).
+               where(is_ai_generated: true, workflow_state: 'draft').to_a
+      # One at a time with update! -- not the workflow event, and not update_all -- so each post's own callbacks
+      # fire, which snapshot the final text into the feedback rating.
+      drafts.each { |post| post.update!(workflow_state: 'published') }
+
+      # Nobody is waiting to approve them any more, so their topics leave the staff pending queues. Topic has no
+      # save callbacks, so one statement is equivalent to unmark_as_pending on each -- including the updated_at
+      # bump, which read tracking keys off (acts_as_readable on: :updated_at). Only these drafts' topics: one
+      # whose comment staff accepted earlier may be pending again because the student has since replied.
+      Course::Discussion::Topic.where(id: drafts.map(&:topic_id), pending_staff_reply: true).
+        update_all(pending_staff_reply: false, updated_at: Time.current)
     end
   end
 
