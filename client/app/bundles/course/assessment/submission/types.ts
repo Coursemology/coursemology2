@@ -171,7 +171,11 @@ export interface GradingState {
   expMultiplier: number;
 }
 
-interface Topic {
+// The discussion topic of one submission question, as sent with the submission.
+export interface Topic {
+  id: number;
+  questionId: number;
+  submissionQuestionId: number;
   postIds: number[];
 }
 

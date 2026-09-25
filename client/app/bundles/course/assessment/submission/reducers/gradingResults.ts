@@ -12,6 +12,7 @@ import {
 } from 'types/course/assessment/submission/answer/programming';
 import { TextResponseSolutionResult } from 'types/course/assessment/submission/answer/textResponse';
 
+import { isOneOf } from '../../utils/matchers';
 import actions from '../constants';
 import { CategoryGradeType } from '../types';
 
@@ -68,23 +69,6 @@ interface QuestionIdAction {
   questionId: number;
 }
 
-interface UnknownAction {
-  type: Exclude<
-    string,
-    | AnswerDataArrayAction['type']
-    | AnswerDataAction['type']
-    | QuestionIdAction['type']
-    | RubricUpdateAction['type']
-  >;
-}
-
-type Action =
-  | AnswerDataArrayAction
-  | AnswerDataAction
-  | QuestionIdAction
-  | RubricUpdateAction
-  | UnknownAction;
-
 export default createReducer<GradingResultsState>(
   {
     solutionResults: {},
@@ -93,18 +77,16 @@ export default createReducer<GradingResultsState>(
   },
   (builder) => {
     builder.addMatcher(
-      (action: Action): action is AnswerDataArrayAction => {
-        return [
-          actions.FETCH_SUBMISSION_SUCCESS,
-          actions.FINALISE_SUCCESS,
-          actions.UNSUBMIT_SUCCESS,
-          actions.SAVE_ALL_GRADE_SUCCESS,
-          actions.SAVE_GRADE_SUCCESS,
-          actions.MARK_SUCCESS,
-          actions.UNMARK_SUCCESS,
-          actions.PUBLISH_SUCCESS,
-        ].includes(action.type);
-      },
+      isOneOf<AnswerDataArrayAction>(
+        actions.FETCH_SUBMISSION_SUCCESS,
+        actions.FINALISE_SUCCESS,
+        actions.UNSUBMIT_SUCCESS,
+        actions.SAVE_ALL_GRADE_SUCCESS,
+        actions.SAVE_GRADE_SUCCESS,
+        actions.MARK_SUCCESS,
+        actions.UNMARK_SUCCESS,
+        actions.PUBLISH_SUCCESS,
+      ),
       (state, action) => {
         const newSolutionResults: Record<string, TextResponseSolutionResult[]> =
           {};
@@ -131,14 +113,12 @@ export default createReducer<GradingResultsState>(
     );
 
     builder.addMatcher(
-      (action: Action): action is AnswerDataAction => {
-        return [
-          actions.SAVE_ANSWER_SUCCESS,
-          actions.REEVALUATE_SUCCESS,
-          actions.AUTOGRADE_SUCCESS,
-          actions.RESET_SUCCESS,
-        ].includes(action.type);
-      },
+      isOneOf<AnswerDataAction>(
+        actions.SAVE_ANSWER_SUCCESS,
+        actions.REEVALUATE_SUCCESS,
+        actions.AUTOGRADE_SUCCESS,
+        actions.RESET_SUCCESS,
+      ),
       (state, action) => {
         const answer = action.payload;
         if (
@@ -157,12 +137,10 @@ export default createReducer<GradingResultsState>(
     );
 
     builder.addMatcher(
-      (action: Action): action is RubricUpdateAction => {
-        return [
-          actions.UPDATE_RUBRIC,
-          actions.AUTOGRADE_RUBRIC_SUCCESS,
-        ].includes(action.type);
-      },
+      isOneOf<RubricUpdateAction>(
+        actions.UPDATE_RUBRIC,
+        actions.AUTOGRADE_RUBRIC_SUCCESS,
+      ),
       (state, action) => {
         if (!action.payload.categoryGrades) return;
 
@@ -172,11 +150,10 @@ export default createReducer<GradingResultsState>(
     );
 
     builder.addMatcher(
-      (action: Action): action is QuestionIdAction => {
-        return [actions.REEVALUATE_FAILURE, actions.AUTOGRADE_FAILURE].includes(
-          action.type,
-        );
-      },
+      isOneOf<QuestionIdAction>(
+        actions.REEVALUATE_FAILURE,
+        actions.AUTOGRADE_FAILURE,
+      ),
       (state, action) => {
         // Clear the previous test results, keeping the test case definitions so the panel still
         // lists what would have been run.
