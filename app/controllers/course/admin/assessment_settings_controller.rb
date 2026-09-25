@@ -81,6 +81,7 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
       # :allow_randomization,
       :allow_mrq_options_randomization,
       :programming_max_time_limit,
+      :rubric_grading_feedback_workflow,
       :rubric_grading_prompt_enabled,
       :rubric_grading_prompt,
       assessment_categories_attributes: [

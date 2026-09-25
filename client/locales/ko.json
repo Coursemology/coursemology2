@@ -458,6 +458,24 @@
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "탭을 이동하는 동안 오류가 발생했습니다."
   },
+  "course.admin.AssessmentSettings.feedbackWorkflow": {
+    "defaultMessage": "피드백 코멘트 전달 방식"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowDraft": {
+    "defaultMessage": "스태프 승인용 초안 코멘트 생성"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowHint": {
+    "defaultMessage": "AI는 숫자 점수와 함께 각 답안에 대한 맞춤형 코멘트를 생성할 수 있습니다."
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowNone": {
+    "defaultMessage": "코멘트를 생성하지 않음"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowPublishOnAnswerSubmit": {
+    "defaultMessage": "코멘트를 즉시 공개"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowPublishOnFinalise": {
+    "defaultMessage": "제출이 확정되면 코멘트 공개"
+  },
   "course.admin.AssessmentSettings.gradingModel": {
     "defaultMessage": "채점 모델"
   },
@@ -612,7 +630,7 @@
     "defaultMessage": "Codaveri가 프로그래밍 문제에 대한 학생 도움 대화를 생성하는 데 사용하는 AI 모델입니다."
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptDescription": {
-    "defaultMessage": "여기에서 지침을 제공하여 Codaveri 모델의 동작을 사용자 지정할 수 있습니다.{br} 학생을 도울 때, 이 지침은 문제 자체에 설정한 지침에 추가로 따르게 됩니다.{br} 문제별 세부 사항을 참조하려면, 아래와 같이 대괄호로 작성된 다음 변수를 프롬프트에서 사용할 수 있습니다:"
+    "defaultMessage": "Codaveri 시스템 프롬프트는 학생과 상호작용할 때 AI의 동작을 제어합니다."
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine": {
     "defaultMessage": "{problemDescriptionVar} : 코딩 문제의 전체 설명"
@@ -657,7 +675,7 @@
     "defaultMessage": "프로그래밍 질문이 포함된 제출물이 완료되었을 때,"
   },
   "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
-    "defaultMessage": "직원 승인이 필요한 초안으로 피드백 생성"
+    "defaultMessage": "스태프 승인용 초안으로 피드백 생성"
   },
   "course.admin.CodaveriSettings.feedbackWorkflowNone": {
     "defaultMessage": "피드백 생성 안 함"

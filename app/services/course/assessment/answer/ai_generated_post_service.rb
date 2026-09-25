@@ -1,16 +1,41 @@
 # frozen_string_literal: true
 
 class Course::Assessment::Answer::AiGeneratedPostService
+  # How a course delivers generated rubric feedback to its students (Course#rubric_grading_feedback_workflow,
+  # configured under Course Settings > Assessments). Mirrors the Codaveri component's feedback_workflow, with
+  # the publish case split in two: rubric answers are graded both when a student submits a single answer and
+  # when they finalise the submission.
+  #
+  #   * +none+                     -- grade the answer, but draft no feedback comment at all.
+  #   * +draft+                    -- staff accept or reject the comment before the student sees it (default).
+  #   * +publish_on_answer_submit+ -- the student sees the comment as soon as the answer is graded.
+  #   * +publish_on_finalise+      -- drafted while the submission is being attempted, published (see
+  #                                   Course::Assessment::Submission#publish_ai_generated_feedback) once it
+  #                                   is finalised.
+  NO_FEEDBACK = 'none'
+  DRAFT_FEEDBACK = 'draft'
+  PUBLISH_ON_ANSWER_SUBMIT = 'publish_on_answer_submit'
+  PUBLISH_ON_FINALISE = 'publish_on_finalise'
+  FEEDBACK_WORKFLOWS = [NO_FEEDBACK, DRAFT_FEEDBACK, PUBLISH_ON_ANSWER_SUBMIT, PUBLISH_ON_FINALISE].freeze
+  DEFAULT_FEEDBACK_WORKFLOW = DRAFT_FEEDBACK
+
   # @param [Course::Assessment::Answer] answer The answer to create/update the post for
   # @param [String] feedback The feedback text to include in the post
-  def initialize(answer, content)
+  # @param [Boolean] force_draft Whether to draft the comment regardless of the course's workflow. Set by
+  #   staff-initiated generation (applying playground evaluations), which may publish to a whole class at
+  #   once and so is never delivered to students without a person deciding to.
+  def initialize(answer, content, force_draft: false)
     @answer = answer
     @content = content
+    @force_draft = force_draft
   end
 
-  # Creates or updates AI-generated draft feedback post for the answer
+  # Creates or updates the AI-generated feedback post for the answer, drafted or published according to the
+  # course's feedback workflow.
   # @return [void]
   def create_ai_generated_draft_post
+    return if feedback_workflow == NO_FEEDBACK
+
     submission_question = @answer.submission.submission_questions.find_by(question_id: @answer.question_id)
     return unless submission_question
 
@@ -26,6 +51,26 @@ class Course::Assessment::Answer::AiGeneratedPostService
 
   private
 
+  # @return [String] one of FEEDBACK_WORKFLOWS
+  def feedback_workflow
+    return DRAFT_FEEDBACK if @force_draft
+
+    @feedback_workflow ||= @answer.submission.assessment.course.rubric_grading_feedback_workflow
+  end
+
+  # Whether this comment reaches the student without a staff decision. +publish_on_finalise+ waits: a
+  # comment drafted mid-attempt stays a draft, and the submission publishes it when it is finalised, while
+  # a comment generated after that point (finalising triggers grading of the remaining answers) is published
+  # straight away.
+  # @return [Boolean]
+  def publish_immediately?
+    case feedback_workflow
+    when PUBLISH_ON_ANSWER_SUBMIT then true
+    when PUBLISH_ON_FINALISE then !@answer.submission.attempting?
+    else false
+    end
+  end
+
   # Builds a draft post with AI-generated feedback
   # @param [Course::Assessment::SubmissionQuestion] submission_question The submission question
   # @return [Course::Discussion::Post] The built post
@@ -35,7 +80,7 @@ class Course::Assessment::Answer::AiGeneratedPostService
       updater: User.system,
       text: @content,
       is_ai_generated: true,
-      workflow_state: 'draft',
+      workflow_state: publish_immediately? ? 'published' : 'draft',
       title: @answer.submission.assessment.title
     )
   end
@@ -51,9 +96,12 @@ class Course::Assessment::Answer::AiGeneratedPostService
       end
       post.save!
       submission_question.save!
+      # The rating is initialized whichever way the comment is delivered, so the generated text is always
+      # snapshotted. A published comment carries no rating UI today (the card is draft-only), so its rating
+      # stays unrated -- the same trade the Codaveri publish workflow makes.
       initialize_rating(post)
       create_topic_subscription(post.topic)
-      post.topic.mark_as_pending
+      post.topic.mark_as_pending unless post.published?
     end
   end
 
@@ -128,7 +176,9 @@ class Course::Assessment::Answer::AiGeneratedPostService
     end
   end
 
-  # Finds the latest AI-generated draft post for the submission question
+  # Finds the latest AI-generated draft post for the submission question. Only drafts are updated in place,
+  # so under a publish workflow a re-graded answer gains a new comment instead of having one the student may
+  # already have read rewritten underneath them.
   # @param [Course::Assessment::SubmissionQuestion] submission_question The submission question
   # @return [Course::Discussion::Post, nil] The latest AI-generated draft post or nil if none exists
   def find_existing_ai_draft_post(submission_question)

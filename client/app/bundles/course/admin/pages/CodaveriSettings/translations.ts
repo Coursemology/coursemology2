@@ -25,8 +25,7 @@ export default defineMessages({
   },
   feedbackWorkflowDraft: {
     id: 'course.admin.CodaveriSettings.feedbackWorkflowDraft',
-    defaultMessage:
-      'Generate feedback as a draft requiring approval from staff',
+    defaultMessage: 'Generate feedback as a draft for staff approval',
   },
   feedbackWorkflowPublish: {
     id: 'course.admin.CodaveriSettings.feedbackWorkflowPublish',

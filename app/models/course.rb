@@ -40,6 +40,7 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :conditional_satisfiability_evaluation_time, presence: true
   validates :ssid_folder_id, uniqueness: { if: :ssid_folder_id_changed? }, allow_nil: true
   validate :validate_rubric_grading_model
+  validate :validate_rubric_grading_feedback_workflow
   validate :validate_rubric_grading_model_options
   validate :validate_rubric_grading_system_prompt
 
@@ -290,6 +291,18 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
     settings(:course_assessments_component).rubric_grading_prompt = prompt.presence
   end
 
+  # How generated rubric feedback reaches students -- drafted for staff approval (the default), published
+  # to the student directly, or not generated at all. See
+  # Course::Assessment::Answer::AiGeneratedPostService::FEEDBACK_WORKFLOWS for the modes.
+  def rubric_grading_feedback_workflow
+    settings(:course_assessments_component).rubric_grading_feedback_workflow.presence ||
+      Course::Assessment::Answer::AiGeneratedPostService::DEFAULT_FEEDBACK_WORKFLOW
+  end
+
+  def rubric_grading_feedback_workflow=(workflow)
+    settings(:course_assessments_component).rubric_grading_feedback_workflow = workflow.presence
+  end
+
   # The model rubric grading runs on, blank meaning the LlmAdapter's DEFAULT_MODEL. Admin-only (see
   # Course::AssessmentsAbilityComponent), as are the two settings below.
   def rubric_grading_model
@@ -480,6 +493,14 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def validate_rubric_grading_feedback_workflow
+    workflow = settings(:course_assessments_component).rubric_grading_feedback_workflow
+    return if workflow.blank?
+    return if Course::Assessment::Answer::AiGeneratedPostService::FEEDBACK_WORKFLOWS.include?(workflow)
+
+    errors.add(:rubric_grading_feedback_workflow, "is not a supported feedback workflow: #{workflow}")
+  end
 
   def validate_rubric_grading_model
     return if rubric_grading_model.blank?

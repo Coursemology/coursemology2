@@ -373,6 +373,28 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    describe 'the rubric feedback workflow' do
+      let(:course) { create(:course) }
+
+      it 'defaults to drafting feedback for approval' do
+        expect(course.rubric_grading_feedback_workflow).to eq('draft')
+      end
+
+      it 'accepts every supported workflow' do
+        Course::Assessment::Answer::AiGeneratedPostService::FEEDBACK_WORKFLOWS.each do |workflow|
+          course.rubric_grading_feedback_workflow = workflow
+          expect(course).to be_valid
+          expect(course.rubric_grading_feedback_workflow).to eq(workflow)
+        end
+      end
+
+      it 'rejects an unsupported workflow' do
+        course.rubric_grading_feedback_workflow = 'publish_whenever'
+        expect(course).not_to be_valid
+        expect(course.errors[:rubric_grading_feedback_workflow]).to be_present
+      end
+    end
+
     describe 'the AI grading model configuration' do
       let(:course) { create(:course) }
 

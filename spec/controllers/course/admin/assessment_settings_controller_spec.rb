@@ -105,6 +105,28 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
       end
     end
 
+    describe '#update persisting the rubric feedback workflow' do
+      # A teaching decision rather than an operational one, so an ordinary course manager may change it.
+      subject do
+        patch :update, as: :json, params: {
+          course_id: course, course: { rubric_grading_feedback_workflow: 'publish_on_finalise' }
+        }
+      end
+
+      it 'stores the workflow on the course settings' do
+        expect(subject).to render_template(:edit)
+        expect(course.reload.rubric_grading_feedback_workflow).to eq('publish_on_finalise')
+      end
+
+      it 'rejects an unsupported workflow' do
+        patch :update, as: :json, params: {
+          course_id: course, course: { rubric_grading_feedback_workflow: 'publish_whenever' }
+        }
+        expect(response).to have_http_status(:bad_request)
+        expect(course.reload.rubric_grading_feedback_workflow).to eq('draft')
+      end
+    end
+
     describe '#update persisting the course-wide rubric grading prompt' do
       subject do
         patch :update, as: :json, params: {

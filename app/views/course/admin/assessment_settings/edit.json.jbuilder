@@ -6,6 +6,9 @@ json.showStdoutAndStderr current_course.show_stdout_and_stderr || false
 json.allowRandomization current_course.allow_randomization || false
 json.allowMrqOptionsRandomization current_course.allow_mrq_options_randomization || false
 json.maxProgrammingTimeLimit current_course.programming_max_time_limit if can?(:manage, :all)
+# How generated rubric feedback reaches students. Unlike the model configuration below, this is a teaching
+# decision, so any course manager may change it.
+json.rubricGradingFeedbackWorkflow current_course.rubric_grading_feedback_workflow
 json.rubricGradingPromptEnabled current_course.rubric_grading_prompt_enabled
 json.rubricGradingPrompt current_course.rubric_grading_prompt || ''
 

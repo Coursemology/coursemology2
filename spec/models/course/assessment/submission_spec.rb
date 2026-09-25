@@ -344,6 +344,61 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
+      # A course that holds AI rubric feedback back until finalisation releases it here; feedback generated
+      # by the finalise itself is published as it is created (see AiGeneratedPostService).
+      describe 'releasing held-back AI rubric feedback' do
+        let(:submission_question) do
+          create(:course_assessment_submission_question, submission: submission,
+                                                         question: assessment.questions.first)
+        end
+        let!(:ai_draft) do
+          create(:course_discussion_post, topic: submission_question.acting_as, is_ai_generated: true,
+                                          workflow_state: 'draft').tap { |post| post.topic.mark_as_pending }
+        end
+        let!(:staff_draft) do
+          create(:course_discussion_post, topic: submission_question.acting_as, workflow_state: 'draft')
+        end
+
+        context 'when the course publishes rubric feedback on finalisation' do
+          before { course.update!(rubric_grading_feedback_workflow: 'publish_on_finalise') }
+
+          it 'publishes the AI draft and clears the pending flag, leaving staff drafts alone' do
+            submission.update!('finalise' => 'true')
+
+            expect(ai_draft.reload.workflow_state).to eq('published')
+            expect(ai_draft.topic.reload.pending_staff_reply).to be(false)
+            expect(staff_draft.reload.workflow_state).to eq('draft')
+          end
+
+          # A comment the staff accepted ahead of finalisation is finished business. The release must skip
+          # it -- and so must not clear a pending flag that a later student reply raised, which is the way
+          # touching it would actually cost someone something.
+          it 'leaves a comment accepted before finalisation, and its topic, alone' do
+            ai_draft.update!(workflow_state: 'published')
+            ai_draft.topic.unmark_as_pending
+
+            create(:course_discussion_post, topic: submission_question.acting_as,
+                                            creator: submission.creator)
+            submission_question.acting_as.mark_as_pending
+
+            expect { submission.update!('finalise' => 'true') }.
+              not_to(change { Course::Discussion::Post.count })
+
+            expect(ai_draft.reload.workflow_state).to eq('published')
+            expect(submission_question.acting_as.reload.pending_staff_reply).to be(true)
+          end
+        end
+
+        context 'when the course drafts rubric feedback for approval' do
+          it 'leaves the AI draft waiting for a staff decision' do
+            submission.update!('finalise' => 'true')
+
+            expect(ai_draft.reload.workflow_state).to eq('draft')
+            expect(ai_draft.topic.reload.pending_staff_reply).to be(true)
+          end
+        end
+      end
+
       # The finalise transaction commits the student's work, so nothing derived from it — the
       # personalised timeline, the notification, the Cikgo push — may be able to roll it back. The
       # first two also leave the request entirely, as jobs, because they call out to a third party

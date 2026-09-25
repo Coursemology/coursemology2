@@ -458,6 +458,24 @@
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "移动标签时出错。"
   },
+  "course.admin.AssessmentSettings.feedbackWorkflow": {
+    "defaultMessage": "反馈评语发布方式"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowDraft": {
+    "defaultMessage": "生成评语草稿供教职人员审核"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowHint": {
+    "defaultMessage": "除数值成绩外，AI 还可以为每个答案生成个性化评语。"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowNone": {
+    "defaultMessage": "不生成评语"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowPublishOnAnswerSubmit": {
+    "defaultMessage": "立即发布评语"
+  },
+  "course.admin.AssessmentSettings.feedbackWorkflowPublishOnFinalise": {
+    "defaultMessage": "提交确认后发布评语"
+  },
   "course.admin.AssessmentSettings.gradingModel": {
     "defaultMessage": "评分模型"
   },
@@ -561,7 +579,7 @@
     "defaultMessage": "Codaveri 使用的 AI 模型，用于为学生的编程问题生成帮助对话。"
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptDescription": {
-    "defaultMessage": "您可以在此提供指令以自定义 Codaveri 模型的行为。{br} 在帮助学生时，这些指令将与您在具体题目中设置的指令一并执行。{br}要引用题目相关的细节，您可以在提示中使用以下变量，并按照如下方式用括号写出："
+    "defaultMessage": "Codaveri 系统提示用于控制 AI 与学生互动时的行为。"
   },
   "course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine": {
     "defaultMessage": "{problemDescriptionVar} ：编程问题的完整描述。"
@@ -591,7 +609,7 @@
     "defaultMessage": "不生成反馈"
   },
   "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
-    "defaultMessage": "生成草稿反馈，需要工作人员批准"
+    "defaultMessage": "生成反馈草稿供教职人员审核"
   },
   "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
     "defaultMessage": "直接向学生发布反馈"
