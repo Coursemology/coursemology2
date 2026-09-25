@@ -36,7 +36,10 @@ end
 # Lazily backfills the rating for pre-feature (or straggler) AI drafts so they render with the rateable card.
 post.ensure_generated_rating! if post.is_ai_generated && post.workflow_state == 'draft'
 ai_feedback_rating = post.is_ai_generated ? post.ai_feedback_rating : nil
-if ai_feedback_rating
+# Staff-only. The rating holds the AI's original text (which staff may have edited before publishing), the edited
+# text, and the staff member's score -- none of which is for the student the comment is addressed to. Gated on the
+# ability the rating endpoint authorizes, so exactly the users who can rate the comment receive it.
+if ai_feedback_rating && can?(:update, ai_feedback_rating)
   json.generatedRating do
     # `type` discriminates which rating endpoint the client should call (see RateableGeneratedCommentCard).
     json.type 'rubric_feedback'

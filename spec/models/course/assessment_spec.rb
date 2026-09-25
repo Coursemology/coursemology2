@@ -273,6 +273,29 @@ RSpec.describe Course::Assessment do
 
           it { is_expected.to be_nil }
         end
+
+        # Rubric grading has no notion of a wrong answer, so a rubric-graded question is passed by submitting it
+        # once -- without waiting on, or depending on the success of, the grading itself.
+        context 'when the first question is rubric-graded' do
+          let(:assessment_traits) { [:with_rubric_question, :with_mcq_question] }
+          let(:rubric_question) { assessment.questions.first }
+
+          it 'is still unanswered while the student has only drafted an answer' do
+            expect(rubric_question).to be_grading_mode_rubric
+            rubric_question.attempt(submission).save!
+
+            is_expected.to eq(rubric_question)
+          end
+
+          it 'counts as answered once submitted, however grading turns out' do
+            answer = rubric_question.attempt(submission)
+            answer.finalise!
+            answer.save!
+            expect(answer.correct).to be_nil
+
+            is_expected.to eq(assessment.questions.second)
+          end
+        end
       end
     end
 

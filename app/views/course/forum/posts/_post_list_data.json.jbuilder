@@ -17,7 +17,10 @@ json.isAiGenerated post.is_ai_generated
 # Lazily backfills the rating for pre-feature (or straggler) AI drafts so they render with the rateable card.
 post.ensure_generated_rating! if post.is_ai_generated && post.workflow_state == 'draft'
 rag_wise_rating = post.is_ai_generated ? post.rag_wise_rating : nil
-if rag_wise_rating
+# Staff-only. The rating holds the AI's original answer (which staff may have edited before publishing), the edited
+# text, the staff member's score and the answer's quality scores -- none of which is for the students reading the
+# forum. Gated on the ability the rating endpoint authorizes, so exactly the users who can rate it receive it.
+if rag_wise_rating && can?(:update, rag_wise_rating)
   json.generatedRating do
     # `type` discriminates which rating endpoint the client should call (see RateableGeneratedCommentCard).
     json.type 'rag_wise'

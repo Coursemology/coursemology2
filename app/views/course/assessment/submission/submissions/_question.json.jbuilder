@@ -12,5 +12,7 @@ end
 
 json.canViewHistory question.history_viewable?
 json.type question.question_type
+# 'rubric' questions have no notion of a wrong answer, which the client needs to word the answer panel.
+json.gradingMode question.grading_mode
 
 json.partial! question, question: question.specific, can_grade: can_grade, answer: answer

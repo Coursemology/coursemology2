@@ -10,7 +10,6 @@ const RubricBasedResponseAdapter = (
     <RubricBasedResponseAnswer
       key={`question_${question.id}`}
       answerId={answerId!}
-      question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
     />

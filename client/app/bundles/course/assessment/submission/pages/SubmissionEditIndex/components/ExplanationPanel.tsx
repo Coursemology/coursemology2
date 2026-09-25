@@ -53,12 +53,17 @@ const ExplanationPanel: FC<Props> = (props) => {
     return null;
   }
 
+  // Rubric grading has no notion of a wrong answer, so for it `correct` only records that the answer was
+  // submitted (see the server's _rubric_explanation partial).
+  const judgesCorrectness =
+    question.autogradable && question.gradingMode !== 'rubric';
+
   const getExplanationTitle = (): string => {
-    if (explanation.correct && question.autogradable) {
+    if (explanation.correct && judgesCorrectness) {
       return t(translations.correct);
     }
 
-    if (explanation.correct && !question.autogradable) {
+    if (explanation.correct) {
       return t(translations.answerSubmitted);
     }
 

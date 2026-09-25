@@ -75,7 +75,13 @@ module Course::Assessment::QuestionsConcern
     where(id: correctly_answered_question_ids(submission))
   end
 
+  # A rubric-graded question counts as answered once the student has submitted it at least once: rubric grading
+  # has no notion of a wrong answer, and a student should not be held on a step by how long grading takes, or by
+  # whether it succeeds at all.
   def correctly_answered_question_ids(submission)
-    submission.answers.where(correct: true).select(:question_id)
+    submitted_rubric_answers = submission.answers.where(question_id: where(grading_mode: :rubric).select(:id)).
+                               where.not(workflow_state: :attempting)
+
+    submission.answers.where(correct: true).or(submitted_rubric_answers).select(:question_id)
   end
 end
