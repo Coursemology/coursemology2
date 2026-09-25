@@ -56,10 +56,11 @@ interface AnswerDataAction {
 }
 
 // UPDATE_RUBRIC (grader edits a category) / AUTOGRADE_RUBRIC_SUCCESS carry the affected question's id + its
-// refreshed category breakdown.
+// refreshed category breakdown. AUTOGRADE_RUBRIC_SUCCESS may omit the breakdown (a student before publication
+// receives only the AI feedback comment), in which case the existing breakdown stands.
 interface RubricUpdateAction {
   type: typeof actions.UPDATE_RUBRIC | typeof actions.AUTOGRADE_RUBRIC_SUCCESS;
-  payload: { questionId: number; categoryGrades: CategoryGradeType[] };
+  payload: { questionId: number; categoryGrades?: CategoryGradeType[] };
 }
 
 interface QuestionIdAction {
@@ -163,6 +164,8 @@ export default createReducer<GradingResultsState>(
         ].includes(action.type);
       },
       (state, action) => {
+        if (!action.payload.categoryGrades) return;
+
         state.categoryGrades[action.payload.questionId] =
           action.payload.categoryGrades;
       },

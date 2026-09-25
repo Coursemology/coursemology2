@@ -1,13 +1,11 @@
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import UserHTMLText from 'lib/components/core/UserHTMLText';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 
 interface RubricBasedResponseAnswerProps {
   answerId: number;
-  question: SubmissionQuestionData<'RubricBasedResponse'>;
   readOnly: boolean;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
 }
@@ -15,8 +13,7 @@ interface RubricBasedResponseAnswerProps {
 const RubricBasedResponseAnswer: FC<RubricBasedResponseAnswerProps> = (
   props,
 ) => {
-  const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =
-    props;
+  const { answerId, readOnly, saveAnswerAndUpdateClientVersion } = props;
 
   const { control } = useFormContext();
 
@@ -48,7 +45,7 @@ const RubricBasedResponseAnswer: FC<RubricBasedResponseAnswerProps> = (
             shrink: true,
           }}
           multiline
-          renderIf={!readOnly && !question.autogradable}
+          renderIf={!readOnly}
           variant="standard"
         />
       )}

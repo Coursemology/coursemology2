@@ -28,9 +28,11 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
           type: actionTypes.AUTOGRADE_SUCCESS,
           payload: { ...data, answerId },
         });
-        // Any rubric-graded answer (RBR, forum post, ...) carries a category breakdown; refresh its rubric
-        // reference grade + categories so the moderation resets to the autograder's result.
-        if (data.categoryGrades) {
+        // A rubric-graded answer (RBR, forum post, ...) may return its category breakdown, which refreshes the
+        // rubric reference grade + categories so the moderation resets to the autograder's result, and/or the
+        // AI feedback comment grading just produced. Either may be absent: students do not see the breakdown
+        // until the submission is published, but may see a published comment straight away.
+        if (data.categoryGrades || data.aiGeneratedComment) {
           dispatch({
             type: actionTypes.AUTOGRADE_RUBRIC_SUCCESS,
             payload: {

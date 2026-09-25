@@ -32,6 +32,35 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
         subject
         expect(topic.reload.posts.any? { |post| post.unread?(user) }).to be(false)
       end
+
+      # The rating of an AI answer is staff data: the AI's original answer (possibly edited by staff before
+      # publishing), the staff member's score, and the answer's quality scores.
+      context 'when the topic has a rated AI-generated answer' do
+        render_views
+        let!(:ai_answer) do
+          create(:course_discussion_post, topic: topic.acting_as, is_ai_generated: true,
+                                          workflow_state: 'published')
+        end
+        let!(:rating) { create(:course_forum_rag_wise_rating, post: ai_answer, rating: 4) }
+        let(:ai_answer_json) { JSON.parse(subject.body)['posts'].find { |post| post['id'] == ai_answer.id } }
+
+        context 'when a student views the topic' do
+          let(:user) { create(:course_student, course: course).user }
+
+          it 'shows the answer without its rating' do
+            expect(ai_answer_json).to be_present
+            expect(ai_answer_json).not_to have_key('generatedRating')
+          end
+        end
+
+        context 'when a teaching assistant views the topic' do
+          let(:user) { create(:course_teaching_assistant, course: course).user }
+
+          it 'includes the rating' do
+            expect(ai_answer_json['generatedRating']).to include('rating' => 4)
+          end
+        end
+      end
     end
 
     describe '#destroy' do

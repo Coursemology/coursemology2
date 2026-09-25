@@ -32,24 +32,8 @@ end
 
 json.partial! 'course/assessment/answer/rubric_category_grades', answer: answer, can_grade: can_grade
 
-if can_grade
-  posts = answer.submission.submission_questions.find_by(question_id: answer.question_id)&.discussion_topic&.posts
-  ai_generated_comment = posts&.select do |post|
-    post.is_ai_generated && post.workflow_state == 'draft'
-  end&.last
-  if ai_generated_comment
-    json.aiGeneratedComment do
-      json.partial! ai_generated_comment
-    end
-  end
-end
-
-if answer.can_read_grade?(current_ability)
-  json.explanation do
-    json.correct last_attempt&.correct
-    json.explanations []
-  end
-end
+json.partial! 'course/assessment/answer/ai_generated_comment', answer: answer, can_grade: can_grade
+json.partial! 'course/assessment/answer/rubric_explanation', last_attempt: last_attempt
 
 if answer.current_answer? && !last_attempt.current_answer?
   json.latestAnswer do

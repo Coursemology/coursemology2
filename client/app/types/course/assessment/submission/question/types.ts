@@ -8,6 +8,8 @@ interface QuestionData {
   autogradable: boolean;
   canViewHistory: boolean;
   type: QuestionType;
+  // 'rubric' questions are graded against a rubric and have no notion of a wrong answer.
+  gradingMode: 'default' | 'rubric';
 }
 
 interface MultipleResponseQuestionData {

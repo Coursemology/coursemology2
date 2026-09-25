@@ -256,6 +256,94 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           expect(json_result['questionId']).to eq answer.question.id
         end
       end
+
+      # The client shows a freshly generated AI comment from this payload, so it has to carry the comment in
+      # whichever state the course's feedback workflow left it -- and respect who may see that state.
+      context 'when the answer has AI-generated feedback comments' do
+        render_views
+        let(:rubric_assessment) { create(:assessment, :published_with_rubric_question, course: course) }
+        let(:question) { rubric_assessment.questions.first }
+        let(:student) { create(:course_student, course: course) }
+        let(:student_submission) do
+          create(:submission, :attempting, assessment: rubric_assessment, creator: student.user,
+                                           course_user: student)
+        end
+        let(:rubric_answer) do
+          create(:course_assessment_answer_rubric_based_response, :submitted,
+                 question: question, submission: student_submission).answer
+        end
+        let(:topic) do
+          create(:course_assessment_submission_question, submission: student_submission, question: question).
+            acting_as
+        end
+        let!(:published_comment) do
+          create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'published',
+                                          created_at: 2.minutes.ago)
+        end
+        subject do
+          post :reload_answer, params: {
+            course_id: course, assessment_id: rubric_assessment.id,
+            id: student_submission.id, answer_id: rubric_answer.id, format: :json
+          }
+        end
+        let(:ai_generated_comment_id) { JSON.parse(subject.body).dig('aiGeneratedComment', 'id') }
+        # Staff edited the AI's wording before publishing, then rated it.
+        let(:rate_published_comment) do
+          Course::Rubric::AnswerEvaluation.create!(answer: rubric_answer, evaluation_type: :grading,
+                                                   feedback: 'The AI wording').
+            ratings.create!(post: published_comment, rating: 2, original_feedback: 'The AI wording',
+                            edited_feedback: 'The staff wording', creator: User.system, updater: User.system)
+        end
+        let(:generated_rating) { JSON.parse(subject.body).dig('aiGeneratedComment', 'generatedRating') }
+
+        context 'when the student reloads it' do
+          # Not by redefining :user, which is also the course's creator.
+          before { controller_sign_in(controller, student.user) }
+
+          it 'includes the published comment' do
+            expect(ai_generated_comment_id).to eq(published_comment.id)
+          end
+
+          it 'never includes a draft, even a newer one' do
+            create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'draft',
+                                            created_at: 1.minute.ago)
+            expect(ai_generated_comment_id).to eq(published_comment.id)
+          end
+
+          it "withholds the comment's rating, and with it the AI's original wording" do
+            rate_published_comment
+            expect(ai_generated_comment_id).to eq(published_comment.id)
+            expect(generated_rating).to be_nil
+            expect(subject.body).not_to include('The AI wording')
+          end
+        end
+
+        # The Continue and Finalise buttons gate on explanation.correct. Students are not otherwise shown grades
+        # when partial submission is allowed, which used to withhold the explanation and leave them stuck.
+        context 'when partial submission is allowed' do
+          before do
+            rubric_assessment.update!(allow_partial_submission: true, show_mcq_answer: true)
+            controller_sign_in(controller, student.user)
+          end
+
+          it 'lets the student move on once the answer has been submitted' do
+            expect(JSON.parse(subject.body).dig('explanation', 'correct')).to be(true)
+          end
+        end
+
+        context 'when staff reload it' do
+          it 'includes the latest comment, draft or not' do
+            draft = create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'draft',
+                                                    created_at: 1.minute.ago)
+            expect(ai_generated_comment_id).to eq(draft.id)
+          end
+
+          it "includes the comment's rating" do
+            rate_published_comment
+            expect(generated_rating).to include('rating' => 2, 'originalContent' => 'The AI wording')
+          end
+        end
+      end
     end
 
     describe '#generate_live_feedback' do
