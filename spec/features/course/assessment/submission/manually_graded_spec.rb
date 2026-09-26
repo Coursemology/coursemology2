@@ -142,7 +142,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Delete the reply
         first('button.delete-comment').click
-        accept_confirm_dialog do
+        accept_confirm_dialog('button.prompt-primary-btn') do
           wait_for_job
         end
 
