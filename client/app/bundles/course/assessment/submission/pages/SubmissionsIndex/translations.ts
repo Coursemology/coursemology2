@@ -81,7 +81,20 @@ const translations = defineMessages({
   },
   publishAutoFeedback: {
     id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedback',
-    defaultMessage: 'Publish Automated Programming Feedback ({count})',
+    defaultMessage: 'Publish AI Programming Feedback ({count})',
+  },
+  publishAutoFeedbackTooltip: {
+    id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedbackTooltip',
+    defaultMessage: "Publishes all draft AI feedback on students' code.",
+  },
+  publishRubricFeedback: {
+    id: 'course.assessment.submission.SubmissionsIndex.publishRubricFeedback',
+    defaultMessage: 'Publish AI Rubric-based Feedback ({count})',
+  },
+  publishRubricFeedbackTooltip: {
+    id: 'course.assessment.submission.SubmissionsIndex.publishRubricFeedbackTooltip',
+    defaultMessage:
+      "Publishes all draft AI feedback on students' written answers.",
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions',
