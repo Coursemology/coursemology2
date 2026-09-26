@@ -85,7 +85,7 @@ const translations = defineMessages({
   },
   publishAutoFeedbackTooltip: {
     id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedbackTooltip',
-    defaultMessage: "Publishes all draft AI feedback on students' code.",
+    defaultMessage: 'Publishes all AI-generated feedback on student code.',
   },
   publishRubricFeedback: {
     id: 'course.assessment.submission.SubmissionsIndex.publishRubricFeedback',
@@ -94,7 +94,7 @@ const translations = defineMessages({
   publishRubricFeedbackTooltip: {
     id: 'course.assessment.submission.SubmissionsIndex.publishRubricFeedbackTooltip',
     defaultMessage:
-      "Publishes all draft AI feedback on students' written answers.",
+      'Publishes all AI-generated feedback on student written answers.',
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions',

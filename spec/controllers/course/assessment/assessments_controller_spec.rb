@@ -240,7 +240,38 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when auto feedback count is fetched' do
         it 'returns the correct count of student auto feedback' do
           subject
-          expect(JSON.parse(response.body).count).to eq(1)
+          expect(JSON.parse(response.body)['count']).to eq(1)
+        end
+      end
+
+      # Topics are polymorphic: a question comment thread whose actable id happens to equal the annotation's id is
+      # a different topic entirely, and its drafts are not programming feedback.
+      context 'when a question comment thread shares an actable id with the annotation' do
+        # Free both as an annotation id and as a question topic's actable id (the test database keeps rows between
+        # runs, so neither can be assumed), and given to both.
+        let(:shared_id) do
+          [Course::Assessment::Answer::ProgrammingFileAnnotation.maximum(:id),
+           Course::Discussion::Topic.where(actable_type: Course::Assessment::SubmissionQuestion.name).
+             maximum(:actable_id)].compact.max.to_i + 1000
+        end
+        let(:annotation) do
+          create(:course_assessment_answer_programming_file_annotation, id: shared_id, file: file)
+        end
+
+        before do
+          other_assessment = create(:assessment, :published_with_rubric_question, course: course)
+          other_submission = create(:submission, :submitted, assessment: other_assessment, creator: student)
+          topic = create(:course_assessment_submission_question, submission: other_submission,
+                                                                 question: other_assessment.questions.first).
+                  acting_as
+          create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'draft')
+          # After the post: its callbacks look the topic's question up, which no longer resolves once moved.
+          topic.update_column(:actable_id, shared_id)
+        end
+
+        it 'counts only the annotation drafts' do
+          subject
+          expect(JSON.parse(response.body)['count']).to eq(1)
         end
       end
     end
@@ -279,6 +310,79 @@ RSpec.describe Course::Assessment::AssessmentsController do
           subject
           expect(post.reload.workflow_state).to eq('published')
           expect(post.reload.codaveri_feedback.reload.rating).to eq(4)
+        end
+      end
+    end
+
+    describe 'AI rubric feedback' do
+      # Submitting a submission queues its auto-grading, which this environment runs on a background thread: it
+      # would grade the rubric answer and draft AI feedback of its own, racing these examples' counts.
+      with_active_job_queue_adapter(:test) do
+        let(:student) { create(:user, name: 'Student') }
+        let!(:course_user) { create(:course_student, course: course, user: student) }
+        let(:assessment) { create(:assessment, :published_with_rubric_question, course: course) }
+        let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student) }
+        let(:topic) do
+          create(:course_assessment_submission_question, submission: submission,
+                                                         question: assessment.questions.first).acting_as
+        end
+        let!(:ai_draft) do
+          create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'draft').
+            tap { topic.mark_as_pending }
+        end
+        # None of these are this assessment's AI feedback drafts.
+        let!(:published_ai_comment) do
+          create(:course_discussion_post, topic: topic, is_ai_generated: true, workflow_state: 'published')
+        end
+        let!(:staff_draft) { create(:course_discussion_post, topic: topic, workflow_state: 'draft') }
+        let!(:other_assessment_draft) do
+          other_assessment = create(:assessment, :published_with_rubric_question, course: course)
+          other_submission = create(:submission, :submitted, assessment: other_assessment, creator: student)
+          other_topic = create(:course_assessment_submission_question, submission: other_submission,
+                                                                       question: other_assessment.questions.first).
+                        acting_as
+          create(:course_discussion_post, topic: other_topic, is_ai_generated: true, workflow_state: 'draft')
+        end
+        let(:params) { { course_id: course, id: assessment, course_users: Course::COURSE_USER_TYPES[:students] } }
+
+        describe '#rubric_feedback_count' do
+          subject { get :rubric_feedback_count, as: :json, params: params }
+
+          it "counts only this assessment's AI feedback drafts" do
+            subject
+            expect(JSON.parse(response.body)['count']).to eq(1)
+          end
+
+          context 'when a student asks' do
+            before { controller_sign_in(controller, student) }
+
+            it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+          end
+        end
+
+        describe '#publish_rubric_feedback' do
+          subject { patch :publish_rubric_feedback, as: :json, params: params }
+
+          it 'publishes the drafts and takes their threads out of the pending queues' do
+            expect(subject).to have_http_status(:ok)
+            expect(ai_draft.reload.workflow_state).to eq('published')
+            expect(topic.reload.pending_staff_reply).to be(false)
+          end
+
+          it 'leaves everything else alone' do
+            subject
+            expect(staff_draft.reload.workflow_state).to eq('draft')
+            expect(other_assessment_draft.reload.workflow_state).to eq('draft')
+          end
+
+          context 'when a student asks' do
+            before { controller_sign_in(controller, student) }
+
+            it 'publishes nothing' do
+              expect { subject }.to raise_exception(CanCan::AccessDenied)
+              expect(ai_draft.reload.workflow_state).to eq('draft')
+            end
+          end
         end
       end
     end

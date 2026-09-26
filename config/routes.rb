@@ -296,6 +296,8 @@ Rails.application.routes.draw do
           get :seb_payload, on: :member
           get :auto_feedback_count, on: :member
           patch :publish_auto_feedback, on: :member
+          get :rubric_feedback_count, on: :member
+          patch :publish_rubric_feedback, on: :member
 
           resources :questions, only: [:show] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate

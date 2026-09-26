@@ -18,10 +18,7 @@ import {
 } from 'lib/helpers/url-builders';
 import moment from 'lib/moment';
 
-import {
-  deleteSubmission,
-  unsubmitSubmission,
-} from '../../actions/submissions';
+import { deleteSubmission, unsubmitSubmission } from '../../actions/requests';
 import SubmissionWorkflowState from '../../components/SubmissionWorkflowState';
 import { workflowStates } from '../../constants';
 import { assessmentShape } from '../../propTypes';

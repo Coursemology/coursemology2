@@ -3446,6 +3446,18 @@
   "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "此问题没有已提交的答案——可能是因为提交之后又添加了新问题。"
   },
+  "course.assessment.submission.SubmissionsIndex.fetchFromKoditsu": {
+    "defaultMessage": "从 Koditsu 获取提交"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedbackTooltip": {
+    "defaultMessage": "发布针对学生代码的所有 AI 生成反馈。"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishRubricFeedback": {
+    "defaultMessage": "发布 AI 评分标准反馈（{count}）"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishRubricFeedbackTooltip": {
+    "defaultMessage": "发布针对学生书面答案的所有 AI 生成反馈。"
+  },
   "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
     "defaultMessage": "没有过去的答案。"
   },
@@ -3459,13 +3471,13 @@
     "defaultMessage": "您的答案必须小于 2 MB。"
   },
   "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
-    "defaultMessage": "您即将发布 {count} 条自动编程反馈。"
+    "defaultMessage": "您即将发布 {count} 条 AI 编程反馈。"
   },
   "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
-    "defaultMessage": "请评价本次测验自动编程反馈的整体质量。您的评分将帮助我们改进自动编程反馈生成，以便所有用户受益。"
+    "defaultMessage": "请评价本次测验 AI 编程反馈的整体质量。您的评分将帮助我们改进 AI 编程反馈生成，以便所有用户受益。"
   },
   "course.assessment.submission.publishAutoFeedbackSuccess": {
-    "defaultMessage": "所有自动编程反馈均已发布。"
+    "defaultMessage": "所有 AI 编程反馈均已发布。"
   },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
     "defaultMessage": "查看过去的答案"
@@ -3515,6 +3527,12 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "包括旁听学生"
   },
+  "course.assessment.submission.publishRubricFeedbackConfirmation": {
+    "defaultMessage": "您即将发布 {count} 条针对书面答案的 AI 评分标准反馈评语。学生将立即可以看到这些评语。"
+  },
+  "course.assessment.submission.publishRubricFeedbackSuccess": {
+    "defaultMessage": "所有 AI 评分标准反馈均已发布。"
+  },
   "lib.translations.myStudents": {
     "defaultMessage": "我的学生"
   },
@@ -3522,7 +3540,7 @@
     "defaultMessage": "旁听用户"
   },
   "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
-    "defaultMessage": "发布自动反馈（{count})"
+    "defaultMessage": "发布 AI 编程反馈（{count}）"
   },
   "course.assessment.submission.SubmissionsIndex.publishGrades": {
     "defaultMessage": "发布成绩"

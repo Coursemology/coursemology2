@@ -458,18 +458,9 @@ class Course::Assessment::Submission < ApplicationRecord
                   Course::Assessment::Answer::AiGeneratedPostService::PUBLISH_ON_FINALISE
 
     ActiveRecord.after_all_transactions_commit do
-      drafts = Course::Discussion::Post.where(topic: submission_questions.map(&:discussion_topic)).
-               where(is_ai_generated: true, workflow_state: 'draft').to_a
-      # One at a time with update! -- not the workflow event, and not update_all -- so each post's own callbacks
-      # fire, which snapshot the final text into the feedback rating.
-      drafts.each { |post| post.update!(workflow_state: 'published') }
-
-      # Nobody is waiting to approve them any more, so their topics leave the staff pending queues. Topic has no
-      # save callbacks, so one statement is equivalent to unmark_as_pending on each -- including the updated_at
-      # bump, which read tracking keys off (acts_as_readable on: :updated_at). Only these drafts' topics: one
-      # whose comment staff accepted earlier may be pending again because the student has since replied.
-      Course::Discussion::Topic.where(id: drafts.map(&:topic_id), pending_staff_reply: true).
-        update_all(pending_staff_reply: false, updated_at: Time.current)
+      Course::Assessment::Answer::AiGeneratedPostService.publish_drafts!(
+        Course::Discussion::Post.where(topic: submission_questions.map(&:discussion_topic))
+      )
     end
   end
 

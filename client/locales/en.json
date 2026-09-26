@@ -3461,6 +3461,18 @@
   "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted."
   },
+  "course.assessment.submission.SubmissionsIndex.fetchFromKoditsu": {
+    "defaultMessage": "Fetch Submissions from Koditsu"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedbackTooltip": {
+    "defaultMessage": "Publishes all AI-generated feedback on student code."
+  },
+  "course.assessment.submission.SubmissionsIndex.publishRubricFeedback": {
+    "defaultMessage": "Publish AI Rubric-based Feedback ({count})"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishRubricFeedbackTooltip": {
+    "defaultMessage": "Publishes all AI-generated feedback on student written answers."
+  },
   "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
     "defaultMessage": "No past answers."
   },
@@ -3514,6 +3526,12 @@
   },
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "Include phantom users"
+  },
+  "course.assessment.submission.publishRubricFeedbackConfirmation": {
+    "defaultMessage": "You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. Students will be able to see them straight away."
+  },
+  "course.assessment.submission.publishRubricFeedbackSuccess": {
+    "defaultMessage": "All AI rubric-based feedback has been published."
   },
   "lib.translations.myStudents": {
     "defaultMessage": "My Students"
@@ -4086,13 +4104,13 @@
     "defaultMessage": "Publish Grade"
   },
   "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
-    "defaultMessage": "You are about to publish {count} automated programming feedback {count, plural, one {comment} other {comments}}."
+    "defaultMessage": "You are about to publish {count} AI programming feedback {count, plural, one {comment} other {comments}}."
   },
   "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
-    "defaultMessage": "Please rate the overall quality of the automated programming feedback for this assessment. Your rating will help us improve automated programming feedback generation for everyone."
+    "defaultMessage": "Please rate the overall quality of the AI programming feedback for this assessment. Your rating will help us improve AI programming feedback generation for everyone."
   },
   "course.assessment.submission.publishAutoFeedbackSuccess": {
-    "defaultMessage": "All automated programming feedback has been published."
+    "defaultMessage": "All AI programming feedback has been published."
   },
   "course.assessment.submission.publishConfirmation": {
     "defaultMessage": "Are you sure you want to publish all {graded} graded submissions ({selectedUsers})? THIS ACTION IS IRREVERSIBLE! All graded submissions will be published and users will be able to see their own grades."
@@ -4305,7 +4323,7 @@
     "defaultMessage": "Submissions"
   },
   "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
-    "defaultMessage": "Publish Automated Programming Feedback ({count})"
+    "defaultMessage": "Publish AI Programming Feedback ({count})"
   },
   "course.assessment.submissions.SubmissionsTable.gradeTooltip": {
     "defaultMessage": "These grades can't be seen by the student until they are published"
