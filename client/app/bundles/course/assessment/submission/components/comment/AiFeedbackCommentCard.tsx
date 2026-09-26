@@ -1,18 +1,14 @@
 import { FC } from 'react';
 import { Avatar } from '@mui/material';
+import { CommentPostMiniEntity } from 'types/course/comments';
 
 import RateableGeneratedCommentCard from 'lib/components/core/RateableGeneratedCommentCard';
 
-// The submission bundle types its posts with PropTypes (see ../../propTypes#postShape); this captures just
-// the fields the card reads.
-interface AiFeedbackPost {
-  id: number;
-  text: string;
-  canUpdate: boolean;
-  createdAt: string;
-  creator?: { imageUrl?: string };
-  generatedRating?: { rating: number | null } | null;
-}
+// The fields of a submission post (see the posts slice) that the card reads.
+type AiFeedbackPost = Pick<
+  CommentPostMiniEntity,
+  'id' | 'text' | 'canUpdate' | 'createdAt' | 'creator' | 'generatedRating'
+>;
 
 interface Props {
   post: AiFeedbackPost;

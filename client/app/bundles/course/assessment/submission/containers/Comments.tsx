@@ -1,10 +1,9 @@
-import { Component } from 'react';
+import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { Typography } from '@mui/material';
-import PropTypes from 'prop-types';
 
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
 import * as commentActions from '../actions/comments';
@@ -12,170 +11,145 @@ import AiFeedbackCommentCard from '../components/comment/AiFeedbackCommentCard';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
 import { workflowStates } from '../constants';
-import { postShape, topicShape } from '../propTypes';
+import { getAssessment } from '../selectors/assessments';
+import { getCommentForms } from '../selectors/commentForms';
+import { getCommentPosts } from '../selectors/comments';
+import { getSubmission } from '../selectors/submissions';
+import { getTopics } from '../selectors/topics';
 import translations from '../translations';
+import { Topic } from '../types';
 
-class VisibleComments extends Component {
-  static newCommentIdentifier(field) {
-    return `topic_${field}`;
-  }
+// DOM id of the new-comment box, which the submission feature specs locate it by.
+const newCommentIdentifier = (topicId: number): string => `topic_${topicId}`;
 
-  render() {
-    const {
-      commentForms,
-      posts,
-      topic,
-      handleCreateChange,
-      handleUpdateChange,
-      createComment,
-      updateComment,
-      deleteComment,
-      publishComment,
-      rateComment,
-      acceptComment,
-      rejectComment,
-      graderView,
-      renderDelayedCommentButton,
-    } = this.props;
+interface Props {
+  topic: Topic;
+}
 
-    return (
-      <div className="mt-8">
-        <Typography className="mb-5" variant="h6">
-          <FormattedMessage {...translations.comments} />
-        </Typography>
+// The comment thread under one submission question.
+const Comments: FC<Props> = ({ topic }) => {
+  const dispatch = useAppDispatch();
 
-        {posts.map((post) => {
-          const isVisible =
-            graderView ||
-            (!post.isDelayed &&
-              post.workflowState !== POST_WORKFLOW_STATE.draft);
-          if (!isVisible) {
-            return null;
-          }
+  const commentForms = useAppSelector(getCommentForms);
+  const allPosts = useAppSelector(getCommentPosts);
+  // Read by id rather than off the prop, so the thread follows the store as comments come and go.
+  const postIds = useAppSelector((state) => getTopics(state)[topic.id].postIds);
+  const graderView = useAppSelector((state) => getSubmission(state).graderView);
+  const workflowState = useAppSelector(
+    (state) => getSubmission(state).workflowState,
+  );
+  const autograded = useAppSelector((state) => getAssessment(state).autograded);
 
-          // An AI-generated draft still awaiting a staff decision uses the rateable card (rate -> edit ->
-          // accept/reject) in place of the plain comment card + Publish button.
-          if (
-            post.isAiGenerated &&
-            post.workflowState === POST_WORKFLOW_STATE.draft &&
-            post.generatedRating
-          ) {
-            return (
-              // Key on createdAt so a re-generated draft (fresh timestamp) remounts with the new content,
-              // resetting the card's local edit state.
-              <AiFeedbackCommentCard
-                key={`${post.id}-${post.createdAt}`}
-                acceptComment={(value) => acceptComment(post.id, value)}
-                deleteComment={() => deleteComment(post.id)}
-                post={post}
-                rateComment={(rating) => rateComment(post.id, rating)}
-                rejectComment={(value) => rejectComment(post.id, value)}
-              />
-            );
-          }
+  const posts = postIds.map((postId) => allPosts[postId]);
+  const renderDelayedCommentButton =
+    graderView &&
+    !autograded &&
+    (workflowState === workflowStates.Submitted ||
+      workflowState === workflowStates.Graded);
 
+  const createComment = (
+    comment: string,
+    isDelayedComment = false,
+  ): Promise<void> =>
+    dispatch(
+      commentActions.create(
+        topic.submissionQuestionId,
+        comment,
+        isDelayedComment,
+      ),
+    )
+      .then(() => {
+        toast.success('Successfully created comment.');
+      })
+      .catch(() => {
+        toast.error('Failed to create comment.');
+      });
+
+  return (
+    <div className="mt-8">
+      <Typography className="mb-5" variant="h6">
+        <FormattedMessage {...translations.comments} />
+      </Typography>
+
+      {posts.map((post) => {
+        const isVisible =
+          graderView ||
+          (!post.isDelayed && post.workflowState !== POST_WORKFLOW_STATE.draft);
+        if (!isVisible) {
+          return null;
+        }
+
+        // An AI-generated draft still awaiting a staff decision uses the rateable card (rate -> edit ->
+        // accept/reject) in place of the plain comment card + Publish button.
+        if (
+          post.isAiGenerated &&
+          post.workflowState === POST_WORKFLOW_STATE.draft &&
+          post.generatedRating
+        ) {
           return (
-            <CommentCard
-              key={post.id}
-              deleteComment={() => deleteComment(post.id)}
-              editValue={commentForms.posts[post.id]}
-              handleChange={(value) => handleUpdateChange(post.id, value)}
-              isUpdatingAnnotationAllowed
+            // Key on createdAt so a re-generated draft (fresh timestamp) remounts with the new content,
+            // resetting the card's local edit state.
+            <AiFeedbackCommentCard
+              key={`${post.id}-${String(post.createdAt)}`}
+              acceptComment={(value) =>
+                dispatch(
+                  commentActions.acceptAiFeedback(topic.id, post.id, value),
+                )
+              }
+              deleteComment={() =>
+                dispatch(commentActions.destroy(topic.id, post.id))
+              }
               post={post}
-              publishComment={(value) => publishComment(post.id, value)}
-              updateComment={(value) => updateComment(post.id, value)}
+              rateComment={(rating) =>
+                dispatch(
+                  commentActions.rateAiFeedback(topic.id, post.id, rating),
+                )
+              }
+              rejectComment={(value) =>
+                dispatch(
+                  commentActions.rejectAiFeedback(topic.id, post.id, value),
+                )
+              }
             />
           );
-        })}
+        }
 
-        <CommentField
-          createComment={createComment}
-          handleChange={handleCreateChange}
-          inputId={VisibleComments.newCommentIdentifier(topic.id)}
-          isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
-          isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
-          isUpdatingComment={commentForms.isUpdatingComment}
-          renderDelayedCommentButton={renderDelayedCommentButton}
-          value={commentForms.topics[topic.id]}
-        />
-      </div>
-    );
-  }
-}
+        return (
+          <CommentCard
+            key={post.id}
+            deleteComment={() =>
+              dispatch(commentActions.destroy(topic.id, post.id))
+            }
+            editValue={commentForms.posts[post.id]}
+            handleChange={(value) =>
+              dispatch(commentActions.onUpdateChange(post.id, value))
+            }
+            isUpdatingAnnotationAllowed
+            post={post}
+            publishComment={(value) =>
+              dispatch(commentActions.publish(topic.id, post.id, value ?? ''))
+            }
+            updateComment={(value) =>
+              dispatch(commentActions.update(topic.id, post.id, value ?? ''))
+            }
+          />
+        );
+      })}
 
-VisibleComments.propTypes = {
-  commentForms: PropTypes.shape({
-    topics: PropTypes.objectOf(PropTypes.string),
-    posts: PropTypes.objectOf(PropTypes.string),
-    isSubmittingNormalComment: PropTypes.bool,
-    isSubmittingDelayedComment: PropTypes.bool,
-    isUpdatingComment: PropTypes.bool,
-  }),
-  posts: PropTypes.arrayOf(postShape),
-  topic: topicShape,
-  graderView: PropTypes.bool.isRequired,
-  renderDelayedCommentButton: PropTypes.bool,
-
-  handleCreateChange: PropTypes.func.isRequired,
-  handleUpdateChange: PropTypes.func.isRequired,
-  createComment: PropTypes.func.isRequired,
-  updateComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  publishComment: PropTypes.func.isRequired,
-  rateComment: PropTypes.func.isRequired,
-  acceptComment: PropTypes.func.isRequired,
-  rejectComment: PropTypes.func.isRequired,
+      <CommentField
+        createComment={createComment}
+        handleChange={(comment: string) =>
+          dispatch(commentActions.onCreateChange(topic.id, comment))
+        }
+        inputId={newCommentIdentifier(topic.id)}
+        isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
+        isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
+        isUpdatingComment={commentForms.isUpdatingComment}
+        renderDelayedCommentButton={renderDelayedCommentButton}
+        value={commentForms.topics[topic.id]}
+      />
+    </div>
+  );
 };
 
-function mapStateToProps({ assessments: { submission } }, ownProps) {
-  const { topic } = ownProps;
-  const renderDelayedCommentButton =
-    submission.submission.graderView &&
-    !submission.assessment.autograded &&
-    (submission.submission.workflowState === workflowStates.Submitted ||
-      submission.submission.workflowState === workflowStates.Graded);
-  return {
-    commentForms: submission.commentForms,
-    posts: submission.topics[topic.id].postIds.map(
-      (postId) => submission.posts[postId],
-    ),
-    graderView: submission.submission.graderView,
-    renderDelayedCommentButton,
-  };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  const { topic } = ownProps;
-
-  return {
-    handleCreateChange: (comment) =>
-      dispatch(commentActions.onCreateChange(topic.id, comment)),
-    handleUpdateChange: (postId, comment) =>
-      dispatch(commentActions.onUpdateChange(postId, comment)),
-    createComment: (comment, isDelayedComment = false) =>
-      dispatch(
-        commentActions.create(
-          topic.submissionQuestionId,
-          comment,
-          isDelayedComment,
-        ),
-      )
-        .then(() => toast.success('Successfully created comment.'))
-        .catch(() => toast.error('Failed to create comment.')),
-    updateComment: (postId, comment) =>
-      dispatch(commentActions.update(topic.id, postId, comment)),
-    deleteComment: (postId) =>
-      dispatch(commentActions.destroy(topic.id, postId)),
-    publishComment: (postId, comment) =>
-      dispatch(commentActions.publish(topic.id, postId, comment)),
-    rateComment: (postId, rating) =>
-      dispatch(commentActions.rateAiFeedback(topic.id, postId, rating)),
-    acceptComment: (postId, comment) =>
-      dispatch(commentActions.acceptAiFeedback(topic.id, postId, comment)),
-    rejectComment: (postId, comment) =>
-      dispatch(commentActions.rejectAiFeedback(topic.id, postId, comment)),
-  };
-}
-
-const Comments = connect(mapStateToProps, mapDispatchToProps)(VisibleComments);
 export default Comments;

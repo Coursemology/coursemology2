@@ -7,6 +7,10 @@ const getLocalState = (
   return state.assessments.submission.posts;
 };
 
+export const getCommentPosts = (
+  state: AppState,
+): Record<number, CommentPostMiniEntity> => getLocalState(state);
+
 export const getCommentPostById = (
   state: AppState,
   postId: number | null,
