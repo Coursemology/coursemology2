@@ -313,12 +313,17 @@ const translations = defineMessages({
   publishAutoFeedbackConfirmationHeader: {
     id: 'course.assessment.submission.publishAutoFeedbackConfirmationHeader',
     defaultMessage:
-      'You are about to publish {count} automated programming feedback {count, plural, one {comment} other {comments}}.',
+      'You are about to publish {count} AI programming feedback {count, plural, one {comment} other {comments}}.',
+  },
+  publishRubricFeedbackConfirmation: {
+    id: 'course.assessment.submission.publishRubricFeedbackConfirmation',
+    defaultMessage:
+      'You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. Students will be able to see them straight away.',
   },
   publishAutoFeedbackConfirmationPleaseRate: {
     id: 'course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate',
     defaultMessage:
-      'Please rate the overall quality of the automated programming feedback for this assessment. Your rating will help us improve automated programming feedback generation for everyone.',
+      'Please rate the overall quality of the AI programming feedback for this assessment. Your rating will help us improve AI programming feedback generation for everyone.',
   },
   remainingTime: {
     id: 'course.assessment.submission.remainingTime',
@@ -483,7 +488,11 @@ const translations = defineMessages({
   },
   publishAutoFeedbackSuccess: {
     id: 'course.assessment.submission.publishAutoFeedbackSuccess',
-    defaultMessage: 'All automated programming feedback has been published.',
+    defaultMessage: 'All AI programming feedback has been published.',
+  },
+  publishRubricFeedbackSuccess: {
+    id: 'course.assessment.submission.publishRubricFeedbackSuccess',
+    defaultMessage: 'All AI rubric-based feedback has been published.',
   },
   sendReminderEmailSuccess: {
     id: 'course.assessment.assessments.sendReminderEmailSuccess',
