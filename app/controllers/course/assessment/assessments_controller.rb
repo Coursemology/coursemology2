@@ -235,6 +235,27 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # Count of the AI rubric-grading feedback comments awaiting publication in this assessment's submissions -- the
+  # written-answer counterpart of #auto_feedback_count, which counts feedback on student code.
+  def rubric_feedback_count
+    authorize!(:manage, @assessment)
+
+    render json: { count: draft_rubric_feedback_posts(student_course_users).count }, status: :ok
+  end
+
+  # Publishes those comments, exactly as finalising a submission does under the publish-on-finalise feedback
+  # workflow. Unlike #publish_auto_feedback there is no overall rating to record.
+  def publish_rubric_feedback
+    authorize!(:manage, @assessment)
+
+    ActiveRecord::Base.transaction do
+      Course::Assessment::Answer::AiGeneratedPostService.publish_drafts!(
+        draft_rubric_feedback_posts(student_course_users)
+      )
+    end
+    head :ok
+  end
+
   def requirements
     requirements = @assessment.specific_conditions.filter_map do |condition|
       condition.title unless current_course_user.present? && condition.satisfied_by?(current_course_user)
@@ -530,10 +551,30 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       where({ file: { answer: programming_answer_ids } }).
       pluck(:id)
 
+    # Topics are polymorphic, so the actable type has to be pinned: otherwise any topic whose actable id matches an
+    # annotation id -- say a question's comment thread, in any course -- would be counted and published here too.
     Course::Discussion::Post.unscoped.
       only_draft_posts.
       includes(:topic).
-      where(topic: { actable_id: file_annotation_ids })
+      where(topic: { actable_type: Course::Assessment::Answer::ProgrammingFileAnnotation.name,
+                     actable_id: file_annotation_ids })
+  end
+
+  # The AI rubric-grading feedback drafts on the question comment threads of the given users' submissions to this
+  # assessment. AiGeneratedPostService.publish_drafts! narrows to AI drafts again, so this is only the scope.
+  def draft_rubric_feedback_posts(course_users)
+    submission_question_ids =
+      Course::Assessment::SubmissionQuestion.
+      joins(:submission).
+      where(submission: { assessment_id: @assessment.id, creator_id: course_users.pluck(:user_id) }).
+      select(:id)
+
+    Course::Discussion::Post.
+      only_draft_posts.
+      where(is_ai_generated: true).
+      joins(:topic).
+      where(topic: { actable_type: Course::Assessment::SubmissionQuestion.name,
+                     actable_id: submission_question_ids })
   end
 
   alias_method :load_submissions, :submissions

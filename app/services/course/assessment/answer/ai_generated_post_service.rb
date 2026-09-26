@@ -19,6 +19,28 @@ class Course::Assessment::Answer::AiGeneratedPostService
   FEEDBACK_WORKFLOWS = [NO_FEEDBACK, DRAFT_FEEDBACK, PUBLISH_ON_ANSWER_SUBMIT, PUBLISH_ON_FINALISE].freeze
   DEFAULT_FEEDBACK_WORKFLOW = DRAFT_FEEDBACK
 
+  # Publishes AI feedback drafts without a staff member reviewing each one -- when a submission is finalised under
+  # PUBLISH_ON_FINALISE, or when staff publish an assessment's drafts in bulk. Only AI-generated drafts are touched,
+  # whatever +posts+ holds, so neither caller can release a staff member's own draft.
+  #
+  # @param [ActiveRecord::Relation<Course::Discussion::Post>] posts The posts to consider.
+  # @return [Integer] The number of drafts published.
+  def self.publish_drafts!(posts)
+    drafts = posts.where(is_ai_generated: true, workflow_state: 'draft').to_a
+    # One at a time with update! -- not the workflow event, and not update_all -- so each post's own callbacks fire,
+    # which snapshot the final text into the feedback rating.
+    drafts.each { |post| post.update!(workflow_state: 'published') }
+
+    # Nobody is waiting to approve them any more, so their topics leave the staff pending queues. Topic has no save
+    # callbacks, so one statement is equivalent to unmark_as_pending on each -- including the updated_at bump, which
+    # read tracking keys off (acts_as_readable on: :updated_at). Only these drafts' topics: one whose comment staff
+    # accepted earlier may be pending again because the student has since replied.
+    Course::Discussion::Topic.where(id: drafts.map(&:topic_id), pending_staff_reply: true).
+      update_all(pending_staff_reply: false, updated_at: Time.current)
+
+    drafts.size
+  end
+
   # @param [Course::Assessment::Answer] answer The answer to create/update the post for
   # @param [String] feedback The feedback text to include in the post
   # @param [Boolean] force_draft Whether to draft the comment regardless of the course's workflow. Set by

@@ -230,6 +230,36 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     );
   }
 
+  /**
+   * Fetch count of draft AI rubric-grading feedback comments on this assessment's written answers.
+   *
+   * @param {number} assessmentId
+   * @param {string} courseUsers
+   * @returns {Promise<import('api/types').APIResponse<{ count: number }>>}
+   */
+  fetchRubricFeedbackCount(assessmentId, courseUsers) {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/rubric_feedback_count`,
+      {
+        params: { course_users: courseUsers },
+      },
+    );
+  }
+
+  /**
+   * Publish all draft AI rubric-grading feedback comments for this assessment.
+   *
+   * @param {number} assessmentId
+   * @param {string} courseUsers
+   * @returns {Promise<import('api/types').APIResponse<void>>}
+   */
+  publishRubricFeedback(assessmentId, courseUsers) {
+    return this.client.patch(
+      `${this.#urlPrefix}/${assessmentId}/publish_rubric_feedback`,
+      { course_users: courseUsers },
+    );
+  }
+
   get #urlPrefix() {
     return `/courses/${this.courseId}/assessments`;
   }

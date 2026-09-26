@@ -1,3 +1,6 @@
+// The submissions page's actions that start a background job and follow it with pollJob, plus fetchSubmissions,
+// which they all reload the page with once the job is done. These stay JavaScript until they move off that deprecated
+// helper -- and fetchSubmissions until its payload, the submissions index, has a TypeScript type.
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
@@ -136,50 +139,6 @@ export function fetchSubmissionsFromKoditsu() {
   };
 }
 
-export function sendAssessmentReminderEmail(assessmentId, type) {
-  return (dispatch) => {
-    dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_REQUEST });
-    return CourseAPI.assessment.assessments
-      .remind(assessmentId, type)
-      .then(() => {
-        dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_SUCCESS });
-        dispatch(setNotification(translations.sendReminderEmailSuccess));
-      })
-      .catch(() => {
-        dispatch({ type: actionTypes.SEND_ASSESSMENT_REMINDER_FAILURE });
-        dispatch(setNotification(translations.requestFailure));
-      });
-  };
-}
-
-export async function fetchAssessmentAutoFeedbackCount(
-  assessmentId,
-  courseUsers,
-) {
-  const response =
-    await CourseAPI.assessment.assessments.fetchAutoFeedbackCount(
-      assessmentId,
-      courseUsers,
-    );
-  return response.data;
-}
-
-export function publishAssessmentAutoFeedback(
-  assessmentId,
-  courseUsers,
-  rating,
-) {
-  return (dispatch) =>
-    CourseAPI.assessment.assessments
-      .publishAutoFeedback(assessmentId, courseUsers, rating)
-      .then(() => {
-        dispatch(setNotification(translations.publishAutoFeedbackSuccess));
-      })
-      .catch(() => {
-        dispatch(setNotification(translations.requestFailure));
-      });
-}
-
 /**
  * Download submissions for indicated user types in a given format (zip or csv)
  *
@@ -264,28 +223,6 @@ export function downloadStatistics(type) {
   };
 }
 
-export function unsubmitSubmission(submissionId, successMessage) {
-  return (dispatch) => {
-    dispatch({ type: actionTypes.UNSUBMIT_SUBMISSION_REQUEST });
-
-    return CourseAPI.assessment.submissions
-      .unsubmitSubmission(submissionId)
-      .then(() => {
-        dispatch({
-          type: actionTypes.UNSUBMIT_SUBMISSION_SUCCESS,
-        });
-        fetchSubmissions()(dispatch);
-        dispatch(setNotification(successMessage));
-      })
-      .catch(() => {
-        dispatch({
-          type: actionTypes.UNSUBMIT_SUBMISSION_FAILURE,
-        });
-        dispatch(setNotification(translations.requestFailure));
-      });
-  };
-}
-
 export function unsubmitAllSubmissions(type) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UNSUBMIT_ALL_SUBMISSIONS_REQUEST });
@@ -319,28 +256,6 @@ export function unsubmitAllSubmissions(type) {
         }
       })
       .catch(handleFailure);
-  };
-}
-
-export function deleteSubmission(submissionId, successMessage) {
-  return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_SUBMISSION_REQUEST });
-
-    return CourseAPI.assessment.submissions
-      .deleteSubmission(submissionId)
-      .then(() => {
-        dispatch({
-          type: actionTypes.DELETE_SUBMISSION_SUCCESS,
-        });
-        dispatch(setNotification(successMessage));
-        fetchSubmissions()(dispatch);
-      })
-      .catch(() => {
-        dispatch({
-          type: actionTypes.DELETE_SUBMISSION_FAILURE,
-        });
-        dispatch(setNotification(translations.requestFailure));
-      });
   };
 }
 

@@ -12,7 +12,8 @@ export interface CommentItem {
 
 export interface AllAnswerItem {
   id: number;
-  createdAt: Date;
+  // As sent by the server; every reader formats it with formatLongDateTime, which takes the string as is.
+  createdAt: string;
   currentAnswer: boolean;
   workflowState: WorkflowState;
 }

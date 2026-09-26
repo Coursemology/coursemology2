@@ -5,6 +5,7 @@ import {
   FormControlLabel,
   Rating,
   Switch,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
@@ -27,18 +28,22 @@ import formTranslations from 'lib/translations/form';
 import assessmentsTranslations from '../../../translations';
 import { purgeSubmissionStore } from '../../actions';
 import {
+  fetchAssessmentAutoFeedbackCount,
+  fetchAssessmentRubricFeedbackCount,
+  publishAssessmentAutoFeedback,
+  publishAssessmentRubricFeedback,
+} from '../../actions/aiFeedback';
+import {
   deleteAllSubmissions,
   downloadStatistics,
   downloadSubmissions,
-  fetchAssessmentAutoFeedbackCount,
   fetchSubmissions,
   fetchSubmissionsFromKoditsu,
   forceSubmitSubmissions,
-  publishAssessmentAutoFeedback,
   publishSubmissions,
-  sendAssessmentReminderEmail,
   unsubmitAllSubmissions,
-} from '../../actions/submissions';
+} from '../../actions/jobs';
+import { sendAssessmentReminderEmail } from '../../actions/requests';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
 
@@ -70,6 +75,7 @@ const AssessmentSubmissionsIndex: FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { courseId, assessmentId } = useParams();
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
   const {
     assessment,
     submissions,
@@ -99,13 +105,24 @@ const AssessmentSubmissionsIndex: FC = () => {
   const [isConfirmingRemind, setIsConfirmingRemind] = useState(false);
   const [isConfirmingPublishAutoFeedback, setIsConfirmingPublishAutoFeedback] =
     useState(false);
+  const [
+    isConfirmingPublishRubricFeedback,
+    setIsConfirmingPublishRubricFeedback,
+  ] = useState(false);
 
   // Whether these requests are in flight
   const [isQueryingAutoFeedback, setIsQueryingAutoFeedback] = useState(false);
   const [isPublishingAutoFeedback, setIsPublishingAutoFeedback] =
     useState(false);
+  const [isPublishingRubricFeedback, setIsPublishingRubricFeedback] =
+    useState(false);
 
+  // Draft AI feedback awaiting publication, per selected user type: on students' code (Codaveri), and on their
+  // written answers (rubric grading).
   const [autoFeedbackCounts, setAutoFeedbackCounts] = useState<
+    Partial<Record<CourseUserType, number>>
+  >({});
+  const [rubricFeedbackCounts, setRubricFeedbackCounts] = useState<
     Partial<Record<CourseUserType, number>>
   >({});
   const [autoFeedbackRating, setAutoFeedbackRating] = useState(0);
@@ -143,16 +160,27 @@ const AssessmentSubmissionsIndex: FC = () => {
       currentSelectedUserType !== CourseUserType.STAFF_W_PHANTOM
     ) {
       setIsQueryingAutoFeedback(true);
-      fetchAssessmentAutoFeedbackCount(
-        assessmentId,
-        currentSelectedUserType,
-      ).then(({ count }) => {
-        setIsQueryingAutoFeedback(false);
-        setAutoFeedbackCounts({
-          ...autoFeedbackCounts,
-          [currentSelectedUserType]: count,
-        });
-      });
+      Promise.all([
+        fetchAssessmentAutoFeedbackCount(
+          parsedAssessmentId,
+          currentSelectedUserType,
+        ),
+        fetchAssessmentRubricFeedbackCount(
+          parsedAssessmentId,
+          currentSelectedUserType,
+        ),
+      ])
+        .then(([autoFeedback, rubricFeedback]) => {
+          setAutoFeedbackCounts((counts) => ({
+            ...counts,
+            [currentSelectedUserType]: autoFeedback.count,
+          }));
+          setRubricFeedbackCounts((counts) => ({
+            ...counts,
+            [currentSelectedUserType]: rubricFeedback.count,
+          }));
+        })
+        .finally(() => setIsQueryingAutoFeedback(false));
     }
   }, [dispatch, currentSelectedUserType]);
 
@@ -196,6 +224,8 @@ const AssessmentSubmissionsIndex: FC = () => {
 
   const shownAutoFeedbackCount =
     autoFeedbackCounts[currentSelectedUserType] ?? 0;
+  const shownRubricFeedbackCount =
+    rubricFeedbackCounts[currentSelectedUserType] ?? 0;
 
   const renderForceSubmitConfirmation = (): JSX.Element => {
     const values = {
@@ -258,10 +288,18 @@ const AssessmentSubmissionsIndex: FC = () => {
       isDeleting ||
       isUnsubmitting ||
       isReminding ||
-      isPublishingAutoFeedback;
+      isPublishingAutoFeedback ||
+      isPublishingRubricFeedback;
     const isShowingRemindButton = tab !== CourseUserTypeTabValue.STAFF_TAB;
     const isShowingPublishAutoFeedbackButton =
       tab !== CourseUserTypeTabValue.STAFF_TAB;
+
+    // No tooltips while disabled: a disabled button fires no pointer events, and MUI warns about a
+    // tooltip on one unless its title is empty.
+    const isPublishAutoFeedbackDisabled =
+      disableButtons || shownAutoFeedbackCount === 0;
+    const isPublishRubricFeedbackDisabled =
+      disableButtons || shownRubricFeedbackCount === 0;
 
     return (
       <div className="space-y-5">
@@ -337,21 +375,59 @@ const AssessmentSubmissionsIndex: FC = () => {
           )}
 
           {isShowingPublishAutoFeedbackButton && (
-            <Button
-              color="warning"
-              disabled={disableButtons || shownAutoFeedbackCount === 0}
-              endIcon={
-                isPublishingAutoFeedback && <LoadingIndicator bare size={20} />
+            <Tooltip
+              title={
+                isPublishAutoFeedbackDisabled
+                  ? ''
+                  : t(submissionsTranslations.publishAutoFeedbackTooltip)
               }
-              onClick={() => {
-                setIsConfirmingPublishAutoFeedback(true);
-              }}
-              variant="contained"
             >
-              {t(submissionsTranslations.publishAutoFeedback, {
-                count: shownAutoFeedbackCount,
-              })}
-            </Button>
+              <Button
+                color="warning"
+                disabled={isPublishAutoFeedbackDisabled}
+                endIcon={
+                  isPublishingAutoFeedback && (
+                    <LoadingIndicator bare size={20} />
+                  )
+                }
+                onClick={() => {
+                  setIsConfirmingPublishAutoFeedback(true);
+                }}
+                variant="contained"
+              >
+                {t(submissionsTranslations.publishAutoFeedback, {
+                  count: shownAutoFeedbackCount,
+                })}
+              </Button>
+            </Tooltip>
+          )}
+
+          {isShowingPublishAutoFeedbackButton && (
+            <Tooltip
+              title={
+                isPublishRubricFeedbackDisabled
+                  ? ''
+                  : t(submissionsTranslations.publishRubricFeedbackTooltip)
+              }
+            >
+              <Button
+                color="warning"
+                disabled={isPublishRubricFeedbackDisabled}
+                endIcon={
+                  isPublishingRubricFeedback && (
+                    <LoadingIndicator bare size={20} />
+                  )
+                }
+                onClick={() => {
+                  setIsConfirmingPublishRubricFeedback(true);
+                }}
+                variant="contained"
+              >
+                {t(submissionsTranslations.publishRubricFeedback, {
+                  count: shownRubricFeedbackCount,
+                })}
+              </Button>
+            </Tooltip>
           )}
         </section>
       </div>
@@ -400,7 +476,10 @@ const AssessmentSubmissionsIndex: FC = () => {
         onCancel={() => setIsConfirmingRemind(false)}
         onConfirm={() => {
           dispatch(
-            sendAssessmentReminderEmail(assessmentId, currentSelectedUserType),
+            sendAssessmentReminderEmail(
+              parsedAssessmentId,
+              currentSelectedUserType,
+            ),
           );
           setIsConfirmingRemind(false);
         }}
@@ -418,16 +497,19 @@ const AssessmentSubmissionsIndex: FC = () => {
           setIsPublishingAutoFeedback(true);
           dispatch(
             publishAssessmentAutoFeedback(
-              assessmentId,
+              parsedAssessmentId,
               publishSelectedUserType,
               autoFeedbackRating,
             ),
           )
             .then(() => {
-              setAutoFeedbackCounts({
-                ...autoFeedbackCounts,
+              setAutoFeedbackCounts((counts) => ({
+                ...counts,
                 [publishSelectedUserType]: 0,
-              });
+              }));
+            })
+            .catch(() => {
+              // The thunk has already notified the user. The drafts are still unpublished, so the count stays.
             })
             .finally(() => {
               setIsPublishingAutoFeedback(false);
@@ -462,6 +544,46 @@ const AssessmentSubmissionsIndex: FC = () => {
       </Prompt>
     );
   };
+
+  // Unlike programming feedback, there is no overall rating to collect: the comments are simply published, exactly
+  // as finalising a submission does under the publish-on-finalise feedback workflow.
+  const renderPublishRubricFeedbackConfirmation = (): JSX.Element => (
+    <Prompt
+      cancelColor="secondary"
+      onClickPrimary={() => {
+        const publishSelectedUserType = currentSelectedUserType; // Capture the value at dispatch
+        setIsPublishingRubricFeedback(true);
+        dispatch(
+          publishAssessmentRubricFeedback(
+            parsedAssessmentId,
+            publishSelectedUserType,
+          ),
+        )
+          .then(() => {
+            setRubricFeedbackCounts((counts) => ({
+              ...counts,
+              [publishSelectedUserType]: 0,
+            }));
+          })
+          .catch(() => {
+            // The thunk has already notified the user. The drafts are still unpublished, so the count stays.
+          })
+          .finally(() => {
+            setIsPublishingRubricFeedback(false);
+          });
+        setIsConfirmingPublishRubricFeedback(false);
+      }}
+      onClose={() => setIsConfirmingPublishRubricFeedback(false)}
+      open={isConfirmingPublishRubricFeedback}
+      primaryLabel={t(formTranslations.continue)}
+    >
+      <Typography variant="body2">
+        {t(translations.publishRubricFeedbackConfirmation, {
+          count: shownRubricFeedbackCount,
+        })}
+      </Typography>
+    </Prompt>
+  );
 
   const renderTable = (
     tableSubmissions: SubmissionData,
@@ -547,6 +669,9 @@ const AssessmentSubmissionsIndex: FC = () => {
 
       {isConfirmingPublishAutoFeedback &&
         renderPublishAutoFeedbackConfirmation()}
+
+      {isConfirmingPublishRubricFeedback &&
+        renderPublishRubricFeedbackConfirmation()}
     </Page>
   );
 };
