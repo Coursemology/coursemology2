@@ -17,7 +17,6 @@ import CourseUserTypeTabs, {
   CourseUserTypeTabValue,
   getCurrentSelectedUserType,
 } from 'lib/components/core/CourseUserTypeTabs';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -244,28 +243,36 @@ const AssessmentSubmissionsIndex: FC = () => {
       : translations.forceSubmitConfirmation;
 
     return (
-      <ConfirmationDialog
-        message={t(message, values)}
-        onCancel={() => setIsConfirmingForceSubmit(false)}
-        onConfirm={() => {
+      <Prompt
+        cancelColor="secondary"
+        onClickPrimary={() => {
           dispatch(forceSubmitSubmissions(currentSelectedUserType));
           setIsConfirmingForceSubmit(false);
         }}
+        onClose={() => setIsConfirmingForceSubmit(false)}
         open={isConfirmingForceSubmit}
-      />
+        primaryLabel={t(formTranslations.continue)}
+      >
+        <Typography variant="body2">{t(message, values)}</Typography>
+      </Prompt>
     );
   };
 
   const renderFetchFromKoditsuConfirmation = (): JSX.Element => (
-    <ConfirmationDialog
-      message={t(translations.fetchSubmissionsFromKoditsuConfirmation)}
-      onCancel={() => setIsConfirmingFetchFromKoditsu(false)}
-      onConfirm={() => {
+    <Prompt
+      cancelColor="secondary"
+      onClickPrimary={() => {
         dispatch(fetchSubmissionsFromKoditsu());
         setIsConfirmingFetchFromKoditsu(false);
       }}
+      onClose={() => setIsConfirmingFetchFromKoditsu(false)}
       open={isConfirmingFetchFromKoditsu}
-    />
+      primaryLabel={t(formTranslations.continue)}
+    >
+      <Typography variant="body2">
+        {t(translations.fetchSubmissionsFromKoditsuConfirmation)}
+      </Typography>
+    </Prompt>
   );
 
   const renderStatusChart = (): JSX.Element => {
@@ -318,7 +325,7 @@ const AssessmentSubmissionsIndex: FC = () => {
 
         {renderStatusChart()}
 
-        <section className="flex-wrap space-x-4">
+        <section className="flex flex-wrap gap-3">
           {canPublishGrades && (
             <Button
               color="primary"
@@ -445,15 +452,20 @@ const AssessmentSubmissionsIndex: FC = () => {
     };
 
     return (
-      <ConfirmationDialog
-        message={t(translations.publishConfirmation, values)}
-        onCancel={() => setIsConfirmingPublish(false)}
-        onConfirm={() => {
+      <Prompt
+        cancelColor="secondary"
+        onClickPrimary={() => {
           dispatch(publishSubmissions(currentSelectedUserType));
           setIsConfirmingPublish(false);
         }}
+        onClose={() => setIsConfirmingPublish(false)}
         open={isConfirmingPublish}
-      />
+        primaryLabel={t(formTranslations.continue)}
+      >
+        <Typography variant="body2">
+          {t(translations.publishConfirmation, values)}
+        </Typography>
+      </Prompt>
     );
   };
 
@@ -471,10 +483,9 @@ const AssessmentSubmissionsIndex: FC = () => {
     };
 
     return (
-      <ConfirmationDialog
-        message={t(translations.sendReminderEmailConfirmation, values)}
-        onCancel={() => setIsConfirmingRemind(false)}
-        onConfirm={() => {
+      <Prompt
+        cancelColor="secondary"
+        onClickPrimary={() => {
           dispatch(
             sendAssessmentReminderEmail(
               parsedAssessmentId,
@@ -483,8 +494,14 @@ const AssessmentSubmissionsIndex: FC = () => {
           );
           setIsConfirmingRemind(false);
         }}
+        onClose={() => setIsConfirmingRemind(false)}
         open={isConfirmingRemind}
-      />
+        primaryLabel={t(formTranslations.continue)}
+      >
+        <Typography variant="body2">
+          {t(translations.sendReminderEmailConfirmation, values)}
+        </Typography>
+      </Prompt>
     );
   };
 

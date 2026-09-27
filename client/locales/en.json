@@ -3528,7 +3528,7 @@
     "defaultMessage": "Include phantom users"
   },
   "course.assessment.submission.publishRubricFeedbackConfirmation": {
-    "defaultMessage": "You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. Students will be able to see them straight away."
+    "defaultMessage": "You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. The receiving students will be able to see them immediately."
   },
   "course.assessment.submission.publishRubricFeedbackSuccess": {
     "defaultMessage": "All AI rubric-based feedback has been published."
