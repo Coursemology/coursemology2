@@ -3528,7 +3528,7 @@
     "defaultMessage": "包括旁听学生"
   },
   "course.assessment.submission.publishRubricFeedbackConfirmation": {
-    "defaultMessage": "您即将发布 {count} 条针对书面答案的 AI 评分标准反馈评语。学生将立即可以看到这些评语。"
+    "defaultMessage": "您即将发布 {count} 条针对书面答案的 AI 评分标准反馈评语。收到评语的学生将立即看到这些评语。"
   },
   "course.assessment.submission.publishRubricFeedbackSuccess": {
     "defaultMessage": "所有 AI 评分标准反馈均已发布。"

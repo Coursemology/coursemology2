@@ -149,7 +149,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
 
         expect(page).to have_text('Graded, unpublished')
         click_button('Publish Grades')
-        accept_confirm_dialog
+        accept_prompt
         wait_for_job
         expect(page).not_to have_text('Graded, unpublished')
 
@@ -170,7 +170,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         expect(page).to have_text('Not Started')
 
         click_button('Force Submit Remaining')
-        accept_confirm_dialog
+        accept_prompt
         wait_for_job
 
         expect(page).not_to have_text('Attempting')

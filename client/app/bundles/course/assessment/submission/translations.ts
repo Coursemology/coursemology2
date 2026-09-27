@@ -318,7 +318,7 @@ const translations = defineMessages({
   publishRubricFeedbackConfirmation: {
     id: 'course.assessment.submission.publishRubricFeedbackConfirmation',
     defaultMessage:
-      'You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. Students will be able to see them straight away.',
+      'You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. The receiving students will be able to see them immediately.',
   },
   publishAutoFeedbackConfirmationPleaseRate: {
     id: 'course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate',
