@@ -148,6 +148,16 @@ class ScholaisticApiService
       }
     end
 
+    def accessible_assessments!(assessment_ids, course_user)
+      result = connection!(:post, 'accessible-assessments', body: {
+        key: settings(course_user.course).integration_key,
+        assessment_ids: assessment_ids,
+        upsert_course_user: course_user_upsert_payload(course_user)
+      })
+
+      result.to_set
+    end
+
     def ping_course(key)
       response = connection!(:get, 'course-link', query: { key: key })
 
