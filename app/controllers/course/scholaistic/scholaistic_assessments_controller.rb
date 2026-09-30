@@ -6,13 +6,21 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
   before_action :sync_all_scholaistic_submissions!, only: [:index]
 
   def index
+    accessible_assessments_set = ScholaisticApiService.accessible_assessments!(
+      @scholaistic_assessments.map(&:upstream_id),
+      current_course_user
+    )
+    @scholaistic_assessments =
+      @scholaistic_assessments.includes(lesson_plan_item: :default_reference_time).select do |assessment|
+        accessible_assessments_set.include?(assessment.upstream_id)
+      end
+
     submissions_status_hash = ScholaisticApiService.submissions!(
       @scholaistic_assessments.map(&:upstream_id),
       current_course_user
     )
 
-    assessments = @scholaistic_assessments.includes(lesson_plan_item: :default_reference_time)
-    @scholaistic_assessments = assessments.sort_by do |assessment|
+    @scholaistic_assessments = @scholaistic_assessments.sort_by do |assessment|
       [assessment.start_at.to_i, assessment.title, assessment.id]
     end
 
