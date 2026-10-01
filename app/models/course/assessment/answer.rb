@@ -86,13 +86,13 @@ class Course::Assessment::Answer < ApplicationRecord
   def auto_grade!(redirect_to_path: nil, reduce_priority: false)
     raise IllegalStateError if attempting?
 
-    ensure_auto_grading!
+    auto_grading = ensure_auto_grading!
     if grade_inline?
-      Course::Assessment::Answer::AutoGradingService.grade(self)
+      Course::Assessment::Answer::AutoGradingService.grade(self, auto_grading)
       nil
     else
       auto_grading_job_class(reduce_priority).
-        perform_later(self, redirect_to_path).tap do |job|
+        perform_later(self, auto_grading, redirect_to_path).tap do |job|
           auto_grading.update_column(:job_id, job.job_id)
         end
     end

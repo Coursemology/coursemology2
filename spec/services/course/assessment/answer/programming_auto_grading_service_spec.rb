@@ -51,7 +51,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         end
 
         describe '#grade' do
-          subject { super().grade(answer) }
+          subject { super().grade(answer, answer.auto_grading) }
           let(:answer_contents) { "test code #{SecureRandom.hex}" }
           let(:answer_traits) { [{ file_contents: [answer_contents] }] }
           before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
@@ -69,6 +69,26 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           it 'creates a Programming Auto Grading record' do
             subject
             expect(grading.actable).to be_a(Course::Assessment::Answer::ProgrammingAutoGrading)
+          end
+
+          # A grading job deserializes the answer and its auto grading as separate instances, so nothing
+          # links the auto grading being written to the one `answer.auto_grading` would autosave.
+          context 'when the answer and auto grading are loaded separately, as in a grading job' do
+            subject do
+              Course::Assessment::Answer::AutoGradingService.grade(
+                Course::Assessment::Answer.find(answer.id),
+                Course::Assessment::Answer::AutoGrading.find(grading.id)
+              )
+            end
+
+            it 'saves the programming auto grading and its test results' do
+              subject
+              programming_auto_grading = grading.reload.actable
+
+              expect(programming_auto_grading).to be_a(Course::Assessment::Answer::ProgrammingAutoGrading)
+              expect(programming_auto_grading).to be_persisted
+              expect(programming_auto_grading.test_results).to be_present
+            end
           end
 
           context 'when the answer is correct' do
@@ -157,7 +177,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
               end
 
               it 'deducts grade for the failed evaluation test cases' do
-                Course::Assessment::Answer::AutoGradingService.grade(answer)
+                Course::Assessment::Answer::AutoGradingService.grade(answer, answer.auto_grading)
                 expect(answer.grade).to be < question.maximum_grade
               end
             end
@@ -181,7 +201,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         describe '#grade' do
           before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
-          subject { super().grade(answer) }
+          subject { super().grade(answer, answer.auto_grading) }
 
           it 'sets grade to 0' do
             subject

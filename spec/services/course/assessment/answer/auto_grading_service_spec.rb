@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     describe '.grade' do
-      subject { Course::Assessment::Answer::AutoGradingService.grade(answer) }
+      subject { Course::Assessment::Answer::AutoGradingService.grade(answer, auto_grading) }
 
       context 'when the assessment is not autograded' do
         it 'evaluates the answer' do

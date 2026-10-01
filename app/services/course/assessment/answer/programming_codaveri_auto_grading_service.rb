@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     unless answer.submission.assessment.course.component_enabled?(Course::CodaveriComponent)
       raise CodaveriError, I18n.t('course.assessment.question.programming.question_type_codaveri_deactivated')
     end
 
     answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
-    programming_auto_grading.auto_grading = answer.auto_grading
+    programming_auto_grading.auto_grading = auto_grading
     grade
   end
 
@@ -54,7 +54,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
     graded_test_count = question.test_cases.where(test_case_type: graded_test_case_types).size
     passed_test_count = count_passed_test_cases(auto_grading, graded_test_case_types)
 
-    considered_correct = check_correctness(question, auto_grading)
+    considered_correct = correct?(question, auto_grading)
     grade = if graded_test_count == 0
               question.maximum_grade
             else
@@ -85,7 +85,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The
   #   ProgrammingAutoGrading instance
   # @return [Boolean] True if the evaluated answer passes all public and private test cases
-  def check_correctness(question, auto_grading)
+  def correct?(question, auto_grading)
     check_test_types = ['public_test', 'private_test'].freeze
     test_count = question.test_cases.reject(&:evaluation_test?).size
     passed_test_count = count_passed_test_cases(auto_grading, check_test_types)

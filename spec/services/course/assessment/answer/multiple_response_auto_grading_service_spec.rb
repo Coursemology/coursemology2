@@ -27,7 +27,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_correct_options }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer.grade).to eq(question.maximum_grade)
             expect(answer).to be_correct
             expect(grading.result['messages']).
@@ -39,7 +39,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer wrong' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -51,7 +51,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer wrong' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -67,7 +67,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_correct_options }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -79,7 +79,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer wrong' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -91,7 +91,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer wrong' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -103,7 +103,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_one_correct_option }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -119,7 +119,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options] }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -131,7 +131,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -143,7 +143,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -159,7 +159,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_correct_options }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -171,7 +171,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -183,7 +183,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -195,7 +195,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_one_correct_option }
 
           it 'marks the answer correct' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).

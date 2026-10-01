@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     it 'can be queued' do
-      expect { subject.perform_later(answer) }.to \
+      expect { subject.perform_later(answer, auto_grading) }.to \
         have_enqueued_job(subject).exactly(:once).on_queue('highest')
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
       end
 
       it 'can be queued with delayed_ queue' do
-        expect { subject.perform_later(answer) }.to \
+        expect { subject.perform_later(answer, auto_grading) }.to \
           have_enqueued_job(subject).exactly(:once).on_queue('delayed_highest')
       end
     end
@@ -37,7 +37,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
       it 'evaluates answers and does not update the exp', :sidekiq_same_thread do
         initial_points = submission.points_awarded
 
-        perform_sidekiq_jobs { subject.perform_later(answer) }
+        perform_sidekiq_jobs { subject.perform_later(answer, auto_grading) }
         expect(answer.reload).to be_graded
         expect(submission.reload.points_awarded).to eq(initial_points)
       end
@@ -57,12 +57,21 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
       it 'evaluates answers and updates the exp', :sidekiq_same_thread do
         initial_points = submission.points_awarded
 
-        perform_sidekiq_jobs { subject.perform_later(answer) }
+        perform_sidekiq_jobs { subject.perform_later(answer, auto_grading) }
         expect(answer.reload).to be_graded
         expect(answer.grade).to eq(question.maximum_grade)
         correct_exp = assessment.base_exp + assessment.time_bonus_exp
         expect(submission.reload.points_awarded).to eq(correct_exp)
         expect(submission.points_awarded).not_to eq(initial_points)
+      end
+
+      # The job deserializes the answer and the auto grading as separate instances, so the grading result
+      # only persists if it is saved through the auto grading the job was given.
+      it 'records the result on the auto grading it was given', :sidekiq_same_thread do
+        expect(auto_grading.result).to be_nil
+
+        perform_sidekiq_jobs { subject.perform_later(answer, auto_grading) }
+        expect(auto_grading.reload.result).to include('messages')
       end
     end
   end
