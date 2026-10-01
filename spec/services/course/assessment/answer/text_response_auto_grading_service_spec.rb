@@ -27,7 +27,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :exact_match }
 
         it 'matches the entire answer' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
@@ -40,7 +40,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :multiline_linux }
 
         it 'treats different answer and question newlines as equivalent' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
@@ -53,7 +53,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :multiline_windows }
 
         it 'treats different answer and question newlines as equivalent' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
@@ -66,7 +66,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
 
         it 'returns only the exact match result' do
           answer.actable.answer_text = 'hello keyword world'
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
@@ -78,7 +78,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :keyword }
 
         it 'matches the keyword' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).not_to be_correct
           expect(answer.grade).to eq(question.solutions.keyword.first.grade)
           expect(grading.result['messages']).to \
@@ -94,7 +94,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
           expected_grade = [question.solutions.keyword.map(&:grade).reduce(0, :+),
                             question.maximum_grade].min
 
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to eq(expected_grade)
           expect(grading.result['messages']).to \
@@ -106,7 +106,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :no_match }
 
         it 'matches nothing' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(0)
           expect(grading.result['messages']).to be_empty
         end
@@ -118,7 +118,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         context 'when the answer matches the regex' do
           it 'grades the answer' do
             answer.actable.answer_text = 'hello123'
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(question.solutions.regex.first.grade)
             expect(grading.result['messages']).to \
@@ -128,7 +128,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
 
         context 'when the answer does not match the regex' do
           it 'matches nothing' do
-            subject.grade(answer)
+            subject.grade(answer, answer.auto_grading)
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).to be_empty
           end

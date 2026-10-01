@@ -61,7 +61,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       let!(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
       describe '#grade and succeeded immediately' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
@@ -106,7 +106,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       end
 
       describe '#grade and succeeded after polling' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         # dummy URL
         let!(:connection) { Excon.new('http://localhost:53896') }
@@ -152,7 +152,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       end
 
       describe '#when the evaluation times out' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         # dummy URL
         let!(:connection) { Excon.new('http://localhost:53896') }
@@ -179,7 +179,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       end
 
       describe '#grade but failed immediately' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
@@ -202,7 +202,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       end
 
       describe '#grade and failed after polling' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         let!(:connection) { Excon.new('http://localhost:53896') }
 
@@ -235,7 +235,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
       end
 
       describe '#grade but wrong' do
-        subject { super().grade(answer) }
+        subject { super().grade(answer, answer.auto_grading) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)

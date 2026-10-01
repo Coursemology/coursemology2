@@ -1,9 +1,9 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::TextResponseAutoGradingService < \
+class Course::Assessment::Answer::TextResponseAutoGradingService <
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     answer.correct, grade, evaluation_results = evaluate_answer(answer.actable)
-    answer.auto_grading.result = {
+    auto_grading.result = {
       messages: explanations_for(evaluation_results),
       evaluation_results: evaluation_results.map do |result|
         result_json = {
@@ -49,7 +49,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
           evaluate_spreadsheet_formula_solutions(answer_text, solutions_by_type[:spreadsheet_formula] || [])
       end
     [
-      correctness_for(question, evaluation_results),
+      correct?(question, evaluation_results),
       grade_for(question, evaluation_results),
       evaluation_results
     ]
@@ -164,7 +164,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   def process_spreadsheet_container_evaluation_result(result, solution)
     SolutionEvaluationResult.new(
       solution,
-      result['results'].all? { |r| r['correct'] } ? solution.grade : 0,
+      (result['results'].all? { |r| r['correct'] }) ? solution.grade : 0,
       if result['results'].any? { |r| r.key?('expectedError') || r.key?('outputError') }
         I18n.t('errors.course.assessment.text_response_auto_grading.grade.evaluation_failed')
       else
@@ -224,7 +224,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   student.
   # @param [Array<SolutionEvaluationResult>] evaluation_results The evaluation results for the student's answer.
   # @return [Boolean] correct True if the answer is correct.
-  def correctness_for(question, evaluation_results)
+  def correct?(question, evaluation_results)
     grade_for(question, evaluation_results) >= question.maximum_grade
   end
 end

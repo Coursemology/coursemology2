@@ -29,7 +29,7 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
       end
       context 'when the question is rubric-based' do
         it 'always grades the answer as correct' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer).to be_correct
           expect(answer.grade).to be_between(0, question.maximum_grade).inclusive
           expect(grading.result['messages']).to contain_exactly('success')
@@ -39,7 +39,7 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
 
     describe '#evaluate' do
       it 'evaluates the answer' do
-        result = subject.evaluate(answer)
+        result = subject.evaluate(answer, answer.auto_grading)
         expect(result).to be_between(0, question.maximum_grade).inclusive
         expect(answer.auto_grading.result).to eq({ 'messages' => ['success'] })
       end

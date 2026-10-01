@@ -88,7 +88,6 @@ Lint/UselessConstantScoping:
     - 'app/helpers/application_html_formatters_helper.rb'
     - 'app/models/course/monitoring/heartbeat.rb'
     - 'app/services/cikgo/service.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
     - 'app/services/course/assessment/submission/ssid_zip_download_service.rb'
     - 'app/services/scholaistic_api_service.rb'
     - 'lib/autoload/coursemology_docker_container.rb'
@@ -241,10 +240,6 @@ Naming/PredicateMethod:
     - 'app/services/concerns/course/user_invitation_service/email_invitation_concern.rb'
     - 'app/services/concerns/course/user_invitation_service/parse_invitation_concern.rb'
     - 'app/services/concerns/instance/user_invitation_service/email_invitation_concern.rb'
-    - 'app/services/course/assessment/answer/programming_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/programming_codaveri_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
     - 'app/services/course/assessment/authentication_service.rb'
     - 'app/services/course/assessment/monitoring_service.rb'
     - 'app/services/course/assessment/session_authentication_service.rb'
@@ -349,7 +344,6 @@ Style/CollectionQuerying:
     - 'app/models/course/forum/topic.rb'
     - 'app/models/course/material/text_chunk_reference.rb'
     - 'app/notifiers/course/assessment_notifier.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
     - 'app/views/course/assessment/assessments/edit.json.jbuilder'
     - 'app/views/course/assessment/question/programming/_question.json.jbuilder'
 
@@ -475,7 +469,6 @@ Style/HashEachMethods:
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/MapIntoArray:
   Exclude:
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
     - 'app/services/course/assessment/submission/update_service.rb'
     - 'spec/libraries/coursemology_docker_container_spec.rb'
 
@@ -542,10 +535,6 @@ Style/RedundantLineContinuation:
     - 'app/controllers/course/assessment/submission/answer/text_response/text_response_controller.rb'
     - 'app/controllers/course/assessment/submission/logs_controller.rb'
     - 'app/services/authentication/keycloak_verification_service.rb'
-    - 'app/services/course/assessment/answer/multiple_response_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/programming_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
-    - 'app/services/course/assessment/answer/text_response_comprehension_auto_grading_service.rb'
     - 'app/services/course/assessment/question/programming/cpp/cpp_package_service.rb'
     - 'app/services/course/assessment/question/programming/java/java_package_service.rb'
     - 'app/services/course/assessment/question/programming/python/python_package_service.rb'
@@ -645,7 +634,6 @@ Style/TernaryParentheses:
     - 'app/models/course/assessment/answer/programming.rb'
     - 'app/models/course/assessment/answer/programming_file.rb'
     - 'app/models/course/user_invitation.rb'
-    - 'app/services/course/assessment/answer/text_response_auto_grading_service.rb'
     - 'app/services/course/duplication/object_duplication_service.rb'
     - 'app/views/course/courses/_course_user_progress.json.jbuilder'
     - 'app/views/course/object_duplications/new.json.jbuilder'

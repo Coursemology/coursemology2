@@ -28,7 +28,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseComprehensionAutoGradingS
         let(:answer_traits) { :comprehension_lifted_word }
 
         it 'matches lifted word and grades as zero' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(0)
         end
       end
@@ -37,7 +37,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseComprehensionAutoGradingS
         let(:answer_traits) { :comprehension_keyword }
 
         it 'matches keyword' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(2)
         end
       end
@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseComprehensionAutoGradingS
         let(:answer_traits) { :comprehension_lifted_word_keyword }
 
         it 'matches lifted word and grades as zero' do
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(0)
         end
       end
@@ -57,13 +57,13 @@ RSpec.describe Course::Assessment::Answer::TextResponseComprehensionAutoGradingS
         it 'matches keywords' do
           question.maximum_grade = 4
           answer.actable.answer_text = 'key word key word'
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(4)
         end
 
         it 'matches keywords with cap on question maximum_grade' do
           answer.actable.answer_text = 'key word key word'
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(2)
         end
       end
@@ -73,7 +73,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseComprehensionAutoGradingS
 
         it 'matches lifted word and grades partial marks' do
           answer.actable.answer_text = 'lifted key word key word'
-          subject.grade(answer)
+          subject.grade(answer, answer.auto_grading)
           expect(answer.grade).to eq(2)
         end
       end

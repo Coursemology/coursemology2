@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     it 'can be queued' do
-      expect { subject.perform_later(answer) }.to \
+      expect { subject.perform_later(answer, auto_grading) }.to \
         have_enqueued_job(subject).exactly(:once).on_queue('medium_high')
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
       end
 
       it 'can be queued with delayed_ queue' do
-        expect { subject.perform_later(answer) }.to \
+        expect { subject.perform_later(answer, auto_grading) }.to \
           have_enqueued_job(subject).exactly(:once).on_queue('delayed_medium_high')
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
       it 'evaluates answers and updates the exp' do
         initial_points = submission.points_awarded
 
-        subject.perform_now(answer)
+        subject.perform_now(answer, auto_grading)
         expect(answer).to be_graded
         expect(answer.grade).to eq(0)
         expect(submission.points_awarded).to eq(0)
@@ -61,7 +61,7 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
       it 'evaluates answers and updates the exp' do
         initial_points = submission.points_awarded
 
-        subject.perform_now(answer)
+        subject.perform_now(answer, auto_grading)
         expect(answer).to be_graded
         expect(answer.grade).to eq(question.maximum_grade)
         correct_exp = assessment.base_exp + assessment.time_bonus_exp

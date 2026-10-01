@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rwordnet'
-class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < \
+class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService <
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     answer.correct, grade, messages = evaluate_answer(answer.actable)
-    answer.auto_grading.result = { messages: messages }
+    auto_grading.result = { messages: messages }
     grade
   end
 
@@ -19,8 +19,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   def evaluate_answer(answer)
     question = answer.question.actable
     answer_text_array = answer.normalized_answer_text.downcase.gsub(/([^a-z ])/, ' ').split
-    answer_text_lemma_array = []
-    answer_text_array.each { |a| answer_text_lemma_array.push(WordNet::Synset.morphy_all(a).first || a) }
+    answer_text_lemma_array = answer_text_array.map { |a| WordNet::Synset.morphy_all(a).first || a }
 
     hash_lifted_word_points = hash_compre_lifted_word(question)
     hash_keyword_solutions = hash_compre_keyword(question)
@@ -34,7 +33,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     }
 
     answer_grade, correct_points = grade_for(question, answer_text_lemma_status)
-    correct = correctness_for(question, answer_grade)
+    correct = correct?(question, answer_grade)
     explanations = explanations_for(
       question, answer_grade, answer_text_array, answer_text_lemma_status, correct_points
     )
@@ -209,7 +208,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
   #   student.
   # @param [Integer] grade The grade of the student answer for the question.
   # @return [Boolean] correct True if the answer is correct.
-  def correctness_for(question, grade)
+  def correct?(question, grade)
     grade >= question.maximum_grade
   end
 
@@ -352,7 +351,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
     answer_text_lemma_status[:compre_lifted_word].each_with_index do |status_point, status_index|
       lifted_words.push(answer_text_array[status_index]) if status_point == point
     end
-    if lifted_words.count == 1
+    if lifted_words.one?
       I18n.t(
         'course.assessment.answer.text_response_comprehension_auto_grading.explanations.lifted_word_singular',
         word_string: lifted_words.first
@@ -387,7 +386,7 @@ class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < 
                        flat_map { |s| s.information.empty? ? empty_information : s.information }
     if missing_keywords.empty?
       []
-    elsif missing_keywords.count == 1
+    elsif missing_keywords.one?
       I18n.t(
         'course.assessment.answer.text_response_comprehension_auto_grading.explanations.missing_keyword_singular',
         word_string: missing_keywords.first
