@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import { annotationShape, fileShape } from '../../propTypes';
 import translations from '../../translations';
+import CopyCodeButton from '../answers/Programming/CopyCodeButton';
 import ProgrammingFileDownloadChip from '../answers/Programming/ProgrammingFileDownloadChip';
 
 import NarrowEditor from './NarrowEditor';
@@ -212,7 +213,10 @@ class ReadOnlyEditor extends Component {
     return (
       <>
         <div className="flex items-center justify-between mt-2">
-          <ProgrammingFileDownloadChip file={file} />
+          <div className="flex items-center gap-2">
+            <ProgrammingFileDownloadChip file={file} />
+            <CopyCodeButton file={file} />
+          </div>
           <div>
             {this.renderShowCommentsPanel()}
             {this.renderExpandAllToggle()}
