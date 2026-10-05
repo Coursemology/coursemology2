@@ -18,6 +18,7 @@ class Course::Condition < ApplicationRecord
   belongs_to :conditional, polymorphic: true
 
   delegate :satisfied_by?, to: :actable
+  delegate :compute_satisfaction_information, to: :actable
 
   ALL_CONDITIONS = [
     { name: Course::Condition::Achievement.name, active: true },
