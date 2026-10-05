@@ -85,6 +85,37 @@ RSpec.describe Course::Assessment::Question::Programming do
           expect(question_programming).to be_valid
         end
       end
+
+      # Created rather than built: the factory skips package processing on built questions, which also skips
+      # this validation.
+      context 'when the language has been disabled' do
+        let(:question) { create(:course_assessment_question_programming) }
+        before do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = false WHERE id = #{question.language_id}"
+          )
+          question.reload
+        end
+
+        # This suite commits without rolling back (use_transactional_fixtures is false), so the language would
+        # otherwise stay disabled for every spec that runs after this one.
+        after do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = true WHERE id = #{question.language_id}"
+          )
+        end
+
+        it 'is invalid' do
+          expect(question).not_to be_valid
+          expect(question.errors[:base]).to include(a_string_starting_with('The selected programming language ' \
+                                                                           'has been deprecated'))
+        end
+
+        it 'is valid when package processing is skipped' do
+          question.skip_process_package = true
+          expect(question).to be_valid
+        end
+      end
     end
 
     describe 'callbacks' do
@@ -152,7 +183,67 @@ RSpec.describe Course::Assessment::Question::Programming do
           #     expect(subject.reload.import_job).not_to eq(old_job_id)
           #   end
           # end
+
+          # The save commits the new values long before the import runs, so the import is handed the values
+          # it replaces in order to snapshot them -- this table's own columns only, not the parent question's.
+          context 'when an edit queues an import' do
+            let(:old_time_limit) { subject.time_limit }
+
+            def expect_previous_version_passed_on(&save)
+              queued_import = have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).
+                              with do |_question, _attachment, _max_time_limit, previous_version|
+                                expect(previous_version).to include('time_limit' => old_time_limit)
+                                expect(previous_version.keys).
+                                  to match_array(Course::Assessment::Question::Programming.column_names)
+                              end
+              expect(&save).to(queued_import)
+            end
+
+            it 'passes on the question as it was before a time limit change' do
+              subject.time_limit = old_time_limit - 1
+              expect_previous_version_passed_on { subject.save! }
+            end
+
+            it 'passes on the question as it was before a new package is uploaded' do
+              subject.time_limit = old_time_limit - 1
+              subject.file = File.new(File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip'))
+              expect_previous_version_passed_on { subject.save! }
+            end
+
+            # Only the request knows who is editing; the import job that creates the snapshot runs without a user.
+            it 'names the editor as the superseder of the version it replaces' do
+              editor = create(:user)
+              subject.time_limit = old_time_limit - 1
+              queued_import = have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).
+                              with do |*, previous_version|
+                                expect(previous_version['superseder_id']).to eq(editor.id)
+                              end
+              expect { User.with_stamper(editor) { subject.save! } }.to(queued_import)
+            end
+          end
         end
+      end
+    end
+
+    describe '#snapshots' do
+      let(:question) { create(:course_assessment_question_programming, :auto_gradable) }
+      let(:package) do
+        path = File.join(Rails.root, 'spec/fixtures/course/programming_question_template_with_add_files.zip')
+        create(:attachment_reference, binary: true, file_path: path)
+      end
+      before { Course::Assessment::Question::ProgrammingImportService.import(question, package) }
+
+      it 'are destroyed with the question, along with their test cases and package references' do
+        snapshot = question.reload.snapshots.sole
+        snapshot_test_case_ids = snapshot.test_cases.map(&:id)
+        expect(snapshot_test_case_ids).not_to be_empty
+
+        question.destroy!
+
+        expect(Course::Assessment::Question::Programming.exists?(snapshot.id)).to be(false)
+        expect(Course::Assessment::Question::ProgrammingTestCase.where(id: snapshot_test_case_ids)).to be_empty
+        expect(AttachmentReference.where(attachable_type: snapshot.class.name, attachable_id: snapshot.id)).
+          to be_empty
       end
     end
 

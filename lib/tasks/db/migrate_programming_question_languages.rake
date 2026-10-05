@@ -17,7 +17,8 @@ namespace :db do
       if src_language.id == dest_language.id
         puts 'SOURCE and DESTINATION languages are identical'
       else
-        migration_count = Course::Assessment::Question::Programming.where(language_id: src_language.id).count
+        # Snapshots keep the language they were graded under; only live questions move.
+        migration_count = Course::Assessment::Question::Programming.live.where(language_id: src_language.id).count
         puts "This operation will migrate all programming questions using language \"#{src_language.name}\" (language_id #{src_language.id})" # rubocop:disable Layout/LineLength
         puts "to language \"#{dest_language.name}\" (language_id #{dest_language.id})."
         puts "#{migration_count} programming questions will be affected."
@@ -25,7 +26,7 @@ namespace :db do
         confirm = $stdin.gets.strip
         if confirm == 'Y'
           ActiveRecord::Base.transaction do
-            Course::Assessment::Question::Programming.
+            Course::Assessment::Question::Programming.live.
               where(language_id: src_language.id).update_all(language_id: dest_language.id)
           end
 

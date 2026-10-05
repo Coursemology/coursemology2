@@ -50,6 +50,123 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             end
         end
 
+        # An edit can re-import the question while one of its answers is being graded. The run evaluated the
+        # package it started with, so its results belong to that version's test cases -- which, once the import
+        # commits, have moved to a snapshot. The import here rebuilds test cases with the same identifiers, as an
+        # edit that keeps its test names would.
+        context 'when the question is re-imported while the answer is being graded' do
+          let(:new_package) do
+            path = File.join(Rails.root, 'spec/fixtures/course/programming_question_template_with_add_files.zip')
+            create(:attachment_reference, binary: true, file_path: path)
+          end
+          let!(:graded_version_test_case_ids) { question.test_cases.map(&:id) }
+          # Loaded afresh, as a grading job deserializes them: nothing on these instances is loaded yet.
+          let(:job_answer) { Course::Assessment::Answer.find(answer.id) }
+          let(:job_grading) { Course::Assessment::Answer::AutoGrading.find(grading.id) }
+          subject { Course::Assessment::Answer::AutoGradingService.grade(job_answer, job_grading) }
+
+          def reimport_question
+            Course::Assessment::Question::ProgrammingImportService.
+              import(Course::Assessment::Question::Programming.find(question.id), new_package)
+          end
+
+          def expect_results_on_the_graded_version
+            snapshot = question.reload.snapshots.sole
+            expect(snapshot.test_cases.map(&:id)).to match_array(graded_version_test_case_ids)
+            expect(grading.reload.actable.test_results.map(&:test_case_id)).
+              to match_array(graded_version_test_case_ids)
+          end
+
+          context 'when the import commits while the package is being evaluated' do
+            before do
+              reimported = false
+              allow(Course::Assessment::ProgrammingEvaluationService).to \
+                receive(:execute).and_wrap_original do |original, *args|
+                  result = original.call(*args)
+                  result.test_reports = { public: File.read(question_test_report_path) }
+                  # The first evaluation is the grading run's; the import evaluates its package too.
+                  unless reimported
+                    reimported = true
+                    reimport_question
+                  end
+                  result
+                end
+            end
+
+            it 'matches the results to the test cases of the version it evaluated' do
+              subject
+              expect_results_on_the_graded_version
+            end
+          end
+
+          # The narrowest window: between reading the test cases and reading the package. The import runs on its own
+          # connection, as a concurrent import job would.
+          context 'when the import commits after the test cases are read, before the package is' do
+            let(:opened_package_ids) { [] }
+            let!(:graded_version_package_id) { question.attachment.attachment_id }
+
+            # The run reads the package's reference right after the test cases, so the import is committed as that
+            # read starts.
+            def commit_import_once_test_cases_are_read
+              grading_thread = Thread.current
+              committed = false
+              # Resolved here: the import thread cannot evaluate a `let` while the grading thread is inside `subject`.
+              question_id = question.id
+              package = new_package
+              allow_any_instance_of(Course::Assessment::Question::Programming).
+                to receive(:attachment_references).and_wrap_original do |original, *args|
+                if Thread.current == grading_thread && !committed
+                  committed = true
+                  import = Thread.new do
+                    ActiveRecord::Base.connection_pool.with_connection do
+                      ActsAsTenant.without_tenant do
+                        Course::Assessment::Question::ProgrammingImportService.
+                          import(Course::Assessment::Question::Programming.find(question_id), package)
+                      end
+                    end
+                  end
+                  # The import thread may need to autoload while this thread waits for it.
+                  ActiveSupport::Dependencies.interlock.permit_concurrent_loads { import.join }
+                end
+                original.call(*args)
+              end
+              yield
+            end
+
+            before do
+              opened = opened_package_ids
+              grading_thread = Thread.current
+              allow_any_instance_of(AttachmentReference).
+                to receive(:open).and_wrap_original do |original, *args, &block|
+                opened << original.receiver.attachment_id if Thread.current == grading_thread
+                original.call(*args, &block)
+              end
+            end
+
+            it 'evaluates the package of the version whose test cases it read' do
+              commit_import_once_test_cases_are_read { subject }
+
+              expect(question.reload.attachment.attachment_id).not_to eq(graded_version_package_id)
+              expect(opened_package_ids).to eq([graded_version_package_id])
+              expect_results_on_the_graded_version
+            end
+          end
+
+          context 'when the import commits after the results are built, before they are saved' do
+            before do
+              allow(job_answer).to receive(:save!).and_wrap_original do |original, *args|
+                reimport_question
+                original.call(*args)
+              end
+            end
+
+            it 'saves the results against the test cases of the version it evaluated' do
+              expect { subject }.not_to raise_error
+              expect_results_on_the_graded_version
+            end
+          end
+        end
+
         describe '#grade' do
           subject { super().grade(answer, answer.auto_grading) }
           let(:answer_contents) { "test code #{SecureRandom.hex}" }
@@ -148,21 +265,17 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
               Rails.root.join('spec', 'fixtures', 'course', 'programming_single_test_suite_report.xml')
             end
             let(:question_test_cases) do
-              # Create one ProgrammingTestCase object with test_case_type = nil
-              # for each test case in report
+              # One test case per test in the report, the first being an evaluation test.
               report = File.read(question_test_report_path)
-              Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.map do |test_case|
-                Course::Assessment::Question::ProgrammingTestCase.new(identifier: test_case.identifier)
+              test_case_types = ['evaluation_test', 'private_test', 'public_test']
+              Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.
+                each_with_index.map do |test_case, index|
+                Course::Assessment::Question::ProgrammingTestCase.new(identifier: test_case.identifier,
+                                                                      test_case_type: test_case_types[index])
               end
             end
 
-            before do
-              # Assign test_case_type for the test cases created in :question_test_cases
-              answer.question.actable.test_cases.first.test_case_type = 'evaluation_test'
-              answer.question.actable.test_cases.second.test_case_type = 'private_test'
-              answer.question.actable.test_cases.third.test_case_type = 'public_test'
-              allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-            end
+            before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
             it 'ignores the evaluation tests and marks the answer correct' do
               subject

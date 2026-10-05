@@ -23,8 +23,43 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
     question.max_time_limit = answer.submission.assessment.course.programming_max_time_limit
     assessment = answer.submission.assessment
     evaluation_result = evaluate_package(assessment.course, question, answer)
-    build_result(question, evaluation_result,
+    test_cases = evaluated_test_cases(question, evaluation_result.evaluation_results)
+    build_result(question, test_cases, evaluation_result,
                  graded_test_case_types: assessment.graded_test_case_types)
+  end
+
+  # The test cases of the version of the question that Codaveri evaluated.
+  #
+  # The Codaveri problem is replaced whenever the question is re-imported, which can happen while this evaluation
+  # runs, so it may hold a different version from the one this run started on. Nothing local can be pinned to it.
+  # Instead, each result names the test case it is for (its index is the test case's id, as pushed to Codaveri),
+  # and a re-import moves the replaced version's test cases to a snapshot rather than deleting them. So the
+  # results identify the version they were graded against.
+  #
+  # Without results to go by, the live question's test cases are used.
+  #
+  # @param [Course::Assessment::Question::Programming] question The question being graded.
+  # @param [Array<Course::Assessment::ProgrammingCodaveriEvaluationService::TestCaseResult>] evaluation_results
+  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
+  # @raise [CodaveriError] When the results are not all for test cases of one version of this question.
+  def evaluated_test_cases(question, evaluation_results)
+    test_case_ids = evaluation_results.map(&:index).uniq
+    programming_test_case = Course::Assessment::Question::ProgrammingTestCase
+    return programming_test_case.where(question_id: question.id).to_a if test_case_ids.empty?
+
+    version_ids = programming_test_case.where(id: test_case_ids).pluck(:id, :question_id).to_h
+    version_id = version_ids.values.uniq.sole if version_ids.size == test_case_ids.size && version_ids.values.uniq.one?
+    unless version_id && version_of?(question, version_id)
+      raise CodaveriError, 'Codaveri evaluated test cases that are not all of one version of this question.'
+    end
+
+    programming_test_case.where(question_id: version_id).to_a
+  end
+
+  # @return [Boolean] Whether the given id is the question's, or one of its snapshots'.
+  def version_of?(question, version_id)
+    version_id == question.id ||
+      Course::Assessment::Question::Programming.where(id: version_id).pick(:current_id) == question.id
   end
 
   # Evaluates the package to obtain the set of tests.
@@ -42,6 +77,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   #
   # @param [Course::Assessment::Question::Programming] question The programming question being
   #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::ProgrammingCodaveriEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
   # @param [Array<String>] graded_test_case_types The types of test cases counted
@@ -49,12 +86,14 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading), Integer>]
   #   The correctness apparent to student ('True' if answer passes public and private test
   #   cases), grade, the programming auto grading record, and the evaluation result's id.
-  def build_result(question, evaluation_result, graded_test_case_types:)
-    auto_grading = build_auto_grading(question, evaluation_result)
-    graded_test_count = question.test_cases.where(test_case_type: graded_test_case_types).size
+  def build_result(question, test_cases, evaluation_result, graded_test_case_types:)
+    auto_grading = build_auto_grading(test_cases, evaluation_result)
+    graded_test_count = test_cases.count do |test_case|
+      graded_test_case_types.include?(test_case.test_case_type)
+    end
     passed_test_count = count_passed_test_cases(auto_grading, graded_test_case_types)
 
-    considered_correct = correct?(question, auto_grading)
+    considered_correct = correct?(test_cases, auto_grading)
     grade = if graded_test_count == 0
               question.maximum_grade
             else
@@ -63,31 +102,31 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
     [considered_correct, grade, auto_grading, evaluation_result.evaluation_id]
   end
 
-  # Builds a ProgrammingAutoGrading instance from the question and codaveri evaluation result.
+  # Builds a ProgrammingAutoGrading instance from the test cases and codaveri evaluation result.
   #
-  # @param [Course::Assessment::Question::Programming] question The programming question being
-  #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::ProgrammingCodaveriEvaluationService::Result] evaluation_result The
   #   result of evaluating the code from Codaveri.
   # @return [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The
   #   ProgrammingAutoGrading instance
-  def build_auto_grading(question, evaluation_result)
+  def build_auto_grading(test_cases, evaluation_result)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
     set_auto_grading_results(auto_grading, evaluation_result)
-    build_test_case_records(question, auto_grading, evaluation_result.evaluation_results)
+    build_test_case_records(test_cases, auto_grading, evaluation_result.evaluation_results)
     auto_grading
   end
 
   # Checks if the answer passes all public and private test cases.
   #
-  # @param [Course::Assessment::Question::Programming] question The programming question being
-  #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The
   #   ProgrammingAutoGrading instance
   # @return [Boolean] True if the evaluated answer passes all public and private test cases
-  def correct?(question, auto_grading)
+  def correct?(test_cases, auto_grading)
     check_test_types = ['public_test', 'private_test'].freeze
-    test_count = question.test_cases.reject(&:evaluation_test?).size
+    test_count = test_cases.reject(&:evaluation_test?).size
     passed_test_count = count_passed_test_cases(auto_grading, check_test_types)
     passed_test_count == test_count
   end
@@ -99,30 +138,30 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
 
   # Checks presence of codaveri evaluation test results and builds the test case records.
   #
-  # @param [Course::Assessment::Question::Programming] question The programming question being
-  #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
   #   grading result to store the test results in.
   # @param [String] evaluation_results The evaluation results from Codaveri API Response.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>] Only the test cases not in
   #   any codaveri evaluation result.
-  def build_test_case_records(question, auto_grading, evaluation_results)
-    build_test_case_records_from_test_results(question, auto_grading, evaluation_results)
+  def build_test_case_records(test_cases, auto_grading, evaluation_results)
+    build_test_case_records_from_test_results(test_cases, auto_grading, evaluation_results)
 
     # Build failed test case records for test cases which were not found in any evaluation result.
-    build_failed_test_case_records(question, auto_grading)
+    build_failed_test_case_records(test_cases, auto_grading)
   end
 
   # Builds test case records from codaveri evaluation test results.
   #
-  # @param [Course::Assessment::Question::Programming] question The programming question being
-  #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
   #   grading result to store the test results in.
   # @param [Array<Struct>] evaluation_results The evaluation results from Codaveri API Response.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
-  def build_test_case_records_from_test_results(question, auto_grading, evaluation_results)
-    test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
+  def build_test_case_records_from_test_results(test_cases, auto_grading, evaluation_results)
+    test_cases = test_cases.index_by(&:id)
     evaluation_results.map do |result|
       test_case = find_test_case(test_cases, result.index)
       messages ||= {
@@ -144,16 +183,16 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   # Builds test case records for remaining test cases when there is no evaluation test result.
   # Treats all remaining test cases without a test result yet as failed.
   #
-  # @param [Course::Assessment::Question::Programming] question The programming question being
-  #   graded.
+  # @param [Array<Course::Assessment::Question::ProgrammingTestCase>] test_cases The test cases of the version
+  #   Codaveri evaluated.
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
   #   grading result to store the test results in.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
-  def build_failed_test_case_records(question, auto_grading)
+  def build_failed_test_case_records(test_cases, auto_grading)
     messages = {
       error: I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
     }
-    remaining_test_cases = question.test_cases - auto_grading.test_results.map(&:test_case)
+    remaining_test_cases = test_cases - auto_grading.test_results.map(&:test_case)
     remaining_test_cases.map do |test_case|
       auto_grading.test_results.build(
         auto_grading: auto_grading, test_case: test_case,

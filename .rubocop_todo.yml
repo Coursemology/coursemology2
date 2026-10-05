@@ -225,7 +225,6 @@ Naming/PredicateMethod:
     - 'app/models/concerns/course/settings/lesson_plan_settings_concern.rb'
     - 'app/models/course/assessment/answer/multiple_response.rb'
     - 'app/models/course/assessment/answer/rubric_based_response.rb'
-    - 'app/models/course/assessment/question/programming.rb'
     - 'app/models/course/discussion/post.rb'
     - 'app/models/course/enrol_request.rb'
     - 'app/models/course/forum/import.rb'
