@@ -9,22 +9,42 @@ class Course::Assessment::Question::ProgrammingImportService
     # @param [Course::Assessment::Question::Programming] question The programming question for
     #   import.
     # @param [Attachment] attachment The attachment containing the package to import.
-    def import(question, attachment)
-      new(question, attachment).import
+    # @param [Hash{String => Object}, nil] previous_version The question's column values before the edit that
+    #   led to this import, with +superseder_id+ set to whoever made that edit. When omitted, the question's
+    #   current values are taken as the previous version, with no superseder.
+    # @param [String, nil] import_job_id The id of the job running this import, as recorded on the question by the
+    #   edit that scheduled it. The import applies only while the question still records it. When omitted, the
+    #   import always applies.
+    # @return [Boolean] Whether the package was imported: false when the import was superseded by a later edit, in
+    #   which case nothing was changed.
+    def import(question, attachment, previous_version = nil, import_job_id: nil)
+      new(question, attachment, previous_version, import_job_id).import
     end
   end
 
+  # Columns a snapshot does not take from the version it records: its own identity, its link to the live
+  # question, and the live question's import job, which is unique per question.
+  SNAPSHOT_EXCLUDED_COLUMNS = ['id', 'current_id', 'import_job_id'].freeze
+
   # Imports the templates and tests found in the package.
+  #
+  # @return [Boolean] See .import.
   def import
+    # Checked here as well as when saving, to skip evaluating a package that will not be applied.
+    return false unless current_import?(Course::Assessment::Question::Programming.unscoped.
+                                        where(id: @question.id).pick(:import_job_id))
+
+    imported = false
     @attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      import_from_package(package)
+      imported = import_from_package(package)
     ensure
       next unless package
 
       temporary_file.close
       package.close
     end
+    imported
   end
 
   private
@@ -33,9 +53,13 @@ class Course::Assessment::Question::ProgrammingImportService
   #
   # @param [Course::Assessment::Question::Programming] question The programming question for import.
   # @param [Attachment] attachment The attachment containing the tests and files.
-  def initialize(question, attachment)
+  # @param [Hash{String => Object}, nil] previous_version See .import.
+  # @param [String, nil] import_job_id See .import.
+  def initialize(question, attachment, previous_version = nil, import_job_id = nil)
     @question = question
     @attachment = attachment
+    @previous_version = previous_version
+    @import_job_id = import_job_id
   end
 
   # Imports the templates and tests from the given package.
@@ -77,13 +101,74 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Hash<String, String>] test_reports The test reports from evaluating the package.
   #   Hash key is the report type, followed by the contents of the report.
   #   e.g. { 'public': <XML from public tests>, 'private': <XML from private tests> }
+  # @return [Boolean] See .import.
   def save!(template_files, test_reports)
-    @question.imported_attachment = @attachment
-    @question.template_files = build_template_file_records(template_files)
-    @question.test_cases = build_combined_test_case_records(test_reports)
+    @question.class.transaction do
+      # One change to the package at a time, and only the latest: see ProgrammingImportsConcern. Everything below
+      # reads the question afresh under the lock, so it sees any import that committed while this one evaluated.
+      next false unless current_import?(@question.lock_package!)
 
-    @question.skip_process_package = true # Skip package re-processing
-    @question.save!
+      snapshot_previous_version
+      @question.imported_attachment = @attachment
+      @question.template_files = build_template_file_records(template_files)
+      @question.test_cases = build_combined_test_case_records(test_reports)
+      # Codaveri still has the previous version until this one is pushed.
+      @question.is_synced_with_codaveri = false
+
+      @question.skip_process_package = true # Skip package re-processing
+      @question.save!
+      true
+    end
+  end
+
+  # Whether this import is still the one the question's latest edit scheduled.
+  #
+  # @param [String, nil] recorded_import_job_id The question's import job id, as recorded now.
+  def current_import?(recorded_import_job_id)
+    @import_job_id.nil? || recorded_import_job_id == @import_job_id
+  end
+
+  # Keeps the version this import replaces as a snapshot, instead of letting the assignments in #save! destroy
+  # its test cases and template files.
+  #
+  # This must run in the same transaction that assigns the new test cases. The live question must never be
+  # committed without test cases: grading would then treat it as not auto-gradable and award full marks.
+  def snapshot_previous_version
+    return unless @question.persisted? && @question.test_cases.exists?
+
+    snapshot = create_snapshot
+    # Moved through the associations deliberately: update_all on an association also resets it. A loaded
+    # association still holding the moved rows would destroy them when #save! assigns the new ones.
+    @question.test_cases.update_all(question_id: snapshot.id)
+    @question.template_files.update_all(question_id: snapshot.id)
+  end
+
+  # Inserted directly rather than through Programming#save!, so that the snapshot has no parent question row
+  # and runs none of the callbacks and validations meant for an editable question.
+  #
+  # @return [Course::Assessment::Question::Programming] The snapshot.
+  def create_snapshot
+    programming = Course::Assessment::Question::Programming
+    # Sliced to this table's columns: under +acts_as+, +attributes+ also includes the parent question's.
+    # +superseded_at+ is when this import replaced the version, not when the edit that queued it was saved.
+    attributes = (@previous_version || @question.attributes).slice(*programming.column_names).
+                 except(*SNAPSHOT_EXCLUDED_COLUMNS).
+                 merge('current_id' => @question.id, 'superseded_at' => Time.current)
+    snapshot_id = programming.insert!(attributes, returning: :id).first['id']
+
+    programming.find(snapshot_id).tap do |snapshot|
+      copy_previous_package_reference(snapshot)
+    end
+  end
+
+  # Gives the snapshot its own reference to the package being replaced. Attachments are content-addressed, so
+  # this costs a reference row and no storage. While a newly uploaded package waits for import, the question
+  # holds references to both packages, so the previous package is the one that is not being imported.
+  #
+  # @param [Course::Assessment::Question::Programming] snapshot The snapshot to attach the package to.
+  def copy_previous_package_reference(snapshot)
+    previous_package = @question.attachment_references.where.not(id: @attachment.id).take || @attachment
+    previous_package.dup.tap { |reference| reference.attachable = snapshot }.save!
   end
 
   # Builds the template file records from the templates loaded from the package.

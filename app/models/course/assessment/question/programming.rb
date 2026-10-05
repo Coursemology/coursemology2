@@ -15,6 +15,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   MEMORY_LIMIT = nil
 
   include DuplicationStateTrackingConcern
+  include Course::Assessment::Question::ProgrammingSnapshotsConcern
 
   attr_accessor :max_time_limit, :skip_process_package
 
@@ -181,7 +182,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   def process_package
     if attachment_changed?
       attachment ? process_new_package : remove_old_package
-    elsif should_evaluate_package
+    elsif should_evaluate_package?
       # For non-autograded questions, the attachment is not present
       evaluate_package if attachment
     elsif !is_synced_with_codaveri && ((is_codaveri_changed? && is_codaveri?) ||
@@ -191,15 +192,17 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     end
   end
 
-  def should_evaluate_package
+  def should_evaluate_package?
     time_limit_changed? || memory_limit_changed? ||
       language_id_changed? || import_job&.status == 'errored'
   end
 
   def evaluate_package
+    previous_version = attributes_before_save
+
     ActiveRecord.after_all_transactions_commit do
-      import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment, max_time_limit)
+      import_job = Course::Assessment::Question::ProgrammingImportJob.
+                   perform_later(self, attachment, max_time_limit, previous_version)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -211,11 +214,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   def process_new_package
     new_attachment = attachment
     restore_attachment_change
+    previous_version = attributes_before_save
 
     ActiveRecord.after_all_transactions_commit do
       new_attachment.save!
-      import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment, max_time_limit)
+      import_job = Course::Assessment::Question::ProgrammingImportJob.
+                   perform_later(self, new_attachment, max_time_limit, previous_version)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -267,12 +271,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
   end
-end
 
-def validate_language_enabled
-  return unless language && !language.enabled
+  def validate_language_enabled
+    return unless language && !language.enabled
 
-  errors.add(:base,
-             'The selected programming language has been deprecated and cannot be used. ' \
-             'Please select another language.')
+    errors.add(:base, 'The selected programming language has been deprecated and cannot be used. ' \
+                      'Please select another language.')
+  end
 end

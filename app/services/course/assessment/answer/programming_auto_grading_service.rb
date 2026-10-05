@@ -9,6 +9,29 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService <
 
   private
 
+  # Reads the package and test cases this run grades against, as one version of the question: an import, or a
+  # package removal, changes both in one transaction, so they are read in one snapshot of the database. The run
+  # then evaluates that package, which can take minutes, and matches and counts its results against those test
+  # cases. An import committing meanwhile does not disturb either: it moves the test cases to a snapshot of the
+  # question instead of deleting them, and a package's file never changes.
+  #
+  # @param [Course::Assessment::Question::Programming] question The question being graded. Its test cases are
+  #   left loaded.
+  # @return [AttachmentReference] The package.
+  # @raise [IllegalStateError] When the question no longer has a package: it was removed after this answer was
+  #   queued for grading.
+  def pin_version(question)
+    package = ActiveRecord::Base.transaction(isolation: :repeatable_read) do
+      # Reloaded, not just loaded: either may already be loaded from before this snapshot.
+      question.test_cases.reload
+      question.attachment_references.reload
+      question.attachment&.tap(&:attachment)
+    end
+    raise IllegalStateError, 'The question no longer has a package to grade against.' unless package
+
+    package
+  end
+
   # Grades the given answer.
   #
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
@@ -17,9 +40,10 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService <
   def evaluate_answer(answer)
     course = answer.submission.assessment.course
     question = answer.question.actable
+    package_reference = pin_version(question)
     assessment = answer.submission.assessment
     question.max_time_limit = course.programming_max_time_limit
-    question.attachment.open(binmode: true) do |temporary_file|
+    package_reference.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       package.submission_files = build_submission_files(answer)
       package.remove_solution_files
@@ -64,7 +88,10 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService <
   #   cases), grade, the programming auto grading record, and the evaluation result's id.
   def build_result(question, evaluation_result, graded_test_case_types:)
     auto_grading = build_auto_grading(question, evaluation_result)
-    graded_test_count = question.test_cases.where(test_case_type: graded_test_case_types).size
+    # Counted from the pinned test cases: a fresh query would see an import committed while this run evaluated.
+    graded_test_count = question.test_cases.count do |test_case|
+      graded_test_case_types.include?(test_case.test_case_type)
+    end
     passed_test_count = count_passed_test_cases(auto_grading, graded_test_case_types)
 
     considered_correct = correct?(question, auto_grading)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_07_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -459,6 +459,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_000000) do
     t.text "codaveri_id"
     t.text "codaveri_message"
     t.integer "codaveri_status"
+    t.integer "current_id"
     t.uuid "import_job_id"
     t.boolean "is_codaveri", default: false
     t.boolean "is_synced_with_codaveri", default: false, null: false
@@ -468,9 +469,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_000000) do
     t.integer "memory_limit"
     t.boolean "multiple_file_submission", default: false, null: false
     t.integer "package_type", default: 0, null: false
+    t.datetime "superseded_at"
+    t.integer "superseder_id"
     t.integer "time_limit"
+    t.index ["current_id"], name: "fk__course_assessment_question_programming_current_id", where: "(current_id IS NOT NULL)"
     t.index ["import_job_id"], name: "index_course_assessment_question_programming_on_import_job_id", unique: true
     t.index ["language_id"], name: "fk__course_assessment_question_programming_language_id"
+    t.index ["superseder_id"], name: "fk__course_assessment_question_programming_superseder_id", where: "(superseder_id IS NOT NULL)"
   end
 
   create_table "course_assessment_question_programming_template_files", id: :serial, force: :cascade do |t|
@@ -2107,8 +2112,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_07_000000) do
   add_foreign_key "course_assessment_question_mock_answer_grading_contexts", "course_assessment_question_mock_answers", column: "mock_answer_id", on_delete: :cascade
   add_foreign_key "course_assessment_question_mock_answers", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_question_multiple_response_options", "course_assessment_question_multiple_responses", column: "question_id", name: "fk_course_assessment_question_multiple_response_options_questio"
+  add_foreign_key "course_assessment_question_programming", "course_assessment_question_programming", column: "current_id", name: "fk_course_assessment_question_programming_current_id"
   add_foreign_key "course_assessment_question_programming", "jobs", column: "import_job_id", name: "fk_course_assessment_question_programming_import_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_programming", "polyglot_languages", column: "language_id", name: "fk_course_assessment_question_programming_language_id"
+  add_foreign_key "course_assessment_question_programming", "users", column: "superseder_id", name: "fk_course_assessment_question_programming_superseder_id"
   add_foreign_key "course_assessment_question_programming_template_files", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_0788633b496294e558f55f2b41bc7c45"
   add_foreign_key "course_assessment_question_programming_test_cases", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_ee00a2daf4389c4c2ddba3041a15c35f"
   add_foreign_key "course_assessment_question_rubric_based_response_categories", "course_assessment_question_rubric_based_responses", column: "question_id"
