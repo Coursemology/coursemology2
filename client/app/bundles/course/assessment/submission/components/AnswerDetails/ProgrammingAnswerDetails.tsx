@@ -38,6 +38,7 @@ const ProgrammingAnswerDetails = (
       <TestCases
         canReadTests={answer.canReadTests}
         defaultExpanded={false}
+        gradedOnPreviousVersion={answer.gradedOnPreviousVersion}
         stderr={answer.stderr}
         stdout={answer.stdout}
         testCases={answer.testCases}

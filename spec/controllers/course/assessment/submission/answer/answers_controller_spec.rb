@@ -193,5 +193,54 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
         end
       end
     end
+
+    # Results are shown against the test cases they were graded against. After an edit re-imports the question,
+    # those belong to a snapshot of its previous version, not to the live question.
+    context 'when a programming answer was graded against a previous version of its question' do
+      let(:user) { create(:user) }
+      let!(:course) { create(:course, creator: user) }
+      let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
+      let(:question) { assessment.questions.first.specific }
+      let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+      let(:answer) { submission.answers.first }
+      let(:new_package) do
+        path = File.join(Rails.root, 'spec/fixtures/course/programming_question_template_with_add_files.zip')
+        create(:attachment_reference, binary: true, file_path: path)
+      end
+      let!(:graded_test_case_ids) do
+        grading = Course::Assessment::Answer::ProgrammingAutoGrading.create!(answer: answer)
+        question.test_cases.map do |test_case|
+          create(:course_assessment_answer_programming_auto_grading_test_result,
+                 auto_grading: grading, test_case: test_case).test_case_id
+        end
+      end
+
+      before do
+        Course::Assessment::Question::ProgrammingImportService.import(question, new_package)
+        controller_sign_in(controller, user)
+      end
+
+      describe '#show' do
+        render_views
+        subject do
+          get :show, format: :json, params: {
+            course_id: course, assessment_id: assessment, submission_id: submission, id: answer.id
+          }
+        end
+
+        it 'shows the results against the test cases they were graded against, flagged as a previous version' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          shown_test_case_ids = json_result['testCases'].values.flatten.map { |test_case| test_case['id'] }
+          joined_result_ids = json_result['testResults'].values.flat_map(&:keys).map(&:to_i)
+
+          expect(json_result['gradedOnPreviousVersion']).to be(true)
+          expect(shown_test_case_ids).to match_array(graded_test_case_ids)
+          expect(joined_result_ids).to match_array(graded_test_case_ids)
+          expect(question.reload.test_cases.map(&:id)).not_to include(*graded_test_case_ids)
+        end
+      end
+    end
   end
 end

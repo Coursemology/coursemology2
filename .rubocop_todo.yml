@@ -51,14 +51,6 @@ Lint/ReturnInVoidContext:
     - 'lib/extensions/attachable/active_record/base.rb'
 
 # Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: present?, blank?, presence, try, try!
-Lint/SafeNavigationConsistency:
-  Exclude:
-    - 'app/views/course/assessment/answer/programming/_programming.json.jbuilder'
-
-# Offense count: 1
 Lint/StructNewOverride:
   Exclude:
     - 'lib/autoload/coursemology_docker_container.rb'

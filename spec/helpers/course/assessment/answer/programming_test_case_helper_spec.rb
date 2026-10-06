@@ -147,5 +147,65 @@ RSpec.describe Course::Assessment::Answer::ProgrammingTestCaseHelper do
         end
       end
     end
+
+    describe '#graded_question_version and #graded_on_previous_version?' do
+      let(:question) { create(:course_assessment_question_programming, template_package: true, test_case_count: 2) }
+      let(:auto_grading) { create(:course_assessment_answer_programming_auto_grading) }
+      let(:new_package) do
+        path = File.join(Rails.root, 'spec/fixtures/course/programming_question_template_with_add_files.zip')
+        create(:attachment_reference, binary: true, file_path: path)
+      end
+
+      def grade_against_live_test_cases
+        question.test_cases.each do |test_case|
+          create(:course_assessment_answer_programming_auto_grading_test_result,
+                 auto_grading: auto_grading, test_case: test_case)
+        end
+      end
+
+      def edit_question
+        Course::Assessment::Question::ProgrammingImportService.import(question, new_package)
+        question.reload
+      end
+
+      context 'when the answer has not been graded' do
+        it 'is the live question' do
+          expect(graded_question_version(question, nil)).to eq(question)
+          expect(graded_on_previous_version?(question, nil)).to be(false)
+        end
+      end
+
+      context 'when the run was graded against the live question' do
+        before { grade_against_live_test_cases }
+
+        it 'is the live question' do
+          expect(graded_question_version(question, auto_grading)).to eq(question)
+          expect(graded_on_previous_version?(question, auto_grading)).to be(false)
+        end
+      end
+
+      context 'when the question has been edited since the run' do
+        before do
+          grade_against_live_test_cases
+          edit_question
+        end
+
+        it 'is the snapshot holding the test cases the run was graded against' do
+          version = graded_question_version(question, auto_grading)
+
+          expect(version).to eq(question.snapshots.sole)
+          expect(version.test_cases.map(&:id)).to match_array(auto_grading.test_results.map(&:test_case_id))
+          expect(graded_on_previous_version?(question, auto_grading)).to be(true)
+        end
+      end
+
+      # Before snapshots were kept, an edit destroyed the run's results along with the test cases.
+      context 'when the run no longer has results to say which version it was graded against' do
+        it 'is the live question, but still a previous version' do
+          expect(graded_question_version(question, auto_grading)).to eq(question)
+          expect(graded_on_previous_version?(question, auto_grading)).to be(true)
+        end
+      end
+    end
   end
 end

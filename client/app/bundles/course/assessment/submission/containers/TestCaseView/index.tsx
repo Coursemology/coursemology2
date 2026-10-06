@@ -52,6 +52,7 @@ const TestCaseView: FC<Props> = ({ questionId }) => {
   return (
     <TestCases
       canReadTests={testCasesState.canReadTests}
+      gradedOnPreviousVersion={testCasesState.gradedOnPreviousVersion}
       graderView={graderView}
       isAutograding={isAutograding}
       showEvaluationTestToStudents={published && showEvaluation}

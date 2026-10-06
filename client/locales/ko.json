@@ -3521,6 +3521,9 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "팬텀 사용자 포함"
   },
+  "course.assessment.submission.history.answerGradedOnPastSnapshot": {
+    "defaultMessage": "이 답안이 채점된 이후 문제가 변경되었습니다."
+  },
   "course.assessment.submission.publishRubricFeedbackConfirmation": {
     "defaultMessage": "서술형 답안에 대한 AI 루브릭 기반 피드백 댓글 {count}개를 게시하려고 합니다. 해당 학생들이 즉시 볼 수 있게 됩니다."
   },

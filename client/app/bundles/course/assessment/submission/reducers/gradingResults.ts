@@ -28,6 +28,7 @@ const testCasesFromAnswer = (
   canReadTests: answer.canReadTests,
   testCases: answer.testCases,
   testResults: answer.testResults,
+  gradedOnPreviousVersion: answer.gradedOnPreviousVersion,
   stdout: answer.stdout,
   stderr: answer.stderr,
 });
