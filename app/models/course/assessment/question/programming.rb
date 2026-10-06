@@ -16,6 +16,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   include DuplicationStateTrackingConcern
   include Course::Assessment::Question::ProgrammingSnapshotsConcern
+  include Course::Assessment::Question::ProgrammingSnapshotReadOnlyConcern
 
   attr_accessor :max_time_limit, :skip_process_package
 
@@ -141,11 +142,17 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     set_duplication_flag
   end
 
-  # This specifies the template files generated from the online editor.
+  # Makes the question non-autograded, with the template files generated from the online editor. Its package and
+  # test cases are removed, after keeping the autograded version as a snapshot.
   #
-  # This is used by the +Course::Assessment::Question::Programming::ProgrammingPackageService+ to
-  # set the template files for a non-autograded programming question.
-  def non_autograded_template_files=(template_files)
+  # This is used by the +Course::Assessment::Question::Programming::ProgrammingPackageService+.
+  #
+  # @param [Array<Course::Assessment::Question::ProgrammingTemplateFile>] template_files The new template files.
+  def remove_package(template_files)
+    snapshot_current_version!(attributes_before_save, attachment)
+
+    self.imported_attachment = nil
+    self.import_job_id = nil
     self.template_files.clear
     self.template_files = template_files
     test_cases.clear

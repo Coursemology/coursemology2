@@ -20,12 +20,10 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
       new_package = @language_package_service.generate_package(@question.attachment)
       @question.file = new_package if new_package.present?
     else
-      templates = @language_package_service.submission_templates
-      @question.imported_attachment = nil
-      @question.import_job_id = nil
-      @question.non_autograded_template_files = templates.map do |template|
+      templates = @language_package_service.submission_templates.map do |template|
         Course::Assessment::Question::ProgrammingTemplateFile.new(template)
       end
+      @question.remove_package(templates)
     end
   end
 

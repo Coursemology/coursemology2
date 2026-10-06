@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
+  include Course::Assessment::Question::ProgrammingSnapshotReadOnlyConcern
+
   before_validation :normalize_filename
 
   validates :content, exclusion: [nil]
@@ -27,6 +29,16 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
   end
 
   private
+
+  # Whether this belongs to a snapshot, or did until this change. See
+  # Course::Assessment::Question::ProgrammingSnapshotReadOnlyConcern.
+  def part_of_snapshot?
+    return true if question&.snapshot?
+    return false unless question_id_changed? && question_id_in_database
+
+    # Not exists?: acts_as joins the parent question row to it, which a snapshot does not have.
+    Course::Assessment::Question::Programming.where(id: question_id_in_database).pick(:current_id).present?
+  end
 
   # Normalises the filename for use across platforms.
   def normalize_filename

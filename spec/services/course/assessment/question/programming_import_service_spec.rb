@@ -318,7 +318,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
           expect { subject.send(:import) }.to raise_error('save failed')
 
           question.reload
-          expect(question.snapshots).to be_empty
+          expect(question.snapshots.ids).to be_empty
           expect(question.test_cases.map(&:id)).to match_array(old_test_case_ids)
           expect(question.template_files.map(&:id)).to match_array(old_template_file_ids)
           expect(old_result.reload.test_case.question_id).to eq(question.id)
@@ -329,7 +329,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
     describe '#import, when the question has no test cases yet' do
       it 'records no previous version' do
         subject.send(:import)
-        expect(question.reload.snapshots).to be_empty
+        expect(question.reload.snapshots.ids).to be_empty
       end
     end
 

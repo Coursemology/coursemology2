@@ -240,10 +240,98 @@ RSpec.describe Course::Assessment::Question::Programming do
 
         question.destroy!
 
-        expect(Course::Assessment::Question::Programming.exists?(snapshot.id)).to be(false)
+        expect(Course::Assessment::Question::Programming.where(id: snapshot.id).ids).to be_empty
         expect(Course::Assessment::Question::ProgrammingTestCase.where(id: snapshot_test_case_ids)).to be_empty
         expect(AttachmentReference.where(attachable_type: snapshot.class.name, attachable_id: snapshot.id)).
           to be_empty
+      end
+
+      context 'once taken' do
+        let(:snapshot) { question.reload.snapshots.sole }
+
+        it 'cannot be changed, or made live again' do
+          expect { snapshot.update!(attempt_limit: 3) }.to raise_error(ActiveRecord::ReadOnlyRecord)
+          expect { snapshot.reload.update!(current_id: nil) }.to raise_error(ActiveRecord::ReadOnlyRecord)
+          expect(snapshot.reload).to have_attributes(attempt_limit: nil, current_id: question.id)
+        end
+
+        it 'cannot have its test cases or template files changed' do
+          expect { snapshot.test_cases.first.update!(expected: 'changed') }.
+            to raise_error(ActiveRecord::ReadOnlyRecord)
+          expect { snapshot.template_files.first.update!(content: 'changed') }.
+            to raise_error(ActiveRecord::ReadOnlyRecord)
+        end
+
+        it 'cannot have test cases or template files added, or moved onto or off it' do
+          expect { snapshot.test_cases.create!(identifier: 'added', test_case_type: :public_test) }.
+            to raise_error(ActiveRecord::ReadOnlyRecord)
+          expect { snapshot.template_files.create!(filename: 'added.py', content: '') }.
+            to raise_error(ActiveRecord::ReadOnlyRecord)
+          # Loaded without the question, so that only the previous owner's id says where it came from.
+          expect do
+            Course::Assessment::Question::ProgrammingTestCase.find(question.test_cases.first.id).
+              update!(question_id: snapshot.id)
+          end.to raise_error(ActiveRecord::ReadOnlyRecord)
+          expect do
+            Course::Assessment::Question::ProgrammingTestCase.find(snapshot.test_cases.first.id).
+              update!(question_id: question.id)
+          end.to raise_error(ActiveRecord::ReadOnlyRecord)
+        end
+
+        it 'leaves the live question and its test cases and template files editable' do
+          question.reload.update!(attempt_limit: 3)
+          question.test_cases.first.update!(expected: 'changed')
+          question.template_files.first.update!(content: 'changed')
+
+          expect(question.reload.attempt_limit).to eq(3)
+        end
+      end
+
+      it 'cannot be created through a save' do
+        expect { create(:course_assessment_question_programming, current: question) }.
+          to raise_error(ActiveRecord::ReadOnlyRecord)
+      end
+    end
+
+    describe '#remove_package' do
+      let(:question) { create(:course_assessment_question_programming, :auto_gradable) }
+      let(:editor) { create(:user) }
+      let(:non_autograded_template_files) do
+        [Course::Assessment::Question::ProgrammingTemplateFile.new(filename: 'main.py', content: 'print(1)')]
+      end
+
+      def remove_package
+        User.with_stamper(editor) do
+          question.remove_package(non_autograded_template_files)
+          question.save!
+        end
+      end
+
+      it 'keeps the autograded version, with its package, as a snapshot' do
+        test_case_ids = question.test_cases.map(&:id)
+        template_file_ids = question.template_files.map(&:id)
+        package_id = question.attachment.attachment_id
+
+        remove_package
+
+        snapshot = question.reload.snapshots.sole
+        expect(snapshot.test_cases.map(&:id)).to match_array(test_case_ids)
+        expect(snapshot.template_files.map(&:id)).to match_array(template_file_ids)
+        expect(snapshot.attachment.attachment_id).to eq(package_id)
+        expect(snapshot.superseder).to eq(editor)
+        expect(question.test_cases).to be_empty
+        expect(question.attachment).to be_nil
+        expect(question.template_files.map(&:filename)).to contain_exactly('main.py')
+      end
+
+      context 'when the question is not autograded' do
+        let(:question) { create(:course_assessment_question_programming) }
+
+        it 'keeps no snapshot' do
+          remove_package
+
+          expect(question.reload.snapshots.ids).to be_empty
+        end
       end
     end
 
