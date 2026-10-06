@@ -23,19 +23,34 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
 
   def update_evaluator
     is_codaveri = update_evaluator_params[:programming_evaluator] == 'codaveri'
-    @programming_questions = Course::Assessment::Question::Programming.
-                             where(id: update_evaluator_params[:programming_question_ids])
+    @programming_questions = course_programming_questions(update_evaluator_params[:programming_question_ids])
     raise ActiveRecord::Rollback unless @programming_questions.update_all(is_codaveri: is_codaveri)
   end
 
   def update_live_feedback_enabled
     live_feedback_enabled = update_live_feedback_enabled_params[:live_feedback_enabled]
-    @programming_questions = Course::Assessment::Question::Programming.
-                             where(id: update_live_feedback_enabled_params[:programming_question_ids])
+    @programming_questions =
+      course_programming_questions(update_live_feedback_enabled_params[:programming_question_ids])
     raise ActiveRecord::Rollback unless @programming_questions.update_all(live_feedback_enabled: live_feedback_enabled)
   end
 
   private
+
+  # The course's live programming questions among the given ids. The bulk updates above skip callbacks, so they
+  # must be scoped here: otherwise ids from the request reach other courses' questions, and snapshots, which must
+  # never change.
+  #
+  # @param [Array<String>] ids The requested programming question ids.
+  # @return [ActiveRecord::Relation<Course::Assessment::Question::Programming>]
+  def course_programming_questions(ids)
+    programming = Course::Assessment::Question::Programming
+    course_question_ids = Course::QuestionAssessment.
+                          where(assessment_id: current_course.assessments.select(:id)).select(:question_id)
+    course_programming_ids = Course::Assessment::Question.
+                             where(id: course_question_ids, actable_type: programming.name).select(:actable_id)
+
+    programming.live.where(id: ids).where(id: course_programming_ids)
+  end
 
   def assessment_params
     params.permit(:id)

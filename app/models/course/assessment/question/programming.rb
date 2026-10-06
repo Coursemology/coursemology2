@@ -17,6 +17,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   include DuplicationStateTrackingConcern
   include Course::Assessment::Question::ProgrammingSnapshotsConcern
   include Course::Assessment::Question::ProgrammingSnapshotReadOnlyConcern
+  include Course::Assessment::Question::ProgrammingImportsConcern
 
   attr_accessor :max_time_limit, :skip_process_package
 
@@ -149,13 +150,23 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   #
   # @param [Array<Course::Assessment::Question::ProgrammingTemplateFile>] template_files The new template files.
   def remove_package(template_files)
-    snapshot_current_version!(attributes_before_save, attachment)
+    # Joins the transaction of the save this is for, so that the lock lasts until the save commits.
+    self.class.transaction do
+      # Under the lock, so that an import that committed after this question was loaded is the version kept, rather
+      # than removed unrecorded. A new question has nothing to keep.
+      if persisted?
+        lock_package!
+        attachment_references.reset
+      end
+      snapshot_current_version!(attributes_before_save, attachment)
 
-    self.imported_attachment = nil
-    self.import_job_id = nil
-    self.template_files.clear
-    self.template_files = template_files
-    test_cases.clear
+      self.imported_attachment = nil
+      # Supersedes any import still to run.
+      self.import_job_id = nil
+      self.template_files.clear
+      self.template_files = template_files
+      test_cases.clear
+    end
   end
 
   def question_type
@@ -172,9 +183,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   def create_or_update_codaveri_problem
     ActiveRecord.after_all_transactions_commit do
-      import_job =
-        Course::Assessment::Question::CodaveriImportJob.perform_later(self, attachment)
-      update_column(:import_job_id, import_job.job_id)
+      record_codaveri_import_job(Course::Assessment::Question::CodaveriImportJob.perform_later(self, attachment))
     end
   end
 
@@ -205,13 +214,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   end
 
   def evaluate_package
-    previous_version = attributes_before_save
-
-    ActiveRecord.after_all_transactions_commit do
-      import_job = Course::Assessment::Question::ProgrammingImportJob.
-                   perform_later(self, attachment, max_time_limit, previous_version)
-      update_column(:import_job_id, import_job.job_id)
-    end
+    schedule_import(attachment, attributes_before_save)
   end
 
   # Queues the new question package for processing.
@@ -221,14 +224,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   def process_new_package
     new_attachment = attachment
     restore_attachment_change
-    previous_version = attributes_before_save
-
-    ActiveRecord.after_all_transactions_commit do
-      new_attachment.save!
-      import_job = Course::Assessment::Question::ProgrammingImportJob.
-                   perform_later(self, new_attachment, max_time_limit, previous_version)
-      update_column(:import_job_id, import_job.job_id)
-    end
+    schedule_import(new_attachment, attributes_before_save)
   end
 
   # Removes the template files and test cases from the old package.

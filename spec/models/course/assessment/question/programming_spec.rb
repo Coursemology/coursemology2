@@ -210,6 +210,35 @@ RSpec.describe Course::Assessment::Question::Programming do
               expect_previous_version_passed_on { subject.save! }
             end
 
+            # So that the import job recorded on the question is always that of the latest edit to commit, which is
+            # the only one an import applies for.
+            it "records the job as the question's import job in the same save, before queueing it" do
+              question_id = subject.id
+              recorded_and_queued_job_ids = []
+              allow_any_instance_of(Course::Assessment::Question::ProgrammingImportJob).
+                to receive(:enqueue).and_wrap_original do |original, *args|
+                recorded_job_id = Course::Assessment::Question::Programming.unscoped.
+                                  where(id: question_id).pick(:import_job_id)
+                recorded_and_queued_job_ids.push(recorded_job_id, original.receiver.job_id)
+                original.call(*args)
+              end
+              subject.time_limit = old_time_limit - 1
+              subject.save!
+
+              recorded_job_id, queued_job_id = recorded_and_queued_job_ids
+              expect(recorded_job_id).to eq(queued_job_id)
+              expect(subject.reload.import_job_id).to eq(queued_job_id)
+            end
+
+            it 'records a job that cannot be queued as failed, so that the next save retries it' do
+              allow_any_instance_of(Course::Assessment::Question::ProgrammingImportJob).
+                to receive(:enqueue).and_raise(StandardError, 'queue unavailable')
+              subject.time_limit = old_time_limit - 1
+
+              expect { subject.save! }.to raise_error(StandardError, 'queue unavailable')
+              expect(subject.reload.import_job).to be_errored
+            end
+
             # Only the request knows who is editing; the import job that creates the snapshot runs without a user.
             it 'names the editor as the superseder of the version it replaces' do
               editor = create(:user)
@@ -220,6 +249,36 @@ RSpec.describe Course::Assessment::Question::Programming do
                               end
               expect { User.with_stamper(editor) { subject.save! } }.to(queued_import)
             end
+          end
+        end
+      end
+    end
+
+    # A Codaveri push is recorded as the question's import job, for the edit page to follow, but must not take the
+    # place of an import still to run: that import would then find itself superseded.
+    describe 'recording a Codaveri push' do
+      let(:question) { create(:course_assessment_question_programming, :auto_gradable) }
+      let(:previous_job) { TrackableJob::Job.create!(id: SecureRandom.uuid, status: previous_job_status) }
+
+      before { question.update_column(:import_job_id, previous_job.id) }
+
+      with_active_job_queue_adapter(:test) do
+        context 'when an import is still to run' do
+          let(:previous_job_status) { :submitted }
+
+          it 'leaves the import recorded' do
+            question.send(:create_or_update_codaveri_problem)
+            expect(question.reload.import_job_id).to eq(previous_job.id)
+          end
+        end
+
+        context 'when the previous job has finished' do
+          let(:previous_job_status) { :completed }
+
+          it 'records the push' do
+            question.send(:create_or_update_codaveri_problem)
+            expect(question.reload.import_job_id).not_to eq(previous_job.id)
+            expect(question.import_job_id).to be_present
           end
         end
       end
