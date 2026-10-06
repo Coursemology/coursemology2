@@ -45,6 +45,17 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     times
   end
 
+  # The latest grading run that has finished, whose results are the ones to show. A run gets its results only when
+  # grading completes, so while a later run is still grading, or if it failed, this is the run before it.
+  #
+  # @return [Course::Assessment::Answer::ProgrammingAutoGrading, nil]
+  def graded_auto_grading
+    latest = acting_as.auto_grading
+    return latest.specific if latest&.actable
+
+    acting_as.auto_gradings.where.not(actable_id: nil).last&.specific
+  end
+
   # Programming answers should be graded in a job.
   def grade_inline?
     false
@@ -53,9 +64,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   def download(dir)
     files.each do |src_file|
       dst_path = File.join(dir, src_file.filename)
-      File.open(dst_path, 'w') do |dst_file|
-        dst_file.write(src_file.content)
-      end
+      File.write(dst_path, src_file.content)
     end
   end
 
@@ -91,7 +100,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   def generate_feedback
-    codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
+    (codaveri_feedback_job&.status == 'submitted') ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
   end
 
   def generate_live_feedback(thread_id, message)

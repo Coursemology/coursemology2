@@ -208,6 +208,24 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             end
           end
 
+          # Answer#auto_grade! grades a programming answer into a new run each time.
+          context 'when the answer is graded again, into a new run' do
+            def grade_into(run)
+              Course::Assessment::Answer::AutoGradingService.grade(Course::Assessment::Answer.find(answer.id), run)
+            end
+
+            it 'keeps the earlier run and its results attached to the answer' do
+              grade_into(grading)
+              later_run = answer.auto_gradings.create!
+              grade_into(later_run)
+
+              runs = answer.reload.auto_gradings
+              expect(runs).to eq([grading, later_run])
+              expect(runs.map { |run| run.reload.actable.test_results }).to all(be_present)
+              expect(answer.auto_grading).to eq(later_run)
+            end
+          end
+
           context 'when the answer is correct' do
             let(:question_test_report_path) do
               File.join(Rails.root,

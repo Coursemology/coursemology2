@@ -6,7 +6,8 @@ RSpec.describe Course::Assessment::Answer do
   it { is_expected.to belong_to(:submission).without_validating_presence }
   it { is_expected.to belong_to(:question).without_validating_presence }
   it { is_expected.to accept_nested_attributes_for(:actable) }
-  it { is_expected.to have_one(:auto_grading).dependent(:destroy) }
+  it { is_expected.to have_many(:auto_gradings).dependent(:destroy) }
+  it { is_expected.to have_one(:auto_grading) }
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
@@ -175,6 +176,14 @@ RSpec.describe Course::Assessment::Answer do
         expect(subject.graded_at).to be_nil
         expect(subject.submitted_at).to be_nil
       end
+
+      it 'keeps its grading runs' do
+        run = create(:course_assessment_answer_auto_grading, answer: subject)
+        subject.unsubmit!
+        subject.save!
+
+        expect(subject.reload.auto_gradings).to contain_exactly(run)
+      end
     end
 
     describe '#auto_grade!' do
@@ -238,25 +247,45 @@ RSpec.describe Course::Assessment::Answer do
       end
     end
 
-    describe '#ensure_auto_grading!' do
-      context 'when an existing auto grading already exists' do
-        let(:existing_record) do
-          # Duplicate the subject so the subject does not know about the grading.
-          create(:course_assessment_answer_auto_grading, answer: subject.class.find(subject.id))
+    describe '#auto_grading_to_grade_into!' do
+      subject { answer.send(:auto_grading_to_grade_into!) }
+
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+
+      context 'when the answer is not a programming answer' do
+        let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
+        let(:answer) do
+          create(:course_assessment_answer_multiple_response, :submitted,
+                 question: assessment.questions.first, creator: student_user).answer
         end
 
-        it 'returns the existing grading' do
-          # Simulate a concurrent creation of an existing record.
-          expect(subject.auto_grading).to be_nil
-          existing_record
+        it 'creates a run when the answer has none' do
+          expect(subject).to be_persisted
+          expect(answer.auto_gradings).to contain_exactly(subject)
+        end
 
-          expect(subject.send(:ensure_auto_grading!)).to eq(existing_record)
+        it 'grades into the existing run' do
+          run = create(:course_assessment_answer_auto_grading, answer: answer)
+          expect(subject).to eq(run)
+          expect(answer.auto_gradings.reload).to contain_exactly(run)
         end
       end
 
-      context 'when no existing auto grading exists' do
-        it 'creates a new grading' do
-          expect(subject.send(:ensure_auto_grading!)).to be_persisted
+      context 'when the answer is a programming answer' do
+        let(:assessment) { create(:assessment, :with_programming_question, course: course) }
+        let(:answer) do
+          create(:course_assessment_answer_programming, :submitted,
+                 question: assessment.questions.first, creator: student_user).answer
+        end
+
+        it 'creates a new run, keeping the earlier ones, and makes it the latest' do
+          earlier_run = create(:course_assessment_answer_auto_grading, answer: answer)
+          answer.auto_grading
+
+          expect(subject).not_to eq(earlier_run)
+          expect(answer.auto_gradings.reload).to eq([earlier_run, subject])
+          expect(answer.auto_grading).to eq(subject)
         end
       end
     end
