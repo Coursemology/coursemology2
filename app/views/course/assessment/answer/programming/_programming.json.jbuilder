@@ -6,7 +6,8 @@ question = answer.question.specific
 is_current_answer = answer.current_answer?
 latest_answer = last_attempt(answer)
 attempt = is_current_answer ? latest_answer : answer
-auto_grading = attempt&.auto_grading&.specific
+# Results come from the latest run that finished; the job status below, from the latest run, finished or not.
+auto_grading = attempt&.specific&.graded_auto_grading
 
 can_grade = can?(:grade, submission)
 

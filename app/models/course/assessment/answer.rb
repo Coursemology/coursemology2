@@ -56,8 +56,15 @@ class Course::Assessment::Answer < ApplicationRecord
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
-  has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
-                         dependent: :destroy, inverse_of: :answer, autosave: true
+  # Every grading run of this answer, oldest first. Programming answers get a new run each time they are graded, so
+  # that a regrade keeps earlier runs' results, which may have been graded against a previous version of the
+  # question. Other answers have one run, graded again in place.
+  has_many :auto_gradings, -> { order(:created_at, :id) }, class_name: 'Course::Assessment::Answer::AutoGrading',
+                                                           dependent: :destroy, inverse_of: :answer
+  # The latest run, which may still be grading. Create runs through +auto_gradings+: assigning one through this
+  # association would detach the previous latest run from the answer.
+  has_one :auto_grading, -> { order(created_at: :desc, id: :desc) },
+          class_name: 'Course::Assessment::Answer::AutoGrading', inverse_of: :answer, autosave: true
   has_many :rubric_evaluations, class_name: 'Course::Rubric::AnswerEvaluation',
                                 dependent: :destroy, inverse_of: :answer
   # The single official grade-bearing evaluation (its rubric is the answer's graded rubric).
@@ -86,7 +93,7 @@ class Course::Assessment::Answer < ApplicationRecord
   def auto_grade!(redirect_to_path: nil, reduce_priority: false)
     raise IllegalStateError if attempting?
 
-    auto_grading = ensure_auto_grading!
+    auto_grading = auto_grading_to_grade_into!
     if grade_inline?
       Course::Assessment::Answer::AutoGradingService.grade(self, auto_grading)
       nil
@@ -209,33 +216,26 @@ class Course::Assessment::Answer < ApplicationRecord
     errors.add(:grade, :non_negative_grade) if grade.present? && grade < 0
   end
 
-  # Ensures that an auto grading record exists for this answer.
+  # The run to grade this answer into: a new one for a programming answer (see +auto_gradings+), otherwise the
+  # answer's existing run if it has one.
   #
-  # Use this to guarantee that an auto grading record exists, and retrieves it. This is because
-  # there can be a concurrent creation of such a record across two processes, and this can only
-  # be detected at the database level.
-  #
-  # The additional transaction is in place because a RecordNotUnique will cause the active
-  # transaction to be considered as errored, and needing a rollback.
+  # Two concurrent first gradings of a non-programming answer can each create a run; the later one is then the
+  # answer's run, and the other is left unused.
   #
   # @return [Course::Assessment::Answer::AutoGrading]
-  def ensure_auto_grading!
-    ActiveRecord::Base.transaction(requires_new: true) do
-      auto_grading || create_auto_grading!
-    end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
-    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
+  def auto_grading_to_grade_into!
+    return auto_grading if auto_grading && !actable.is_a?(Course::Assessment::Answer::Programming)
 
-    association(:auto_grading).reload
-    auto_grading
+    auto_gradings.create!.tap { association(:auto_grading).reset }
   end
 
+  # The answer's grading runs are kept: unsubmitting is followed by finalising and grading again, which adds a run
+  # (see +auto_gradings+).
   def unsubmit
     self.grade = nil
     self.grader = nil
     self.graded_at = nil
     self.submitted_at = nil
-    auto_grading&.mark_for_destruction
   end
 
   def auto_grading_job_class(reduce_priority)

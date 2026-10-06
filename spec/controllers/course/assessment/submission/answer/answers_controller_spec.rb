@@ -240,6 +240,20 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
           expect(joined_result_ids).to match_array(graded_test_case_ids)
           expect(question.reload.test_cases.map(&:id)).not_to include(*graded_test_case_ids)
         end
+
+        # The regrade an edit queues grades into a new run, which has no results until it finishes.
+        context 'while a later run is still grading' do
+          before { create(:course_assessment_answer_auto_grading, answer: answer) }
+
+          it 'still shows the results of the run that finished' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['testResults'].values.flat_map(&:keys).map(&:to_i)).
+              to match_array(graded_test_case_ids)
+            expect(json_result['gradedOnPreviousVersion']).to be(true)
+          end
+        end
       end
     end
   end

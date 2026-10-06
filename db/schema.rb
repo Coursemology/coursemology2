@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_02_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_06_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -100,7 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_000000) do
     t.json "result"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["actable_id", "actable_type"], name: "index_course_assessment_answer_auto_gradings_on_actable", unique: true
-    t.index ["answer_id"], name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true
+    t.index ["answer_id"], name: "idx_course_assessment_answer_auto_gradings_on_answer_id"
     t.index ["job_id"], name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true
   end
 

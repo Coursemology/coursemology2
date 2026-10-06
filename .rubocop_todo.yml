@@ -372,7 +372,6 @@ Style/FetchEnvVar:
 # This cop supports safe autocorrection (--autocorrect).
 Style/FileWrite:
   Exclude:
-    - 'app/models/course/assessment/answer/programming.rb'
     - 'app/models/course/assessment/answer/text_response.rb'
     - 'app/services/course/survey/survey_download_service.rb'
 
@@ -622,7 +621,6 @@ Style/TernaryParentheses:
     - 'app/controllers/course/learning_map_controller.rb'
     - 'app/controllers/course/lesson_plan/items_controller.rb'
     - 'app/controllers/course/material/folders_controller.rb'
-    - 'app/models/course/assessment/answer/programming.rb'
     - 'app/models/course/assessment/answer/programming_file.rb'
     - 'app/models/course/user_invitation.rb'
     - 'app/services/course/duplication/object_duplication_service.rb'

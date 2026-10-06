@@ -45,6 +45,34 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#graded_auto_grading' do
+      # A run's programming record is attached only when its grading completes.
+      def finished_run
+        Course::Assessment::Answer::ProgrammingAutoGrading.create!(answer: answer.acting_as)
+      end
+
+      def unfinished_run
+        create(:course_assessment_answer_auto_grading, answer: answer.acting_as)
+      end
+
+      it 'is nil before the answer is graded' do
+        unfinished_run
+        expect(answer.graded_auto_grading).to be_nil
+      end
+
+      it 'is the latest run, once it has finished' do
+        finished_run
+        latest_run = finished_run
+        expect(answer.graded_auto_grading).to eq(latest_run)
+      end
+
+      it 'is the run before the latest, while the latest is still grading or has failed' do
+        earlier_run = finished_run
+        unfinished_run
+        expect(answer.graded_auto_grading).to eq(earlier_run)
+      end
+    end
+
     describe '#grade_inline?' do
       it 'returns false' do
         expect(answer.acting_as.grade_inline?).to be_falsy
