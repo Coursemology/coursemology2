@@ -226,6 +226,75 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       end
     end
 
+    describe 'snapshots' do
+      let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
+      let(:live_question) { assessment.questions.first.specific }
+      let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+      let!(:graded_test_result) do
+        grading = Course::Assessment::Answer::ProgrammingAutoGrading.create!(answer: submission.answers.first)
+        create(:course_assessment_answer_programming_auto_grading_test_result,
+               auto_grading: grading, test_case: live_question.test_cases.first)
+      end
+
+      # Switching to non-autograded removes the package and test cases outside of an import.
+      context 'when an online editor question is made non-autograded after an answer was graded against it' do
+        before { live_question.update_column(:package_type, :online_editor) }
+
+        subject do
+          request.accept = 'application/json'
+          patch :update, params: {
+            course_id: course, assessment_id: assessment, id: live_question,
+            question_programming: {
+              title: live_question.title, language_id: live_question.language_id,
+              memory_limit: live_question.memory_limit, time_limit: live_question.time_limit,
+              autograded: false, submission: 'print(1)'
+            }
+          }
+        end
+
+        it 'keeps the version it was graded against as a snapshot' do
+          test_case_ids = live_question.test_cases.map(&:id)
+
+          expect(subject).to have_http_status(:ok)
+
+          snapshot = live_question.reload.snapshots.sole
+          expect(snapshot.test_cases.map(&:id)).to match_array(test_case_ids)
+          expect(snapshot.superseder).to eq(user)
+          expect(graded_test_result.reload.test_case.question_id).to eq(snapshot.id)
+          expect(live_question.test_cases).to be_empty
+        end
+      end
+
+      # Every action loads the question through the assessment, and a snapshot is in none: it has no parent question
+      # row. Rails renders the RecordNotFound as a 404.
+      context 'when a request is made for a snapshot' do
+        let(:snapshot) do
+          path = File.join(Rails.root, 'spec/fixtures/course/programming_question_template_with_add_files.zip')
+          package = create(:attachment_reference, binary: true, file_path: path)
+          Course::Assessment::Question::ProgrammingImportService.import(live_question, package)
+          live_question.reload.snapshots.sole
+        end
+        let(:snapshot_params) { { course_id: course, assessment_id: assessment, id: snapshot.id } }
+
+        it 'is not found, for reading or for changing it' do
+          expect { get :edit, format: :json, params: snapshot_params }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { get :import_result, format: :json, params: snapshot_params }.
+            to raise_error(ActiveRecord::RecordNotFound)
+          expect do
+            patch :update, format: :json, params: snapshot_params.merge(question_programming: { attempt_limit: 3 })
+          end.to raise_error(ActiveRecord::RecordNotFound)
+          expect do
+            patch :update_question_setting,
+                  params: snapshot_params.merge(question_programming: { live_feedback_enabled: true })
+          end.to raise_error(ActiveRecord::RecordNotFound)
+          expect { delete :destroy, params: snapshot_params }.to raise_error(ActiveRecord::RecordNotFound)
+
+          expect(snapshot.reload).to have_attributes(attempt_limit: nil, live_feedback_enabled: false)
+          expect(snapshot.test_cases).to include(graded_test_result.reload.test_case)
+        end
+      end
+    end
+
     describe '#codaveri_languages' do
       subject do
         get :codaveri_languages, params: { course_id: course, assessment_id: assessment }, format: :json

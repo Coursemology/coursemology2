@@ -22,10 +22,6 @@ class Course::Assessment::Question::ProgrammingImportService
     end
   end
 
-  # Columns a snapshot does not take from the version it records: its own identity, its link to the live
-  # question, and the live question's import job, which is unique per question.
-  SNAPSHOT_EXCLUDED_COLUMNS = ['id', 'current_id', 'import_job_id'].freeze
-
   # Imports the templates and tests found in the package.
   #
   # @return [Boolean] See .import.
@@ -131,44 +127,15 @@ class Course::Assessment::Question::ProgrammingImportService
   # Keeps the version this import replaces as a snapshot, instead of letting the assignments in #save! destroy
   # its test cases and template files.
   #
-  # This must run in the same transaction that assigns the new test cases. The live question must never be
-  # committed without test cases: grading would then treat it as not auto-gradable and award full marks.
+  # The live question must never be committed without test cases: grading would then treat it as not
+  # auto-gradable and award full marks. Hence the snapshot is taken in the transaction that assigns the new ones.
+  # +superseded_at+ is when this import replaced the version, not when the edit that queued it was saved.
+  #
+  # While a newly uploaded package waits for import, the question holds references to both packages, so the
+  # previous package is the one that is not being imported.
   def snapshot_previous_version
-    return unless @question.persisted? && @question.test_cases.exists?
-
-    snapshot = create_snapshot
-    # Moved through the associations deliberately: update_all on an association also resets it. A loaded
-    # association still holding the moved rows would destroy them when #save! assigns the new ones.
-    @question.test_cases.update_all(question_id: snapshot.id)
-    @question.template_files.update_all(question_id: snapshot.id)
-  end
-
-  # Inserted directly rather than through Programming#save!, so that the snapshot has no parent question row
-  # and runs none of the callbacks and validations meant for an editable question.
-  #
-  # @return [Course::Assessment::Question::Programming] The snapshot.
-  def create_snapshot
-    programming = Course::Assessment::Question::Programming
-    # Sliced to this table's columns: under +acts_as+, +attributes+ also includes the parent question's.
-    # +superseded_at+ is when this import replaced the version, not when the edit that queued it was saved.
-    attributes = (@previous_version || @question.attributes).slice(*programming.column_names).
-                 except(*SNAPSHOT_EXCLUDED_COLUMNS).
-                 merge('current_id' => @question.id, 'superseded_at' => Time.current)
-    snapshot_id = programming.insert!(attributes, returning: :id).first['id']
-
-    programming.find(snapshot_id).tap do |snapshot|
-      copy_previous_package_reference(snapshot)
-    end
-  end
-
-  # Gives the snapshot its own reference to the package being replaced. Attachments are content-addressed, so
-  # this costs a reference row and no storage. While a newly uploaded package waits for import, the question
-  # holds references to both packages, so the previous package is the one that is not being imported.
-  #
-  # @param [Course::Assessment::Question::Programming] snapshot The snapshot to attach the package to.
-  def copy_previous_package_reference(snapshot)
     previous_package = @question.attachment_references.where.not(id: @attachment.id).take || @attachment
-    previous_package.dup.tap { |reference| reference.attachable = snapshot }.save!
+    @question.snapshot_current_version!(@previous_version || @question.attributes, previous_package)
   end
 
   # Builds the template file records from the templates loaded from the package.
