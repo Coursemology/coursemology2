@@ -3470,6 +3470,9 @@
   "course.assessment.submission.answerTooLargeError": {
     "defaultMessage": "您的答案必须小于 2 MB。"
   },
+  "course.assessment.submission.history.answerGradedOnPastSnapshot": {
+    "defaultMessage": "此答案评分后，题目已被修改。"
+  },
   "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
     "defaultMessage": "您即将发布 {count} 条 AI 编程反馈。"
   },

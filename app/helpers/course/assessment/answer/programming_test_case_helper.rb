@@ -72,4 +72,44 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
       [test_case_type, failed_test_case && [failed_test_case, results[failed_test_case.id]]]
     end
   end
+
+  # The version of the question whose test cases a grading run's results belong to. An edit that re-imports a
+  # question moves its test cases onto a snapshot of the previous version instead of deleting them, so a run's
+  # results keep pointing at the test cases they were graded against.
+  #
+  # @param [Course::Assessment::Question::Programming] question The live question.
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading, nil] auto_grading The grading run, if any.
+  # @return [Course::Assessment::Question::Programming] The live question or one of its snapshots. The live
+  #   question when there is no run, or when the run's results no longer exist to say which version they belong
+  #   to -- destroyed by an edit made before snapshots were kept.
+  def graded_question_version(question, auto_grading)
+    version_id = graded_question_version_id(auto_grading)
+    return question if version_id.nil? || version_id == question.id
+
+    question.snapshots.find_by(id: version_id) || question
+  end
+
+  # Whether a grading run was graded against an earlier version of the question than the live one, including a
+  # run whose results no longer exist to say which version.
+  #
+  # @param [Course::Assessment::Question::Programming] question The live question.
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading, nil] auto_grading The grading run, if any.
+  def graded_on_previous_version?(question, auto_grading)
+    auto_grading.present? && graded_question_version_id(auto_grading) != question.id
+  end
+
+  private
+
+  # @return [Integer, nil] The id of the question or snapshot owning the run's test cases, or nil if it has no
+  #   results that still point at a test case.
+  def graded_question_version_id(auto_grading)
+    return nil unless auto_grading
+
+    @graded_question_version_ids ||= {}
+    @graded_question_version_ids.fetch(auto_grading.id) do
+      @graded_question_version_ids[auto_grading.id] =
+        Course::Assessment::Question::ProgrammingTestCase.
+        where(id: auto_grading.test_results.select(:test_case_id)).pick(:question_id)
+    end
+  end
 end

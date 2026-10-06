@@ -258,6 +258,26 @@ describe('TestCases', () => {
     });
   });
 
+  describe('when the answer was graded against an earlier version of the question', () => {
+    const editedNotice =
+      'Changes have been made to the question after this answer was graded.';
+
+    it('says so', async () => {
+      const page = render(
+        <TestCases {...defaultStudentViewProps} gradedOnPreviousVersion />,
+      );
+
+      expect(await page.findByText(editedNotice)).toBeVisible();
+    });
+
+    it('says nothing otherwise', async () => {
+      const page = render(<TestCases {...defaultStudentViewProps} />);
+      await waitForMount(page);
+
+      expect(page.queryByText(editedNotice)).not.toBeInTheDocument();
+    });
+  });
+
   // Past answers and assessment statistics pass no course settings: the server has already filtered
   // the payload for the viewer, so what arrived is what should be rendered. Neither the output column
   // nor the stream panels are gated on their data being present the way the test case panels are, so

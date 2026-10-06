@@ -78,6 +78,11 @@ export interface TestCasesState {
   canReadTests: boolean;
   testCases: TestCasesByType;
   testResults?: TestResultsByType;
+  /**
+   * The run was graded against an earlier version of the question. `testCases` are that version's, unless
+   * the run predates snapshots and its results no longer exist, in which case they are the current ones.
+   */
+  gradedOnPreviousVersion?: boolean;
   stdout?: string;
   stderr?: string;
 }
@@ -106,6 +111,7 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
   canReadTests: boolean;
   testCases: TestCasesByType;
   testResults?: TestResultsByType;
+  gradedOnPreviousVersion?: boolean;
   stdout?: string;
   stderr?: string;
   attemptsLeft?: number;

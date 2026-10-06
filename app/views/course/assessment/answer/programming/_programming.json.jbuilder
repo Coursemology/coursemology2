@@ -62,10 +62,14 @@ displayed_test_case_types << 'evaluation_test' if show_evaluation
 # test case id: a test case belongs to the question, while a result belongs to one grading run.
 # Both hashes cover every type on the question -- the explanation below needs evaluation tests even
 # when they are not displayed -- but only the displayed types are rendered.
-test_cases_by_type = question.test_cases_by_type
+#
+# The definitions come from the version the run was graded against, so that its results make sense: after an
+# edit, that is a snapshot of the previous version. Everything else shows the live question.
+test_cases_by_type = graded_question_version(question, auto_grading).test_cases_by_type
 test_results_by_type = get_test_results_by_type(test_cases_by_type, auto_grading)
 
 json.canReadTests can_read_tests
+json.gradedOnPreviousVersion graded_on_previous_version?(question, auto_grading)
 
 json.testCases do
   displayed_test_case_types.each do |test_case_type|
@@ -116,7 +120,7 @@ json.explanation do
 
     passed_evaluation_tests = first_failure_by_type['evaluation_test'].blank?
 
-    json.correct attempt&.auto_grading && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
+    json.correct attempt.auto_grading && attempt.correct && (can_grade ? passed_evaluation_tests : true)
     json.explanations explanations
   end
 end

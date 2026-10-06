@@ -88,6 +88,7 @@ export interface ProgrammingAnswerDetails
   canReadTests: boolean;
   testCases: TestCasesByType;
   testResults?: TestResultsByType;
+  gradedOnPreviousVersion?: boolean;
   stdout?: string;
   stderr?: string;
   attemptsLeft?: number;

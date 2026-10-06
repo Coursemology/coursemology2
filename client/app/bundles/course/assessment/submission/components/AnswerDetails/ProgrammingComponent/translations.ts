@@ -66,4 +66,9 @@ export default defineMessages({
     id: 'course.assessment.submission.TestCaseView.noOutputs',
     defaultMessage: 'No outputs',
   },
+  answerGradedOnPastSnapshot: {
+    id: 'course.assessment.submission.history.answerGradedOnPastSnapshot',
+    defaultMessage:
+      'Changes have been made to the question after this answer was graded.',
+  },
 });

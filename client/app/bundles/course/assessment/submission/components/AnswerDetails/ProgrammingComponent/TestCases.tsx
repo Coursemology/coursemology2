@@ -176,6 +176,8 @@ export interface TestCasesProps {
   testResults?: TestResultsByType;
   stdout?: string;
   stderr?: string;
+  /** The results are from a run graded against an earlier version of the question. */
+  gradedOnPreviousVersion?: boolean;
 
   /**
    * Whether staff-only panels and columns are shown. The submission edit page passes its
@@ -206,6 +208,7 @@ const TestCases: FC<TestCasesProps> = (props) => {
     testResults,
     stdout,
     stderr,
+    gradedOnPreviousVersion = false,
     graderView = true,
     showPublicTestCasesOutput,
     showStdoutAndStderr,
@@ -257,6 +260,12 @@ const TestCases: FC<TestCasesProps> = (props) => {
     <div className="my-5 space-y-5">
       {isAutograding && (
         <Alert severity="info">{t(translations.autogradeProgress)}</Alert>
+      )}
+
+      {gradedOnPreviousVersion && (
+        <Alert severity="info">
+          {t(translations.answerGradedOnPastSnapshot)}
+        </Alert>
       )}
 
       {(Object.keys(PANEL_TITLES) as TestCaseType[]).map((testCaseType) => {
