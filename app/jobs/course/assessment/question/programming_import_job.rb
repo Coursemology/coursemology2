@@ -2,6 +2,7 @@
 class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   include TrackableJob
   include Rails.application.routes.url_helpers
+  include Course::Assessment::Question::CodaveriQuestionConcern
 
   protected
 
@@ -26,11 +27,15 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   # @param [Attachment] attachment The attachment containing the package.
   # @param [Hash{String => Object}, nil] previous_version See #perform_tracked.
   def perform_import(question, attachment, previous_version)
-    Course::Assessment::Question::ProgrammingImportService.import(question, attachment, previous_version)
-    # Make an API call to Codaveri to create/update question if the import above is succesful.
-    if question.is_codaveri || question.live_feedback_enabled
-      Course::Assessment::Question::ProgrammingCodaveriService.create_or_update_question(question, attachment)
-    end
+    imported = Course::Assessment::Question::ProgrammingImportService.
+               import(question, attachment, previous_version, import_job_id: job_id)
+    # Superseded by a later edit, whose own import applies its package, pushes it to Codaveri and regrades.
+    return unless imported
+
+    # Push the imported version to Codaveri. Through the serialised push, which sends the question's current version:
+    # pushing this job's own package could leave Codaveri on an older version, were a later import's push to land
+    # first.
+    safe_create_or_update_codaveri_question(question) if question.is_codaveri || question.live_feedback_enabled
     # Re-run the tests since the test results are deleted with the old package.
     Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
   end

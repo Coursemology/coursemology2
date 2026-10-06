@@ -97,6 +97,46 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
       end
     end
 
+    # The bulk updates skip callbacks, so only the course's own live questions may be reached: not another course's,
+    # and not a snapshot, even when their ids are requested.
+    describe 'bulk updates of programming questions' do
+      let(:own_questions) { course2.assessments.first.programming_questions.to_a }
+      let(:other_course_question) { course.assessments.first.programming_questions.first }
+      let!(:snapshot) do
+        programming = Course::Assessment::Question::Programming
+        live = own_questions.first
+        snapshot_id = programming.insert!(
+          live.attributes.slice(*programming.column_names).except('id', 'import_job_id').
+            merge('current_id' => live.id),
+          returning: :id
+        ).first['id']
+        programming.find(snapshot_id)
+      end
+      let(:requested_ids) { own_questions.map(&:id) + [other_course_question.id, snapshot.id] }
+
+      def expect_only_own_questions_changed(attribute, value)
+        expect(own_questions.map { |question| question.reload.public_send(attribute) }).to all(eq(value))
+        expect(other_course_question.reload.public_send(attribute)).not_to eq(value)
+        expect(snapshot.reload.public_send(attribute)).not_to eq(value)
+      end
+
+      it 'enables live feedback on the course\'s own live questions only' do
+        patch :update_live_feedback_enabled, params: {
+          course_id: course2,
+          update_live_feedback_enabled: { live_feedback_enabled: true, programming_question_ids: requested_ids }
+        }
+        expect_only_own_questions_changed(:live_feedback_enabled, true)
+      end
+
+      it 'switches the evaluator of the course\'s own live questions only' do
+        patch :update_evaluator, params: {
+          course_id: course2,
+          update_evaluator: { programming_evaluator: 'codaveri', programming_question_ids: requested_ids }
+        }
+        expect_only_own_questions_changed(:is_codaveri, true)
+      end
+    end
+
     describe '#update_live_feedback_enabled' do
       context 'when the live feedback is enabled for all assessments within course' do
         subject do

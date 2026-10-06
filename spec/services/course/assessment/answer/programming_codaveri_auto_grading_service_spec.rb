@@ -178,6 +178,85 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
+      # The Codaveri problem is replaced when the question is re-imported, which can happen while an answer is being
+      # evaluated, so Codaveri may evaluate either the version before the import or the one it created.
+      describe '#grade when the question is re-imported during the evaluation' do
+        let!(:previous_test_case_ids) { question.test_cases.map(&:id) }
+        let(:new_test_case_ids) { [] }
+        let(:job_grading) { Course::Assessment::Answer::AutoGrading.find(grading.id) }
+        subject do
+          Course::Assessment::Answer::AutoGradingService.grade(Course::Assessment::Answer.find(answer.id), job_grading)
+        end
+
+        # What an import commits once its package is evaluated: the version's test cases move to a snapshot, and
+        # new ones with the same identifiers replace them.
+        def commit_reimport
+          live = Course::Assessment::Question::Programming.find(question.id)
+          previous_test_cases = live.test_cases.to_a
+          Course::Assessment::Question::Programming.transaction do
+            live.snapshot_current_version!(live.attributes, live.attachment)
+            live.test_cases = previous_test_cases.map do |test_case|
+              Course::Assessment::Question::ProgrammingTestCase.new(identifier: test_case.identifier,
+                                                                    test_case_type: test_case.test_case_type)
+            end
+            live.skip_process_package = true
+            live.save!
+          end
+          live.test_cases.map(&:id)
+        end
+
+        # Commits the import once the evaluation is requested, and has Codaveri return results for the test cases
+        # the block chooses from the previous and new ones.
+        def evaluate_with_results_for(&choose_test_case_ids)
+          new_ids = new_test_case_ids
+          allow_any_instance_of(Course::Assessment::ProgrammingCodaveriEvaluationService).
+            to receive(:request_codaveri_evaluation).and_wrap_original do |original, *args|
+            new_ids.replace(commit_reimport)
+            allow(Codaveri::EvaluateApiStubs).to receive(:test_cases_id_from_factory).
+              and_return(choose_test_case_ids.call(previous_test_case_ids, new_ids))
+            Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
+            original.call(*args)
+          end
+        end
+
+        def saved_result_test_case_ids
+          job_grading.reload.actable.test_results.map(&:test_case_id)
+        end
+
+        before { Excon.defaults[:mock] = true }
+        after { Excon.stubs.clear }
+
+        context 'when Codaveri evaluated the version before the import' do
+          before { evaluate_with_results_for { |previous, _new| previous } }
+
+          it 'records the results against that version, now a snapshot' do
+            subject
+            expect(saved_result_test_case_ids).to match_array(previous_test_case_ids)
+            expect(question.reload.snapshots.sole.test_cases.map(&:id)).to match_array(previous_test_case_ids)
+            expect(answer.reload).to be_correct
+          end
+        end
+
+        context 'when Codaveri evaluated the version the import created' do
+          before { evaluate_with_results_for { |_previous, new| new } }
+
+          it 'records the results against the live question' do
+            subject
+            expect(saved_result_test_case_ids).to match_array(new_test_case_ids)
+            expect(answer.reload).to be_correct
+          end
+        end
+
+        context 'when the results are not all for one version' do
+          before { evaluate_with_results_for { |previous, new| previous.first(3) + new.drop(3) } }
+
+          it 'refuses to attribute them' do
+            expect { subject }.to raise_error(CodaveriError, /not all of one version/)
+            expect(job_grading.reload.actable).to be_nil
+          end
+        end
+      end
+
       describe '#grade but failed immediately' do
         subject { super().grade(answer, answer.auto_grading) }
 
