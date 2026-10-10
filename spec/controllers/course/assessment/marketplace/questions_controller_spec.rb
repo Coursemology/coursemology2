@@ -131,9 +131,12 @@ RSpec.describe Course::Assessment::Marketplace::QuestionsController, type: :cont
       get :show, as: :json, params: {
         course_id: destination_course.id, listing_id: listing.id, id: question.id
       }
-      category = response.parsed_body['detail']['categories'].first
-      expect(category).to include('name', 'isBonus')
-      expect(category['criteria'].first).to include('grade', 'explanation')
+      categories = response.parsed_body['detail']['categories']
+      # Read from the question's v2 active rubric, which has no bonus categories.
+      expect(categories.map { |category| category['name'] }).
+        to eq(question.specific.active_rubric.categories.map(&:name))
+      expect(categories.first).not_to include('isBonus')
+      expect(categories.first['criteria'].first).to include('grade', 'explanation')
     end
 
     it 'serializes forum post requirements' do

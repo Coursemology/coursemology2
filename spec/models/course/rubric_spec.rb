@@ -63,14 +63,26 @@ RSpec.describe Course::Rubric, type: :model do
     describe '#copy_with' do
       let(:assessment) { create(:assessment, course: course) }
       let!(:question) { create(:course_assessment_question_rubric_based_response, assessment: assessment) }
-      let!(:rubric) { Course::Rubric.build_from_v1(question, course).tap(&:save!) }
+      let!(:rubric) { question.active_rubric }
+
+      # Unsaved copies of the rubric's categories: what re-submitting its unchanged content would build.
+      def category_copies
+        rubric.categories.map do |category|
+          Course::Rubric::Category.new(
+            name: category.name,
+            criterions: category.criterions.map do |criterion|
+              Course::Rubric::Category::Criterion.new(grade: criterion.grade, explanation: criterion.explanation)
+            end
+          )
+        end
+      end
 
       context 'when the proposed content is identical' do
         it 'returns the same record without creating a new rubric' do
           expect do
             result = rubric.copy_with(
               grading_prompt: rubric.grading_prompt, model_answer: rubric.model_answer,
-              categories: Course::Rubric.categories_from_v1(question)
+              categories: category_copies
             )
             expect(result).to eq(rubric)
           end.not_to change(Course::Rubric, :count)
@@ -96,7 +108,7 @@ RSpec.describe Course::Rubric, type: :model do
 
       context 'when the categories change' do
         it 'persists a new, incompatible rubric with the new content' do
-          new_categories = Course::Rubric.categories_from_v1(question)
+          new_categories = category_copies
           new_categories.first.name = 'Renamed category'
 
           result = nil
@@ -112,7 +124,7 @@ RSpec.describe Course::Rubric, type: :model do
 
       context 'when categories are only reordered' do
         it 'is a no-op: the hash is order-independent, so the same record is returned' do
-          reordered = Course::Rubric.categories_from_v1(question).reverse
+          reordered = category_copies.reverse
 
           expect do
             result = rubric.copy_with(categories: reordered)

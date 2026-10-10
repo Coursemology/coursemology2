@@ -180,10 +180,6 @@ export default defineMessages({
   },
   // Preview-only copy with no equivalent in course/assessment/translations. Every other renderer
   // label is reused from there; these three have no source and so live locally.
-  bonus: {
-    id: 'course.marketplace.bonus',
-    defaultMessage: 'Bonus',
-  },
   noPreviewImage: {
     id: 'course.marketplace.noPreviewImage',
     defaultMessage:

@@ -6278,9 +6278,6 @@
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "검색과 일치하는 평가가 없습니다."
   },
-  "course.marketplace.bonus": {
-    "defaultMessage": "보너스"
-  },
   "course.marketplace.noPreviewImage": {
     "defaultMessage": "이 문항의 배경 이미지는 여기에서 미리 볼 수 없습니다."
   },

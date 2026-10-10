@@ -19,6 +19,7 @@ class Course::Rubric::Category::Criterion < ApplicationRecord
 
   default_scope { order(grade: :asc) }
 
+  # DEPRECATED -- scheduled for removal with Course::Rubric.build_from_v1.
   def self.build_from_v1(v1_criterion)
     Course::Rubric::Category::Criterion.new(
       grade: v1_criterion.grade,
@@ -26,8 +27,7 @@ class Course::Rubric::Category::Criterion < ApplicationRecord
     )
   end
 
-  # Builds an (unsaved) v2 criterion straight from edit-page params (used by question types that configure
-  # their rubric directly in v2, e.g. forum-post questions).
+  # Builds an (unsaved) v2 criterion straight from edit-page params (see Course::Rubric.categories_from_params).
   def self.build_from_params(criterion_params)
     Course::Rubric::Category::Criterion.new(
       grade: criterion_params[:grade],

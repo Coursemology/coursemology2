@@ -118,7 +118,6 @@ export interface QuestionPreviewData {
     | {
         categories: {
           name: string;
-          isBonus: boolean;
           criteria: { grade: number; explanation: string }[];
         }[];
       }

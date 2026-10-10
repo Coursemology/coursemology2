@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ForumPostResponsesController < Course::Assessment::Question::Controller
   include Course::Assessment::Question::GradingContextParamsConcern
+  include Course::Assessment::Question::RubricAuthoringConcern
 
   build_and_authorize_new_question :forum_post_response_question,
                                    class: Course::Assessment::Question::ForumPostResponse, only: [:new, :create]
@@ -99,25 +100,8 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
     saved ? :synced : :failed
   end
 
-  # Links the (possibly newly-versioned) rubric and carries graded evaluations forward onto it. Returns
-  # :advance_required when an incompatible change with graded answers needs confirmation (caller rolls back).
-  def sync_rubric_advance(previous_active, synced)
-    link_active_rubric
-    return :advance_required if advance_confirmation_required?(previous_active, synced)
-
-    advance_grading_evaluations(previous_active, synced)
-    :synced
-  end
-
-  # Builds the proposed v2 rubric from the edit-page params and assigns it to the question so its validation
-  # sees a present, valid active_rubric (and autosave persists a brand-new one). Copy-on-write: reuses the
-  # current active rubric untouched when the proposed content + prompt + model answer are unchanged.
-  def assign_active_rubric_from_params
-    previous_active = @forum_post_response_question.active_rubric
-    proposed = build_proposed_rubric
-    synced = (previous_active && rubric_content_unchanged?(previous_active, proposed)) ? previous_active : proposed
-    @forum_post_response_question.active_rubric = synced
-    synced
+  def rubric_question
+    @forum_post_response_question
   end
 
   # Question attributes to persist on update. A rubric-graded question's maximum grade is defined by its
@@ -134,58 +118,8 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
     rubric.categories.sum { |category| category.criterions.map(&:grade).max.to_i }
   end
 
-  def build_proposed_rubric
-    Course::Rubric.new(
-      course: current_course,
-      categories: Course::Rubric.categories_from_params(rubric_params[:categories_attributes]),
-      grading_prompt: rubric_params[:ai_grading_custom_prompt] || '',
-      model_answer: rubric_params[:ai_grading_model_answer] || ''
-    )
-  end
-
-  # Copy-on-write comparison mirroring Course::Rubric#copy_with: unchanged content (order-independent hash)
-  # plus unchanged prompt/model answer means the existing version can be reused instead of versioned.
-  def rubric_content_unchanged?(previous, proposed)
-    proposed.assign_category_weights
-    proposed.canonical_content_hash == previous.content_hash &&
-      proposed.grading_prompt.to_s == previous.grading_prompt.to_s &&
-      proposed.model_answer.to_s == previous.model_answer.to_s
-  end
-
-  # Records the question<->rubric link (rubric history; drives orphan cleanup on question delete). No-op when
-  # the reused-unchanged rubric is already linked.
-  def link_active_rubric
-    rubric = @forum_post_response_question.active_rubric
-    return if rubric.nil?
-
-    question = @forum_post_response_question.acting_as
-    rubric.questions << question unless rubric.question_rubrics.exists?(question_id: question.id)
-  end
-
-  def advance_confirmation_required?(previous_active, synced)
-    return false if synced == previous_active || confirm_rubric_advance?
-
-    previous_active&.incompatible_with?(synced) && advance_service(synced).pending?
-  end
-
-  # Carries graded answers' evaluations forward onto the newly-versioned rubric (no-op when the rubric was
-  # reused unchanged).
-  def advance_grading_evaluations(previous_active, synced)
-    return if synced == previous_active
-
-    advance_service(synced).advance!
-  end
-
-  def advance_service(new_rubric)
-    Course::Rubric::GradingEvaluationAdvanceService.new(@forum_post_response_question, new_rubric)
-  end
-
   def rubric_grading_mode_param?
     forum_post_response_question_params[:grading_mode] == 'rubric'
-  end
-
-  def confirm_rubric_advance?
-    ActiveRecord::Type::Boolean.new.cast(params[:confirm_rubric_advance])
   end
 
   # Question attributes that are assigned directly to the forum question (includes grading_mode). Kept

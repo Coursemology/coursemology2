@@ -6314,9 +6314,6 @@
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "No assessments match your search."
   },
-  "course.marketplace.bonus": {
-    "defaultMessage": "Bonus"
-  },
   "course.marketplace.noPreviewImage": {
     "defaultMessage": "The background image for this question cannot be previewed here."
   },

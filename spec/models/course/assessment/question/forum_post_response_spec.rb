@@ -80,6 +80,12 @@ RSpec.describe Course::Assessment::Question::ForumPostResponse do
         expect(duplicate.active_rubric).not_to eq(question.active_rubric)
         expect(duplicate.active_rubric.canonical_content_hash).to eq(question.active_rubric.content_hash)
       end
+
+      it "links the duplicate's rubric to it, so the playground can reach it" do
+        duplicate.save!
+
+        expect(duplicate.acting_as.reload.rubrics).to contain_exactly(duplicate.active_rubric)
+      end
     end
 
     describe 'validations' do

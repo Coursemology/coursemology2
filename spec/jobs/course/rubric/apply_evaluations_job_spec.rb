@@ -8,12 +8,7 @@ RSpec.describe Course::Rubric::ApplyEvaluationsJob do
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :published_with_rubric_question, course: course) }
     let(:question) { assessment.questions.first.specific }
-    let!(:rubric) do
-      Course::Rubric.build_from_v1(question, course).tap do |built|
-        built.save!
-        question.acting_as.update_column(:active_rubric_id, built.id)
-      end
-    end
+    let!(:rubric) { question.active_rubric }
     let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
     let(:answer) do
       create(:course_assessment_answer_rubric_based_response, :submitted,

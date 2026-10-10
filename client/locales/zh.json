@@ -6272,9 +6272,6 @@
   "course.marketplace.emptyNoMatch": {
     "defaultMessage": "没有符合搜索条件的评估。"
   },
-  "course.marketplace.bonus": {
-    "defaultMessage": "奖励"
-  },
   "course.marketplace.noPreviewImage": {
     "defaultMessage": "此题目的背景图片无法在此预览。"
   },

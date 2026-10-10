@@ -42,6 +42,9 @@ class Course::Rubric < ApplicationRecord
     self.categories = duplicator.duplicate(other.categories.sort_by(&:weight))
   end
 
+  # DEPRECATED -- scheduled for removal in the deploy after the v1 rubric deprecation, if no issues are raised.
+  # Safety net only: builds a v2 rubric from a legacy RBR question's v1 rubric rows, for a question that still
+  # has no v2 active rubric (see RubricBasedResponse#ensure_active_rubric_from_v1!). Reads v1, never writes it.
   def self.build_from_v1(v1_rubric_based_response_question, course)
     Course::Rubric.new(
       questions: [v1_rubric_based_response_question.acting_as],
@@ -52,6 +55,7 @@ class Course::Rubric < ApplicationRecord
     )
   end
 
+  # DEPRECATED -- scheduled for removal with .build_from_v1.
   # Builds (unsaved) v2 categories from a v1 question's non-bonus categories, in their display order
   # (the v1 default scope orders by name), so the resulting weights mirror what the user sees.
   def self.categories_from_v1(v1_rubric_based_response_question)
@@ -61,8 +65,8 @@ class Course::Rubric < ApplicationRecord
   end
 
   # Builds (unsaved) v2 categories straight from edit-page params (each with nested criterions_attributes),
-  # skipping any marked for destruction, in the order given. Used by question types that configure their
-  # rubric directly in v2 (e.g. forum-post questions) instead of via the deprecated v1 category tables.
+  # skipping any marked for destruction, in the order given. Used by every rubric-graded question type's edit
+  # page (see Course::Assessment::Question::RubricAuthoringConcern).
   def self.categories_from_params(categories_params)
     nested_param_values(categories_params).
       reject { |category_params| ActiveRecord::Type::Boolean.new.cast(category_params[:_destroy]) }.
