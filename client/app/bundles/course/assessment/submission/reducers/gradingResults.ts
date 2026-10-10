@@ -33,16 +33,25 @@ const testCasesFromAnswer = (
   stderr: answer.stderr,
 });
 
+// Carry every answer in the submission, so the results they hold replace the existing ones.
 interface AnswerDataArrayAction {
   type:
     | typeof actions.FETCH_SUBMISSION_SUCCESS
     | typeof actions.FINALISE_SUCCESS
     | typeof actions.UNSUBMIT_SUCCESS
     | typeof actions.SAVE_ALL_GRADE_SUCCESS
-    | typeof actions.SAVE_GRADE_SUCCESS
     | typeof actions.MARK_SUCCESS
     | typeof actions.UNMARK_SUCCESS
     | typeof actions.PUBLISH_SUCCESS;
+  payload: {
+    answers: AnswerData[];
+  };
+}
+
+// Carries only the answer whose grade was saved (the action filters the response down to it), so its results
+// are merged in; replacing would wipe every other question's results.
+interface SaveGradeAction {
+  type: typeof actions.SAVE_GRADE_SUCCESS;
   payload: {
     answers: AnswerData[];
   };
@@ -70,6 +79,24 @@ interface QuestionIdAction {
   questionId: number;
 }
 
+const mergeAnswerResults = (
+  state: GradingResultsState,
+  answer: AnswerData,
+): void => {
+  if (
+    answer.questionType === QuestionType.TextResponse &&
+    answer.solutionResults
+  ) {
+    state.solutionResults[answer.questionId] = answer.solutionResults;
+  }
+  if (answer.categoryGrades) {
+    state.categoryGrades[answer.questionId] = answer.categoryGrades;
+  }
+  if (answer.questionType === QuestionType.Programming) {
+    state.testCases[answer.questionId] = testCasesFromAnswer(answer);
+  }
+};
+
 export default createReducer<GradingResultsState>(
   {
     solutionResults: {},
@@ -83,7 +110,6 @@ export default createReducer<GradingResultsState>(
         actions.FINALISE_SUCCESS,
         actions.UNSUBMIT_SUCCESS,
         actions.SAVE_ALL_GRADE_SUCCESS,
-        actions.SAVE_GRADE_SUCCESS,
         actions.MARK_SUCCESS,
         actions.UNMARK_SUCCESS,
         actions.PUBLISH_SUCCESS,
@@ -114,27 +140,22 @@ export default createReducer<GradingResultsState>(
     );
 
     builder.addMatcher(
+      isOneOf<SaveGradeAction>(actions.SAVE_GRADE_SUCCESS),
+      (state, action) => {
+        action.payload.answers.forEach((answer) =>
+          mergeAnswerResults(state, answer),
+        );
+      },
+    );
+
+    builder.addMatcher(
       isOneOf<AnswerDataAction>(
         actions.SAVE_ANSWER_SUCCESS,
         actions.REEVALUATE_SUCCESS,
         actions.AUTOGRADE_SUCCESS,
         actions.RESET_SUCCESS,
       ),
-      (state, action) => {
-        const answer = action.payload;
-        if (
-          answer.questionType === QuestionType.TextResponse &&
-          answer.solutionResults
-        ) {
-          state.solutionResults[answer.questionId] = answer.solutionResults;
-        }
-        if (answer.categoryGrades) {
-          state.categoryGrades[answer.questionId] = answer.categoryGrades;
-        }
-        if (answer.questionType === QuestionType.Programming) {
-          state.testCases[answer.questionId] = testCasesFromAnswer(answer);
-        }
-      },
+      (state, action) => mergeAnswerResults(state, action.payload),
     );
 
     builder.addMatcher(

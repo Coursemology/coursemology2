@@ -504,14 +504,11 @@ export function saveAllGrades(
 
   const modifiedGrades = grades.map((grade) => {
     if (categoryGradeDetail[grade.id]) {
-      const totalGrade = Object.values(categoryGradeDetail[grade.id]).reduce(
-        (acc, category) => acc + category.grade,
-        0,
-      );
-
+      // Send the stored grade, not the breakdown sum: the grade already carries the moderation
+      // adjustment on top of the criterion breakdown, which a recomputed sum would discard.
       return {
         id: grade.id,
-        grade: totalGrade,
+        grade: grade.grade,
         selections_attributes: Object.keys(categoryGradeDetail[grade.id]).map(
           (categoryId) => ({
             id: categoryGradeDetail[grade.id][categoryId].id,
