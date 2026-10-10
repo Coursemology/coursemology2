@@ -32,7 +32,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "^11.1.0",
+    "@ckeditor/ckeditor5-react": "^11.2.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hello-pangea/dnd": "^16.6.0",
