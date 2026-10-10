@@ -194,5 +194,70 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
         expect(answer.grading_context_text).to eq('Only body')
       end
     end
+
+    describe 'rubric grading' do
+      let(:user) { create(:user) }
+      let(:course) { create(:course, creator: user) }
+      let(:assessment) { create(:assessment, :published, course: course) }
+      let(:question) { create(:course_assessment_question_forum_post_response, assessment: assessment) }
+      let(:rubric) { create(:course_rubric, course: course, questions: [question.acting_as]) }
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
+      let(:answer) do
+        create(:course_assessment_answer_forum_post_response, :submitted,
+               question: question.acting_as, submission: submission).answer
+      end
+      let(:grading_mode) { 'rubric' }
+
+      before { question.acting_as.update_columns(grading_mode: grading_mode, active_rubric_id: rubric.id) }
+
+      describe 'manual grade-edit path (#assign_params)' do
+        let!(:grading) { answer.specific.ensure_grading_evaluation! }
+        let(:category) { rubric.categories.first }
+        let(:selection) { grading.selections.find_by(category_id: category.id) }
+        let(:criterion) { category.criterions.find { |c| c.grade == 2 } }
+
+        it 'applies grade-selection edits to the grading evaluation when the answer saves' do
+          answer.specific.assign_params(selections_attributes: [id: selection.id, criterion_id: criterion.id])
+          answer.specific.save!
+
+          expect(selection.reload.criterion_id).to eq(criterion.id)
+        end
+
+        context 'when the question is not rubric-graded' do
+          let(:grading) do
+            evaluation = Course::Rubric::AnswerEvaluation.create!(answer: answer, evaluation_type: :grading)
+            rubric.categories.each { |category| evaluation.selections.create!(category_id: category.id) }
+            evaluation
+          end
+          let(:grading_mode) { 'default' }
+
+          it 'ignores grade-selection edits' do
+            answer.specific.assign_params(selections_attributes: [id: selection.id, criterion_id: criterion.id])
+            answer.specific.save!
+
+            expect(selection.reload.criterion_id).to be_nil
+          end
+        end
+      end
+
+      describe '#ensure_grading_evaluation!' do
+        it 'creates a blank grading evaluation with a selection per active-rubric category' do
+          answer.specific.ensure_grading_evaluation!
+          created = answer.reload.grading_rubric_evaluation
+
+          expect(created.selections.map(&:category_id)).to match_array(rubric.categories.map(&:id))
+          expect(created.selections.map(&:criterion_id)).to all(be_nil)
+        end
+
+        context 'when the question is not rubric-graded' do
+          let(:grading_mode) { 'default' }
+
+          it 'is a no-op' do
+            expect { answer.specific.ensure_grading_evaluation! }.
+              not_to change(Course::Rubric::AnswerEvaluation, :count)
+          end
+        end
+      end
+    end
   end
 end

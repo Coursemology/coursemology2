@@ -329,15 +329,14 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   private
 
-  # When a grader opens a (submitted) submission, make sure every rubric-based answer has a v2 grading
+  # When a grader opens a (submitted) submission, make sure every rubric-graded answer has a v2 grading
   # evaluation so the rubric panel is editable and the breakdown persists, even for answers never
   # auto-graded. Idempotent and grader-only; ungraded answers in an attempting submission are skipped.
   def ensure_rubric_grading_evaluations
     return if @submission.attempting? || cannot?(:grade, @submission)
 
     @answers.each do |answer|
-      actable = answer.actable
-      actable.ensure_grading_evaluation! if actable.is_a?(Course::Assessment::Answer::RubricBasedResponse)
+      answer.actable.ensure_grading_evaluation! if answer.question.grading_mode_rubric?
     end
   end
 

@@ -10,10 +10,9 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     specific_answer = answer.specific
     specific_answer.assign_params(update_answer_params)
     # Saving the specific_answer to forward validation errors
-    return true if specific_answer.save
-
-    answer.errors.merge!(specific_answer.errors)
-    false
+    saved = specific_answer.save
+    answer.errors.merge!(specific_answer.errors) unless saved
+    saved
   end
 
   protected
@@ -27,8 +26,17 @@ module Course::Assessment::Answer::UpdateAnswerConcern
   def additional_answer_params(answer)
     [].tap do |result|
       result.push(*update_specific_answer_type_params(answer)) if can?(:update, answer)
-      result.push(:grade) if can?(:grade, answer) && !answer.submission.attempting?
+      result.push(*grading_params(answer)) if can?(:grade, answer) && !answer.submission.attempting?
     end
+  end
+
+  def grading_params(answer)
+    result = [:grade]
+    # The grader's criterion selections, for any rubric-graded answer (see RubricGradingConcern).
+    if answer.question.grading_mode_rubric?
+      result.push(selections_attributes: [:id, :answer_id, :category_id, :criterion_id, :grade, :explanation])
+    end
+    result
   end
 
   def update_specific_answer_type_params(answer)
@@ -44,7 +52,7 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     when 'Course::Assessment::Answer::TextResponse'
       update_text_response_params(scalar_params)
     when 'Course::Assessment::Answer::RubricBasedResponse'
-      update_rubric_based_response_params(scalar_params, array_params, answer)
+      update_rubric_based_response_params(scalar_params)
     when 'Course::Assessment::Answer::VoiceResponse'
       update_voice_response_params(scalar_params)
     when 'Course::Assessment::Answer::Scribing'
@@ -73,11 +81,8 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     scalar_params.push(attachments_params)
   end
 
-  def update_rubric_based_response_params(scalar_params, array_params, answer)
+  def update_rubric_based_response_params(scalar_params)
     scalar_params.push(:answer_text)
-    return unless can?(:grade, answer) && !answer.submission.attempting?
-
-    array_params[:selections_attributes] = [:id, :answer_id, :category_id, :criterion_id, :grade, :explanation]
   end
 
   def update_forum_post_response_params(scalar_params, array_params)

@@ -202,7 +202,6 @@ Naming/MemoizedInstanceVariableName:
 # WaywardPredicates: infinite?, nonzero?
 Naming/PredicateMethod:
   Exclude:
-    - 'app/controllers/concerns/course/assessment/answer/update_answer_concern.rb'
     - 'app/controllers/concerns/course/discussion/posts_concern.rb'
     - 'app/controllers/concerns/course/lesson_plan/strategies/fomo_personalization_strategy.rb'
     - 'app/controllers/concerns/course/users_controller_management_concern.rb'
