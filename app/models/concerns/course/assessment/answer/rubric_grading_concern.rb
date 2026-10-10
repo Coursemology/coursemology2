@@ -16,6 +16,7 @@ module Course::Assessment::Answer::RubricGradingConcern
   included do
     # Grade-selection edits target the v2 grading evaluation, which is not a nested attribute on this
     # record, so they are stashed during #assign_params and persisted once the answer itself saves.
+    validate :validate_grading_selections, if: -> { @pending_grading_selections.present? }
     after_save :persist_grading_selections, if: -> { @pending_grading_selections.present? }
   end
 
@@ -56,17 +57,44 @@ module Course::Assessment::Answer::RubricGradingConcern
     @pending_grading_selections = params[:selections_attributes]
   end
 
-  # Applies stashed grade-selection edits to the answer's grading evaluation (v2). Each row carries the
-  # grading selection's id and the chosen criterion (blank clears it, i.e. ungrades the category).
-  def persist_grading_selections
-    grading = acting_as.grading_rubric_evaluation
-    if grading
-      selections_by_id = grading.selections.index_by(&:id)
-      @pending_grading_selections.each do |attribute|
+  # Resolves stashed grade-selection edits against the answer's grading evaluation (v2). Each row carries the
+  # grading selection's id and the chosen criterion (blank clears it, i.e. ungrades the category). Rows for
+  # selections not on the grading evaluation are dropped. The criterion is looked up among the selection's
+  # own category's criteria (nil when it is not one of them): neither the association nor the schema ties a
+  # selection's criterion to its category.
+  def resolved_grading_selections
+    @resolved_grading_selections ||= begin
+      grading = acting_as.grading_rubric_evaluation
+      selections_by_id = grading ? grading.selections.includes(category: :criterions).index_by(&:id) : {}
+      @pending_grading_selections.filter_map do |attribute|
         selection = selections_by_id[attribute[:id].to_i]
-        selection&.update!(criterion_id: attribute[:criterion_id].presence&.to_i)
+        next unless selection
+
+        criterion_id = attribute[:criterion_id].presence&.to_i
+        criterion = criterion_id && selection.category.criterions.find { |c| c.id == criterion_id }
+        { selection: selection, criterion_id: criterion_id, criterion: criterion }
       end
     end
+  end
+
+  def validate_grading_selections
+    # Deliberately generic and untranslated: a criterion outside its category is only reachable by a crafted
+    # request. On :base, as not every including model has a +selections+ attribute to read for the message.
+    errors.add(:base, 'Invalid criterion') if resolved_grading_selections.any? { |row| foreign_criterion?(row) }
+  end
+
+  def persist_grading_selections
+    resolved_grading_selections.each do |row|
+      # Rejected by validation; also skipped here in case validation was bypassed.
+      next if foreign_criterion?(row)
+
+      row[:selection].update!(criterion: row[:criterion])
+    end
     @pending_grading_selections = nil
+    @resolved_grading_selections = nil
+  end
+
+  def foreign_criterion?(row)
+    row[:criterion_id] && !row[:criterion]
   end
 end

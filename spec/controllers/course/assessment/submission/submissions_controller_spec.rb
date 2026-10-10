@@ -216,6 +216,15 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           expect(subject).to have_http_status(:ok)
           expect(selection.reload.criterion_id).to eq(criterion.id)
         end
+
+        context 'when the criterion belongs to another rubric' do
+          let(:criterion) { create(:course_rubric, course: course).categories.first.criterions.max_by(&:grade) }
+
+          it 'rejects the update' do
+            expect(subject).to have_http_status(:bad_request)
+            expect(selection.reload.criterion_id).to be_nil
+          end
+        end
       end
     end
 
