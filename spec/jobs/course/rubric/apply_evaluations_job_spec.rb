@@ -39,6 +39,21 @@ RSpec.describe Course::Rubric::ApplyEvaluationsJob do
       end
     end
 
+    context 'when the answer only has an empty evaluation (added to the playground, never run)' do
+      let!(:empty_evaluation) do
+        Course::Rubric::AnswerEvaluation.create!(answer: answer, rubric: rubric, evaluation_type: :playground)
+      end
+
+      it 'runs that evaluation instead of applying it empty' do
+        expect_any_instance_of(Course::Rubric::LlmService).to receive(:evaluate).and_call_original
+
+        run
+
+        expect(empty_evaluation.reload.selections.map(&:category_id)).to match_array(rubric.categories.map(&:id))
+        expect(answer.reload.grading_rubric_evaluation.selections).to be_present
+      end
+    end
+
     context 'when an llm evaluation already exists' do
       let!(:llm_evaluation) do
         evaluation = Course::Rubric::AnswerEvaluation.create!(

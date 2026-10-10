@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import {
@@ -12,6 +11,8 @@ import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
+
+import useRubricAdvanceConfirmation from '../commons/useRubricAdvanceConfirmation';
 
 import RubricBasedResponseForm from './components/RubricBasedResponseForm';
 import {
@@ -49,11 +50,6 @@ const EditRubricBasedResponsePage = (): JSX.Element => {
   if (!id)
     throw new Error(`EditRubricBasedResponsePage was loaded with ID: ${id}.`);
 
-  // The form data awaiting confirmation of an incompatible (re-grading) rubric change; the original update
-  // was rolled back, so re-submitting with confirmRubricAdvance is what actually saves.
-  const [pendingData, setPendingData] =
-    useState<RubricBasedResponseData | null>(null);
-
   const fetchData = (): Promise<RubricBasedResponseFormData> =>
     fetchEditRubricBasedResponse(id);
 
@@ -66,19 +62,12 @@ const EditRubricBasedResponsePage = (): JSX.Element => {
       window.location.href = redirectUrl;
     });
 
-  const handleSubmit = (data: RubricBasedResponseData): Promise<void> =>
-    submit(data, false).catch((error) => {
-      if (error instanceof RubricAdvanceConfirmationError) {
-        setPendingData(data);
-        return;
-      }
-      throw error;
-    });
-
-  const handleConfirmAdvance = (): Promise<void> => {
-    if (!pendingData) return Promise.resolve();
-    return submit(pendingData, true).catch(() => setPendingData(null));
-  };
+  // An incompatible rubric change is rolled back until the user confirms it (see useRubricAdvanceConfirmation).
+  const { handleSubmit, isConfirming, confirm, cancel } =
+    useRubricAdvanceConfirmation(
+      submit,
+      (error) => error instanceof RubricAdvanceConfirmationError,
+    );
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchData}>
@@ -87,9 +76,9 @@ const EditRubricBasedResponsePage = (): JSX.Element => {
           <RubricBasedResponseForm onSubmit={handleSubmit} with={data} />
           <Prompt
             cancelLabel={t(translations.confirmAdvanceCancel)}
-            onClickPrimary={handleConfirmAdvance}
-            onClose={() => setPendingData(null)}
-            open={pendingData !== null}
+            onClickPrimary={confirm}
+            onClose={cancel}
+            open={isConfirming}
             primaryColor="info"
             primaryLabel={t(translations.confirmAdvancePrimary)}
             title={t(translations.confirmAdvanceTitle)}

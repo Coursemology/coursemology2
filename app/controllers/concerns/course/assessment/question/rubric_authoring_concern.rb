@@ -45,7 +45,32 @@ module Course::Assessment::Question::RubricAuthoringConcern
       categories: Course::Rubric.categories_from_params(rubric_params[:categories_attributes]),
       grading_prompt: rubric_params[:ai_grading_custom_prompt] || '',
       model_answer: rubric_params[:ai_grading_model_answer] || ''
-    )
+    ).tap { |proposed| keep_stored_explanations(proposed, rubric_question.active_rubric) }
+  end
+
+  # The edit page serves criterion explanations sanitised, and its rich text editor may re-serialise them, so an
+  # explanation the user did not change can come back as different HTML with the same content (e.g. re-quoted
+  # attributes). Keep the stored text for those: otherwise an unchanged rubric would hash differently and be saved
+  # as a new version, incompatible with the graded answers.
+  def keep_stored_explanations(proposed, previous)
+    return unless previous
+
+    stored = previous.categories.to_h do |category|
+      [category.name, category.criterions.to_h { |criterion| [criterion.grade, criterion.explanation] }]
+    end
+    proposed.categories.each do |category|
+      category.criterions.each do |criterion|
+        stored_explanation = stored.dig(category.name, criterion.grade)
+        next unless stored_explanation && same_explanation?(stored_explanation, criterion.explanation)
+
+        criterion.explanation = stored_explanation
+      end
+    end
+  end
+
+  def same_explanation?(stored_explanation, submitted_explanation)
+    helpers.sanitize_ckeditor_rich_text(stored_explanation.to_s) ==
+      helpers.sanitize_ckeditor_rich_text(submitted_explanation.to_s)
   end
 
   # Copy-on-write comparison mirroring Course::Rubric#copy_with: unchanged content (order-independent hash)
