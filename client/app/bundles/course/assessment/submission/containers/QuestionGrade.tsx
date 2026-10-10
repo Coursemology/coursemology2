@@ -98,6 +98,8 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const isRubricVisible =
     answerCategoryGradesFromStore.length > 0 &&
     (graderView || (published && assessment.showRubricToStudents));
+  // A rubric-graded question's grade is edited only through the rubric panel (criteria + moderation).
+  const isRubricGraded = question.gradingMode === 'rubric';
   const isRubricBasedResponseAndAutogradable =
     isRubricBasedResponse &&
     (question as SubmissionQuestionData<QuestionType.RubricBasedResponse>)
@@ -226,7 +228,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
       <div className="flex items-center space-x-4">
         <TextField
           className="w-40"
-          disabled={isRubricBasedResponse}
+          disabled={isRubricGraded}
           hiddenLabel
           inputProps={{ className: 'grade' }}
           onBlur={(e): void => processValue(e.target.value)}

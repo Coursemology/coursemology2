@@ -1,4 +1,5 @@
 import { QuestionType } from 'types/course/assessment/question';
+import { AnswerData } from 'types/course/assessment/submission/answer';
 import { ProgrammingAnswerData } from 'types/course/assessment/submission/answer/programming';
 
 import actions from '../../constants';
@@ -43,5 +44,37 @@ describe('gradingResults reducer', () => {
     });
 
     expect(regraded.testCases[1].gradedOnPreviousVersion).toBe(false);
+  });
+
+  // Saving one question's grade returns only that answer; other questions' rubric panels must survive it.
+  it("merges a single question's saved grade without wiping other questions' results", () => {
+    const categoryGrades = (grade: number): AnswerData['categoryGrades'] => [
+      { id: grade, categoryId: 1, gradeId: grade, grade, explanation: null },
+    ];
+    const rubricAnswer = (questionId: number, grade: number): AnswerData =>
+      ({
+        questionId,
+        questionType: QuestionType.ForumPostResponse,
+        categoryGrades: categoryGrades(grade),
+      }) as AnswerData;
+
+    const fetched = reducer(initialState, {
+      type: actions.FETCH_SUBMISSION_SUCCESS,
+      payload: {
+        answers: [
+          rubricAnswer(1, 1),
+          rubricAnswer(2, 1),
+          buildProgrammingAnswer({ questionId: 3 }),
+        ],
+      },
+    });
+    const saved = reducer(fetched, {
+      type: actions.SAVE_GRADE_SUCCESS,
+      payload: { answers: [rubricAnswer(1, 2)] },
+    });
+
+    expect(saved.categoryGrades[1]).toEqual(categoryGrades(2));
+    expect(saved.categoryGrades[2]).toEqual(categoryGrades(1));
+    expect(saved.testCases[3]).toBeDefined();
   });
 });
