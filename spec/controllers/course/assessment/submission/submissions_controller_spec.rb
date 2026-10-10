@@ -186,6 +186,57 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
         it { is_expected.to have_http_status(:ok) }
       end
+
+      context 'when a grader edits the rubric breakdown of a rubric-graded forum post answer' do
+        let(:assessment_traits) { [] }
+        let(:question) { create(:course_assessment_question_forum_post_response, assessment: assessment) }
+        let(:rubric) { create(:course_rubric, course: course, questions: [question.acting_as]) }
+        let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
+        let(:answer) do
+          create(:course_assessment_answer_forum_post_response, :submitted,
+                 question: question.acting_as, submission: submission).answer
+        end
+        let(:selection) { answer.specific.ensure_grading_evaluation!.selections.first }
+        let(:criterion) { selection.category.criterions.max_by(&:grade) }
+
+        subject do
+          post :update, params: {
+            course_id: course, assessment_id: assessment, id: submission,
+            submission: {
+              answers: [{ id: answer.id, grade: criterion.grade,
+                          selections_attributes: [{ id: selection.id, criterion_id: criterion.id }] }]
+            },
+            format: :json
+          }
+        end
+
+        before { question.acting_as.update_columns(grading_mode: 'rubric', active_rubric_id: rubric.id) }
+
+        it 'persists the criterion selection' do
+          expect(subject).to have_http_status(:ok)
+          expect(selection.reload.criterion_id).to eq(criterion.id)
+        end
+      end
+    end
+
+    describe '#edit for a rubric-graded forum post answer' do
+      let(:question) { create(:course_assessment_question_forum_post_response, assessment: assessment) }
+      let(:rubric) { create(:course_rubric, course: course, questions: [question.acting_as]) }
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
+      let!(:answer) do
+        create(:course_assessment_answer_forum_post_response, :submitted,
+               question: question.acting_as, submission: submission).answer
+      end
+      let(:assessment_traits) { [] }
+
+      before { question.acting_as.update_columns(grading_mode: 'rubric', active_rubric_id: rubric.id) }
+
+      it 'creates a blank grading evaluation so the grader can edit the breakdown' do
+        get :edit, params: { course_id: course, assessment_id: assessment, id: submission, format: :json }
+
+        expect(answer.reload.grading_rubric_evaluation.selections.map(&:category_id)).
+          to match_array(rubric.categories.map(&:id))
+      end
     end
 
     describe '#extract_instance_variables' do

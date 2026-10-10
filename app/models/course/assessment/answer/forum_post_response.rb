@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   acts_as :answer, class_name: 'Course::Assessment::Answer'
+  include Course::Assessment::Answer::RubricGradingConcern
 
   # A post pack is a group of 4 objects:
   #  - The core forum post
@@ -23,6 +24,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   def assign_params(params)
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]
+    assign_grading_selections(params)
 
     return unless params[:selected_post_packs]
 
