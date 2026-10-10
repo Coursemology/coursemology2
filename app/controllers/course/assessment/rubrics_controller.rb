@@ -6,10 +6,10 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   def index
     head :not_found and return unless rubric_graded_question?
 
-    # Legacy RBR questions may not have a v2 rubric yet; forum-post rubrics are always built directly as v2.
-    if @question.rubrics.empty? && @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
-      v2_rubric = Course::Rubric.build_from_v1(@question.specific, current_course)
-      v2_rubric.save!
+    # DEPRECATED safety net (remove with Course::Rubric.build_from_v1): a legacy RBR question may still lack a
+    # v2 rubric. Forum-post rubrics are always built directly as v2.
+    if @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
+      @question.specific.ensure_active_rubric_from_v1!(current_course)
     end
 
     @rubrics = @question.rubrics.includes({ categories: :criterions })

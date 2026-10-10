@@ -1,5 +1,4 @@
 import {
-  Chip,
   Table,
   TableBody,
   TableCell,
@@ -8,14 +7,12 @@ import {
   Typography,
 } from '@mui/material';
 
-// Field labels (Rubric heading, Grade, Explanation) come from course/assessment/translations;
-// only the "Bonus" category chip has no equivalent there and lives in the marketplace translations.
+// Field labels (Rubric heading, Grade, Explanation) come from course/assessment/translations.
 import translations from 'course/assessment/translations';
 import Section from 'lib/components/core/layouts/Section';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import previewTranslations from '../../../translations';
 import { QuestionPreviewData } from '../../../types';
 
 import { RendererProps } from './types';
@@ -33,17 +30,7 @@ const RubricBasedResponse = ({ question }: RendererProps): JSX.Element => {
       <Section title={t(translations.rubric)}>
         {detail.categories.map((category) => (
           <section key={category.name} className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Typography variant="subtitle1">{category.name}</Typography>
-              {category.isBonus && (
-                <Chip
-                  color="warning"
-                  label={t(previewTranslations.bonus)}
-                  size="small"
-                  variant="outlined"
-                />
-              )}
-            </div>
+            <Typography variant="subtitle1">{category.name}</Typography>
             <div className="overflow-x-auto">
               <Table size="small">
                 <TableHead>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::RubricBasedResponsesController < Course::Assessment::Question::Controller
-  include Course::Assessment::Question::RubricBasedResponseControllerConcern
   include Course::Assessment::Question::GradingContextParamsConcern
+  include Course::Assessment::Question::RubricAuthoringConcern
 
   build_and_authorize_new_question :rubric_based_response_question,
                                    class: Course::Assessment::Question::RubricBasedResponse, only: [:new, :create]
@@ -9,21 +9,22 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
                               class: 'Course::Assessment::Question::RubricBasedResponse',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
-  before_action :preload_criterions_per_category, only: [:edit]
-
-  RESERVED_CATEGORY_NAMES = Course::Assessment::Question::RubricBasedResponse::RESERVED_CATEGORY_NAMES
+  # DEPRECATED safety net (remove with Course::Rubric.build_from_v1): gives a legacy question still lacking a
+  # v2 rubric one built from its v1 rows, so its edit page shows (and re-saves) its existing rubric.
+  before_action :ensure_active_rubric_from_v1, only: [:edit, :update]
 
   def create
-    if @rubric_based_response_question.save
-      success = add_bonus_category_to_rubric_based_question
+    saved = ActiveRecord::Base.transaction do
+      assign_active_rubric_from_params
+      raise ActiveRecord::Rollback unless @rubric_based_response_question.save
 
-      if success
-        sync_active_rubric
-        sync_grading_contexts(@rubric_based_response_question, grading_contexts_params)
-        render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
-      else
-        head :bad_request
-      end
+      link_active_rubric
+      sync_grading_contexts(@rubric_based_response_question, grading_contexts_params)
+      true
+    end
+
+    if saved
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
       render json: { errors: @rubric_based_response_question.errors.messages.values.flatten.to_sentence },
              status: :bad_request
@@ -34,12 +35,6 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     @rubric_based_response_question.description = helpers.sanitize_ckeditor_rich_text(
       @rubric_based_response_question.description
     )
-
-    @rubric_based_response_question.categories.without_bonus_category.each do |category|
-      category.criterions.each do |grade|
-        grade.explanation = helpers.sanitize_ckeditor_rich_text(grade.explanation)
-      end
-    end
   end
 
   def update
@@ -69,35 +64,22 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
 
   private
 
-  def add_bonus_category_to_rubric_based_question
-    bonus_category_objects = RESERVED_CATEGORY_NAMES.map do |name|
-      {
-        question_id: @rubric_based_response_question.id,
-        name: name.titleize,
-        is_bonus_category: true
-      }
-    end
-
-    ActiveRecord::Base.transaction do
-      bonus_categories = Course::Assessment::Question::RubricBasedResponseCategory.insert_all(bonus_category_objects)
-      if !bonus_categories.empty? && (bonus_categories.nil? || bonus_categories.rows.empty?)
-        raise ActiveRecord::Rollback
-      end
-
-      true
-    end
+  def rubric_question
+    @rubric_based_response_question
   end
 
-  # Updates the v1 question and syncs the v2 active rubric. Returns :synced on success, :failed on a
-  # validation error, or :needs_confirmation when an incompatible rubric change with graded answers needs
-  # the user's confirmation -- in which case the entire transaction is rolled back (nothing is saved) so the
-  # user can confirm on the still-open edit page and re-submit with confirm_rubric_advance: true.
+  # Updates the question and its v2 active rubric (built from the params, copy-on-write). Returns :synced on
+  # success, :failed on a validation error, or :needs_confirmation when an incompatible rubric change with
+  # graded answers needs the user's confirmation -- in which case the entire transaction is rolled back
+  # (nothing is saved) so the user can confirm on the still-open edit page and re-submit with
+  # confirm_rubric_advance: true.
   def update_rubric_based_response_question
     needs_confirmation = false
     saved = ActiveRecord::Base.transaction do
+      previous_active = @rubric_based_response_question.active_rubric
       raise ActiveRecord::Rollback unless apply_question_update
 
-      if sync_active_rubric(confirm_advance: confirm_rubric_advance?) == :advance_required
+      if sync_rubric_advance(previous_active, @rubric_based_response_question.active_rubric) == :advance_required
         needs_confirmation = true
         raise ActiveRecord::Rollback
       end
@@ -110,11 +92,12 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     saved ? :synced : :failed
   end
 
-  # Updates the v1 question (skills + attributes) and re-clamps grades when the maximum changed. Returns
-  # whether the question itself saved.
+  # Updates the question (skills, attributes and active rubric) and re-clamps answer grades when the maximum
+  # grade changed. Returns whether the question saved.
   def apply_question_update
     update_skill_ids_if_params_present(rubric_based_response_question_params[:question_assessment])
     previous_maximum_grade = @rubric_based_response_question.maximum_grade
+    assign_active_rubric_from_params
     updated = @rubric_based_response_question.update(
       rubric_based_response_question_params.except(:question_assessment)
     )
@@ -125,20 +108,23 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     updated
   end
 
-  def confirm_rubric_advance?
-    ActiveRecord::Type::Boolean.new.cast(params[:confirm_rubric_advance])
-  end
-
+  # Attributes assigned directly to the question. The rubric is built separately from #rubric_params.
   def rubric_based_response_question_params
     permitted_params = [
-      :title, :description, :staff_only_comments, :maximum_grade,
-      :ai_grading_enabled, :ai_grading_custom_prompt, :ai_grading_model_answer, :template_text,
-      question_assessment: { skill_ids: [] },
-      categories_attributes: [:_destroy, :id, :name,
-                              criterions_attributes: [:_destroy, :id, :grade, :explanation]]
+      :title, :description, :staff_only_comments, :maximum_grade, :ai_grading_enabled, :template_text,
+      question_assessment: { skill_ids: [] }
     ]
 
     params.require(:question_rubric_based_response).permit(*permitted_params)
+  end
+
+  # The rubric configuration, used to build the v2 active rubric (see RubricAuthoringConcern).
+  def rubric_params
+    params.require(:question_rubric_based_response).permit(
+      :ai_grading_custom_prompt, :ai_grading_model_answer,
+      categories_attributes: [:id, :name, :_destroy,
+                              criterions_attributes: [:id, :grade, :explanation, :_destroy]]
+    )
   end
 
   # Grading contexts pulled into the rubric grading prompt (see GradingContext); replaced on every save.
@@ -149,5 +135,9 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
 
   def load_question_assessment
     @question_assessment = load_question_assessment_for(@rubric_based_response_question)
+  end
+
+  def ensure_active_rubric_from_v1
+    @rubric_based_response_question.ensure_active_rubric_from_v1!(current_course)
   end
 end

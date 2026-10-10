@@ -31,6 +31,7 @@ class Course::Rubric::Category < ApplicationRecord
     self.criterions = duplicator.duplicate(other.criterions)
   end
 
+  # DEPRECATED -- scheduled for removal with Course::Rubric.build_from_v1.
   def self.build_from_v1(v1_category)
     Course::Rubric::Category.new(
       name: v1_category.name,
@@ -39,8 +40,8 @@ class Course::Rubric::Category < ApplicationRecord
   end
 
   # Builds an (unsaved) v2 category (with its criterions) straight from edit-page params, skipping any marked
-  # for destruction. Copy-on-write rebuilds categories wholesale, so ids are ignored. Used by question types
-  # that configure their rubric directly in v2 (e.g. forum-post questions).
+  # for destruction. Copy-on-write rebuilds categories wholesale, so ids are ignored (see
+  # Course::Rubric.categories_from_params).
   def self.build_from_params(category_params)
     criterions_params = Course::Rubric.nested_param_values(category_params[:criterions_attributes])
     Course::Rubric::Category.new(

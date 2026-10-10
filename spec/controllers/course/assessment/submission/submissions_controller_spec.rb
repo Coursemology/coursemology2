@@ -266,6 +266,54 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           expect(answer_json['autograding']).to include('status' => 'submitted', 'jobUrl' => job_path(job))
         end
       end
+
+      context 'when the answer has no grading run yet' do
+        render_views
+
+        # Submitted, before the submission's grading job has reached the answer.
+        before do
+          current_answer = submission.answers.find_by!(question: question.acting_as, current_answer: true)
+          current_answer.auto_gradings.destroy_all
+          current_answer.update_column(:workflow_state, 'submitted')
+        end
+
+        it 'reports no grading status, so the page does not wait on a job that does not exist' do
+          get :edit, params: { course_id: course, assessment_id: assessment, id: submission, format: :json }
+
+          answer_json = JSON.parse(response.body)['answers'].find { |a| a['questionId'] == question.acting_as.id }
+          expect(answer_json).not_to have_key('autograding')
+        end
+      end
+    end
+
+    describe '#edit for a rubric-based response answer with no grading run yet' do
+      render_views
+
+      let(:assessment_traits) { [] }
+      let(:question) do
+        create(:course_assessment_question_rubric_based_response, assessment: assessment).tap do |rbr|
+          rbr.update_column(:ai_grading_enabled, false) # graded without the LLM when the submission is finalised
+        end
+      end
+      let(:submission) do
+        question
+        create(:submission, :submitted, assessment: assessment, creator: user)
+      end
+
+      # The test adapter only enqueues jobs, so the submission's grading job never reaches the answer: it stays
+      # submitted, with no grading run.
+      with_active_job_queue_adapter(:test) do
+        it 'reports no grading status, so the page does not wait on a job that does not exist' do
+          get :edit, params: { course_id: course, assessment_id: assessment, id: submission, format: :json }
+
+          answer = submission.answers.find_by!(question: question.acting_as, current_answer: true)
+          expect(answer).to be_submitted
+          expect(answer.auto_grading).to be_nil
+
+          answer_json = JSON.parse(response.body)['answers'].find { |a| a['questionId'] == question.acting_as.id }
+          expect(answer_json).not_to have_key('autograding')
+        end
+      end
     end
 
     describe '#extract_instance_variables' do

@@ -6,12 +6,7 @@ RSpec.describe Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter do
   with_tenant(:instance) do
     let(:assessment) { create(:assessment, :published_with_rubric_question) }
     let(:question) { assessment.questions.first.specific }
-    let!(:active_rubric) do
-      Course::Rubric.build_from_v1(question, assessment.course).tap do |rubric|
-        rubric.save!
-        question.acting_as.update_column(:active_rubric_id, rubric.id)
-      end
-    end
+    let!(:active_rubric) { question.active_rubric }
     let(:submission) { create(:submission, :attempting, assessment: assessment) }
     let(:answer) do
       create(:course_assessment_answer_rubric_based_response, :submitted,

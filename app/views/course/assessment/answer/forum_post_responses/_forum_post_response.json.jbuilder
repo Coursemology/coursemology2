@@ -16,21 +16,18 @@ end
 last_attempt = last_attempt(answer)
 attempt = answer.current_answer? ? last_attempt : answer
 
-# The grading job's status, as for the other job-graded types. Rubric-graded forum answers are graded in a
-# job; without this, a grading view opened mid-job would neither show nor poll it, and would leave the rubric
-# editable while the job is about to overwrite it.
+# The grading job's status. Rubric-graded forum answers are graded in a job; without this, a grading view opened
+# mid-job would neither show nor poll it, and would leave the rubric editable while the job is about to overwrite it.
+#
+# Unlike the other job-graded types, there is deliberately no "submitted" status for an answer with no grading run
+# yet (finalised, but not yet reached by the submission's grading job): it carries no job to poll, so it would leave
+# the answer marked as grading -- with its rubric locked -- until a reload.
 job = attempt&.auto_grading&.job
 
 if job
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.partial! "jobs/#{job.status}", job: job
-  end
-end
-
-if attempt&.submitted? && !attempt.auto_grading
-  json.autograding do
-    json.status :submitted
   end
 end
 

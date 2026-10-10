@@ -6,12 +6,7 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
   with_tenant(:instance) do
     let(:assessment) { create(:assessment, :published_with_rubric_question) }
     let(:question) { assessment.questions.first.specific }
-    let!(:active_rubric) do
-      Course::Rubric.build_from_v1(question, assessment.course).tap do |rubric|
-        rubric.save!
-        question.acting_as.update_column(:active_rubric_id, rubric.id)
-      end
-    end
+    let!(:active_rubric) { question.active_rubric }
     let(:submission) do
       create(:submission, :attempting, assessment: assessment)
     end
