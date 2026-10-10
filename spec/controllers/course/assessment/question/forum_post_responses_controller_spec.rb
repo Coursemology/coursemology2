@@ -182,6 +182,31 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController, type:
           expect(reloaded.grading_mode).to eq('rubric')
           expect(reloaded.active_rubric.categories.map(&:name)).to include('Depth')
         end
+
+        context 'when an answer was graded above the rubric total' do
+          let!(:forum_post_response) do
+            create(:course_assessment_question_forum_post_response, assessment: assessment, maximum_grade: 10)
+          end
+          let!(:answer) do
+            create(:course_assessment_answer_forum_post_response, :submitted,
+                   question: forum_post_response.acting_as,
+                   submission: create(:submission, :submitted, assessment: assessment, creator: user)).
+              answer.tap { |a| a.update_column(:grade, 8) }
+          end
+
+          it 'clamps the grade to the new maximum grade' do
+            patch_update(categories_attributes: {
+              '0' => {
+                name: 'Depth',
+                criterions_attributes: { '0' => { grade: 0, explanation: '' },
+                                         '1' => { grade: 3, explanation: '' } }
+              }
+            })
+
+            expect(forum_post_response.reload.maximum_grade).to eq(3)
+            expect(answer.reload.grade).to eq(3)
+          end
+        end
       end
 
       context 'when switching to default grading mode' do

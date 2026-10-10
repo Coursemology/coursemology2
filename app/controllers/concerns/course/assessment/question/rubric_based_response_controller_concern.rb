@@ -40,15 +40,6 @@ module Course::Assessment::Question::RubricBasedResponseControllerConcern
     :synced
   end
 
-  # Caps existing answer grades at the question's maximum_grade. Needed when maximum_grade is lowered
-  # without a rubric-content change (so the advance service, which also clamps, does not run).
-  def clamp_answer_grades_to_maximum
-    maximum_grade = @rubric_based_response_question.maximum_grade
-    Course::Assessment::Answer.where(question_id: @rubric_based_response_question.acting_as.id).
-      where('grade > ?', maximum_grade).
-      update_all(grade: maximum_grade)
-  end
-
   def build_synced_rubric(question, previous_active, categories)
     if previous_active
       previous_active.copy_with(grading_prompt: question.ai_grading_custom_prompt,

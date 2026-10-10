@@ -206,7 +206,6 @@ Naming/PredicateMethod:
     - 'app/controllers/concerns/course/lesson_plan/strategies/fomo_personalization_strategy.rb'
     - 'app/controllers/concerns/course/users_controller_management_concern.rb'
     - 'app/controllers/course/assessment/question/multiple_responses_controller.rb'
-    - 'app/controllers/course/assessment/question/rubric_based_responses_controller.rb'
     - 'app/controllers/course/forum/posts_controller.rb'
     - 'app/helpers/course/assessment/assessments_helper.rb'
     - 'app/helpers/course/forum/controller_helper.rb'
@@ -555,7 +554,6 @@ Style/RedundantStringEscape:
 Style/SafeNavigation:
   Exclude:
     - 'app/helpers/application_html_formatters_helper.rb'
-    - 'app/models/course/assessment/question.rb'
     - 'lib/autoload/course/assessment/programming_test_case_report.rb'
 
 # Offense count: 10

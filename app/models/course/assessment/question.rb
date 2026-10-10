@@ -111,6 +111,14 @@ class Course::Assessment::Question < ApplicationRecord
     actable.rubric_answer_adapter(answer, rubric)
   end
 
+  # Caps existing answer grades at the question's maximum grade, after it was lowered. An answer graded above
+  # the maximum fails validation, so every later grade save for its submission would be rejected. This matters
+  # most for rubric-graded questions, whose grade field is not editable to correct it. The rubric advance
+  # service also clamps, but only the answers it advances.
+  def clamp_answer_grades_to_maximum!
+    answers.where('grade > ?', maximum_grade).update_all(grade: maximum_grade)
+  end
+
   # Attempts the given question in the submission. This builds a new answer for the current
   # question.
   #
@@ -123,9 +131,7 @@ class Course::Assessment::Question < ApplicationRecord
   #   should not be persisted.
   # @raise [NotImplementedError] question#attempt was not implemented.
   def attempt(submission, last_attempt = nil)
-    if actable&.self_respond_to?(:attempt)
-      return actable.attempt(submission, last_attempt ? last_attempt.actable : nil)
-    end
+    return actable.attempt(submission, last_attempt&.actable) if actable&.self_respond_to?(:attempt)
 
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end

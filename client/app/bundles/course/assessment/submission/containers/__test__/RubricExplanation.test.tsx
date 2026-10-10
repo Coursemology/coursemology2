@@ -1,5 +1,5 @@
 import { AppState } from 'store';
-import { render } from 'test-utils';
+import { fireEvent, render } from 'test-utils';
 
 import RubricExplanation from '../RubricExplanation';
 
@@ -15,20 +15,29 @@ const category = {
 
 // Only the fields the component reads. `Partial<AppState>` allows omitting whole slices but not fields
 // within one, hence the cast.
-const stateWith = (isSaving: boolean): Partial<AppState> =>
+const stateWith = (
+  isSaving: boolean,
+  grade: number | null,
+): Partial<AppState> =>
   ({
     assessments: {
       submission: {
         submission: { workflowState: 'submitted' },
         questions: { 1: { id: 1, maximumGrade: 2 } },
-        grading: { questions: { 1: { id: 100, grade: 0 } } },
+        grading: { questions: { 1: { id: 100, grade } } },
         questionsFlags: {},
         submissionFlags: { isAutograding: false, isSaving },
       },
     },
   }) as unknown as Partial<AppState>;
 
-const renderExplanation = (isSaving: boolean): ReturnType<typeof render> =>
+const renderExplanation = (
+  isSaving: boolean,
+  { grade = 0, updateGrade = jest.fn() } = {} as {
+    grade?: number | null;
+    updateGrade?: jest.Mock;
+  },
+): ReturnType<typeof render> =>
   render(
     <RubricExplanation
       category={category}
@@ -37,9 +46,9 @@ const renderExplanation = (isSaving: boolean): ReturnType<typeof render> =>
       }}
       questionId={1}
       setIsFirstRendering={jest.fn()}
-      updateGrade={jest.fn()}
+      updateGrade={updateGrade}
     />,
-    { state: stateWith(isSaving) },
+    { state: stateWith(isSaving, grade) },
   );
 
 describe('<RubricExplanation />', () => {
@@ -58,6 +67,22 @@ describe('<RubricExplanation />', () => {
 
     expect(await page.findByRole('combobox')).not.toHaveAttribute(
       'aria-disabled',
+    );
+  });
+
+  // An answer nobody has graded yet has a null grade; picking a criterion must still save a numeric one.
+  it('saves a numeric grade when the answer has not been graded yet', async () => {
+    const updateGrade = jest.fn();
+    const page = renderExplanation(false, { grade: null, updateGrade });
+
+    fireEvent.mouseDown(await page.findByRole('combobox'));
+    fireEvent.click(await page.findByRole('option', { name: /Clear/ }));
+
+    expect(updateGrade).toHaveBeenCalledWith(
+      expect.objectContaining({ 1: expect.objectContaining({ gradeId: 11 }) }),
+      1,
+      expect.anything(),
+      2,
     );
   });
 });
