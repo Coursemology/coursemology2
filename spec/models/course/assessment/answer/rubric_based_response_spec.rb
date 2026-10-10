@@ -49,6 +49,16 @@ RSpec.describe Course::Assessment::Answer::RubricBasedResponse, type: :model do
         expect(selection.reload.criterion_id).to be_nil
       end
 
+      it "rejects a criterion that is not one of the selection's category's criteria" do
+        foreign_criterion = create(:course_rubric, course: course).categories.first.criterions.last
+
+        answer.specific.assign_params(selections_attributes: [id: selection.id, criterion_id: foreign_criterion.id])
+
+        expect(answer.specific.save).to be(false)
+        expect(answer.specific.errors[:base]).to include('Invalid criterion')
+        expect(selection.reload.criterion_id).to be_nil
+      end
+
       it 'does not touch the v1 selections table' do
         expect do
           answer.specific.assign_params(selections_attributes: [id: selection.id, criterion_id: criterion.id])
