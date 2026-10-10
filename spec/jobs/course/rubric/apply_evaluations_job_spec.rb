@@ -27,6 +27,16 @@ RSpec.describe Course::Rubric::ApplyEvaluationsJob do
         expect(grading.selections.map(&:category_id)).to match_array(rubric.categories.map(&:id))
         expect(answer.grade).to eq(grading.selections.includes(:criterion).sum { |s| s.criterion&.grade.to_i })
       end
+
+      it "evaluates with the question's grading context, as auto-grading does" do
+        resolver = instance_double(Course::Assessment::Question::GradingContext::Resolver, resolve: 'Resolved context')
+        allow(Course::Assessment::Question::GradingContext::Resolver).to receive(:new).
+          with(answer.question, answer.submission).and_return(resolver)
+        expect_any_instance_of(Course::Rubric::LlmService).to receive(:evaluate).
+          with(context: 'Resolved context').and_call_original
+
+        run
+      end
     end
 
     context 'when an llm evaluation already exists' do

@@ -194,7 +194,7 @@ RSpec.describe Course::Assessment::RubricsController, type: :controller do
             expect do
               post :initialize_answer_evaluations, params: member_params(answer_ids: [answer.id, foreign_answer.id])
             end.to raise_error(ActiveRecord::RecordNotFound)
-          end.not_to change(Course::Rubric::AnswerEvaluation, :count)
+          end.not_to(change { rubric.answer_evaluations.count })
         end
       end
 
