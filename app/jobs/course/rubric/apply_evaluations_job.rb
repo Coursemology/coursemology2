@@ -10,7 +10,8 @@ class Course::Rubric::ApplyEvaluationsJob < ApplicationJob
 
   def perform_tracked(course, rubric_id, answer_ids)
     rubric = course.rubrics.find(rubric_id)
-    Course::Assessment::Answer.where(id: answer_ids).includes(:actable).find_each do |answer|
+    # find_each batches in primary key order, so drop Answer's default order (which it would ignore, with a warning).
+    Course::Assessment::Answer.unscope(:order).where(id: answer_ids).includes(:actable).find_each do |answer|
       apply(rubric, answer)
     end
   end
@@ -18,7 +19,10 @@ class Course::Rubric::ApplyEvaluationsJob < ApplicationJob
   private
 
   def apply(rubric, answer)
-    evaluation = rubric.answer_evaluations.playground_types.find_by(answer: answer) || evaluate(rubric, answer)
+    # Only an evaluation that has been run is reused: applying an empty one would clear the answer's breakdown
+    # and zero its grade. #evaluate runs an empty one in place.
+    evaluation = rubric.answer_evaluations.playground_types.evaluated.find_by(answer: answer) ||
+                 evaluate(rubric, answer)
 
     grading = Course::Rubric::GradingEvaluationMirrorService.mirror(answer, evaluation)
     grade = Course::Rubric::GradingEvaluationMirrorService.total_grade(grading, answer.question.maximum_grade)

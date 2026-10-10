@@ -13,6 +13,7 @@ import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
+import { SubmissionResult } from '../../commons/useRubricAdvanceConfirmation';
 import CommonQuestionFields from '../../components/CommonQuestionFields';
 import AIGradingFields from '../../rubric-based-responses/components/AIGradingFields';
 import CategoryManager from '../../rubric-based-responses/components/CategoryManager';
@@ -20,7 +21,8 @@ import questionSchema from '../commons/validations';
 
 export interface ForumPostResponseFormProps<T extends 'new' | 'edit'> {
   with: ForumPostResponseFormData<T>;
-  onSubmit: (data: ForumPostResponseData) => Promise<void>;
+  // Settles with false when the submission was cancelled (see useRubricAdvanceConfirmation).
+  onSubmit: (data: ForumPostResponseData) => Promise<SubmissionResult>;
 }
 
 // The maximum grade of a rubric-graded question is the sum of each category's top criterion grade (mirrors
@@ -189,10 +191,15 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
 
     setSubmitting(true);
 
-    props.onSubmit(newData).catch((errors) => {
-      setSubmitting(false);
-      formRef.current?.receiveErrors?.(errors);
-    });
+    props
+      .onSubmit(newData)
+      .then((result) => {
+        if (result === false) setSubmitting(false);
+      })
+      .catch((errors) => {
+        setSubmitting(false);
+        formRef.current?.receiveErrors?.(errors);
+      });
   };
 
   return (

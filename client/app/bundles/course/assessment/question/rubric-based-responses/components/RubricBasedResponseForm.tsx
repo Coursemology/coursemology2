@@ -12,6 +12,7 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
+import { SubmissionResult } from '../../commons/useRubricAdvanceConfirmation';
 import schema from '../commons/validation';
 import { RubricBasedResponseFormDataProvider } from '../hooks/RubricBasedResponseFormDataContext';
 
@@ -21,7 +22,8 @@ import QuestionFields from './QuestionFields';
 
 export interface RubricBasedResponseFormProps {
   with: RubricBasedResponseFormData;
-  onSubmit: (data: RubricBasedResponseData) => Promise<void>;
+  // Settles with false when the submission was cancelled (see useRubricAdvanceConfirmation).
+  onSubmit: (data: RubricBasedResponseData) => Promise<SubmissionResult>;
 }
 
 const RubricBasedResponseForm = (
@@ -53,10 +55,15 @@ const RubricBasedResponseForm = (
     };
 
     setSubmitting(true);
-    props.onSubmit(newData).catch((error) => {
-      toast.error(error || t(translations.errorWhenSavingQuestion));
-      return setSubmitting(false);
-    });
+    props
+      .onSubmit(newData)
+      .then((result) => {
+        if (result === false) setSubmitting(false);
+      })
+      .catch((error) => {
+        toast.error(error || t(translations.errorWhenSavingQuestion));
+        return setSubmitting(false);
+      });
   };
 
   return (

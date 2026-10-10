@@ -185,6 +185,26 @@ RSpec.describe Course::Assessment::RubricsController, type: :controller do
             expect(JSON.parse(response.body)['error']).to include('unevaluated')
             expect(Course::Rubric::ApplyEvaluationsJob).not_to have_been_enqueued
           end
+
+          # An evaluation is created empty when an answer is added to the playground, and only filled when run.
+          it 'counts an answer whose evaluation was never run as unevaluated' do
+            Course::Rubric::AnswerEvaluation.create!(answer: answer, rubric: rubric, evaluation_type: :playground)
+
+            apply([answer.id], should_apply_unevaluated: false)
+
+            expect(response).to have_http_status(:bad_request)
+            expect(Course::Rubric::ApplyEvaluationsJob).not_to have_been_enqueued
+          end
+
+          it 'applies without warning once the evaluation has been run' do
+            evaluation = Course::Rubric::AnswerEvaluation.create!(answer: answer, rubric: rubric,
+                                                                  evaluation_type: :playground)
+            rubric.categories.each { |category| evaluation.selections.create!(category_id: category.id) }
+
+            apply([answer.id], should_apply_unevaluated: false)
+
+            expect(Course::Rubric::ApplyEvaluationsJob).to have_been_enqueued
+          end
         end
       end
 

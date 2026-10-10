@@ -16,7 +16,8 @@ RSpec.describe Course::Assessment::Question::RubricBasedResponsesController, typ
       controller.instance_variable_set(:@rubric_based_response_question, rubric_based_response_question)
     end
 
-    # The rubric fields of the edit form, as it submits them for +rubric+ unchanged.
+    # The rubric fields of the edit form, as it submits them for +rubric+ unchanged: explanations come back as the
+    # edit page serves them, sanitised.
     def rubric_form_params(rubric)
       {
         ai_grading_custom_prompt: rubric.grading_prompt,
@@ -27,7 +28,8 @@ RSpec.describe Course::Assessment::Question::RubricBasedResponsesController, typ
 
     def category_form_params(category)
       criterions = category.criterions.map do |criterion|
-        { id: criterion.id, grade: criterion.grade, explanation: criterion.explanation }
+        { id: criterion.id, grade: criterion.grade,
+          explanation: ApplicationController.helpers.sanitize_ckeditor_rich_text(criterion.explanation) }
       end
       { id: category.id, name: category.name, criterions_attributes: indexed(criterions) }
     end
@@ -128,6 +130,32 @@ RSpec.describe Course::Assessment::Question::RubricBasedResponsesController, typ
 
       it 'does not create a new rubric version when the content is unchanged' do
         expect { patch_update({}) }.not_to change(Course::Rubric, :count)
+      end
+
+      context 'when a stored explanation is HTML that the edit page re-serialises' do
+        # Sanitising re-quotes the attribute: style='font-family:"Segoe UI"'.
+        let(:stored_explanation) { '<p><span style="font-family:&quot;Segoe UI&quot;">Clear</span></p>' }
+
+        before do
+          active_rubric.categories.first.criterions.last.update_column(:explanation, stored_explanation)
+          active_rubric.update_column(:content_hash, active_rubric.reload.canonical_content_hash)
+        end
+
+        it 'still recognises the rubric as unchanged' do
+          sanitised = ApplicationController.helpers.sanitize_ckeditor_rich_text(stored_explanation)
+          expect(sanitised).not_to eq(stored_explanation)
+
+          expect { patch_update({}) }.not_to change(Course::Rubric, :count)
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'versions the rubric when that explanation is really changed' do
+          categories = rubric_form_params(active_rubric)[:categories_attributes]
+          criterions = categories['0'][:criterions_attributes]
+          criterions[(criterions.size - 1).to_s][:explanation] = '<p>Very clear</p>'
+
+          expect { patch_update({ categories_attributes: categories }) }.to change(Course::Rubric, :count).by(1)
+        end
       end
 
       it 'creates a new version and repoints active_rubric_id when the grading prompt changes' do

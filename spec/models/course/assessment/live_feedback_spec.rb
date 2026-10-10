@@ -30,7 +30,7 @@ RSpec.describe Course::Assessment::LiveFeedback do
       context 'when the live feedback is successfully created' do
         it 'creates a live feedback with associated codes' do
           feedback = Course::Assessment::LiveFeedback.create_with_codes(
-            assessment.id, question.id, user, nil, files
+            assessment.id, question.acting_as.id, user, nil, files
           )
 
           expect(feedback).to be_persisted
@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::LiveFeedback do
 
           expect(Rails.logger).to receive(:error).with(/Failed to save live_feedback/)
           feedback = Course::Assessment::LiveFeedback.create_with_codes(
-            assessment.id, question.id, user, nil, files
+            assessment.id, question.acting_as.id, user, nil, files
           )
 
           expect(feedback).to be_nil
@@ -59,7 +59,7 @@ RSpec.describe Course::Assessment::LiveFeedback do
 
           expect(Rails.logger).to receive(:error).with(/Failed to save live_feedback_code/).twice
           feedback = Course::Assessment::LiveFeedback.create_with_codes(
-            assessment.id, question.id, user, nil, files
+            assessment.id, question.acting_as.id, user, nil, files
           )
 
           expect(feedback).to be_persisted

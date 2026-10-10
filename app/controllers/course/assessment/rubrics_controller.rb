@@ -280,10 +280,12 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     found_ids
   end
 
+  # Whether any requested answer has not been evaluated against this rubric, as the playground table shows it: a
+  # visible evaluation that has been run (an empty one, created when the answer was added, does not count).
   def should_raise_unevaluated_warning?
-    !ActiveRecord::Type::Boolean.new.cast(@should_apply_unevaluated) &&
-      Course::Assessment::Answer.where(id: answer_ids).includes(:rubric_evaluations).any? do |answer|
-        answer.rubric_evaluations.playground.find_by(rubric: @rubric).nil?
-      end
+    return false if ActiveRecord::Type::Boolean.new.cast(@should_apply_unevaluated)
+
+    evaluated_ids = @rubric.answer_evaluations.playground.evaluated.where(answer_id: answer_ids).pluck(:answer_id)
+    (answer_ids - evaluated_ids).any?
   end
 end

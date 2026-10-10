@@ -18,6 +18,9 @@ class Course::Rubric::AnswerEvaluation < ApplicationRecord
 
   # +playground+ and +playground_hidden+ are the same kind of record (visible vs dismissed).
   scope :playground_types, -> { where(evaluation_type: [:playground, :playground_hidden]) }
+  # Evaluations that have been run: an evaluation is created empty (e.g. when an answer is added to the
+  # playground) and only gets its selections, one per category, when it is evaluated.
+  scope :evaluated, -> { where(id: Course::Rubric::AnswerEvaluation::Selection.select(:answer_evaluation_id)) }
 
   validates :answer, presence: true
   # A +grading+ evaluation may have a null rubric (manually graded, no AI); +playground+ kinds always need one.
