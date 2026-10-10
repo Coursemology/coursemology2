@@ -41,8 +41,10 @@ class Course::Rubric::ApplyEvaluationsJob < ApplicationJob
     answer_adapter = Course::Assessment::Answer::RubricPlaygroundAnswerAdapter.new(answer, evaluation)
     llm_adapter = Course::Rubric::LlmService::LlmAdapter.for_course(rubric.course)
 
+    # The same grading context (sibling answers, forum thread, ...) that auto-grading and the playground give the LLM.
+    context = Course::Assessment::Question::GradingContext::Resolver.new(answer.question, answer.submission).resolve
     llm_response = Course::Rubric::LlmService.
-                   new(question_adapter, rubric_adapter, answer_adapter, llm_adapter).evaluate
+                   new(question_adapter, rubric_adapter, answer_adapter, llm_adapter).evaluate(context: context)
     answer_adapter.save_llm_results(llm_response)
     evaluation.reload
   end
