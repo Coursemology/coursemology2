@@ -246,6 +246,26 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         expect(answer.reload.grading_rubric_evaluation.selections.map(&:category_id)).
           to match_array(rubric.categories.map(&:id))
       end
+
+      context 'when the answer is being graded' do
+        render_views
+
+        let(:job) { create(:trackable_job) }
+
+        # Finalising the submission created (and graded) the question's current answer, which is the one the
+        # page shows; point its grading run at a job that is still running.
+        before do
+          submission.answers.find_by!(question: question.acting_as, current_answer: true).
+            auto_grading.update!(job: job)
+        end
+
+        it 'reports the grading job, so the page can show and poll it' do
+          get :edit, params: { course_id: course, assessment_id: assessment, id: submission, format: :json }
+
+          answer_json = JSON.parse(response.body)['answers'].find { |a| a['questionId'] == question.acting_as.id }
+          expect(answer_json['autograding']).to include('status' => 'submitted', 'jobUrl' => job_path(job))
+        end
+      end
     end
 
     describe '#extract_instance_variables' do

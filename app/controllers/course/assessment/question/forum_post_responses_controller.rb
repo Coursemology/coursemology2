@@ -74,6 +74,7 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
     needs_confirmation = false
     saved = ActiveRecord::Base.transaction do
       previous_active = @forum_post_response_question.active_rubric
+      previous_maximum_grade = @forum_post_response_question.maximum_grade
       # Switching to default grading mode retains the active_rubric (dormant, ignored by auto_gradable?) so the
       # configured rubric survives a round-trip back to rubric mode; only rubric mode (re)syncs it.
       synced = assign_active_rubric_from_params if rubric_grading_mode_param?
@@ -83,6 +84,11 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
       if rubric_grading_mode_param? && sync_rubric_advance(previous_active, synced) == :advance_required
         needs_confirmation = true
         raise ActiveRecord::Rollback
+      end
+      # In rubric mode the maximum grade follows the rubric, so editing the rubric (or switching to rubric
+      # mode) can lower it below answers' existing grades.
+      if @forum_post_response_question.maximum_grade < previous_maximum_grade
+        @forum_post_response_question.acting_as.clamp_answer_grades_to_maximum!
       end
       sync_grading_contexts(@forum_post_response_question, grading_contexts_params)
       true

@@ -96,7 +96,7 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
 
   def initialize_answer_evaluations
     answer_evaluations = Course::Rubric::AnswerEvaluation.insert_all(
-      params.require(:answer_ids).map do |id|
+      answer_ids.map do |id|
         {
           rubric_id: @rubric.id,
           answer_id: id
@@ -111,7 +111,7 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
 
   def initialize_mock_answer_evaluations
     mock_answer_evaluations = Course::Rubric::MockAnswerEvaluation.insert_all(
-      params.require(:mock_answer_ids).map do |id|
+      mock_answer_ids.map do |id|
         {
           rubric_id: @rubric.id,
           mock_answer_id: id
@@ -195,7 +195,7 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     end
 
     job = Course::Rubric::ApplyEvaluationsJob.perform_later(
-      current_course, @rubric.id, params.require(:answer_ids)
+      current_course, @rubric.id, answer_ids
     ).job
     render partial: 'jobs/submitted', locals: { job: job }
   end
@@ -260,8 +260,24 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     )
   end
 
-  def initialize_mock_answer_evaluations_params
-    params.require(:mock_answer_ids)
+  # The requested answers' ids, all of which must belong to this question: the playground actions write
+  # evaluations (and apply_evaluations writes grades) for them, so an id from elsewhere must be rejected.
+  def answer_ids
+    @answer_ids ||= ids_within(@question.answers, params.require(:answer_ids))
+  end
+
+  # As #answer_ids, for the question's mock answers.
+  def mock_answer_ids
+    @mock_answer_ids ||= ids_within(@question.mock_answers, params.require(:mock_answer_ids))
+  end
+
+  def ids_within(scope, requested_ids)
+    ids = Array(requested_ids).map(&:to_i).uniq
+    found_ids = scope.where(id: ids).pluck(:id)
+    raise ActiveRecord::RecordNotFound, "Couldn't find all of #{scope.model_name.human.pluralize}" if
+      found_ids.size != ids.size
+
+    found_ids
   end
 
   def should_raise_unevaluated_warning?

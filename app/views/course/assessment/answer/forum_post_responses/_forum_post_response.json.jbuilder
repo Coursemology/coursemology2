@@ -14,6 +14,25 @@ json.fields do
 end
 
 last_attempt = last_attempt(answer)
+attempt = answer.current_answer? ? last_attempt : answer
+
+# The grading job's status, as for the other job-graded types. Rubric-graded forum answers are graded in a
+# job; without this, a grading view opened mid-job would neither show nor poll it, and would leave the rubric
+# editable while the job is about to overwrite it.
+job = attempt&.auto_grading&.job
+
+if job
+  json.autograding do
+    json.path job_path(job) if job.submitted?
+    json.partial! "jobs/#{job.status}", job: job
+  end
+end
+
+if attempt&.submitted? && !attempt.auto_grading
+  json.autograding do
+    json.status :submitted
+  end
+end
 
 # Only rubric-graded forum questions carry a categoryGrades breakdown; default-graded answers are graded by
 # the plain grade field, so emitting an (empty) breakdown would misroute their save through the rubric path.

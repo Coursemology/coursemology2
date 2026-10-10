@@ -137,6 +137,80 @@ RSpec.describe Course::Assessment::RubricsController, type: :controller do
       end
     end
 
+    describe 'answer ids outside the question' do
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
+      let!(:answer) do
+        create(:course_assessment_answer_rubric_based_response, :submitted,
+               question: question.acting_as, submission: submission).answer
+      end
+      # An answer to a question in another course.
+      let(:other_assessment) { create(:assessment, course: create(:course)) }
+      let(:other_question) { create(:course_assessment_question_rubric_based_response, assessment: other_assessment) }
+      let!(:foreign_answer) do
+        create(:course_assessment_answer_rubric_based_response, :submitted,
+               question: other_question.acting_as,
+               submission: create(:submission, :submitted, assessment: other_assessment, creator: user)).answer
+      end
+
+      def member_params(extra)
+        { course_id: course.id, assessment_id: assessment.id, question_id: question.acting_as.id,
+          id: rubric.id, on: :member }.merge(extra)
+      end
+
+      describe '#apply_evaluations' do
+        render_views
+
+        def apply(answer_ids, should_apply_unevaluated: true)
+          post :apply_evaluations, format: :json,
+                                   params: member_params(answer_ids: answer_ids,
+                                                         should_apply_unevaluated: should_apply_unevaluated)
+        end
+
+        with_active_job_queue_adapter(:test) do
+          it 'rejects an answer from another question without applying anything' do
+            expect { apply([answer.id, foreign_answer.id]) }.to raise_error(ActiveRecord::RecordNotFound)
+            expect(Course::Rubric::ApplyEvaluationsJob).not_to have_been_enqueued
+          end
+
+          it "applies the question's own answers" do
+            apply([answer.id])
+
+            expect(Course::Rubric::ApplyEvaluationsJob).to have_been_enqueued.with(course, rubric.id, [answer.id])
+          end
+
+          it 'warns instead of applying when an answer is unevaluated and that was not confirmed' do
+            apply([answer.id], should_apply_unevaluated: false)
+
+            expect(response).to have_http_status(:bad_request)
+            expect(JSON.parse(response.body)['error']).to include('unevaluated')
+            expect(Course::Rubric::ApplyEvaluationsJob).not_to have_been_enqueued
+          end
+        end
+      end
+
+      describe '#initialize_answer_evaluations' do
+        it 'rejects an answer from another question without creating any evaluation' do
+          expect do
+            expect do
+              post :initialize_answer_evaluations, params: member_params(answer_ids: [answer.id, foreign_answer.id])
+            end.to raise_error(ActiveRecord::RecordNotFound)
+          end.not_to change(Course::Rubric::AnswerEvaluation, :count)
+        end
+      end
+
+      describe '#initialize_mock_answer_evaluations' do
+        let!(:foreign_mock_answer) { other_question.acting_as.mock_answers.create!(name: 'Other', answer_text: 'x') }
+
+        it 'rejects a mock answer from another question without creating any evaluation' do
+          expect do
+            expect do
+              post :initialize_mock_answer_evaluations, params: member_params(mock_answer_ids: [foreign_mock_answer.id])
+            end.to raise_error(ActiveRecord::RecordNotFound)
+          end.not_to change(Course::Rubric::MockAnswerEvaluation, :count)
+        end
+      end
+    end
+
     describe '#delete_mock_answer_evaluations' do
       let!(:grading_context) do
         Course::Assessment::Question::GradingContext.create!(

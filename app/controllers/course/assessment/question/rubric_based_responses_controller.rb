@@ -115,12 +115,14 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
   def apply_question_update
     update_skill_ids_if_params_present(rubric_based_response_question_params[:question_assessment])
     previous_maximum_grade = @rubric_based_response_question.maximum_grade
-    return false unless @rubric_based_response_question.update(
+    updated = @rubric_based_response_question.update(
       rubric_based_response_question_params.except(:question_assessment)
     )
 
-    clamp_answer_grades_to_maximum if @rubric_based_response_question.maximum_grade != previous_maximum_grade
-    true
+    if updated && @rubric_based_response_question.maximum_grade != previous_maximum_grade
+      @rubric_based_response_question.acting_as.clamp_answer_grades_to_maximum!
+    end
+    updated
   end
 
   def confirm_rubric_advance?
