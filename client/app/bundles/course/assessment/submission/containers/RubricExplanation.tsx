@@ -63,6 +63,9 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   const submissionFlags = useAppSelector(getSubmissionFlags);
   const isAutograding =
     submissionFlags?.isAutograding || questionFlags[questionId]?.isAutograding;
+  // A grade save's response carries the breakdown as of when it was sent, so a criterion picked while it is
+  // in flight would be overwritten by an outdated breakdown (while the newer grade is kept).
+  const isSaving = submissionFlags?.isSaving;
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
@@ -116,7 +119,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   return (
     <Select
       className="w-full h-20"
-      disabled={isAutograding}
+      disabled={isAutograding || isSaving}
       id={`category-${category.id}`}
       onChange={handleOnChange}
       renderValue={(selectedId) => {
