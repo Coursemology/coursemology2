@@ -1,61 +1,34 @@
-import recorderHelper from '../../../utils/recorderHelper';
-import actionTypes from '../../constants';
-import reducer from '../recorder';
-
-jest.mock('../../../utils/recorderHelper');
+import reducer, { setNotRecording, setRecording } from '../recorder';
 
 describe('recorder reducer', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  it('starts with nothing recording', () => {
+    expect(reducer(undefined, { type: '@@INIT' })).toEqual({
+      recording: false,
+      recordingComponentId: '',
+    });
   });
 
-  describe('RECORDER_COMPONENT_UNMOUNT', () => {
-    it('does not try to stop the recorder when nothing was recording', () => {
-      jest.mocked(recorderHelper.isRecording).mockReturnValue(false);
-      const state = {
-        recording: false,
-        recorderComponentsCount: 1,
-        recordingComponentId: '',
-      };
+  it('records which question started recording', () => {
+    const state = reducer(
+      undefined,
+      setRecording({ recordingComponentId: 'voice_response_3' }),
+    );
 
-      reducer(state, { type: actionTypes.RECORDER_COMPONENT_UNMOUNT });
-
-      expect(recorderHelper.stopRecord).not.toHaveBeenCalled();
+    expect(state).toEqual({
+      recording: true,
+      recordingComponentId: 'voice_response_3',
     });
+  });
 
-    it('stops the recorder when the user navigates away mid-recording', () => {
-      jest.mocked(recorderHelper.isRecording).mockReturnValue(true);
-      jest
-        .mocked(recorderHelper.stopRecord)
-        .mockResolvedValue(new File([], 'test.wav'));
-      const state = {
-        recording: true,
-        recorderComponentsCount: 1,
-        recordingComponentId: 'voice_response_1',
-      };
+  it('clears the recording question when recording stops', () => {
+    const recording = reducer(
+      undefined,
+      setRecording({ recordingComponentId: 'voice_response_3' }),
+    );
 
-      reducer(state, { type: actionTypes.RECORDER_COMPONENT_UNMOUNT });
-
-      expect(recorderHelper.stopRecord).toHaveBeenCalled();
-    });
-
-    it('does not decrement below the last unmount and resets recording state', () => {
-      jest.mocked(recorderHelper.isRecording).mockReturnValue(false);
-      const state = {
-        recording: true,
-        recorderComponentsCount: 1,
-        recordingComponentId: 'voice_response_1',
-      };
-
-      const nextState = reducer(state, {
-        type: actionTypes.RECORDER_COMPONENT_UNMOUNT,
-      });
-
-      expect(nextState).toEqual({
-        recording: false,
-        recorderComponentsCount: 0,
-        recordingComponentId: 'voice_response_1',
-      });
+    expect(reducer(recording, setNotRecording())).toEqual({
+      recording: false,
+      recordingComponentId: '',
     });
   });
 });
