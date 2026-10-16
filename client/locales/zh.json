@@ -3627,10 +3627,28 @@
     "defaultMessage": "上传的文件："
   },
   "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
-    "defaultMessage": "将你的音频文件拖到此处，或点击以选择。仅支持 wav 和 mp3 格式。或者，你可以使用下面的录音机来记录你的回复"
+    "defaultMessage": "将你的音频文件拖到此处，或点击以选择。支持 mp3、wav、m4a、ogg 和 webm 等常见音频格式。或者，你可以使用下面的录音机来记录你的回复"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.fileTooLarge": {
+    "defaultMessage": "此文件超过了 {maxSize} 的大小限制。请尝试使用 mp3 或 m4a 等压缩格式。"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneBlocked": {
+    "defaultMessage": "麦克风访问已被阻止。如需录音，请在浏览器设置中允许此网站使用你的麦克风，然后再次点击“开始录音”。"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneNotFound": {
+    "defaultMessage": "未检测到麦克风。请连接麦克风，然后再次点击“开始录音”。"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneUnavailable": {
+    "defaultMessage": "无法启动你的麦克风。请确认没有其他应用程序正在使用它，然后再次点击“开始录音”。"
   },
   "course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice": {
     "defaultMessage": "请录下你的声音"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.recordingLimitReached": {
+    "defaultMessage": "录音已在达到 {maxSize} 的大小限制时自动停止。已录制的内容已保留。"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.recordingNotSupported": {
+    "defaultMessage": "你的浏览器不支持录音。你仍然可以在上方上传音频文件。"
   },
   "course.assessment.submission.VoiceResponseAnswer.startRecording": {
     "defaultMessage": "开始录音"

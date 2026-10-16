@@ -74,7 +74,7 @@ commands:
       - restore_cache:
           name: Restore client Yarn dependencies cache
           keys:
-            - v22.22.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
+            - v22.22.0-node-{{ checksum "client/yarn.lock" }}
             - v22.22.0-node-
 
       - run:
@@ -85,8 +85,7 @@ commands:
       - save_cache:
           paths:
             - ./client/node_modules
-            - ./client/vendor/recorderjs/node_modules
-          key: v22.22.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
+          key: v22.22.0-node-{{ checksum "client/yarn.lock" }}
 
   restore_client_cache:
     steps:

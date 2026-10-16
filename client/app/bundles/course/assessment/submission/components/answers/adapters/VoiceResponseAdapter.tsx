@@ -1,5 +1,5 @@
-import VoiceResponseAnswer from '../../../containers/VoiceResponseAnswer';
 import type { VoiceResponseAnswerProps } from '../types';
+import VoiceResponseAnswer from '../VoiceResponse';
 
 const VoiceResponseAdapter = (props: VoiceResponseAnswerProps): JSX.Element => {
   const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =

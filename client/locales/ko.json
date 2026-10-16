@@ -3621,10 +3621,28 @@
     "defaultMessage": "업로드된 파일"
   },
   "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
-    "defaultMessage": "오디오 파일을 여기에 끌어다 놓거나 클릭하여 선택하세요. wav 및 mp3 형식만 지원됩니다. 또는 아래 녹음기를 사용하여 응답을 녹음할 수 있습니다"
+    "defaultMessage": "오디오 파일을 여기에 끌어다 놓거나 클릭하여 선택하세요. mp3, wav, m4a, ogg, webm 등 일반적인 오디오 형식을 지원합니다. 또는 아래 녹음기를 사용하여 응답을 녹음할 수 있습니다"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.fileTooLarge": {
+    "defaultMessage": "이 파일은 {maxSize} 제한을 초과합니다. mp3 또는 m4a 같은 압축 형식을 사용해 보세요."
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneBlocked": {
+    "defaultMessage": "마이크 접근이 차단되었습니다. 녹음하려면 브라우저 설정에서 이 사이트의 마이크 사용을 허용한 후 '녹음 시작'을 다시 클릭하세요."
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneNotFound": {
+    "defaultMessage": "마이크를 찾을 수 없습니다. 마이크를 연결한 후 '녹음 시작'을 다시 클릭하세요."
+  },
+  "course.assessment.submission.VoiceResponseAnswer.microphoneUnavailable": {
+    "defaultMessage": "마이크를 시작할 수 없습니다. 다른 애플리케이션이 마이크를 사용하고 있지 않은지 확인한 후 '녹음 시작'을 다시 클릭하세요."
   },
   "course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice": {
     "defaultMessage": "목소리를 녹음해주세요"
+  },
+  "course.assessment.submission.VoiceResponseAnswer.recordingLimitReached": {
+    "defaultMessage": "{maxSize} 크기 제한에 도달하여 녹음이 자동으로 중지되었습니다. 녹음된 내용은 유지되었습니다."
+  },
+  "course.assessment.submission.VoiceResponseAnswer.recordingNotSupported": {
+    "defaultMessage": "사용 중인 브라우저는 녹음을 지원하지 않습니다. 위에서 오디오 파일을 업로드할 수 있습니다."
   },
   "course.assessment.submission.VoiceResponseAnswer.startRecording": {
     "defaultMessage": "녹음 시작"
