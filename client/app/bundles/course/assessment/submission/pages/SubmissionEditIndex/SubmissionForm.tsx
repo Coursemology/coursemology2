@@ -10,6 +10,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { finalise, getEvaluationResult, getJobStatus } from '../../actions';
 import { fetchLiveFeedback } from '../../actions/answers';
 import AllAttemptsPrompt from '../../components/AllAttempts';
+import useMicrophoneAccess from '../../components/answers/VoiceResponse/useMicrophoneAccess';
 import WarningDialog from '../../components/WarningDialog';
 import actionTypes, {
   EVALUATE_POLL_INTERVAL_MILLISECONDS,
@@ -130,6 +131,7 @@ const SubmissionForm: FC<Props> = (props) => {
     formState: { isDirty },
   } = methods;
   usePrompt(isDirty);
+  useMicrophoneAccess();
 
   useEffect(() => {
     reset(initialValues);

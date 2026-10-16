@@ -11,7 +11,7 @@ describe('recorder reducer', () => {
 
   describe('RECORDER_COMPONENT_UNMOUNT', () => {
     it('does not try to stop the recorder when nothing was recording', () => {
-      recorderHelper.isRecording.mockReturnValue(false);
+      jest.mocked(recorderHelper.isRecording).mockReturnValue(false);
       const state = {
         recording: false,
         recorderComponentsCount: 1,
@@ -24,8 +24,10 @@ describe('recorder reducer', () => {
     });
 
     it('stops the recorder when the user navigates away mid-recording', () => {
-      recorderHelper.isRecording.mockReturnValue(true);
-      recorderHelper.stopRecord.mockResolvedValue(new File([], 'test.wav'));
+      jest.mocked(recorderHelper.isRecording).mockReturnValue(true);
+      jest
+        .mocked(recorderHelper.stopRecord)
+        .mockResolvedValue(new File([], 'test.wav'));
       const state = {
         recording: true,
         recorderComponentsCount: 1,
@@ -38,7 +40,7 @@ describe('recorder reducer', () => {
     });
 
     it('does not decrement below the last unmount and resets recording state', () => {
-      recorderHelper.isRecording.mockReturnValue(false);
+      jest.mocked(recorderHelper.isRecording).mockReturnValue(false);
       const state = {
         recording: true,
         recorderComponentsCount: 1,

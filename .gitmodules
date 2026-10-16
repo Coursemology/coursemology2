@@ -1,7 +1,3 @@
-[submodule "vendor/assets/javascripts/recorderjs"]
-	path = client/vendor/recorderjs
-	url = https://github.com/mattdiamond/Recorderjs.git
-	ignore = dirty
 [submodule "authentication/singular-keycloak-database-federation"]
 	path = authentication/singular-keycloak-database-federation
 	url = https://github.com/Coursemology/singular-keycloak-database-federation.git

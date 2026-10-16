@@ -1,282 +1,163 @@
-import { Component } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
 import { Button, Typography } from '@mui/material';
-import { red } from '@mui/material/colors';
-import PropTypes from 'prop-types';
 
-import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
+import FormSingleFileInput, {
+  PreviewComponentProps,
+} from 'lib/components/form/fields/SingleFileInput';
+import AudioPreview from 'lib/components/form/fields/SingleFileInput/AudioPreview';
+import useTranslation, {
+  Descriptor,
+  MessageTranslator,
+} from 'lib/hooks/useTranslation';
 
-import recorderHelper from '../../utils/recorderHelper';
-import {
-  recorderComponentMount,
-  recorderComponentUnmount,
-  setNotRecording,
-  setRecording,
-} from '../actions/answers/voiceResponse';
+import recorderHelper, {
+  MicrophoneError,
+} from '../../../../utils/recorderHelper';
+import { VoiceResponseAnswerProps } from '../types';
 
-const translations = defineMessages({
-  startRecording: {
-    id: 'course.assessment.submission.VoiceResponseAnswer.startRecording',
-    defaultMessage: 'Start Recording',
-  },
-  stopRecording: {
-    id: 'course.assessment.submission.VoiceResponseAnswer.stopRecording',
-    defaultMessage: 'Stop Recording',
-  },
-  chooseVoiceFileExplain: {
-    id: 'course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain',
-    defaultMessage:
-      'Drag and drop or click to upload your WAV / MP3 files. Alternatively, use the \
-                     recorder below to record your response',
-  },
-  pleaseRecordYourVoice: {
-    id: 'course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice',
-    defaultMessage: 'Please record your voice',
-  },
-});
+import translations from './translations';
+import useVoiceRecorder from './useVoiceRecorder';
 
-const styles = {
-  fileInputWrapper: {
-    width: '100%',
-  },
-  singleFileInputChildrenWrapper: {
-    width: '100%',
-    height: '100%',
-    display: 'table',
-  },
-  singleFileInputChildren: {
-    display: 'table-cell',
-    verticalAlign: 'middle',
-  },
-  errorStyle: {
-    color: red[500],
-  },
-};
-const checkVoiceResponseRecorded = (value, intl) => {
-  const { file, url } = value;
-  if (url || file instanceof File) {
-    return true;
-  }
-  return intl.formatMessage(translations.pleaseRecordYourVoice);
+// Common audio formats, keyed by standard MIME type. The extensions also admit files whose MIME type the
+// OS reports differently, such as .webm as video/webm.
+const ACCEPTED_AUDIO = {
+  'audio/mpeg': ['.mp3'],
+  'audio/wav': ['.wav'],
+  'audio/mp4': ['.m4a', '.mp4'],
+  'audio/aac': ['.aac'],
+  'audio/ogg': ['.ogg', '.oga', '.opus'],
+  'audio/webm': ['.webm'],
+  'audio/flac': ['.flac'],
 };
 
-class VoiceResponseAnswer extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(recorderComponentMount());
-  }
+const MICROPHONE_ERROR_MESSAGES: Record<MicrophoneError, Descriptor> = {
+  NotAllowedError: translations.microphoneBlocked,
+  NotFoundError: translations.microphoneNotFound,
+  OtherError: translations.microphoneUnavailable,
+};
 
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch(recorderComponentUnmount());
-  }
+// The form value, in the shape FormSingleFileInput reads and writes. `file` is set only when a new file
+// was recorded or picked; `url` and `name` describe the one already saved.
+export interface VoiceResponseFileValue {
+  url: string | null;
+  name: string;
+  file?: File | null;
+}
 
-  onStartRecord = () => {
-    const { dispatch } = this.props;
-    const recordingComponentId = this.currentRecordingComponentId();
-    recorderHelper
-      .startRecord()
-      .then(() => dispatch(setRecording({ recordingComponentId })));
-  };
+interface VoiceResponseProps
+  extends Omit<VoiceResponseAnswerProps, 'answerId'> {
+  answerId: number;
+}
 
-  onStopRecord = (field) => () => {
-    const { dispatch } = this.props;
-    recorderHelper.stopRecord().then((file) => {
-      const { onChange, value = {} } = field;
-      const { url, name } = value;
-      /**
-       * check SingleFileInput about the format of the single file
-       */
-      onChange({ file, url, name });
-      return dispatch(setNotRecording());
-    });
-  };
+const checkVoiceResponseRecorded = (
+  value: VoiceResponseFileValue | undefined,
+  t: MessageTranslator,
+): true | string =>
+  value?.url || value?.file instanceof File
+    ? true
+    : t(translations.pleaseRecordYourVoice);
 
-  /**
-   * It is just a unique Id for each component make use of recorder
-   */
-  currentRecordingComponentId = () => {
-    const { question } = this.props;
-    return `voice_response_${question.id}`;
-  };
+const SingleFileInputChildren = ({
+  file,
+}: PreviewComponentProps): JSX.Element => {
+  const { t } = useTranslation();
 
-  // eslint-disable-next-line class-methods-use-this
-  renderAudio = (field) => {
-    const {
-      value: { file, url },
-    } = field;
-    let finalUrl;
-    if (file) {
-      finalUrl = URL.createObjectURL(file);
-    } else if (url) {
-      finalUrl = url;
-    }
-    if (finalUrl) {
-      return (
-        <audio controls src={finalUrl}>
-          <track kind="captions" />
-        </audio>
-      );
-    }
-    return null;
-  };
-
-  renderAudioInput = (
-    readOnly,
-    recording,
-    recordingComponentId,
-    field,
-    fieldState,
-  ) => {
-    if (readOnly) {
-      return null;
-    }
-    const { intl } = this.props;
-    return (
-      <div>
-        <div className="w-full">
-          <FormSingleFileInput
-            accept={{ 'audio/mp3': ['.mp3'], 'audio/wav': ['wav'] }}
-            disabled={readOnly}
-            field={field}
-            fieldState={fieldState}
-            previewComponent={this.renderSingleFileInputChildren}
-          />
-        </div>
-        <div className="flex w-full items-center space-x-3 mb-2 mt-2">
-          <Button
-            color="primary"
-            disabled={recording}
-            onClick={this.onStartRecord}
-          >
-            <Mic />
-            {intl.formatMessage(translations.startRecording)}
-          </Button>
-
-          <Button
-            color="secondary"
-            disabled={
-              !recording ||
-              recordingComponentId !== this.currentRecordingComponentId()
-            }
-            onClick={this.onStopRecord(field)}
-          >
-            <Stop />
-            {intl.formatMessage(translations.stopRecording)}
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  renderFile = ({
-    field,
-    fieldState,
-    readOnly,
-    recording,
-    recordingComponentId,
-  }) => {
-    const error = fieldState.error;
-
-    return (
-      <div>
-        {this.renderAudioInput(
-          readOnly,
-          recording,
-          recordingComponentId,
-          field,
-          fieldState,
-        )}
-        {this.renderAudio(field)}
-        {error ? <div style={styles.errorStyle}>{error.message}</div> : null}
-      </div>
-    );
-  };
-
-  // eslint-disable-next-line class-methods-use-this
-  renderSingleFileInputChildren = (props) => (
-    <div style={styles.singleFileInputChildrenWrapper}>
-      <div style={styles.singleFileInputChildren}>
-        <Typography variant="body1">
-          <div>
-            <FormattedMessage {...translations.chooseVoiceFileExplain} />
-          </div>
-          {props.file && props.file.name}
-        </Typography>
-      </div>
-    </div>
+  return (
+    <Typography component="div" variant="body1">
+      <div>{t(translations.chooseVoiceFileExplain)}</div>
+      {file?.name}
+    </Typography>
   );
-
-  render() {
-    const {
-      control,
-      question,
-      recording,
-      recordingComponentId,
-      readOnly,
-      answerId,
-      saveAnswerAndUpdateClientVersion,
-      intl,
-    } = this.props;
-    return (
-      <div>
-        <Controller
-          control={control}
-          name={`${answerId}.file`}
-          render={({ field, fieldState }) =>
-            this.renderFile({
-              field: {
-                ...field,
-                onChange: (event) => {
-                  field.onChange(event);
-                  saveAnswerAndUpdateClientVersion(answerId);
-                },
-              },
-              fieldState,
-              readOnly,
-              answerId,
-              recording,
-              recordingComponentId,
-              question,
-            })
-          }
-          rules={{ validate: (v) => checkVoiceResponseRecorded(v, intl) }}
-        />
-      </div>
-    );
-  }
-}
-
-VoiceResponseAnswer.propTypes = {
-  control: PropTypes.object.isRequired,
-  answerId: PropTypes.number.isRequired,
-  readOnly: PropTypes.bool.isRequired,
-  question: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }),
-  dispatch: PropTypes.func.isRequired,
-  recordingComponentId: PropTypes.string.isRequired,
-  recording: PropTypes.bool.isRequired,
-  intl: PropTypes.object.isRequired,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
-const VoiceResponseAnswerWithFormContext = (props) => {
+const VoiceResponseAnswer = (props: VoiceResponseProps): JSX.Element => {
+  const { answerId, question, readOnly, saveAnswerAndUpdateClientVersion } =
+    props;
+  const { t } = useTranslation();
   const { control } = useFormContext();
-  return <VoiceResponseAnswer control={control} {...props} />;
+  const recorder = useVoiceRecorder(question.id);
+  const canRecord = recorderHelper.isRecordingSupported();
+
+  return (
+    <Controller
+      control={control}
+      name={`${answerId}.file`}
+      render={({ field, fieldState }): JSX.Element => {
+        const value = field.value as VoiceResponseFileValue | undefined;
+
+        const onChange = (newValue: VoiceResponseFileValue): void => {
+          field.onChange(newValue);
+          saveAnswerAndUpdateClientVersion(answerId);
+        };
+
+        const onRecorded = (file: File): void =>
+          onChange({ url: value?.url ?? null, name: value?.name ?? '', file });
+
+        return (
+          <div>
+            {!readOnly && (
+              <>
+                <FormSingleFileInput
+                  accept={ACCEPTED_AUDIO}
+                  field={{ ...field, onChange }}
+                  fieldState={fieldState}
+                  previewComponent={SingleFileInputChildren}
+                />
+
+                {canRecord ? (
+                  <div className="my-2 flex w-full items-center space-x-3">
+                    <Button
+                      color="primary"
+                      disabled={recorder.isRecording}
+                      onClick={recorder.onStartRecord}
+                      startIcon={<Mic />}
+                    >
+                      {t(translations.startRecording)}
+                    </Button>
+
+                    <Button
+                      color="secondary"
+                      disabled={!recorder.isRecordingHere}
+                      onClick={(): void => recorder.onStopRecord(onRecorded)}
+                      startIcon={<Stop />}
+                    >
+                      {t(translations.stopRecording)}
+                    </Button>
+                  </div>
+                ) : (
+                  <Typography
+                    className="my-2"
+                    color="text.secondary"
+                    variant="body2"
+                  >
+                    {t(translations.recordingNotSupported)}
+                  </Typography>
+                )}
+
+                {canRecord && recorder.microphoneError && (
+                  <Typography className="mb-2" color="error" variant="body2">
+                    {t(MICROPHONE_ERROR_MESSAGES[recorder.microphoneError])}
+                  </Typography>
+                )}
+              </>
+            )}
+
+            <AudioPreview file={value?.file} url={value?.url} />
+
+            {fieldState.error && (
+              <div className="text-red-500">{fieldState.error.message}</div>
+            )}
+          </div>
+        );
+      }}
+      rules={{
+        validate: (value?: VoiceResponseFileValue): true | string =>
+          checkVoiceResponseRecorded(value, t),
+      }}
+    />
+  );
 };
 
-function mapStateToProps({ assessments: { submission } }) {
-  return {
-    recording: submission.recorder.recording,
-    recordingComponentId: submission.recorder.recordingComponentId,
-  };
-}
-
-export default connect(mapStateToProps)(
-  injectIntl(VoiceResponseAnswerWithFormContext),
-);
+export default VoiceResponseAnswer;
