@@ -151,6 +151,57 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    # Finalising queues auto-grading; run inline in a background thread, it would change the answers at an
+    # unpredictable point in these examples.
+    with_active_job_queue_adapter(:test) do
+      describe '#update, submitting a voice recording saved before the size limit existed' do
+        let(:assessment_traits) { [:with_voice_response_question] }
+        let(:student) { create(:course_student, course: course) }
+        let(:submission) do
+          create(:submission, :attempting, assessment: assessment, creator: student.user, course_user: student)
+        end
+        let(:max_size) { 1.kilobyte }
+        let(:voice_answer) { submission.current_answers.first.specific }
+
+        def audio_upload(size, fill)
+          file = Tempfile.new(['voice', '.m4a'])
+          file.write(fill * size)
+          file.flush
+          Rack::Test::UploadedFile.new(file.path, 'audio/mp4')
+        end
+
+        def submit(answers = [])
+          patch :update, params: {
+            course_id: course, assessment_id: assessment, id: submission,
+            submission: { finalise: true, answers: answers }
+          }, format: :json
+        end
+
+        before do
+          controller_sign_in(controller, student.user)
+          stub_const('Course::Assessment::Answer::VoiceResponse::MAX_FILE_SIZE', max_size)
+          # Set directly, as a recording saved before the limit existed never went through the upload check.
+          voice_answer.attachment_reference = AttachmentReference.new(file: audio_upload(max_size * 2, 'z'))
+          voice_answer.save!
+        end
+
+        it 'refuses the submission, naming the answer to replace' do
+          submit
+
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body['errors']['base'].first).to include('voice_response_too_large')
+          expect(submission.reload).to be_attempting
+        end
+
+        it 'submits once the recording is replaced in the same request' do
+          submit([{ id: voice_answer.acting_as.id, file: audio_upload(max_size / 2, 'a') }])
+
+          expect(response).to have_http_status(:ok)
+          expect(submission.reload).to be_submitted
+        end
+      end
+    end
+
     describe '#update_grade' do
       subject do
         post :update, params: {

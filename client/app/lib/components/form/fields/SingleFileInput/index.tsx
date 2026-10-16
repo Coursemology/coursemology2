@@ -1,5 +1,5 @@
 import { ComponentType, UIEvent, useEffect, useRef, useState } from 'react';
-import Dropzone, { Accept } from 'react-dropzone';
+import Dropzone, { Accept, FileRejection } from 'react-dropzone';
 import {
   ControllerFieldState,
   ControllerRenderProps,
@@ -22,6 +22,9 @@ interface SingleFileInputProps<
   field: ControllerRenderProps<T, TName>;
   fieldState: ControllerFieldState;
   accept?: Accept;
+  // In bytes. A larger file is rejected, and reported through `onDropRejected`.
+  maxSize?: number;
+  onDropRejected?: (rejections: FileRejection[]) => void;
   disabled?: boolean;
   previewComponent?: ComponentType<PreviewComponentProps>;
   label?: string;
@@ -54,6 +57,8 @@ const FormSingleFileInput = <
     field: { value, onChange },
     fieldState: { error },
     accept,
+    maxSize,
+    onDropRejected,
     disabled,
     previewComponent: PreviewComponent = FilePreview,
     label,
@@ -79,6 +84,8 @@ const FormSingleFileInput = <
   };
 
   const onDrop = (files: File[]): void => {
+    // Dropzone calls this even when it rejected every file; keep the current file rather than clearing it.
+    if (files.length === 0) return;
     setFile(files[0]);
   };
 
@@ -96,8 +103,10 @@ const FormSingleFileInput = <
       <Dropzone
         accept={accept}
         disabled={disabled}
+        maxSize={maxSize}
         multiple={false}
         onDrop={onDrop}
+        onDropRejected={onDropRejected}
       >
         {({ getRootProps, getInputProps }) => (
           <div

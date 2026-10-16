@@ -1,5 +1,6 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
+import { MAX_VOICE_RESPONSE_FILE_SIZE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import recorderHelper, {
@@ -13,7 +14,8 @@ interface VoiceRecorder {
   // This question is the one recording.
   isRecordingHere: boolean;
   microphoneError: MicrophoneError | null;
-  onStartRecord: () => void;
+  // `onLimitReached` receives a take stopped automatically at the size limit.
+  onStartRecord: (onLimitReached: (file: File) => void) => void;
   onStopRecord: (onRecorded: (file: File) => void) => void;
 }
 
@@ -54,9 +56,17 @@ const useVoiceRecorder = (questionId: number): VoiceRecorder => {
     };
   }, []);
 
-  const onStartRecord = (): void => {
+  const onStartRecord = (onLimitReached: (file: File) => void): void => {
     recorderHelper
-      .startRecord()
+      .startRecord({
+        maxBytes: MAX_VOICE_RESPONSE_FILE_SIZE,
+        onLimitReached: (file) => {
+          // Unmounted while the stop flushed its last chunk: see onStopRecord.
+          if (!isMountedRef.current) return;
+          dispatch(setNotRecording());
+          onLimitReached(file);
+        },
+      })
       .then(() => {
         // Unmounted while waiting for the mic, e.g. on the permission prompt: no Stop button is left to
         // end this take, so discard it rather than mark a departed question as recording.
@@ -71,11 +81,23 @@ const useVoiceRecorder = (questionId: number): VoiceRecorder => {
   };
 
   const onStopRecord = (onRecorded: (file: File) => void): void => {
+    // Only the stop that ends the take may release the controls. Once the recorder has no take of its own,
+    // a stop (this one, or an automatic one at the size limit) is already flushing the last chunk, so a
+    // further click is ignored: its failure would otherwise re-enable Start early, and clear the state of a
+    // take started in the meantime.
+    if (!recorderHelper.isRecording()) return;
+
     recorderHelper
       .stopRecord()
-      .then(onRecorded)
+      // A stop completes asynchronously, after the question may have unmounted. Its cleanup has already
+      // released the controls, and another question may be recording by now.
+      .then((file) => {
+        if (isMountedRef.current) onRecorded(file);
+      })
       .catch(() => {})
-      .finally(() => dispatch(setNotRecording()));
+      .finally(() => {
+        if (isMountedRef.current) dispatch(setNotRecording());
+      });
   };
 
   return {

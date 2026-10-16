@@ -37,6 +37,10 @@ en:
           attributes:
             attachments:
               unique: 'File names must be unique'
+        course/assessment/answer/voice_response:
+          attributes:
+            attachment:
+              exceed_size_limit: 'Your audio file (%{file_size_mb} MB) must be less than 15 MB.'
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
         course/assessment/question/multiple_response:
@@ -110,6 +114,7 @@ en:
                 or contact the Coursemology team
           submission_already_exists: 'Looks like you have already created a submission. Try again?'
           no_bundles_assigned: 'There are no question bundles assigned for you. Contact your instructor for assistance.'
+          voice_response_too_large: '%{question}: the audio file is larger than the 15 MB limit. Record or upload it again before submitting.'
           autograded_no_partial_answer: 'There are updated answers which have not been re-submitted yet. Please re-submit all answers before finalising your submission.'
         course/assessment/tab:
           deletion: 'the last tab cannot be deleted'
