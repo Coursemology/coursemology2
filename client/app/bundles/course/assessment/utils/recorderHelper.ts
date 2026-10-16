@@ -15,6 +15,11 @@ const PREFERRED_MIME_TYPES = [
   'audio/ogg;codecs=opus',
 ];
 
+// How often chunks arrive when a take has a size limit, and how close to the limit a take may get. The
+// headroom covers the final chunk, which arrives only after the take is stopped.
+const LIMIT_CHECK_INTERVAL_MS = 1000;
+const LIMIT_HEADROOM = 0.95;
+
 const EXTENSIONS: Record<string, string> = {
   'audio/mp4': 'm4a',
   'audio/webm': 'webm',
@@ -122,27 +127,6 @@ const acquireMicrophone = async (): Promise<void> => {
   }
 };
 
-const startRecord = async (): Promise<void> => {
-  if (take) throw new Error('Recorder has already started');
-
-  releaseRequested = false;
-  const source = await requestStream();
-  // A second Start may have won the race while the stream was being requested.
-  if (take) throw new Error('Recorder has already started');
-
-  const mimeType = pickMimeType();
-  const recorder = new MediaRecorder(
-    source,
-    mimeType ? { mimeType } : undefined,
-  );
-  const current: Take = { recorder, chunks: [] };
-  recorder.addEventListener('dataavailable', (event) => {
-    if (event.data.size > 0) current.chunks.push(event.data);
-  });
-  recorder.start();
-  take = current;
-};
-
 /**
  * Promise will resolve a file object
  */
@@ -166,6 +150,47 @@ const stopRecord = (): Promise<File> => {
     recorder.addEventListener('error', reject, { once: true });
     recorder.stop();
   });
+};
+
+interface StartRecordOptions {
+  // Stops the take automatically once it nears this size.
+  maxBytes?: number;
+  // Receives a take that was stopped automatically at `maxBytes`.
+  onLimitReached?: (file: File) => void;
+}
+
+const startRecord = async (options: StartRecordOptions = {}): Promise<void> => {
+  const { maxBytes, onLimitReached } = options;
+  if (take) throw new Error('Recorder has already started');
+
+  releaseRequested = false;
+  const source = await requestStream();
+  // A second Start may have won the race while the stream was being requested.
+  if (take) throw new Error('Recorder has already started');
+
+  const mimeType = pickMimeType();
+  const recorder = new MediaRecorder(
+    source,
+    mimeType ? { mimeType } : undefined,
+  );
+  const current: Take = { recorder, chunks: [] };
+  let recordedBytes = 0;
+  recorder.addEventListener('dataavailable', (event) => {
+    if (event.data.size > 0) current.chunks.push(event.data);
+    recordedBytes += event.data.size;
+
+    const nearLimit =
+      maxBytes !== undefined && recordedBytes >= maxBytes * LIMIT_HEADROOM;
+    // Once stopped, this take is no longer `take`, so its final chunk doesn't stop it twice.
+    if (nearLimit && take === current)
+      stopRecord()
+        .then((file) => onLimitReached?.(file))
+        .catch(() => {});
+  });
+  // With a limit, chunks must arrive while recording so the size can be checked; without one, a single
+  // chunk at the end is enough.
+  recorder.start(maxBytes !== undefined ? LIMIT_CHECK_INTERVAL_MS : undefined);
+  take = current;
 };
 
 /**

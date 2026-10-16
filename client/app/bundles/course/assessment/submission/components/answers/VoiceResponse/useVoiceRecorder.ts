@@ -1,5 +1,6 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 
+import { MAX_VOICE_RESPONSE_FILE_SIZE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import recorderHelper, {
@@ -13,7 +14,8 @@ interface VoiceRecorder {
   // This question is the one recording.
   isRecordingHere: boolean;
   microphoneError: MicrophoneError | null;
-  onStartRecord: () => void;
+  // `onLimitReached` receives a take stopped automatically at the size limit.
+  onStartRecord: (onLimitReached: (file: File) => void) => void;
   onStopRecord: (onRecorded: (file: File) => void) => void;
 }
 
@@ -54,9 +56,15 @@ const useVoiceRecorder = (questionId: number): VoiceRecorder => {
     };
   }, []);
 
-  const onStartRecord = (): void => {
+  const onStartRecord = (onLimitReached: (file: File) => void): void => {
     recorderHelper
-      .startRecord()
+      .startRecord({
+        maxBytes: MAX_VOICE_RESPONSE_FILE_SIZE,
+        onLimitReached: (file) => {
+          dispatch(setNotRecording());
+          onLimitReached(file);
+        },
+      })
       .then(() => {
         // Unmounted while waiting for the mic, e.g. on the permission prompt: no Stop button is left to
         // end this take, so discard it rather than mark a departed question as recording.

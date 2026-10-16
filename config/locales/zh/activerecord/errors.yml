@@ -37,6 +37,10 @@ zh:
           attributes:
             attachments:
               unique: '文件名不能重复。'
+        course/assessment/answer/voice_response:
+          attributes:
+            attachment:
+              exceed_size_limit: '您的音频文件 (%{file_size_mb} MB) 必须小于 15 MB。'
         course/assessment/category:
           deletion: '最后一类不能删除'
         course/assessment/question/multiple_response:

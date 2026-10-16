@@ -37,6 +37,10 @@ en:
           attributes:
             attachments:
               unique: 'File names must be unique'
+        course/assessment/answer/voice_response:
+          attributes:
+            attachment:
+              exceed_size_limit: 'Your audio file (%{file_size_mb} MB) must be less than 15 MB.'
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
         course/assessment/question/multiple_response:

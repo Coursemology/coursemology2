@@ -33,6 +33,9 @@ export const SAVING_STATUS = mirrorCreator([
 
 export const MAX_SAVING_SIZE = 2_000_000; // 2MB
 export const ANSWER_TOO_LARGE_ERR = 'exceed_size_limit';
+// About 15 minutes of recording at the ~128 kbps browsers typically default to. Slightly stricter than the
+// server's Course::Assessment::Answer::VoiceResponse::MAX_FILE_SIZE (15 MiB).
+export const MAX_VOICE_RESPONSE_FILE_SIZE = 15_000_000; // 15MB
 
 export const SYNC_STATUS = mirrorCreator(['Synced', 'Syncing', 'Failed']);
 

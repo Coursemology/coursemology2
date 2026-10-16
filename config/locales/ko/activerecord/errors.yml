@@ -37,6 +37,10 @@ ko:
           attributes:
             attachments:
               unique: '파일 이름은 중복되어선 안 됩니다'
+        course/assessment/answer/voice_response:
+          attributes:
+            attachment:
+              exceed_size_limit: '제출한 오디오 파일(%{file_size_mb} MB)은 15MB 미만이어야 합니다.'
         course/assessment/category:
           deletion: '마지막 카테고리는 삭제할 수 없습니다'
         course/assessment/question/multiple_response:

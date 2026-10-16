@@ -4,10 +4,13 @@ import { dispatch } from 'store';
 import { act, fireEvent, render, screen, waitFor } from 'test-utils';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
+import toast from 'lib/hooks/toast';
+
 import recorderHelper from '../../../../../utils/recorderHelper';
 import VoiceResponseAnswer from '..';
 
 jest.mock('../../../../../utils/recorderHelper');
+jest.mock('lib/hooks/toast');
 
 const helper = jest.mocked(recorderHelper);
 const save = jest.fn();
@@ -170,6 +173,45 @@ describe('<VoiceResponseAnswer />', () => {
     ['.mp3', '.wav', '.m4a', '.aac', '.ogg', '.opus', '.webm', '.flac'].forEach(
       (extension) => expect(accept).toContain(extension),
     );
+  });
+
+  it('records up to the size limit, and saves a take stopped there', async () => {
+    let startOptions: Parameters<typeof recorderHelper.startRecord>[0];
+    helper.startRecord.mockImplementation(async (options) => {
+      startOptions = options;
+    });
+    render(<Harness />);
+    fireEvent.click((await startButtons())[0]);
+    await waitFor(() => expect(stopButtons()[0]).toBeEnabled());
+
+    expect(startOptions?.maxBytes).toBe(15_000_000);
+    act(() => startOptions?.onLimitReached?.(recording));
+
+    expect(save).toHaveBeenCalledWith(answerIdOf(1));
+    expect(toast.info).toHaveBeenCalledWith(
+      expect.stringContaining('stopped automatically at the 15 MB size limit'),
+    );
+    await waitFor(() =>
+      expect(screen.getAllByRole('button', { name: START })[0]).toBeEnabled(),
+    );
+  });
+
+  it('rejects an upload over the size limit, keeping the current answer', async () => {
+    render(<Harness questionIds={[1]} />);
+    await startButtons();
+    const tooLarge = new File(['audio'], 'long.mp3', { type: 'audio/mpeg' });
+    Object.defineProperty(tooLarge, 'size', { value: 15_000_001 });
+
+    fireEvent.change(document.querySelector('input[type="file"]')!, {
+      target: { files: [tooLarge] },
+    });
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('larger than the 15 MB limit'),
+      ),
+    );
+    expect(save).not.toHaveBeenCalled();
   });
 
   it('hides the upload and recording controls when read-only', async () => {
