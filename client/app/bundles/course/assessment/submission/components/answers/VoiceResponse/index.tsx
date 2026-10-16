@@ -1,3 +1,4 @@
+import { ErrorCode, FileRejection } from 'react-dropzone';
 import { Controller, useFormContext } from 'react-hook-form';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
@@ -7,6 +8,8 @@ import FormSingleFileInput, {
   PreviewComponentProps,
 } from 'lib/components/form/fields/SingleFileInput';
 import AudioPreview from 'lib/components/form/fields/SingleFileInput/AudioPreview';
+import { MAX_VOICE_RESPONSE_FILE_SIZE } from 'lib/constants/sharedConstants';
+import toast from 'lib/hooks/toast';
 import useTranslation, {
   Descriptor,
   MessageTranslator,
@@ -31,6 +34,9 @@ const ACCEPTED_AUDIO = {
   'audio/webm': ['.webm'],
   'audio/flac': ['.flac'],
 };
+
+// As shown to students, e.g. "15 MB".
+const maxSize = `${MAX_VOICE_RESPONSE_FILE_SIZE / 1_000_000} MB`;
 
 const MICROPHONE_ERROR_MESSAGES: Record<MicrophoneError, Descriptor> = {
   NotAllowedError: translations.microphoneBlocked,
@@ -95,6 +101,18 @@ const VoiceResponseAnswer = (props: VoiceResponseProps): JSX.Element => {
         const onRecorded = (file: File): void =>
           onChange({ url: value?.url ?? null, name: value?.name ?? '', file });
 
+        const onLimitReached = (file: File): void => {
+          onRecorded(file);
+          toast.info(t(translations.recordingLimitReached, { maxSize }));
+        };
+
+        const onDropRejected = (rejections: FileRejection[]): void => {
+          const tooLarge = rejections.some(({ errors }) =>
+            errors.some(({ code }) => code === ErrorCode.FileTooLarge),
+          );
+          if (tooLarge) toast.error(t(translations.fileTooLarge, { maxSize }));
+        };
+
         return (
           <div>
             {!readOnly && (
@@ -103,6 +121,8 @@ const VoiceResponseAnswer = (props: VoiceResponseProps): JSX.Element => {
                   accept={ACCEPTED_AUDIO}
                   field={{ ...field, onChange }}
                   fieldState={fieldState}
+                  maxSize={MAX_VOICE_RESPONSE_FILE_SIZE}
+                  onDropRejected={onDropRejected}
                   previewComponent={SingleFileInputChildren}
                 />
 
@@ -111,7 +131,9 @@ const VoiceResponseAnswer = (props: VoiceResponseProps): JSX.Element => {
                     <Button
                       color="primary"
                       disabled={recorder.isRecording}
-                      onClick={recorder.onStartRecord}
+                      onClick={(): void =>
+                        recorder.onStartRecord(onLimitReached)
+                      }
                       startIcon={<Mic />}
                     >
                       {t(translations.startRecording)}

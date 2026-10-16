@@ -36,6 +36,16 @@ export default defineMessages({
       'Your microphone could not be started. Check that no other application is using it, then click ' +
       'Start Recording again.',
   },
+  recordingLimitReached: {
+    id: 'course.assessment.submission.VoiceResponseAnswer.recordingLimitReached',
+    defaultMessage:
+      'Recording stopped automatically at the {maxSize} size limit. What you recorded has been kept.',
+  },
+  fileTooLarge: {
+    id: 'course.assessment.submission.VoiceResponseAnswer.fileTooLarge',
+    defaultMessage:
+      'This file is larger than the {maxSize} limit. Try a compressed format such as mp3 or m4a.',
+  },
   recordingNotSupported: {
     id: 'course.assessment.submission.VoiceResponseAnswer.recordingNotSupported',
     defaultMessage:

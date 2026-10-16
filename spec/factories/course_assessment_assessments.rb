@@ -108,6 +108,15 @@ FactoryBot.define do
       end
     end
 
+    trait :with_voice_response_question do
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.times do
+          question = build(:course_assessment_question_voice_response)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
+        end
+      end
+    end
+
     trait :with_forum_post_response_question do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.times do

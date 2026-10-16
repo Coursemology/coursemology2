@@ -31,6 +31,8 @@ class FakeMediaRecorder extends EventTarget {
 
   options?: MediaRecorderOptions;
 
+  timeslice?: number;
+
   constructor(_stream: MediaStream, options?: MediaRecorderOptions) {
     super();
     this.options = options;
@@ -39,7 +41,8 @@ class FakeMediaRecorder extends EventTarget {
     FakeMediaRecorder.instances.push(this);
   }
 
-  start(): void {
+  start(timeslice?: number): void {
+    this.timeslice = timeslice;
     this.state = 'recording';
   }
 
@@ -163,6 +166,35 @@ describe('format', () => {
     expect(latestRecorder().options).toBeUndefined();
     expect(file.name).toMatch(/^\d+\.ogg$/);
     expect(file.type).toBe('audio/ogg');
+  });
+});
+
+describe('size limit', () => {
+  it('stops a take nearing the limit and hands it over', async () => {
+    let handOver!: (file: File) => void;
+    const limitReached = new Promise<File>((resolve) => {
+      handOver = resolve;
+    });
+    await helper.startRecord({ maxBytes: 100, onLimitReached: handOver });
+
+    expect(latestRecorder().timeslice).toBe(1000);
+    latestRecorder().emit('a'.repeat(50));
+    expect(helper.isRecording()).toBe(true);
+
+    // 50 + 45 bytes reaches 95% of the limit, leaving room for the final chunk.
+    latestRecorder().emit('b'.repeat(45));
+    const file = await limitReached;
+
+    expect(helper.isRecording()).toBe(false);
+    expect(await readText(file)).toBe(`${'a'.repeat(50)}${'b'.repeat(45)}|end`);
+  });
+
+  it('records in one chunk, and never stops on its own, without a limit', async () => {
+    await helper.startRecord();
+
+    expect(latestRecorder().timeslice).toBeUndefined();
+    latestRecorder().emit('a'.repeat(10_000));
+    expect(helper.isRecording()).toBe(true);
   });
 });
 

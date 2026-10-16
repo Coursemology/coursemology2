@@ -100,23 +100,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def update_submission
     @submission.class.transaction do
-      unless unsubmit? || unmark?
-        update_answers_params&.each do |answer_params|
-          next if !answer_params.is_a?(ActionController::Parameters) || answer_params[:id].blank?
+      update_answers unless unsubmit? || unmark?
 
-          answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
-
-          next unless answer && !update_answer(answer, answer_params)
-
-          logger.error("Failed to update answer #{answer.errors.inspect}")
-          answer.errors.messages.each do |attribute, message|
-            @submission.errors.add(attribute, message)
-          end
-          raise ActiveRecord::Rollback
-        end
-      end
-
-      unless @submission.update(update_submission_params)
+      unless submittable? && @submission.update(update_submission_params)
         logger.error("Failed to update submission #{@submission.errors.inspect}")
         raise ActiveRecord::Rollback
       end
@@ -125,8 +111,50 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
+  # Applies the answer updates sent with the submission. A failed update rolls back the enclosing
+  # transaction in update_submission.
+  def update_answers
+    update_answers_params&.each do |answer_params|
+      next if !answer_params.is_a?(ActionController::Parameters) || answer_params[:id].blank?
+
+      answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
+
+      next unless answer && !update_answer(answer, answer_params)
+
+      logger.error("Failed to update answer #{answer.errors.inspect}")
+      answer.errors.messages.each do |attribute, message|
+        @submission.errors.add(attribute, message)
+      end
+      raise ActiveRecord::Rollback
+    end
+  end
+
   def unsubmit?
     params[:submission] && params[:submission][:unsubmit].present?
+  end
+
+  def finalise?
+    params[:submission] && params[:submission][:finalise].present?
+  end
+
+  # A voice recording saved before the size limit existed is kept through unsubmission, but must be
+  # replaced before the submission is submitted again. Checked after this request's answer updates, so a
+  # replacement uploaded with the submission counts.
+  #
+  # This lives here rather than in the model so it applies only when someone submits through the page:
+  # forced submission (Submission#force_submit! at the deadline, and ForceSubmittingJob, which finalises
+  # every selected submission in one transaction) must still go through.
+  def submittable?
+    return true unless finalise?
+
+    @submission.current_answers.each do |answer|
+      next unless answer.actable_type == Course::Assessment::Answer::VoiceResponse.name
+      next unless answer.specific.file_too_large?
+
+      question_assessment = @assessment.question_assessments.find_by(question: answer.question)
+      @submission.errors.add(:base, :voice_response_too_large, question: question_assessment&.display_title)
+    end
+    @submission.errors.empty?
   end
 
   def unmark?
