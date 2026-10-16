@@ -1,56 +1,40 @@
-import recorderHelper from '../../utils/recorderHelper';
-import actionTypes from '../constants';
+// Which voice-response question, if any, is recording. Only one take is captured at a time across the
+// page, so every question reads this to disable its Start button while another question records.
+//
+// The recording itself (the mic stream, the take in progress) lives in utils/recorderHelper rather than
+// here: neither is serialisable. Cleanup when a question unmounts mid-take is done by the question's
+// useVoiceRecorder hook, which keeps this reducer free of side effects.
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface RecorderState {
+  recording: boolean;
+  // Identifies the recording question, as `voice_response_<question id>`; empty when nothing records.
+  recordingComponentId: string;
+}
+
+const initialState: RecorderState = {
   recording: false,
-  recorderComponentsCount: 0,
   recordingComponentId: '',
 };
 
-export default function (state = initialState, action) {
-  switch (action.type) {
-    case actionTypes.RECORDER_SET_RECORDING: {
-      const { recordingComponentId } = action.payload || {};
-      return {
-        ...state,
-        recording: true,
-        recordingComponentId,
-      };
-    }
-    case actionTypes.RECORDER_SET_UNRECORDING: {
-      return {
-        ...state,
-        recording: false,
-        recordingComponentId: '',
-      };
-    }
-    case actionTypes.RECORDER_COMPONENT_MOUNT: {
-      let { recorderComponentsCount = 0 } = state;
-      recorderComponentsCount += 1;
-      return {
-        ...state,
-        recorderComponentsCount,
-      };
-    }
-    case actionTypes.RECORDER_COMPONENT_UNMOUNT: {
-      let { recorderComponentsCount = 0, recording } = state;
-      recorderComponentsCount -= 1;
-      recording = false;
+export const recorderSlice = createSlice({
+  name: 'recorder',
+  initialState,
+  reducers: {
+    setRecording: (
+      state,
+      action: PayloadAction<{ recordingComponentId: string }>,
+    ) => {
+      state.recording = true;
+      state.recordingComponentId = action.payload.recordingComponentId;
+    },
+    setNotRecording: (state) => {
+      state.recording = false;
+      state.recordingComponentId = '';
+    },
+  },
+});
 
-      /**
-       * When the user navigates to another path without stopping the recorder,
-       * help them stop it, but only if it was actually recording.
-       */
-      if (recorderComponentsCount === 0 && recorderHelper.isRecording()) {
-        recorderHelper.stopRecord();
-      }
-      return {
-        ...state,
-        recorderComponentsCount,
-        recording,
-      };
-    }
-    default:
-      return state;
-  }
-}
+export const { setRecording, setNotRecording } = recorderSlice.actions;
+
+export default recorderSlice.reducer;

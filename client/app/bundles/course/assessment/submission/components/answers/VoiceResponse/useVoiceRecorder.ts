@@ -5,10 +5,7 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import recorderHelper, {
   MicrophoneError,
 } from '../../../../utils/recorderHelper';
-import {
-  setNotRecording,
-  setRecording,
-} from '../../../actions/answers/voiceResponse';
+import { setNotRecording, setRecording } from '../../../reducers/recorder';
 
 interface VoiceRecorder {
   // Some question on the page is recording; only one may record at a time.
