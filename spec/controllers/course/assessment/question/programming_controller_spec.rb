@@ -312,7 +312,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         it 'returns whether each language supports multiple file submission' do
           subject
           whitelists = JSON.parse(response.body).to_h { |l| [l['name'], l['whitelists']['multipleFileSubmission']] }
-          expect(whitelists).to include('Java 17' => true, 'Python 3.10' => false)
+          expect(whitelists).to include('Java 17' => true, 'Python 3.10' => true, 'R 4.1' => false)
         end
       end
 

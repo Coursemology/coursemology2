@@ -70,6 +70,9 @@ const fileSubmissionMetadataFields = {
   solutionFiles: array(),
 };
 
+const pythonMetadataSchema: Translated<AnyObjectSchema> = (t) =>
+  basicMetadataSchema(t).shape(fileSubmissionMetadataFields);
+
 const javaMetadataSchema: Translated<AnyObjectSchema> = (t) =>
   basicMetadataSchema(t).shape({
     ...fileSubmissionMetadataFields,
@@ -79,7 +82,7 @@ const javaMetadataSchema: Translated<AnyObjectSchema> = (t) =>
 const POLYGLOT_SCHEMA: Partial<
   Record<LanguageMode, Translated<AnyObjectSchema>>
 > = {
-  python: basicMetadataSchema,
+  python: pythonMetadataSchema,
   c_cpp: basicMetadataSchema,
   r: basicMetadataSchema,
   java: javaMetadataSchema,

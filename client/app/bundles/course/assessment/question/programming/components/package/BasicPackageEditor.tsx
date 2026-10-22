@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../../translations';
 import ControlledEditor from '../common/ControlledEditor';
 import DataFilesManager from '../common/DataFilesManager';
+import SubmissionModeTemplates from '../common/SubmissionModeTemplates';
 import ReorderableTestCasesManager from '../ReorderableTestCasesManager';
 
 import PackageEditor, { PackageEditorProps } from './PackageEditor';
@@ -13,6 +14,7 @@ import PackageEditor, { PackageEditorProps } from './PackageEditor';
 interface BasicPackageEditorProps extends PackageEditorProps {
   language: LanguageMode;
   hint?: ReactNode;
+  prependDefaultValue?: string;
 }
 
 const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
@@ -21,11 +23,7 @@ const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
   return (
     <>
       <PackageEditor.Templates>
-        <ControlledEditor.Template
-          disabled={props.disabled}
-          language={props.language}
-        />
-        <ControlledEditor.Solution
+        <SubmissionModeTemplates
           disabled={props.disabled}
           language={props.language}
         />
@@ -33,6 +31,7 @@ const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
 
       <PackageEditor.CodeInserts>
         <ControlledEditor.Prepend
+          defaultValue={props.prependDefaultValue}
           disabled={props.disabled}
           language={props.language}
         />

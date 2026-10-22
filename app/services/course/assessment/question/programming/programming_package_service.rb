@@ -17,6 +17,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   # Generates a programming package from the parameters which were passed to the controller.
   def generate_package
     if @language_package_service.autograded?
+      @language_package_service.language_changed! if @question.language_id_changed?
       new_package = @language_package_service.generate_package(@question.attachment)
       @question.file = new_package if new_package.present?
     else

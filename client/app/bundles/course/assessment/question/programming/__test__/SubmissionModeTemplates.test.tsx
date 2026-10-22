@@ -17,6 +17,10 @@ jest.mock(
     ),
 );
 
+const CODE_EDITOR = 'code-editor';
+const CODE_SUBMISSION = 'Code submission';
+const FILE_SUBMISSION = 'File submission';
+
 const JAVA_ID = 9;
 const PYTHON_ID = 18;
 
@@ -42,6 +46,7 @@ interface RenderOptions {
   currentLanguageId?: number;
   submitAsFile?: boolean;
   hasSubmissions?: boolean;
+  pythonSupportsFiles?: boolean;
 }
 
 const renderTemplates = (options: RenderOptions = {}): void => {
@@ -50,13 +55,14 @@ const renderTemplates = (options: RenderOptions = {}): void => {
     currentLanguageId = savedLanguageId,
     submitAsFile = false,
     hasSubmissions = false,
+    pythonSupportsFiles = false,
   } = options;
 
   const data = {
     question: { languageId: savedLanguageId, hasSubmissions },
     languages: [
       languageWith(JAVA_ID, 'Java 17', true),
-      languageWith(PYTHON_ID, 'Python 3.10', false),
+      languageWith(PYTHON_ID, 'Python 3.10', pythonSupportsFiles),
     ],
   } as unknown as ProgrammingFormData;
 
@@ -94,50 +100,59 @@ describe('<SubmissionModeTemplates />', () => {
     renderTemplates();
 
     expect(
-      await screen.findByRole('radio', { name: 'Code submission' }),
+      await screen.findByRole('radio', { name: CODE_SUBMISSION }),
     ).toBeEnabled();
-    expect(
-      screen.getByRole('radio', { name: 'File submission' }),
-    ).toBeEnabled();
+    expect(screen.getByRole('radio', { name: FILE_SUBMISSION })).toBeEnabled();
     expect(
       screen.getByText(
         'Upload code files as submission templates. Students can edit them online or upload their own code files to be tested.',
       ),
     ).toBeVisible();
-    expect(screen.getAllByTestId('code-editor')).toHaveLength(2);
+    expect(screen.getAllByTestId(CODE_EDITOR)).toHaveLength(2);
   });
 
   it('shows file uploads instead of code editors in file submission mode', async () => {
     renderTemplates({ submitAsFile: true });
 
     expect(
-      await screen.findByRole('radio', { name: 'File submission' }),
+      await screen.findByRole('radio', { name: FILE_SUBMISSION }),
     ).toBeChecked();
-    expect(screen.queryByTestId('code-editor')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(CODE_EDITOR)).not.toBeInTheDocument();
   });
 
   it('only shows code editors for a language without multiple file submission', async () => {
     renderTemplates({ savedLanguageId: PYTHON_ID });
 
-    expect(await screen.findAllByTestId('code-editor')).toHaveLength(2);
+    expect(await screen.findAllByTestId(CODE_EDITOR)).toHaveLength(2);
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
   });
 
   it('hides the choice after switching from a file submission question to a language without it', async () => {
     renderTemplates({ submitAsFile: true, currentLanguageId: PYTHON_ID });
 
-    expect(await screen.findAllByTestId('code-editor')).toHaveLength(2);
+    expect(await screen.findAllByTestId(CODE_EDITOR)).toHaveLength(2);
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
+  });
+
+  it('keeps file submission after switching to another language with it', async () => {
+    renderTemplates({
+      submitAsFile: true,
+      currentLanguageId: PYTHON_ID,
+      pythonSupportsFiles: true,
+    });
+
+    expect(
+      await screen.findByRole('radio', { name: FILE_SUBMISSION }),
+    ).toBeChecked();
+    expect(screen.queryByTestId(CODE_EDITOR)).not.toBeInTheDocument();
   });
 
   it('locks the choice once the question has submissions', async () => {
     renderTemplates({ hasSubmissions: true });
 
     expect(
-      await screen.findByRole('radio', { name: 'Code submission' }),
+      await screen.findByRole('radio', { name: CODE_SUBMISSION }),
     ).toBeDisabled();
-    expect(
-      screen.getByRole('radio', { name: 'File submission' }),
-    ).toBeDisabled();
+    expect(screen.getByRole('radio', { name: FILE_SUBMISSION })).toBeDisabled();
   });
 });
