@@ -2022,7 +2022,7 @@
     "defaultMessage": "Code submission"
   },
   "course.assessment.question.programming.codeSubmissionHint": {
-    "defaultMessage": "Set the submission template below. Students can edit and submit their code in the editor to be compiled and tested."
+    "defaultMessage": "Set the submission template below. Students can edit and submit their code in the editor to be tested."
   },
   "course.assessment.question.programming.cppTestCasesHint": {
     "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will then be compared against the Expected expectations using the <code>EXPECT_*</code> assertions from the <gtf>Google Test Framework</gtf>. Floating point numbers are formatted with <sts>std::to_string</sts>."
@@ -2103,7 +2103,7 @@
     "defaultMessage": "File submission"
   },
   "course.assessment.question.programming.fileSubmissionHint": {
-    "defaultMessage": "Upload Java files as submission templates. Students can edit online or upload their Java files to be compiled and tested."
+    "defaultMessage": "Upload code files as submission templates. Students can edit them online or upload their own code files to be tested."
   },
   "course.assessment.question.programming.hasToBeAtLeastOne": {
     "defaultMessage": "Has to be a valid positive number at least 1."

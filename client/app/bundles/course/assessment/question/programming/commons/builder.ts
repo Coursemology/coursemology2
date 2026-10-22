@@ -1,6 +1,7 @@
 import {
   BasicMetadata,
   DataFile,
+  FileSubmissionMetadata,
   JavaMetadata,
   JavaMetadataTestCase,
   LanguageMode,
@@ -115,7 +116,12 @@ const basicBuilder = <M extends BasicMetadata>(
   appendTestCasesInto(data, metadata);
 };
 
-const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
+const appendSubmissionTemplatesInto = <
+  M extends BasicMetadata & FileSubmissionMetadata,
+>(
+  data: FormData,
+  metadata: M,
+): void => {
   appendInto(data, 'submit_as_file', metadata.submitAsFile);
 
   if (metadata.submitAsFile) {
@@ -124,7 +130,10 @@ const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
   } else {
     appendTemplatesInto(data, metadata);
   }
+};
 
+const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
+  appendSubmissionTemplatesInto(data, metadata);
   appendInsertsInto(data, metadata);
   appendFilesInto(data, 'data', metadata.dataFiles);
 

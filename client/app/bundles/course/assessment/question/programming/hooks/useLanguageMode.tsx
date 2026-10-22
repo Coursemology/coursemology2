@@ -26,6 +26,8 @@ const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
             whitelists: {
               codaveriEvaluator: language.whitelists.codaveriEvaluator,
               defaultEvaluator: language.whitelists.defaultEvaluator,
+              multipleFileSubmission:
+                language.whitelists.multipleFileSubmission,
             },
             dependencies: language.dependencies,
           };

@@ -1929,7 +1929,7 @@ const translations = defineMessages({
   codeSubmissionHint: {
     id: 'course.assessment.question.programming.codeSubmissionHint',
     defaultMessage:
-      'Set the submission template below. Students can edit and submit their code in the editor to be compiled and tested.',
+      'Set the submission template below. Students can edit and submit their code in the editor to be tested.',
   },
   fileSubmission: {
     id: 'course.assessment.question.programming.fileSubmission',
@@ -1938,7 +1938,7 @@ const translations = defineMessages({
   fileSubmissionHint: {
     id: 'course.assessment.question.programming.fileSubmissionHint',
     defaultMessage:
-      'Upload Java files as submission templates. Students can edit online or upload their Java files to be compiled and tested.',
+      'Upload code files as submission templates. Students can edit them online or upload their own code files to be tested.',
   },
   javaTestCasesHint: {
     id: 'course.assessment.question.programming.javaTestCasesHint',

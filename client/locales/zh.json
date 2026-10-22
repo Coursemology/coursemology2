@@ -2013,7 +2013,7 @@
     "defaultMessage": "代码提交"
   },
   "course.assessment.question.programming.codeSubmissionHint": {
-    "defaultMessage": "设置下面的提交模板。学生可在编辑器中编辑并提交代码，以便编译和测试。"
+    "defaultMessage": "设置下面的提交模板。学生可在编辑器中编辑并提交代码，以便进行测试。"
   },
   "course.assessment.question.programming.cppTestCasesHint": {
     "defaultMessage": "表达式将在提交代码的上下文中进行评估，然后使用 <gtf>Google Test Framework</gtf> 中的 <code>EXPECT_*</code> 断言，将其返回值与期望值做比较。浮点数使用 <sts>std::to_string</sts> 格式化"
@@ -2094,7 +2094,7 @@
     "defaultMessage": "文件提交"
   },
   "course.assessment.question.programming.fileSubmissionHint": {
-    "defaultMessage": "上传 Java 文件作为提交模板。学生可以在线编辑或上传他们的 Java 文件，以便进行编译和测试。"
+    "defaultMessage": "上传代码文件作为提交模板。学生可以在线编辑，或上传自己的代码文件进行测试。"
   },
   "course.assessment.question.programming.hasToBeAtLeastOne": {
     "defaultMessage": "必须为一个大于等于 1 的有效正数。"

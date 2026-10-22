@@ -88,6 +88,7 @@ FactoryBot.define do
     end
 
     trait :multiple_file_submission do
+      language { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
       multiple_file_submission { true }
     end
 

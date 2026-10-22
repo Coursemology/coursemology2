@@ -552,5 +552,44 @@ RSpec.describe Course::Assessment::Question::Programming do
         end
       end
     end
+
+    describe '#validate_multiple_file_submission_supported' do
+      let(:java) { Coursemology::Polyglot::Language::Java::Java17.instance }
+      let(:python) { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
+      let(:error_message) do
+        "Multiple file submission is not available for #{python.name}. " \
+          'Please switch to code submission or select another language.'
+      end
+
+      context 'when the language supports multiple file submission' do
+        subject { build(:course_assessment_question_programming, :multiple_file_submission, language: java) }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'when the language does not support multiple file submission' do
+        subject { build(:course_assessment_question_programming, :multiple_file_submission, language: python) }
+
+        it 'is invalid' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.messages[:base]).to include(error_message)
+        end
+
+        it 'is valid as a code submission question' do
+          subject.multiple_file_submission = false
+          expect(subject).to be_valid
+        end
+      end
+
+      context 'when an existing multiple file submission question changes language' do
+        subject { create(:course_assessment_question_programming, :multiple_file_submission) }
+
+        it 'rejects a language without support' do
+          subject.language = python
+          expect(subject).not_to be_valid
+          expect(subject.errors.messages[:base]).to include(error_message)
+        end
+      end
+    end
   end
 end

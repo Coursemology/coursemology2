@@ -40,6 +40,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   validate -> { validate_time_limit }
   validate :validate_codaveri_question
+  validate :validate_multiple_file_submission_supported
 
   belongs_to :import_job, class_name: 'TrackableJob::Job', inverse_of: nil, optional: true
   belongs_to :language, class_name: 'Coursemology::Polyglot::Language', inverse_of: nil
@@ -273,6 +274,13 @@ class Course::Assessment::Question::Programming < ApplicationRecord
                  'Codaveri component is deactivated.' \
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
+  end
+
+  def validate_multiple_file_submission_supported
+    return if !multiple_file_submission || language.nil? || language.multiple_file_submission_whitelisted?
+
+    errors.add(:base, "Multiple file submission is not available for #{language.name}. " \
+                      'Please switch to code submission or select another language.')
   end
 
   def validate_language_enabled
