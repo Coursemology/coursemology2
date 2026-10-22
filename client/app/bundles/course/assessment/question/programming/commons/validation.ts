@@ -64,11 +64,15 @@ const javaTestCaseSchema: Translated<AnyObjectSchema> = (t) =>
 const nullCaster = <C, O>(currentValue: C, originalValue: O): C | null =>
   originalValue ? currentValue : null;
 
+const fileSubmissionMetadataFields = {
+  submitAsFile: boolean(),
+  submissionFiles: array(),
+  solutionFiles: array(),
+};
+
 const javaMetadataSchema: Translated<AnyObjectSchema> = (t) =>
   basicMetadataSchema(t).shape({
-    submitAsFile: boolean(),
-    submissionFiles: array(),
-    solutionFiles: array(),
+    ...fileSubmissionMetadataFields,
     testCases: testCasesSchemaOf(t)(javaTestCaseSchema(t)),
   });
 

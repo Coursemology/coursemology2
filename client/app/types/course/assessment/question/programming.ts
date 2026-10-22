@@ -27,6 +27,7 @@ export interface LanguageData {
   whitelists: {
     defaultEvaluator: boolean;
     codaveriEvaluator: boolean;
+    multipleFileSubmission: boolean;
   };
   dependencies: LanguageDependencyData[];
 }
@@ -81,10 +82,13 @@ export interface JavaMetadataTestCase extends MetadataTestCase {
   inlineCode: string;
 }
 
-export interface JavaMetadata extends BasicMetadata {
+export interface FileSubmissionMetadata {
   submitAsFile: boolean;
   submissionFiles: DataFile[];
   solutionFiles: DataFile[];
+}
+
+export interface JavaMetadata extends BasicMetadata, FileSubmissionMetadata {
   testCases: MetadataTestCases<JavaMetadataTestCase>;
 }
 

@@ -60,6 +60,15 @@ namespace :db do
       Coursemology::Polyglot::Language::Python::Python3Point14
     ].freeze
 
+  # Languages whose online-editor package service can generate multiple file submission packages.
+  MULTIPLE_FILE_SUBMISSION_WHITELIST =
+    [
+      Coursemology::Polyglot::Language::Java::Java8,
+      Coursemology::Polyglot::Language::Java::Java11,
+      Coursemology::Polyglot::Language::Java::Java17,
+      Coursemology::Polyglot::Language::Java::Java21
+    ].freeze
+
   DEPRECATED_LANGUAGES =
     [
       Coursemology::Polyglot::Language::Python::Python2Point7,
@@ -108,6 +117,13 @@ namespace :db do
       Coursemology::Polyglot::Language.
         where.not(type: KODITSU_WHITELIST.map(&:name)).
         update_all(koditsu_whitelisted: false)
+
+      Coursemology::Polyglot::Language.
+        where(type: MULTIPLE_FILE_SUBMISSION_WHITELIST.map(&:name)).
+        update_all(multiple_file_submission_whitelisted: true)
+      Coursemology::Polyglot::Language.
+        where.not(type: MULTIPLE_FILE_SUBMISSION_WHITELIST.map(&:name)).
+        update_all(multiple_file_submission_whitelisted: false)
 
       Coursemology::Polyglot::Language.
         where(type: DEPRECATED_LANGUAGES.map(&:name)).

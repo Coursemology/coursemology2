@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_06_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_22_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -1963,6 +1963,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_06_000001) do
     t.boolean "default_evaluator_whitelisted", default: true, null: false
     t.boolean "enabled", default: true, null: false
     t.boolean "koditsu_whitelisted", default: false, null: false
+    t.boolean "multiple_file_submission_whitelisted", default: false, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
     t.boolean "question_generation_whitelisted", default: false, null: false

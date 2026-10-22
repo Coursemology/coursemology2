@@ -2058,7 +2058,7 @@
     "defaultMessage": "코드 제출"
   },
   "course.assessment.question.programming.codeSubmissionHint": {
-    "defaultMessage": "아래의 제출 템플릿을 설정하세요. 학생들은 편집기에서 코드를 편집하고 제출하여 컴파일 및 테스트할 수 있습니다."
+    "defaultMessage": "아래의 제출 템플릿을 설정하세요. 학생들은 편집기에서 코드를 편집하고 제출하여 테스트할 수 있습니다."
   },
   "course.assessment.question.programming.cppTestCasesHint": {
     "defaultMessage": "식은 제출된 코드의 맥락에서 평가됩니다. 그런 다음 반환 값은 <gtf>Google Test Framework</gtf>의 <code>EXPECT_*</code> 단언을 사용하여 예상 기대치와 비교됩니다. 부동 소수점 숫자는 <sts>std::to_string</sts>로 형식이 지정됩니다."
@@ -2139,7 +2139,7 @@
     "defaultMessage": "파일 제출"
   },
   "course.assessment.question.programming.fileSubmissionHint": {
-    "defaultMessage": "제출 템플릿으로 Java 파일을 업로드하세요. 학생들은 온라인으로 편집하거나 Java 파일을 업로드하여 컴파일 및 테스트할 수 있습니다."
+    "defaultMessage": "제출 템플릿으로 코드 파일을 업로드하세요. 학생들은 온라인으로 편집하거나 자신의 코드 파일을 업로드하여 테스트할 수 있습니다."
   },
   "course.assessment.question.programming.hasToBeAtLeastOne": {
     "defaultMessage": "적어도 1이어야 하는 유효한 양수여야 합니다."

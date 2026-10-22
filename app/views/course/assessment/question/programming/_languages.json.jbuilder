@@ -7,6 +7,7 @@ json.array! languages do |language|
     # we could return the other flags here, but they are currently not used by FE
     json.defaultEvaluator language.default_evaluator_whitelisted?
     json.codaveriEvaluator language.codaveri_evaluator_whitelisted?
+    json.multipleFileSubmission language.multiple_file_submission_whitelisted?
   end
   json.dependencies language.class.dependencies
   json.editorMode language.ace_mode

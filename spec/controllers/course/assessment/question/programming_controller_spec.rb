@@ -308,6 +308,12 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
           expect(response).to have_http_status(:ok)
           expect(JSON.parse(response.body).map { |language| language['name'] }).to include('Python 3.10')
         end
+
+        it 'returns whether each language supports multiple file submission' do
+          subject
+          whitelists = JSON.parse(response.body).to_h { |l| [l['name'], l['whitelists']['multipleFileSubmission']] }
+          expect(whitelists).to include('Java 17' => true, 'Python 3.10' => false)
+        end
       end
 
       context 'when the language is disabled' do
