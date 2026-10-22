@@ -63,6 +63,21 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
 
           expect(errors['files'].first).to include(expected_error_message)
         end
+
+        it 'also rejects them for a Python question with file submission' do
+          question = assessment.questions.first.specific
+          question.update_column(:language_id, Coursemology::Polyglot::Language::Python::Python3Point10.instance.id)
+          expect(question.reload.language.multiple_file_submission_whitelisted?).to be(true)
+
+          stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
+          post :create_programming_files, as: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: { id: answer.id, files_attributes: [large_file_attribute] }
+          }
+
+          expect(response).to have_http_status(:bad_request)
+          expect(answer.specific.reload.files.map(&:filename)).not_to include('template2')
+        end
       end
     end
 

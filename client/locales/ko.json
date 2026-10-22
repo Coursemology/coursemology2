@@ -2258,6 +2258,9 @@
   "course.assessment.question.programming.publicTestCases": {
     "defaultMessage": "공개 테스트 케이스"
   },
+  "course.assessment.question.programming.pythonFileSubmissionTestCasesHint": {
+    "defaultMessage": "파일 제출 Python 문제에서는 제출된 코드 파일을 삽입(Prepend) 스크립트에서 가져와야 합니다(예: <code>import main as student</code>). 식의 반환 값은 등호 연산자(<code>==</code>)를 사용하여 예상 기대치와 비교됩니다. 특히, <code>print()</code>는 <code>None</code>을 반환하므로, <code>print</code>된 출력은 실제 반환 값과 혼동되어서는 안 됩니다."
+  },
   "course.assessment.question.programming.pythonTestCasesHint": {
     "defaultMessage": "식은 제출된 코드의 맥락에서 평가됩니다. 그런 다음 반환 값은 등호 연산자(<code>==</code>)를 사용하여 예상 기대치와 비교됩니다. 특히, <code>print()</code>는 <code>None</code>을 반환하므로, <code>print</code>된 출력은 실제 반환 값과 혼동되어서는 안 됩니다."
   },

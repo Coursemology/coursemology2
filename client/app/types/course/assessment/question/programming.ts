@@ -76,7 +76,7 @@ export interface BasicMetadata {
 
 export type CppMetadata = BasicMetadata;
 
-export type PythonMetadata = BasicMetadata;
+export type PythonMetadata = BasicMetadata & FileSubmissionMetadata;
 
 export interface JavaMetadataTestCase extends MetadataTestCase {
   inlineCode: string;

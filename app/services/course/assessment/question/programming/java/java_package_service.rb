@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::Java::JavaPackageService < \
+class Course::Assessment::Question::Programming::Java::JavaPackageService <
   Course::Assessment::Question::Programming::LanguagePackageService
   # The autograding definitions appended to `tests/prepend` of every generated Java package.
   # The Codaveri Java package service strips them back out, and relies on this path to know how
@@ -12,20 +12,12 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
   end
 
   def submission_templates
-    if submit_as_file?
-      templates = []
-      @test_params[:submission_files].map do |file|
-        template_file = { filename: file.original_filename, content: File.read(file.tempfile.path) }
-        templates.push(template_file)
-      end
+    return uploaded_submission_templates if submit_as_file?
 
-      templates
-    else
-      [
-        filename: 'template',
-        content: @test_params[:submission] || ''
-      ]
-    end
+    [
+      filename: 'template',
+      content: @test_params[:submission] || ''
+    ]
   end
 
   def generate_package(old_attachment)
@@ -33,12 +25,12 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
     @tmp_dir = Dir.mktmpdir
     @old_meta = old_attachment.present? ? extract_meta(old_attachment, nil) : nil
-    data_files_to_keep = old_attachment.present? ? find_files_to_keep('data_files', old_attachment) : []
-    submission_files_to_keep = old_attachment.present? ? find_files_to_keep('submission_files', old_attachment) : []
-    solution_files_to_keep = old_attachment.present? ? find_files_to_keep('solution_files', old_attachment) : []
+    data_files_to_keep = find_files_to_keep('data_files', old_attachment)
+    submission_files_to_keep = find_files_to_keep('submission_files', old_attachment)
+    solution_files_to_keep = find_files_to_keep('solution_files', old_attachment)
     @meta = generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
 
-    return nil if @meta == @old_meta
+    return nil if package_unchanged?
 
     @attachment = generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
@@ -78,49 +70,6 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     meta[:submission] = template_files.first&.content
 
     meta.as_json
-  end
-
-  def extract_from_package(package, file_type, new_filenames, files_to_delete)
-    files_to_keep = []
-
-    if @old_meta.present?
-      package.unzip_file @tmp_dir
-      @old_meta[file_type].try(:each) do |file|
-        next if files_to_delete.try(:include?, (file['filename']))
-        # new files overrides old ones
-        next if new_filenames.include?(file['filename'])
-
-        files_to_keep.append(File.new(File.join(resolve_folder_path(@tmp_dir, file_type), file['filename'])))
-      end
-    end
-
-    files_to_keep
-  end
-
-  def resolve_folder_path(tmp_dir, file_type)
-    case file_type
-    when 'submission_files'
-      "#{tmp_dir}/submission"
-    when 'solution_files'
-      "#{tmp_dir}/solution"
-    # Data files do not need resolution
-    else
-      tmp_dir
-    end
-  end
-
-  def find_files_to_keep(file_type, attachment)
-    new_filenames = (@test_params[file_type] || []).compact.map(&:original_filename)
-
-    attachment.open(binmode: true) do |temporary_file|
-      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      files_to_delete = "#{file_type}_to_delete"
-      return extract_from_package(package, file_type, new_filenames, @test_params[files_to_delete])
-    ensure
-      next unless package
-
-      temporary_file.close
-    end
   end
 
   def generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
@@ -175,20 +124,8 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     end
 
     Zip::File.open(tmp.path) do |zip|
-      # @test_params should have the [:submission_files] key if submitted as a file
-      if submit_as_file?
-        generate_standard_submission_solution_files(zip, submission_files_to_keep, solution_files_to_keep)
-      end
-
-      @test_params[:data_files].try(:each) do |file|
-        next if file.nil?
-
-        zip.add(file.original_filename, file.tempfile.path)
-      end
-
-      data_files_to_keep.each do |file|
-        zip.add(File.basename(file.path), file.path)
-      end
+      add_submission_and_solution_files(zip, submission_files_to_keep, solution_files_to_keep) if submit_as_file?
+      add_data_files(zip, data_files_to_keep)
     end
 
     tmp
@@ -209,38 +146,9 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     zip.print "\n"
   end
 
-  # Used to generate submission and solution files for the regular java implementation
-  # (Submitted as whole files)
-  def generate_standard_submission_solution_files(zip, submission_files_to_keep, solution_files_to_keep)
-    zip.mkdir('submission')
-    @test_params[:submission_files].try(:each) do |file|
-      next if file.nil?
-
-      zip.add("submission/#{file.original_filename}", file.tempfile.path)
-    end
-
-    submission_files_to_keep.each do |file|
-      zip.add("submission/#{File.basename(file.path)}", file.path)
-    end
-
-    zip.mkdir('solution')
-    @test_params[:solution_files].try(:each) do |file|
-      next if file.nil?
-
-      zip.add("solution/#{file.original_filename}", file.tempfile.path)
-    end
-
-    solution_files_to_keep.each do |file|
-      zip.add("solution/#{File.basename(file.path)}", file.path)
-    end
-  end
-
   def zip_test_files(test_type, zip)
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
-      # String types should be displayed with quotes, other types will be converted to string
-      # with the str method.
-      expected = string?(test[:expected]) ? test[:expected].inspect : (test[:expected]).to_s
       hint = test[:hint].blank? ? String(nil) : "result.setAttribute(\"hint\", #{test[:hint].inspect});"
 
       test_fn = <<-JAVA
@@ -260,37 +168,13 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
     end
   end
 
-  def get_files_meta(files_to_keep, new_files)
-    files = []
-
-    new_files.each do |file|
-      sha256 = Digest::SHA256.file(file.tempfile).hexdigest
-      files.append(filename: file.original_filename, size: file.tempfile.size, hash: sha256)
-    end
-
-    files_to_keep.each do |file|
-      sha256 = Digest::SHA256.file(file).hexdigest
-      files.append(filename: File.basename(file.path), size: file.size, hash: sha256)
-    end
-
-    files.sort_by { |file| file[:filename].downcase }
-  end
-
   def generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     meta = default_meta
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    new_data_files = (@test_params[:data_files] || []).compact
-    meta[:data_files] = get_files_meta(data_files_to_keep, new_data_files)
-
-    meta[:submit_as_file] = submit_as_file?
-
-    new_submission_files = (@test_params[:submission_files] || []).compact
-    meta[:submission_files] = get_files_meta(submission_files_to_keep, new_submission_files)
-
-    new_solution_files = (@test_params[:solution_files] || []).compact
-    meta[:solution_files] = get_files_meta(solution_files_to_keep, new_solution_files)
+    meta[:data_files] = files_meta('data_files', data_files_to_keep)
+    add_file_submission_meta(meta, submission_files_to_keep, solution_files_to_keep)
 
     [:public, :private, :evaluation].each do |test_type|
       meta[:test_cases][test_type] = @test_params[:test_cases][test_type] || []
@@ -346,9 +230,5 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       whitelisted[:submission_files_to_delete] = params['question_programming']['submission_files_to_delete']
       whitelisted[:solution_files_to_delete] = params['question_programming']['solution_files_to_delete']
     end
-  end
-
-  def submit_as_file?
-    @test_params[:submit_as_file] == 'true'
   end
 end

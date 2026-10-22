@@ -2222,6 +2222,9 @@
   "course.assessment.question.programming.publicTestCases": {
     "defaultMessage": "Public test cases"
   },
+  "course.assessment.question.programming.pythonFileSubmissionTestCasesHint": {
+    "defaultMessage": "For file submission Python questions, submitted code file(s) must be imported in the prepend script, e.g. <code>import main as student</code>. Expression return values will be compared against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values."
+  },
   "course.assessment.question.programming.pythonTestCasesHint": {
     "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will then be compared against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values."
   },

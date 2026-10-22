@@ -18,7 +18,7 @@ class Course::Assessment::Question::Programming::CSharp::CSharpPackageService <
     data_files_to_keep = old_attachment.present? ? find_data_files_to_keep(old_attachment) : []
     @meta = generate_meta(data_files_to_keep)
 
-    return nil if @meta == @old_meta
+    return nil if package_unchanged?
 
     @attachment = generate_zip_file(data_files_to_keep)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?

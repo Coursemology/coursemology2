@@ -2213,6 +2213,9 @@
   "course.assessment.question.programming.publicTestCases": {
     "defaultMessage": "公共测试用例"
   },
+  "course.assessment.question.programming.pythonFileSubmissionTestCasesHint": {
+    "defaultMessage": "对于文件提交的 Python 题目，提交的代码文件必须在前置（Prepend）脚本中导入，例如 <code>import main as student</code>。表达式的返回值将使用相等运算符 (<code>==</code>) 与期望值进行比较。注意，由于<code>print()</code> 返回 <code>None</code>，所以 <code>print</code> 的输出不应该与实际返回值混淆。"
+  },
   "course.assessment.question.programming.pythonTestCasesHint": {
     "defaultMessage": "表达式将在提交代码的上下文中进行评估。返回值将使用相等运算符 (<code>==</code>) 与期望值进行比较。注意，由于<code>print()</code> 返回 <code>None</code>, 所以 <code>print</code> 的输出不应该与实际返回值混淆"
   },

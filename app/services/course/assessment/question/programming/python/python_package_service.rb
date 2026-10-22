@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::Python::PythonPackageService < \
+class Course::Assessment::Question::Programming::Python::PythonPackageService <
   Course::Assessment::Question::Programming::LanguagePackageService
   def submission_templates
+    return uploaded_submission_templates if submit_as_file?
+
     [
       {
         filename: 'template.py',
@@ -15,12 +17,14 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
     @tmp_dir = Dir.mktmpdir
     @old_meta = old_attachment.present? ? extract_meta(old_attachment, nil) : nil
-    data_files_to_keep = old_attachment.present? ? find_data_files_to_keep(old_attachment) : []
-    @meta = generate_meta(data_files_to_keep)
+    data_files_to_keep = find_files_to_keep('data_files', old_attachment)
+    submission_files_to_keep = find_files_to_keep('submission_files', old_attachment)
+    solution_files_to_keep = find_files_to_keep('solution_files', old_attachment)
+    @meta = generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
 
-    return nil if @meta == @old_meta
+    return nil if package_unchanged?
 
-    @attachment = generate_zip_file(data_files_to_keep)
+    @attachment = generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
     @attachment
   end
@@ -60,55 +64,15 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     meta.as_json
   end
 
-  def extract_from_package(package, new_data_filenames, data_files_to_delete)
-    data_files_to_keep = []
-
-    if @old_meta.present?
-      package.unzip_file @tmp_dir
-
-      @old_meta['data_files']&.each do |file|
-        next if data_files_to_delete.try(:include?, (file['filename']))
-        # new files overrides old ones
-        next if new_data_filenames.include?(file['filename'])
-
-        data_files_to_keep.append(File.new(File.join(@tmp_dir, file['filename'])))
-      end
-    end
-
-    data_files_to_keep
-  end
-
-  def find_data_files_to_keep(attachment)
-    new_filenames = (@test_params[:data_files] || []).compact.map(&:original_filename)
-
-    attachment.open(binmode: true) do |temporary_file|
-      package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      return extract_from_package(package, new_filenames, @test_params[:data_files_to_delete])
-    ensure
-      next unless package
-
-      temporary_file.close
-    end
-  end
-
-  def generate_zip_file(data_files_to_keep)
+  def generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
     autograde_pre_path = get_file_path('python_autograde_pre.py')
     autograde_post_path = get_file_path('python_autograde_post.py')
-    makefile_path = get_file_path('python_makefile')
+    # With files, the student's code is imported by the tests rather than pasted into them.
+    makefile_path = get_file_path(submit_as_file? ? 'python_standard_makefile' : 'python_makefile')
 
     Zip::OutputStream.open(tmp.path) do |zip|
-      # Create solution directory with template file
-      zip.put_next_entry 'solution/'
-      zip.put_next_entry 'solution/template.py'
-      zip.print @test_params[:solution]
-      zip.print "\n"
-
-      # Create submission directory with template file
-      zip.put_next_entry 'submission/'
-      zip.put_next_entry 'submission/template.py'
-      zip.print @test_params[:submission]
-      zip.print "\n"
+      generate_template_submission_solution_files(zip) unless submit_as_file?
 
       # Create tests directory with prepend, append and autograde files
       zip.put_next_entry 'tests/'
@@ -139,18 +103,26 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     Zip::File.open(tmp.path) do |zip|
-      @test_params[:data_files]&.each do |file|
-        next if file.nil?
-
-        zip.add(file.original_filename, file.tempfile.path)
-      end
-
-      data_files_to_keep.each do |file|
-        zip.add(File.basename(file.path), file.path)
-      end
+      add_submission_and_solution_files(zip, submission_files_to_keep, solution_files_to_keep) if submit_as_file?
+      add_data_files(zip, data_files_to_keep)
     end
 
     tmp
+  end
+
+  # Writes the submission template and solution written in the code editors.
+  def generate_template_submission_solution_files(zip)
+    # Create solution directory with template file
+    zip.put_next_entry 'solution/'
+    zip.put_next_entry 'solution/template.py'
+    zip.print @test_params[:solution]
+    zip.print "\n"
+
+    # Create submission directory with template file
+    zip.put_next_entry 'submission/'
+    zip.put_next_entry 'submission/template.py'
+    zip.print @test_params[:submission]
+    zip.print "\n"
   end
 
   # Retrieves the absolute path of the file specified
@@ -194,34 +166,53 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     zip.print "\n"
   end
 
-  def get_data_files_meta(data_files_to_keep, new_data_files)
-    data_files = []
-
-    new_data_files.each do |file|
-      sha256 = Digest::SHA256.file(file.tempfile).hexdigest
-      data_files.append(filename: file.original_filename, size: file.tempfile.size, hash: sha256)
-    end
-
-    data_files_to_keep.each do |file|
-      sha256 = Digest::SHA256.file(file).hexdigest
-      data_files.append(filename: File.basename(file.path), size: file.size, hash: sha256)
-    end
-
-    data_files.sort_by { |file| file[:filename].downcase }
-  end
-
-  def generate_meta(data_files_to_keep)
+  def generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
     meta = default_meta
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    new_data_files = (@test_params[:data_files] || []).compact
-    meta[:data_files] = get_data_files_meta(data_files_to_keep, new_data_files)
+    meta[:data_files] = files_meta('data_files', data_files_to_keep)
+    add_file_submission_meta(meta, submission_files_to_keep, solution_files_to_keep)
 
     [:public, :private, :evaluation].each do |test_type|
       meta[:test_cases][test_type] = @test_params[:test_cases][test_type] || []
     end
 
     meta.as_json
+  end
+
+  # Defines the default meta to be used by the online editor for rendering.
+  #
+  # @return [Hash]
+  def default_meta
+    super.merge(submit_as_file: false, submission_files: [], solution_files: [])
+  end
+
+  # Permits the fields that are used to generate a the package for the language.
+  #
+  # @param [ActionController::Parameters] params The parameters containing the data for package
+  #   generation.
+  def test_params(params)
+    test_params = params.require(:question_programming).permit(
+      :prepend, :append, :solution, :submission, :autograded, :submit_as_file,
+      submission_files: [],
+      solution_files: [],
+      data_files: [],
+      test_cases: {
+        public: [:expression, :expected, :hint],
+        private: [:expression, :expected, :hint],
+        evaluation: [:expression, :expected, :hint]
+      }
+    )
+    whitelist(params, test_params)
+  end
+
+  def whitelist(params, test_params)
+    super.tap do |whitelisted|
+      next unless whitelisted[:submit_as_file] == 'true'
+
+      whitelisted[:submission_files_to_delete] = params['question_programming']['submission_files_to_delete']
+      whitelisted[:solution_files_to_delete] = params['question_programming']['solution_files_to_delete']
+    end
   end
 end

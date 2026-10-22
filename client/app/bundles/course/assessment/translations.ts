@@ -1958,6 +1958,14 @@ const translations = defineMessages({
     defaultMessage:
       'If you wish to override these behaviours, you may redefine these methods in <append>Append</append> above.',
   },
+  pythonFileSubmissionTestCasesHint: {
+    id: 'course.assessment.question.programming.pythonFileSubmissionTestCasesHint',
+    defaultMessage:
+      'For file submission Python questions, submitted code file(s) must be imported in the prepend script, e.g. <code>import main as student</code>. ' +
+      'Expression return values will be compared ' +
+      'against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> ' +
+      'returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values.',
+  },
   pythonTestCasesHint: {
     id: 'course.assessment.question.programming.pythonTestCasesHint',
     defaultMessage:

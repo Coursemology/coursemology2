@@ -7,6 +7,7 @@ import {
   LanguageMode,
   MetadataTestCase,
   ProgrammingFormRequestData,
+  PythonMetadata,
 } from 'types/course/assessment/question/programming';
 
 import {
@@ -132,6 +133,13 @@ const appendSubmissionTemplatesInto = <
   }
 };
 
+const pythonBuilder = (data: FormData, metadata: PythonMetadata): void => {
+  appendSubmissionTemplatesInto(data, metadata);
+  appendInsertsInto(data, metadata);
+  appendFilesInto(data, 'data', metadata.dataFiles);
+  appendTestCasesInto(data, metadata);
+};
+
 const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
   appendSubmissionTemplatesInto(data, metadata);
   appendInsertsInto(data, metadata);
@@ -151,7 +159,7 @@ const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
 const POLYGLOT_BUILDER: Partial<
   Record<LanguageMode, (data: FormData, metadata) => void>
 > = {
-  python: basicBuilder,
+  python: pythonBuilder,
   c_cpp: basicBuilder,
   java: javaBuilder,
   r: basicBuilder,
