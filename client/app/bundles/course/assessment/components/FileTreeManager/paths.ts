@@ -67,6 +67,13 @@ export const validatePath = (path: string): PathError | null => {
   return isTooLong(segments) ? 'tooLong' : null;
 };
 
+/**
+ * Finds the first rule a folder's path breaks. The folder's path becomes the folder part of every
+ * file in it, so it is checked as the folder of a file.
+ */
+export const validateFolderPath = (path: string): PathError | null =>
+  path === '' ? 'invalid' : validatePath(`${path}/x`);
+
 /** Each folder the path is in, such as `a` and `a/b` for `a/b/c`. */
 export const foldersOf = (path: string): string[] => {
   const segments = path.split('/');
@@ -128,13 +135,18 @@ export const basename = (path: string): string =>
 export const dirname = (path: string): string =>
   path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '';
 
+/** The path a picked or dropped file is saved under: its name, inside `targetFolder`. */
+export const pathOfFile = (file: File, targetFolder = ''): string =>
+  joinPath(targetFolder, normalisePath(file.name));
+
 /**
- * The path a picked or dropped file should be saved under, inside `targetFolder`. A folder picker
- * gives `webkitRelativePath`, react-dropzone gives `path` for a dropped folder, and a single file
- * has only its `name`.
+ * Whether a dropped file came from inside a dropped folder. react-dropzone walks a dropped folder
+ * and gives each file a `path` that includes its folders, such as `./site/index.html`; a loose file's
+ * `path` is just its name. Folders aren't taken, since one could hold any number of files.
  */
-export const pathOfFile = (file: File, targetFolder = ''): string => {
+export const isFromDroppedFolder = (file: File): boolean => {
   const dropzonePath = (file as File & { path?: string }).path;
-  const relativePath = file.webkitRelativePath || dropzonePath || file.name;
-  return joinPath(targetFolder, normalisePath(relativePath));
+  return Boolean(
+    file.webkitRelativePath || normalisePath(dropzonePath ?? '').includes('/'),
+  );
 };

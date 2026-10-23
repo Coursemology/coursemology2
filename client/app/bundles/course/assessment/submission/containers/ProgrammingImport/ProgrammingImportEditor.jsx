@@ -174,42 +174,20 @@ const VisibleProgrammingImportEditor = (props) => {
   };
 
   return (
-    <>
-      {!readOnly && (
-        <ImportedFileView
-          displayFileName={displayFileName}
-          files={files}
-          handleDeleteFile={handleDeleteFile}
-          handleFileTabbing={(filename) => setDisplayFileName(filename)}
-        />
-      )}
-      <SelectProgrammingFileEditor
-        {...{
-          answerId,
-          editorRef,
-          readOnly,
-          question,
-          displayFileName,
-          saveAnswerAndUpdateClientVersion,
-          language: question.editorMode,
-        }}
-      />
-      {readOnly ? null : (
-        <FileInputField
-          disabled={disabled}
-          isMultipleAttachmentsAllowed
-          name={`${answerId}.import_files`}
-          onDropCallback={(filesToImport) => {
-            handleStageFiles(filesToImport).then((response) => {
-              const existingFiles = getValues()[answerId].files_attributes;
-              const parsedFiles = response;
-              const allFiles = existingFiles.concat(parsedFiles);
-              handleUploadFiles(allFiles);
-            });
-          }}
-        />
-      )}
-    </>
+    <div className="mb-3 flex flex-col gap-4 md:flex-row">
+      <div className="relative w-full flex-none md:min-h-80 md:w-72 lg:w-80">
+        <div className="md:absolute md:inset-0">
+          <AnswerFilesTree
+            answerId={answerId}
+            disabled={disabled}
+            displayFileName={displayFileName}
+            language={question.editorMode}
+            setDisplayFileName={setDisplayFileName}
+          />
+        </div>
+      </div>
+      <div className="min-w-0 flex-1">{editor}</div>
+    </div>
   );
 };
 

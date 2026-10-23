@@ -4,6 +4,7 @@ import {
   byteLength,
   dirname,
   foldersOf,
+  isFromDroppedFolder,
   normalisePath,
   pathOfFile,
   validatePath,
@@ -155,47 +156,59 @@ describe('path parts', () => {
   });
 });
 
-describe('pathOfFile', () => {
-  const fileWith = (
-    name: string,
-    extra: { webkitRelativePath?: string; path?: string } = {},
-  ): File => {
-    const file = new File([''], name);
-    if (extra.webkitRelativePath !== undefined)
-      Object.defineProperty(file, 'webkitRelativePath', {
-        value: extra.webkitRelativePath,
-      });
-    if (extra.path !== undefined)
-      Object.defineProperty(file, 'path', { value: extra.path });
-    return file;
-  };
+const fileWith = (
+  name: string,
+  extra: { webkitRelativePath?: string; path?: string } = {},
+): File => {
+  const file = new File([''], name);
+  if (extra.webkitRelativePath !== undefined)
+    Object.defineProperty(file, 'webkitRelativePath', {
+      value: extra.webkitRelativePath,
+    });
+  if (extra.path !== undefined)
+    Object.defineProperty(file, 'path', { value: extra.path });
+  return file;
+};
 
+describe('pathOfFile', () => {
   it('uses the name of a single file', () => {
     expect(pathOfFile(fileWith('app.py'))).toBe('app.py');
-  });
-
-  it('keeps the folders of a file from a folder picker', () => {
-    expect(
-      pathOfFile(
-        fileWith('index.html', {
-          webkitRelativePath: 'site/templates/index.html',
-        }),
-      ),
-    ).toBe('site/templates/index.html');
-  });
-
-  it('keeps the folders of a file dropped on react-dropzone', () => {
-    expect(
-      pathOfFile(fileWith('index.html', { path: './templates/index.html' })),
-    ).toBe('templates/index.html');
-    expect(
-      pathOfFile(fileWith('index.html', { path: '/templates/index.html' })),
-    ).toBe('templates/index.html');
   });
 
   it('puts the file under the folder it was added to', () => {
     expect(
       pathOfFile(fileWith('index.html', { path: './index.html' }), 'templates'),
     ).toBe('templates/index.html');
+  });
+});
+
+describe('isFromDroppedFolder', () => {
+  it('is false for a loose file, picked or dropped', () => {
+    expect(isFromDroppedFolder(fileWith('app.py'))).toBe(false);
+    expect(isFromDroppedFolder(fileWith('app.py', { path: './app.py' }))).toBe(
+      false,
+    );
+    expect(isFromDroppedFolder(fileWith('app.py', { path: '/app.py' }))).toBe(
+      false,
+    );
+  });
+
+  it('is true for a file react-dropzone found inside a dropped folder', () => {
+    expect(
+      isFromDroppedFolder(
+        fileWith('index.html', { path: './site/index.html' }),
+      ),
+    ).toBe(true);
+    expect(
+      isFromDroppedFolder(fileWith('index.html', { path: '/site/index.html' })),
+    ).toBe(true);
+  });
+
+  it('is true for a file from a folder picker', () => {
+    expect(
+      isFromDroppedFolder(
+        fileWith('index.html', { webkitRelativePath: 'site/index.html' }),
+      ),
+    ).toBe(true);
   });
 });
