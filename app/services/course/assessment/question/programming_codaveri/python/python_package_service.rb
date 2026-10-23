@@ -1,8 +1,28 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService <
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
+  # Codaveri runs the first file of a Python problem as the main script, and adds the test cases to it. It
+  # does not use the evaluator prefix and suffix for Python, as it does for Java. So with file submission, a
+  # generated first file carries the prepend and append, which import the student's files for the tests:
+  # the same layout as the answer.py our own evaluator builds. Students never see or edit this file.
+  MAIN_FILE_PATH = '_coursemology_main.py'
+
+  # With file submission, the student code is a set of files rather than a single template.py, sent with
+  # the generated main file in front of it.
+  def self.generates_answer_files?(question)
+    question.multiple_file_submission
+  end
+
+  def generated_answer_files
+    @question.multiple_file_submission ? [main_file] : []
+  end
+
   def process_solutions
-    extract_main_solution
+    if @question.multiple_file_submission
+      extract_file_solutions
+    else
+      extract_code_solution
+    end
   end
 
   def process_test_cases
@@ -10,18 +30,26 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
   end
 
   def process_data
-    extract_supporting_files
+    if @question.multiple_file_submission
+      extract_file_supporting_files
+    else
+      extract_code_supporting_files
+    end
   end
 
   def process_templates
-    extract_template
+    if @question.multiple_file_submission
+      extract_file_templates
+    else
+      extract_code_template
+    end
   end
 
   private
 
   # Extracts the main solution of a programing question problem and append it to the
   # [:resources][0][:solutions] array array for the problem management API request body.
-  def extract_main_solution
+  def extract_code_solution
     main_solution_object = default_codaveri_solution_template
 
     solution_files = @package.solution_files
@@ -35,11 +63,18 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
   # In a programming question package, there may be data files that are included in the package
   # The contents of these files are appended to the "additionalFiles" array in the API Request main body.
-  def extract_supporting_files
+  def extract_code_supporting_files
     extract_supporting_main_files
     extract_supporting_tests_files
     extract_supporting_submission_files
     extract_supporting_solution_files
+  end
+
+  # With file submission, the submission and solution files are sent as templates and solutions instead,
+  # so only the data files and any extra test files are additional files.
+  def extract_file_supporting_files
+    extract_supporting_main_files
+    extract_supporting_tests_files
   end
 
   # Finds and extracts all contents of additional files in the root package folder
@@ -143,7 +178,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
   # Extracts template file from submissions folder and append it to the
   # [:resources][0][:templates] array for the problem management API request body.
-  def extract_template
+  def extract_code_template
     main_template_object = default_codaveri_template_template
 
     submission_files = @package.submission_files
@@ -156,6 +191,42 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
     main_template_object[:suffix] = test_files[Pathname.new('append.py')].gsub('import xmlrunner', '')
 
     @template_files.append(main_template_object)
+  end
+
+  # With file submission, the generated main file and then every submission file are templates, with no
+  # prefix or suffix.
+  def extract_file_templates
+    @template_files.append(default_codaveri_template_template.merge(main_file))
+
+    @package.submission_files.each do |pathname, content|
+      template_object = default_codaveri_template_template
+      template_object[:path] = pathname.to_s
+      template_object[:content] = content
+
+      @template_files.append(template_object)
+    end
+  end
+
+  # With file submission, the generated main file and then every solution file are solution files. Empty
+  # files are kept, since an empty module can still be imported.
+  def extract_file_solutions
+    @solution_files.append(default_codaveri_solution_template.merge(main_file))
+
+    @package.solution_files.each do |pathname, content|
+      solution_object = default_codaveri_solution_template
+      solution_object[:path] = pathname.to_s
+      solution_object[:content] = content
+
+      @solution_files.append(solution_object)
+    end
+  end
+
+  # @return [Hash] The generated main file's path and content: the prepend and append, in the order the
+  #   package's own tests run them.
+  def main_file
+    test_files = @package.test_files
+    content = "#{test_files[Pathname.new('prepend.py')]}#{test_files[Pathname.new('append.py')]}"
+    { path: MAIN_FILE_PATH, content: content.gsub('import xmlrunner', '') }
   end
 
   def preload_question_test_cases

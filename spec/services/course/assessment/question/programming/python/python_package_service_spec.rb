@@ -89,6 +89,28 @@ RSpec.describe Course::Assessment::Question::Programming::Python::PythonPackageS
       end
     end
 
+    context 'when the package was saved before file submission' do
+      let(:params) { package_params(submission: "def f():\n    pass", solution: "def f():\n    return 1") }
+      let(:previous_package) do
+        package = described_class.new(params).generate_package(nil)
+        Zip::File.open(package.path) do |zip|
+          meta = JSON.parse(zip.read('.meta')).except('submit_as_file', 'submission_files', 'solution_files')
+          zip.get_output_stream('.meta') { |file| file.write(meta.to_json) }
+        end
+        ProgrammingPackageServiceHelpers::PreviousPackage.new(package.path)
+      end
+
+      it 'loads the missing fields with their defaults' do
+        meta = described_class.new(nil).extract_meta(previous_package, nil)
+
+        expect(meta).to include('submit_as_file' => false, 'submission_files' => [], 'solution_files' => [])
+      end
+
+      it 'is unchanged when saved as it is' do
+        expect(described_class.new(params).generate_package(previous_package)).to be_nil
+      end
+    end
+
     context 'when a Java question with files is switched to Python' do
       let(:java_package) do
         Course::Assessment::Question::Programming::Java::JavaPackageService.new(
