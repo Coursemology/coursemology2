@@ -69,6 +69,27 @@ RSpec.describe Course::Assessment::Question::Programming::ProgrammingPackageServ
 
           expect(service.generate_package(previous_package)).to be_present
         end
+
+        context 'with a data file in a folder' do
+          let(:previous_package) do
+            params = package_params(submission: 'code', solution: 'solution',
+                                    data_files: [uploaded_file('a.csv', 'x,y')], data_file_paths: ['data/a.csv'])
+            ProgrammingPackageServiceHelpers::PreviousPackage.new(service_class.new(params).generate_package(nil).path)
+          end
+
+          it 'builds no new package when saved again without changes' do
+            expect(service_class.new(package_params(submission: 'code', solution: 'solution')).
+              generate_package(previous_package)).to be_nil
+          end
+
+          it 'keeps the file in its folder when the package is rebuilt' do
+            package = service_class.new(package_params(submission: 'changed', solution: 'solution')).
+                      generate_package(previous_package)
+
+            expect(package_files(package)).to include('data/a.csv' => 'x,y')
+            expect(package_meta(package)['data_files'].pluck('filename')).to eq(['data/a.csv'])
+          end
+        end
       end
     end
   end

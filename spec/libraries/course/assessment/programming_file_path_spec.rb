@@ -79,5 +79,23 @@ RSpec.describe Course::Assessment::ProgrammingFilePath do
     it 'accepts folders that share a prefix with a file' do
       expect(described_class.collection_error(['temp', 'templates/index.html'])).to be_nil
     end
+
+    context 'when there are existing files' do
+      it 'rejects a new path that matches an existing one in another case' do
+        expect(described_class.collection_error(['Main.py'], ['main.py'])).to eq(:duplicate)
+      end
+
+      it 'rejects a new file at the path of an existing folder' do
+        expect(described_class.collection_error(['templates'], ['templates/index.html'])).to eq(:file_folder_clash)
+      end
+
+      it 'rejects a new file inside an existing file' do
+        expect(described_class.collection_error(['main.py/x.py'], ['main.py'])).to eq(:file_folder_clash)
+      end
+
+      it 'ignores clashes among the existing paths alone' do
+        expect(described_class.collection_error(['other.py'], ['Main.py', 'main.py'])).to be_nil
+      end
+    end
   end
 end

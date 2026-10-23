@@ -89,6 +89,109 @@ RSpec.describe Course::Assessment::Question::Programming::Python::PythonPackageS
       end
     end
 
+    context 'when files are in folders' do
+      let(:params) do
+        package_params(submit_as_file: 'true',
+                       submission_files: [uploaded_file('app.py', 'x = 1'), uploaded_file('index.html', '<p>')],
+                       submission_file_paths: ['app.py', 'templates/index.html'],
+                       solution_files: [uploaded_file('index.html', '<p>1</p>')],
+                       solution_file_paths: ['templates/index.html'])
+      end
+
+      subject { described_class.new(params).generate_package(nil) }
+
+      it 'writes each file at its path, and records the path in the meta' do
+        expect(package_files(subject)).to include('submission/app.py' => 'x = 1',
+                                                  'submission/templates/index.html' => '<p>',
+                                                  'solution/templates/index.html' => '<p>1</p>')
+        expect(package_meta(subject)['submission_files'].pluck('filename')).to eq(['app.py', 'templates/index.html'])
+      end
+
+      context 'when the question is edited' do
+        let(:previous_package) { ProgrammingPackageServiceHelpers::PreviousPackage.new(subject.path) }
+
+        it 'builds no new package when saved again without changes' do
+          expect(described_class.new(package_params(submit_as_file: 'true')).generate_package(previous_package)).
+            to be_nil
+        end
+
+        it 'keeps the files in their folders when the package is rebuilt' do
+          package = described_class.new(package_params(submit_as_file: 'true', prepend: 'import app')).
+                    generate_package(previous_package)
+
+          expect(package_files(package)).to include('submission/templates/index.html' => '<p>',
+                                                    'solution/templates/index.html' => '<p>1</p>')
+        end
+
+        it 'removes a file in a folder that is deleted by its path' do
+          params = package_params(submit_as_file: 'true', prepend: 'import app')
+          params[:question_programming][:submission_files_to_delete] = ['templates/index.html']
+          package = described_class.new(params).generate_package(previous_package)
+
+          expect(package_files(package).keys).not_to include('submission/templates/index.html')
+        end
+
+        it 'rejects an upload whose path differs from a kept file only in case' do
+          params = package_params(submit_as_file: 'true', submission_files: [uploaded_file('a.py', '')],
+                                  submission_file_paths: ['Templates/index.html'])
+
+          expect { described_class.new(params).generate_package(previous_package) }.
+            to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+        end
+      end
+
+      it 'uses the paths for the templates of a question that is not autograded' do
+        params[:question_programming][:autograded] = 'false'
+
+        expect(described_class.new(params).submission_templates.pluck(:filename)).
+          to eq(['app.py', 'templates/index.html'])
+      end
+    end
+
+    context 'when an uploaded path is invalid' do
+      def generate(paths, filenames = paths.map { |path| File.basename(path) })
+        params = package_params(submit_as_file: 'true',
+                                submission_files: filenames.map { |filename| uploaded_file(filename, '') },
+                                submission_file_paths: paths)
+        described_class.new(params).generate_package(nil)
+      end
+
+      [
+        '../app.py',
+        'a//b.py',
+        '/app.py',
+        'a?.py',
+        'a' * 101,
+        "#{'d' * 68}/#{'d' * 68}/app.py"
+      ].each do |path|
+        it "rejects #{path.truncate(30).inspect}" do
+          expect { generate([path], ['app.py']) }.to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+        end
+      end
+
+      it 'rejects paths that differ only in case' do
+        expect { generate(['App.py', 'app.py']) }.
+          to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+      end
+
+      it 'rejects a file at the path of a folder' do
+        expect { generate(['templates', 'templates/index.html']) }.
+          to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+      end
+
+      it 'rejects paths that do not match the uploads one to one' do
+        expect { generate(['app.py'], ['app.py', 'b.py']) }.
+          to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+      end
+
+      it 'rejects an invalid upload name when no paths are sent' do
+        params = package_params(data_files: [uploaded_file('a:b.txt', '')])
+
+        expect { described_class.new(params).generate_package(nil) }.
+          to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+      end
+    end
+
     context 'when the package was saved before file submission' do
       let(:params) { package_params(submission: "def f():\n    pass", solution: "def f():\n    return 1") }
       let(:previous_package) do

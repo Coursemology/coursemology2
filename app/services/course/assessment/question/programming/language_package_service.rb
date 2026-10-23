@@ -7,6 +7,10 @@
 # online editor for rendering. This meta will be stored in the package for autograded questions, or
 # generated using the existing template files and the default meta for non-autograded questions.
 class Course::Assessment::Question::Programming::LanguagePackageService
+  # A file for the new package: its path within its folder, such as +templates/index.html+, and where
+  # its content is on disk.
+  PackageFile = Struct.new(:filename, :source_path)
+
   # A concrete language package service will be initalized with the request parameters from the
   # controller when creating/updating the programming question, the language package service
   # will use the parameters to create/update the package.
@@ -85,6 +89,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
     test_params = params.require(:question_programming).permit(
       :prepend, :append, :solution, :submission, :autograded,
       data_files: [],
+      data_file_paths: [],
       test_cases: {
         public: [:expression, :expected, :hint],
         private: [:expression, :expected, :hint],
@@ -119,22 +124,66 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @return [Array<Hash>]
   def uploaded_submission_templates
-    (@test_params[:submission_files] || []).compact.map do |file|
-      { filename: file.original_filename, content: File.read(file.tempfile.path) }
-    end
+    uploaded = uploaded_files('submission_files')
+    check_paths!(uploaded.map(&:filename), [])
+
+    uploaded.map { |file| { filename: file.filename, content: File.read(file.source_path) } }
   end
 
-  # Finds the files of the given type in the previous package that the new package keeps: those not
-  # deleted, and not replaced by an upload with the same name. Submission and solution files are only
-  # kept when the templates are files, so switching a question to code drops them.
+  # Finds the files of the given type for the new package: those uploaded in this save, then those kept
+  # from the previous package. Submission and solution files are only used when the templates are files,
+  # so switching a question to code drops them.
   #
   # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
   # @param [AttachmentReference] attachment The previous package, if any.
-  # @return [Array<File>]
-  def find_files_to_keep(file_type, attachment)
-    return [] if attachment.blank? || (file_type != 'data_files' && !submit_as_file?)
+  # @return [Array<PackageFile>]
+  # @raise [Course::Assessment::ProgrammingFilePath::InvalidPathError] When an uploaded file's path is
+  #   invalid, or clashes with another file's.
+  def package_files(file_type, attachment)
+    return [] if file_type != 'data_files' && !submit_as_file?
 
-    new_filenames = (@test_params[file_type] || []).compact.map(&:original_filename)
+    uploaded = uploaded_files(file_type)
+    kept = find_files_to_keep(file_type, attachment, uploaded.map(&:filename))
+    check_paths!(uploaded.map(&:filename), kept.map(&:filename))
+
+    uploaded + kept
+  end
+
+  # The files of the given type uploaded in this save. Rack keeps only the last part of an upload's
+  # name, so the client sends each file's path in a parallel +*_file_paths+ array. A client that sends
+  # no paths gets the upload's own name.
+  #
+  # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
+  # @return [Array<PackageFile>]
+  def uploaded_files(file_type)
+    uploads = (@test_params[file_type] || []).compact
+    paths = @test_params[file_type.sub(/_files\z/, '_file_paths')]
+    raise Course::Assessment::ProgrammingFilePath::InvalidPathError if paths && paths.size != uploads.size
+
+    uploads.each_with_index.map do |upload, index|
+      PackageFile.new(paths ? paths[index] : upload.original_filename, upload.tempfile.path)
+    end
+  end
+
+  # @param [Array<String>] uploaded The paths of the files uploaded in this save.
+  # @param [Array<String>] kept The paths of the files kept from the previous package. Clashes among
+  #   these alone are left alone, so a question saved before these rules can still be saved.
+  # @raise [Course::Assessment::ProgrammingFilePath::InvalidPathError]
+  def check_paths!(uploaded, kept)
+    error = uploaded.lazy.filter_map { |path| Course::Assessment::ProgrammingFilePath.error(path) }.first ||
+            Course::Assessment::ProgrammingFilePath.collection_error(uploaded, kept)
+    raise Course::Assessment::ProgrammingFilePath::InvalidPathError, error.to_s if error
+  end
+
+  # Finds the files of the given type in the previous package that the new package keeps: those not
+  # deleted, and not replaced by an upload with the same path.
+  #
+  # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
+  # @param [AttachmentReference] attachment The previous package, if any.
+  # @param [Array<String>] new_filenames The paths of the files uploaded in this save.
+  # @return [Array<PackageFile>]
+  def find_files_to_keep(file_type, attachment, new_filenames)
+    return [] if attachment.blank?
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
@@ -155,7 +204,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
       # new files overrides old ones
       next if new_filenames.include?(file['filename'])
 
-      File.new(File.join(package_folder_path(file_type), file['filename']))
+      PackageFile.new(file['filename'], File.join(package_folder_path(file_type), file['filename']))
     end
   end
 
@@ -171,53 +220,31 @@ class Course::Assessment::Question::Programming::LanguagePackageService
     end
   end
 
-  # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
-  # @param [Array<File>] files_to_keep The files kept from the previous package.
-  # @return [Array<Hash>] The name, size and hash of each file, sorted by name.
-  def files_meta(file_type, files_to_keep)
-    files = (@test_params[file_type] || []).compact.map do |file|
-      { filename: file.original_filename, size: file.tempfile.size, hash: Digest::SHA256.file(file.tempfile).hexdigest }
+  # @param [Array<PackageFile>] files The files from {#package_files}.
+  # @return [Array<Hash>] The path, size and hash of each file, sorted by path.
+  def files_meta(files)
+    meta = files.map do |file|
+      { filename: file.filename, size: File.size(file.source_path),
+        hash: Digest::SHA256.file(file.source_path).hexdigest }
     end
-
-    files_to_keep.each do |file|
-      files.append(filename: File.basename(file.path), size: file.size, hash: Digest::SHA256.file(file).hexdigest)
-    end
-
-    files.sort_by { |file| file[:filename].downcase }
+    meta.sort_by { |file| file[:filename].downcase }
   end
 
-  def add_file_submission_meta(meta, submission_files_to_keep, solution_files_to_keep)
+  def add_file_submission_meta(meta, submission_files, solution_files)
     meta[:submit_as_file] = submit_as_file?
-    meta[:submission_files] = files_meta('submission_files', submission_files_to_keep)
-    meta[:solution_files] = files_meta('solution_files', solution_files_to_keep)
+    meta[:submission_files] = files_meta(submission_files)
+    meta[:solution_files] = files_meta(solution_files)
   end
 
-  def add_data_files(zip, data_files_to_keep)
-    @test_params[:data_files]&.each do |file|
-      next if file.nil?
-
-      zip.add(file.original_filename, file.tempfile.path)
-    end
-
-    data_files_to_keep.each do |file|
-      zip.add(File.basename(file.path), file.path)
-    end
+  def add_data_files(zip, data_files)
+    data_files.each { |file| zip.add(file.filename, file.source_path) }
   end
 
   # Adds the submission and solution files of a package whose templates are files.
-  def add_submission_and_solution_files(zip, submission_files_to_keep, solution_files_to_keep)
-    { 'submission' => ['submission_files', submission_files_to_keep],
-      'solution' => ['solution_files', solution_files_to_keep] }.each do |folder, (file_type, files_to_keep)|
+  def add_submission_and_solution_files(zip, submission_files, solution_files)
+    { 'submission' => submission_files, 'solution' => solution_files }.each do |folder, files|
       zip.mkdir(folder)
-      @test_params[file_type]&.each do |file|
-        next if file.nil?
-
-        zip.add("#{folder}/#{file.original_filename}", file.tempfile.path)
-      end
-
-      files_to_keep.each do |file|
-        zip.add("#{folder}/#{File.basename(file.path)}", file.path)
-      end
+      files.each { |file| zip.add("#{folder}/#{file.filename}", file.source_path) }
     end
   end
 

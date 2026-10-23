@@ -10,6 +10,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
                               except: [:new, :create, :generate, :codaveri_languages]
   before_action :load_question_assessment, only: [:edit, :update, :update_question_setting]
   before_action :set_attributes_for_programming_question, except: [:generate, :codaveri_languages]
+  # The client checks paths with the same rules first, so this is not expected to reach users.
+  rescue_from Course::Assessment::ProgrammingFilePath::InvalidPathError, with: :render_invalid_file_path
 
   def new
     respond_to do |format|
@@ -151,6 +153,10 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def render_failure_json
     render json: { errors: @programming_question.errors.full_messages.to_sentence }, status: :bad_request
+  end
+
+  def render_invalid_file_path
+    head :bad_request
   end
 
   def process_package

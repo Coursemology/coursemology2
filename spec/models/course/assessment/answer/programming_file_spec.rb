@@ -25,6 +25,22 @@ RSpec.describe Course::Assessment::Answer::ProgrammingFile do
           expect(subject.valid?).to be(true)
           expect(subject.filename).to eq('test/b.txt')
         end
+
+        it 'rejects a path that leaves its folder' do
+          subject.filename = '../Makefile'
+          expect(subject).not_to be_valid
+        end
+
+        it 'rejects a path that is too long to be evaluated' do
+          subject.filename = 'a' * 101
+          expect(subject).not_to be_valid
+        end
+
+        it 'leaves a saved filename alone' do
+          file = create(:course_assessment_answer_programming_file)
+          file.update_column(:filename, 'a' * 101)
+          expect(file.reload).to be_valid
+        end
       end
     end
 
