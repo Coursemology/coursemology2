@@ -409,9 +409,18 @@ const translations = defineMessages({
     id: 'course.assessment.submission.similarFileNameExists',
     defaultMessage: 'File uploads failed: File already exists',
   },
+  binaryFileUploadError: {
+    id: 'course.assessment.submission.binaryFileUploadError',
+    defaultMessage:
+      'File uploads failed: only text files, such as code, can be uploaded',
+  },
   uploadFiles: {
     id: 'course.assessment.submission.uploadFiles',
     defaultMessage: 'Upload Files',
+  },
+  uploadFilesSuccess: {
+    id: 'course.assessment.submission.uploadFilesSuccess',
+    defaultMessage: 'Files uploaded successfully',
   },
   codaveriAutogradeFailure: {
     id: 'course.assessment.submission.codaveriAutogradeFailure',
