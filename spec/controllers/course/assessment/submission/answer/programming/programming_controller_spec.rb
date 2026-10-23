@@ -79,6 +79,38 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
           expect(answer.specific.reload.files.map(&:filename)).not_to include('template2')
         end
       end
+
+      context 'when uploading an empty file' do
+        # Sent as form fields, as the client sends them, in which an empty value is an empty string.
+        it 'saves it as a file with no content' do
+          post :create_programming_files, format: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: answer.id, files_attributes: [filename: 'pkg/__init__.py', content: '']
+            }
+          }
+
+          expect(response).to have_http_status(:ok)
+          file = answer.specific.reload.files.find_by(filename: 'pkg/__init__.py')
+          expect(file).to be_present
+          expect(file.content).to eq('')
+        end
+      end
+
+      context 'when uploading a binary file' do
+        it 'returns a bad request with a code the client can explain, and saves nothing' do
+          post :create_programming_files, as: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: answer.id, files_attributes: [filename: 'archive.zip', content: "PK\u0003\u0004\u0000"]
+            }
+          }
+
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['codes']).to include('binary')
+          expect(answer.specific.reload.files.map(&:filename)).not_to include('archive.zip')
+        end
+      end
     end
 
     describe '#delete_programming_file' do

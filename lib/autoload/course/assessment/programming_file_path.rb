@@ -12,6 +12,9 @@ module Course::Assessment::ProgrammingFilePath
   # folder the package puts in front of a file.
   MAX_FOLDER_BYTES = 136
 
+  # Raised when a file being saved has a path that breaks these rules.
+  class InvalidPathError < StandardError; end
+
   module_function
 
   # Finds the first rule a path breaks.
@@ -28,17 +31,40 @@ module Course::Assessment::ProgrammingFilePath
     too_long?(segments) ? :too_long : nil
   end
 
-  # Finds the first rule a set of paths breaks together, after each path is checked by {.error}.
+  # Finds the first rule that new paths break, among themselves or with the paths of existing files,
+  # after each new path is checked by {.error}. Clashes among the existing paths alone are not
+  # reported, so files saved before these rules don't block a save.
   #
-  # @param [Array<String>] paths The paths of every file in the same folder of the package.
+  # @param [Array<String>] paths The paths of the files being added.
+  # @param [Array<String>] existing The paths of the files already in the same folder of the package.
   # @return [Symbol, nil] +:duplicate+ when two paths differ only in case, +:file_folder_clash+ when a
   #   file has the same path as a folder, or nil when the paths are valid together.
-  def collection_error(paths)
+  def collection_error(paths, existing = [])
     keys = paths.map(&:downcase)
-    return :duplicate if keys.uniq.size != keys.size
+    existing_keys = existing.to_set(&:downcase)
+    return :duplicate if keys.uniq.size != keys.size || existing_keys.intersect?(keys.to_set)
 
-    folders = keys.flat_map { |key| folders_of(key) }.to_set
-    :file_folder_clash if folders.intersect?(keys.to_set)
+    new_folders = keys.flat_map { |key| folders_of(key) }.to_set
+    existing_folders = existing_keys.flat_map { |key| folders_of(key) }.to_set
+    :file_folder_clash if new_folders.intersect?(existing_keys | keys) || existing_folders.intersect?(keys.to_set)
+  end
+
+  # Writes a file at its path inside a folder, making the folders on the way, as the downloads of
+  # answers and templates need. A path that would lead out of the folder, which only a file saved
+  # before these rules could have, is skipped.
+  #
+  # @param [String] folder The folder to write into.
+  # @param [String] path The file's path, relative to the folder.
+  # @param [String] content
+  # @return [String, nil] The path written to, or nil when the file was skipped.
+  def write(folder, path, content)
+    root = File.expand_path(folder)
+    destination = File.expand_path(path, root)
+    return unless destination.start_with?("#{root}/")
+
+    FileUtils.mkdir_p(File.dirname(destination))
+    File.write(destination, content)
+    destination
   end
 
   # A segment is valid when Pathname.normalize_filename would leave it unchanged, which also rejects

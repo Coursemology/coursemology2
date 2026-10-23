@@ -19,6 +19,21 @@ RSpec.describe Course::Assessment::Question::ProgrammingTemplateFile do
           expect(subject.valid?).to be(true)
           expect(subject.filename).to eq('test/b.txt')
         end
+
+        it 'rejects a path that leaves its folder' do
+          subject.filename = '../Makefile'
+          expect(subject).not_to be_valid
+        end
+
+        it 'rejects a path that is too long to be evaluated' do
+          subject.filename = 'a' * 101
+          expect(subject).not_to be_valid
+        end
+      end
+
+      it 'accepts an empty template' do
+        subject.content = ''
+        expect(subject).to be_valid
       end
     end
 
@@ -38,6 +53,12 @@ RSpec.describe Course::Assessment::Question::ProgrammingTemplateFile do
 
       it 'has the same contents as the template' do
         expect(answer_file.content).to eq(subject.content)
+      end
+
+      it 'copies an empty template as an empty file' do
+        subject.content = ''
+        expect(answer_file.content).to eq('')
+        expect(answer_file).to be_valid
       end
     end
   end

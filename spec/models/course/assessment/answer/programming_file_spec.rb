@@ -25,6 +25,33 @@ RSpec.describe Course::Assessment::Answer::ProgrammingFile do
           expect(subject.valid?).to be(true)
           expect(subject.filename).to eq('test/b.txt')
         end
+
+        it 'rejects a path that leaves its folder' do
+          subject.filename = '../Makefile'
+          expect(subject).not_to be_valid
+        end
+
+        it 'rejects a path that is too long to be evaluated' do
+          subject.filename = 'a' * 101
+          expect(subject).not_to be_valid
+        end
+
+        it 'rejects content with a NUL byte, which a binary file has and the database cannot store' do
+          subject.content = "PK\u0003\u0004\u0000\u0000"
+          expect(subject).not_to be_valid
+          expect(subject.errors.details[:content]).to include(error: :binary)
+        end
+
+        it 'saves an empty file as a row with no content' do
+          file = create(:course_assessment_answer_programming_file, filename: '__init__.py', content: '')
+          expect(file.reload.content).to eq('')
+        end
+
+        it 'leaves a saved filename alone' do
+          file = create(:course_assessment_answer_programming_file)
+          file.update_column(:filename, 'a' * 101)
+          expect(file.reload).to be_valid
+        end
       end
     end
 

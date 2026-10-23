@@ -20,6 +20,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   accepts_nested_attributes_for :files, allow_destroy: true
 
   validate :validate_total_file_size, if: -> { files.any?(&:content_changed?) }
+  validate :validate_file_paths, if: -> { files.any?(&:filename_changed?) }
 
   def to_partial_path
     'course/assessment/answer/programming/programming'
@@ -66,8 +67,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   def download(dir)
     files.each do |src_file|
-      dst_path = File.join(dir, src_file.filename)
-      File.write(dst_path, src_file.content)
+      Course::Assessment::ProgrammingFilePath.write(dir, src_file.filename, src_file.content)
     end
   end
 
@@ -170,6 +170,14 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     # Round up to 2 decimal places, so student will see "2.01 MB" if size is slightly over
     display_total_size = (total_size.to_f / 1.megabyte).ceil(2)
     errors.add(:files, :exceed_size_limit, total_size_mb: display_total_size)
+  end
+
+  # Checks the paths of added files against each other and the answer's other files. Each file checks
+  # its own path.
+  def validate_file_paths
+    added, existing = files.reject(&:marked_for_destruction?).partition(&:filename_changed?)
+    error = Course::Assessment::ProgrammingFilePath.collection_error(added.map(&:filename), existing.map(&:filename))
+    errors.add(:files, :invalid) if error
   end
 
   def request_create_live_feedback_chat(question)

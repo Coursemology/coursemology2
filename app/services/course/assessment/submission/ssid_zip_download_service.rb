@@ -63,8 +63,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
       question_dir = create_folder(skeleton_dir, question_assessment.display_title)
       programming_question = question.specific
       programming_question.template_files.each do |template_file|
-        file_path = File.join(question_dir, template_file.filename)
-        File.write(file_path, template_file.content)
+        Course::Assessment::ProgrammingFilePath.write(question_dir, template_file.filename, template_file.content)
       end
     end
   end

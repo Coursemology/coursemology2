@@ -17,14 +17,14 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
 
     @tmp_dir = Dir.mktmpdir
     @old_meta = old_attachment.present? ? extract_meta(old_attachment, nil) : nil
-    data_files_to_keep = find_files_to_keep('data_files', old_attachment)
-    submission_files_to_keep = find_files_to_keep('submission_files', old_attachment)
-    solution_files_to_keep = find_files_to_keep('solution_files', old_attachment)
-    @meta = generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
+    data_files = package_files('data_files', old_attachment)
+    submission_files = package_files('submission_files', old_attachment)
+    solution_files = package_files('solution_files', old_attachment)
+    @meta = generate_meta(data_files, submission_files, solution_files)
 
     return nil if package_unchanged?
 
-    @attachment = generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
+    @attachment = generate_zip_file(data_files, submission_files, solution_files)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
     @attachment
   end
@@ -66,7 +66,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
     meta.as_json
   end
 
-  def generate_zip_file(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
+  def generate_zip_file(data_files, submission_files, solution_files)
     tmp = Tempfile.new(['package', '.zip'])
     autograde_pre_path = get_file_path('python_autograde_pre.py')
     autograde_post_path = get_file_path('python_autograde_post.py')
@@ -105,8 +105,8 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
     end
 
     Zip::File.open(tmp.path) do |zip|
-      add_submission_and_solution_files(zip, submission_files_to_keep, solution_files_to_keep) if submit_as_file?
-      add_data_files(zip, data_files_to_keep)
+      add_submission_and_solution_files(zip, submission_files, solution_files) if submit_as_file?
+      add_data_files(zip, data_files)
     end
 
     tmp
@@ -168,13 +168,13 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
     zip.print "\n"
   end
 
-  def generate_meta(data_files_to_keep, submission_files_to_keep, solution_files_to_keep)
+  def generate_meta(data_files, submission_files, solution_files)
     meta = default_meta
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
 
-    meta[:data_files] = files_meta('data_files', data_files_to_keep)
-    add_file_submission_meta(meta, submission_files_to_keep, solution_files_to_keep)
+    meta[:data_files] = files_meta(data_files)
+    add_file_submission_meta(meta, submission_files, solution_files)
 
     [:public, :private, :evaluation].each do |test_type|
       meta[:test_cases][test_type] = @test_params[:test_cases][test_type] || []
@@ -198,8 +198,11 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
     test_params = params.require(:question_programming).permit(
       :prepend, :append, :solution, :submission, :autograded, :submit_as_file,
       submission_files: [],
+      submission_file_paths: [],
       solution_files: [],
+      solution_file_paths: [],
       data_files: [],
+      data_file_paths: [],
       test_cases: {
         public: [:expression, :expected, :hint],
         private: [:expression, :expected, :hint],

@@ -223,6 +223,31 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
       end
     end
 
+    describe 'a programming answer with files in folders' do
+      let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
+      let!(:submission) do
+        create(:submission, :submitted, assessment: assessment, course: course, creator: student1.user).tap do |s|
+          answer = s.answers.first.specific
+          answer.files.create!(filename: 'templates/index.html', content: '<p>')
+          answer.files.create!(filename: 'templates/partials/nav.html', content: '')
+        end
+      end
+
+      it 'keeps the folders in the zip' do
+        question_title = Pathname.normalize_filename(assessment.question_assessments.first.display_title)
+        answer_folder = "#{student1.name}/#{question_title}"
+
+        file_names = Zip::File.open(service.download_and_zip) { |f| f.map(&:name) }
+
+        expect(file_names).to include("#{answer_folder}/templates/",
+                                      "#{answer_folder}/templates/index.html",
+                                      "#{answer_folder}/templates/partials/nav.html")
+        submission.answers.first.specific.files.each do |file|
+          expect(file_names).to include("#{answer_folder}/#{file.filename}")
+        end
+      end
+    end
+
     describe '#download_and_zip' do
       subject { service.download_and_zip }
 

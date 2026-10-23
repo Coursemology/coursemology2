@@ -104,7 +104,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
             submit_as_file: 'true',
             submission_files: [uploaded_file('a.py', "import b\n"), uploaded_file('b.py', 'X = None')],
             solution_files: solution_files,
-            data_files: [uploaded_file('data.txt', 'some data')],
+            data_files: data_files,
+            data_file_paths: data_files.map(&:original_filename),
             prepend: 'import a',
             append: "def x():\n    return a.b.X",
             test_cases: { public: [test_case] }
@@ -114,6 +115,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
           Course::Assessment::ProgrammingPackage.new(generated.path)
         end
         let(:solution_files) { [uploaded_file('a.py', "import b\n"), uploaded_file('b.py', 'X = 1')] }
+        let(:data_files) { [uploaded_file('data.txt', 'some data')] }
         let(:problem) { subject.send(:construct_problem_object, package) }
 
         before { question.multiple_file_submission = true }
@@ -159,6 +161,14 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
 
         it 'sends only the data files as additional files' do
           expect(problem[:additionalFiles].map { |file| file[:path] }).to eq(['data.txt'])
+        end
+
+        context 'when a data file is in a folder' do
+          let(:data_files) { [uploaded_file('data.txt', 'some data'), uploaded_file('data/codons.csv', 'AAA,K')] }
+
+          it 'sends it under its path' do
+            expect(problem[:additionalFiles]).to include(a_hash_including(path: 'data/codons.csv', content: 'AAA,K'))
+          end
         end
 
         describe 'the files generated for answers' do

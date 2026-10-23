@@ -79,5 +79,46 @@ RSpec.describe Course::Assessment::ProgrammingFilePath do
     it 'accepts folders that share a prefix with a file' do
       expect(described_class.collection_error(['temp', 'templates/index.html'])).to be_nil
     end
+
+    context 'when there are existing files' do
+      it 'rejects a new path that matches an existing one in another case' do
+        expect(described_class.collection_error(['Main.py'], ['main.py'])).to eq(:duplicate)
+      end
+
+      it 'rejects a new file at the path of an existing folder' do
+        expect(described_class.collection_error(['templates'], ['templates/index.html'])).to eq(:file_folder_clash)
+      end
+
+      it 'rejects a new file inside an existing file' do
+        expect(described_class.collection_error(['main.py/x.py'], ['main.py'])).to eq(:file_folder_clash)
+      end
+
+      it 'ignores clashes among the existing paths alone' do
+        expect(described_class.collection_error(['other.py'], ['Main.py', 'main.py'])).to be_nil
+      end
+    end
+  end
+
+  describe '.write' do
+    # A folder holding the one written into, so that anything written beside it is caught.
+    let(:parent) { Dir.mktmpdir }
+    let(:folder) { File.join(parent, 'folder').tap { |path| Dir.mkdir(path) } }
+    after { FileUtils.remove_entry(parent) }
+
+    it 'writes a file in a folder, making the folder' do
+      path = described_class.write(folder, 'templates/index.html', '<p>')
+      expect(path).to eq(File.join(folder, 'templates/index.html'))
+      expect(File.read(path)).to eq('<p>')
+    end
+
+    it 'writes an empty file' do
+      described_class.write(folder, 'empty.py', '')
+      expect(File.read(File.join(folder, 'empty.py'))).to eq('')
+    end
+
+    it 'skips a path that leads out of the folder' do
+      expect(described_class.write(folder, '../escaped/file.txt', 'x')).to be_nil
+      expect(Dir.children(parent)).to eq(['folder'])
+    end
   end
 end
