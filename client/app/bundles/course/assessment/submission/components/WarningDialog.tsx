@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -10,9 +11,9 @@ import {
 
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatHumanizedDuration } from 'lib/moment';
 
 import { TIME_LAPSE_NEW_SUBMISSION_MS, workflowStates } from '../constants';
-import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBanner';
 import { getAssessment } from '../selectors/assessments';
 import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
@@ -20,6 +21,7 @@ import { getForceSubmitRemainingTime } from '../utils/timer';
 
 const WarningDialog: FC = () => {
   const { t } = useTranslation();
+  const intl = useIntl();
 
   const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
@@ -57,7 +59,7 @@ const WarningDialog: FC = () => {
   if (examNotice && timedNotice) {
     dialogTitle = t(translations.timedExamDialogTitle, {
       isNewSubmission,
-      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
+      remainingTime: formatHumanizedDuration(intl, remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
     });
     dialogMessage = t(translations.timedExamDialogMessage, {
@@ -69,7 +71,7 @@ const WarningDialog: FC = () => {
   } else if (timedNotice) {
     dialogTitle = t(translations.timedAssessmentDialogTitle, {
       isNewSubmission,
-      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
+      remainingTime: formatHumanizedDuration(intl, remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
     });
     dialogMessage = t(translations.timedAssessmentDialogMessage, {

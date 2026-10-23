@@ -4208,15 +4208,6 @@
   "course.assessment.submission.studentView": {
     "defaultMessage": "학생 보기"
   },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
-    "defaultMessage": "{hrs, plural, other {#시간}} {mins, plural, =0 {} other {#분}} {secs, plural, =0 {} other {#초}}"
-  },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
-    "defaultMessage": "{mins, plural, other {#분}} {secs, plural, =0 {} other {#초}}"
-  },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
-    "defaultMessage": "{secs, plural, other {#초}}"
-  },
   "course.assessment.submission.SubmissionEditIndex.observingAttemptWarning": {
     "defaultMessage": "이 사용자는 아직 제출물을 최종 제출하지 않았습니다. 이 페이지에서 수정한 내용은 답안에 직접 반영되며, 자동 채점 결과에 영향을 줄 수 있습니다."
   },

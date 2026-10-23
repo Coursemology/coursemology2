@@ -1,8 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { HourglassTop } from '@mui/icons-material';
 
 import Banner from 'lib/components/core/layouts/Banner';
+import useTranslation from 'lib/hooks/useTranslation';
+import { formatHumanizedDuration } from 'lib/moment';
 
 import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../../constants';
 import translations from '../../translations';
@@ -11,56 +13,27 @@ interface Props {
   forceSubmitRemainingTime: number;
 }
 
-// The countdown display only formats up to 24 hours (hours are shown modulo 24), so the banner is
-// hidden while more than a day remains and appears once the deadline is within 24 hours.
-const HIDE_ABOVE_MS = 24 * 60 * 60 * 1000;
+// Beyond a day away, the banner can sit on screen for weeks, so it is styled as a quiet notice:
+// black on white, delineated with the site's default blue on the two edges that meet the page.
+// Within the day, and once the deadline has passed, it keeps its original urgent styling.
+const DISTANT_CLASS_NAME =
+  'bg-white text-black border-only-b-info border-only-l-info';
+const IMMINENT_CLASS_NAME = 'bg-red-700 text-white border-only-b-fuchsia-200';
+const PAST_DEADLINE_CLASS_NAME =
+  'bg-yellow-700 text-white border-only-b-fuchsia-200';
 
-export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
-  const hours = Math.floor(remainingTime / 1000 / 60 / 60) % 24;
-  const minutes = Math.floor(remainingTime / 1000 / 60) % 60;
-  const seconds = Math.floor(remainingTime / 1000) % 60;
+// The countdown is shown only while there is at least a whole second left to name. Below that
+// formatHumanizedDuration has no unit to report, and the banner is a tick away from the finalising
+// message anyway.
+const MILLISECONDS_IN_A_SECOND = 1000;
 
-  if (hours > 0) {
-    return (
-      <FormattedMessage
-        {...translations.hoursMinutesSeconds}
-        values={{
-          hrs: hours,
-          mins: minutes,
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  if (minutes > 0) {
-    return (
-      <FormattedMessage
-        {...translations.minutesSeconds}
-        values={{
-          mins: minutes,
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  if (seconds >= 0) {
-    return (
-      <FormattedMessage
-        {...translations.seconds}
-        values={{
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  return <div />;
-};
+// Above this, the deadline is far enough off that an alarm-coloured banner would be noise.
+const DISTANT_DEADLINE_MS = 24 * 60 * 60 * 1000;
 
 const TimeLimitBanner: FC<Props> = (props) => {
   const { forceSubmitRemainingTime } = props;
+  const { t } = useTranslation();
+  const intl = useIntl();
 
   const [currentRemainingTime, setCurrentRemainingTime] = useState(
     forceSubmitRemainingTime,
@@ -79,52 +52,44 @@ const TimeLimitBanner: FC<Props> = (props) => {
         forceSubmitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS - currentTime;
 
       setCurrentRemainingTime(remainingSeconds);
-
-      if (remainingSeconds < 0) {
-        setCurrentBufferTime(remainingBufferSeconds);
-      }
-    }, 1000);
+      // Tracked from the start rather than only once past the deadline, so it is never read while
+      // still holding its initial value.
+      setCurrentBufferTime(remainingBufferSeconds);
+    }, MILLISECONDS_IN_A_SECOND);
 
     return () => clearInterval(interval);
   }, [forceSubmitRemainingTime]);
 
-  // The interval above keeps currentRemainingTime fresh, so this flips on automatically once the
-  // deadline comes within 24h without needing a separate timer.
-  if (currentRemainingTime > HIDE_ABOVE_MS) return null;
+  const isCountingDown = currentRemainingTime >= MILLISECONDS_IN_A_SECOND;
+  const isDistant = currentRemainingTime > DISTANT_DEADLINE_MS;
 
-  let TimeBanner: JSX.Element;
+  let message: string;
+  let className: string;
 
-  if (currentRemainingTime > 0) {
-    TimeBanner = (
-      <Banner
-        className="bg-red-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0 z-dropdown"
-        icon={<HourglassTop />}
-      >
-        <FormattedMessage
-          {...translations.remainingTime}
-          values={{ timeLimit: remainingTimeDisplay(currentRemainingTime) }}
-        />
-      </Banner>
-    );
+  if (isCountingDown) {
+    message = t(translations.remainingTime, {
+      timeLimit: formatHumanizedDuration(intl, currentRemainingTime),
+    });
+    className = isDistant ? DISTANT_CLASS_NAME : IMMINENT_CLASS_NAME;
+  } else if (currentBufferTime > 0) {
+    message = t(translations.remainingBufferTime, {
+      timeLimit: formatHumanizedDuration(intl, currentBufferTime),
+    });
+    className = PAST_DEADLINE_CLASS_NAME;
   } else {
-    TimeBanner = (
-      <Banner
-        className="bg-yellow-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0 z-dropdown"
-        icon={<HourglassTop />}
-      >
-        {currentBufferTime > 0 ? (
-          <FormattedMessage
-            {...translations.remainingBufferTime}
-            values={{ timeLimit: remainingTimeDisplay(currentBufferTime) }}
-          />
-        ) : (
-          <FormattedMessage {...translations.timeIsUp} />
-        )}
-      </Banner>
-    );
+    message = t(translations.timeIsUp);
+    className = PAST_DEADLINE_CLASS_NAME;
   }
 
-  return TimeBanner;
+  return (
+    <Banner
+      className={`fixed top-0 right-0 z-dropdown ${className}`}
+      // The other variants are white on a dark fill, where the icon should inherit the text colour.
+      icon={<HourglassTop className={isDistant ? 'text-info' : undefined} />}
+    >
+      {message}
+    </Banner>
+  );
 };
 
 export default TimeLimitBanner;
