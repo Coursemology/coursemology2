@@ -45,6 +45,25 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#files' do
+      it 'returns the files in the order they were created, however they are edited' do
+        answer.specific.files.build(filename: 'b.py', content: 'b')
+        answer.specific.files.build(filename: 'c.py', content: 'c')
+        answer.specific.save!
+        files_in_order = -> { described_class.find(answer.specific.id).files.map(&:filename) }
+        created_order = files_in_order.call
+
+        created_order.each do |filename|
+          reloaded = described_class.find(answer.specific.id)
+          file = reloaded.files.find { |f| f.filename == filename }
+          edit = { id: file.id, content: "edited #{filename}" }
+          reloaded.create_and_update_files(files_attributes: [edit])
+
+          expect(files_in_order.call).to eq(created_order)
+        end
+      end
+    end
+
     describe '#graded_auto_grading' do
       # A run's programming record is attached only when its grading completes.
       def finished_run

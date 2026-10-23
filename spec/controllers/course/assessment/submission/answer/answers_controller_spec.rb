@@ -58,6 +58,41 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
       end
     end
 
+    context 'when a student saves a programming answer with several files' do
+      let(:course) { create(:course) }
+      let(:student) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, :published, :with_programming_file_submission_question, course: course) }
+      let(:submission) { create(:submission, :attempting, assessment: assessment, creator: student) }
+      let(:answer) { submission.answers.first }
+      let!(:files) do
+        programming_answer = answer.specific
+        programming_answer.files.build(filename: 'Second.java', content: 'class Second {}')
+        programming_answer.save!
+        programming_answer.files.to_a
+      end
+
+      before { controller_sign_in(controller, student) }
+
+      describe '#update' do
+        render_views
+
+        it 'saves each file by id, in whatever order the files are sent' do
+          patch :update, format: :json, params: {
+            course_id: course, assessment_id: assessment, submission_id: submission, id: answer.id,
+            answer: { id: answer.id, files_attributes: files.reverse.map do |file|
+              { id: file.id, filename: file.filename, content: "edited #{file.filename}" }
+            end }
+          }
+
+          expect(response).to have_http_status(:ok)
+          expect(answer.specific.files.reload.to_h { |file| [file.filename, file.content] }).
+            to eq(files.to_h { |file| [file.filename, "edited #{file.filename}"] })
+          expect(JSON.parse(response.body)['fields']['files_attributes'].map { |file| file['id'] }).
+            to eq(files.map(&:id).sort)
+        end
+      end
+    end
+
     context 'when a student submits an answer' do
       let(:course) { create(:course, :enrollable) }
       let(:submitter) { create(:course_student, course: course).user }

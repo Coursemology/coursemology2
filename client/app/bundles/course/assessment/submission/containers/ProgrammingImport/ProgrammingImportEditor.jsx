@@ -52,8 +52,10 @@ const SelectProgrammingFileEditor = ({
         }
         if (file.filename === displayFileName && !file.staged) {
           return (
+            // The editor is bound to the file's position, so it must remount if the file moves:
+            // a mounted editor keeps showing the value of the position it was created for.
             <Editor
-              key={file.id}
+              key={`${file.id}-${index}`}
               editorRef={editorRef}
               fieldName={`${answerId}.files_attributes.${index}.content`}
               file={file}

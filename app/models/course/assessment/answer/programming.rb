@@ -7,8 +7,11 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   acts_as :answer, class_name: 'Course::Assessment::Answer'
 
-  has_many :files, class_name: 'Course::Assessment::Answer::ProgrammingFile',
-                   foreign_key: :answer_id, dependent: :destroy, inverse_of: :answer
+  # Ordered so that every response lists the files the same way. Without an order, an edited file
+  # can come back in a different position, and the client's form, which binds files by position,
+  # reorders under the student.
+  has_many :files, -> { order(:id) }, class_name: 'Course::Assessment::Answer::ProgrammingFile',
+                                      foreign_key: :answer_id, dependent: :destroy, inverse_of: :answer
 
   # @!attribute [r] job
   #   This might be null if the job has been cleared.
