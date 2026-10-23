@@ -149,18 +149,12 @@ VisibleImportedFileView.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const {
-    displayFileName,
-    handleFileTabbing,
-    handleDeleteFile,
-    files,
-    viewHistory,
-  } = ownProps;
+  const { displayFileName, handleFileTabbing, handleDeleteFile, files } =
+    ownProps;
   const { submission } = state.assessments.submission;
   const canDestroyFiles =
     submission.workflowState === workflowStates.Attempting &&
-    submission.isCreator &&
-    !viewHistory;
+    submission.isCreator;
 
   return {
     canDestroyFiles,
