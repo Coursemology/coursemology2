@@ -10,12 +10,9 @@ import {
   PythonMetadata,
 } from 'types/course/assessment/question/programming';
 
-import {
-  isDraftable,
-  isMarked,
-  unwrap,
-} from '../components/common/DataFileRow';
 import { attachment, isAttached } from '../components/common/PackageUploader';
+
+import { isDraftable, isMarked, unwrap } from './draftFiles';
 
 const buildKey = (
   path: string[],
@@ -48,6 +45,9 @@ const appendInto = <T>(
   data.append(key, shouldBeRaw(value) ? value ?? '' : JSON.stringify(value));
 };
 
+// Rack keeps only the last part of an upload's name, so each upload's path goes in a parallel
+// `*_file_paths[]` array, in the same order. Deletions are an array of paths too: as hash keys, a
+// name with brackets would be split apart.
 const appendFilesInto = (
   data: FormData,
   type: string,
@@ -55,10 +55,10 @@ const appendFilesInto = (
 ): void =>
   files?.forEach((file) => {
     if (isMarked(file)) {
-      const filename = unwrap(file).filename;
-      appendInto(data, [`${type}_files_to_delete`, filename], 'on');
+      appendInto(data, [`${type}_files_to_delete`, ''], unwrap(file).filename);
     } else if (isDraftable(file) && file.raw) {
       appendInto(data, [`${type}_files`, ''], file.raw);
+      appendInto(data, [`${type}_file_paths`, ''], file.filename);
     }
   });
 
