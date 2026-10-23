@@ -11,7 +11,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
     if update_answer_files_attributes(create_programming_files_params)
       render @programming_answer.answer
     else
-      render json: { errors: @programming_answer.errors }, status: :bad_request
+      render json: { errors: @programming_answer.errors, codes: error_codes }, status: :bad_request
     end
   end
 
@@ -42,5 +42,10 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
 
   def delete_programming_file(file_id)
     @programming_answer.delete_file(file_id)
+  end
+
+  # Why the save failed, as error types such as `binary`, for the client to explain in its own words.
+  def error_codes
+    @programming_answer.errors.map(&:type).uniq
   end
 end

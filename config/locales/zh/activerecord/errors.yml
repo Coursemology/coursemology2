@@ -33,6 +33,10 @@ zh:
           attributes:
             files:
               exceed_size_limit: '您的答案 (%{total_size_mb} MB) 必须小于 2 MB。'
+        course/assessment/answer/programming_file:
+          attributes:
+            content:
+              binary: '必须是文本，无法上传二进制文件'
         course/assessment/answer/text_response:
           attributes:
             attachments:
