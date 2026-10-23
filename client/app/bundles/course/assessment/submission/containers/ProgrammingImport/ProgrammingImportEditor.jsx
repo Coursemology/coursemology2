@@ -9,7 +9,7 @@ import {
 } from '../../actions/answers/programming';
 import Editor from '../../components/Editor';
 import FileInputField from '../../components/FileInput';
-import { fileShape, questionShape } from '../../propTypes';
+import { questionShape } from '../../propTypes';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import ImportedFileView from './ImportedFileView';
@@ -84,17 +84,6 @@ SelectProgrammingFileEditor.propTypes = {
   ]),
 };
 
-const renderProgrammingHistoryEditor = (answer, displayFileName) => {
-  const file = answer.files_attributes.find(
-    (elem) => elem.filename === displayFileName,
-  );
-  if (!file) {
-    return null;
-  }
-
-  return <ReadOnlyEditor key={answer.id} answerId={answer.id} file={file} />;
-};
-
 const handleStageFiles = async (filesToImport) => {
   // Create a map of promises that will resolve all files are read
   const readerPromises = Object.keys(filesToImport).map(
@@ -129,17 +118,14 @@ const VisibleProgrammingImportEditor = (props) => {
     editorRef,
     disabled,
     dispatch,
-    historyAnswers,
     question,
     readOnly,
     displayFileName,
     setDisplayFileName,
     saveAnswerAndUpdateClientVersion,
-    viewHistory,
   } = props;
   const { control, resetField, getValues } = useFormContext();
-  const currentAnswer = useWatch({ control });
-  const answers = viewHistory ? historyAnswers : currentAnswer;
+  const answers = useWatch({ control });
 
   const files = answers[answerId]
     ? answers[answerId].files_attributes ||
@@ -195,26 +181,20 @@ const VisibleProgrammingImportEditor = (props) => {
           files={files}
           handleDeleteFile={handleDeleteFile}
           handleFileTabbing={(filename) => setDisplayFileName(filename)}
-          viewHistory={viewHistory}
         />
       )}
-      {viewHistory ? (
-        renderProgrammingHistoryEditor(answers[answerId], displayFileName)
-      ) : (
-        <SelectProgrammingFileEditor
-          {...{
-            answerId,
-            editorRef,
-            readOnly,
-            question,
-            displayFileName,
-            viewHistory,
-            saveAnswerAndUpdateClientVersion,
-            language: question.editorMode,
-          }}
-        />
-      )}
-      {readOnly || viewHistory ? null : (
+      <SelectProgrammingFileEditor
+        {...{
+          answerId,
+          editorRef,
+          readOnly,
+          question,
+          displayFileName,
+          saveAnswerAndUpdateClientVersion,
+          language: question.editorMode,
+        }}
+      />
+      {readOnly ? null : (
         <FileInputField
           disabled={disabled}
           isMultipleAttachmentsAllowed
@@ -239,12 +219,6 @@ VisibleProgrammingImportEditor.propTypes = {
   dispatch: PropTypes.func,
   question: questionShape,
   readOnly: PropTypes.bool,
-  viewHistory: PropTypes.bool,
-  historyAnswers: PropTypes.shape({
-    id: PropTypes.number,
-    questionId: PropTypes.number,
-    files_attributes: PropTypes.arrayOf(fileShape),
-  }),
   displayFileName: PropTypes.string,
   setDisplayFileName: PropTypes.func,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
@@ -255,20 +229,13 @@ VisibleProgrammingImportEditor.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { answerId, question, readOnly, viewHistory, isSavingAnswer } =
-    ownProps;
-  const { submissionFlags, history } = state.assessments.submission;
-
-  let historyAnswers;
-  if (viewHistory) {
-    historyAnswers = history.answers;
-  }
+  const { answerId, question, readOnly, isSavingAnswer } = ownProps;
+  const { submissionFlags } = state.assessments.submission;
   const disabled = submissionFlags.isSaving || isSavingAnswer;
 
   return {
     answerId,
     disabled,
-    historyAnswers,
     question,
     readOnly,
   };

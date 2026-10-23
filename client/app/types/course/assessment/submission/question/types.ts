@@ -118,7 +118,6 @@ export interface SubmissionQuestionBaseData extends QuestionData {
   liveFeedbackEnabled?: boolean;
   attemptsLeft?: number;
   attemptLimit?: number;
-  viewHistory?: boolean;
 }
 
 export type SubmissionQuestionData<T extends keyof typeof QuestionType> =
