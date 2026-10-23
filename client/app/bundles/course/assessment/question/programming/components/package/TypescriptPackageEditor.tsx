@@ -4,7 +4,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 import ControlledEditor from '../common/ControlledEditor';
-import DataFilesManager from '../common/DataFilesManager';
+import QuestionFilesManager from '../common/QuestionFilesManager';
 import ReorderableTestCasesManager from '../ReorderableTestCasesManager';
 
 import PackageEditor, { PackageEditorProps } from './PackageEditor';
@@ -65,7 +65,7 @@ const TypescriptPackageEditor = (props: PackageEditorProps): JSX.Element => {
       </PackageEditor.CodeInserts>
 
       <PackageEditor.DataFiles>
-        <DataFilesManager
+        <QuestionFilesManager
           disabled={props.disabled}
           name="testUi.metadata.dataFiles"
         />

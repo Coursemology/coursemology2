@@ -2,10 +2,10 @@ import { ComponentProps } from 'react';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 
-import DataFilesManager from './DataFilesManager';
+import QuestionFilesManager from './QuestionFilesManager';
 
 interface DataFilesAccordionProps
-  extends ComponentProps<typeof DataFilesManager> {
+  extends ComponentProps<typeof QuestionFilesManager> {
   title: string;
   disabled?: boolean;
   subtitle?: string;
@@ -16,7 +16,9 @@ const DataFilesAccordion = (props: DataFilesAccordionProps): JSX.Element => {
 
   return (
     <Accordion disabled={disabled} subtitle={subtitle} title={title}>
-      <DataFilesManager {...otherProps} headless toolbarClassName="p-5" />
+      <div className="p-5">
+        <QuestionFilesManager disabled={disabled} {...otherProps} />
+      </div>
     </Accordion>
   );
 };
