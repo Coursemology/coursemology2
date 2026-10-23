@@ -4202,15 +4202,6 @@
   "course.assessment.submission.studentView": {
     "defaultMessage": "学生视角"
   },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
-    "defaultMessage": "{hrs, plural, other {#小时}} {mins, plural, =0 {} other {#分钟}} {secs, plural, =0 {} other {#秒}}"
-  },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
-    "defaultMessage": "{mins, plural, other {#分钟}} {secs, plural, =0 {} other {#秒}}"
-  },
-  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds": {
-    "defaultMessage": "{secs, plural, other {#秒}}"
-  },
   "course.assessment.submission.SubmissionEditIndex.observingAttemptWarning": {
     "defaultMessage": "该用户尚未最终提交其作答。在此页面所做的修改将直接影响答案，并可能影响自动评分结果。"
   },

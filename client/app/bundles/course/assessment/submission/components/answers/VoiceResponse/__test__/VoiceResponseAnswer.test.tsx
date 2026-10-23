@@ -145,9 +145,14 @@ describe('<VoiceResponseAnswer />', () => {
 
     await waitFor(() => expect(save).toHaveBeenCalledWith(answerIdOf(1)));
     expect(save).toHaveBeenCalledTimes(1);
-    expect(document.querySelector('audio')).toHaveAttribute(
-      'src',
-      'blob:recording',
+    // `save` is called synchronously after `field.onChange`, but react-hook-form propagates the new
+    // value to subscribers on a later flush, so the preview is not necessarily mounted by the time
+    // the wait above resolves. Wait for it rather than asserting against that ordering.
+    await waitFor(() =>
+      expect(document.querySelector('audio')).toHaveAttribute(
+        'src',
+        'blob:recording',
+      ),
     );
     await waitFor(() =>
       expect(screen.getAllByRole('button', { name: START })[0]).toBeEnabled(),

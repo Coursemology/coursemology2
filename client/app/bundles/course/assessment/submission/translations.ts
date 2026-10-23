@@ -720,23 +720,6 @@ const translations = defineMessages({
       'This user has not yet finalised their submission. Edits made on this \
 page will affect answers directly, which can influence auto grading results.',
   },
-  hoursMinutesSeconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds',
-    defaultMessage:
-      '{hrs, plural, one {# hour} other {# hours}} \
-    {mins, plural, =0 {} one {# minute} other {# minutes}} \
-    {secs, plural, =0 {} one {# second} other {# seconds}}',
-  },
-  minutesSeconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
-    defaultMessage:
-      '{mins, plural, one {# minute} other {# minutes}} \
-    {secs, plural, =0 {} one {# second} other {# seconds}}',
-  },
-  seconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.seconds',
-    defaultMessage: '{secs, plural, one {# second} other {# seconds}}',
-  },
 });
 
 export const scribingTranslations = defineMessages({
