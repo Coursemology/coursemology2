@@ -192,6 +192,51 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
     end
   end
 
+  describe '#unzip_file' do
+    # A folder holding the destination, so that anything written beside the destination is caught.
+    let(:parent) { Dir.mktmpdir }
+    let(:destination) { File.join(parent, 'destination') }
+    after { FileUtils.remove_entry(parent) }
+
+    def zip_with(entries)
+      path = "#{temp_package_path}.zip"
+      Zip::OutputStream.open(path) do |zip|
+        entries.each do |name, content|
+          zip.put_next_entry(name)
+          zip.write(content)
+        end
+      end
+      open_package(path)
+    end
+
+    def files_under(folder)
+      Dir.glob('**/*', File::FNM_DOTMATCH, base: folder).reject { |path| File.basename(path) == '.' }
+    end
+
+    it 'extracts a nested file, and an empty one, making the folders the zip has no entries for' do
+      zip_with('submission/templates/index.html' => '<html>', 'empty.py' => '').unzip_file(destination)
+
+      expect(File.read(File.join(destination, 'submission/templates/index.html'))).to eq('<html>')
+      expect(File.read(File.join(destination, 'empty.py'))).to eq('')
+    end
+
+    it 'makes nothing outside the destination for an entry that leads out of it' do
+      zip_with('../escaped/nested/file.txt' => 'x', 'kept.txt' => 'y').unzip_file(destination)
+
+      expect(files_under(parent)).to contain_exactly('destination', 'destination/kept.txt')
+    end
+
+    it 'writes nothing through a symlink in the destination that leads out of it' do
+      outside = File.join(parent, 'outside')
+      FileUtils.mkdir_p([outside, destination])
+      File.symlink(outside, File.join(destination, 'link'))
+
+      zip_with('link/nested/file.txt' => 'x', 'link/file.txt' => 'x').unzip_file(destination)
+
+      expect(files_under(outside)).to be_empty
+    end
+  end
+
   describe '#ensure_file_open!' do
     context 'when the file cannot be opened' do
       it 'raises an IllegalStateError' do

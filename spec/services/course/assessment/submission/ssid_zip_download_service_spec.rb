@@ -41,6 +41,25 @@ RSpec.describe Course::Assessment::Submission::SsidZipDownloadService do
       end
     end
 
+    describe 'files in folders' do
+      let(:question) { assessment.questions.first.specific }
+      let(:question_title) { Pathname.normalize_filename(question.question_assessments.first.display_title) }
+
+      # The submission is made after the template, so its answer starts with a copy of it.
+      before do
+        question.template_files.create!(filename: 'templates/index.html', content: '<p>')
+        submission1
+      end
+
+      it 'keeps the folders of the templates and the answers' do
+        file_names = service.download_and_zip.flat_map { |zip| Zip::File.open(zip) { |f| f.map(&:name) } }
+
+        expect(file_names).to include("skeleton/#{question_title}/templates/index.html")
+        # Answer files take the language's extension, as SSID compares files of one language.
+        expect(file_names).to include("#{submission1.id}_#{student1.name}/#{question_title}/templates/index.py")
+      end
+    end
+
     describe '#download_and_zip' do
       subject { service.download_and_zip }
 

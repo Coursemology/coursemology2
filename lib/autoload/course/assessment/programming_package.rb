@@ -167,10 +167,17 @@ class Course::Assessment::ProgrammingPackage
   # @param [String] Path to folder.
   def unzip_file(destination)
     ensure_file_open!
+    FileUtils.mkdir_p(destination)
+    root = File.realpath(destination)
     @file.each do |entry|
-      entry_path = File.join(destination, entry.name)
-      FileUtils.mkdir_p(destination)
-      @file.extract(entry, destination_directory: destination) unless File.exist?(entry_path)
+      entry_path = File.expand_path(entry.name, root)
+      # rubyzip skips an entry that would land outside the folder, but only once its folders are
+      # made, so such an entry is skipped before anything is made for it.
+      next unless inside_folder?(root, entry_path)
+
+      # A nested file needn't have entries for its folders, and rubyzip doesn't create them.
+      FileUtils.mkdir_p(File.dirname(entry_path))
+      @file.extract(entry, destination_directory: root) unless File.exist?(entry_path)
     end
   end
 
@@ -221,6 +228,21 @@ class Course::Assessment::ProgrammingPackage
     raise IllegalStateError unless @file
   end
 
+  # Whether a path is inside a folder once the symlinks along it are followed, so that a symlink
+  # left in the folder can't lead out of it. Only the part of the path that exists can be followed.
+  #
+  # @param [String] folder The folder's real path.
+  # @param [String] path An absolute path, with no +..+ in it.
+  # @return [Boolean]
+  def inside_folder?(folder, path)
+    path = File.dirname(path) until File.exist?(path) || File.symlink?(path)
+    real_path = File.realpath(path)
+    real_path == folder || real_path.start_with?("#{folder}#{File::SEPARATOR}")
+  rescue SystemCallError
+    # A symlink that leads nowhere can't be followed, so where it leads can't be checked.
+    false
+  end
+
   def remove_folder_files(folder_path)
     @file.glob("#{folder_path}/**/*").each do |entry|
       @file.remove(entry)
@@ -252,17 +274,26 @@ class Course::Assessment::ProgrammingPackage
     @file.read(file_path)
   end
 
-  # Get the contents of all files in the main directory of the package.
+  # Get the contents of all files in the main directory of the package, and of the data files the
+  # online editor put in folders. Other folders are left out: a zip built by hand can hold folders
+  # such as +__MACOSX/+ that aren't meant for the package.
   #
   # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
   #   file.
   def retrieve_files_in_main_dir
     ensure_file_open!
-    @file.glob('*').map do |entry|
-      next if entry.directory?
+    top_level = @file.glob('*').reject(&:directory?)
+    (top_level + nested_data_file_entries).to_h do |entry|
+      [Pathname.new(entry.name), entry.get_input_stream(&:read)]
+    end
+  end
 
-      entry_file_name = Pathname.new(entry.name)
-      [entry_file_name, entry.get_input_stream(&:read)]
-    end.compact.to_h
+  # @return [Array<Zip::Entry>] The entries of the data files in folders that the +.meta+ lists.
+  def nested_data_file_entries
+    meta = meta_file
+    return [] if meta.blank?
+
+    filenames = JSON.parse(meta)['data_files']&.pluck('filename') || []
+    filenames.select { |filename| filename.include?('/') }.filter_map { |filename| @file.find_entry(filename) }
   end
 end

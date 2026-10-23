@@ -45,6 +45,21 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#download' do
+      it 'writes each file at its path, in its folders' do
+        answer.specific.files.build(filename: 'templates/index.html', content: '<p>')
+        answer.specific.save!
+
+        Dir.mktmpdir do |dir|
+          answer.specific.download(dir)
+
+          expect(File.read(File.join(dir, 'templates/index.html'))).to eq('<p>')
+          expect(Dir.glob('**/*', base: dir).select { |path| File.file?(File.join(dir, path)) }).
+            to match_array(answer.specific.files.map(&:filename))
+        end
+      end
+    end
+
     describe '#files' do
       it 'returns the files in the order they were created, however they are edited' do
         answer.specific.files.build(filename: 'b.py', content: 'b')
@@ -180,6 +195,30 @@ RSpec.describe Course::Assessment::Answer::Programming do
           stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
           answer = build(:course_assessment_answer_programming, file_contents: [invalid_content])
           expect(answer).not_to be_valid
+        end
+      end
+
+      context 'when files are added' do
+        def add_files(*filenames)
+          answer.specific.create_and_update_files(
+            files_attributes: filenames.map { |filename| { filename: filename, content: '' } }
+          )
+        end
+
+        it 'accepts files in folders' do
+          expect(add_files('templates/index.html', 'static/style.css')).to be(true)
+        end
+
+        it 'rejects two files whose paths differ only in case' do
+          expect(add_files('helper.py', 'Helper.py')).to be(false)
+          expect(answer.specific.errors[:files]).to be_present
+        end
+
+        it 'rejects a file at the path of an existing folder' do
+          add_files('templates/index.html')
+
+          expect(add_files('templates')).to be(false)
+          expect(answer.specific.errors[:files]).to be_present
         end
       end
     end

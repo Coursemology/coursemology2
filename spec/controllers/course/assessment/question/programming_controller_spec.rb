@@ -163,6 +163,29 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         end
       end
 
+      context 'when an uploaded file has an invalid path' do
+        include ProgrammingPackageServiceHelpers
+
+        run_rescue
+
+        let!(:programming_question) do
+          create(:course_assessment_question_programming, assessment: assessment, language: existing_language)
+        end
+        let(:question_programming_attributes) do
+          {
+            title: 'Renamed', language_id: existing_language.id, autograded: 'true',
+            test_cases: { public: [expression: 'f()', expected: '1', hint: ''] },
+            data_files: [uploaded_file('data.txt', 'x')], data_file_paths: ['../data.txt']
+          }
+        end
+
+        it 'returns bad request and saves nothing' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+          expect(programming_question.reload.title).not_to eq('Renamed')
+        end
+      end
+
       context 'when attaching a template package' do
         include Rails.application.routes.url_helpers
 

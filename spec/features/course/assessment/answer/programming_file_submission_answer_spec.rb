@@ -21,60 +21,55 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         File.join(Rails.root, 'spec/fixtures/files/template_file_2')
       end
 
+      # The answer's files are the rows of its file tree.
+      def file_tree
+        find('[role="tree"]')
+      end
+
+      def saved_filenames(submission)
+        submission.answers.first.specific.reload.files.map(&:filename)
+      end
+
       scenario 'I can only upload new programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        file_view = find('h6', text: 'Uploaded Files:').find(:xpath, '..')
-        dropzone = find('.dropzone-input')
-        file_input = dropzone.find('input', visible: false)
+        # The question's template file
+        expect(file_tree).to have_css('[role="treeitem"]', count: 1)
+        file_input = find('input[data-testid="file-tree-add-files"]', visible: false)
 
-        # Stage the file to upload
         file_input.set(file_path)
+        expect(file_tree).to have_css('[role="treeitem"][aria-label="template_file"]')
+        expect(file_tree).to have_css('[role="treeitem"]', count: 2)
 
-        # The file should show in the dropzone
-        expect(file_view).to have_css('span', count: 1)
-        expect(dropzone).to have_css('span', text: 'template_file')
-
-        wait_for_autosave
-
-        # The upload should be successful and the staged file should not be in the dropzone
-        # The newly uploaded file should show as a new file tab
-        expect(dropzone).to have_no_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', count: 2)
-
-        # Stage the same file again and attempt to upload
-        # (Need to set to another file first before setting again to the first file)
         file_input.set(file_path2)
-        wait_for_autosave
+        expect(file_tree).to have_css('[role="treeitem"][aria-label="template_file_2"]')
+        expect(file_tree).to have_css('[role="treeitem"]', count: 3)
 
+        # A file with the name of one already uploaded is turned away, and nothing more is saved
         file_input.set(file_path)
-        wait_for_autosave
-
-        # The upload should fail and the staged file should be gone from dropzone
-        # There should still be only 2 files in the question
-        expect(dropzone).to have_no_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', count: 3)
+        expect(page).to have_text('A file or folder with this name already exists here.')
+        expect(file_tree).to have_css('[role="treeitem"]', count: 3)
+        expect(saved_filenames(submission)).to contain_exactly(
+          submission.assessment.questions.first.specific.template_files.first.filename,
+          'template_file', 'template_file_2'
+        )
       end
 
       scenario 'I can delete existing programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission2)
 
-        file_view = find('h6', text: 'Uploaded Files:').find(:xpath, '..')
-
         # There should be a single programming file in the submission
-        expect(file_view).to have_css('span', count: 1)
+        expect(file_tree).to have_css('[role="treeitem"]', count: 1)
 
-        # Click on the delete button and confirm
-        delete_button = file_view.find('svg')
-        delete_button.click
-        click_button('Delete')
-        expect(page).to have_no_button('Delete')
+        # Click on the row's delete button and confirm
+        file_tree.find('[role="treeitem"]').find_button('Delete').click
+        within('[role="dialog"]') { click_button('Delete') }
+        expect(page).to have_no_css('[role="dialog"]')
 
-        # It should indicate that there are no files uploaded
-        # Original programming file in the question should have been deleted
-        expect(file_view).to have_text('No files uploaded.')
-        expect(file_view).to have_no_css('span', text: /file_/)
+        # The original programming file in the question should have been deleted
+        expect(page).to have_text('No files yet.')
+        expect(page).to have_no_css('[role="treeitem"]')
+        expect(saved_filenames(submission2)).to be_empty
       end
     end
   end

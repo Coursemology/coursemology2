@@ -5,6 +5,7 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
 
   validates :content, exclusion: [nil]
   validates :filename, length: { maximum: 255 }, presence: true
+  validate :validate_filename_path, if: :filename_changed?
   validates :answer, presence: true
   validates :filename, uniqueness: { scope: [:answer_id],
                                      case_sensitive: false, if: -> { answer_id? && filename_changed? } }
@@ -42,5 +43,11 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   # Normalises the filename for use across platforms.
   def normalize_filename
     self.filename = Pathname.normalize_path(filename)
+  end
+
+  # Runs after normalisation, so it mostly catches what normalisation can't fix: a path that is too
+  # long, or one whose +..+ became an empty segment.
+  def validate_filename_path
+    errors.add(:filename, :invalid) if Course::Assessment::ProgrammingFilePath.error(filename)
   end
 end
