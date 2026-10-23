@@ -27,6 +27,12 @@ class Course::Assessment::Answer::LiveFeedback::FeedbackService
   end
 
   def construct_feedback_object
+    # Files generated for the question come first, as Codaveri runs the first file as the main script. The
+    # student did not write them, so they get no feedback.
+    generated_files = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.
+                      generated_answer_files(@answer.question.specific)
+    generated_files.each { |file| @feedback_object[:message][:files].append(file.merge(requiresFeedback: false)) }
+
     @answer.files.each do |file|
       file_object = { path: file.filename, content: file.content }
       @feedback_object[:message][:files].append(file_object)

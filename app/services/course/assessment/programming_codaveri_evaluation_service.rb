@@ -159,6 +159,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     @answer_object[:languageVersion][:language] = @question.language.extend(CodaveriLanguageConcern).codaveri_language
     @answer_object[:languageVersion][:version] = @question.language.extend(CodaveriLanguageConcern).codaveri_version
 
+    # Files generated for the question come first, as Codaveri runs the first file as the main script.
+    @answer_object[:files].concat(Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.generated_answer_files(@question))
+
     @answer.files.each do |file|
       file_template = default_codaveri_student_file_template
       file_template[:path] =

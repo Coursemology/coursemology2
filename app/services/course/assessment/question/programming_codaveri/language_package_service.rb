@@ -23,6 +23,22 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
 
   attr_reader :solution_files, :test_case_files, :template_files, :data_files, :evaluator_config
 
+  # Whether answers to the question need files generated from its package, sent to Codaveri ahead of the
+  # student's own (see #generated_answer_files). Checked before the package is opened.
+  #
+  # @param [Course::Assessment::Question::Programming] _question
+  # @return [Boolean]
+  def self.generates_answer_files?(_question)
+    false
+  end
+
+  # Files generated from the package, to send to Codaveri ahead of an answer's own files.
+  #
+  # @return [Array<Hash>] Each file's path and content.
+  def generated_answer_files
+    []
+  end
+
   # Returns an array containing the solution files for Codaveri problem object.
   #
   # @return [Array]

@@ -93,6 +93,22 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackServi
           # refine this assertion once API request model is fully finalized
           expect(test_payload_object[:config]).to include(actual_payload_object[:config])
         end
+
+        context 'when the question needs a generated main file' do
+          let(:main_file) { { path: '_coursemology_main.py', content: "import template\n" } }
+
+          before do
+            allow(Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService).
+              to receive(:generated_answer_files).with(question).and_return([main_file])
+          end
+
+          it 'sends it first, asking for no feedback on it' do
+            files = subject.send(:construct_feedback_object)[:files]
+
+            expect(files.first).to eq(main_file.merge(requiresFeedback: false))
+            expect(files.drop(1).map { |file| file[:path] }).to eq(answer.actable.files.map(&:filename))
+          end
+        end
       end
     end
   end

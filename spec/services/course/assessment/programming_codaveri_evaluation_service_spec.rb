@@ -143,6 +143,22 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
         expect(test_payload_object[:problemId]).to eq(actual_payload_object[:problemId])
         expect(test_payload_object[:courseName]).to eq(course.title)
       end
+
+      context 'when the question needs a generated main file' do
+        let(:main_file) { { path: '_coursemology_main.py', content: "import template\n" } }
+
+        before do
+          allow(Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService).
+            to receive(:generated_answer_files).with(question).and_return([main_file])
+        end
+
+        it 'sends it before the answer files, which Codaveri runs as the main script' do
+          files = service_instance.send(:construct_grading_object)[:files]
+
+          expect(files.first).to eq(main_file)
+          expect(files.drop(1).map { |file| file[:path] }).to eq(['template.py'])
+        end
+      end
     end
   end
 end

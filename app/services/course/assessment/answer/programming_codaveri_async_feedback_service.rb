@@ -78,6 +78,13 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
       version: @question.language.extend(CodaveriLanguageConcern).codaveri_version
     }
 
+    # Files generated for the question come first, as Codaveri runs the first file as the main script. The
+    # student did not write them, so they get no feedback; any that comes back matches none of the answer's
+    # files, and is dropped.
+    generated_files = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.
+                      generated_answer_files(@question)
+    generated_files.each { |file| @answer_object[:files].append(file.merge(requiresFeedback: false)) }
+
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
       file_template[:path] = file.filename

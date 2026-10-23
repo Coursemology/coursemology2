@@ -41,11 +41,13 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
 
   private
 
+  # Packages saved before file submission lack its fields, so they are filled in from the defaults: the
+  # form needs them, and the package must still compare as unchanged when saved as it is.
   def extract_autograded_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       meta = package.meta_file
-      @old_meta = meta.present? ? JSON.parse(meta) : nil
+      @old_meta = meta.present? ? default_meta.as_json.merge(JSON.parse(meta)) : nil
     ensure
       next unless package
 
