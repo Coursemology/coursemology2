@@ -39,7 +39,6 @@ const Editor = (props) => {
             minLines={25}
             onCursorChange={onCursorChange ?? (() => {})}
             readOnly={false}
-            style={{ marginBottom: 10 }}
           />
         )}
       />

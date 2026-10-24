@@ -135,9 +135,13 @@ export const basename = (path: string): string =>
 export const dirname = (path: string): string =>
   path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '';
 
-/** The path a picked or dropped file is saved under: its name, inside `targetFolder`. */
+/**
+ * The path a picked or dropped file is saved under: its name, inside `targetFolder`. The name is
+ * kept as it is, so a name the rules don't allow (a leading space, a `\`) is rejected, not saved
+ * under a different name.
+ */
 export const pathOfFile = (file: File, targetFolder = ''): string =>
-  joinPath(targetFolder, normalisePath(file.name));
+  joinPath(targetFolder, file.name);
 
 /**
  * Whether a dropped file came from inside a dropped folder. react-dropzone walks a dropped folder
@@ -147,6 +151,8 @@ export const pathOfFile = (file: File, targetFolder = ''): string =>
 export const isFromDroppedFolder = (file: File): boolean => {
   const dropzonePath = (file as File & { path?: string }).path;
   return Boolean(
-    file.webkitRelativePath || normalisePath(dropzonePath ?? '').includes('/'),
+    // A `\` in a loose file's name isn't a folder, so the leading `./` or `/` is all that's dropped.
+    file.webkitRelativePath ||
+      (dropzonePath ?? '').replace(/^\.?\//, '').includes('/'),
   );
 };

@@ -67,9 +67,9 @@ const validateFilesByLanguageErrorMessageMap = {
 };
 
 const validateProgrammingFilesErrorMsg = (language, files) => {
-  if (!validateUniqueFilenames(files)) {
-    return translations.similarFileNameExists;
-  }
+  const pathsError = pathsErrorMsg(files);
+  if (pathsError) return pathsError;
+
   const specificLanguageValidator = validateFilesByLanguageMap[language];
   if (specificLanguageValidator && !specificLanguageValidator(files)) {
     return validateFilesByLanguageErrorMessageMap[language];
@@ -135,7 +135,8 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
       return Promise.resolve();
     }
 
-    CourseAPI.assessment.answer.programming
+    // Returned so the caller can wait for the save; failures are reported here.
+    return CourseAPI.assessment.answer.programming
       .createProgrammingFiles(answerId, payload)
       .then((response) => {
         const updatedAnswer = response.data;
@@ -149,7 +150,11 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
         );
-        toast.success(message(translations.uploadFilesSuccess));
+        toast.success(
+          message(translations.uploadFilesSuccess, {
+            count: filesPayload.filter((file) => !file.id).length,
+          }),
+        );
       })
       .catch((error) => {
         dispatch({

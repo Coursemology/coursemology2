@@ -180,6 +180,13 @@ describe('pathOfFile', () => {
       pathOfFile(fileWith('index.html', { path: './index.html' }), 'templates'),
     ).toBe('templates/index.html');
   });
+
+  it('keeps the name as it is, for validatePath to reject', () => {
+    expect(pathOfFile(fileWith(' main.py'))).toBe(' main.py');
+    expect(validatePath(pathOfFile(fileWith(' main.py')))).toBe('invalid');
+    expect(pathOfFile(fileWith('a\\b.py'), 'src')).toBe('src/a\\b.py');
+    expect(validatePath(pathOfFile(fileWith('a\\b.py')))).toBe('invalid');
+  });
 });
 
 describe('isFromDroppedFolder', () => {
@@ -191,6 +198,12 @@ describe('isFromDroppedFolder', () => {
     expect(isFromDroppedFolder(fileWith('app.py', { path: '/app.py' }))).toBe(
       false,
     );
+  });
+
+  it('is false for a loose file with a backslash in its name', () => {
+    expect(
+      isFromDroppedFolder(fileWith('a\\b.py', { path: './a\\b.py' })),
+    ).toBe(false);
   });
 
   it('is true for a file react-dropzone found inside a dropped folder', () => {

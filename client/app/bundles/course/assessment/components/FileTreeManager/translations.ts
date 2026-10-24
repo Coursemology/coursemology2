@@ -22,10 +22,6 @@ const translations = defineMessages({
     id: 'course.assessment.FileTreeManager.expandAll',
     defaultMessage: 'Expand all',
   },
-  name: {
-    id: 'course.assessment.FileTreeManager.name',
-    defaultMessage: 'Name',
-  },
   size: {
     id: 'course.assessment.FileTreeManager.size',
     defaultMessage: 'Size',
@@ -68,7 +64,7 @@ const translations = defineMessages({
   },
   emptyFolderHint: {
     id: 'course.assessment.FileTreeManager.emptyFolderHint',
-    defaultMessage: 'An empty folder is not saved. Add files to keep it.',
+    defaultMessage: 'Empty folders will not be saved.',
   },
   newFolderName: {
     id: 'course.assessment.FileTreeManager.newFolderName',
@@ -114,17 +110,9 @@ const translations = defineMessages({
     id: 'course.assessment.FileTreeManager.downloadFile',
     defaultMessage: 'Download {name}',
   },
-  deleteConfirmationTitle: {
-    id: 'course.assessment.FileTreeManager.deleteConfirmationTitle',
-    defaultMessage: 'Delete file',
-  },
   deleteConfirmation: {
     id: 'course.assessment.FileTreeManager.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete "{path}"?',
-  },
-  delete: {
-    id: 'course.assessment.FileTreeManager.delete',
-    defaultMessage: 'Delete',
   },
   invalidPath: {
     id: 'course.assessment.FileTreeManager.invalidPath',

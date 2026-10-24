@@ -60,10 +60,16 @@ export interface FileTree {
   /** Collapses every folder, or expands them all when none is open. */
   toggleAll: () => void;
   focusedKey?: string;
+  /** Focuses a row, which also makes its folder the target again. */
   setFocusedKey: (key: string) => void;
   focusedRow?: FileTreeNode<FileTreeEntry>;
-  /** Where new files and folders go: the focused folder, or the focused file's folder. */
+  /**
+   * Where new files and folders go: the focused folder, or the focused file's folder, until
+   * `targetTopLevel` is called.
+   */
   targetFolder: string;
+  /** Makes the top level the target, until a row is focused again. */
+  targetTopLevel: () => void;
   removeDraftFolder: (path: string) => void;
   /** The folder a new folder is being named in, or `null`. */
   creatingIn: string | null;
@@ -83,7 +89,9 @@ export interface FileTree {
  */
 const useFileTree = (files: FileTreeEntry[]): FileTree => {
   const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(new Set());
-  const [focusedKey, setFocusedKey] = useState<string>();
+  const [focusedKey, setFocusedKeyState] = useState<string>();
+  // Every row is in a folder or is one, so the top level needs its own way to be the target.
+  const [atTopLevel, setAtTopLevel] = useState(false);
   const [draftFolders, setDraftFolders] = useState<string[]>([]);
   const [creatingIn, setCreatingIn] = useState<string | null>(null);
   const [renamingPath, setRenamingPath] = useState<string | null>(null);
@@ -101,6 +109,12 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     .map((folder) => folder.path);
 
   const focusedRow = rows.find((row) => rowKey(row) === focusedKey);
+  const targetFolder = atTopLevel ? '' : folderOfRow(focusedRow);
+
+  const setFocusedKey = (key: string): void => {
+    setFocusedKeyState(key);
+    setAtTopLevel(false);
+  };
 
   const expand = useCallback((path: string): void => {
     setCollapsed((current) => {
@@ -130,7 +144,7 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     );
 
   const startCreating = (): void => {
-    const parent = folderOfRow(focusedRow);
+    const parent = targetFolder;
     if (parent) expand(parent);
     setRenamingPath(null);
     setCreatingIn(parent);
@@ -196,7 +210,7 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
       );
     if (error) return { error };
 
-    if (focusedKey === `file:${from}`) setFocusedKey(`file:${to}`);
+    if (focusedKey === `file:${from}`) setFocusedKeyState(`file:${to}`);
     setRenamingPath(null);
     return { to };
   };
@@ -214,7 +228,8 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     focusedKey,
     setFocusedKey,
     focusedRow,
-    targetFolder: folderOfRow(focusedRow),
+    targetFolder,
+    targetTopLevel: (): void => setAtTopLevel(true),
     removeDraftFolder,
     creatingIn,
     startCreating,
