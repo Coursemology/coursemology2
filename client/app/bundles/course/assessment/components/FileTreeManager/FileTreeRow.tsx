@@ -13,6 +13,7 @@ import { Typography } from '@mui/material';
 import { formatReadableBytes } from 'utilities';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import { dirname } from './paths';
 import translations from './translations';
@@ -40,7 +41,7 @@ export const RowLead = (props: {
 }): JSX.Element => (
   <>
     <div className="flex-none" style={{ width: indentOf(props.depth) }} />
-    <span className="ml-2 flex h-7 w-7 flex-none items-center justify-center">
+    <span className="flex h-7 w-7 flex-none items-center justify-center">
       {props.children}
     </span>
   </>
@@ -104,6 +105,8 @@ export interface FileTreeRowProps {
   expanded?: boolean;
   selected?: boolean;
   selectable?: boolean;
+  /** Whether new files and folders go into this folder. */
+  target?: boolean;
   dropTarget?: boolean;
   pending?: boolean;
   disabled?: boolean;
@@ -132,6 +135,9 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     const entries = isFolder ? node.files : [node.file];
     const marked = entries.length > 0 && entries.every(isMarked);
     const draft = !isFolder && node.file.state === 'draft';
+    const renamable = Boolean(props.canRename) && draft;
+    // Clicking a folder opens or closes it, and clicking a file selects it only when files can be.
+    const clickable = isFolder ? expandable : Boolean(props.selectable);
 
     let meta: string;
     if (isFolder) {
@@ -154,7 +160,7 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
       node.depth > MAX_INDENTED_DEPTH ? `${dirname(node.path)}/` : '';
 
     let background = 'bg-white';
-    if (marked) background = 'bg-neutral-100';
+    if (marked) background = 'bg-red-50';
     else if (selected) background = 'bg-cyan-50';
     else if (draft) background = 'bg-lime-50';
 
@@ -162,14 +168,16 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     if (draft) labelParts.push(t(translations.newBadge));
     if (marked) labelParts.push(t(translations.toDeleteBadge));
 
-    const deleteLabel = isFolder
-      ? t(translations.deleteFolder, { name })
-      : t(translations.deleteFile, { name });
     const restoreLabel = isFolder
       ? t(translations.restoreFolder, { name })
       : t(translations.restoreFile, { name });
 
     const Icon = isFolder ? Folder : InsertDriveFile;
+    const target = isFolder && props.target;
+
+    let nameWeight = 'font-normal';
+    if (target) nameWeight = 'font-bold';
+    else if (isFolder) nameWeight = 'font-medium';
 
     return (
       <div
@@ -179,7 +187,9 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
         aria-label={labelParts.join(', ')}
         aria-level={node.depth + 1}
         aria-selected={props.selectable ? Boolean(selected) : undefined}
-        className={`flex cursor-pointer select-none items-center border-0 border-b border-solid border-neutral-100 py-2 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${background} ${
+        className={`flex ${
+          clickable ? 'cursor-pointer' : 'cursor-default'
+        } select-none items-center border-0 border-b border-solid border-neutral-100 py-2 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${background} ${
           props.dropTarget ? 'ring-2 ring-inset ring-primary' : ''
         } ${pending ? 'opacity-50' : ''}`}
         data-drop-folder={folderOfRow(node)}
@@ -213,21 +223,51 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
           )}
         </RowLead>
 
-        <Icon className="mr-2 flex-none text-neutral-500" fontSize="small" />
+        <Icon
+          className={`mr-2 flex-none ${
+            target ? 'text-neutral-800' : 'text-neutral-500'
+          }`}
+          fontSize="small"
+        />
 
-        <Typography
-          className={`min-w-0 flex-initial ${
-            isFolder ? 'font-medium' : 'font-normal'
-          } ${marked ? 'text-neutral-400 line-through' : 'text-neutral-900'}`}
-          component="span"
-          noWrap
-          // Without the size column, the size is in the tooltip.
-          title={compact && meta ? `${node.path} · ${meta}` : node.path}
-          variant="body2"
-        >
-          {prefix && <span className="text-neutral-500">{prefix}</span>}
-          {name}
-        </Typography>
+        {/* The rename button shows while the name or the button is hovered. */}
+        <span className="group/name flex min-w-0 flex-initial items-center">
+          <Typography
+            className={`min-w-0 flex-initial ${nameWeight} ${
+              marked ? 'text-neutral-400 line-through' : 'text-neutral-900'
+            } ${renamable && !disabled ? 'cursor-text' : ''}`}
+            component="span"
+            noWrap
+            // A name that can be renamed is renamed by clicking it, as by its rename button.
+            onClick={
+              renamable && !disabled
+                ? (event: MouseEvent): void => {
+                    event.stopPropagation();
+                    props.onRename?.();
+                  }
+                : undefined
+            }
+            // Without the size column, the size is in the tooltip.
+            title={compact && meta ? `${node.path} · ${meta}` : node.path}
+            variant="body2"
+          >
+            {prefix && <span className="text-neutral-500">{prefix}</span>}
+            {name}
+          </Typography>
+
+          {renamable && (
+            <span className="ml-1 hidden flex-none group-hover/name:flex">
+              <ActionButton
+                className="text-neutral-600"
+                disabled={disabled}
+                label={t(translations.renameFile, { name })}
+                onClick={(): void => props.onRename?.()}
+              >
+                <Edit fontSize="small" />
+              </ActionButton>
+            </span>
+          )}
+        </span>
 
         {draft && <Badge tone="new">{t(translations.newBadge)}</Badge>}
         {marked && <Badge tone="marked">{t(translations.toDeleteBadge)}</Badge>}
@@ -236,13 +276,13 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
 
         {!compact && (
           <Typography
-            className={`w-36 flex-none text-right tabular-nums ${
+            className={`w-48 flex-none tabular-nums ${
               marked ? 'line-through' : ''
             }`}
             color="text.secondary"
             component="span"
             noWrap
-            variant="body2"
+            variant="caption"
           >
             {meta}
           </Typography>
@@ -253,17 +293,6 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
             compact ? 'min-w-0' : 'min-w-20'
           } flex-none items-center justify-end`}
         >
-          {props.canRename && draft && (
-            <ActionButton
-              className="text-neutral-600"
-              disabled={disabled}
-              label={t(translations.renameFile, { name })}
-              onClick={(): void => props.onRename?.()}
-            >
-              <Edit fontSize="small" />
-            </ActionButton>
-          )}
-
           {props.canDownload && !isFolder && (
             <ActionButton
               className="text-neutral-600"
@@ -279,7 +308,8 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
             <ActionButton
               className="text-red-700"
               disabled={disabled || pending}
-              label={deleteLabel}
+              // The row it is in names what it deletes.
+              label={t(formTranslations.delete)}
               onClick={(): void => props.onDelete?.()}
             >
               <Delete fontSize="small" />

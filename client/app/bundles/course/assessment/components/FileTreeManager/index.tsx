@@ -1,26 +1,30 @@
-import { ChangeEvent, DragEvent, KeyboardEvent, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  DragEvent,
+  KeyboardEvent,
+  MouseEvent,
+  ReactElement,
+  useRef,
+  useState,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
-  Add,
   CreateNewFolder,
+  NoteAdd,
   UnfoldLess,
   UnfoldMore,
 } from '@mui/icons-material';
-import {
-  Button,
-  IconButton,
-  LinearProgress,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { IconButton, LinearProgress, Tooltip, Typography } from '@mui/material';
 import { formatReadableBytes } from 'utilities';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+import tableTranslations from 'lib/translations/table';
 
 import EditableNameRow, { NAME_ERROR_MESSAGES } from './EditableNameRow';
-import FileTreeRow, { isExpandable } from './FileTreeRow';
+import FileTreeRow, { isExpandable, RowLead } from './FileTreeRow';
 import {
   dirname,
   isFromDroppedFolder,
@@ -49,6 +53,30 @@ const pathsOf = (node: Node): string[] =>
     ? node.files.map((entry) => entry.path)
     : [node.file.path];
 
+interface ToolbarButtonProps {
+  label: string;
+  icon: ReactElement;
+  onClick: () => void;
+  disabled?: boolean;
+}
+
+// An icon button whose label is its tooltip.
+const ToolbarButton = (props: ToolbarButtonProps): JSX.Element => (
+  <Tooltip title={props.label}>
+    {/* A disabled button fires no events, so the tooltip needs a wrapper to listen to. */}
+    <span>
+      <IconButton
+        aria-label={props.label}
+        disabled={props.disabled}
+        onClick={props.onClick}
+        size="small"
+      >
+        {props.icon}
+      </IconButton>
+    </span>
+  </Tooltip>
+);
+
 /**
  * A file tree for the files of a programming question or answer. What the user can do is set by the
  * feature flags, and `commit` sets whether changes wait for the caller to save them or are saved as
@@ -71,9 +99,13 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   const typeAhead = useRef({ text: '', at: 0 });
 
   const isDraft = props.commit === 'draft';
+  const compact = Boolean(props.compact);
+  const fillHeight = Boolean(props.fillHeight);
   const locked = disabled || busy;
   const canUpload = Boolean(props.uploadable) && !locked;
   const canRename = props.commit === 'draft' && Boolean(props.renamable);
+  // Whether there is anything to add, so that the folder things go into is worth showing.
+  const canAddHere = Boolean(props.uploadable || props.canCreateFolder);
 
   // The first row is the tree's tab stop until the user focuses another.
   const tabbableKey =
@@ -287,6 +319,10 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
         if (!isFolder && props.selectable) props.onSelect?.(node.path);
         else handled = false;
         break;
+      case 'Escape':
+        // As a click off the rows does, for those who can't click.
+        tree.targetTopLevel();
+        break;
       case 'Delete':
       case 'Backspace':
         if (!canDeleteNode(node)) handled = false;
@@ -390,6 +426,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           canDelete={canDeleteNode(node)}
           canDownload={Boolean(props.downloadable)}
           canRename={canRename}
+          compact={compact}
           disabled={locked}
           dropTarget={
             canUpload && dropFolder === folderOfRow(node) && dropFolder !== ''
@@ -407,6 +444,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           pending={pathsOf(node).some((path) => pendingPaths.has(path))}
           selectable={props.selectable}
           selected={node.kind === 'file' && node.path === props.selectedPath}
+          target={canAddHere && node.path === tree.targetFolder}
         />,
       );
     }
@@ -417,10 +455,19 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     return elements;
   };
 
-  const hasRows = tree.rows.length > 0 || tree.creatingIn !== null;
   const hasEmptyFolder = tree.rows.some(
     (row) => row.kind === 'folder' && row.files.length === 0,
   );
+
+  // The compact tree adjoins the editor: above it on a narrow screen, and to its left from `md` up,
+  // so the corners that meet the editor stay square.
+  let frame = '';
+  if (!props.headless)
+    frame = `border border-solid border-neutral-200 ${
+      compact
+        ? 'rounded-t-md md:rounded-bl-md md:rounded-tr-none'
+        : 'rounded-md'
+    }`;
 
   return (
     <section
@@ -428,30 +475,37 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
         fillHeight ? 'flex h-full flex-col' : ''
       }`}
     >
-      {(props.uploadable ||
-        props.canCreateFolder ||
-        tree.hasOpenableFolders) && (
-        <div
-          className={`flex flex-none flex-wrap items-center justify-between ${
-            compact ? 'gap-1' : 'gap-3'
-          }`}
-        >
-          <div
-            className={`flex flex-wrap items-center ${
-              compact ? 'gap-1' : 'gap-3'
-            }`}
-          >
+      <div
+        {...getRootProps({
+          // A click off the rows and the buttons makes the top level the target, as a drop there
+          // does.
+          onClick: (event: MouseEvent<HTMLElement>) => {
+            const element =
+              event.target instanceof Element ? event.target : null;
+            if (!element?.closest('[data-drop-folder], button, input'))
+              tree.targetTopLevel();
+          },
+          onDragOver: (event: DragEvent<HTMLElement>) =>
+            setDropFolder(folderAtEvent(event.target) ?? ''),
+        })}
+        className={`overflow-hidden ${
+          fillHeight ? 'flex min-h-0 flex-1 flex-col' : ''
+        } ${frame} ${
+          isDragActive && canUpload && dropFolder === ''
+            ? 'ring-2 ring-primary'
+            : ''
+        }`}
+      >
+        <div className="flex flex-none items-center gap-y-1 border-0 border-b border-solid border-neutral-200 bg-neutral-50 px-2 py-1">
+          <div className="flex flex-wrap items-center">
             {props.uploadable && (
               <>
-                <Button
+                <ToolbarButton
                   disabled={!canUpload}
+                  icon={<NoteAdd fontSize="small" />}
+                  label={t(translations.addFiles)}
                   onClick={(): void => fileInput.current?.click()}
-                  size="small"
-                  startIcon={<Add />}
-                  variant="outlined"
-                >
-                  {t(translations.addFiles)}
-                </Button>
+                />
                 <input
                   ref={fileInput}
                   className="hidden"
@@ -464,73 +518,63 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             )}
 
             {props.canCreateFolder && (
-              <Button
+              <ToolbarButton
                 disabled={locked}
-                icon={<CreateNewFolder />}
+                icon={<CreateNewFolder fontSize="small" />}
                 label={t(translations.newFolder)}
                 onClick={tree.startCreating}
-                variant="outlined"
-              >
-                {t(translations.newFolder)}
-              </Button>
+              />
+            )}
+
+            {tree.hasOpenableFolders && (
+              <ToolbarButton
+                icon={
+                  tree.anyExpanded ? (
+                    <UnfoldLess fontSize="small" />
+                  ) : (
+                    <UnfoldMore fontSize="small" />
+                  )
+                }
+                label={
+                  tree.anyExpanded
+                    ? t(translations.collapseAll)
+                    : t(translations.expandAll)
+                }
+                onClick={tree.toggleAll}
+              />
             )}
           </div>
 
-          {tree.hasOpenableFolders && (
-            <ToolbarButton
-              color="info"
-              compact={compact}
-              icon={tree.anyExpanded ? <UnfoldLess /> : <UnfoldMore />}
-              label={
-                tree.anyExpanded
-                  ? t(translations.collapseAll)
-                  : t(translations.expandAll)
-              }
-              onClick={tree.toggleAll}
-              showIconWhenFull={false}
-            />
+          {/* A caption is inline, so it renders as a div to take the end of the band. */}
+          {files.length > 0 && (
+            <Typography
+              className="ml-auto"
+              color="text.secondary"
+              component="div"
+              variant="caption"
+            >
+              {summary.join(' · ')}
+            </Typography>
           )}
         </div>
-      )}
 
-      <div
-        {...getRootProps({
-          onDragOver: (event: DragEvent<HTMLElement>) =>
-            setDropFolder(folderAtEvent(event.target) ?? ''),
-        })}
-        className={`overflow-hidden ${
-          props.headless
-            ? ''
-            : 'rounded-md border border-solid border-neutral-200'
-        } ${
-          isDragActive && canUpload && dropFolder === ''
-            ? 'ring-2 ring-primary'
-            : ''
-        }`}
-      >
-        {busy && <LinearProgress />}
+        {busy && <LinearProgress className="flex-none" />}
 
-        {hasRows && !compact && (
-          <div className="flex h-8 items-center border-0 border-b border-solid border-neutral-200 bg-neutral-50 pl-4 pr-2">
-            <Typography
-              className="flex-auto font-semibold uppercase tracking-wider"
-              color="text.secondary"
-              variant="caption"
-            >
-              {t(translations.name)}
+        {!compact && (
+          <div className="flex py-1 flex-none items-center border-0 border-b border-solid border-neutral-200 pr-2 bg-neutral-50">
+            {/* The headings line up with the icons and sizes of the rows below. */}
+            <RowLead depth={0} />
+            <Typography className="flex-auto font-medium" variant="body2">
+              {t(tableTranslations.name)}
             </Typography>
-            <Typography
-              className="w-36 flex-none text-right font-semibold uppercase tracking-wider"
-              color="text.secondary"
-              variant="caption"
-            >
+            <Typography className="w-48 flex-none font-medium" variant="body2">
               {t(translations.size)}
             </Typography>
             <span className="min-w-20 flex-none" />
           </div>
         )}
 
-        {/* When the tree fills its container's height, the rows scroll and the footer stays put. */}
+        {/* When the tree fills its container's height, the rows scroll and the header stays put. */}
         <div className={fillHeight ? 'min-h-0 flex-1 overflow-y-auto' : ''}>
           <div
             aria-label={t(translations.files)}
@@ -543,7 +587,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             {tree.rows.flatMap(renderNode)}
           </div>
 
-          {!hasRows && (
+          {tree.rows.length === 0 && tree.creatingIn === null && (
             <Typography
               className="px-4 py-6 text-center"
               color="text.secondary"
@@ -553,18 +597,6 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             </Typography>
           )}
         </div>
-
-        {/* A caption is inline, so the footer band renders it as a div. */}
-        {files.length > 0 && (
-          <Typography
-            className="flex-none border-0 border-t border-solid border-neutral-200 bg-neutral-50 px-4 py-3"
-            color="text.secondary"
-            component="div"
-            variant="caption"
-          >
-            {summary.join(' · ')}
-          </Typography>
-        )}
       </div>
 
       {hasEmptyFolder && (
@@ -583,8 +615,12 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
         onClose={(): void => setConfirmingDelete(null)}
         open={confirmingDelete !== null}
         primaryColor="error"
-        primaryLabel={t(translations.delete)}
-        title={t(translations.deleteConfirmationTitle)}
+        primaryLabel={t(formTranslations.delete)}
+        title={
+          confirmingDelete?.kind === 'folder'
+            ? t(translations.deleteFolder, { name: confirmingDelete.name })
+            : t(translations.deleteFile, { name: confirmingDelete?.name ?? '' })
+        }
       >
         <PromptText>
           {t(translations.deleteConfirmation, {

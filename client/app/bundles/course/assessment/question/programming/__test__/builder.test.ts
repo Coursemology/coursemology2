@@ -49,6 +49,18 @@ describe('buildFormData', () => {
     ).toEqual(['templates/index.html', 'app.py']);
   });
 
+  it('sends an empty file like any other', () => {
+    const empty = draft('pkg/__init__.py', '');
+    const data = build({ dataFiles: [empty] });
+
+    expect(data.getAll('question_programming[data_files][]')).toEqual([
+      empty.raw,
+    ]);
+    expect(data.getAll('question_programming[data_file_paths][]')).toEqual([
+      'pkg/__init__.py',
+    ]);
+  });
+
   it('sends nothing for a saved file that is kept', () => {
     const data = build({ dataFiles: [saved('data/a.csv')] });
 

@@ -133,3 +133,10 @@ export const flatten = <T>(
   visit(root);
   return rows;
 };
+
+/** The paths of the files in the order the tree shows them with every folder open. */
+export const filePathsInTreeOrder = (paths: string[]): string[] =>
+  flatten(
+    buildTree(paths, (path) => path),
+    new Set(),
+  ).flatMap((node) => (node.kind === 'file' ? [node.path] : []));

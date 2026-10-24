@@ -420,7 +420,8 @@ const translations = defineMessages({
   },
   uploadFilesSuccess: {
     id: 'course.assessment.submission.uploadFilesSuccess',
-    defaultMessage: 'Files uploaded successfully',
+    defaultMessage:
+      '{count, plural, one {File uploaded successfully} other {Files uploaded successfully}}',
   },
   codaveriAutogradeFailure: {
     id: 'course.assessment.submission.codaveriAutogradeFailure',

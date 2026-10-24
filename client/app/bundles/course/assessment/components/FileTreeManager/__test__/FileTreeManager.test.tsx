@@ -10,6 +10,21 @@ import {
 } from '../types';
 import FileTreeManager from '..';
 
+// A row's delete button, which is labelled "Delete" alone: the row says what it deletes.
+const rowNamed = (name: string): HTMLElement =>
+  screen.getByRole('treeitem', {
+    name: (label) => label === name || label.startsWith(`${name}, `),
+  });
+const deleteButtonOf = (name: string): HTMLElement =>
+  within(rowNamed(name)).getByRole('button', { name: 'Delete' });
+const queryDeleteButtonOf = (name: string): HTMLElement | null =>
+  within(rowNamed(name)).queryByRole('button', { name: 'Delete' });
+// The confirmation's Delete button, as opposed to the rows'.
+const confirmDeleteButton = async (): Promise<HTMLElement> =>
+  within(await screen.findByRole('dialog')).getByRole('button', {
+    name: 'Delete',
+  });
+
 const entry = (
   path: string,
   state: FileTreeEntry['state'] = 'saved',
@@ -162,22 +177,36 @@ describe('FileTreeManager', () => {
       expect(screen.queryByLabelText(/^Download/)).not.toBeInTheDocument();
     });
 
+    it('fits a sidebar when compact: no size column, and icon buttons with the same names', async () => {
+      await renderImmediate({
+        compact: true,
+        uploadable: true,
+        canCreateFolder: true,
+      });
+
+      expect(screen.queryByText('Size')).not.toBeInTheDocument();
+      expect(screen.queryByText('10 bytes')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Add files' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'New folder' })).toBeVisible();
+      expect(
+        screen.getByRole('button', { name: 'Collapse all' }),
+      ).toBeVisible();
+      expect(screen.getByTitle('app.py · 10 bytes')).toBeInTheDocument();
+      expect(screen.getByText('3 files · 30 bytes')).toBeVisible();
+    });
+
     it('shows delete on files only, or on folders only', async () => {
       const { unmount } = render(
         <FileTreeManager commit="immediate" files={SAVED} filesDeleteable />,
       );
       await screen.findByRole('tree');
-      expect(screen.getByLabelText('Delete app.py')).toBeInTheDocument();
-      expect(
-        screen.queryByLabelText('Delete folder templates'),
-      ).not.toBeInTheDocument();
+      expect(deleteButtonOf('app.py')).toBeInTheDocument();
+      expect(queryDeleteButtonOf('templates')).not.toBeInTheDocument();
       unmount();
 
       await renderImmediate({ foldersDeleteable: true });
-      expect(
-        screen.getByLabelText('Delete folder templates'),
-      ).toBeInTheDocument();
-      expect(screen.queryByLabelText('Delete app.py')).not.toBeInTheDocument();
+      expect(deleteButtonOf('templates')).toBeInTheDocument();
+      expect(queryDeleteButtonOf('app.py')).not.toBeInTheDocument();
     });
 
     it('selects a file when selectable', async () => {
@@ -221,6 +250,101 @@ describe('FileTreeManager', () => {
       expect(
         screen.getByText('4 files · 31 bytes · 1 to upload'),
       ).toBeVisible();
+    });
+
+    describe('when every file is in a folder', () => {
+      const NESTED = [entry('templates/index.html')];
+
+      // The folder new files go into is shown by its bold name.
+      const isTarget = (name: string): boolean =>
+        within(row(name)).getByText(name).classList.contains('font-bold');
+
+      it('adds to the top level again after a click off the rows', async () => {
+        const user = userEvent.setup();
+        await renderDraft({ initial: NESTED, uploadable: true });
+
+        await user.click(row('index.html'));
+        expect(isTarget('templates')).toBe(true);
+
+        await user.click(screen.getByText('Name'));
+        expect(isTarget('templates')).toBe(false);
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'app.py'),
+        );
+        expect(
+          await screen.findByRole('treeitem', { name: 'app.py, New' }),
+        ).toHaveAttribute('aria-level', '1');
+      });
+
+      it('adds to the top level again after Escape', async () => {
+        const user = userEvent.setup();
+        await renderDraft({
+          initial: NESTED,
+          uploadable: true,
+          canCreateFolder: true,
+        });
+
+        await user.click(row('index.html'));
+        await user.keyboard('{Escape}');
+        expect(isTarget('templates')).toBe(false);
+        expect(row('index.html')).toHaveFocus();
+
+        await user.click(screen.getByRole('button', { name: 'New folder' }));
+        await user.type(
+          screen.getByLabelText('New folder name'),
+          'static{Enter}',
+        );
+        expect(row('static')).toHaveAttribute('aria-level', '1');
+      });
+
+      it('keeps the folder when a button is clicked, and targets it again once a row in it is', async () => {
+        const user = userEvent.setup();
+        await renderDraft({ initial: NESTED, uploadable: true });
+
+        await user.click(row('templates'));
+        // Clicking the folder closed it.
+        await user.click(screen.getByRole('button', { name: 'Expand all' }));
+        expect(isTarget('templates')).toBe(true);
+
+        await user.click(screen.getByText('Name'));
+        await user.click(row('templates'));
+        expect(isTarget('templates')).toBe(true);
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'base.html'),
+        );
+        expect(
+          await screen.findByRole('treeitem', { name: 'base.html, New' }),
+        ).toHaveAttribute('aria-level', '2');
+      });
+
+      it('shows no target folder when nothing can be added', async () => {
+        const user = userEvent.setup();
+        await renderDraft({ initial: NESTED });
+
+        await user.click(row('index.html'));
+        expect(isTarget('templates')).toBe(false);
+      });
+    });
+
+    it('rejects a file name the rules do not allow, rather than changing it', async () => {
+      await renderDraft({ uploadable: true });
+
+      upload(
+        screen.getByTestId('file-tree-add-files'),
+        new File(['x'], ' main.py'),
+        new File(['x'], 'a\\b.py'),
+      );
+
+      const alert = await screen.findByRole('alert');
+      expect(alert).toHaveTextContent(' main.py');
+      expect(alert).toHaveTextContent('a\\b.py');
+      expect(
+        screen.queryByRole('treeitem', { name: /main\.py|b\.py/ }),
+      ).not.toBeInTheDocument();
     });
 
     it('offers no folder upload, since a folder could hold any number of files', async () => {
@@ -275,7 +399,7 @@ describe('FileTreeManager', () => {
       const user = userEvent.setup();
       await renderDraft({ filesDeleteable: true });
 
-      await user.click(screen.getByLabelText('Delete app.py'));
+      await user.click(deleteButtonOf('app.py'));
       expect(row('app.py, To delete')).toBeVisible();
       expect(
         screen.getByText('2 files · 20 bytes · 1 to delete'),
@@ -289,7 +413,7 @@ describe('FileTreeManager', () => {
       const user = userEvent.setup();
       await renderDraft({ foldersDeleteable: true });
 
-      await user.click(screen.getByLabelText('Delete folder templates'));
+      await user.click(deleteButtonOf('templates'));
       expect(row('index.html, To delete')).toBeVisible();
       expect(row('nav.html, To delete')).toBeVisible();
       expect(row('templates, To delete')).toBeVisible();
@@ -313,6 +437,36 @@ describe('FileTreeManager', () => {
       await user.type(field, 'main.py{Enter}');
 
       expect(row('main.py, New')).toBeVisible();
+    });
+
+    it('renames a draft file when its name is clicked, but not a saved one', async () => {
+      const user = userEvent.setup();
+      await renderDraft({
+        renamable: true,
+        initial: [entry('a.py', 'draft'), entry('b.py')],
+      });
+
+      await user.click(within(row('b.py')).getByText('b.py'));
+      expect(
+        screen.queryByLabelText('New name for b.py'),
+      ).not.toBeInTheDocument();
+
+      await user.click(within(row('a.py, New')).getByText('a.py'));
+      expect(screen.getByLabelText('New name for a.py')).toHaveFocus();
+    });
+
+    it('does not rename a draft file by its name while the tree is disabled', async () => {
+      const user = userEvent.setup();
+      await renderDraft({
+        renamable: true,
+        disabled: true,
+        initial: [entry('a.py', 'draft')],
+      });
+
+      await user.click(within(row('a.py, New')).getByText('a.py'));
+      expect(
+        screen.queryByLabelText('New name for a.py'),
+      ).not.toBeInTheDocument();
     });
 
     it('keeps the rename open when the new name is taken', async () => {
@@ -354,7 +508,7 @@ describe('FileTreeManager', () => {
       expect(row('icons')).toHaveAttribute('aria-level', '3');
       expect(row('svg')).toHaveAttribute('aria-level', '4');
       expect(
-        screen.getByText('An empty folder is not saved. Add files to keep it.'),
+        screen.getByText('Empty folders will not be saved.'),
       ).toBeVisible();
     });
 
@@ -433,7 +587,7 @@ describe('FileTreeManager', () => {
       await renderDraft({ canCreateFolder: true });
 
       await createFolder('empty');
-      await user.click(screen.getByLabelText('Delete folder empty'));
+      await user.click(deleteButtonOf('empty'));
 
       expect(
         screen.queryByRole('treeitem', { name: 'empty' }),
@@ -453,8 +607,11 @@ describe('FileTreeManager', () => {
       const user = userEvent.setup();
       await renderImmediate({ filesDeleteable: true, onDelete });
 
-      await user.click(screen.getByLabelText('Delete app.py'));
-      await user.click(await screen.findByRole('button', { name: 'Delete' }));
+      await user.click(deleteButtonOf('app.py'));
+      expect(await screen.findByRole('dialog')).toHaveTextContent(
+        'Delete app.py',
+      );
+      await user.click(await confirmDeleteButton());
       // The closing dialog hides the rest of the page until it has gone.
       await waitFor(() =>
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),

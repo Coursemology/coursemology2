@@ -1,5 +1,24 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { buildTree, FileTreeFolder, FileTreeNode, flatten } from '../tree';
+import {
+  buildTree,
+  filePathsInTreeOrder,
+  FileTreeFolder,
+  FileTreeNode,
+  flatten,
+} from '../tree';
+
+describe('filePathsInTreeOrder', () => {
+  it('lists the files as the tree shows them, folders first', () => {
+    expect(
+      filePathsInTreeOrder([
+        'b.py',
+        'templates/index.html',
+        'a.py',
+        'templates/x/y.html',
+      ]),
+    ).toEqual(['templates/x/y.html', 'templates/index.html', 'a.py', 'b.py']);
+  });
+});
 
 interface TestFile {
   path: string;
