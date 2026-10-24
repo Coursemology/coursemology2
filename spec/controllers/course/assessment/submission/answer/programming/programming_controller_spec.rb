@@ -79,6 +79,21 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
           expect(answer.specific.reload.files.map(&:filename)).not_to include('template2')
         end
       end
+
+      context 'when uploading a binary file' do
+        it 'returns a bad request with a code the client can explain, and saves nothing' do
+          post :create_programming_files, as: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: answer.id, files_attributes: [filename: 'archive.zip', content: "PK\u0003\u0004\u0000"]
+            }
+          }
+
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['codes']).to include('binary')
+          expect(answer.specific.reload.files.map(&:filename)).not_to include('archive.zip')
+        end
+      end
     end
 
     describe '#delete_programming_file' do

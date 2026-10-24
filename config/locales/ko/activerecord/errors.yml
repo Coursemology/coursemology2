@@ -33,6 +33,10 @@ ko:
           attributes:
             files:
               exceed_size_limit: '제출한 답변(%{total_size_mb} MB)은 2MB 미만이어야 합니다.'
+        course/assessment/answer/programming_file:
+          attributes:
+            content:
+              binary: '텍스트여야 합니다. 바이너리 파일은 업로드할 수 없습니다'
         course/assessment/answer/text_response:
           attributes:
             attachments:

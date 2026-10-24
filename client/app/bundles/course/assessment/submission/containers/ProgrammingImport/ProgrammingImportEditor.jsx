@@ -3,16 +3,11 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {
-  deleteProgrammingFile,
-  importProgrammingFiles,
-} from '../../actions/answers/programming';
 import Editor from '../../components/Editor';
-import FileInputField from '../../components/FileInput';
-import { fileShape, questionShape } from '../../propTypes';
+import { questionShape } from '../../propTypes';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
-import ImportedFileView from './ImportedFileView';
+import AnswerFilesTree from './AnswerFilesTree';
 
 const SelectProgrammingFileEditor = ({
   answerId,
@@ -84,67 +79,19 @@ SelectProgrammingFileEditor.propTypes = {
   ]),
 };
 
-const renderProgrammingHistoryEditor = (answer, displayFileName) => {
-  const file = answer.files_attributes.find(
-    (elem) => elem.filename === displayFileName,
-  );
-  if (!file) {
-    return null;
-  }
-
-  return <ReadOnlyEditor key={answer.id} answerId={answer.id} file={file} />;
-};
-
-const handleStageFiles = async (filesToImport) => {
-  // Create a map of promises that will resolve all files are read
-  const readerPromises = Object.keys(filesToImport).map(
-    (key) =>
-      new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsText(filesToImport[key]);
-        reader.onload = (e) => {
-          resolve(e.target.result);
-        };
-      }),
-  );
-
-  return Promise.all(readerPromises).then((results) => {
-    const newFiles = [];
-    Object.keys(filesToImport).forEach((key, index) => {
-      const obj = filesToImport[key];
-      const file = {
-        filename: obj.name,
-        staged: true,
-        content: results[index],
-      };
-      newFiles.push(file);
-    });
-    return newFiles;
-  });
-};
-
 const VisibleProgrammingImportEditor = (props) => {
   const {
     answerId,
     editorRef,
     disabled,
-    dispatch,
-    historyAnswers,
     question,
     readOnly,
     displayFileName,
     setDisplayFileName,
     saveAnswerAndUpdateClientVersion,
-    viewHistory,
   } = props;
-  const { control, resetField, getValues } = useFormContext();
-  const currentAnswer = useWatch({ control });
-  const answers = viewHistory ? historyAnswers : currentAnswer;
-
-  const files = answers[answerId]
-    ? answers[answerId].files_attributes ||
-      answers[`${answerId}`].files_attributes
-    : null;
+  const { control } = useFormContext();
+  const answers = useWatch({ control });
 
   // When an assessment is submitted/unsubmitted,
   // the form is somehow not reset yet and the answers for the new answerId
@@ -153,98 +100,51 @@ const VisibleProgrammingImportEditor = (props) => {
     return null;
   }
 
-  const handleUploadFiles = (filesToUpload) => {
-    dispatch(
-      importProgrammingFiles(
+  const editor = (
+    <SelectProgrammingFileEditor
+      {...{
         answerId,
-        filesToUpload,
-        question.editorMode,
-        resetField,
-      ),
-    );
-    if (displayFileName === '') {
-      setDisplayFileName(filesToUpload[0].filename);
-    }
-  };
+        editorRef,
+        readOnly,
+        question,
+        displayFileName,
+        saveAnswerAndUpdateClientVersion,
+        language: question.editorMode,
+      }}
+    />
+  );
 
-  const handleDeleteFile = (fileId, fileName) => {
-    const answer = answers[answerId];
-    const onDeleteSuccess = () => {
-      // When an uploaded programming file is deleted, we need to update the field value
-      // excluding the deleted file.
-      const newFilesAttributes = answer.files_attributes.filter(
-        (file) => file.id !== fileId,
-      );
-      resetField(`${answerId}.files_attributes`, {
-        defaultValue: newFilesAttributes,
-      });
-      if (fileName === displayFileName) {
-        setDisplayFileName(
-          newFilesAttributes.length > 0 ? newFilesAttributes[0].filename : '',
-        );
-      }
-    };
-    dispatch(deleteProgrammingFile(answer, fileId, onDeleteSuccess));
-  };
+  // Read-only answers stack every file, so they have no file tree.
+  if (readOnly) return editor;
 
+  // The file tree sits to the left of the editor, as in a code editor, and is as tall as the
+  // editor: the editor alone sets the row's height, the tree fills it, and the tree's rows scroll.
+  // On a narrow screen the tree goes above the editor at its own height. The minimum height keeps
+  // the tree usable when no file is open, so there is no editor to set the height. The space below
+  // belongs to the row, so the tree and the editor end at the same line.
   return (
-    <>
-      {!readOnly && (
-        <ImportedFileView
-          displayFileName={displayFileName}
-          files={files}
-          handleDeleteFile={handleDeleteFile}
-          handleFileTabbing={(filename) => setDisplayFileName(filename)}
-          viewHistory={viewHistory}
-        />
-      )}
-      {viewHistory ? (
-        renderProgrammingHistoryEditor(answers[answerId], displayFileName)
-      ) : (
-        <SelectProgrammingFileEditor
-          {...{
-            answerId,
-            editorRef,
-            readOnly,
-            question,
-            displayFileName,
-            viewHistory,
-            saveAnswerAndUpdateClientVersion,
-            language: question.editorMode,
-          }}
-        />
-      )}
-      {readOnly || viewHistory ? null : (
-        <FileInputField
-          disabled={disabled}
-          isMultipleAttachmentsAllowed
-          name={`${answerId}.import_files`}
-          onDropCallback={(filesToImport) => {
-            handleStageFiles(filesToImport).then((response) => {
-              const existingFiles = getValues()[answerId].files_attributes;
-              const parsedFiles = response;
-              const allFiles = existingFiles.concat(parsedFiles);
-              handleUploadFiles(allFiles);
-            });
-          }}
-        />
-      )}
-    </>
+    <div className="mb-3 flex flex-col gap-4 md:flex-row">
+      <div className="relative w-full flex-none md:min-h-80 md:w-72 lg:w-80">
+        <div className="md:absolute md:inset-0">
+          <AnswerFilesTree
+            answerId={answerId}
+            disabled={disabled}
+            displayFileName={displayFileName}
+            language={question.editorMode}
+            setDisplayFileName={setDisplayFileName}
+          />
+        </div>
+      </div>
+      <div className="min-w-0 flex-1">{editor}</div>
+    </div>
   );
 };
 
 VisibleProgrammingImportEditor.propTypes = {
   answerId: PropTypes.number.isRequired,
   disabled: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func,
   question: questionShape,
   readOnly: PropTypes.bool,
-  viewHistory: PropTypes.bool,
-  historyAnswers: PropTypes.shape({
-    id: PropTypes.number,
-    questionId: PropTypes.number,
-    files_attributes: PropTypes.arrayOf(fileShape),
-  }),
   displayFileName: PropTypes.string,
   setDisplayFileName: PropTypes.func,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
@@ -255,20 +155,13 @@ VisibleProgrammingImportEditor.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const { answerId, question, readOnly, viewHistory, isSavingAnswer } =
-    ownProps;
-  const { submissionFlags, history } = state.assessments.submission;
-
-  let historyAnswers;
-  if (viewHistory) {
-    historyAnswers = history.answers;
-  }
+  const { answerId, question, readOnly, isSavingAnswer } = ownProps;
+  const { submissionFlags } = state.assessments.submission;
   const disabled = submissionFlags.isSaving || isSavingAnswer;
 
   return {
     answerId,
     disabled,
-    historyAnswers,
     question,
     readOnly,
   };

@@ -33,6 +33,10 @@ en:
           attributes:
             files:
               exceed_size_limit: 'Your answer (%{total_size_mb} MB) must be less than 2 MB.'
+        course/assessment/answer/programming_file:
+          attributes:
+            content:
+              binary: 'must be text; binary files cannot be uploaded'
         course/assessment/answer/text_response:
           attributes:
             attachments:

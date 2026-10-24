@@ -84,7 +84,7 @@ const LiveFeedbackDetails: FC = () => {
       )}
 
       <div className="flex flex-row w-full relative min-h-[52.5rem]">
-        <div className="absolute w-1/2 top-0 bottom-0 left-0 pr-1 flex">
+        <div className="absolute w-1/2 top-0 bottom-0 left-0 pr-1 flex flex-col gap-2 overflow-y-auto">
           {selectedMessageFiles.map((file) => (
             <LiveFeedbackFiles
               key={`${isConversationEndSelected ? 'end' : ''}_${messages[selectedMessageIndex].id}_${file.id}`}

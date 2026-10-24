@@ -25,8 +25,10 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
     saveAnswerAndUpdateClientVersion,
   } = props;
 
+  // The space below an editable file; the editor itself has none, so it can line up with a file
+  // tree beside it in file mode.
   return (
-    <div className="space-y-3">
+    <div className={readOnly ? 'space-y-3' : 'mb-3 space-y-3'}>
       {readOnly ? (
         <ReadOnlyEditor answerId={answerId} file={file} />
       ) : (

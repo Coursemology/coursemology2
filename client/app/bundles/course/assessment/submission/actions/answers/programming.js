@@ -1,5 +1,12 @@
+import { createElement } from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import CourseAPI from 'api/course';
-import { setNotification } from 'lib/actions';
+import {
+  validatePath,
+  validatePaths,
+} from 'course/assessment/components/FileTreeManager/paths';
+import fileTreeTranslations from 'course/assessment/components/FileTreeManager/translations';
 import { MAX_SAVING_SIZE, SAVING_STATUS } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 
@@ -13,13 +20,36 @@ import {
   dispatchUpdateAnswerFlagSavingStatus,
 } from '.';
 
-// Ensure that there are no existing files with the same filenames
-const validateUniqueFilenames = (files) => {
-  const filenames = files.map((file) => file.filename);
-  const uniqueFilenames = filenames.filter(
-    (name, index, self) => self.indexOf(name) === index,
-  );
-  return filenames.length === uniqueFilenames.length;
+// These actions report through toasts, red for errors and green for success, as the rest of the
+// site does. Toasts render inside the intl provider, so one can carry a message to translate.
+const message = (descriptor, values) =>
+  createElement(FormattedMessage, { ...descriptor, values });
+
+// The server names why an upload failed in `codes`, which are turned into messages here; any other
+// failure shows the server's own error text.
+const UPLOAD_ERROR_MESSAGES = {
+  binary: translations.binaryFileUploadError,
+};
+
+const uploadErrorMessage = (error) => {
+  const codes = error?.response?.data?.codes ?? [];
+  const known = codes.find((code) => UPLOAD_ERROR_MESSAGES[code]);
+  return known
+    ? message(UPLOAD_ERROR_MESSAGES[known])
+    : buildErrorMessage(error);
+};
+
+// The files not saved yet (with no id) need valid paths that don't clash with each other or with
+// the saved files, ignoring case as the server does. Clashes among saved files alone are left alone.
+const pathsErrorMsg = (files) => {
+  const added = files.filter((file) => !file.id).map((file) => file.filename);
+  const saved = files.filter((file) => file.id).map((file) => file.filename);
+
+  const pathErrors = added.map(validatePath);
+  if (pathErrors.includes('tooLong')) return fileTreeTranslations.pathTooLong;
+  if (pathErrors.includes('invalid')) return fileTreeTranslations.invalidPath;
+  if (validatePaths(added, saved)) return translations.similarFileNameExists;
+  return null;
 };
 
 const validateFilesByLanguageMap = {
@@ -37,9 +67,9 @@ const validateFilesByLanguageErrorMessageMap = {
 };
 
 const validateProgrammingFilesErrorMsg = (language, files) => {
-  if (!validateUniqueFilenames(files)) {
-    return translations.similarFileNameExists;
-  }
+  const pathsError = pathsErrorMsg(files);
+  if (pathsError) return pathsError;
+
   const specificLanguageValidator = validateFilesByLanguageMap[language];
   if (specificLanguageValidator && !specificLanguageValidator(files)) {
     return validateFilesByLanguageErrorMessageMap[language];
@@ -61,7 +91,7 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
       resetField(`${answerId}.import_files`, {
         defaultValue: null,
       });
-      dispatch(setNotification(translations.answerTooLargeError));
+      toast.error(message(translations.answerTooLargeError));
     };
   }
   const filesPayload = files.map((file) => ({
@@ -101,11 +131,12 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
       dispatch(
         dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
       );
-      dispatch(setNotification(validationErrorMessage));
-      return;
+      toast.error(message(validationErrorMessage));
+      return Promise.resolve();
     }
 
-    CourseAPI.assessment.answer.programming
+    // Returned so the caller can wait for the save; failures are reported here.
+    return CourseAPI.assessment.answer.programming
       .createProgrammingFiles(answerId, payload)
       .then((response) => {
         const updatedAnswer = response.data;
@@ -119,6 +150,7 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
         );
+        toast.success(message(translations.uploadFilesSuccess));
       })
       .catch((error) => {
         dispatch({
@@ -134,7 +166,7 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
         resetField(`${answerId}.import_files`, {
           defaultValue: null,
         });
-        toast.error(buildErrorMessage(error));
+        toast.error(uploadErrorMessage(error));
       });
   };
 }
@@ -164,7 +196,7 @@ export function deleteProgrammingFile(answer, fileId, onDeleteSuccess) {
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
         );
         onDeleteSuccess();
-        dispatch(setNotification(translations.deleteFileSuccess));
+        toast.success(message(translations.deleteFileSuccess));
       })
       .catch((error) => {
         dispatch({
@@ -173,11 +205,10 @@ export function deleteProgrammingFile(answer, fileId, onDeleteSuccess) {
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
         );
-        dispatch(
-          setNotification(
-            translations.deleteFileFailure,
-            buildErrorMessage(error),
-          ),
+        toast.error(
+          message(translations.deleteFileFailure, {
+            errors: buildErrorMessage(error),
+          }),
         );
       });
   };

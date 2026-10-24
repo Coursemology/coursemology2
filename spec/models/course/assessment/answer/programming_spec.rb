@@ -182,6 +182,30 @@ RSpec.describe Course::Assessment::Answer::Programming do
           expect(answer).not_to be_valid
         end
       end
+
+      context 'when files are added' do
+        def add_files(*filenames)
+          answer.specific.create_and_update_files(
+            files_attributes: filenames.map { |filename| { filename: filename, content: '' } }
+          )
+        end
+
+        it 'accepts files in folders' do
+          expect(add_files('templates/index.html', 'static/style.css')).to be(true)
+        end
+
+        it 'rejects two files whose paths differ only in case' do
+          expect(add_files('helper.py', 'Helper.py')).to be(false)
+          expect(answer.specific.errors[:files]).to be_present
+        end
+
+        it 'rejects a file at the path of an existing folder' do
+          add_files('templates/index.html')
+
+          expect(add_files('templates')).to be(false)
+          expect(answer.specific.errors[:files]).to be_present
+        end
+      end
     end
   end
 end
