@@ -1,4 +1,12 @@
-import { ChangeEvent, DragEvent, KeyboardEvent, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  ComponentProps,
+  DragEvent,
+  KeyboardEvent,
+  ReactElement,
+  useRef,
+  useState,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   Add,
@@ -49,6 +57,54 @@ const pathsOf = (node: Node): string[] =>
     ? node.files.map((entry) => entry.path)
     : [node.file.path];
 
+interface ToolbarButtonProps {
+  label: string;
+  icon: ReactElement;
+  onClick: () => void;
+  compact?: boolean;
+  disabled?: boolean;
+  variant?: 'outlined' | 'text';
+  color?: ComponentProps<typeof Button>['color'];
+  /** Whether the full-size button shows its icon beside the label. */
+  showIconWhenFull?: boolean;
+}
+
+// A labelled button, or in a compact tree an icon button whose label is its tooltip.
+const ToolbarButton = (props: ToolbarButtonProps): JSX.Element => {
+  const { label, icon, compact, color, showIconWhenFull = true } = props;
+
+  if (compact)
+    return (
+      <Tooltip title={label}>
+        {/* A disabled button fires no events, so the tooltip needs a wrapper to listen to. */}
+        <span>
+          <IconButton
+            aria-label={label}
+            color={color === 'inherit' ? 'default' : color}
+            disabled={props.disabled}
+            onClick={props.onClick}
+            size="small"
+          >
+            {icon}
+          </IconButton>
+        </span>
+      </Tooltip>
+    );
+
+  return (
+    <Button
+      color={color}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size="small"
+      startIcon={showIconWhenFull ? icon : undefined}
+      variant={props.variant ?? 'text'}
+    >
+      {label}
+    </Button>
+  );
+};
+
 /**
  * A file tree for the files of a programming question or answer. What the user can do is set by the
  * feature flags, and `commit` sets whether changes wait for the caller to save them or are saved as
@@ -71,6 +127,8 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   const typeAhead = useRef({ text: '', at: 0 });
 
   const isDraft = props.commit === 'draft';
+  const compact = Boolean(props.compact);
+  const fillHeight = Boolean(props.fillHeight);
   const locked = disabled || busy;
   const canUpload = Boolean(props.uploadable) && !locked;
   const canRename = props.commit === 'draft' && Boolean(props.renamable);
@@ -390,6 +448,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           canDelete={canDeleteNode(node)}
           canDownload={Boolean(props.downloadable)}
           canRename={canRename}
+          compact={compact}
           disabled={locked}
           dropTarget={
             canUpload && dropFolder === folderOfRow(node) && dropFolder !== ''
@@ -443,15 +502,14 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           >
             {props.uploadable && (
               <>
-                <Button
+                <ToolbarButton
+                  compact={compact}
                   disabled={!canUpload}
+                  icon={<Add />}
+                  label={t(translations.addFiles)}
                   onClick={(): void => fileInput.current?.click()}
-                  size="small"
-                  startIcon={<Add />}
                   variant="outlined"
-                >
-                  {t(translations.addFiles)}
-                </Button>
+                />
                 <input
                   ref={fileInput}
                   className="hidden"
@@ -464,15 +522,14 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             )}
 
             {props.canCreateFolder && (
-              <Button
+              <ToolbarButton
+                compact={compact}
                 disabled={locked}
                 icon={<CreateNewFolder />}
                 label={t(translations.newFolder)}
                 onClick={tree.startCreating}
                 variant="outlined"
-              >
-                {t(translations.newFolder)}
-              </Button>
+              />
             )}
           </div>
 
@@ -499,6 +556,8 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             setDropFolder(folderAtEvent(event.target) ?? ''),
         })}
         className={`overflow-hidden ${
+          fillHeight ? 'flex min-h-0 flex-1 flex-col' : ''
+        } ${
           props.headless
             ? ''
             : 'rounded-md border border-solid border-neutral-200'

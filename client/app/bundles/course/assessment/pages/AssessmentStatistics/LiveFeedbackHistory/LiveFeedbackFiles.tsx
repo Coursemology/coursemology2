@@ -32,7 +32,10 @@ const LiveFeedbackFiles: FC<Props> = (props) => {
   };
 
   return (
-    <Paper className="flex flex-col w-full flex-1" variant="outlined">
+    <Paper
+      className="flex flex-col w-full flex-1 min-h-[25rem]"
+      variant="outlined"
+    >
       <div className="flex-none p-1 flex items-center justify-between">
         <Typography className="pl-2" variant="subtitle1">
           {t(translations.codeHistory)}

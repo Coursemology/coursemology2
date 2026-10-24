@@ -162,6 +162,24 @@ describe('FileTreeManager', () => {
       expect(screen.queryByLabelText(/^Download/)).not.toBeInTheDocument();
     });
 
+    it('fits a sidebar when compact: no size column, and icon buttons with the same names', async () => {
+      await renderImmediate({
+        compact: true,
+        uploadable: true,
+        canCreateFolder: true,
+      });
+
+      expect(screen.queryByText('Size')).not.toBeInTheDocument();
+      expect(screen.queryByText('10 bytes')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Add files' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'New folder' })).toBeVisible();
+      expect(
+        screen.getByRole('button', { name: 'Collapse all' }),
+      ).toBeVisible();
+      expect(screen.getByTitle('app.py · 10 bytes')).toBeInTheDocument();
+      expect(screen.getByText('3 files · 30 bytes')).toBeVisible();
+    });
+
     it('shows delete on files only, or on folders only', async () => {
       const { unmount } = render(
         <FileTreeManager commit="immediate" files={SAVED} filesDeleteable />,

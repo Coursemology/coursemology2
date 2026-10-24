@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import PropTypes from 'prop-types';
 
+import { filePathsInTreeOrder } from 'course/assessment/components/FileTreeManager/tree';
 import { workflowStates } from 'course/assessment/submission/constants';
 import { getIsSavingAnswer } from 'course/assessment/submission/selectors/answerFlags';
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
@@ -93,8 +94,10 @@ const Programming = (props) => {
       currentAnswer[`${answerId}`].files_attributes
     : null;
 
+  // The file shown in the editor, by its path. It starts at the first file the tree shows.
   const [displayFileName, setDisplayFileName] = useState(
-    files && files.length > 0 ? files[0].filename : '',
+    () =>
+      filePathsInTreeOrder((files ?? []).map((file) => file.filename))[0] ?? '',
   );
 
   const editorRef = useRef(null);

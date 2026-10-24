@@ -43,6 +43,16 @@ interface FileTreeManagerBaseProps {
   disabled?: boolean;
   /** Drops the outer border, for use inside an accordion. */
   headless?: boolean;
+  /**
+   * For a narrow sidebar: no size column or column headings, shorter rows, and icon buttons in the
+   * toolbar. Sizes stay in the footer and in each name's tooltip.
+   */
+  compact?: boolean;
+  /**
+   * Fills the height of its container, which must have one: the rows scroll, and the toolbar and
+   * footer stay in place.
+   */
+  fillHeight?: boolean;
 }
 
 /**
