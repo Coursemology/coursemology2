@@ -1774,29 +1774,6 @@ const translations = defineMessages({
       'be compared against the Expected expectations using the <code>EXPECT_*</code> assertions from the ' +
       '<gtf>Google Test Framework</gtf>. Floating point numbers are formatted with <sts>std::to_string</sts>.',
   },
-  addFiles: {
-    id: 'course.assessment.question.programming.addFiles',
-    defaultMessage: 'Add files',
-  },
-  oneDuplicateFileNotAdded: {
-    id: 'course.assessment.question.programming.oneDuplicateFileNotAdded',
-    defaultMessage:
-      '{name} was not added because other files with the same name were selected or already added. ' +
-      'Remove the existing file(s) or rename the new file to add it.',
-  },
-  someDuplicateFilesNotAdded: {
-    id: 'course.assessment.question.programming.someDuplicateFilesNotAdded',
-    defaultMessage:
-      'These files were not added because other files with the same name were selected or already added.',
-  },
-  fileName: {
-    id: 'course.assessment.question.programming.fileName',
-    defaultMessage: 'File name',
-  },
-  fileSize: {
-    id: 'course.assessment.question.programming.fileSize',
-    defaultMessage: 'Size',
-  },
   evaluator: {
     id: 'course.assessment.question.programming.evaluator',
     defaultMessage: 'Evaluator',

@@ -1586,6 +1586,111 @@
   "course.assessment.FileManager.uploadingFile": {
     "defaultMessage": "파일 업로드 중..."
   },
+  "course.assessment.FileTreeManager.addFiles": {
+    "defaultMessage": "파일 추가"
+  },
+  "course.assessment.FileTreeManager.collapseAll": {
+    "defaultMessage": "모두 접기"
+  },
+  "course.assessment.FileTreeManager.collapseFolder": {
+    "defaultMessage": "{name} 접기"
+  },
+  "course.assessment.FileTreeManager.deleteConfirmation": {
+    "defaultMessage": "\"{path}\"을(를) 삭제하시겠습니까?"
+  },
+  "course.assessment.FileTreeManager.deleteFile": {
+    "defaultMessage": "{name} 삭제"
+  },
+  "course.assessment.FileTreeManager.deleteFolder": {
+    "defaultMessage": "{name} 폴더 삭제"
+  },
+  "course.assessment.FileTreeManager.downloadFile": {
+    "defaultMessage": "{name} 다운로드"
+  },
+  "course.assessment.FileTreeManager.duplicatePath": {
+    "defaultMessage": "이 위치에 같은 이름의 파일 또는 폴더가 이미 있습니다."
+  },
+  "course.assessment.FileTreeManager.emptyFolder": {
+    "defaultMessage": "비어 있음"
+  },
+  "course.assessment.FileTreeManager.emptyFolderHint": {
+    "defaultMessage": "빈 폴더는 저장되지 않습니다."
+  },
+  "course.assessment.FileTreeManager.expandAll": {
+    "defaultMessage": "모두 펼치기"
+  },
+  "course.assessment.FileTreeManager.expandFolder": {
+    "defaultMessage": "{name} 펼치기"
+  },
+  "course.assessment.FileTreeManager.fileFolderClash": {
+    "defaultMessage": "파일과 폴더는 같은 이름을 사용할 수 없습니다."
+  },
+  "course.assessment.FileTreeManager.files": {
+    "defaultMessage": "파일"
+  },
+  "course.assessment.FileTreeManager.filesSummary": {
+    "defaultMessage": "{count, plural, other {파일 #개}} · {size}"
+  },
+  "course.assessment.FileTreeManager.folderAlreadyExists": {
+    "defaultMessage": "이 폴더는 이미 있습니다."
+  },
+  "course.assessment.FileTreeManager.folderNamePlaceholder": {
+    "defaultMessage": "폴더 이름"
+  },
+  "course.assessment.FileTreeManager.folderSummary": {
+    "defaultMessage": "{count, plural, other {파일 #개}} · {size}"
+  },
+  "course.assessment.FileTreeManager.foldersNotUploaded": {
+    "defaultMessage": "폴더는 업로드할 수 없습니다. 폴더를 만든 다음 파일을 추가하세요."
+  },
+  "course.assessment.FileTreeManager.invalidPath": {
+    "defaultMessage": "이름에는 \" ? * : | < > \\ 를 사용할 수 없으며, 공백으로 시작하거나 끝나거나 마침표로 끝날 수 없습니다."
+  },
+  "course.assessment.FileTreeManager.newBadge": {
+    "defaultMessage": "신규"
+  },
+  "course.assessment.FileTreeManager.newFolder": {
+    "defaultMessage": "새 폴더"
+  },
+  "course.assessment.FileTreeManager.newFolderName": {
+    "defaultMessage": "새 폴더 이름"
+  },
+  "course.assessment.FileTreeManager.newName": {
+    "defaultMessage": "{name}의 새 이름"
+  },
+  "course.assessment.FileTreeManager.noFiles": {
+    "defaultMessage": "아직 파일이 없습니다."
+  },
+  "course.assessment.FileTreeManager.pathTooLong": {
+    "defaultMessage": "파일 경로가 너무 깁니다."
+  },
+  "course.assessment.FileTreeManager.renameFile": {
+    "defaultMessage": "{name} 이름 변경"
+  },
+  "course.assessment.FileTreeManager.restoreFile": {
+    "defaultMessage": "{name} 복원"
+  },
+  "course.assessment.FileTreeManager.restoreFolder": {
+    "defaultMessage": "{name} 폴더 복원"
+  },
+  "course.assessment.FileTreeManager.saveFailed": {
+    "defaultMessage": "변경 사항을 저장하지 못했습니다. 다시 시도해 주세요."
+  },
+  "course.assessment.FileTreeManager.size": {
+    "defaultMessage": "크기"
+  },
+  "course.assessment.FileTreeManager.someFilesNotAdded": {
+    "defaultMessage": "다음 파일이 추가되지 않았습니다:"
+  },
+  "course.assessment.FileTreeManager.toDeleteBadge": {
+    "defaultMessage": "삭제 예정"
+  },
+  "course.assessment.FileTreeManager.toDeleteSummary": {
+    "defaultMessage": "삭제 예정 {count}개"
+  },
+  "course.assessment.FileTreeManager.toUploadSummary": {
+    "defaultMessage": "업로드 예정 {count}개"
+  },
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "평가 마감 알림 이메일이 성공적으로 발송되었습니다."
   },
@@ -2000,9 +2105,6 @@
   "course.assessment.question.multipleResponses.undoDeleteResponse": {
     "defaultMessage": "삭제 취소 응답"
   },
-  "course.assessment.question.programming.addFiles": {
-    "defaultMessage": "파일 추가"
-  },
   "course.assessment.question.programming.addTestCase": {
     "defaultMessage": "테스트 케이스 추가"
   },
@@ -2129,12 +2231,6 @@
   "course.assessment.question.programming.expression": {
     "defaultMessage": "식"
   },
-  "course.assessment.question.programming.fileName": {
-    "defaultMessage": "파일 이름"
-  },
-  "course.assessment.question.programming.fileSize": {
-    "defaultMessage": "크기"
-  },
   "course.assessment.question.programming.fileSubmission": {
     "defaultMessage": "파일 제출"
   },
@@ -2197,9 +2293,6 @@
   },
   "course.assessment.question.programming.noTestCases": {
     "defaultMessage": "테스트 케이스가 없습니다."
-  },
-  "course.assessment.question.programming.oneDuplicateFileNotAdded": {
-    "defaultMessage": "{name}은(는) 다른 파일과 이름이 같거나 이미 추가된 파일이 선택되었기 때문에 추가되지 않았습니다. 기존 파일을 제거하거나 새 파일의 이름을 변경하여 추가할 수 있습니다."
   },
   "course.assessment.question.programming.packageCreationMode": {
     "defaultMessage": "패키지 생성 모드"
@@ -2281,9 +2374,6 @@
   },
   "course.assessment.question.programming.solutionHint": {
     "defaultMessage": "항상 숨겨져 있습니다. 참조용으로 여기에 저장되었습니다."
-  },
-  "course.assessment.question.programming.someDuplicateFilesNotAdded": {
-    "defaultMessage": "이 파일은 다른 파일과 이름이 같거나 이미 추가된 파일이 선택되었기 때문에 추가되지 않았습니다."
   },
   "course.assessment.question.programming.standardError": {
     "defaultMessage": "표준 오류"
@@ -3467,15 +3557,6 @@
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "파일을 업로드하려면 드래그 앤 드롭하거나 클릭하세요."
   },
-  "course.assessment.submission.ImportedFileView.deleteConfirmation": {
-    "defaultMessage": "이 파일을 삭제하시겠습니까?"
-  },
-  "course.assessment.submission.ImportedFileView.noFiles": {
-    "defaultMessage": "업로드된 파일이 없습니다."
-  },
-  "course.assessment.submission.ImportedFileView.uploadedFiles": {
-    "defaultMessage": "업로드된 파일:"
-  },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
     "defaultMessage": "과거 답변 보기"
   },
@@ -3524,6 +3605,9 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "팬텀 사용자 포함"
   },
+  "course.assessment.submission.binaryFileUploadError": {
+    "defaultMessage": "파일 업로드 실패: 코드와 같은 텍스트 파일만 업로드할 수 있습니다"
+  },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "이 답안이 채점된 이후 문제가 변경되었습니다."
   },
@@ -3532,6 +3616,9 @@
   },
   "course.assessment.submission.publishRubricFeedbackSuccess": {
     "defaultMessage": "모든 AI 루브릭 기반 피드백이 게시되었습니다."
+  },
+  "course.assessment.submission.uploadFilesSuccess": {
+    "defaultMessage": "파일이 성공적으로 업로드되었습니다"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "내 학생들"
