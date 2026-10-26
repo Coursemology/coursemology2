@@ -1586,6 +1586,111 @@
   "course.assessment.FileManager.uploadingFile": {
     "defaultMessage": "Uploading file..."
   },
+  "course.assessment.FileTreeManager.addFiles": {
+    "defaultMessage": "Add files"
+  },
+  "course.assessment.FileTreeManager.collapseAll": {
+    "defaultMessage": "Collapse all"
+  },
+  "course.assessment.FileTreeManager.collapseFolder": {
+    "defaultMessage": "Collapse {name}"
+  },
+  "course.assessment.FileTreeManager.deleteConfirmation": {
+    "defaultMessage": "Are you sure you want to delete \"{path}\"?"
+  },
+  "course.assessment.FileTreeManager.deleteFile": {
+    "defaultMessage": "Delete {name}"
+  },
+  "course.assessment.FileTreeManager.deleteFolder": {
+    "defaultMessage": "Delete folder {name}"
+  },
+  "course.assessment.FileTreeManager.downloadFile": {
+    "defaultMessage": "Download {name}"
+  },
+  "course.assessment.FileTreeManager.duplicatePath": {
+    "defaultMessage": "A file or folder with this name already exists here."
+  },
+  "course.assessment.FileTreeManager.emptyFolder": {
+    "defaultMessage": "empty"
+  },
+  "course.assessment.FileTreeManager.emptyFolderHint": {
+    "defaultMessage": "Empty folders will not be saved."
+  },
+  "course.assessment.FileTreeManager.expandAll": {
+    "defaultMessage": "Expand all"
+  },
+  "course.assessment.FileTreeManager.expandFolder": {
+    "defaultMessage": "Expand {name}"
+  },
+  "course.assessment.FileTreeManager.fileFolderClash": {
+    "defaultMessage": "A file and a folder cannot have the same name."
+  },
+  "course.assessment.FileTreeManager.files": {
+    "defaultMessage": "Files"
+  },
+  "course.assessment.FileTreeManager.filesSummary": {
+    "defaultMessage": "{count, plural, one {# file} other {# files}} · {size}"
+  },
+  "course.assessment.FileTreeManager.folderAlreadyExists": {
+    "defaultMessage": "This folder already exists."
+  },
+  "course.assessment.FileTreeManager.folderNamePlaceholder": {
+    "defaultMessage": "folder name"
+  },
+  "course.assessment.FileTreeManager.folderSummary": {
+    "defaultMessage": "{count, plural, one {# file} other {# files}} · {size}"
+  },
+  "course.assessment.FileTreeManager.foldersNotUploaded": {
+    "defaultMessage": "Folders cannot be uploaded. Create the folder, then add its files."
+  },
+  "course.assessment.FileTreeManager.invalidPath": {
+    "defaultMessage": "Names cannot contain \" ? * : | < > \\, start or end with a space, or end with a dot."
+  },
+  "course.assessment.FileTreeManager.newBadge": {
+    "defaultMessage": "New"
+  },
+  "course.assessment.FileTreeManager.newFolder": {
+    "defaultMessage": "New folder"
+  },
+  "course.assessment.FileTreeManager.newFolderName": {
+    "defaultMessage": "New folder name"
+  },
+  "course.assessment.FileTreeManager.newName": {
+    "defaultMessage": "New name for {name}"
+  },
+  "course.assessment.FileTreeManager.noFiles": {
+    "defaultMessage": "No files yet."
+  },
+  "course.assessment.FileTreeManager.pathTooLong": {
+    "defaultMessage": "File path too long."
+  },
+  "course.assessment.FileTreeManager.renameFile": {
+    "defaultMessage": "Rename {name}"
+  },
+  "course.assessment.FileTreeManager.restoreFile": {
+    "defaultMessage": "Restore {name}"
+  },
+  "course.assessment.FileTreeManager.restoreFolder": {
+    "defaultMessage": "Restore folder {name}"
+  },
+  "course.assessment.FileTreeManager.saveFailed": {
+    "defaultMessage": "Your change could not be saved. Please try again."
+  },
+  "course.assessment.FileTreeManager.size": {
+    "defaultMessage": "Size"
+  },
+  "course.assessment.FileTreeManager.someFilesNotAdded": {
+    "defaultMessage": "{count, plural, one {This file was} other {These files were}} not added:"
+  },
+  "course.assessment.FileTreeManager.toDeleteBadge": {
+    "defaultMessage": "To delete"
+  },
+  "course.assessment.FileTreeManager.toDeleteSummary": {
+    "defaultMessage": "{count} to delete"
+  },
+  "course.assessment.FileTreeManager.toUploadSummary": {
+    "defaultMessage": "{count} to upload"
+  },
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "Closing assessment reminder emails have been successfully dispatched."
   },
@@ -1964,9 +2069,6 @@
   "course.assessment.question.multipleResponses.undoDeleteResponse": {
     "defaultMessage": "Undo delete response"
   },
-  "course.assessment.question.programming.addFiles": {
-    "defaultMessage": "Add files"
-  },
   "course.assessment.question.programming.addTestCase": {
     "defaultMessage": "Add a test case"
   },
@@ -2093,12 +2195,6 @@
   "course.assessment.question.programming.expression": {
     "defaultMessage": "Expression"
   },
-  "course.assessment.question.programming.fileName": {
-    "defaultMessage": "File name"
-  },
-  "course.assessment.question.programming.fileSize": {
-    "defaultMessage": "Size"
-  },
   "course.assessment.question.programming.fileSubmission": {
     "defaultMessage": "File submission"
   },
@@ -2161,9 +2257,6 @@
   },
   "course.assessment.question.programming.noTestCases": {
     "defaultMessage": "No test cases."
-  },
-  "course.assessment.question.programming.oneDuplicateFileNotAdded": {
-    "defaultMessage": "{name} was not added because other files with the same name were selected or already added. Remove the existing file(s) or rename the new file to add it."
   },
   "course.assessment.question.programming.packageCreationMode": {
     "defaultMessage": "Package creation mode"
@@ -2245,9 +2338,6 @@
   },
   "course.assessment.question.programming.solutionHint": {
     "defaultMessage": "Always hidden. Stored here for reference only."
-  },
-  "course.assessment.question.programming.someDuplicateFilesNotAdded": {
-    "defaultMessage": "These files were not added because other files with the same name were selected or already added."
   },
   "course.assessment.question.programming.standardError": {
     "defaultMessage": "Standard error"
@@ -3452,15 +3542,6 @@
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "Drag and drop or click to upload files"
   },
-  "course.assessment.submission.ImportedFileView.deleteConfirmation": {
-    "defaultMessage": "Are you sure you want to delete this file?"
-  },
-  "course.assessment.submission.ImportedFileView.noFiles": {
-    "defaultMessage": "No files uploaded."
-  },
-  "course.assessment.submission.ImportedFileView.uploadedFiles": {
-    "defaultMessage": "Uploaded Files:"
-  },
   "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted."
   },
@@ -3530,6 +3611,9 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "Include phantom users"
   },
+  "course.assessment.submission.binaryFileUploadError": {
+    "defaultMessage": "File uploads failed: only text files, such as code, can be uploaded"
+  },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "Changes have been made to the question after this answer was graded."
   },
@@ -3538,6 +3622,9 @@
   },
   "course.assessment.submission.publishRubricFeedbackSuccess": {
     "defaultMessage": "All AI rubric-based feedback has been published."
+  },
+  "course.assessment.submission.uploadFilesSuccess": {
+    "defaultMessage": "{count, plural, one {File uploaded successfully} other {Files uploaded successfully}}"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "My Students"

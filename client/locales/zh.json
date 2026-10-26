@@ -1577,6 +1577,111 @@
   "course.assessment.FileManager.uploadingFile": {
     "defaultMessage": "上传文件..."
   },
+  "course.assessment.FileTreeManager.addFiles": {
+    "defaultMessage": "添加文件"
+  },
+  "course.assessment.FileTreeManager.collapseAll": {
+    "defaultMessage": "全部折叠"
+  },
+  "course.assessment.FileTreeManager.collapseFolder": {
+    "defaultMessage": "折叠 {name}"
+  },
+  "course.assessment.FileTreeManager.deleteConfirmation": {
+    "defaultMessage": "你确定要删除“{path}”吗？"
+  },
+  "course.assessment.FileTreeManager.deleteFile": {
+    "defaultMessage": "删除 {name}"
+  },
+  "course.assessment.FileTreeManager.deleteFolder": {
+    "defaultMessage": "删除文件夹 {name}"
+  },
+  "course.assessment.FileTreeManager.downloadFile": {
+    "defaultMessage": "下载 {name}"
+  },
+  "course.assessment.FileTreeManager.duplicatePath": {
+    "defaultMessage": "此处已存在同名的文件或文件夹。"
+  },
+  "course.assessment.FileTreeManager.emptyFolder": {
+    "defaultMessage": "空"
+  },
+  "course.assessment.FileTreeManager.emptyFolderHint": {
+    "defaultMessage": "空文件夹不会被保存。"
+  },
+  "course.assessment.FileTreeManager.expandAll": {
+    "defaultMessage": "全部展开"
+  },
+  "course.assessment.FileTreeManager.expandFolder": {
+    "defaultMessage": "展开 {name}"
+  },
+  "course.assessment.FileTreeManager.fileFolderClash": {
+    "defaultMessage": "文件和文件夹不能同名。"
+  },
+  "course.assessment.FileTreeManager.files": {
+    "defaultMessage": "文件"
+  },
+  "course.assessment.FileTreeManager.filesSummary": {
+    "defaultMessage": "{count, plural, other {# 个文件}} · {size}"
+  },
+  "course.assessment.FileTreeManager.folderAlreadyExists": {
+    "defaultMessage": "此文件夹已存在。"
+  },
+  "course.assessment.FileTreeManager.folderNamePlaceholder": {
+    "defaultMessage": "文件夹名称"
+  },
+  "course.assessment.FileTreeManager.folderSummary": {
+    "defaultMessage": "{count, plural, other {# 个文件}} · {size}"
+  },
+  "course.assessment.FileTreeManager.foldersNotUploaded": {
+    "defaultMessage": "无法上传文件夹。请先创建文件夹，再添加其中的文件。"
+  },
+  "course.assessment.FileTreeManager.invalidPath": {
+    "defaultMessage": "名称不能包含 \" ? * : | < > \\，不能以空格开头或结尾，也不能以句点结尾。"
+  },
+  "course.assessment.FileTreeManager.newBadge": {
+    "defaultMessage": "新增"
+  },
+  "course.assessment.FileTreeManager.newFolder": {
+    "defaultMessage": "新建文件夹"
+  },
+  "course.assessment.FileTreeManager.newFolderName": {
+    "defaultMessage": "新文件夹名称"
+  },
+  "course.assessment.FileTreeManager.newName": {
+    "defaultMessage": "{name} 的新名称"
+  },
+  "course.assessment.FileTreeManager.noFiles": {
+    "defaultMessage": "暂无文件。"
+  },
+  "course.assessment.FileTreeManager.pathTooLong": {
+    "defaultMessage": "文件路径过长。"
+  },
+  "course.assessment.FileTreeManager.renameFile": {
+    "defaultMessage": "重命名 {name}"
+  },
+  "course.assessment.FileTreeManager.restoreFile": {
+    "defaultMessage": "恢复 {name}"
+  },
+  "course.assessment.FileTreeManager.restoreFolder": {
+    "defaultMessage": "恢复文件夹 {name}"
+  },
+  "course.assessment.FileTreeManager.saveFailed": {
+    "defaultMessage": "无法保存你的更改，请重试。"
+  },
+  "course.assessment.FileTreeManager.size": {
+    "defaultMessage": "大小"
+  },
+  "course.assessment.FileTreeManager.someFilesNotAdded": {
+    "defaultMessage": "以下文件未能添加："
+  },
+  "course.assessment.FileTreeManager.toDeleteBadge": {
+    "defaultMessage": "待删除"
+  },
+  "course.assessment.FileTreeManager.toDeleteSummary": {
+    "defaultMessage": "{count} 个待删除"
+  },
+  "course.assessment.FileTreeManager.toUploadSummary": {
+    "defaultMessage": "{count} 个待上传"
+  },
   "course.assessment.assessments.sendReminderEmailSuccess": {
     "defaultMessage": "已成功发送结束测验的提醒邮件。"
   },
@@ -1955,9 +2060,6 @@
   "course.assessment.question.multipleResponses.undoDeleteResponse": {
     "defaultMessage": "撤销删除选择"
   },
-  "course.assessment.question.programming.addFiles": {
-    "defaultMessage": "添加文件"
-  },
   "course.assessment.question.programming.addTestCase": {
     "defaultMessage": "添加测试用例"
   },
@@ -2084,12 +2186,6 @@
   "course.assessment.question.programming.expression": {
     "defaultMessage": "表达式"
   },
-  "course.assessment.question.programming.fileName": {
-    "defaultMessage": "文件名"
-  },
-  "course.assessment.question.programming.fileSize": {
-    "defaultMessage": "文件体积"
-  },
   "course.assessment.question.programming.fileSubmission": {
     "defaultMessage": "文件提交"
   },
@@ -2152,9 +2248,6 @@
   },
   "course.assessment.question.programming.noTestCases": {
     "defaultMessage": "无测试用例"
-  },
-  "course.assessment.question.programming.oneDuplicateFileNotAdded": {
-    "defaultMessage": "因为已经选择/添加了其他同名文件，未能添加 {name} 。你可以删除现有文件或重命名后重试。"
   },
   "course.assessment.question.programming.packageCreationMode": {
     "defaultMessage": "包创建模式"
@@ -2236,9 +2329,6 @@
   },
   "course.assessment.question.programming.solutionHint": {
     "defaultMessage": "始终隐藏，存储在这里供参考。"
-  },
-  "course.assessment.question.programming.someDuplicateFilesNotAdded": {
-    "defaultMessage": "这些文件未能添加，因为已经选择/添加了其他同名文件。"
   },
   "course.assessment.question.programming.standardError": {
     "defaultMessage": "标准错误"
@@ -3437,15 +3527,6 @@
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "拖放或点击上传文件"
   },
-  "course.assessment.submission.ImportedFileView.deleteConfirmation": {
-    "defaultMessage": "你确定要删除此文件吗？"
-  },
-  "course.assessment.submission.ImportedFileView.noFiles": {
-    "defaultMessage": "未上传文件。"
-  },
-  "course.assessment.submission.ImportedFileView.uploadedFiles": {
-    "defaultMessage": "上传的文件："
-  },
   "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "此问题没有已提交的答案——可能是因为提交之后又添加了新问题。"
   },
@@ -3472,6 +3553,9 @@
   },
   "course.assessment.submission.answerTooLargeError": {
     "defaultMessage": "您的答案必须小于 2 MB。"
+  },
+  "course.assessment.submission.binaryFileUploadError": {
+    "defaultMessage": "文件上传失败：只能上传代码等文本文件"
   },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "此答案评分后，题目已被修改。"
@@ -3538,6 +3622,9 @@
   },
   "course.assessment.submission.publishRubricFeedbackSuccess": {
     "defaultMessage": "所有 AI 评分标准反馈均已发布。"
+  },
+  "course.assessment.submission.uploadFilesSuccess": {
+    "defaultMessage": "文件上传成功"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "我的学生"
