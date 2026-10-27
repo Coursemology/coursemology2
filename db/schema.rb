@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_22_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -72,6 +72,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_22_000000) do
     t.index ["course_id"], name: "fk__course_achievements_course_id"
     t.index ["creator_id"], name: "fk__course_achievements_creator_id"
     t.index ["updater_id"], name: "fk__course_achievements_updater_id"
+  end
+
+  create_table "course_activity_marks", primary_key: ["course_id", "month", "user_id"], force: :cascade do |t|
+    t.integer "course_id", null: false
+    t.integer "instance_id", null: false
+    t.date "month", null: false, comment: "First day of the month, UTC"
+    t.integer "user_id", null: false
+    t.index ["month", "instance_id", "user_id"], name: "index_course_activity_marks_on_month_instance_user"
   end
 
   create_table "course_announcements", id: :serial, force: :cascade do |t|
