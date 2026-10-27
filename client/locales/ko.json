@@ -9044,6 +9044,69 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "도움 받기"
   },
+  "system.admin.admin.AdminNavigator.activity": {
+    "defaultMessage": "활동"
+  },
+  "system.admin.admin.ActivityStatistics.header": {
+    "defaultMessage": "학생 활동"
+  },
+  "system.admin.admin.ActivityStatistics.fetchFailure": {
+    "defaultMessage": "활동 통계를 불러오지 못했습니다."
+  },
+  "system.admin.admin.ActivityStatistics.monthly": {
+    "defaultMessage": "월별"
+  },
+  "system.admin.admin.ActivityStatistics.yearly": {
+    "defaultMessage": "연도별"
+  },
+  "system.admin.admin.ActivityStatistics.granularity": {
+    "defaultMessage": "집계 단위"
+  },
+  "system.admin.admin.ActivityStatistics.previousPeriod": {
+    "defaultMessage": "이전 기간"
+  },
+  "system.admin.admin.ActivityStatistics.nextPeriod": {
+    "defaultMessage": "다음 기간"
+  },
+  "system.admin.admin.ActivityStatistics.overall": {
+    "defaultMessage": "전체"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerMonth": {
+    "defaultMessage": "월 평균"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerYear": {
+    "defaultMessage": "연 평균"
+  },
+  "system.admin.admin.ActivityStatistics.peak": {
+    "defaultMessage": "최고치"
+  },
+  "system.admin.admin.ActivityStatistics.peakValue": {
+    "defaultMessage": "{bucket}: {count}"
+  },
+  "system.admin.admin.ActivityStatistics.studentCount": {
+    "defaultMessage": "{count, plural, other {학생 #명}}"
+  },
+  "system.admin.admin.ActivityStatistics.currentLabel": {
+    "defaultMessage": "{label} (현재)"
+  },
+  "system.admin.admin.ActivityStatistics.currentMonth": {
+    "defaultMessage": "이번 달"
+  },
+  "system.admin.admin.ActivityStatistics.currentYear": {
+    "defaultMessage": "올해"
+  },
+  "system.admin.admin.ActivityStatistics.activeStudents": {
+    "defaultMessage": "활동 학생"
+  },
+  "system.admin.admin.ActivityStatistics.chartSummary": {
+    "defaultMessage": "{name}의 활동 학생: {values}"
+  },
+  "system.admin.admin.ActivityStatistics.searchInstances": {
+    "defaultMessage": "인스턴스 검색"
+  },
+  "system.admin.admin.ActivityStatistics.csvFileName": {
+    "defaultMessage": "학생 활동 {period}"
+  },
   "system.admin.admin.AdminNavigator.marketplace": {
     "defaultMessage": "마켓플레이스 접근"
   },

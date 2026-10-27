@@ -1,5 +1,9 @@
 import { Operation } from 'store';
 import { AnnouncementFormData } from 'types/course/announcements';
+import {
+  ActivityStatisticsData,
+  ActivityStatisticsParams,
+} from 'types/system/activities';
 import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
 import { UserMiniEntity } from 'types/users';
 
@@ -207,5 +211,12 @@ export const fetchSystemGetHelpActivity = async (params: {
   end_at: string;
 }): Promise<SystemGetHelpActivity[]> => {
   const response = await SystemAPI.admin.fetchSystemGetHelpActivity(params);
+  return response.data;
+};
+
+export const fetchActivityStatistics = async (
+  params: ActivityStatisticsParams,
+): Promise<ActivityStatisticsData> => {
+  const response = await SystemAPI.admin.fetchActivityStatistics(params);
   return response.data;
 };

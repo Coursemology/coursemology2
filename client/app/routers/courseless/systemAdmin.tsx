@@ -111,6 +111,17 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
         ).default,
       }),
     },
+    {
+      path: 'activity',
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'SystemActivityIndex' */
+            'bundles/system/admin/admin/pages/SystemActivityIndex'
+          )
+        ).default,
+      }),
+    },
   ],
 });
 

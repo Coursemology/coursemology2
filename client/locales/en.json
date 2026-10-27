@@ -9068,6 +9068,69 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "Get Help"
   },
+  "system.admin.admin.AdminNavigator.activity": {
+    "defaultMessage": "Activity"
+  },
+  "system.admin.admin.ActivityStatistics.header": {
+    "defaultMessage": "Student Activity"
+  },
+  "system.admin.admin.ActivityStatistics.fetchFailure": {
+    "defaultMessage": "Failed to load activity statistics."
+  },
+  "system.admin.admin.ActivityStatistics.monthly": {
+    "defaultMessage": "Monthly"
+  },
+  "system.admin.admin.ActivityStatistics.yearly": {
+    "defaultMessage": "Yearly"
+  },
+  "system.admin.admin.ActivityStatistics.granularity": {
+    "defaultMessage": "Granularity"
+  },
+  "system.admin.admin.ActivityStatistics.previousPeriod": {
+    "defaultMessage": "Previous period"
+  },
+  "system.admin.admin.ActivityStatistics.nextPeriod": {
+    "defaultMessage": "Next period"
+  },
+  "system.admin.admin.ActivityStatistics.overall": {
+    "defaultMessage": "Overall"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerMonth": {
+    "defaultMessage": "Average per month"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerYear": {
+    "defaultMessage": "Average per year"
+  },
+  "system.admin.admin.ActivityStatistics.peak": {
+    "defaultMessage": "Peak"
+  },
+  "system.admin.admin.ActivityStatistics.peakValue": {
+    "defaultMessage": "{count} in {bucket}"
+  },
+  "system.admin.admin.ActivityStatistics.studentCount": {
+    "defaultMessage": "{count, plural, one {# student} other {# students}}"
+  },
+  "system.admin.admin.ActivityStatistics.currentLabel": {
+    "defaultMessage": "{label} (current)"
+  },
+  "system.admin.admin.ActivityStatistics.currentMonth": {
+    "defaultMessage": "Current month"
+  },
+  "system.admin.admin.ActivityStatistics.currentYear": {
+    "defaultMessage": "Current year"
+  },
+  "system.admin.admin.ActivityStatistics.activeStudents": {
+    "defaultMessage": "Active students"
+  },
+  "system.admin.admin.ActivityStatistics.chartSummary": {
+    "defaultMessage": "Active students for {name}: {values}"
+  },
+  "system.admin.admin.ActivityStatistics.searchInstances": {
+    "defaultMessage": "Search instances"
+  },
+  "system.admin.admin.ActivityStatistics.csvFileName": {
+    "defaultMessage": "Student activity {period}"
+  },
   "system.admin.admin.AdminNavigator.marketplace": {
     "defaultMessage": "Marketplace Access"
   },

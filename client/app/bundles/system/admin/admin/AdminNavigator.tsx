@@ -6,6 +6,7 @@ import {
   Chat,
   Group,
   Storefront,
+  Timeline,
 } from '@mui/icons-material';
 
 import useTranslation from 'lib/hooks/useTranslation';
@@ -32,6 +33,10 @@ const translations = defineMessages({
   getHelp: {
     id: 'system.admin.admin.AdminNavigator.getHelp',
     defaultMessage: 'Get Help',
+  },
+  activity: {
+    id: 'system.admin.admin.AdminNavigator.activity',
+    defaultMessage: 'Activity',
   },
   marketplace: {
     id: 'system.admin.admin.AdminNavigator.marketplace',
@@ -72,6 +77,11 @@ const AdminNavigator = (): JSX.Element => {
           icon: <AutoStories />,
           title: t(translations.courses),
           path: '/admin/courses',
+        },
+        {
+          icon: <Timeline />,
+          title: t(translations.activity),
+          path: '/admin/activity',
         },
         {
           icon: <Storefront />,
