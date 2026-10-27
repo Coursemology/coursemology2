@@ -3,6 +3,10 @@ import {
   AnnouncementData,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+import {
+  ActivityStatisticsData,
+  ActivityStatisticsParams,
+} from 'types/system/activities';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
 import {
@@ -175,6 +179,17 @@ export default class AdminAPI extends BaseSystemAPI {
     end_at: string;
   }): Promise<AxiosResponse> {
     return this.client.get(`${AdminAPI.#urlPrefix}/get_help`, {
+      params,
+    });
+  }
+
+  /**
+   * Fetches student activity counts per instance, bucketed by month or year
+   */
+  fetchActivityStatistics(
+    params: ActivityStatisticsParams,
+  ): Promise<AxiosResponse<ActivityStatisticsData>> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/activities/statistics`, {
       params,
     });
   }

@@ -9038,6 +9038,69 @@
   "system.admin.admin.AdminNavigator.getHelp": {
     "defaultMessage": "获取帮助"
   },
+  "system.admin.admin.AdminNavigator.activity": {
+    "defaultMessage": "活动"
+  },
+  "system.admin.admin.ActivityStatistics.header": {
+    "defaultMessage": "学生活动"
+  },
+  "system.admin.admin.ActivityStatistics.fetchFailure": {
+    "defaultMessage": "加载活动统计失败。"
+  },
+  "system.admin.admin.ActivityStatistics.monthly": {
+    "defaultMessage": "按月"
+  },
+  "system.admin.admin.ActivityStatistics.yearly": {
+    "defaultMessage": "按年"
+  },
+  "system.admin.admin.ActivityStatistics.granularity": {
+    "defaultMessage": "时间粒度"
+  },
+  "system.admin.admin.ActivityStatistics.previousPeriod": {
+    "defaultMessage": "上一时段"
+  },
+  "system.admin.admin.ActivityStatistics.nextPeriod": {
+    "defaultMessage": "下一时段"
+  },
+  "system.admin.admin.ActivityStatistics.overall": {
+    "defaultMessage": "总体"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerMonth": {
+    "defaultMessage": "月平均"
+  },
+  "system.admin.admin.ActivityStatistics.averagePerYear": {
+    "defaultMessage": "年平均"
+  },
+  "system.admin.admin.ActivityStatistics.peak": {
+    "defaultMessage": "峰值"
+  },
+  "system.admin.admin.ActivityStatistics.peakValue": {
+    "defaultMessage": "{bucket}：{count}"
+  },
+  "system.admin.admin.ActivityStatistics.studentCount": {
+    "defaultMessage": "{count, plural, other {# 名学生}}"
+  },
+  "system.admin.admin.ActivityStatistics.currentLabel": {
+    "defaultMessage": "{label}（当前）"
+  },
+  "system.admin.admin.ActivityStatistics.currentMonth": {
+    "defaultMessage": "本月"
+  },
+  "system.admin.admin.ActivityStatistics.currentYear": {
+    "defaultMessage": "今年"
+  },
+  "system.admin.admin.ActivityStatistics.activeStudents": {
+    "defaultMessage": "活跃学生"
+  },
+  "system.admin.admin.ActivityStatistics.chartSummary": {
+    "defaultMessage": "{name} 的活跃学生：{values}"
+  },
+  "system.admin.admin.ActivityStatistics.searchInstances": {
+    "defaultMessage": "搜索实例"
+  },
+  "system.admin.admin.ActivityStatistics.csvFileName": {
+    "defaultMessage": "学生活动 {period}"
+  },
   "system.admin.admin.AdminNavigator.marketplace": {
     "defaultMessage": "市场访问"
   },
