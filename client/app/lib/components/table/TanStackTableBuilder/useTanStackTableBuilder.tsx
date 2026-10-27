@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Cell,
   ColumnFiltersState,
+  FilterFn,
+  filterFns,
+  FilterMeta,
   getCoreRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
@@ -203,6 +206,22 @@ const useTanStackTableBuilder = <D extends object>(
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
 
+  // TanStack's default search ('auto') is includesString; `search.alwaysInclude` rows pass on top of it.
+  const alwaysInclude = props.search?.alwaysInclude;
+  const globalFilterFn: FilterFn<D> | 'auto' = alwaysInclude
+    ? Object.assign(
+        (
+          row: Row<D>,
+          columnId: string,
+          filterValue: string,
+          addMeta: (meta: FilterMeta) => void,
+        ): boolean =>
+          alwaysInclude(row.original) ||
+          filterFns.includesString(row, columnId, filterValue, addMeta),
+        { autoRemove: filterFns.includesString.autoRemove },
+      )
+    : 'auto';
+
   const table = useReactTable({
     data: props.data,
     columns,
@@ -243,6 +262,7 @@ const useTanStackTableBuilder = <D extends object>(
     // enableGlobalFilter (= searchable), so visibility is the only extra gate.
     // See: https://github.com/TanStack/table/pull/6252
     getColumnCanGlobalFilter: (column) => column.getIsVisible(),
+    globalFilterFn,
     autoResetPageIndex: false,
     state: {
       rowSelection,
@@ -355,6 +375,8 @@ const useTanStackTableBuilder = <D extends object>(
       forEachRow: (row) => ({
         id: row.id,
         className: props.getRowClassName?.(row.original),
+        onClick:
+          props.onRowClick && ((): void => props.onRowClick?.(row.original)),
         getEqualityData:
           props.getRowEqualityData &&
           ((): RowEqualityData => ({

@@ -11,6 +11,7 @@ export interface RowRender {
   id: string;
   className?: string;
   getEqualityData?: () => RowEqualityData;
+  onClick?: () => void;
 }
 
 export interface CellRender {

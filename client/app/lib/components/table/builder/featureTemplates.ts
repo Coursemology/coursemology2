@@ -28,6 +28,9 @@ export interface CsvDownloadTemplate {
 export interface SearchTemplate<D extends Data> {
   searchPlaceholder?: string;
   searchProps?: SearchProps<D>;
+  // Rows for which this returns true are never hidden by the search box (e.g. a totals row).
+  // Every other row is matched as usual.
+  alwaysInclude?: (datum: D) => boolean;
 }
 
 export interface IndexingTemplate<D extends Data> {

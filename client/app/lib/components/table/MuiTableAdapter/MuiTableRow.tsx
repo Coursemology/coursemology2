@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { TableCell, TableRow } from '@mui/material';
+import { TableCell, TableRow, TableRowProps } from '@mui/material';
 import equal from 'fast-deep-equal';
 
 import { isRowSelector } from '../adapters';
@@ -12,8 +12,27 @@ interface MuiTableRowProps<C> extends RowRender {
   forEachCell: (cell: C, index: number) => CellRender;
 }
 
+// Clickable rows are also focusable and respond to Enter and Space, so they work without a mouse.
+const getClickableRowProps = (onClick?: () => void): Partial<TableRowProps> =>
+  onClick
+    ? {
+        hover: true,
+        onClick,
+        tabIndex: 0,
+        onKeyDown: (event): void => {
+          if (event.target !== event.currentTarget) return;
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          onClick();
+        },
+      }
+    : {};
+
 const MuiTableRow = <C,>(props: MuiTableRowProps<C>): JSX.Element => (
-  <TableRow className={props.className}>
+  <TableRow
+    className={`${props.className ?? ''} ${props.onClick ? 'cursor-pointer' : ''}`}
+    {...getClickableRowProps(props.onClick)}
+  >
     {props
       .getCells()
       .map((cell, cellIndex) => props.forEachCell(cell, cellIndex))

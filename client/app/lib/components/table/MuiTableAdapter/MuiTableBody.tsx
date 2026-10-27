@@ -20,6 +20,7 @@ const MuiTableBody = <B, C>(props: BodyProps<B, C>): JSX.Element => (
           getCells={(): C[] => props.getCells(row)}
           getEqualityData={rowProps.getEqualityData}
           id={rowProps.id}
+          onClick={rowProps.onClick}
         />
       );
     })}

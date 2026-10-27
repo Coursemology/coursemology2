@@ -18,6 +18,7 @@ interface TableTemplate<D extends Data> {
   getRowId: (datum: D) => string;
   getRowClassName?: (datum: D) => string;
   getRowEqualityData?: (datum: D) => unknown;
+  onRowClick?: (datum: D) => void;
   className?: string;
   renderEmpty?: ReactNode;
   pagination?: PaginationTemplate;
