@@ -141,6 +141,9 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
       resources :get_help, only: [:index]
+      resources :activities, only: [] do
+        get :statistics, on: :collection
+      end
 
       namespace :instance do
         get '/' => 'admin#index', as: :admin
