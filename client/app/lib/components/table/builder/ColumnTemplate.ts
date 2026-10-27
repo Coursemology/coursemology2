@@ -32,6 +32,9 @@ interface ColumnTemplate<D extends Data> {
   csvDownloadable?: boolean;
   filterProps?: FilteringProps<D>;
   csvValue?: (value) => string;
+  // CSV header for this column. Needed when `title` renders an element, which would otherwise
+  // export as the column id.
+  csvTitle?: string;
   sortProps?: SortingProps<D>;
   searchProps?: SearchingProps<D>;
   className?: string;

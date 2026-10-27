@@ -99,6 +99,28 @@ describe('csvGenerator', () => {
     expect(lines[2]).toBe('Bob,bob@example.com');
   });
 
+  it('uses csvTitle for the header when the title renders an element', async () => {
+    const { table, getRealColumn } = buildHarness({
+      name: true,
+      email: true,
+      score: true,
+    });
+
+    const csv = await generateCsv({
+      table,
+      getRealColumn: (id) =>
+        id === 'name'
+          ? {
+              ...getRealColumn(id)!,
+              title: (): string => 'Name*',
+              csvTitle: 'Name*',
+            }
+          : getRealColumn(id),
+    });
+
+    expect(csv.trim().split(/\r?\n/)[0]).toBe('Name*,Email');
+  });
+
   it('excludes hidden columns from output', async () => {
     const { table, getRealColumn } = buildHarness({
       name: true,

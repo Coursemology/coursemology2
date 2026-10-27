@@ -15,6 +15,7 @@ const extractHeader = <D extends Data>(
   col: Column<D, unknown>,
   realColumn: ColumnTemplate<D> | undefined,
 ): string => {
+  if (realColumn?.csvTitle !== undefined) return realColumn.csvTitle;
   const title = realColumn?.title;
   if (typeof title === 'string') return title;
   return realColumn?.id ?? col.id;

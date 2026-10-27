@@ -8,6 +8,7 @@ import {
   Legend,
   LinearScale,
   LineElement,
+  Plugin,
   PointElement,
   Tooltip,
 } from 'chart.js';
@@ -25,10 +26,12 @@ ChartJS.register(
 interface LineChartProps {
   data: ChartData<'line'>;
   options: ChartOptions<'line'>;
+  /** Inline plugins for this chart only. Keep the array stable (e.g. useMemo) across renders. */
+  plugins?: Plugin<'line'>[];
 }
 
-const LineChart = ({ data, options }: LineChartProps): JSX.Element => (
-  <Chart data={data} options={options} type="line" />
+const LineChart = ({ data, options, plugins }: LineChartProps): JSX.Element => (
+  <Chart data={data} options={options} plugins={plugins} type="line" />
 );
 
 export default LineChart;
