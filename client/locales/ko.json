@@ -110,6 +110,9 @@
   "components.SidebarContainer.pinSidebar": {
     "defaultMessage": "사이드바 고정"
   },
+  "components.SidebarContainer.showSidebar": {
+    "defaultMessage": "사이드바 표시"
+  },
   "course.UserEmailSubscriptions.component": {
     "defaultMessage": "주제"
   },

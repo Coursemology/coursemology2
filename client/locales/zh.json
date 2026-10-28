@@ -110,6 +110,9 @@
   "components.SidebarContainer.pinSidebar": {
     "defaultMessage": "固定侧边栏"
   },
+  "components.SidebarContainer.showSidebar": {
+    "defaultMessage": "显示侧边栏"
+  },
   "course.UserEmailSubscriptions.component": {
     "defaultMessage": "主题"
   },
