@@ -5,8 +5,6 @@ import { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from '../redirects';
 
-import instanceAdminRouter from './instanceAdmin';
-import systemAdminRouter from './systemAdmin';
 import usersRouter from './users';
 
 const courselessRouter: Translated<RouteObject> = (t) => ({
@@ -26,8 +24,6 @@ const courselessRouter: Translated<RouteObject> = (t) => ({
 
   children: [
     reservedRoutes,
-    instanceAdminRouter(t),
-    systemAdminRouter(t),
     usersRouter(t),
     {
       path: 'announcements',

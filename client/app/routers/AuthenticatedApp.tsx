@@ -10,6 +10,8 @@ import {
 
 import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
+import instanceAdminRouter from './courseless/instanceAdmin';
+import systemAdminRouter from './courseless/systemAdmin';
 import courseRouter from './course';
 import courselessRouter from './courseless';
 import { ROUTER_FUTURE_FLAGS } from './future';
@@ -18,6 +20,10 @@ import createAppRouter from './router';
 const authenticatedRouter: Translated<RouteObject[]> = (t) =>
   createAppRouter([
     courseRouter(t),
+    // The admin panels are their own layouts (a sidebar beside the courseless header), like courses, so they sit
+    // beside CourselessContainer rather than inside it. Their explicit paths outrank its `*`.
+    instanceAdminRouter(t),
+    systemAdminRouter(t),
     {
       path: '/',
       lazy: async () => {
