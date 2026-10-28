@@ -1,12 +1,19 @@
 import { defineMessages } from 'react-intl';
 import {
   AutoStories,
+  AutoStoriesOutlined,
   Campaign,
+  CampaignOutlined,
   Category,
+  CategoryOutlined,
   Chat,
+  ChatOutlined,
   Group,
+  GroupOutlined,
   Storefront,
+  StorefrontOutlined,
   Timeline,
+  TimelineOutlined,
 } from '@mui/icons-material';
 
 import useTranslation from 'lib/hooks/useTranslation';
@@ -59,42 +66,50 @@ const AdminNavigator = (): JSX.Element => {
     <AdminNavigablePage
       paths={[
         {
-          icon: <Campaign />,
+          icon: <CampaignOutlined />,
+          activeIcon: <Campaign />,
           title: t(translations.announcements),
           path: '/admin/announcements',
         },
         {
-          icon: <Group />,
+          icon: <GroupOutlined />,
+          activeIcon: <Group />,
           title: t(translations.users),
           path: '/admin/users',
         },
         {
-          icon: <Category />,
+          icon: <CategoryOutlined />,
+          activeIcon: <Category />,
           title: t(translations.instances),
           path: '/admin/instances',
         },
         {
-          icon: <AutoStories />,
+          icon: <AutoStoriesOutlined />,
+          activeIcon: <AutoStories />,
           title: t(translations.courses),
           path: '/admin/courses',
         },
         {
-          icon: <Timeline />,
+          icon: <TimelineOutlined />,
+          activeIcon: <Timeline />,
           title: t(translations.activity),
           path: '/admin/activity',
         },
         {
-          icon: <Storefront />,
+          icon: <StorefrontOutlined />,
+          activeIcon: <Storefront />,
           title: t(translations.marketplace),
           path: '/admin/marketplace_allowlist_rules',
         },
         {
-          icon: <Storefront />,
+          icon: <StorefrontOutlined />,
+          activeIcon: <Storefront />,
           title: t(translations.marketplaceListings),
           path: '/admin/marketplace_listings',
         },
         {
-          icon: <Chat />,
+          icon: <ChatOutlined />,
+          activeIcon: <Chat />,
           title: t(translations.getHelp),
           path: '/admin/get_help',
         },

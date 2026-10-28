@@ -2,11 +2,17 @@ import { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import {
   AssignmentInd,
+  AssignmentIndOutlined,
   AutoStories,
+  AutoStoriesOutlined,
   Campaign,
+  CampaignOutlined,
   Chat,
+  ChatOutlined,
   Group,
+  GroupOutlined,
   ListAlt,
+  ListAltOutlined,
 } from '@mui/icons-material';
 
 import AdminNavigablePage from 'bundles/system/admin/components/AdminNavigablePage';
@@ -70,27 +76,32 @@ const InstanceAdminNavigator = (): JSX.Element => {
 
   const basePaths = [
     {
-      icon: <Campaign />,
+      icon: <CampaignOutlined />,
+      activeIcon: <Campaign />,
       title: t(translations.announcements),
       path: '/admin/instance/announcements',
     },
     {
-      icon: <Group />,
+      icon: <GroupOutlined />,
+      activeIcon: <Group />,
       title: t(translations.users),
       path: '/admin/instance/users',
     },
     {
-      icon: <AutoStories />,
+      icon: <AutoStoriesOutlined />,
+      activeIcon: <AutoStories />,
       title: t(translations.courses),
       path: '/admin/instance/courses',
     },
     {
-      icon: <ListAlt />,
+      icon: <ListAltOutlined />,
+      activeIcon: <ListAlt />,
       title: t(translations.components),
       path: '/admin/instance/components',
     },
     {
-      icon: <AssignmentInd />,
+      icon: <AssignmentIndOutlined />,
+      activeIcon: <AssignmentInd />,
       title: t(translations.roleRequests),
       path: '/admin/instance/role_requests',
     },
@@ -101,7 +112,8 @@ const InstanceAdminNavigator = (): JSX.Element => {
     ? [
         ...basePaths,
         {
-          icon: <Chat />,
+          icon: <ChatOutlined />,
+          activeIcon: <Chat />,
           title: t(translations.getHelp),
           path: '/admin/instance/get_help',
         },
