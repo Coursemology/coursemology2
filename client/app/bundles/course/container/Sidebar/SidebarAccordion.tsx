@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { SidebarItemData } from 'types/course/courses';
 
-import SidebarItem from './SidebarItem';
+import CourseSidebarItem from './CourseSidebarItem';
 
 interface SidebarAccordionProps {
   containing: SidebarItemData[];
@@ -35,7 +35,7 @@ const SidebarAccordion = (props: SidebarAccordionProps): JSX.Element => {
 
       <AccordionDetails className="p-0">
         {items?.map((item) => (
-          <SidebarItem
+          <CourseSidebarItem
             key={item.key}
             activePath={props.activePath}
             of={item}

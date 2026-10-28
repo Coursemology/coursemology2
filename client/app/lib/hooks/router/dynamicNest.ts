@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   type CrumbContent as RDBCrumbContent,
   type CrumbData as RDBCrumbData,
@@ -10,7 +11,10 @@ import {
 } from 'react-dynamic-breadcrumbs';
 import { Location, useLocation, useMatches } from 'react-router-dom';
 
-import type { Descriptor } from '../useTranslation';
+import useTranslation, {
+  type Descriptor,
+  translatable,
+} from '../useTranslation';
 
 type CrumbTitle = string | Descriptor | null | undefined;
 
@@ -35,5 +39,24 @@ export const useDynamicNest = () => {
 };
 
 export const DEFAULT_WINDOW_TITLE = 'Coursemology';
+
+/**
+ * The current page's title, from the deepest crumb that has one, which is also set as the window's title. Takes the
+ * layout's crumbs rather than calling useDynamicNest again, which would resolve them twice.
+ */
+export const usePageTitle = (
+  crumbs: ReturnType<typeof useDynamicNest>['crumbs'],
+): string | null | undefined => {
+  const { t } = useTranslation();
+
+  const crumbTitle = getLastCrumbTitle(crumbs);
+  const title = translatable(crumbTitle) ? t(crumbTitle) : crumbTitle;
+
+  useEffect(() => {
+    document.title = title ?? DEFAULT_WINDOW_TITLE;
+  }, [title]);
+
+  return title;
+};
 
 export { forEachFlatCrumb, getLastCrumbTitle };

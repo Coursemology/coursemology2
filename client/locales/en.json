@@ -110,6 +110,9 @@
   "components.SidebarContainer.pinSidebar": {
     "defaultMessage": "Pin sidebar"
   },
+  "components.SidebarContainer.showSidebar": {
+    "defaultMessage": "Show sidebar"
+  },
   "course.UserEmailSubscriptions.component": {
     "defaultMessage": "Topic"
   },

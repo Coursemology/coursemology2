@@ -116,7 +116,13 @@ const BrandingHeadContainer = (props: { children: ReactNode }): JSX.Element => (
   </div>
 );
 
-const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
+type CoursesButtonProps = Pick<
+  BrandingHeadProps,
+  'withCourseSwitcher' | 'withGotoCoursesLink'
+>;
+
+/** "Courses": a menu of the user's courses, or a link to the courses page. */
+const CoursesButton = (props: CoursesButtonProps): JSX.Element => {
   const { t } = useTranslation();
 
   const courseSwitcherRef =
@@ -135,37 +141,20 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
 
   return (
     <>
-      <BrandingHeadContainer>
-        <div className="flex items-center space-x-2">
-          <Brand />
+      {shouldShowCourseSwitcher && Boolean(courses?.length) && (
+        <Button
+          endIcon={<KeyboardArrowDown />}
+          onClick={(e): void => courseSwitcherRef.current?.open(e)}
+        >
+          {t(translations.goToOtherCourses)}
+        </Button>
+      )}
 
-          {props.title && (
-            <div className="flex items-center space-x-2 text-neutral-500">
-              <ChevronRight />
-              <Typography className="line-clamp-1">{props.title}</Typography>
-            </div>
-          )}
-        </div>
-
-        <div className="flex h-full items-center space-x-4">
-          {shouldShowCourseSwitcher && courses?.length && (
-            <Button
-              endIcon={<KeyboardArrowDown />}
-              onClick={(e): void => courseSwitcherRef.current?.open(e)}
-            >
-              {t(translations.goToOtherCourses)}
-            </Button>
-          )}
-
-          {shouldShowGoToCoursesLink && (
-            <Link to="/courses">
-              <Button>{t(translations.goToOtherCourses)}</Button>
-            </Link>
-          )}
-
-          {props.withUserMenu && <UserMenuButton />}
-        </div>
-      </BrandingHeadContainer>
+      {shouldShowGoToCoursesLink && (
+        <Link to="/courses">
+          <Button>{t(translations.goToOtherCourses)}</Button>
+        </Link>
+      )}
 
       {Boolean(courses?.length) && (
         <CourseSwitcherPopupMenu ref={courseSwitcherRef} />
@@ -174,6 +163,30 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
   );
 };
 
+const BrandingHead = (props: BrandingHeadProps): JSX.Element => (
+  <BrandingHeadContainer>
+    <div className="flex items-center space-x-2">
+      <Brand />
+
+      {props.title && (
+        <div className="flex items-center space-x-2 text-neutral-500">
+          <ChevronRight />
+          <Typography className="line-clamp-1">{props.title}</Typography>
+        </div>
+      )}
+    </div>
+
+    <div className="flex h-full items-center space-x-4">
+      <CoursesButton
+        withCourseSwitcher={props.withCourseSwitcher}
+        withGotoCoursesLink={props.withGotoCoursesLink}
+      />
+
+      {props.withUserMenu && <UserMenuButton />}
+    </div>
+  </BrandingHeadContainer>
+);
+
 const MiniBrandingHead = (): JSX.Element => (
   <BrandingHeadContainer>
     <Brand />
@@ -181,4 +194,7 @@ const MiniBrandingHead = (): JSX.Element => (
   </BrandingHeadContainer>
 );
 
-export default Object.assign(BrandingHead, { Mini: MiniBrandingHead });
+export default Object.assign(BrandingHead, {
+  Mini: MiniBrandingHead,
+  CoursesButton,
+});

@@ -25,6 +25,10 @@ interface FloatingContainerProps extends ContainerProps {
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 }
 
+// Hidden floating sidebars sit a full viewport width to the left, not `-left-full`: that is relative to the containing
+// block, which is only as wide as the page when the sidebar is not inside a narrower positioned element.
+const HIDDEN_OFFSET = '-left-[100vw]';
+
 const FloatingContainer = (props: FloatingContainerProps): JSX.Element => (
   <div
     className={`absolute z-50 h-full p-2 transition-position ${
@@ -62,7 +66,7 @@ const AppearOnLeftGutter = (props: ContainerProps): JSX.Element => {
   return (
     <>
       <FloatingContainer
-        className={`top-0 ${appear ? 'left-0' : '-left-full'}`}
+        className={`top-0 ${appear ? 'left-0' : HIDDEN_OFFSET}`}
         onMouseEnter={(): void => setInside(true)}
         onMouseLeave={(): void => setInside(false)}
       >
@@ -103,7 +107,7 @@ const Collapsible = (props: ControlledContainerProps): JSX.Element => {
     return (
       <FloatingContainer
         className={`max-sm:w-screen max-sm:p-0 ${
-          props.open ? 'left-0' : '-left-full'
+          props.open ? 'left-0' : HIDDEN_OFFSET
         }`}
       >
         <aside
