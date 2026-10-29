@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class CourseUser < ApplicationRecord
+  # Defined before the includes: `include Course::UniqueExternalIdConcern` loads Course when CourseUser loads first
+  # (as in a rake task, which does not eager load), and Course's class body reads CourseUser.timeline_algorithms.
+  enum :role, { student: 0, teaching_assistant: 1, manager: 2, owner: 3, observer: 4 }
+  enum :timeline_algorithm, { fixed: 0, fomo: 1, stragglers: 2, otot: 3 }
+
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern
@@ -7,9 +12,6 @@ class CourseUser < ApplicationRecord
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
-
-  enum :role, { student: 0, teaching_assistant: 1, manager: 2, owner: 3, observer: 4 }
-  enum :timeline_algorithm, { fixed: 0, fomo: 1, stragglers: 2, otot: 3 }
 
   # A set of roles which comprise the staff of a course, including the observer.
   STAFF_ROLES_SYM = Set[:teaching_assistant, :manager, :owner, :observer]

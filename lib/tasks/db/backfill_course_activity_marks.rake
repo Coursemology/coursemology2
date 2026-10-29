@@ -10,9 +10,10 @@ namespace :db do
   # The marks are selected first and inserted separately, in batches. Postgres does not run the SELECT of an
   # INSERT ... SELECT in parallel, and these joins took about ten times as long that way.
   #
-  # Activities do not record the actor's role at the time, so this counts actors who are *currently* non-phantom
-  # students of the course. Activities whose object or course has since been deleted cannot be attributed and are
-  # skipped.
+  # New activities record their marks as they are created (see Course::ActivityMark.record_for), so this is for months
+  # before that. Activities do not record the actor's role at the time, so this counts actors who are *currently*
+  # non-phantom students of the course. Activities whose object or course has since been deleted cannot be attributed
+  # and are skipped.
   #
   # System administrators are never counted, and instance administrators are not counted in the instance they
   # administer, as their student activity there is usually testing. An instance administrator enrolled as a student
@@ -83,9 +84,9 @@ namespace :db do
     inserted = marks.each_slice(1000).sum { |batch| Course::ActivityMark.insert_all(batch).length }
     seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
 
-    # "Already present" equals "found" on a re-run, which confirms the run changed nothing. Once marks are written as
-    # activities happen, it shows how many of these the live writes had already recorded, and the month's total can
-    # exceed "found" if they recorded marks this backfill cannot derive.
+    # "Already present" equals "found" on a re-run, which confirms the run changed nothing. For a month since marks
+    # are written as activities are created, it shows how many of these the live writes had already recorded, and the
+    # month's total can exceed "found" by marks for students who have since changed role or left the course.
     month_total = Course::ActivityMark.where(month: month).count
     skipped = rows.size - marks.size
     puts "#{month.strftime('%Y-%m')}: #{marks.size} marks found (#{skipped} administrator " \

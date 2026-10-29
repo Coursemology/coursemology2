@@ -15,6 +15,8 @@ class Activity < ApplicationRecord
   has_many :course_notifications, class_name: 'Course::Notification', dependent: :destroy
   has_many :user_notifications, dependent: :destroy
 
+  after_create_commit { Course::ActivityMark.record_for(self) }
+
   USER_NOTIFICATION_TYPES = [:email, :popup].freeze
   COURSE_NOTIFICATION_TYPES = [:email, :feed].freeze
 
