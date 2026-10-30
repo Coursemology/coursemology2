@@ -1,4 +1,6 @@
 import { ReactElement } from 'react';
+import { AppDispatch, AppState } from 'store';
+import { ProgrammingFilePostData } from 'types/course/assessment/submission/answer/programming';
 
 import ProgrammingAPI from 'api/course/Assessment/Submission/Answer/Programming';
 import toast from 'lib/hooks/toast';
@@ -12,20 +14,30 @@ const dispatch = jest.fn((action) =>
 );
 const resetField = jest.fn();
 
-const saved = (id: number, filename: string): object => ({
+const saved = (id: number, filename: string): ProgrammingFilePostData => ({
   id,
   filename,
   content: '',
 });
-const added = (filename: string): object => ({
+// As `AnswerFilesTree` sends a file read from an upload.
+const added = (
+  filename: string,
+): ProgrammingFilePostData & { staged: boolean } => ({
   filename,
   content: '',
   staged: true,
 });
 
-// The thunk returns the save's promise, though its JavaScript source gives TypeScript no type for it.
-const upload = (files: object[], language = 'python'): unknown =>
-  importProgrammingFiles(7, files, language, resetField)(dispatch);
+const upload = (
+  files: ProgrammingFilePostData[],
+  language = 'python',
+): Promise<void> =>
+  importProgrammingFiles(
+    7,
+    files,
+    language,
+    resetField,
+  )(dispatch as unknown as AppDispatch, () => ({}) as AppState, {});
 
 let create: jest.SpyInstance;
 

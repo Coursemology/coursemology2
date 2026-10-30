@@ -1,21 +1,23 @@
-import { Component } from 'react';
+import { ComponentProps, Ref } from 'react';
+import AceEditor from 'react-ace';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Stack } from '@mui/material';
-import PropTypes from 'prop-types';
+import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import FormEditorField from 'lib/components/form/fields/EditorField';
 
-import { fileShape } from '../propTypes';
+interface EditorProps {
+  /** The form field holding the file's content, such as `7.files_attributes.0.content`. */
+  fieldName: string;
+  language: LanguageMode;
+  onChangeCallback: () => void;
+  onCursorChange?: ComponentProps<typeof AceEditor>['onCursorChange'];
+  editorRef?: Ref<AceEditor>;
+}
 
-const Editor = (props) => {
-  const {
-    file,
-    fieldName,
-    language,
-    onChangeCallback,
-    onCursorChange,
-    editorRef,
-  } = props;
+const Editor = (props: EditorProps): JSX.Element => {
+  const { fieldName, language, onChangeCallback, onCursorChange, editorRef } =
+    props;
   const { control } = useFormContext();
 
   return (
@@ -23,39 +25,26 @@ const Editor = (props) => {
       <Controller
         control={control}
         name={fieldName}
-        render={({ field }) => (
+        render={({ field }): JSX.Element => (
           <FormEditorField
             ref={editorRef}
             field={{
               ...field,
-              onChange: (event) => {
-                field.onChange(event);
+              onChange: (value: string): void => {
+                field.onChange(value);
                 onChangeCallback();
               },
             }}
-            filename={file.filename}
             language={language}
             maxLines={25}
             minLines={25}
-            onCursorChange={onCursorChange ?? (() => {})}
+            onCursorChange={onCursorChange}
             readOnly={false}
           />
         )}
       />
     </Stack>
   );
-};
-
-Editor.propTypes = {
-  fieldName: PropTypes.string.isRequired,
-  file: fileShape.isRequired,
-  language: PropTypes.string.isRequired,
-  onChangeCallback: PropTypes.func.isRequired,
-  onCursorChange: PropTypes.func,
-  editorRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Component) }),
-  ]),
 };
 
 export default Editor;

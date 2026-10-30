@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import PropTypes from 'prop-types';
+import { LanguageMode } from 'types/course/assessment/question/programming';
+import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
 
 import { filePathsInTreeOrder } from 'course/assessment/components/FileTreeManager/tree';
 import { workflowStates } from 'course/assessment/submission/constants';
@@ -10,19 +11,28 @@ import { useAppSelector } from 'lib/hooks/store';
 
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
-import { questionShape } from '../../../propTypes';
 import { getLiveFeedbackChatsForAnswerId } from '../../../selectors/liveFeedbackChats';
 import GetHelpChatPage from '../../GetHelpChatPage';
+import { ProgrammingAnswerProps } from '../types';
 
 import ProgrammingFile from './ProgrammingFile';
 
-const ProgrammingFiles = ({
-  readOnly,
-  answerId,
-  editorRef,
-  language,
-  saveAnswerAndUpdateClientVersion,
-}) => {
+interface ProgrammingFilesProps {
+  readOnly: boolean;
+  answerId: number;
+  editorRef: MutableRefObject<null>;
+  language: LanguageMode;
+  saveAnswerAndUpdateClientVersion: (answerId: number) => void;
+}
+
+const ProgrammingFiles = (props: ProgrammingFilesProps): JSX.Element => {
+  const {
+    readOnly,
+    answerId,
+    editorRef,
+    language,
+    saveAnswerAndUpdateClientVersion,
+  } = props;
   const { control } = useFormContext();
 
   const { fields } = useFieldArray({
@@ -33,41 +43,47 @@ const ProgrammingFiles = ({
   const currentField = useWatch({
     control,
     name: `${answerId}.files_attributes`,
-  });
+  }) as ProgrammingContent[];
 
   const controlledProgrammingFields = fields.map((field, index) => ({
     ...field,
     ...currentField[index],
   }));
 
-  return controlledProgrammingFields.map((field, index) => {
-    const file = {
-      id: field.id,
-      filename: field.filename,
-      content: field.content,
-      highlightedContent: field.highlightedContent,
-    };
+  return (
+    <>
+      {controlledProgrammingFields.map((field, index) => {
+        const file: ProgrammingContent = {
+          id: field.id,
+          filename: field.filename,
+          content: field.content,
+          highlightedContent: field.highlightedContent,
+        };
 
-    const keyString = `editor-container-${index}`;
+        const keyString = `editor-container-${index}`;
 
-    return (
-      <div key={keyString} id={keyString}>
-        <ProgrammingFile
-          key={field.id}
-          answerId={answerId}
-          editorRef={editorRef}
-          fieldName={`${answerId}.files_attributes.${index}.content`}
-          file={file}
-          language={language}
-          readOnly={readOnly}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-        />
-      </div>
-    );
-  });
+        return (
+          <div key={keyString} id={keyString}>
+            <ProgrammingFile
+              key={field.id}
+              answerId={answerId}
+              editorRef={editorRef}
+              fieldName={`${answerId}.files_attributes.${index}.content`}
+              file={file}
+              language={language}
+              readOnly={readOnly}
+              saveAnswerAndUpdateClientVersion={
+                saveAnswerAndUpdateClientVersion
+              }
+            />
+          </div>
+        );
+      })}
+    </>
+  );
 };
 
-const Programming = (props) => {
+const Programming = (props: ProgrammingAnswerProps): JSX.Element | null => {
   const { question, readOnly, answerId, saveAnswerAndUpdateClientVersion } =
     props;
 
@@ -85,14 +101,13 @@ const Programming = (props) => {
   const isLiveFeedbackChatOpen =
     liveFeedbackChatForAnswer?.isLiveFeedbackChatOpen && submission.isCreator;
   const fileSubmission = question.fileSubmission;
-  const isSavingAnswer = useAppSelector((state) =>
-    getIsSavingAnswer(state, answerId),
+  const isSavingAnswer = useAppSelector(
+    (state) => answerId !== null && getIsSavingAnswer(state, answerId),
   );
 
-  const files = currentAnswer[answerId]
-    ? currentAnswer[answerId].files_attributes ||
-      currentAnswer[`${answerId}`].files_attributes
-    : null;
+  const files = (
+    answerId !== null ? currentAnswer[answerId]?.files_attributes ?? null : null
+  ) as ProgrammingContent[] | null;
 
   // The file shown in the editor, by its path. It starts at the first file the tree shows.
   const [displayFileName, setDisplayFileName] = useState(
@@ -102,12 +117,8 @@ const Programming = (props) => {
 
   const editorRef = useRef(null);
 
-  const feedbackFiles = useAppSelector(
-    (state) =>
-      state.assessments.submission.liveFeedback?.feedbackByQuestion?.[
-        question.id
-      ]?.feedbackFiles ?? [],
-  );
+  // A programming answer always has an id; the shared props allow none for other question types.
+  if (answerId === null) return null;
 
   return (
     <>
@@ -134,7 +145,6 @@ const Programming = (props) => {
               key={question.id}
               answerId={answerId}
               editorRef={editorRef}
-              feedbackFiles={feedbackFiles}
               language={question.editorMode}
               readOnly={readOnly}
               saveAnswerAndUpdateClientVersion={
@@ -152,13 +162,6 @@ const Programming = (props) => {
       <CodaveriFeedbackStatus answerId={answerId} questionId={question.id} />
     </>
   );
-};
-
-Programming.propTypes = {
-  question: questionShape.isRequired,
-  readOnly: PropTypes.bool.isRequired,
-  answerId: PropTypes.number.isRequired,
-  saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
 };
 
 export default Programming;

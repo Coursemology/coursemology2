@@ -1,22 +1,40 @@
-import { Component } from 'react';
+import { memo, Ref } from 'react';
+import AceEditor from 'react-ace';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { LanguageMode } from 'types/course/assessment/question/programming';
+import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
+import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
+
+import { useAppSelector } from 'lib/hooks/store';
 
 import Editor from '../../components/Editor';
-import { questionShape } from '../../propTypes';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import AnswerFilesTree from './AnswerFilesTree';
 
-const SelectProgrammingFileEditor = ({
-  answerId,
-  editorRef,
-  readOnly,
-  language,
-  displayFileName,
-  saveAnswerAndUpdateClientVersion,
-}) => {
+/** A file in the answer form. A file read from an upload is `staged` until the server saves it. */
+type AnswerFormFile = ProgrammingContent & { staged?: boolean };
+
+interface SelectProgrammingFileEditorProps {
+  answerId: number;
+  editorRef?: Ref<AceEditor>;
+  readOnly: boolean;
+  language: LanguageMode;
+  displayFileName: string;
+  saveAnswerAndUpdateClientVersion: (answerId: number) => void;
+}
+
+const SelectProgrammingFileEditor = (
+  props: SelectProgrammingFileEditorProps,
+): JSX.Element => {
+  const {
+    answerId,
+    editorRef,
+    readOnly,
+    language,
+    displayFileName,
+    saveAnswerAndUpdateClientVersion,
+  } = props;
   const { control } = useFormContext();
   const { fields } = useFieldArray({
     control,
@@ -26,9 +44,9 @@ const SelectProgrammingFileEditor = ({
   const currentFields = useWatch({
     control,
     name: `${answerId}.files_attributes`,
-  });
+  }) as AnswerFormFile[];
 
-  const controlledProgrammingFields =
+  const controlledProgrammingFields: AnswerFormFile[] =
     currentFields.length === fields.length
       ? fields.map((field, index) => ({
           ...field,
@@ -38,8 +56,7 @@ const SelectProgrammingFileEditor = ({
 
   return (
     <>
-      {controlledProgrammingFields.map((field, index) => {
-        const file = field;
+      {controlledProgrammingFields.map((file, index) => {
         if (readOnly) {
           return (
             <ReadOnlyEditor key={file.id} answerId={answerId} file={file} />
@@ -53,9 +70,8 @@ const SelectProgrammingFileEditor = ({
               key={`${file.id}-${index}`}
               editorRef={editorRef}
               fieldName={`${answerId}.files_attributes.${index}.content`}
-              file={file}
               language={language}
-              onChangeCallback={() =>
+              onChangeCallback={(): void =>
                 saveAnswerAndUpdateClientVersion(answerId)
               }
             />
@@ -67,31 +83,36 @@ const SelectProgrammingFileEditor = ({
   );
 };
 
-SelectProgrammingFileEditor.propTypes = {
-  answerId: PropTypes.number,
-  readOnly: PropTypes.bool,
-  language: PropTypes.string,
-  displayFileName: PropTypes.string,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
-  editorRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Component) }),
-  ]),
-};
+interface ProgrammingImportEditorProps {
+  answerId: number;
+  question: SubmissionQuestionData<'Programming'>;
+  readOnly: boolean;
+  isSavingAnswer: boolean;
+  displayFileName: string;
+  setDisplayFileName: (path: string) => void;
+  saveAnswerAndUpdateClientVersion: (answerId: number) => void;
+  editorRef?: Ref<AceEditor>;
+}
 
-const VisibleProgrammingImportEditor = (props) => {
+const ProgrammingImportEditor = (
+  props: ProgrammingImportEditorProps,
+): JSX.Element | null => {
   const {
     answerId,
     editorRef,
-    disabled,
     question,
     readOnly,
+    isSavingAnswer,
     displayFileName,
     setDisplayFileName,
     saveAnswerAndUpdateClientVersion,
   } = props;
   const { control } = useFormContext();
   const answers = useWatch({ control });
+  const isSavingSubmission = useAppSelector(
+    (state) => state.assessments.submission.submissionFlags.isSaving,
+  );
+  const disabled = isSavingSubmission || isSavingAnswer;
 
   // When an assessment is submitted/unsubmitted,
   // the form is somehow not reset yet and the answers for the new answerId
@@ -102,15 +123,12 @@ const VisibleProgrammingImportEditor = (props) => {
 
   const editor = (
     <SelectProgrammingFileEditor
-      {...{
-        answerId,
-        editorRef,
-        readOnly,
-        question,
-        displayFileName,
-        saveAnswerAndUpdateClientVersion,
-        language: question.editorMode,
-      }}
+      answerId={answerId}
+      displayFileName={displayFileName}
+      editorRef={editorRef}
+      language={question.editorMode}
+      readOnly={readOnly}
+      saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
     />
   );
 
@@ -140,35 +158,5 @@ const VisibleProgrammingImportEditor = (props) => {
   );
 };
 
-VisibleProgrammingImportEditor.propTypes = {
-  answerId: PropTypes.number.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  question: questionShape,
-  readOnly: PropTypes.bool,
-  displayFileName: PropTypes.string,
-  setDisplayFileName: PropTypes.func,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
-  editorRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Component) }),
-  ]),
-};
-
-function mapStateToProps(state, ownProps) {
-  const { answerId, question, readOnly, isSavingAnswer } = ownProps;
-  const { submissionFlags } = state.assessments.submission;
-  const disabled = submissionFlags.isSaving || isSavingAnswer;
-
-  return {
-    answerId,
-    disabled,
-    question,
-    readOnly,
-  };
-}
-
-const ProgrammingImportEditor = connect(mapStateToProps)(
-  VisibleProgrammingImportEditor,
-);
-
-export default ProgrammingImportEditor;
+// `connect` used to skip re-rendering when the props were shallowly equal; `memo` keeps that.
+export default memo(ProgrammingImportEditor);

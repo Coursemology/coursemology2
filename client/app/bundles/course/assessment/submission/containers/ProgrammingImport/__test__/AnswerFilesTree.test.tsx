@@ -12,6 +12,7 @@ import {
   ProgrammingAnswerData,
   ProgrammingContent,
 } from 'types/course/assessment/submission/answer/programming';
+import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import ProgrammingAPI from 'api/course/Assessment/Submission/Answer/Programming';
 import toast from 'lib/hooks/toast';
@@ -19,6 +20,11 @@ import toast from 'lib/hooks/toast';
 import actionTypes from '../../../constants';
 import { convertAnswerDataToInitialValue } from '../../../utils/answers';
 import ProgrammingImportEditor from '../ProgrammingImportEditor';
+
+// Only the editor mode is read; the rest of the question is irrelevant here.
+const QUESTION = {
+  editorMode: 'python',
+} as unknown as SubmissionQuestionData<'Programming'>;
 
 // A row's delete button, which is labelled "Delete" alone: the row says what it deletes.
 const rowNamed = (name: string): HTMLElement =>
@@ -91,7 +97,7 @@ const Harness = (props: {
         displayFileName={displayFileName}
         editorRef={{ current: null }}
         isSavingAnswer={false}
-        question={{ editorMode: 'python' }}
+        question={QUESTION}
         readOnly={false}
         saveAnswerAndUpdateClientVersion={(): void => {}}
         setDisplayFileName={setDisplayFileName}

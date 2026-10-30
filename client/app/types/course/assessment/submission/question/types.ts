@@ -1,4 +1,5 @@
 import { QuestionType } from '../../question';
+import { LanguageMode } from '../../question/programming';
 import { CategoryData } from '../../question/rubric-based-responses';
 
 interface QuestionData {
@@ -18,6 +19,8 @@ interface MultipleResponseQuestionData {
 
 interface ProgrammingQuestionData {
   language: string;
+  /** The Ace editor mode of the language, such as `python`. */
+  editorMode: LanguageMode;
   fileSubmission: boolean;
   isCodaveri: boolean;
   attemptLimit?: number;

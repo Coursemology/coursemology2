@@ -1,23 +1,24 @@
+import {
+  ProgrammingAnswerData,
+  ProgrammingFileDeleteData,
+  ProgrammingFilesPostData,
+} from 'types/course/assessment/submission/answer/programming';
+
+import { APIResponse } from 'api/types';
+
 import BaseAssessmentAPI from '../../Base';
 import SubmissionsAPI from '../../Submissions';
 
 export default class ProgrammingAPI extends BaseAssessmentAPI {
   /**
-   * Creates a programming file and updates all existing files for a programming answer
+   * Creates the new files of a programming answer and updates the content of its saved ones.
    *
-   * @param {number} answerId
-   * @param {object} submissionFields - in the format of:
-   *   {
-   *     answer: {
-   *       id: number,
-   *       files_attributes: [:id, :filename, :content]
-   *     }
-   *   }
-   * @return {Promise}
-   * success response: {}
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   * @returns The answer as saved. A failed validation is a 400 with `errors`, and `codes` naming why.
    */
-  createProgrammingFiles(answerId, submissionFields) {
+  createProgrammingFiles(
+    answerId: number,
+    data: ProgrammingFilesPostData,
+  ): APIResponse<ProgrammingAnswerData> {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -26,32 +27,28 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     };
 
     const formData = new FormData();
-    SubmissionsAPI.appendFormData(formData, submissionFields);
+    SubmissionsAPI.appendFormData(formData, data);
 
     const url = `${this.#urlPrefix}/${answerId}/programming/create_programming_files`;
     return this.client.post(url, formData, config);
   }
 
   /**
-   * Deletes a programming file from a programming answer
+   * Deletes a file from a programming answer.
    *
-   * @param {number} answerId
-   * @param {object} payload - in the format of:
-   *   {
-   *     answer: { id: number, file_id: number }
-   *   }
-   * @return {Promise}
-   * success response: { answerId: number, fileId: number }
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   * @returns The answer as saved. A failure is a 400 with `errors`.
    */
-  deleteProgrammingFile(answerId, payload) {
+  deleteProgrammingFile(
+    answerId: number,
+    data: ProgrammingFileDeleteData,
+  ): APIResponse<ProgrammingAnswerData> {
     return this.client.post(
       `${this.#urlPrefix}/${answerId}/programming/destroy_programming_file`,
-      payload,
+      data,
     );
   }
 
-  get #urlPrefix() {
+  get #urlPrefix(): string {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}\
 /submissions/${this.submissionId}/answers`;
   }
