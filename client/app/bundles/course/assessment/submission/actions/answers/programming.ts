@@ -1,5 +1,9 @@
-import { createElement } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { ComponentProps, createElement, ReactElement, ReactNode } from 'react';
+import { FieldValues, UseFormResetField } from 'react-hook-form';
+import { FormattedMessage, MessageDescriptor } from 'react-intl';
+import { AxiosError } from 'axios';
+import { Operation } from 'store';
+import { ProgrammingFilePostData } from 'types/course/assessment/submission/answer/programming';
 
 import CourseAPI from 'api/course';
 import {
@@ -22,17 +26,20 @@ import {
 
 // These actions report through toasts, red for errors and green for success, as the rest of the
 // site does. Toasts render inside the intl provider, so one can carry a message to translate.
-const message = (descriptor, values) =>
-  createElement(FormattedMessage, { ...descriptor, values });
+const message = (
+  descriptor: MessageDescriptor,
+  values?: ComponentProps<typeof FormattedMessage>['values'],
+): ReactElement => createElement(FormattedMessage, { ...descriptor, values });
 
 // The server names why an upload failed in `codes`, which are turned into messages here; any other
 // failure shows the server's own error text.
-const UPLOAD_ERROR_MESSAGES = {
+const UPLOAD_ERROR_MESSAGES: Record<string, MessageDescriptor> = {
   binary: translations.binaryFileUploadError,
 };
 
-const uploadErrorMessage = (error) => {
-  const codes = error?.response?.data?.codes ?? [];
+const uploadErrorMessage = (error: unknown): ReactNode => {
+  const codes =
+    (error as AxiosError<{ codes?: string[] }>)?.response?.data?.codes ?? [];
   const known = codes.find((code) => UPLOAD_ERROR_MESSAGES[code]);
   return known
     ? message(UPLOAD_ERROR_MESSAGES[known])
@@ -41,7 +48,9 @@ const uploadErrorMessage = (error) => {
 
 // The files not saved yet (with no id) need valid paths that don't clash with each other or with
 // the saved files, ignoring case as the server does. Clashes among saved files alone are left alone.
-const pathsErrorMsg = (files) => {
+const pathsErrorMsg = (
+  files: ProgrammingFilePostData[],
+): MessageDescriptor | null => {
   const added = files.filter((file) => !file.id).map((file) => file.filename);
   const saved = files.filter((file) => file.id).map((file) => file.filename);
 
@@ -52,7 +61,10 @@ const pathsErrorMsg = (files) => {
   return null;
 };
 
-const validateFilesByLanguageMap = {
+const validateFilesByLanguageMap: Record<
+  string,
+  (files: ProgrammingFilePostData[]) => boolean
+> = {
   java: (files) => {
     // Used to ensure that only java files can be uploaded.
     const regex = /\.(java)$/i;
@@ -62,11 +74,17 @@ const validateFilesByLanguageMap = {
   },
 };
 
-const validateFilesByLanguageErrorMessageMap = {
+const validateFilesByLanguageErrorMessageMap: Record<
+  string,
+  MessageDescriptor
+> = {
   java: translations.invalidJavaFileUpload,
 };
 
-const validateProgrammingFilesErrorMsg = (language, files) => {
+const validateProgrammingFilesErrorMsg = (
+  language: string,
+  files: ProgrammingFilePostData[],
+): MessageDescriptor | null => {
   const pathsError = pathsErrorMsg(files);
   if (pathsError) return pathsError;
 
@@ -77,13 +95,24 @@ const validateProgrammingFilesErrorMsg = (language, files) => {
   return null;
 };
 
-export function importProgrammingFiles(answerId, files, language, resetField) {
+/**
+ * Saves an answer's files: its saved files, by `id`, and the new ones. The answer in the form is
+ * replaced with the saved one, and failures are reported in a toast.
+ *
+ * @returns The save, so the caller can wait for it. It resolves after a failure too.
+ */
+export function importProgrammingFiles(
+  answerId: number,
+  files: ProgrammingFilePostData[],
+  language: string,
+  resetField: UseFormResetField<FieldValues>,
+): Operation {
   const savingSize = files.reduce(
     (acc, file) => acc + (file?.content?.length ?? 0),
     0,
   );
   if (savingSize > MAX_SAVING_SIZE) {
-    return (dispatch) => {
+    return async (dispatch) => {
       dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
       dispatch(
         dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
@@ -94,11 +123,13 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
       toast.error(message(translations.answerTooLargeError));
     };
   }
-  const filesPayload = files.map((file) => ({
-    id: file.id,
-    filename: file.filename,
-    content: file.content,
-  }));
+  const filesPayload = files.map(
+    (file): ProgrammingFilePostData => ({
+      id: file.id,
+      filename: file.filename,
+      content: file.content,
+    }),
+  );
   const payload = {
     answer: {
       id: answerId,
@@ -156,7 +187,7 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
           }),
         );
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         dispatch({
           type: actionTypes.UPLOAD_PROGRAMMING_FILES_FAILURE,
         });
@@ -175,7 +206,11 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
   };
 }
 
-export function deleteProgrammingFile(answer, fileId, onDeleteSuccess) {
+export function deleteProgrammingFile(
+  answer: { id: number },
+  fileId: number,
+  onDeleteSuccess: () => void,
+): Operation {
   const answerId = answer.id;
   const payload = {
     answer: { id: answerId, file_id: fileId },

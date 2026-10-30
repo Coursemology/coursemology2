@@ -47,7 +47,7 @@ describe('<ProgrammingFile />', () => {
         content: '',
         highlightedContent: null,
       },
-      language: 'python',
+      language: 'python' as const,
       readOnly: true,
       editorRef: { current: jest.fn() } as unknown as MutableRefObject<null>,
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},

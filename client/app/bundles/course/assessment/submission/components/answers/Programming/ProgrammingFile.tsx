@@ -1,4 +1,5 @@
 import { FC, MutableRefObject } from 'react';
+import { LanguageMode } from 'types/course/assessment/question/programming';
 import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
 
 import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
@@ -8,7 +9,7 @@ interface ProgrammingFileProps {
   answerId: number;
   fieldName: string;
   file: ProgrammingContent;
-  language: string;
+  language: LanguageMode;
   readOnly: boolean;
   editorRef: MutableRefObject<null>;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
@@ -35,7 +36,6 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
         <Editor
           editorRef={editorRef}
           fieldName={fieldName}
-          file={file}
           language={language}
           onChangeCallback={() => saveAnswerAndUpdateClientVersion(answerId)}
         />

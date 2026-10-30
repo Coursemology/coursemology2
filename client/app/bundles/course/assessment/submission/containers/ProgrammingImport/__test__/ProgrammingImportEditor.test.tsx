@@ -11,11 +11,17 @@ import {
   ProgrammingAnswerData,
   ProgrammingContent,
 } from 'types/course/assessment/submission/answer/programming';
+import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { formatAnswer } from '../../../actions/utils';
 import actionTypes from '../../../constants';
 import { convertAnswerDataToInitialValue } from '../../../utils/answers';
 import ProgrammingImportEditor from '../ProgrammingImportEditor';
+
+// Only the editor mode is read; the rest of the question is irrelevant here.
+const QUESTION = {
+  editorMode: 'python',
+} as unknown as SubmissionQuestionData<'Programming'>;
 
 jest.mock(
   'lib/components/core/fields/EditorField',
@@ -83,7 +89,7 @@ const Harness = (): JSX.Element => {
         displayFileName={displayFileName}
         editorRef={{ current: null }}
         isSavingAnswer={false}
-        question={{ editorMode: 'python' }}
+        question={QUESTION}
         readOnly={false}
         saveAnswerAndUpdateClientVersion={(answerId: number): void => {
           savedPayloads.push(formatAnswer(methods.getValues()[answerId], 0));

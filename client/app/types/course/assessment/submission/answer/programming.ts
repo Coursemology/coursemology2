@@ -138,6 +138,30 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
   posts?: Post[];
 }
 
+/**
+ * A file sent to `create_programming_files`: a saved file by its `id`, whose content is updated, or
+ * a new file, created under `filename`.
+ */
+export interface ProgrammingFilePostData {
+  id?: number;
+  filename: string;
+  content: string;
+}
+
+export interface ProgrammingFilesPostData {
+  answer: {
+    id: number;
+    files_attributes: ProgrammingFilePostData[];
+  };
+}
+
+export interface ProgrammingFileDeleteData {
+  answer: {
+    id: number;
+    file_id: number;
+  };
+}
+
 // FE Data Type
 
 export interface ProgrammingFieldEntity extends AnswerFieldBaseEntity {
