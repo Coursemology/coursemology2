@@ -29,7 +29,7 @@ declare const FIRST_BUILD_YEAR: string;
 declare const LATEST_BUILD_YEAR: string;
 
 declare function buildContextOptions(
-  store?: unknown,
+  store?: import('redux').Store,
 ): import('enzyme').MountRendererProps;
 
 declare module '*.md' {

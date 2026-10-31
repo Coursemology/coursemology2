@@ -40,7 +40,6 @@ module.exports = {
           ['types', './app/types'],
           ['utilities', './app/utilities'],
           ['course', './app/bundles/course'],
-          ['testUtils', './app/__test__/utils'],
           ['test-utils', './app/utilities/test-utils'],
           ['mocks', './app/__test__/mocks'],
           ['workers', './app/workers'],
@@ -124,7 +123,7 @@ module.exports = {
           // Packages. `react` related packages come first.
           ['^react', '^@?\\w'],
           // Internal packages.
-          ['^(lib|api|course|testUtils|bundles)(/.*|$)'],
+          ['^(lib|api|course|bundles)(/.*|$)'],
           // Side effect imports.
           ['^\\u0000'],
           // Parent imports. Put `..` last.
