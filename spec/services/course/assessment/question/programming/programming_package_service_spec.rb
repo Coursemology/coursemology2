@@ -89,6 +89,17 @@ RSpec.describe Course::Assessment::Question::Programming::ProgrammingPackageServ
             expect(package_files(package)).to include('data/a.csv' => 'x,y')
             expect(package_meta(package)['data_files'].pluck('filename')).to eq(['data/a.csv'])
           end
+
+          it 'replaces the file with an upload under a name that differs only in case' do
+            params = package_params(submission: 'code', solution: 'solution',
+                                    data_files: [uploaded_file('A.csv', 'new')], data_file_paths: ['data/A.csv'],
+                                    data_files_to_delete: ['data/a.csv'])
+            package = service_class.new(params).generate_package(previous_package)
+
+            expect(package_files(package)).to include('data/A.csv' => 'new')
+            expect(package_files(package).keys).not_to include('data/a.csv')
+            expect(package_meta(package)['data_files'].pluck('filename')).to eq(['data/A.csv'])
+          end
         end
 
         context 'with an empty data file' do

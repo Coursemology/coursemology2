@@ -1661,6 +1661,18 @@
   "course.assessment.FileTreeManager.renameFile": {
     "defaultMessage": "重命名 {name}"
   },
+  "course.assessment.FileTreeManager.replace": {
+    "defaultMessage": "替换"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmation": {
+    "defaultMessage": "你确定要替换以下文件吗？"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmationTitle": {
+    "defaultMessage": "替换文件？"
+  },
+  "course.assessment.FileTreeManager.replacedFile": {
+    "defaultMessage": "{path}，{from} → {to}"
+  },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "恢复 {name}"
   },
@@ -1681,6 +1693,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "{count} 个待删除"
+  },
+  "course.assessment.FileTreeManager.toReplaceBadge": {
+    "defaultMessage": "待替换"
   },
   "course.assessment.FileTreeManager.toUploadSummary": {
     "defaultMessage": "{count} 个待上传"

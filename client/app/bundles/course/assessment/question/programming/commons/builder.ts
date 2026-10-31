@@ -57,6 +57,13 @@ const appendFilesInto = (
     if (isMarked(file)) {
       appendInto(data, [`${type}_files_to_delete`, ''], unwrap(file).filename);
     } else if (isDraftable(file) && file.raw) {
+      // A replacement deletes the saved file, so its path is free even if only its case differs.
+      if (file.replacedFrom)
+        appendInto(
+          data,
+          [`${type}_files_to_delete`, ''],
+          file.replacedFrom.filename,
+        );
       appendInto(data, [`${type}_files`, ''], file.raw);
       appendInto(data, [`${type}_file_paths`, ''], file.filename);
     }

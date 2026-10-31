@@ -256,18 +256,44 @@ describe('<AnswerFilesTree />', () => {
     ).toBeVisible();
   });
 
-  it('rejects an upload whose name differs from a saved file only in case', async () => {
+  it('replaces the shown file after asking, under the new name when only its case differs', async () => {
+    const create = jest
+      .spyOn(ProgrammingAPI.prototype, 'createProgrammingFiles')
+      .mockImplementation(saveWhatIsSent);
+    const user = userEvent.setup();
+    await renderTree();
+
+    addFiles(new File(['print("new")'], 'App.py'));
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveTextContent('app.py, 17 bytes → 12 bytes');
+    await user.click(within(dialog).getByRole('button', { name: 'Replace' }));
+
+    await waitFor(() => expect(create).toHaveBeenCalled());
+    expect(create.mock.calls[0][1].answer.files_attributes).toContainEqual({
+      id: 1,
+      filename: 'App.py',
+      content: 'print("new")',
+    });
+    await waitFor(() => expect(shown).toBe('App.py'));
+    expect(await screen.findByTestId('editor')).toHaveValue('print("new")');
+    expect(await screen.findByText('File uploaded successfully')).toBeVisible();
+  });
+
+  it('replaces nothing when the replacement is cancelled', async () => {
     const create = jest.spyOn(
       ProgrammingAPI.prototype,
       'createProgrammingFiles',
     );
+    const user = userEvent.setup();
     await renderTree();
 
-    fireEvent.change(screen.getByTestId('file-tree-add-files'), {
-      target: { files: [new File(['x'], 'App.py')] },
-    });
+    addFiles(new File(['x'], 'app.py'));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
 
-    expect(await screen.findByText(/not added/)).toBeVisible();
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+    );
     expect(create).not.toHaveBeenCalled();
   });
 

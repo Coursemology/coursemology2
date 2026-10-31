@@ -1670,6 +1670,18 @@
   "course.assessment.FileTreeManager.renameFile": {
     "defaultMessage": "{name} 이름 변경"
   },
+  "course.assessment.FileTreeManager.replace": {
+    "defaultMessage": "바꾸기"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmation": {
+    "defaultMessage": "다음 파일을 바꾸시겠습니까?"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmationTitle": {
+    "defaultMessage": "파일을 바꾸시겠습니까?"
+  },
+  "course.assessment.FileTreeManager.replacedFile": {
+    "defaultMessage": "{path}, {from} → {to}"
+  },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "{name} 복원"
   },
@@ -1690,6 +1702,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "삭제 예정 {count}개"
+  },
+  "course.assessment.FileTreeManager.toReplaceBadge": {
+    "defaultMessage": "바꿀 예정"
   },
   "course.assessment.FileTreeManager.toUploadSummary": {
     "defaultMessage": "업로드 예정 {count}개"
