@@ -41,29 +41,52 @@ type DraftOptions = Partial<
   Omit<DraftFileTreeManagerProps, 'commit' | 'files'>
 >;
 
-// Holds the files as the question form would: deleting marks a saved file and drops a draft.
+// A file in the harness: a replacement remembers the saved file it replaces, as the form does.
+type HarnessEntry = FileTreeEntry & { original?: FileTreeEntry };
+
+// Holds the files as the question form would: deleting marks a saved file and drops a draft, and an
+// upload replaces the file at its path.
 const DraftHarness = (
   props: DraftOptions & { initial: FileTreeEntry[] },
 ): JSX.Element => {
   const { initial, ...flags } = props;
-  const [files, setFiles] = useState(initial);
+  const [files, setFiles] = useState<HarnessEntry[]>(initial);
 
   return (
     <FileTreeManager
       commit="draft"
       files={files}
       onAdd={(uploads): void =>
-        setFiles((current) => [
-          ...current,
-          ...uploads.map((upload) =>
-            entry(upload.path, 'draft', upload.file.size),
-          ),
-        ])
+        setFiles((current) => {
+          const next = [...current];
+          uploads.forEach(({ path, file, replaces }) => {
+            const index = next.findIndex(
+              (candidate) => candidate.path === replaces,
+            );
+            if (index < 0) {
+              next.push(entry(path, 'draft', file.size));
+              return;
+            }
+            const existing = next[index];
+            next[index] =
+              existing.state === 'draft'
+                ? entry(path, 'draft', file.size)
+                : {
+                    ...entry(path, 'replaced', file.size),
+                    original: existing.original ?? {
+                      ...existing,
+                      state: 'saved',
+                    },
+                  };
+          });
+          return next;
+        })
       }
       onDelete={(paths): void =>
         setFiles((current) =>
           current.flatMap((file) => {
             if (!paths.includes(file.path)) return [file];
+            if (file.original) return [{ ...file.original, state: 'marked' }];
             return file.state === 'draft' ? [] : [{ ...file, state: 'marked' }];
           }),
         )
@@ -77,9 +100,10 @@ const DraftHarness = (
       }
       onRestore={(paths): void =>
         setFiles((current) =>
-          current.map((file) =>
-            paths.includes(file.path) ? { ...file, state: 'saved' } : file,
-          ),
+          current.map((file) => {
+            if (!paths.includes(file.path)) return file;
+            return file.original ?? { ...file, state: 'saved' };
+          }),
         )
       }
       {...flags}
@@ -378,21 +402,101 @@ describe('FileTreeManager', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('rejects uploads that clash with existing files, and says why', async () => {
-      await renderDraft({ uploadable: true });
+    describe('replacing files', () => {
+      it('replaces a saved file without asking, and undoes it', async () => {
+        const user = userEvent.setup();
+        await renderDraft({ uploadable: true, filesDeleteable: true });
 
-      upload(
-        screen.getByTestId('file-tree-add-files'),
-        new File(['x'], 'App.py'),
-        new File(['x'], 'ok.py'),
-      );
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'app.py'),
+        );
 
-      const alert = await screen.findByRole('alert');
-      expect(alert).toHaveTextContent('App.py');
-      expect(alert).toHaveTextContent(
-        'A file or folder with this name already exists here.',
-      );
-      expect(row('ok.py, New')).toBeVisible();
+        expect(
+          await screen.findByRole('treeitem', { name: 'app.py, To replace' }),
+        ).toBeVisible();
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(
+          screen.getByText('3 files · 21 bytes · 1 to upload'),
+        ).toBeVisible();
+
+        await user.click(screen.getByLabelText('Restore app.py'));
+        expect(row('app.py')).toBeVisible();
+        expect(screen.getByText('3 files · 30 bytes')).toBeVisible();
+      });
+
+      it('replaces a saved file marked for deletion', async () => {
+        await renderDraft({
+          uploadable: true,
+          filesDeleteable: true,
+          initial: [entry('app.py', 'marked')],
+        });
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'app.py'),
+        );
+
+        expect(
+          await screen.findByRole('treeitem', { name: 'app.py, To replace' }),
+        ).toBeVisible();
+      });
+
+      it('replaces a new file as a new file', async () => {
+        await renderDraft({
+          uploadable: true,
+          initial: [entry('app.py', 'draft')],
+        });
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['xyz'], 'app.py'),
+        );
+
+        expect(
+          await screen.findByRole('treeitem', { name: 'app.py, New' }),
+        ).toBeVisible();
+        expect(screen.getAllByRole('treeitem')).toHaveLength(1);
+        expect(
+          screen.getByText('1 file · 3 bytes · 1 to upload'),
+        ).toBeVisible();
+      });
+
+      it('takes the name of an upload that differs only in case', async () => {
+        await renderDraft({ uploadable: true });
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'App.py'),
+        );
+
+        expect(
+          await screen.findByRole('treeitem', { name: 'App.py, To replace' }),
+        ).toBeVisible();
+        expect(
+          screen.queryByRole('treeitem', { name: /^app\.py/ }),
+        ).not.toBeInTheDocument();
+      });
+
+      it('still rejects a file with the name of a folder, and the same name twice', async () => {
+        await renderDraft({ uploadable: true });
+
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'templates'),
+          new File(['x'], 'ok.py'),
+          new File(['x'], 'ok.py'),
+        );
+
+        const alert = await screen.findByRole('alert');
+        expect(alert).toHaveTextContent(
+          'templates — A file and a folder cannot have the same name.',
+        );
+        expect(alert).toHaveTextContent(
+          'ok.py — A file or folder with this name already exists here.',
+        );
+        expect(row('ok.py, New')).toBeVisible();
+      });
     });
 
     it('marks a file for deletion and restores it', async () => {
@@ -596,6 +700,60 @@ describe('FileTreeManager', () => {
   });
 
   describe('in immediate mode', () => {
+    it('asks before replacing saved files, listing their sizes before and after', async () => {
+      const user = userEvent.setup();
+      const onAdd = jest.fn(() => Promise.resolve());
+      await renderImmediate({ uploadable: true, onAdd });
+
+      const replacement = new File(['xyz'], 'index.html');
+      const added = new File(['x'], 'new.py');
+      await user.click(row('templates'));
+      upload(screen.getByTestId('file-tree-add-files'), replacement, added);
+
+      const dialog = await screen.findByRole('dialog');
+      expect(dialog).toHaveTextContent('Replace file?');
+      expect(dialog).toHaveTextContent(
+        'Are you sure you want to replace this file?',
+      );
+      expect(within(dialog).getByRole('listitem')).toHaveTextContent(
+        'templates/index.html, 10 bytes → 3 bytes',
+      );
+      expect(onAdd).not.toHaveBeenCalled();
+
+      await user.click(within(dialog).getByRole('button', { name: 'Replace' }));
+
+      expect(onAdd).toHaveBeenCalledWith([
+        {
+          path: 'templates/index.html',
+          file: replacement,
+          replaces: 'templates/index.html',
+        },
+        { path: 'templates/new.py', file: added, replaces: undefined },
+      ]);
+    });
+
+    it('adds nothing when the replacement is cancelled', async () => {
+      const user = userEvent.setup();
+      const onAdd = jest.fn(() => Promise.resolve());
+      await renderImmediate({ uploadable: true, onAdd });
+
+      upload(
+        screen.getByTestId('file-tree-add-files'),
+        new File(['x'], 'App.py'),
+        new File(['x'], 'other.py'),
+      );
+      const dialog = await screen.findByRole('dialog');
+      const cancel = within(dialog).getByRole('button', { name: 'Cancel' });
+      // As in the other confirmations on the submission page, such as finalising.
+      expect(cancel).toHaveClass('MuiButton-colorSecondary');
+      await user.click(cancel);
+
+      await waitFor(() =>
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+      );
+      expect(onAdd).not.toHaveBeenCalled();
+    });
+
     it('asks before deleting, and shows the row as pending until the save settles', async () => {
       let finish: () => void = () => {};
       const onDelete = jest.fn(

@@ -1,8 +1,9 @@
 /**
- * The state of a file in draft mode: saved before, newly added, or marked for deletion. Draft mode
- * shows the last two with badges; immediate mode has only saved files.
+ * The state of a file in draft mode: saved before, newly added, marked for deletion, or a saved file
+ * an upload will replace. Draft mode shows the last three with badges; immediate mode has only saved
+ * files.
  */
-export type FileTreeEntryState = 'saved' | 'draft' | 'marked';
+export type FileTreeEntryState = 'saved' | 'draft' | 'marked' | 'replaced';
 
 export interface FileTreeEntry {
   /** Relative to the files' folder, such as `templates/index.html`. */
@@ -16,6 +17,11 @@ export interface FileTreeEntry {
 export interface FileTreeUpload {
   path: string;
   file: File;
+  /**
+   * The path of the file this upload replaces: one at the same path, ignoring case. The upload's
+   * own path is the one kept.
+   */
+  replaces?: string;
 }
 
 interface FileTreeManagerBaseProps {

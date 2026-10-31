@@ -79,32 +79,62 @@ const AnswerFilesTree = (props: AnswerFilesTreeProps): JSX.Element => {
   const currentFiles = (): AnswerFile[] =>
     getValues()[answerId]?.files_attributes ?? [];
 
+  // An upload that replaces a saved file is sent as that file, by its id, with the upload's name
+  // and content; the others are new files.
   const handleAdd = async (uploads: FileTreeUpload[]): Promise<void> => {
     const contents = await Promise.all(
       uploads.map((upload) => readText(upload.file)),
     );
-    const staged: AnswerFile[] = uploads.map((upload, index) => ({
-      filename: upload.path,
-      content: contents[index],
-      staged: true,
-    }));
+    const replacements = new Map(
+      uploads.flatMap((upload, index) =>
+        upload.replaces === undefined
+          ? []
+          : [
+              [
+                upload.replaces,
+                { path: upload.path, content: contents[index] },
+              ],
+            ],
+      ),
+    );
+    const saved: AnswerFile[] = currentFiles().map((file) => {
+      const replacement = replacements.get(file.filename);
+      return replacement
+        ? {
+            ...file,
+            filename: replacement.path,
+            content: replacement.content,
+            staged: true,
+          }
+        : file;
+    });
+    const staged: AnswerFile[] = uploads.flatMap((upload, index) =>
+      upload.replaces === undefined
+        ? [{ filename: upload.path, content: contents[index], staged: true }]
+        : [],
+    );
 
     await dispatch(
       importProgrammingFiles(
         answerId,
-        currentFiles().concat(staged),
+        saved.concat(staged),
         props.language,
         resetField,
       ),
     );
 
     // The shown file is chosen from what the server saved, not from what was asked for: a refused
-    // upload saves nothing, and the editor must never point at a file that doesn't exist.
+    // upload saves nothing, and the editor must never point at a file that doesn't exist. A shown
+    // file replaced under a name that differs in case stays shown, under its new name.
     const savedPaths = currentFiles()
       .filter((file) => !file.staged)
       .map((file) => file.filename);
-    if (!savedPaths.includes(displayFileName))
-      setDisplayFileName(filePathsInTreeOrder(savedPaths)[0] ?? '');
+    const shown = [
+      replacements.get(displayFileName)?.path,
+      displayFileName,
+    ].find((path) => path !== undefined && savedPaths.includes(path));
+    if (shown !== displayFileName)
+      setDisplayFileName(shown ?? filePathsInTreeOrder(savedPaths)[0] ?? '');
   };
 
   const deleteFile = (path: string): Promise<void> => {

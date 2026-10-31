@@ -84,10 +84,13 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     end
   end
 
+  # Creates the files without an id, and updates the saved ones by id: their content, and their name
+  # when one is given, which replaces a file with an upload whose name differs only in case.
   def create_and_update_files(params)
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
       if file.present?
+        file.filename = file_attributes[:filename] if file_attributes[:filename].present?
         file.content = file_attributes[:content]
       else
         files.build(filename: file_attributes[:filename], content: file_attributes[:content])
@@ -172,11 +175,12 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     errors.add(:files, :exceed_size_limit, total_size_mb: display_total_size)
   end
 
-  # Checks the paths of added files against each other and the answer's other files. Each file checks
-  # its own path.
+  # Checks the paths of added and renamed files against each other and the answer's other files. Each
+  # file checks its own path. A file can't take a path another file has before this save, even one
+  # renamed in the same save: each file's uniqueness validation checks the saved files.
   def validate_file_paths
-    added, existing = files.reject(&:marked_for_destruction?).partition(&:filename_changed?)
-    error = Course::Assessment::ProgrammingFilePath.collection_error(added.map(&:filename), existing.map(&:filename))
+    changed, unchanged = files.reject(&:marked_for_destruction?).partition(&:filename_changed?)
+    error = Course::Assessment::ProgrammingFilePath.collection_error(changed.map(&:filename), unchanged.map(&:filename))
     errors.add(:files, :invalid) if error
   end
 

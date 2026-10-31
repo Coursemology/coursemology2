@@ -80,6 +80,21 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
         end
       end
 
+      context 'when replacing a file with one whose name differs only in case' do
+        it 'saves the new content under the new name' do
+          file = answer.specific.files.first
+          post :create_programming_files, format: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: answer.id, files_attributes: [id: file.id, filename: file.filename.upcase, content: 'new']
+            }
+          }
+
+          expect(response).to have_http_status(:ok)
+          expect(file.reload).to have_attributes(filename: file.filename.upcase, content: 'new')
+        end
+      end
+
       context 'when uploading an empty file' do
         # Sent as form fields, as the client sends them, in which an empty value is an empty string.
         it 'saves it as a file with no content' do

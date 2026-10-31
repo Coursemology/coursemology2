@@ -103,7 +103,7 @@ const validateProgrammingFilesErrorMsg = (
  */
 export function importProgrammingFiles(
   answerId: number,
-  files: ProgrammingFilePostData[],
+  files: (ProgrammingFilePostData & { staged?: boolean })[],
   language: string,
   resetField: UseFormResetField<FieldValues>,
 ): Operation {
@@ -183,7 +183,8 @@ export function importProgrammingFiles(
         );
         toast.success(
           message(translations.uploadFilesSuccess, {
-            count: filesPayload.filter((file) => !file.id).length,
+            // The files read from uploads: the new ones, and the saved ones they replace.
+            count: files.filter((file) => !file.id || file.staged).length,
           }),
         );
       })

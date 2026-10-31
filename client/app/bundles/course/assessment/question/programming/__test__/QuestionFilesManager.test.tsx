@@ -92,6 +92,69 @@ describe('QuestionFilesManager', () => {
     ).toBeVisible();
   });
 
+  it('replaces a saved file with an upload, and brings it back when undone', async () => {
+    const user = userEvent.setup();
+    await renderForm([saved('data/b.csv')]);
+
+    await user.click(screen.getByRole('treeitem', { name: 'data' }));
+    const file = new File(['new'], 'b.csv');
+    fireEvent.change(screen.getByTestId('file-tree-add-files'), {
+      target: { files: [file] },
+    });
+
+    expect(dataFiles()).toEqual([
+      {
+        filename: 'data/b.csv',
+        size: 3,
+        hash: '',
+        raw: file,
+        replacedFrom: saved('data/b.csv'),
+      },
+    ]);
+
+    await user.click(screen.getByLabelText('Restore b.csv'));
+    expect(dataFiles()).toEqual([saved('data/b.csv')]);
+  });
+
+  it('replaces a saved file marked for deletion', async () => {
+    await renderForm([mark(saved('a.py'))]);
+
+    const file = new File(['new'], 'A.py');
+    fireEvent.change(screen.getByTestId('file-tree-add-files'), {
+      target: { files: [file] },
+    });
+
+    expect(dataFiles()).toEqual([
+      {
+        filename: 'A.py',
+        size: 3,
+        hash: '',
+        raw: file,
+        replacedFrom: saved('a.py'),
+      },
+    ]);
+  });
+
+  it('marks the saved file when its replacement is deleted', async () => {
+    const user = userEvent.setup();
+    await renderForm([
+      {
+        filename: 'a.py',
+        size: 1,
+        hash: '',
+        raw: new File(['x'], 'a.py'),
+        replacedFrom: saved('a.py'),
+      },
+    ]);
+
+    await user.click(
+      screen.getByRole('treeitem', { name: 'a.py, To replace' }),
+    );
+    await user.keyboard('{Delete}');
+
+    expect(dataFiles()).toEqual([mark(saved('a.py'))]);
+  });
+
   it('marks a saved file, and drops a new one, when deleted', async () => {
     const user = userEvent.setup();
     const file = new File(['x'], 'new.py');

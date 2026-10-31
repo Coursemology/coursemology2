@@ -82,15 +82,19 @@ const ActionButton = (props: ActionButtonProps): JSX.Element => (
   </button>
 );
 
+const BADGE_TONES = {
+  new: 'border-lime-600 bg-lime-50 text-lime-800',
+  replaced: 'border-amber-300 bg-amber-50 text-amber-800',
+  marked: 'border-red-200 bg-red-50 text-red-700',
+};
+
 const Badge = (props: {
-  tone: 'new' | 'marked';
+  tone: keyof typeof BADGE_TONES;
   children: string;
 }): JSX.Element => (
   <Typography
     className={`ml-2 flex-none rounded-sm border border-solid px-1.5 font-semibold uppercase leading-normal tracking-wider ${
-      props.tone === 'new'
-        ? 'border-lime-600 bg-lime-50 text-lime-800'
-        : 'border-red-200 bg-red-50 text-red-700'
+      BADGE_TONES[props.tone]
     }`}
     component="span"
     variant="caption"
@@ -135,6 +139,7 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     const entries = isFolder ? node.files : [node.file];
     const marked = entries.length > 0 && entries.every(isMarked);
     const draft = !isFolder && node.file.state === 'draft';
+    const replaced = !isFolder && node.file.state === 'replaced';
     const renamable = Boolean(props.canRename) && draft;
     // Clicking a folder opens or closes it, and clicking a file selects it only when files can be.
     const clickable = isFolder ? expandable : Boolean(props.selectable);
@@ -163,9 +168,11 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     if (marked) background = 'bg-red-50';
     else if (selected) background = 'bg-cyan-50';
     else if (draft) background = 'bg-lime-50';
+    else if (replaced) background = 'bg-amber-50';
 
     const labelParts = [name];
     if (draft) labelParts.push(t(translations.newBadge));
+    if (replaced) labelParts.push(t(translations.toReplaceBadge));
     if (marked) labelParts.push(t(translations.toDeleteBadge));
 
     const restoreLabel = isFolder
@@ -270,6 +277,9 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
         </span>
 
         {draft && <Badge tone="new">{t(translations.newBadge)}</Badge>}
+        {replaced && (
+          <Badge tone="replaced">{t(translations.toReplaceBadge)}</Badge>
+        )}
         {marked && <Badge tone="marked">{t(translations.toDeleteBadge)}</Badge>}
 
         <span className="flex-auto" />
@@ -304,7 +314,7 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
             </ActionButton>
           )}
 
-          {props.canDelete && !marked && (
+          {props.canDelete && !marked && !replaced && (
             <ActionButton
               className="text-red-700"
               disabled={disabled || pending}
@@ -316,7 +326,8 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
             </ActionButton>
           )}
 
-          {props.canDelete && marked && props.onRestore && (
+          {/* Undoes a deletion, or a replacement, which goes back to the saved file. */}
+          {props.canDelete && (marked || replaced) && props.onRestore && (
             <ActionButton
               className="text-info"
               disabled={disabled}
