@@ -36,7 +36,7 @@ zh:
         course/assessment/answer/programming_file:
           attributes:
             content:
-              binary: '必须是文本，无法上传二进制文件'
+              binary: '必须是 UTF-8 文本，无法上传二进制文件'
         course/assessment/answer/text_response:
           attributes:
             attachments:

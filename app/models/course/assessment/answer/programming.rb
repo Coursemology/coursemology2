@@ -80,7 +80,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
-      file.content = file_attributes[:content] if file.present?
+      file.content = content_from(file_attributes[:content]) if file.present?
     end
   end
 
@@ -91,9 +91,9 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
       file = files.find { |f| f.id == file_attributes[:id].to_i }
       if file.present?
         file.filename = file_attributes[:filename] if file_attributes[:filename].present?
-        file.content = file_attributes[:content]
+        file.content = content_from(file_attributes[:content])
       else
-        files.build(filename: file_attributes[:filename], content: file_attributes[:content])
+        files.build(filename: file_attributes[:filename], content: content_from(file_attributes[:content]))
       end
     end
     save
@@ -165,6 +165,13 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   MAX_TOTAL_FILE_SIZE = 2.megabytes
 
   private
+
+  # The content of a file as the client sent it. The client sends it as a file part, whose bytes the
+  # browser sends unchanged; a text field would have its line endings turned into CRLF. Text is still
+  # taken from any other client.
+  def content_from(value)
+    value.respond_to?(:read) ? value.read.force_encoding(Encoding::UTF_8) : value
+  end
 
   def validate_total_file_size
     total_size = files.reject(&:marked_for_destruction?).sum { |file| file.content.bytesize }

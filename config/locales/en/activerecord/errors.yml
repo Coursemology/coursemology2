@@ -36,7 +36,7 @@ en:
         course/assessment/answer/programming_file:
           attributes:
             content:
-              binary: 'must be text; binary files cannot be uploaded'
+              binary: 'must be UTF-8 text; binary files cannot be uploaded'
         course/assessment/answer/text_response:
           attributes:
             attachments:

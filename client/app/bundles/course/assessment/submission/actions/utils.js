@@ -9,6 +9,7 @@
 import { produce } from 'immer';
 
 import { questionTypes } from '../constants';
+import { asFilePart } from '../utils/filePart';
 
 const formatAnswerBase = (answer, currentTime) => ({
   id: answer.id,
@@ -28,7 +29,7 @@ const formatAnswerSpecific = (answer) => {
       const formattedFilesAttributes = filesAttributes.map((file) => ({
         id: file.id,
         filename: file.filename,
-        content: file.content,
+        content: asFilePart(file.content ?? '', file.filename),
       }));
       return {
         files_attributes: formattedFilesAttributes,
