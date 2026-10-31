@@ -60,6 +60,43 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#create_and_update_files' do
+      let(:programming_answer) do
+        answer.specific.tap do |specific|
+          specific.files.destroy_all
+          specific.files.create!(filename: 'app.py', content: 'old app')
+          specific.files.create!(filename: 'main.py', content: 'old main')
+        end
+      end
+      let(:app) { programming_answer.files.find_by!(filename: 'app.py') }
+      let(:main) { programming_answer.files.find_by!(filename: 'main.py') }
+
+      def update(*files_attributes)
+        described_class.find(programming_answer.id).create_and_update_files(files_attributes: files_attributes)
+      end
+
+      it 'replaces a saved file under a name that differs only in case' do
+        expect(update({ id: app.id, filename: 'App.py', content: 'new app' })).to be(true)
+        expect(app.reload).to have_attributes(filename: 'App.py', content: 'new app')
+      end
+
+      it 'keeps the name of a saved file when none is given' do
+        expect(update({ id: app.id, content: 'new app' })).to be(true)
+        expect(app.reload).to have_attributes(filename: 'app.py', content: 'new app')
+      end
+
+      it "refuses to give a saved file another file's path" do
+        expect(update({ id: app.id, filename: 'main.py', content: '' })).to be(false)
+        expect(app.reload.filename).to eq('app.py')
+      end
+
+      it 'refuses to swap the paths of two saved files, rather than failing partway through the save' do
+        expect(update({ id: app.id, filename: 'main.py', content: '' },
+                      { id: main.id, filename: 'app.py', content: '' })).to be(false)
+        expect([app.reload.filename, main.reload.filename]).to eq(['app.py', 'main.py'])
+      end
+    end
+
     describe '#files' do
       it 'returns the files in the order they were created, however they are edited' do
         answer.specific.files.build(filename: 'b.py', content: 'b')

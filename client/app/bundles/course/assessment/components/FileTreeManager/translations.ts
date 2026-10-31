@@ -34,6 +34,28 @@ const translations = defineMessages({
     id: 'course.assessment.FileTreeManager.newBadge',
     defaultMessage: 'New',
   },
+  toReplaceBadge: {
+    id: 'course.assessment.FileTreeManager.toReplaceBadge',
+    defaultMessage: 'To replace',
+  },
+  replace: {
+    id: 'course.assessment.FileTreeManager.replace',
+    defaultMessage: 'Replace',
+  },
+  replaceConfirmationTitle: {
+    id: 'course.assessment.FileTreeManager.replaceConfirmationTitle',
+    defaultMessage:
+      '{count, plural, one {Replace file?} other {Replace files?}}',
+  },
+  replaceConfirmation: {
+    id: 'course.assessment.FileTreeManager.replaceConfirmation',
+    defaultMessage:
+      'Are you sure you want to replace {count, plural, one {this file} other {these files}}?',
+  },
+  replacedFile: {
+    id: 'course.assessment.FileTreeManager.replacedFile',
+    defaultMessage: '{path}, {from} → {to}',
+  },
   toDeleteBadge: {
     id: 'course.assessment.FileTreeManager.toDeleteBadge',
     defaultMessage: 'To delete',

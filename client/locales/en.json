@@ -1670,6 +1670,18 @@
   "course.assessment.FileTreeManager.renameFile": {
     "defaultMessage": "Rename {name}"
   },
+  "course.assessment.FileTreeManager.replace": {
+    "defaultMessage": "Replace"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmation": {
+    "defaultMessage": "Are you sure you want to replace {count, plural, one {this file} other {these files}}?"
+  },
+  "course.assessment.FileTreeManager.replaceConfirmationTitle": {
+    "defaultMessage": "{count, plural, one {Replace file?} other {Replace files?}}"
+  },
+  "course.assessment.FileTreeManager.replacedFile": {
+    "defaultMessage": "{path}, {from} → {to}"
+  },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "Restore {name}"
   },
@@ -1690,6 +1702,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "{count} to delete"
+  },
+  "course.assessment.FileTreeManager.toReplaceBadge": {
+    "defaultMessage": "To replace"
   },
   "course.assessment.FileTreeManager.toUploadSummary": {
     "defaultMessage": "{count} to upload"

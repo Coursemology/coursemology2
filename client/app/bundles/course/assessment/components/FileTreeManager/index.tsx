@@ -44,9 +44,20 @@ interface RejectedUpload {
   error: NameError;
 }
 
+/** Uploads that wait for the user to confirm the files they replace, in immediate mode. */
+interface PendingReplacement {
+  uploads: FileTreeUpload[];
+  folder: string;
+  replaced: { path: string; from?: number; to: number }[];
+}
+
 const TYPE_AHEAD_RESET_MS = 500;
 
 const isMarked = (entry: FileTreeEntry): boolean => entry.state === 'marked';
+
+/** A marked file can be kept, and a replaced one can go back to the saved file. */
+const isRestorable = (entry: FileTreeEntry): boolean =>
+  entry.state === 'marked' || entry.state === 'replaced';
 
 const pathsOf = (node: Node): string[] =>
   node.kind === 'folder'
@@ -92,6 +103,8 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     new Set(),
   );
   const [confirmingDelete, setConfirmingDelete] = useState<Node | null>(null);
+  const [pendingReplacement, setPendingReplacement] =
+    useState<PendingReplacement | null>(null);
   const [dropFolder, setDropFolder] = useState<string | null>(null);
 
   const rowRefs = useRef(new Map<string, HTMLDivElement>());
@@ -150,39 +163,83 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     );
   };
 
+  const commitUploads = (uploads: FileTreeUpload[], folder: string): void => {
+    if (folder) tree.expand(folder);
+    if (props.commit === 'draft') {
+      props.onAdd?.(uploads);
+      return;
+    }
+
+    const { onAdd } = props;
+    if (onAdd)
+      runImmediately(
+        uploads.map((upload) => upload.replaces ?? upload.path),
+        () => onAdd(uploads),
+      );
+  };
+
+  // An upload at the path of a file in the tree, ignoring case, replaces that file under the
+  // upload's path. A new file not saved yet is replaced as it is. A saved file is too in draft mode,
+  // where the save confirms it; in immediate mode the user confirms first.
   const addFiles = (picked: File[], folder: string): void => {
     if (!canUpload || !picked.length) return;
 
-    const existing = files.map((file) => file.path);
+    const entries = new Map(
+      files.map((entry) => [entry.path.toLowerCase(), entry]),
+    );
     const accepted: FileTreeUpload[] = [];
+    const replaced: PendingReplacement['replaced'] = [];
     const rejections: RejectedUpload[] = [];
 
     picked.forEach((file) => {
       const path = pathOfFile(file, folder);
+      const key = path.toLowerCase();
+      const existing = entries.get(key);
       const error =
         validatePath(path) ??
-        validatePaths(
-          [path],
-          [...existing, ...accepted.map((upload) => upload.path)],
-        );
-      if (error) rejections.push({ path, error });
-      else accepted.push({ path, file });
+        (accepted.some((upload) => upload.path.toLowerCase() === key)
+          ? 'duplicate'
+          : null) ??
+        (existing
+          ? null
+          : validatePaths(
+              [path],
+              [
+                ...files.map((entry) => entry.path),
+                ...accepted.map((upload) => upload.path),
+              ],
+            ));
+      if (error) {
+        rejections.push({ path, error });
+        return;
+      }
+
+      accepted.push({ path, file, replaces: existing?.path });
+      const saved =
+        existing && existing.state !== 'draft' && existing.state !== 'replaced';
+      if (saved)
+        replaced.push({
+          path: existing.path,
+          from: existing.size,
+          to: file.size,
+        });
     });
 
     if (rejections.length) toastRejections(rejections);
     if (!accepted.length) return;
 
-    if (folder) tree.expand(folder);
-    if (props.commit === 'draft') {
-      props.onAdd?.(accepted);
-    } else {
-      const { onAdd } = props;
-      if (onAdd)
-        runImmediately(
-          accepted.map((upload) => upload.path),
-          () => onAdd(accepted),
-        );
+    if (props.commit === 'immediate' && replaced.length) {
+      setPendingReplacement({ uploads: accepted, folder, replaced });
+      return;
     }
+
+    commitUploads(accepted, folder);
+  };
+
+  const confirmReplacement = (): void => {
+    const pending = pendingReplacement;
+    setPendingReplacement(null);
+    if (pending) commitUploads(pending.uploads, pending.folder);
   };
 
   const handlePicked = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -213,7 +270,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     if (locked || props.commit !== 'draft') return;
 
     const paths = (node.kind === 'folder' ? node.files : [node.file])
-      .filter(isMarked)
+      .filter(isRestorable)
       .map((entry) => entry.path);
     if (paths.length) props.onRestore?.(paths);
   };
@@ -367,7 +424,9 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   });
 
   const liveFiles = files.filter((file) => !isMarked(file));
-  const draftCount = files.filter((file) => file.state === 'draft').length;
+  const draftCount = files.filter(
+    (file) => file.state === 'draft' || file.state === 'replaced',
+  ).length;
   const markedCount = files.length - liveFiles.length;
   const summary = [
     t(translations.filesSummary, {
@@ -611,6 +670,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
       )}
 
       <Prompt
+        cancelColor="secondary"
         onClickPrimary={confirmDelete}
         onClose={(): void => setConfirmingDelete(null)}
         open={confirmingDelete !== null}
@@ -627,6 +687,39 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
             path: confirmingDelete?.path ?? '',
           })}
         </PromptText>
+      </Prompt>
+
+      <Prompt
+        cancelColor="secondary"
+        onClickPrimary={confirmReplacement}
+        onClose={(): void => setPendingReplacement(null)}
+        open={pendingReplacement !== null}
+        primaryLabel={t(translations.replace)}
+        title={t(translations.replaceConfirmationTitle, {
+          count: pendingReplacement?.replaced.length ?? 0,
+        })}
+      >
+        <PromptText>
+          {t(translations.replaceConfirmation, {
+            count: pendingReplacement?.replaced.length ?? 0,
+          })}
+        </PromptText>
+        <ul className="mb-0 mt-3 pl-8">
+          {pendingReplacement?.replaced.map(({ path, from, to }) => (
+            <Typography
+              key={path}
+              className="break-all"
+              component="li"
+              variant="body2"
+            >
+              {t(translations.replacedFile, {
+                path,
+                from: from === undefined ? '?' : formatReadableBytes(from),
+                to: formatReadableBytes(to),
+              })}
+            </Typography>
+          ))}
+        </ul>
       </Prompt>
     </section>
   );

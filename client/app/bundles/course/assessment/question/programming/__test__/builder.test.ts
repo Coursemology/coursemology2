@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import {
   DataFile,
   ProgrammingFormRequestData,
@@ -58,6 +59,24 @@ describe('buildFormData', () => {
     ]);
     expect(data.getAll('question_programming[data_file_paths][]')).toEqual([
       'pkg/__init__.py',
+    ]);
+  });
+
+  it('sends a replacement as a deletion of the saved file and an upload', () => {
+    const replacement = {
+      ...draft('Data/a.csv', 'new'),
+      replacedFrom: saved('data/a.csv'),
+    };
+    const data = build({ dataFiles: [replacement] });
+
+    expect(data.getAll('question_programming[data_files_to_delete][]')).toEqual(
+      ['data/a.csv'],
+    );
+    expect(data.getAll('question_programming[data_files][]')).toEqual([
+      replacement.raw,
+    ]);
+    expect(data.getAll('question_programming[data_file_paths][]')).toEqual([
+      'Data/a.csv',
     ]);
   });
 

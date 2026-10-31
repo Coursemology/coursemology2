@@ -33,6 +33,7 @@ const entryOf = (file: FormFile): FileTreeEntry => {
   const unwrapped = unwrap(file);
   let state: FileTreeEntry['state'] = 'saved';
   if (isMarked(file)) state = 'marked';
+  else if (unwrapped.replacedFrom) state = 'replaced';
   else if (unwrapped.raw) state = 'draft';
 
   return { path: unwrapped.filename, size: unwrapped.size, state };
@@ -64,32 +65,52 @@ const QuestionFilesManager = (
       { shouldDirty: true },
     );
 
-  const handleAdd = (uploads: FileTreeUpload[]): void =>
-    append(
-      uploads.map(
-        ({ path, file }): DraftableDataFile => ({
-          filename: path,
-          size: file.size,
-          hash: '',
-          raw: file,
-        }),
-      ) as never,
-    );
+  // An upload that replaces a file takes its place in the form. A saved file it replaces, even one
+  // marked for deletion, is kept as `replacedFrom`, so undoing the replacement brings it back.
+  const handleAdd = (uploads: FileTreeUpload[]): void => {
+    const added: DraftableDataFile[] = [];
+    uploads.forEach(({ path, file, replaces }) => {
+      const upload: DraftableDataFile = {
+        filename: path,
+        size: file.size,
+        hash: '',
+        raw: file,
+      };
+      const [index] = replaces === undefined ? [] : indicesOf([replaces]);
+      if (index === undefined) {
+        added.push(upload);
+        return;
+      }
 
-  // A saved file is marked, to be deleted when the form is submitted; a new upload is dropped.
+      const existing = files[index];
+      const saved = isMarked(existing)
+        ? unwrap(existing)
+        : existing.replacedFrom ?? (existing.raw ? undefined : existing);
+      setFile(index, saved ? { ...upload, replacedFrom: saved } : upload);
+    });
+    if (added.length) append(added as never);
+  };
+
+  // A saved file is marked, to be deleted when the form is submitted, as is the saved file a
+  // replacement would have replaced; a new upload is dropped.
   const handleDelete = (paths: string[]): void => {
     const drafts: number[] = [];
     indicesOf(paths).forEach((index) => {
       const file = files[index];
       if (isMarked(file)) return;
-      if (file.raw) drafts.push(index);
+      if (file.replacedFrom) setFile(index, mark(file.replacedFrom));
+      else if (file.raw) drafts.push(index);
       else setFile(index, mark(file));
     });
     if (drafts.length) remove(drafts);
   };
 
+  // Keeps a marked file, and undoes a replacement.
   const handleRestore = (paths: string[]): void =>
-    indicesOf(paths).forEach((index) => setFile(index, unwrap(files[index])));
+    indicesOf(paths).forEach((index) => {
+      const file = files[index];
+      setFile(index, isMarked(file) ? unwrap(file) : file.replacedFrom ?? file);
+    });
 
   const handleRename = (from: string, to: string): void =>
     indicesOf([from]).forEach((index) =>
