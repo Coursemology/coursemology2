@@ -14,7 +14,10 @@ module ActiveJob::TestGroupHelpers
     ActiveJob::Base.queue_adapter = old_adapter
   end
 
+  # Also drops future jobs left by earlier examples, so +perform_enqueued_jobs+ only runs the current
+  # example's. A leftover job may track a TrackableJob::Job row that was rolled back with its transaction.
   def self.ensure_jobs_completion(example)
+    clear_future_jobs
     example.call
   ensure
     wait_for_jobs if ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
@@ -22,6 +25,12 @@ module ActiveJob::TestGroupHelpers
 
   def self.wait_for_jobs
     ActiveJob::Base.queue_adapter.wait_for_jobs
+  end
+
+  def self.clear_future_jobs
+    return unless ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
+
+    ActiveJob::Base.queue_adapter.clear_enqueued_jobs
   end
 
   def with_active_job_queue_adapter(adapter, &proc)

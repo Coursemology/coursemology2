@@ -7,7 +7,7 @@ const config = {
   moduleDirectories: ['node_modules', 'app'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   setupFiles: ['jest-localstorage-mock'],
-  setupFilesAfterEnv: ['<rootDir>/app/__test__/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/app/__test__/setup.tsx'],
   snapshotSerializers: ['<rootDir>/node_modules/enzyme-to-json/serializer'],
   moduleNameMapper: {
     '\\.(css|scss)$': '<rootDir>/app/__test__/mocks/fileMock.js',
@@ -19,7 +19,6 @@ const config = {
     '^api(.*)$': '<rootDir>/app/api$1',
     '^lib(.*)$': '<rootDir>/app/lib$1',
     '^theme(.*)$': '<rootDir>/app/theme$1',
-    '^testUtils(.*)$': '<rootDir>/app/__test__/utils$1',
     '^bundles(.*)$': '<rootDir>/app/bundles$1',
     '^course(.*)$': '<rootDir>/app/bundles/course$1',
     '^store(.*)$': '<rootDir>/app/store$1',

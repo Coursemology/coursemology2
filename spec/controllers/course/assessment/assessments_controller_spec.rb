@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         }
 
         perform_enqueued_jobs
-        wait_for_job
+        wait_for_enqueued_jobs
 
         emails = unread_emails_for(student.email).map(&:subject)
         closing_subject = 'course.mailer.assessment_closing_reminder_email.subject'

@@ -37,7 +37,7 @@ RSpec.feature 'Course: Category: Management', js: true do
 
         expect_toastify('Your changes have been saved.')
         visit current_path
-        expect(page).to have_content(category_element[:title])
+        expect(page).to have_content(category_edited[:title])
         expect(page).not_to have_content(previous_title)
       end
 
@@ -87,7 +87,6 @@ RSpec.feature 'Course: Category: Management', js: true do
       end
 
       scenario 'I can move a tab to another category' do
-        skip 'Flaky tests'
         default_category = course.assessment_categories.first
         tab = create(:course_assessment_tab, course: course)
         assessment = create(:assessment, course: course, tab: tab)
@@ -97,7 +96,9 @@ RSpec.feature 'Course: Category: Management', js: true do
         tab_element = find_rbd_tab(tab.id)
         default_category_element = find_rbd_tab(default_category.tabs.first.id)
 
-        page.scroll_to default_category_element
+        # Centre the drop target: at the viewport edge, the drag library auto-scrolls the window under
+        # the pointer and the drop never lands.
+        page.scroll_to(default_category_element, align: :center)
         drag_rbd(tab_element, default_category_element)
 
         click_button 'Save changes'

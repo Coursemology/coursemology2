@@ -1,9 +1,9 @@
+import { ReactNode } from 'react';
 import { createIntl, createIntlCache, IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { createTheme } from '@mui/material/styles';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Enzyme from 'enzyme';
-import PropTypes from 'prop-types';
+import Enzyme, { MountRendererProps } from 'enzyme';
+import { Store } from 'redux';
 
 import 'jest-canvas-mock';
 import '@testing-library/jest-dom';
@@ -19,30 +19,27 @@ const intlCache = createIntlCache();
 const intl = createIntl({ locale: 'en', timeZone }, intlCache);
 const courseId = '1';
 
-const muiTheme = createTheme();
+// Mount options for the remaining Enzyme tests: wraps the component in the intl provider, and the
+// Redux provider when a store is given.
+const buildContextOptions = (store?: Store): MountRendererProps => {
+  if (!store) {
+    return { wrappingComponent: IntlProvider, wrappingComponentProps: intl };
+  }
 
-const buildContextOptions = (store) => {
-  // eslint-disable-next-line react/prop-types
-  const WrapWithProviders = ({ children }) => (
+  const WrapWithProviders = ({
+    children,
+  }: {
+    children: ReactNode;
+  }): JSX.Element => (
     <IntlProvider {...intl}>
       <Provider store={store}>{children}</Provider>
     </IntlProvider>
   );
-  return {
-    context: { muiTheme },
-    childContextTypes: {
-      muiTheme: PropTypes.object,
-      intl: PropTypes.object,
-    },
-    wrappingComponent: store ? WrapWithProviders : IntlProvider,
-    wrappingComponentProps: store ? null : intl,
-  };
+  return { wrappingComponent: WrapWithProviders };
 };
 
 // Global variables
 global.courseId = courseId;
-global.window = window;
-global.muiTheme = muiTheme;
 global.buildContextOptions = buildContextOptions;
 
 window.history.pushState({}, '', `/courses/${courseId}`);
@@ -50,9 +47,10 @@ window.history.pushState({}, '', `/courses/${courseId}`);
 // Global helper functions
 
 // Sleep for a given period in ms.
-function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
+const sleep = (time: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
 global.sleep = sleep;
 
 // summernote does not work well with jsdom in tests, stub it to normal text field.
