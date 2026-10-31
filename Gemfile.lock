@@ -240,7 +240,7 @@ GEM
       mail (~> 2.7)
     erb (6.0.7)
     erubi (1.13.1)
-    et-orbi (1.2.11)
+    et-orbi (1.4.2)
       tzinfo
     event_stream_parser (1.0.0)
     excon (1.7.1)
@@ -281,8 +281,8 @@ GEM
       reline
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
-    fugit (1.11.1)
-      et-orbi (~> 1, >= 1.2.11)
+    fugit (1.14.0)
+      et-orbi (~> 1.4)
       raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
@@ -429,7 +429,7 @@ GEM
     public_suffix (7.0.5)
     puma (7.2.1)
       nio4r (~> 2.0)
-    raabro (1.4.0)
+    raabro (1.5.0)
     racc (1.8.1)
     rack (3.2.7)
     rack-cors (3.0.0)
@@ -500,7 +500,7 @@ GEM
       actionview (>= 5)
     redis (5.4.1)
       redis-client (>= 0.22.0)
-    redis-client (0.28.0)
+    redis-client (0.30.1)
       connection_pool
     regexp_parser (2.13.0)
     reline (0.7.0)
@@ -590,7 +590,7 @@ GEM
       logger
       rack (>= 2.2.4, < 3.3)
       redis-client (>= 0.23.0, < 1)
-    sidekiq-cron (2.2.0)
+    sidekiq-cron (2.4.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
