@@ -3615,7 +3615,7 @@
     "defaultMessage": "Include phantom users"
   },
   "course.assessment.submission.binaryFileUploadError": {
-    "defaultMessage": "File uploads failed: only text files, such as code, can be uploaded"
+    "defaultMessage": "File uploads failed: only text files (UTF-8), such as code, can be uploaded"
   },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "Changes have been made to the question after this answer was graded."

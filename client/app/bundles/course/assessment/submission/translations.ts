@@ -412,7 +412,7 @@ const translations = defineMessages({
   binaryFileUploadError: {
     id: 'course.assessment.submission.binaryFileUploadError',
     defaultMessage:
-      'File uploads failed: only text files, such as code, can be uploaded',
+      'File uploads failed: only text files (UTF-8), such as code, can be uploaded',
   },
   uploadFiles: {
     id: 'course.assessment.submission.uploadFiles',

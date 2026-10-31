@@ -5,6 +5,7 @@ import {
 } from 'types/course/assessment/submission/answer/programming';
 
 import { APIResponse } from 'api/types';
+import { asFilePart } from 'course/assessment/submission/utils/filePart';
 
 import BaseAssessmentAPI from '../../Base';
 import SubmissionsAPI from '../../Submissions';
@@ -26,8 +27,15 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
       },
     };
 
+    // Every file's content goes as a file part, the saved files' too, so none is saved as CRLF.
+    const filesAttributes = data.answer.files_attributes.map((file) => ({
+      ...file,
+      content: asFilePart(file.content, file.filename),
+    }));
     const formData = new FormData();
-    SubmissionsAPI.appendFormData(formData, data);
+    SubmissionsAPI.appendFormData(formData, {
+      answer: { ...data.answer, files_attributes: filesAttributes },
+    });
 
     const url = `${this.#urlPrefix}/${answerId}/programming/create_programming_files`;
     return this.client.post(url, formData, config);

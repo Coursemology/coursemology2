@@ -11,6 +11,7 @@ import { fireEvent, render, screen, waitFor, within } from 'test-utils';
 import {
   ProgrammingAnswerData,
   ProgrammingContent,
+  ProgrammingFilePostData,
 } from 'types/course/assessment/submission/answer/programming';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
@@ -129,14 +130,26 @@ const renderTree = async (
   await screen.findByRole('tree');
 };
 
+const textOf = (content: string | File): Promise<string> =>
+  typeof content === 'string'
+    ? Promise.resolve(content)
+    : new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (): void => resolve(reader.result as string);
+        reader.readAsText(content);
+      });
+
 // Saves what was sent, giving each new file an id, as the server does.
-const saveWhatIsSent = (_answerId: number, payload): Promise<never> => {
-  const sent = payload.answer.files_attributes as ProgrammingContent[];
-  return Promise.resolve({
-    data: answerData(
-      sent.map((saved, index) => ({ ...saved, id: saved.id ?? 10 + index })),
-    ),
-  } as never);
+const saveWhatIsSent = async (_answerId: number, payload): Promise<never> => {
+  const sent = payload.answer.files_attributes as ProgrammingFilePostData[];
+  const files = await Promise.all(
+    sent.map(async (saved, index) => ({
+      id: saved.id ?? 10 + index,
+      filename: saved.filename,
+      content: await textOf(saved.content),
+    })),
+  );
+  return { data: answerData(files) } as never;
 };
 
 const addFiles = (...files: File[]): void => {
@@ -172,34 +185,24 @@ describe('<AnswerFilesTree />', () => {
     expect(shown).toBe('templates/base.html');
   });
 
-  it('saves an upload under the folder it was added to', async () => {
+  it('saves an upload under the folder it was added to, sending the picked file itself', async () => {
     const create = jest
       .spyOn(ProgrammingAPI.prototype, 'createProgrammingFiles')
-      .mockImplementation((_answerId, payload) => {
-        const sent = payload.answer.files_attributes as ProgrammingContent[];
-        return Promise.resolve({
-          data: answerData(
-            sent.map((saved, index) => ({
-              ...saved,
-              id: saved.id ?? 10 + index,
-            })),
-          ),
-        } as never);
-      });
+      .mockImplementation(saveWhatIsSent);
     const user = userEvent.setup();
     await renderTree();
 
     await user.click(screen.getByRole('treeitem', { name: 'templates' }));
-    fireEvent.change(screen.getByTestId('file-tree-add-files'), {
-      target: { files: [new File(['<nav>'], 'nav.html')] },
-    });
+    const nav = new File(['<nav>\r\n'], 'nav.html');
+    addFiles(nav);
 
     await waitFor(() => expect(create).toHaveBeenCalled());
     const sent = create.mock.calls[0][1].answer.files_attributes;
+    // The picked file, not text read from it, so its bytes are saved as they are.
     expect(sent).toContainEqual({
       id: undefined,
       filename: 'templates/nav.html',
-      content: '<nav>',
+      content: nav,
     });
     await waitFor(() => expect(savedPaths()).toContain('templates/nav.html'));
     // A green toast, not the snackbar: the test app renders both, so the text alone proves nothing.
@@ -233,11 +236,12 @@ describe('<AnswerFilesTree />', () => {
       .mockImplementation(saveWhatIsSent);
     await renderTree('', []);
 
-    addFiles(new File([], '__init__.py'));
+    const init = new File([], '__init__.py');
+    addFiles(init);
 
     await waitFor(() => expect(create).toHaveBeenCalled());
     expect(create.mock.calls[0][1].answer.files_attributes).toEqual([
-      { id: undefined, filename: '__init__.py', content: '' },
+      { id: undefined, filename: '__init__.py', content: init },
     ]);
     await waitFor(() => expect(shown).toBe('__init__.py'));
     expect(screen.getByRole('treeitem', { name: '__init__.py' })).toBeVisible();
@@ -263,7 +267,8 @@ describe('<AnswerFilesTree />', () => {
     const user = userEvent.setup();
     await renderTree();
 
-    addFiles(new File(['print("new")'], 'App.py'));
+    const replacement = new File(['print("new")'], 'App.py');
+    addFiles(replacement);
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toHaveTextContent('app.py, 17 bytes → 12 bytes');
     await user.click(within(dialog).getByRole('button', { name: 'Replace' }));
@@ -272,7 +277,7 @@ describe('<AnswerFilesTree />', () => {
     expect(create.mock.calls[0][1].answer.files_attributes).toContainEqual({
       id: 1,
       filename: 'App.py',
-      content: 'print("new")',
+      content: replacement,
     });
     await waitFor(() => expect(shown).toBe('App.py'));
     expect(await screen.findByTestId('editor')).toHaveValue('print("new")');

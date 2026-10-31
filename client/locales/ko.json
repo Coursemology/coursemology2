@@ -3609,7 +3609,7 @@
     "defaultMessage": "팬텀 사용자 포함"
   },
   "course.assessment.submission.binaryFileUploadError": {
-    "defaultMessage": "파일 업로드 실패: 코드와 같은 텍스트 파일만 업로드할 수 있습니다"
+    "defaultMessage": "파일 업로드 실패: 코드와 같은 텍스트 파일(UTF-8)만 업로드할 수 있습니다"
   },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "이 답안이 채점된 이후 문제가 변경되었습니다."

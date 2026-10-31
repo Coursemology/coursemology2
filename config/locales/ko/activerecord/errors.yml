@@ -36,7 +36,7 @@ ko:
         course/assessment/answer/programming_file:
           attributes:
             content:
-              binary: '텍스트여야 합니다. 바이너리 파일은 업로드할 수 없습니다'
+              binary: 'UTF-8 텍스트여야 합니다. 바이너리 파일은 업로드할 수 없습니다'
         course/assessment/answer/text_response:
           attributes:
             attachments:

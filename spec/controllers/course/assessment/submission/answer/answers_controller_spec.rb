@@ -90,6 +90,19 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
           expect(JSON.parse(response.body)['fields']['files_attributes'].map { |file| file['id'] }).
             to eq(files.map(&:id).sort)
         end
+
+        it 'keeps the bytes of content sent as a file part, line endings included' do
+          content = "class First {\r\n}\n"
+          part = Rack::Test::UploadedFile.new(StringIO.new(content), 'text/plain', original_filename: 'First.java')
+          patch :update, format: :json, params: {
+            course_id: course, assessment_id: assessment, submission_id: submission, id: answer.id,
+            answer: { id: answer.id, files_attributes: [id: files.first.id, filename: files.first.filename,
+                                                        content: part] }
+          }
+
+          expect(response).to have_http_status(:ok)
+          expect(files.first.reload.content).to eq(content)
+        end
       end
     end
 

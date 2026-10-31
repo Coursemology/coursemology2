@@ -3558,7 +3558,7 @@
     "defaultMessage": "您的答案必须小于 2 MB。"
   },
   "course.assessment.submission.binaryFileUploadError": {
-    "defaultMessage": "文件上传失败：只能上传代码等文本文件"
+    "defaultMessage": "文件上传失败：只能上传代码等文本文件（UTF-8）"
   },
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "此答案评分后，题目已被修改。"

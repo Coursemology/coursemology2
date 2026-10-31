@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { ProgrammingFilePostData } from 'types/course/assessment/submission/answer/programming';
 
 import FileTreeManager, {
   FileTreeEntry,
@@ -24,6 +25,9 @@ interface AnswerFile {
   staged?: boolean;
 }
 
+/** A file sent to be saved: one in the form, or an upload, whose content is the picked file. */
+type SentFile = ProgrammingFilePostData & { staged?: boolean };
+
 interface AnswerFilesTreeProps {
   answerId: number;
   /** The question's editor mode, which decides what files the language accepts. */
@@ -32,14 +36,6 @@ interface AnswerFilesTreeProps {
   setDisplayFileName: (path: string) => void;
   disabled?: boolean;
 }
-
-const readText = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (): void => resolve(reader.result as string);
-    reader.onerror = (): void => reject(reader.error);
-    reader.readAsText(file);
-  });
 
 /**
  * The files of a student's answer to a question whose templates are files. Each change is saved as
@@ -80,37 +76,28 @@ const AnswerFilesTree = (props: AnswerFilesTreeProps): JSX.Element => {
     getValues()[answerId]?.files_attributes ?? [];
 
   // An upload that replaces a saved file is sent as that file, by its id, with the upload's name
-  // and content; the others are new files.
+  // and content; the others are new files. An upload's content is the picked file itself, so its
+  // bytes are saved as they are.
   const handleAdd = async (uploads: FileTreeUpload[]): Promise<void> => {
-    const contents = await Promise.all(
-      uploads.map((upload) => readText(upload.file)),
-    );
     const replacements = new Map(
-      uploads.flatMap((upload, index) =>
-        upload.replaces === undefined
-          ? []
-          : [
-              [
-                upload.replaces,
-                { path: upload.path, content: contents[index] },
-              ],
-            ],
+      uploads.flatMap((upload) =>
+        upload.replaces === undefined ? [] : [[upload.replaces, upload]],
       ),
     );
-    const saved: AnswerFile[] = currentFiles().map((file) => {
+    const saved: SentFile[] = currentFiles().map((file) => {
       const replacement = replacements.get(file.filename);
       return replacement
         ? {
-            ...file,
+            id: file.id,
             filename: replacement.path,
-            content: replacement.content,
+            content: replacement.file,
             staged: true,
           }
         : file;
     });
-    const staged: AnswerFile[] = uploads.flatMap((upload, index) =>
+    const staged: SentFile[] = uploads.flatMap((upload) =>
       upload.replaces === undefined
-        ? [{ filename: upload.path, content: contents[index], staged: true }]
+        ? [{ filename: upload.path, content: upload.file, staged: true }]
         : [],
     );
 

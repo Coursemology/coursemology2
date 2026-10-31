@@ -30,7 +30,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         submission.answers.first.specific.reload.files.map(&:filename)
       end
 
-      scenario 'I can only upload new programming files' do
+      scenario 'I can upload programming files, and replace one after confirming' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # The question's template file
@@ -39,20 +39,42 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         file_input.set(file_path)
         expect(file_tree).to have_css('[role="treeitem"][aria-label="template_file"]')
-        expect(file_tree).to have_css('[role="treeitem"]', count: 2)
-
         file_input.set(file_path2)
         expect(file_tree).to have_css('[role="treeitem"][aria-label="template_file_2"]')
         expect(file_tree).to have_css('[role="treeitem"]', count: 3)
 
-        # A file with the name of one already uploaded is turned away, and nothing more is saved
+        # A file with the name of one already uploaded asks first, with the sizes before and after
         file_input.set(file_path)
-        expect(page).to have_text('A file or folder with this name already exists here.')
+        within('[role="dialog"]') do
+          expect(page).to have_text('template_file, 23 bytes → 23 bytes')
+          click_button('Cancel')
+        end
+        expect(page).to have_no_css('[role="dialog"]')
+
+        file_input.set(file_path)
+        within('[role="dialog"]') { click_button('Replace') }
+        expect(page).to have_no_css('[role="dialog"]')
+        expect(page).to have_text('File uploaded successfully')
+
         expect(file_tree).to have_css('[role="treeitem"]', count: 3)
         expect(saved_filenames(submission)).to contain_exactly(
           submission.assessment.questions.first.specific.template_files.first.filename,
           'template_file', 'template_file_2'
         )
+      end
+
+      scenario 'Uploading keeps the bytes of every file, line endings included' do
+        # Saved files go along with an upload, so their content is sent again too.
+        saved = submission.answers.first.specific.files.first
+        saved.update!(content: "a = 1\nb = 2\n")
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        find('input[data-testid="file-tree-add-files"]', visible: false).set(file_path)
+        expect(file_tree).to have_css('[role="treeitem"][aria-label="template_file"]')
+
+        uploaded = submission.answers.first.specific.files.reload.find_by(filename: 'template_file')
+        expect(uploaded.content.b).to eq(File.binread(file_path))
+        expect(saved.reload.content).to eq("a = 1\nb = 2\n")
       end
 
       scenario 'I can delete existing programming files' do
