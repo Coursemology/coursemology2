@@ -140,12 +140,12 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
 
 /**
  * A file sent to `create_programming_files`: a saved file by its `id`, whose content is updated, or
- * a new file, created under `filename`.
+ * a new file, created under `filename`. Content is the text of a saved file, or an uploaded `File`.
  */
 export interface ProgrammingFilePostData {
   id?: number;
   filename: string;
-  content: string;
+  content: string | File;
 }
 
 export interface ProgrammingFilesPostData {

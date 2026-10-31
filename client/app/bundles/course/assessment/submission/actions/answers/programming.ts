@@ -108,7 +108,11 @@ export function importProgrammingFiles(
   resetField: UseFormResetField<FieldValues>,
 ): Operation {
   const savingSize = files.reduce(
-    (acc, file) => acc + (file?.content?.length ?? 0),
+    (acc, file) =>
+      acc +
+      (typeof file.content === 'string'
+        ? file.content.length
+        : file.content.size),
     0,
   );
   if (savingSize > MAX_SAVING_SIZE) {

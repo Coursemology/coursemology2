@@ -95,6 +95,31 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
         end
       end
 
+      context 'when the content is sent as a file part' do
+        def upload(bytes)
+          part = Rack::Test::UploadedFile.new(StringIO.new(bytes), 'text/plain', original_filename: 'part.py')
+          post :create_programming_files, format: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: { id: answer.id, files_attributes: [filename: 'part.py', content: part] }
+          }
+        end
+
+        it 'saves its bytes, line endings included' do
+          upload("a = 1\r\nb = 2\n")
+
+          expect(response).to have_http_status(:ok)
+          expect(answer.specific.reload.files.find_by(filename: 'part.py').content).to eq("a = 1\r\nb = 2\n")
+        end
+
+        it 'refuses content that is not UTF-8, with a code the client can explain' do
+          upload("caf\xE9 = 1\n".b)
+
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['codes']).to include('binary')
+          expect(answer.specific.reload.files.map(&:filename)).not_to include('part.py')
+        end
+      end
+
       context 'when uploading an empty file' do
         # Sent as form fields, as the client sends them, in which an empty value is an empty string.
         it 'saves it as a file with no content' do

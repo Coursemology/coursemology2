@@ -45,8 +45,9 @@ jest.mock(
     ),
 );
 
+// As sent: each file's content is a file part, so its line endings arrive as they are.
 interface SavedPayload {
-  files_attributes: ProgrammingContent[];
+  files_attributes: { id: number; filename: string; content: File }[];
 }
 
 const ANSWER_ID = 7;
@@ -123,9 +124,22 @@ const formContents = (): Record<string, string> =>
     ),
   );
 
-const payloadContents = (payload: SavedPayload): Record<number, string> =>
+const textOf = (file: File): Promise<string> =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (): void => resolve(reader.result as string);
+    reader.readAsText(file);
+  });
+
+const payloadContents = async (
+  payload: SavedPayload,
+): Promise<Record<number, string>> =>
   Object.fromEntries(
-    payload.files_attributes.map((file) => [file.id, file.content]),
+    await Promise.all(
+      payload.files_attributes.map(
+        async (file) => [file.id, await textOf(file.content)] as const,
+      ),
+    ),
   );
 
 beforeEach(() => {
@@ -187,7 +201,7 @@ describe('<ProgrammingImportEditor /> when an autosave returns the files reorder
     // Typing adds to what the editor shows, so a wrong file shown here would be saved as B.
     type(`${editor().value}, typed in B`);
 
-    expect(savedPayloads.map(payloadContents)).toEqual([
+    expect(await Promise.all(savedPayloads.map(payloadContents))).toEqual([
       { [FILE_A.id]: 'A edited', [FILE_B.id]: B_CONTENT },
       { [FILE_A.id]: 'A edited', [FILE_B.id]: `${B_CONTENT}, typed in B` },
     ]);

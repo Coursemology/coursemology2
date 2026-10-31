@@ -3,10 +3,11 @@
 class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   before_validation :normalize_filename
 
-  validates :content, exclusion: [nil]
+  # Not `validates :content`: an each-validator calls `blank?` on the content, which raises for bytes
+  # that aren't valid UTF-8 instead of letting the content be refused.
+  validate :validate_content
   validates :filename, length: { maximum: 255 }, presence: true
   validate :validate_filename_path, if: :filename_changed?
-  validate :validate_content_is_text, if: :content_changed?
   validates :answer, presence: true
   validates :filename, uniqueness: { scope: [:answer_id],
                                      case_sensitive: false, if: -> { answer_id? && filename_changed? } }
@@ -52,9 +53,14 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
     errors.add(:filename, :invalid) if Course::Assessment::ProgrammingFilePath.error(filename)
   end
 
-  # PostgreSQL can't store a NUL byte in text, and almost every binary file, such as a zip, has one.
-  # Saving one would raise instead of failing validation.
-  def validate_content_is_text
-    errors.add(:content, :binary) if content&.include?("\u0000")
+  # Content can be empty but not nil. When it changes it must be UTF-8 text: PostgreSQL rejects invalid
+  # UTF-8 and NUL bytes in text, and almost every binary file, such as a zip, is one or the other.
+  # Saving such content would raise instead of failing validation.
+  def validate_content
+    if content.nil?
+      errors.add(:content, :exclusion, value: nil)
+    elsif content_changed? && (!content.valid_encoding? || content.include?("\u0000"))
+      errors.add(:content, :binary)
+    end
   end
 end
