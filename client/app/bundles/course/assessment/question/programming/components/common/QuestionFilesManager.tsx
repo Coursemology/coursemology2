@@ -10,6 +10,7 @@ import { ProgrammingFormData } from 'types/course/assessment/question/programmin
 
 import FileTreeManager, {
   FileTreeEntry,
+  FileTreeMove,
   FileTreeUpload,
 } from 'course/assessment/components/FileTreeManager';
 
@@ -18,6 +19,7 @@ import {
   isMarked,
   mark,
   MaybeMarked,
+  savedFileOf,
   unwrap,
 } from '../../commons/draftFiles';
 
@@ -35,8 +37,14 @@ const entryOf = (file: FormFile): FileTreeEntry => {
   if (isMarked(file)) state = 'marked';
   else if (unwrapped.replacedFrom) state = 'replaced';
   else if (unwrapped.raw) state = 'draft';
+  else if (unwrapped.movedFrom) state = 'moved';
 
-  return { path: unwrapped.filename, size: unwrapped.size, state };
+  return {
+    path: unwrapped.filename,
+    size: unwrapped.size,
+    state,
+    previousPath: unwrapped.movedFrom,
+  };
 };
 
 /**
@@ -85,7 +93,8 @@ const QuestionFilesManager = (
       const existing = files[index];
       const saved = isMarked(existing)
         ? unwrap(existing)
-        : existing.replacedFrom ?? (existing.raw ? undefined : existing);
+        : existing.replacedFrom ??
+          (existing.raw ? undefined : savedFileOf(existing));
       setFile(index, saved ? { ...upload, replacedFrom: saved } : upload);
     });
     if (added.length) append(added as never);
@@ -100,21 +109,42 @@ const QuestionFilesManager = (
       if (isMarked(file)) return;
       if (file.replacedFrom) setFile(index, mark(file.replacedFrom));
       else if (file.raw) drafts.push(index);
-      else setFile(index, mark(file));
+      else setFile(index, mark(savedFileOf(file)));
     });
     if (drafts.length) remove(drafts);
   };
 
-  // Keeps a marked file, and undoes a replacement.
+  // Keeps a marked file, and undoes a replacement or a rename.
   const handleRestore = (paths: string[]): void =>
     indicesOf(paths).forEach((index) => {
       const file = files[index];
-      setFile(index, isMarked(file) ? unwrap(file) : file.replacedFrom ?? file);
+      setFile(
+        index,
+        isMarked(file) ? unwrap(file) : file.replacedFrom ?? savedFileOf(file),
+      );
     });
 
-  const handleRename = (from: string, to: string): void =>
-    indicesOf([from]).forEach((index) =>
-      setFile(index, { ...unwrap(files[index]), filename: to }),
+  // A new upload, or a replacement, just takes the new path. A saved file remembers its saved path,
+  // and stops being moved if it gets it back. A file marked for deletion stays where it is, so it
+  // is still deleted under its saved path.
+  const handleMove = (moves: FileTreeMove[]): void =>
+    moves.forEach(({ from, to }) =>
+      indicesOf([from]).forEach((index) => {
+        const file = files[index];
+        if (isMarked(file)) return;
+        if (file.raw) {
+          setFile(index, { ...file, filename: to });
+          return;
+        }
+
+        const saved = savedFileOf(file);
+        setFile(
+          index,
+          to === saved.filename
+            ? saved
+            : { ...saved, filename: to, movedFrom: saved.filename },
+        );
+      }),
     );
 
   return (
@@ -126,11 +156,11 @@ const QuestionFilesManager = (
       filesDeleteable
       foldersDeleteable
       headless={props.headless}
+      movable
       onAdd={handleAdd}
       onDelete={handleDelete}
-      onRename={handleRename}
+      onMove={handleMove}
       onRestore={handleRestore}
-      renamable
       uploadable
     />
   );

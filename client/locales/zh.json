@@ -1640,6 +1640,12 @@
   "course.assessment.FileTreeManager.invalidPath": {
     "defaultMessage": "名称不能包含 \" ? * : | < > \\，不能以空格开头或结尾，也不能以句点结尾。"
   },
+  "course.assessment.FileTreeManager.movedBadge": {
+    "defaultMessage": "已移动"
+  },
+  "course.assessment.FileTreeManager.movedFrom": {
+    "defaultMessage": "{path}（从 {previous} 移动）"
+  },
   "course.assessment.FileTreeManager.newBadge": {
     "defaultMessage": "新增"
   },
@@ -1658,9 +1664,6 @@
   "course.assessment.FileTreeManager.pathTooLong": {
     "defaultMessage": "文件路径过长。"
   },
-  "course.assessment.FileTreeManager.renameFile": {
-    "defaultMessage": "重命名 {name}"
-  },
   "course.assessment.FileTreeManager.replace": {
     "defaultMessage": "替换"
   },
@@ -1672,6 +1675,9 @@
   },
   "course.assessment.FileTreeManager.replacedFile": {
     "defaultMessage": "{path}，{from} → {to}"
+  },
+  "course.assessment.FileTreeManager.reservedPath": {
+    "defaultMessage": "已有文件从此处移出。请先保存更改或撤销移动，再使用此名称。"
   },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "恢复 {name}"
@@ -1693,6 +1699,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "{count} 个待删除"
+  },
+  "course.assessment.FileTreeManager.toMoveSummary": {
+    "defaultMessage": "{count} 个待移动"
   },
   "course.assessment.FileTreeManager.toReplaceBadge": {
     "defaultMessage": "待替换"
@@ -3578,6 +3587,12 @@
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "此答案评分后，题目已被修改。"
   },
+  "course.assessment.submission.invalidJavaFileMove": {
+    "defaultMessage": "文件未移动：Java 文件必须以 .java 结尾"
+  },
+  "course.assessment.submission.moveFilesSuccess": {
+    "defaultMessage": "文件移动成功"
+  },
   "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
     "defaultMessage": "您即将发布 {count} 条 AI 编程反馈。"
   },
@@ -3643,6 +3658,9 @@
   },
   "course.assessment.submission.uploadFilesSuccess": {
     "defaultMessage": "文件上传成功"
+  },
+  "lib.translations.form.buttons.rename": {
+    "defaultMessage": "重命名"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "我的学生"

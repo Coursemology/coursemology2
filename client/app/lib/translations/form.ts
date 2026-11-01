@@ -65,6 +65,10 @@ const formTranslations = defineMessages({
     id: 'lib.translations.form.buttons.delete',
     defaultMessage: 'Delete',
   },
+  rename: {
+    id: 'lib.translations.form.buttons.rename',
+    defaultMessage: 'Rename',
+  },
   edit: {
     id: 'lib.translations.form.buttons.edit',
     defaultMessage: 'Edit',

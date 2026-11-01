@@ -15,6 +15,7 @@ export const NAME_ERROR_MESSAGES: Record<NameError, MessageDescriptor> = {
   duplicate: translations.duplicatePath,
   fileFolderClash: translations.fileFolderClash,
   folderAlreadyExists: translations.folderAlreadyExists,
+  reserved: translations.reservedPath,
 };
 
 interface EditableNameRowProps {

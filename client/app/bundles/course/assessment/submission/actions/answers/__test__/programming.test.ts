@@ -6,7 +6,7 @@ import ProgrammingAPI from 'api/course/Assessment/Submission/Answer/Programming'
 import toast from 'lib/hooks/toast';
 
 import translations from '../../../translations';
-import { importProgrammingFiles } from '../programming';
+import { importProgrammingFiles, moveProgrammingFiles } from '../programming';
 
 // Runs thunks inline, so the notification thunk's action is recorded too.
 const dispatch = jest.fn((action) =>
@@ -104,5 +104,36 @@ describe('importProgrammingFiles', () => {
     expect((content as ReactElement).props.id).toBe(
       translations.binaryFileUploadError.id,
     );
+  });
+});
+
+describe('moveProgrammingFiles', () => {
+  const move = (
+    files: { id: number; filename: string }[],
+    language: string,
+  ): Promise<void> =>
+    moveProgrammingFiles(
+      7,
+      files,
+      language,
+      resetField,
+    )(dispatch as unknown as AppDispatch, () => ({}) as AppState, {});
+
+  it('holds Java files to the .java extension, as uploads are', async () => {
+    const shown = jest.spyOn(toast, 'error').mockImplementation(() => 0);
+    await move([{ id: 1, filename: 'Main.txt' }], 'java');
+
+    expect(create).not.toHaveBeenCalled();
+    const [content] = shown.mock.calls[0];
+    expect((content as ReactElement).props.id).toBe(
+      translations.invalidJavaFileMove.id,
+    );
+  });
+
+  it('moves Java files that keep the extension, and any file for other languages', async () => {
+    await move([{ id: 1, filename: 'pkg/Main.java' }], 'java');
+    await move([{ id: 1, filename: 'notes.txt' }], 'python');
+
+    expect(create).toHaveBeenCalledTimes(2);
   });
 });

@@ -19,6 +19,11 @@ const deleteButtonOf = (name: string): HTMLElement =>
   within(rowNamed(name)).getByRole('button', { name: 'Delete' });
 const queryDeleteButtonOf = (name: string): HTMLElement | null =>
   within(rowNamed(name)).queryByRole('button', { name: 'Delete' });
+// A row's rename button, labelled "Rename" alone for the same reason.
+const renameButtonOf = (name: string): HTMLElement =>
+  within(rowNamed(name)).getByRole('button', { name: 'Rename' });
+const queryRenameButtonOf = (name: string): HTMLElement | null =>
+  within(rowNamed(name)).queryByRole('button', { name: 'Rename' });
 // The confirmation's Delete button, as opposed to the rows'.
 const confirmDeleteButton = async (): Promise<HTMLElement> =>
   within(await screen.findByRole('dialog')).getByRole('button', {
@@ -91,18 +96,43 @@ const DraftHarness = (
           }),
         )
       }
-      onRename={(from, to): void =>
+      onMove={(moves): void =>
         setFiles((current) =>
-          current.map((file) =>
-            file.path === from ? { ...file, path: to } : file,
-          ),
+          current.map((file) => {
+            const move = moves.find(({ from }) => from === file.path);
+            if (!move || file.state === 'marked') return file;
+            if (file.state === 'draft' || file.state === 'replaced')
+              return { ...file, path: move.to };
+
+            // A saved file remembers its saved path, and is saved again if it gets it back.
+            const saved = file.previousPath ?? file.path;
+            return move.to === saved
+              ? {
+                  ...file,
+                  path: saved,
+                  state: 'saved',
+                  previousPath: undefined,
+                }
+              : {
+                  ...file,
+                  path: move.to,
+                  state: 'moved',
+                  previousPath: saved,
+                };
+          }),
         )
       }
       onRestore={(paths): void =>
         setFiles((current) =>
           current.map((file) => {
             if (!paths.includes(file.path)) return file;
-            return file.original ?? { ...file, state: 'saved' };
+            if (file.original) return file.original;
+            return {
+              ...file,
+              path: file.previousPath ?? file.path,
+              state: 'saved',
+              previousPath: undefined,
+            };
           }),
         )
       }
@@ -527,42 +557,133 @@ describe('FileTreeManager', () => {
       expect(row('nav.html')).toBeVisible();
     });
 
-    it('renames a draft file in place, but not a saved one', async () => {
+    const renameTo = async (
+      user: ReturnType<typeof userEvent.setup>,
+      name: string,
+      newName: string,
+    ): Promise<void> => {
+      const field = screen.getByLabelText(`New name for ${name}`);
+      await user.clear(field);
+      await user.type(field, `${newName}{Enter}`);
+    };
+
+    it('renames a draft file in place', async () => {
       const user = userEvent.setup();
       await renderDraft({
-        renamable: true,
+        movable: true,
         initial: [entry('a.py', 'draft'), entry('b.py')],
       });
 
-      expect(screen.queryByLabelText('Rename b.py')).not.toBeInTheDocument();
-      await user.click(screen.getByLabelText('Rename a.py'));
-      const field = screen.getByLabelText('New name for a.py');
-      await user.clear(field);
-      await user.type(field, 'main.py{Enter}');
+      await user.click(renameButtonOf('a.py'));
+      await renameTo(user, 'a.py', 'main.py');
 
       expect(row('main.py, New')).toBeVisible();
     });
 
-    it('renames a draft file when its name is clicked, but not a saved one', async () => {
+    it('shows a moved saved file as moved until saved, and undoes it', async () => {
       const user = userEvent.setup();
-      await renderDraft({
-        renamable: true,
-        initial: [entry('a.py', 'draft'), entry('b.py')],
-      });
+      await renderDraft({ movable: true, initial: [entry('b.py')] });
+
+      await user.click(renameButtonOf('b.py'));
+      await renameTo(user, 'b.py', 'c.py');
+
+      expect(row('c.py, Moved')).toBeVisible();
+      expect(within(row('c.py, Moved')).getByText('c.py')).toHaveAttribute(
+        'title',
+        'c.py, moved from b.py',
+      );
+      expect(screen.getByText('1 file · 10 bytes · 1 to move')).toBeVisible();
+
+      await user.click(screen.getByLabelText('Restore c.py'));
+      expect(row('b.py')).toBeVisible();
+    });
+
+    it('makes a moved file saved again when it gets its saved name back', async () => {
+      const user = userEvent.setup();
+      await renderDraft({ movable: true, initial: [entry('b.py')] });
+
+      await user.click(renameButtonOf('b.py'));
+      await renameTo(user, 'b.py', 'c.py');
+      await user.click(renameButtonOf('c.py'));
+      await renameTo(user, 'c.py', 'b.py');
+
+      expect(row('b.py')).toBeVisible();
+    });
+
+    it('renames a file when its name is clicked', async () => {
+      const user = userEvent.setup();
+      await renderDraft({ movable: true, initial: [entry('b.py')] });
 
       await user.click(within(row('b.py')).getByText('b.py'));
-      expect(
-        screen.queryByLabelText('New name for b.py'),
-      ).not.toBeInTheDocument();
+      expect(screen.getByLabelText('New name for b.py')).toHaveFocus();
+    });
 
-      await user.click(within(row('a.py, New')).getByText('a.py'));
-      expect(screen.getByLabelText('New name for a.py')).toHaveFocus();
+    it('does not rename a file to be deleted or replaced', async () => {
+      await renderDraft({
+        movable: true,
+        filesDeleteable: true,
+        initial: [entry('a.py', 'marked'), entry('b.py', 'replaced')],
+      });
+
+      expect(queryRenameButtonOf('a.py')).not.toBeInTheDocument();
+      expect(queryRenameButtonOf('b.py')).not.toBeInTheDocument();
+    });
+
+    it('renames a folder and every file in it', async () => {
+      const user = userEvent.setup();
+      await renderDraft({ movable: true });
+
+      await user.click(renameButtonOf('templates'));
+      await renameTo(user, 'templates', 'views');
+
+      expect(row('views')).toHaveAttribute('aria-level', '1');
+      expect(row('index.html, Moved')).toHaveAttribute('aria-level', '2');
+      expect(row('partials')).toHaveAttribute('aria-level', '2');
+      expect(row('nav.html, Moved')).toHaveAttribute('aria-level', '3');
+      expect(
+        screen.queryByRole('treeitem', { name: 'templates' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('refuses to move onto an existing folder or file, even one to be deleted', async () => {
+      const user = userEvent.setup();
+      await renderDraft({
+        movable: true,
+        initial: [...SAVED, entry('static/app.css'), entry('old.py', 'marked')],
+      });
+
+      await user.click(renameButtonOf('templates'));
+      await renameTo(user, 'templates', 'Static');
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'This folder already exists.',
+      );
+      await renameTo(user, 'templates', 'app.py');
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'A file and a folder cannot have the same name.',
+      );
+      await user.keyboard('{Escape}');
+
+      await user.click(renameButtonOf('app.py'));
+      await renameTo(user, 'app.py', 'old.py');
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'A file or folder with this name already exists here.',
+      );
+    });
+
+    it('renames the focused row with F2', async () => {
+      const user = userEvent.setup();
+      await renderDraft({ movable: true });
+
+      await user.click(row('templates'));
+      await user.keyboard('{F2}');
+
+      expect(screen.getByLabelText('New name for templates')).toHaveFocus();
     });
 
     it('does not rename a draft file by its name while the tree is disabled', async () => {
       const user = userEvent.setup();
       await renderDraft({
-        renamable: true,
+        movable: true,
         disabled: true,
         initial: [entry('a.py', 'draft')],
       });
@@ -576,11 +697,11 @@ describe('FileTreeManager', () => {
     it('keeps the rename open when the new name is taken', async () => {
       const user = userEvent.setup();
       await renderDraft({
-        renamable: true,
+        movable: true,
         initial: [entry('a.py', 'draft'), entry('b.py')],
       });
 
-      await user.click(screen.getByLabelText('Rename a.py'));
+      await user.click(renameButtonOf('a.py'));
       const field = screen.getByLabelText('New name for a.py');
       await user.clear(field);
       await user.type(field, 'B.py{Enter}');
@@ -589,6 +710,87 @@ describe('FileTreeManager', () => {
         'A file or folder with this name already exists here.',
       );
       expect(field).toBeInTheDocument();
+    });
+
+    describe('the saved path of a moved file, which stays reserved until the form is saved', () => {
+      const reservedMessage =
+        'A file was moved from here. Save your changes, or undo the move, before reusing this name.';
+
+      it('turns away an upload there, so that Undo can put the file back', async () => {
+        const user = userEvent.setup();
+        await renderDraft({
+          movable: true,
+          uploadable: true,
+          initial: [entry('a.csv')],
+        });
+
+        await user.click(renameButtonOf('a.csv'));
+        await renameTo(user, 'a.csv', 'b.csv');
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'A.csv'),
+        );
+
+        expect(
+          await screen.findByText(/A file was moved from here/),
+        ).toBeVisible();
+        expect(rowNames()).toEqual(['b.csv, Moved']);
+
+        await user.click(screen.getByLabelText('Restore b.csv'));
+        expect(rowNames()).toEqual(['a.csv']);
+      });
+
+      it('refuses to move another file there, which the server would refuse', async () => {
+        const user = userEvent.setup();
+        await renderDraft({
+          movable: true,
+          initial: [entry('a.csv'), entry('b.csv')],
+        });
+
+        await user.click(renameButtonOf('a.csv'));
+        await renameTo(user, 'a.csv', 'c.csv');
+        await user.click(renameButtonOf('b.csv'));
+        await renameTo(user, 'b.csv', 'a.csv');
+
+        expect(screen.getByRole('alert')).toHaveTextContent(reservedMessage);
+      });
+
+      it('refuses a new folder there', async () => {
+        const user = userEvent.setup();
+        await renderDraft({
+          movable: true,
+          canCreateFolder: true,
+          initial: [entry('lib')],
+        });
+
+        await user.click(renameButtonOf('lib'));
+        await renameTo(user, 'lib', 'lib.py');
+        await user.click(screen.getByRole('button', { name: 'New folder' }));
+        await user.type(screen.getByLabelText('New folder name'), 'lib{Enter}');
+
+        expect(screen.getByRole('alert')).toHaveTextContent(reservedMessage);
+      });
+
+      it('lets the moved file itself be replaced there', async () => {
+        const user = userEvent.setup();
+        await renderDraft({
+          movable: true,
+          uploadable: true,
+          filesDeleteable: true,
+          initial: [entry('a.csv')],
+        });
+
+        await user.click(renameButtonOf('a.csv'));
+        await renameTo(user, 'a.csv', 'A.csv');
+        upload(
+          screen.getByTestId('file-tree-add-files'),
+          new File(['x'], 'a.csv'),
+        );
+
+        expect(
+          await screen.findByRole('treeitem', { name: /To replace/ }),
+        ).toBeVisible();
+      });
     });
   });
 
@@ -700,6 +902,37 @@ describe('FileTreeManager', () => {
   });
 
   describe('in immediate mode', () => {
+    it('renames a folder in one call with every file in it', async () => {
+      const user = userEvent.setup();
+      const onMove = jest.fn(() => Promise.resolve());
+      await renderImmediate({ movable: true, onMove });
+
+      await user.click(row('templates'));
+      await user.keyboard('{F2}');
+      const field = screen.getByLabelText('New name for templates');
+      await user.clear(field);
+      await user.type(field, 'views{Enter}');
+
+      expect(onMove).toHaveBeenCalledTimes(1);
+      expect(onMove).toHaveBeenCalledWith([
+        { from: 'templates/index.html', to: 'views/index.html' },
+        { from: 'templates/partials/nav.html', to: 'views/partials/nav.html' },
+      ]);
+    });
+
+    it('opens a file when its name is clicked, rather than renaming it', async () => {
+      const user = userEvent.setup();
+      const onSelect = jest.fn();
+      await renderImmediate({ movable: true, selectable: true, onSelect });
+
+      await user.click(within(row('app.py')).getByText('app.py'));
+
+      expect(onSelect).toHaveBeenCalledWith('app.py');
+      expect(
+        screen.queryByLabelText('New name for app.py'),
+      ).not.toBeInTheDocument();
+    });
+
     it('asks before replacing saved files, listing their sizes before and after', async () => {
       const user = userEvent.setup();
       const onAdd = jest.fn(() => Promise.resolve());

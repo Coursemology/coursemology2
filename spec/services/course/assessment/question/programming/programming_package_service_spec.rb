@@ -102,6 +102,66 @@ RSpec.describe Course::Assessment::Question::Programming::ProgrammingPackageServ
           end
         end
 
+        context 'with data files to move' do
+          let(:previous_package) do
+            params = package_params(submission: 'code', solution: 'solution',
+                                    data_files: [uploaded_file('a.csv', 'a'), uploaded_file('b.csv', 'b')],
+                                    data_file_paths: ['data/a.csv', 'data/b.csv'])
+            ProgrammingPackageServiceHelpers::PreviousPackage.new(service_class.new(params).generate_package(nil).path)
+          end
+
+          # A `def` can't see the loop's `service_class`; a `let` block can.
+          let(:service) { service_class }
+
+          def move(from, to, **fields)
+            params = package_params(submission: 'code', solution: 'solution',
+                                    data_files_to_move_from: from, data_files_to_move_to: to, **fields)
+            service.new(params).generate_package(previous_package)
+          end
+
+          it 'keeps moved files under their new paths, with their content' do
+            package = move(['data/a.csv', 'data/b.csv'], ['input/a.csv', 'B.csv'])
+
+            expect(package_files(package)).to include('input/a.csv' => 'a', 'B.csv' => 'b')
+            expect(package_files(package).keys).not_to include('data/a.csv', 'data/b.csv')
+            expect(package_meta(package)['data_files'].pluck('filename')).to contain_exactly('input/a.csv', 'B.csv')
+          end
+
+          it 'moves a file to its own path in another case' do
+            expect(package_files(move(['data/a.csv'], ['data/A.csv']))).to include('data/A.csv' => 'a')
+          end
+
+          it 'keeps a moved file when an upload takes its old path' do
+            package = move(['data/a.csv'], ['data/c.csv'],
+                           data_files: [uploaded_file('a.csv', 'new')], data_file_paths: ['data/a.csv'])
+
+            expect(package_files(package)).to include('data/c.csv' => 'a', 'data/a.csv' => 'new')
+          end
+
+          it "refuses a move onto another file's path, even one being deleted or moved" do
+            expect { move(['data/a.csv'], ['data/B.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+            expect { move(['data/a.csv'], ['data/b.csv'], data_files_to_delete: ['data/b.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+            expect { move(['data/a.csv', 'data/b.csv'], ['data/b.csv', 'data/a.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+          end
+
+          it 'refuses to move a file being deleted, or one that does not exist' do
+            expect { move(['data/a.csv'], ['data/c.csv'], data_files_to_delete: ['data/a.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+            expect { move(['data/x.csv'], ['data/c.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+          end
+
+          it 'refuses moves whose lists do not pair up, or a new path that breaks the rules' do
+            expect { move(['data/a.csv'], []) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+            expect { move(['data/a.csv'], ['../a.csv']) }.
+              to raise_error(Course::Assessment::ProgrammingFilePath::InvalidPathError)
+          end
+        end
+
         context 'with an empty data file' do
           let(:previous_package) do
             params = package_params(submission: 'code', solution: 'solution',

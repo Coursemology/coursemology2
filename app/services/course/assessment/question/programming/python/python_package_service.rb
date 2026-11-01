@@ -216,8 +216,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService <
     super.tap do |whitelisted|
       next unless whitelisted[:submit_as_file] == 'true'
 
-      whitelisted[:submission_files_to_delete] = params['question_programming']['submission_files_to_delete']
-      whitelisted[:solution_files_to_delete] = params['question_programming']['solution_files_to_delete']
+      whitelist_file_changes(params, whitelisted, %w[submission_files solution_files])
     end
   end
 end

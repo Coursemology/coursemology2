@@ -80,6 +80,22 @@ describe('buildFormData', () => {
     ]);
   });
 
+  it('sends a rename as the saved path and the new one', () => {
+    const moved: DraftableDataFile = {
+      ...saved('input/a.csv'),
+      movedFrom: 'data/a.csv',
+    };
+    const data = build({ dataFiles: [moved] });
+
+    expect(
+      data.getAll('question_programming[data_files_to_move_from][]'),
+    ).toEqual(['data/a.csv']);
+    expect(
+      data.getAll('question_programming[data_files_to_move_to][]'),
+    ).toEqual(['input/a.csv']);
+    expect(data.getAll('question_programming[data_files][]')).toEqual([]);
+  });
+
   it('sends nothing for a saved file that is kept', () => {
     const data = build({ dataFiles: [saved('data/a.csv')] });
 

@@ -4,6 +4,7 @@ import { ProgrammingFilePostData } from 'types/course/assessment/submission/answ
 
 import FileTreeManager, {
   FileTreeEntry,
+  FileTreeMove,
   FileTreeUpload,
 } from 'course/assessment/components/FileTreeManager';
 import { byteLength } from 'course/assessment/components/FileTreeManager/paths';
@@ -13,6 +14,7 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import {
   deleteProgrammingFile,
   importProgrammingFiles,
+  moveProgrammingFiles,
 } from '../../actions/answers/programming';
 import { workflowStates } from '../../constants';
 import { getSubmission } from '../../selectors/submissions';
@@ -154,6 +156,24 @@ const AnswerFilesTree = (props: AnswerFilesTreeProps): JSX.Element => {
     return dispatch(deleteProgrammingFile(answer, fileId, onDeleteSuccess));
   };
 
+  // Every file in a moved folder is moved in one request. The shown file follows its new path.
+  const handleMove = async (moves: FileTreeMove[]): Promise<void> => {
+    const ids = new Map(currentFiles().map((file) => [file.filename, file.id]));
+    const moved = moves.flatMap(({ from, to }) => {
+      const id = ids.get(from);
+      return id === undefined ? [] : [{ id, filename: to }];
+    });
+    if (!moved.length) return;
+
+    await dispatch(
+      moveProgrammingFiles(answerId, moved, props.language, resetField),
+    );
+
+    const shown = moves.find((move) => move.from === displayFileName);
+    const savedPaths = currentFiles().map((file) => file.filename);
+    if (shown && savedPaths.includes(shown.to)) setDisplayFileName(shown.to);
+  };
+
   // One at a time: the server deletes one file per request.
   const handleDelete = (paths: string[]): Promise<void> =>
     paths.reduce<Promise<void>>(
@@ -170,8 +190,10 @@ const AnswerFilesTree = (props: AnswerFilesTreeProps): JSX.Element => {
       files={entries}
       filesDeleteable={canDestroyFiles}
       fillHeight
+      movable={canDestroyFiles}
       onAdd={handleAdd}
       onDelete={handleDelete}
+      onMove={handleMove}
       onSelect={setDisplayFileName}
       selectable
       selectedPath={displayFileName}

@@ -101,7 +101,17 @@ class Course::Assessment::Question::Programming::LanguagePackageService
 
   def whitelist(params, test_params)
     test_params.tap do |whitelisted|
-      whitelisted[:data_files_to_delete] = params['question_programming']['data_files_to_delete']
+      whitelist_file_changes(params, whitelisted, ['data_files'])
+    end
+  end
+
+  # Whitelists the deletions and moves of the files of the given types. Each is a list of paths, and a
+  # move is two lists in the same order: the paths before and after.
+  def whitelist_file_changes(params, whitelisted, file_types)
+    file_types.each do |file_type|
+      %W[#{file_type}_to_delete #{file_type}_to_move_from #{file_type}_to_move_to].each do |key|
+        whitelisted[key] = params['question_programming'][key]
+      end
     end
   end
 
@@ -143,8 +153,11 @@ class Course::Assessment::Question::Programming::LanguagePackageService
     return [] if file_type != 'data_files' && !submit_as_file?
 
     uploaded = uploaded_files(file_type)
-    kept = find_files_to_keep(file_type, attachment, uploaded.map(&:filename))
-    check_paths!(uploaded.map(&:filename), kept.map(&:filename))
+    moves = moves(file_type)
+    kept = find_files_to_keep(file_type, attachment, uploaded.map(&:filename), moves)
+    check_moves!(file_type, moves)
+    unchanged = kept.reject { |file| moves.value?(file.filename) }
+    check_paths!(uploaded.map(&:filename) + moves.values, unchanged.map(&:filename))
 
     uploaded + kept
   end
@@ -165,6 +178,36 @@ class Course::Assessment::Question::Programming::LanguagePackageService
     end
   end
 
+  # The files of the given type to move in this save, from their previous path to their new one.
+  #
+  # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
+  # @return [Hash{String => String}]
+  # @raise [Course::Assessment::ProgrammingFilePath::InvalidPathError] When the two lists don't pair up.
+  def moves(file_type)
+    from = @test_params["#{file_type}_to_move_from"] || []
+    to = @test_params["#{file_type}_to_move_to"] || []
+    raise Course::Assessment::ProgrammingFilePath::InvalidPathError if from.size != to.size || from.uniq != from
+
+    from.zip(to).to_h
+  end
+
+  # A move must be of a file in the previous package that isn't being deleted, onto a path that no file
+  # in the previous package has, even one being deleted or moved itself. A file may change the case of
+  # its own path. The new paths are checked against the path rules and the other files with the uploads.
+  #
+  # @raise [Course::Assessment::ProgrammingFilePath::InvalidPathError]
+  def check_moves!(file_type, moves)
+    return if moves.empty?
+
+    previous = (@old_meta&.dig(file_type) || []).pluck('filename')
+    deleted = @test_params["#{file_type}_to_delete"] || []
+    taken = previous.map(&:downcase)
+    invalid = moves.any? do |from, to|
+      !previous.include?(from) || deleted.include?(from) || (taken.include?(to.downcase) && to.casecmp(from) != 0)
+    end
+    raise Course::Assessment::ProgrammingFilePath::InvalidPathError, 'invalid_move' if invalid
+  end
+
   # @param [Array<String>] uploaded The paths of the files uploaded in this save.
   # @param [Array<String>] kept The paths of the files kept from the previous package. Clashes among
   #   these alone are left alone, so a question saved before these rules can still be saved.
@@ -176,18 +219,21 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   end
 
   # Finds the files of the given type in the previous package that the new package keeps: those not
-  # deleted, and not replaced by an upload with the same path.
+  # deleted, and not replaced by an upload with the same path. A moved file is kept under its new path,
+  # even if an upload takes its old one.
   #
   # @param [String] file_type 'data_files', 'submission_files' or 'solution_files'.
   # @param [AttachmentReference] attachment The previous package, if any.
   # @param [Array<String>] new_filenames The paths of the files uploaded in this save.
+  # @param [Hash{String => String}] moves The new paths of moved files, by their previous path.
   # @return [Array<PackageFile>]
-  def find_files_to_keep(file_type, attachment, new_filenames)
+  def find_files_to_keep(file_type, attachment, new_filenames, moves = {})
     return [] if attachment.blank?
 
     attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      return extract_files_to_keep(package, file_type, new_filenames, @test_params["#{file_type}_to_delete"])
+      return extract_files_to_keep(package, file_type, new_filenames, @test_params["#{file_type}_to_delete"],
+                                   moves)
     ensure
       next unless package
 
@@ -195,16 +241,18 @@ class Course::Assessment::Question::Programming::LanguagePackageService
     end
   end
 
-  def extract_files_to_keep(package, file_type, new_filenames, files_to_delete)
+  def extract_files_to_keep(package, file_type, new_filenames, files_to_delete, moves)
     return [] if @old_meta.blank?
 
     package.unzip_file @tmp_dir
     (@old_meta[file_type] || []).filter_map do |file|
       next if files_to_delete.try(:include?, file['filename'])
-      # new files overrides old ones
-      next if new_filenames.include?(file['filename'])
 
-      PackageFile.new(file['filename'], File.join(package_folder_path(file_type), file['filename']))
+      moved = moves[file['filename']]
+      # new files overrides old ones
+      next if moved.nil? && new_filenames.include?(file['filename'])
+
+      PackageFile.new(moved || file['filename'], File.join(package_folder_path(file_type), file['filename']))
     end
   end
 

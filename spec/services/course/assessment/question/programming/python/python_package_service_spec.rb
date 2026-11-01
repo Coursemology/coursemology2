@@ -131,6 +131,20 @@ RSpec.describe Course::Assessment::Question::Programming::Python::PythonPackageS
           expect(package_files(package).keys).not_to include('submission/templates/index.html')
         end
 
+        it 'moves submission and solution files in folders' do
+          params = package_params(submit_as_file: 'true',
+                                  submission_files_to_move_from: ['templates/index.html'],
+                                  submission_files_to_move_to: ['views/index.html'],
+                                  solution_files_to_move_from: ['templates/index.html'],
+                                  solution_files_to_move_to: ['views/index.html'])
+          package = described_class.new(params).generate_package(previous_package)
+
+          expect(package_files(package)).to include('submission/views/index.html' => '<p>',
+                                                    'solution/views/index.html' => '<p>1</p>')
+          expect(package_files(package).keys).not_to include('submission/templates/index.html')
+          expect(package_meta(package)['submission_files'].pluck('filename')).to eq(['app.py', 'views/index.html'])
+        end
+
         it 'rejects an upload whose path differs from a kept file only in case' do
           params = package_params(submit_as_file: 'true', submission_files: [uploaded_file('a.py', '')],
                                   submission_file_paths: ['Templates/index.html'])

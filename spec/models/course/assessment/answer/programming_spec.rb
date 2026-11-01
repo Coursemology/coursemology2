@@ -80,6 +80,16 @@ RSpec.describe Course::Assessment::Answer::Programming do
         expect(app.reload).to have_attributes(filename: 'App.py', content: 'new app')
       end
 
+      it 'moves a saved file, keeping its content, when only a name is given' do
+        expect(update({ id: app.id, filename: 'src/app.py' })).to be(true)
+        expect(app.reload).to have_attributes(filename: 'src/app.py', content: 'old app')
+      end
+
+      it "moves a folder's files in one update" do
+        expect(update({ id: app.id, filename: 'src/app.py' }, { id: main.id, filename: 'src/main.py' })).to be(true)
+        expect(programming_answer.files.reload.map(&:filename)).to contain_exactly('src/app.py', 'src/main.py')
+      end
+
       it 'keeps the name of a saved file when none is given' do
         expect(update({ id: app.id, content: 'new app' })).to be(true)
         expect(app.reload).to have_attributes(filename: 'app.py', content: 'new app')

@@ -14,6 +14,8 @@ const rowNamed = (name: string): HTMLElement =>
   });
 const deleteButtonOf = (name: string): HTMLElement =>
   within(rowNamed(name)).getByRole('button', { name: 'Delete' });
+const renameButtonOf = (name: string): HTMLElement =>
+  within(rowNamed(name)).getByRole('button', { name: 'Rename' });
 
 const saved = (filename: string): DraftableDataFile => ({
   filename,
@@ -193,12 +195,53 @@ describe('QuestionFilesManager', () => {
     expect(screen.getByTestId('dirty')).toHaveTextContent('true');
   });
 
-  it('renames a new file in the form', async () => {
+  it('moves a saved file, remembering its saved path, and undoes it', async () => {
+    const user = userEvent.setup();
+    await renderForm([saved('data/b.csv')]);
+
+    await user.click(renameButtonOf('b.csv'));
+    const field = screen.getByLabelText('New name for b.csv');
+    await user.clear(field);
+    await user.type(field, 'c.csv{Enter}');
+
+    expect(dataFiles()).toEqual([
+      { ...saved('data/c.csv'), movedFrom: 'data/b.csv' },
+    ]);
+
+    await user.click(screen.getByLabelText('Restore c.csv'));
+    expect(dataFiles()).toEqual([saved('data/b.csv')]);
+  });
+
+  it('marks the saved file when a moved file is deleted', async () => {
+    const user = userEvent.setup();
+    await renderForm([{ ...saved('c.csv'), movedFrom: 'b.csv' }]);
+
+    await user.click(deleteButtonOf('c.csv'));
+
+    expect(dataFiles()).toEqual([mark(saved('b.csv'))]);
+  });
+
+  it('keeps a file to be deleted where it is when its folder is moved', async () => {
+    const user = userEvent.setup();
+    await renderForm([saved('data/a.csv'), mark(saved('data/b.csv'))]);
+
+    await user.click(renameButtonOf('data'));
+    const field = screen.getByLabelText('New name for data');
+    await user.clear(field);
+    await user.type(field, 'input{Enter}');
+
+    expect(dataFiles()).toEqual([
+      { ...saved('input/a.csv'), movedFrom: 'data/a.csv' },
+      mark(saved('data/b.csv')),
+    ]);
+  });
+
+  it('moves a new file in the form', async () => {
     const user = userEvent.setup();
     const file = new File(['x'], 'draft.py');
     await renderForm([{ filename: 'draft.py', size: 1, hash: '', raw: file }]);
 
-    await user.click(screen.getByLabelText('Rename draft.py'));
+    await user.click(renameButtonOf('draft.py'));
     const field = screen.getByLabelText('New name for draft.py');
     await user.clear(field);
     await user.type(field, 'main.py{Enter}');

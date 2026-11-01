@@ -1,9 +1,14 @@
 /**
- * The state of a file in draft mode: saved before, newly added, marked for deletion, or a saved file
- * an upload will replace. Draft mode shows the last three with badges; immediate mode has only saved
- * files.
+ * The state of a file in draft mode: saved before, newly added, marked for deletion, a saved file an
+ * upload will replace, or a saved file that will be moved. Draft mode shows all but the first with
+ * badges; immediate mode has only saved files.
  */
-export type FileTreeEntryState = 'saved' | 'draft' | 'marked' | 'replaced';
+export type FileTreeEntryState =
+  | 'saved'
+  | 'draft'
+  | 'marked'
+  | 'replaced'
+  | 'moved';
 
 export interface FileTreeEntry {
   /** Relative to the files' folder, such as `templates/index.html`. */
@@ -11,6 +16,14 @@ export interface FileTreeEntry {
   /** In bytes. The size column shows it when given. */
   size?: number;
   state?: FileTreeEntryState;
+  /** The path a `moved` file has until the changes are saved. */
+  previousPath?: string;
+}
+
+/** A file moved to a new path: renamed, or in a folder that was renamed. */
+export interface FileTreeMove {
+  from: string;
+  to: string;
 }
 
 /** A file the user added, and the path it will be saved under. */
@@ -67,12 +80,13 @@ interface FileTreeManagerBaseProps {
  */
 export interface DraftFileTreeManagerProps extends FileTreeManagerBaseProps {
   commit: 'draft';
-  /** Lets the user rename files that are not saved yet. */
-  renamable?: boolean;
+  /** Lets the user rename files and folders. A saved file shows as moved until the form is saved. */
+  movable?: boolean;
   onAdd?: (uploads: FileTreeUpload[]) => void;
   onDelete?: (paths: string[]) => void;
   onRestore?: (paths: string[]) => void;
-  onRename?: (from: string, to: string) => void;
+  /** Renaming a folder moves every file in it, in one call. */
+  onMove?: (moves: FileTreeMove[]) => void;
 }
 
 /**
@@ -82,10 +96,12 @@ export interface DraftFileTreeManagerProps extends FileTreeManagerBaseProps {
 export interface ImmediateFileTreeManagerProps
   extends FileTreeManagerBaseProps {
   commit: 'immediate';
-  /** Saved files cannot be renamed: there is no API for it. */
-  renamable?: false;
+  /** Lets the user rename files and folders. */
+  movable?: boolean;
   onAdd?: (uploads: FileTreeUpload[]) => Promise<void>;
   onDelete?: (paths: string[]) => Promise<void>;
+  /** Renaming a folder moves every file in it, in one call. */
+  onMove?: (moves: FileTreeMove[]) => Promise<void>;
 }
 
 export type FileTreeManagerProps =
