@@ -34,8 +34,19 @@ import {
 } from './paths';
 import translations from './translations';
 import { FileTreeNode } from './tree';
-import { FileTreeEntry, FileTreeManagerProps, FileTreeUpload } from './types';
-import useFileTree, { folderOfRow, NameError, rowKey } from './useFileTree';
+import {
+  FileTreeEntry,
+  FileTreeManagerProps,
+  FileTreeMove,
+  FileTreeUpload,
+} from './types';
+import useFileTree, {
+  folderOfRow,
+  NameError,
+  reservedFor,
+  reservedPaths,
+  rowKey,
+} from './useFileTree';
 
 type Node = FileTreeNode<FileTreeEntry>;
 
@@ -55,9 +66,13 @@ const TYPE_AHEAD_RESET_MS = 500;
 
 const isMarked = (entry: FileTreeEntry): boolean => entry.state === 'marked';
 
-/** A marked file can be kept, and a replaced one can go back to the saved file. */
+/**
+ * A marked file can be kept, and a replaced or moved one can go back to the saved file.
+ */
 const isRestorable = (entry: FileTreeEntry): boolean =>
-  entry.state === 'marked' || entry.state === 'replaced';
+  entry.state === 'marked' ||
+  entry.state === 'replaced' ||
+  entry.state === 'moved';
 
 const pathsOf = (node: Node): string[] =>
   node.kind === 'folder'
@@ -116,7 +131,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   const fillHeight = Boolean(props.fillHeight);
   const locked = disabled || busy;
   const canUpload = Boolean(props.uploadable) && !locked;
-  const canRename = props.commit === 'draft' && Boolean(props.renamable);
+  const canMove = Boolean(props.movable);
   // Whether there is anything to add, so that the folder things go into is worth showing.
   const canAddHere = Boolean(props.uploadable || props.canCreateFolder);
 
@@ -195,8 +210,11 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
       const path = pathOfFile(file, folder);
       const key = path.toLowerCase();
       const existing = entries.get(key);
+      // A moved file's saved path is kept for it, but the file itself can still be replaced.
+      const owner = reservedFor(files, path);
       const error =
         validatePath(path) ??
+        (owner && owner !== existing ? 'reserved' : null) ??
         (accepted.some((upload) => upload.path.toLowerCase() === key)
           ? 'duplicate'
           : null) ??
@@ -206,6 +224,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
               [path],
               [
                 ...files.map((entry) => entry.path),
+                ...reservedPaths(files),
                 ...accepted.map((upload) => upload.path),
               ],
             ));
@@ -283,6 +302,31 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     const { onDelete } = props;
     const paths = pathsOf(node);
     runImmediately(paths, () => onDelete(paths));
+  };
+
+  // A folder can always be moved, and so can a file unless it is to be deleted or replaced.
+  const canMoveNode = (node: Node): boolean =>
+    canMove &&
+    (node.kind === 'folder' ||
+      node.file.state === undefined ||
+      ['saved', 'draft', 'moved'].includes(node.file.state));
+
+  const startRenaming = (node: Node): void =>
+    tree.startRenaming({ kind: node.kind, path: node.path });
+
+  const commitMoves = (moves: FileTreeMove[]): void => {
+    if (!moves.length) return;
+    if (props.commit === 'draft') {
+      props.onMove?.(moves);
+      return;
+    }
+
+    const { onMove } = props;
+    if (onMove)
+      runImmediately(
+        moves.map((move) => move.from),
+        () => onMove(moves),
+      );
   };
 
   const canDeleteNode = (node: Node): boolean => {
@@ -368,9 +412,12 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
       case 'Enter':
         if (isFolder) {
           if (expandable) tree.toggle(node.path);
-        } else if (canRename && node.file.state === 'draft' && !locked)
-          tree.startRenaming(node.path);
+        } else if (isDraft && canMoveNode(node) && !locked) startRenaming(node);
         else if (props.selectable) props.onSelect?.(node.path);
+        break;
+      case 'F2':
+        if (canMoveNode(node) && !locked) startRenaming(node);
+        else handled = false;
         break;
       case ' ':
         if (!isFolder && props.selectable) props.onSelect?.(node.path);
@@ -438,6 +485,9 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   ];
   if (isDraft && draftCount)
     summary.push(t(translations.toUploadSummary, { count: draftCount }));
+  const movedCount = files.filter((file) => file.state === 'moved').length;
+  if (isDraft && movedCount)
+    summary.push(t(translations.toMoveSummary, { count: movedCount }));
   if (isDraft && markedCount)
     summary.push(t(translations.toDeleteSummary, { count: markedCount }));
 
@@ -456,20 +506,19 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     const key = rowKey(node);
     const elements: JSX.Element[] = [];
 
-    if (node.kind === 'file' && tree.renamingPath === node.path) {
+    if (tree.renaming?.kind === node.kind && tree.renaming.path === node.path) {
       elements.push(
         <EditableNameRow
-          key={`rename:${node.path}`}
+          key={`rename:${key}`}
           depth={node.depth}
           initialName={node.name}
-          kind="file"
+          kind={node.kind}
           label={t(translations.newName, { name: node.name })}
           onCancel={tree.cancelRenaming}
           onSubmit={(name): NameError | null => {
-            const result = tree.submitRename(node.path, name);
+            const result = tree.submitRename(name);
             if ('error' in result) return result.error;
-            if (result.to !== node.path && props.commit === 'draft')
-              props.onRename?.(node.path, result.to);
+            commitMoves(result.moves);
             return null;
           }}
         />,
@@ -484,7 +533,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           }}
           canDelete={canDeleteNode(node)}
           canDownload={Boolean(props.downloadable)}
-          canRename={canRename}
+          canRename={canMoveNode(node)}
           compact={compact}
           disabled={locked}
           dropTarget={
@@ -497,10 +546,12 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           onDelete={(): void => deleteNode(node)}
           onDownload={(): void => props.onDownload?.(node.path)}
           onFocus={(): void => tree.setFocusedKey(key)}
-          onRename={(): void => tree.startRenaming(node.path)}
+          onRename={(): void => startRenaming(node)}
           onRestore={isDraft ? (): void => restoreNode(node) : undefined}
           onToggle={(): void => tree.toggle(node.path)}
           pending={pathsOf(node).some((path) => pendingPaths.has(path))}
+          // In draft mode a file's name renames it; in immediate mode it opens the file.
+          renameOnNameClick={isDraft}
           selectable={props.selectable}
           selected={node.kind === 'file' && node.path === props.selectedPath}
           target={canAddHere && node.path === tree.targetFolder}
@@ -730,6 +781,7 @@ export type {
   DraftFileTreeManagerProps,
   FileTreeEntry,
   FileTreeManagerProps,
+  FileTreeMove,
   FileTreeUpload,
   ImmediateFileTreeManagerProps,
 } from './types';

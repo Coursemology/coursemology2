@@ -81,6 +81,13 @@ const validateFilesByLanguageErrorMessageMap: Record<
   java: translations.invalidJavaFileUpload,
 };
 
+const validateFilesByLanguageMoveErrorMessageMap: Record<
+  string,
+  MessageDescriptor
+> = {
+  java: translations.invalidJavaFileMove,
+};
+
 const validateProgrammingFilesErrorMsg = (
   language: string,
   files: ProgrammingFilePostData[],
@@ -107,14 +114,15 @@ export function importProgrammingFiles(
   language: string,
   resetField: UseFormResetField<FieldValues>,
 ): Operation {
-  const savingSize = files.reduce(
-    (acc, file) =>
+  const savingSize = files.reduce((acc, file) => {
+    if (file.content === undefined) return acc;
+    return (
       acc +
       (typeof file.content === 'string'
         ? file.content.length
-        : file.content.size),
-    0,
-  );
+        : file.content.size)
+    );
+  }, 0);
   if (savingSize > MAX_SAVING_SIZE) {
     return async (dispatch) => {
       dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
@@ -206,6 +214,56 @@ export function importProgrammingFiles(
         resetField(`${answerId}.import_files`, {
           defaultValue: null,
         });
+        toast.error(uploadErrorMessage(error));
+      });
+  };
+}
+
+/**
+ * Moves an answer's saved files, by `id`, in one request: a file, or the files of a moved folder.
+ * The new paths are held to the language's rules, as uploads are. The answer in the form is
+ * replaced with the saved one, and failures are reported in a toast.
+ *
+ * @returns The save, so the caller can wait for it. It resolves after a failure too.
+ */
+export function moveProgrammingFiles(
+  answerId: number,
+  files: { id: number; filename: string }[],
+  language: string,
+  resetField: UseFormResetField<FieldValues>,
+): Operation {
+  return async (dispatch) => {
+    const languageValidator = validateFilesByLanguageMap[language];
+    if (languageValidator && !languageValidator(files)) {
+      toast.error(
+        message(validateFilesByLanguageMoveErrorMessageMap[language]),
+      );
+      return Promise.resolve();
+    }
+
+    dispatch(
+      dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saving),
+    );
+
+    return CourseAPI.assessment.answer.programming
+      .createProgrammingFiles(answerId, {
+        answer: { id: answerId, files_attributes: files },
+      })
+      .then((response) => {
+        resetField(`${answerId}`, {
+          defaultValue: convertAnswerDataToInitialValue(response.data),
+        });
+        dispatch(
+          dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
+        );
+        toast.success(
+          message(translations.moveFilesSuccess, { count: files.length }),
+        );
+      })
+      .catch((error: unknown) => {
+        dispatch(
+          dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
+        );
         toast.error(uploadErrorMessage(error));
       });
   };

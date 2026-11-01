@@ -84,14 +84,14 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     end
   end
 
-  # Creates the files without an id, and updates the saved ones by id: their content, and their name
-  # when one is given, which replaces a file with an upload whose name differs only in case.
+  # Creates the files without an id, and updates the saved ones by id: their content and their name, each
+  # when given. A name alone moves a file; a name with content replaces it with an upload.
   def create_and_update_files(params)
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
       if file.present?
         file.filename = file_attributes[:filename] if file_attributes[:filename].present?
-        file.content = content_from(file_attributes[:content])
+        file.content = content_from(file_attributes[:content]) if file_attributes.key?(:content)
       else
         files.build(filename: file_attributes[:filename], content: content_from(file_attributes[:content]))
       end

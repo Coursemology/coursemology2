@@ -12,11 +12,21 @@ import {
   validatePaths,
 } from './paths';
 import { buildTree, FileTreeFolder, FileTreeNode, flatten } from './tree';
-import { FileTreeEntry } from './types';
+import { FileTreeEntry, FileTreeMove } from './types';
 
-export type NameError = PathError | PathCollectionError | 'folderAlreadyExists';
+export type NameError =
+  | PathError
+  | PathCollectionError
+  | 'folderAlreadyExists'
+  | 'reserved';
 
-export type RenameResult = { error: NameError } | { to: string };
+export type MoveResult = { error: NameError } | { moves: FileTreeMove[] };
+
+/** A row to move: a file, or a folder and everything in it. */
+export interface MoveTarget {
+  kind: 'file' | 'folder';
+  path: string;
+}
 
 /** A file and a folder can share a path while it is still being checked, so rows are keyed by both. */
 export const rowKey = (node: FileTreeNode<FileTreeEntry>): string =>
@@ -44,6 +54,23 @@ const collectFolders = (
 
 const isInFolder = (path: string, folder: string): boolean =>
   path === folder || path.startsWith(`${folder}/`);
+
+/**
+ * The file a path is reserved for, ignoring case: a moved file keeps the path it was saved under
+ * until the changes are saved. Nothing else may take it, so that Undo can always put the file back,
+ * and so that the save isn't refused: the server checks moves against the files as they were saved.
+ */
+export const reservedFor = (
+  files: FileTreeEntry[],
+  path: string,
+): FileTreeEntry | undefined => {
+  const key = path.toLowerCase();
+  return files.find((file) => file.previousPath?.toLowerCase() === key);
+};
+
+/** The saved paths that moved files keep, for checking new paths against as other files' paths. */
+export const reservedPaths = (files: FileTreeEntry[]): string[] =>
+  files.flatMap((file) => (file.previousPath ? [file.previousPath] : []));
 
 export interface FileTree {
   root: FileTreeFolder<FileTreeEntry>;
@@ -76,11 +103,11 @@ export interface FileTree {
   startCreating: () => void;
   cancelCreating: () => void;
   createFolder: (raw: string) => NameError | null;
-  /** The file being renamed, or `null`. */
-  renamingPath: string | null;
-  startRenaming: (path: string) => void;
+  /** The row being renamed, or `null`. */
+  renaming: MoveTarget | null;
+  startRenaming: (target: MoveTarget) => void;
   cancelRenaming: () => void;
-  submitRename: (from: string, raw: string) => RenameResult;
+  submitRename: (raw: string) => MoveResult;
 }
 
 /**
@@ -94,7 +121,7 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
   const [atTopLevel, setAtTopLevel] = useState(false);
   const [draftFolders, setDraftFolders] = useState<string[]>([]);
   const [creatingIn, setCreatingIn] = useState<string | null>(null);
-  const [renamingPath, setRenamingPath] = useState<string | null>(null);
+  const [renaming, setRenaming] = useState<MoveTarget | null>(null);
 
   const root = useMemo(
     () => buildTree(files, (file) => file.path, draftFolders),
@@ -146,7 +173,7 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
   const startCreating = (): void => {
     const parent = targetFolder;
     if (parent) expand(parent);
-    setRenamingPath(null);
+    setRenaming(null);
     setCreatingIn(parent);
   };
 
@@ -170,7 +197,12 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     if (folderPaths.some((folder) => folder.toLowerCase() === key))
       return 'folderAlreadyExists';
 
-    const filePaths = new Set(files.map((file) => file.path.toLowerCase()));
+    if (reservedFor(files, path)) return 'reserved';
+    const filePaths = new Set(
+      [...files.map((file) => file.path), ...reservedPaths(files)].map(
+        (filePath) => filePath.toLowerCase(),
+      ),
+    );
     if ([...foldersOf(key), key].some((folder) => filePaths.has(folder)))
       return 'fileFolderClash';
 
@@ -181,38 +213,87 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     return null;
   };
 
-  const startRenaming = (path: string): void => {
+  const startRenaming = (target: MoveTarget): void => {
     setCreatingIn(null);
-    setRenamingPath(path);
+    setRenaming(target);
   };
 
-  const cancelRenaming = (): void => setRenamingPath(null);
+  const cancelRenaming = (): void => setRenaming(null);
+
+  const movePath = (path: string, from: string, to: string): string =>
+    isInFolder(path, from) ? to + path.slice(from.length) : path;
 
   /**
-   * Checks the new name of a file, which stays in its folder, and ends the renaming when it is
-   * valid. The caller then renames the file to `to`.
+   * Checks the new name of the row being renamed, which stays in its folder, and ends the renaming
+   * when it is valid. The caller then moves the files to their new paths: the file, or every file
+   * in the folder. A name can't be the path of another file or folder, even one marked for deletion,
+   * nor one reserved for another moved file. A moved file can go back to its own.
    */
-  const submitRename = (from: string, raw: string): RenameResult => {
+  const submitRename = (raw: string): MoveResult => {
+    if (!renaming) return { error: 'invalid' };
+    const { kind, path: from } = renaming;
     const name = normalisePath(raw);
     if (!name || name.includes('/')) return { error: 'invalid' };
 
     const to = joinPath(dirname(from), name);
     if (to === from) {
-      setRenamingPath(null);
-      return { to };
+      setRenaming(null);
+      return { moves: [] };
     }
 
-    const error =
-      validatePath(to) ??
-      validatePaths(
-        [to],
-        files.map((file) => file.path).filter((path) => path !== from),
-      );
+    const moved = files.filter((file) => isInFolder(file.path, from));
+    const unmoved = files.filter((file) => !isInFolder(file.path, from));
+    const others = [
+      ...unmoved.map((file) => file.path),
+      ...reservedPaths(unmoved),
+    ];
+    const moves = moved.map((file) => ({
+      from: file.path,
+      to: movePath(file.path, from, to),
+    }));
+    const takesReserved = moves.some((move) => {
+      const owner = reservedFor(files, move.to);
+      return owner !== undefined && owner.path !== move.from;
+    });
+
+    const key = to.toLowerCase();
+    let error: NameError | null;
+    if (kind === 'file') {
+      error =
+        validatePath(to) ??
+        (takesReserved ? 'reserved' : null) ??
+        validatePaths([to], others);
+    } else {
+      error =
+        validateFolderPath(to) ??
+        moves.map((move) => validatePath(move.to)).find(Boolean) ??
+        (takesReserved ? 'reserved' : null) ??
+        (folderPaths.some(
+          (folder) => folder !== from && folder.toLowerCase() === key,
+        )
+          ? 'folderAlreadyExists'
+          : null) ??
+        (others.some((path) => path.toLowerCase() === key)
+          ? 'fileFolderClash'
+          : validatePaths(
+              moves.map((move) => move.to),
+              others,
+            ));
+    }
     if (error) return { error };
 
-    if (focusedKey === `file:${from}`) setFocusedKeyState(`file:${to}`);
-    setRenamingPath(null);
-    return { to };
+    if (kind === 'folder') {
+      setDraftFolders((current) =>
+        current.map((folder) => movePath(folder, from, to)),
+      );
+      setCollapsed(
+        (current) =>
+          new Set([...current].map((folder) => movePath(folder, from, to))),
+      );
+    }
+    if (focusedKey === `${kind}:${from}`) setFocusedKeyState(`${kind}:${to}`);
+    setRenaming(null);
+    return { moves };
   };
 
   return {
@@ -235,7 +316,7 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     startCreating,
     cancelCreating,
     createFolder,
-    renamingPath,
+    renaming,
     startRenaming,
     cancelRenaming,
     submitRename,

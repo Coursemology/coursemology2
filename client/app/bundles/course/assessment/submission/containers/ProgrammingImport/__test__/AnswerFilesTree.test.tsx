@@ -146,7 +146,7 @@ const saveWhatIsSent = async (_answerId: number, payload): Promise<never> => {
     sent.map(async (saved, index) => ({
       id: saved.id ?? 10 + index,
       filename: saved.filename,
-      content: await textOf(saved.content),
+      content: await textOf(saved.content ?? ''),
     })),
   );
   return { data: answerData(files) } as never;
@@ -282,6 +282,43 @@ describe('<AnswerFilesTree />', () => {
     await waitFor(() => expect(shown).toBe('App.py'));
     expect(await screen.findByTestId('editor')).toHaveValue('print("new")');
     expect(await screen.findByText('File uploaded successfully')).toBeVisible();
+  });
+
+  it('moves the shown file by its id alone, and keeps showing it', async () => {
+    // The server moves the file and returns every file of the answer.
+    const create = jest
+      .spyOn(ProgrammingAPI.prototype, 'createProgrammingFiles')
+      .mockImplementation((_answerId, payload) =>
+        Promise.resolve({
+          data: answerData(
+            FILES.map((saved) => {
+              const moved = payload.answer.files_attributes.find(
+                (sent) => sent.id === saved.id,
+              );
+              return moved ? { ...saved, filename: moved.filename } : saved;
+            }),
+          ),
+        } as never),
+      );
+    const user = userEvent.setup();
+    await renderTree();
+
+    await user.click(
+      within(screen.getByRole('treeitem', { name: 'app.py' })).getByRole(
+        'button',
+        { name: 'Rename' },
+      ),
+    );
+    const field = screen.getByLabelText('New name for app.py');
+    await user.clear(field);
+    await user.type(field, 'main.py{Enter}');
+
+    await waitFor(() => expect(create).toHaveBeenCalled());
+    expect(create.mock.calls[0][1].answer.files_attributes).toEqual([
+      { id: 1, filename: 'main.py' },
+    ]);
+    await waitFor(() => expect(shown).toBe('main.py'));
+    expect(await screen.findByText('File moved successfully')).toBeVisible();
   });
 
   it('replaces nothing when the replacement is cancelled', async () => {

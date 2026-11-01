@@ -30,7 +30,10 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     // Every file's content goes as a file part, the saved files' too, so none is saved as CRLF.
     const filesAttributes = data.answer.files_attributes.map((file) => ({
       ...file,
-      content: asFilePart(file.content, file.filename),
+      content:
+        file.content === undefined
+          ? undefined
+          : asFilePart(file.content, file.filename),
     }));
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, {

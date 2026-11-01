@@ -34,6 +34,18 @@ const translations = defineMessages({
     id: 'course.assessment.FileTreeManager.newBadge',
     defaultMessage: 'New',
   },
+  movedBadge: {
+    id: 'course.assessment.FileTreeManager.movedBadge',
+    defaultMessage: 'Moved',
+  },
+  movedFrom: {
+    id: 'course.assessment.FileTreeManager.movedFrom',
+    defaultMessage: '{path}, moved from {previous}',
+  },
+  toMoveSummary: {
+    id: 'course.assessment.FileTreeManager.toMoveSummary',
+    defaultMessage: '{count} to move',
+  },
   toReplaceBadge: {
     id: 'course.assessment.FileTreeManager.toReplaceBadge',
     defaultMessage: 'To replace',
@@ -124,10 +136,6 @@ const translations = defineMessages({
     id: 'course.assessment.FileTreeManager.restoreFolder',
     defaultMessage: 'Restore folder {name}',
   },
-  renameFile: {
-    id: 'course.assessment.FileTreeManager.renameFile',
-    defaultMessage: 'Rename {name}',
-  },
   downloadFile: {
     id: 'course.assessment.FileTreeManager.downloadFile',
     defaultMessage: 'Download {name}',
@@ -156,6 +164,11 @@ const translations = defineMessages({
   folderAlreadyExists: {
     id: 'course.assessment.FileTreeManager.folderAlreadyExists',
     defaultMessage: 'This folder already exists.',
+  },
+  reservedPath: {
+    id: 'course.assessment.FileTreeManager.reservedPath',
+    defaultMessage:
+      'A file was moved from here. Save your changes, or undo the move, before reusing this name.',
   },
   someFilesNotAdded: {
     id: 'course.assessment.FileTreeManager.someFilesNotAdded',

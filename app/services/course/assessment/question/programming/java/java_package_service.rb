@@ -229,9 +229,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService <
 
   def whitelist(params, test_params)
     test_params.tap do |whitelisted|
-      whitelisted[:data_files_to_delete] = params['question_programming']['data_files_to_delete']
-      whitelisted[:submission_files_to_delete] = params['question_programming']['submission_files_to_delete']
-      whitelisted[:solution_files_to_delete] = params['question_programming']['solution_files_to_delete']
+      whitelist_file_changes(params, whitelisted, %w[data_files submission_files solution_files])
     end
   end
 end

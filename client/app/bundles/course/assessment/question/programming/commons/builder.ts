@@ -66,6 +66,9 @@ const appendFilesInto = (
         );
       appendInto(data, [`${type}_files`, ''], file.raw);
       appendInto(data, [`${type}_file_paths`, ''], file.filename);
+    } else if ('movedFrom' in file && file.movedFrom) {
+      appendInto(data, [`${type}_files_to_move_from`, ''], file.movedFrom);
+      appendInto(data, [`${type}_files_to_move_to`, ''], file.filename);
     }
   });
 

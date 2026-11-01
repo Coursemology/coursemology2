@@ -1649,6 +1649,12 @@
   "course.assessment.FileTreeManager.invalidPath": {
     "defaultMessage": "이름에는 \" ? * : | < > \\ 를 사용할 수 없으며, 공백으로 시작하거나 끝나거나 마침표로 끝날 수 없습니다."
   },
+  "course.assessment.FileTreeManager.movedBadge": {
+    "defaultMessage": "이동됨"
+  },
+  "course.assessment.FileTreeManager.movedFrom": {
+    "defaultMessage": "{path} ({previous}에서 이동됨)"
+  },
   "course.assessment.FileTreeManager.newBadge": {
     "defaultMessage": "신규"
   },
@@ -1667,9 +1673,6 @@
   "course.assessment.FileTreeManager.pathTooLong": {
     "defaultMessage": "파일 경로가 너무 깁니다."
   },
-  "course.assessment.FileTreeManager.renameFile": {
-    "defaultMessage": "{name} 이름 변경"
-  },
   "course.assessment.FileTreeManager.replace": {
     "defaultMessage": "바꾸기"
   },
@@ -1681,6 +1684,9 @@
   },
   "course.assessment.FileTreeManager.replacedFile": {
     "defaultMessage": "{path}, {from} → {to}"
+  },
+  "course.assessment.FileTreeManager.reservedPath": {
+    "defaultMessage": "파일이 이 위치에서 이동되었습니다. 이 이름을 다시 사용하려면 먼저 변경 사항을 저장하거나 이동을 취소하세요."
   },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "{name} 복원"
@@ -1702,6 +1708,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "삭제 예정 {count}개"
+  },
+  "course.assessment.FileTreeManager.toMoveSummary": {
+    "defaultMessage": "이동 예정 {count}개"
   },
   "course.assessment.FileTreeManager.toReplaceBadge": {
     "defaultMessage": "바꿀 예정"
@@ -3629,6 +3638,12 @@
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "이 답안이 채점된 이후 문제가 변경되었습니다."
   },
+  "course.assessment.submission.invalidJavaFileMove": {
+    "defaultMessage": "파일을 이동하지 못했습니다: Java 파일은 .java로 끝나야 합니다"
+  },
+  "course.assessment.submission.moveFilesSuccess": {
+    "defaultMessage": "파일이 이동되었습니다"
+  },
   "course.assessment.submission.publishRubricFeedbackConfirmation": {
     "defaultMessage": "서술형 답안에 대한 AI 루브릭 기반 피드백 댓글 {count}개를 게시하려고 합니다. 해당 학생들이 즉시 볼 수 있게 됩니다."
   },
@@ -3637,6 +3652,9 @@
   },
   "course.assessment.submission.uploadFilesSuccess": {
     "defaultMessage": "파일이 성공적으로 업로드되었습니다"
+  },
+  "lib.translations.form.buttons.rename": {
+    "defaultMessage": "이름 변경"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "내 학생들"

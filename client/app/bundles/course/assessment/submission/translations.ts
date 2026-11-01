@@ -405,6 +405,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.invalidFileUpload',
     defaultMessage: 'File uploads failed: Only java files can be uploaded',
   },
+  invalidJavaFileMove: {
+    id: 'course.assessment.submission.invalidJavaFileMove',
+    defaultMessage: 'File not moved: Java files must end in .java',
+  },
   similarFileNameExists: {
     id: 'course.assessment.submission.similarFileNameExists',
     defaultMessage: 'File uploads failed: File already exists',
@@ -417,6 +421,11 @@ const translations = defineMessages({
   uploadFiles: {
     id: 'course.assessment.submission.uploadFiles',
     defaultMessage: 'Upload Files',
+  },
+  moveFilesSuccess: {
+    id: 'course.assessment.submission.moveFilesSuccess',
+    defaultMessage:
+      '{count, plural, one {File moved successfully} other {Files moved successfully}}',
   },
   uploadFilesSuccess: {
     id: 'course.assessment.submission.uploadFilesSuccess',

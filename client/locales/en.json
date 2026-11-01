@@ -1649,6 +1649,12 @@
   "course.assessment.FileTreeManager.invalidPath": {
     "defaultMessage": "Names cannot contain \" ? * : | < > \\, start or end with a space, or end with a dot."
   },
+  "course.assessment.FileTreeManager.movedBadge": {
+    "defaultMessage": "Moved"
+  },
+  "course.assessment.FileTreeManager.movedFrom": {
+    "defaultMessage": "{path}, moved from {previous}"
+  },
   "course.assessment.FileTreeManager.newBadge": {
     "defaultMessage": "New"
   },
@@ -1667,9 +1673,6 @@
   "course.assessment.FileTreeManager.pathTooLong": {
     "defaultMessage": "File path too long."
   },
-  "course.assessment.FileTreeManager.renameFile": {
-    "defaultMessage": "Rename {name}"
-  },
   "course.assessment.FileTreeManager.replace": {
     "defaultMessage": "Replace"
   },
@@ -1681,6 +1684,9 @@
   },
   "course.assessment.FileTreeManager.replacedFile": {
     "defaultMessage": "{path}, {from} → {to}"
+  },
+  "course.assessment.FileTreeManager.reservedPath": {
+    "defaultMessage": "A file was moved from here. Save your changes, or undo the move, before reusing this name."
   },
   "course.assessment.FileTreeManager.restoreFile": {
     "defaultMessage": "Restore {name}"
@@ -1702,6 +1708,9 @@
   },
   "course.assessment.FileTreeManager.toDeleteSummary": {
     "defaultMessage": "{count} to delete"
+  },
+  "course.assessment.FileTreeManager.toMoveSummary": {
+    "defaultMessage": "{count} to move"
   },
   "course.assessment.FileTreeManager.toReplaceBadge": {
     "defaultMessage": "To replace"
@@ -3635,6 +3644,12 @@
   "course.assessment.submission.history.answerGradedOnPastSnapshot": {
     "defaultMessage": "Changes have been made to the question after this answer was graded."
   },
+  "course.assessment.submission.invalidJavaFileMove": {
+    "defaultMessage": "File not moved: Java files must end in .java"
+  },
+  "course.assessment.submission.moveFilesSuccess": {
+    "defaultMessage": "{count, plural, one {File moved successfully} other {Files moved successfully}}"
+  },
   "course.assessment.submission.publishRubricFeedbackConfirmation": {
     "defaultMessage": "You are about to publish {count} AI rubric-based feedback {count, plural, one {comment} other {comments}} on written answers. The receiving students will be able to see them immediately."
   },
@@ -3643,6 +3658,9 @@
   },
   "course.assessment.submission.uploadFilesSuccess": {
     "defaultMessage": "{count, plural, one {File uploaded successfully} other {Files uploaded successfully}}"
+  },
+  "lib.translations.form.buttons.rename": {
+    "defaultMessage": "Rename"
   },
   "lib.translations.myStudents": {
     "defaultMessage": "My Students"

@@ -84,6 +84,7 @@ const ActionButton = (props: ActionButtonProps): JSX.Element => (
 
 const BADGE_TONES = {
   new: 'border-lime-600 bg-lime-50 text-lime-800',
+  moved: 'border-sky-300 bg-sky-50 text-sky-800',
   replaced: 'border-amber-300 bg-amber-50 text-amber-800',
   marked: 'border-red-200 bg-red-50 text-red-700',
 };
@@ -116,6 +117,8 @@ export interface FileTreeRowProps {
   disabled?: boolean;
   canDelete?: boolean;
   canRename?: boolean;
+  /** Clicking a file's name renames it, as in the question form; otherwise it selects the file. */
+  renameOnNameClick?: boolean;
   canDownload?: boolean;
   /** Leaves out the size column, for a narrow sidebar. */
   compact?: boolean;
@@ -140,7 +143,10 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     const marked = entries.length > 0 && entries.every(isMarked);
     const draft = !isFolder && node.file.state === 'draft';
     const replaced = !isFolder && node.file.state === 'replaced';
-    const renamable = Boolean(props.canRename) && draft;
+    const moved = !isFolder && node.file.state === 'moved';
+    const renamable = Boolean(props.canRename);
+    const renamesOnClick =
+      renamable && !isFolder && Boolean(props.renameOnNameClick) && !disabled;
     // Clicking a folder opens or closes it, and clicking a file selects it only when files can be.
     const clickable = isFolder ? expandable : Boolean(props.selectable);
 
@@ -169,10 +175,12 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
     else if (selected) background = 'bg-cyan-50';
     else if (draft) background = 'bg-lime-50';
     else if (replaced) background = 'bg-amber-50';
+    else if (moved) background = 'bg-sky-50';
 
     const labelParts = [name];
     if (draft) labelParts.push(t(translations.newBadge));
     if (replaced) labelParts.push(t(translations.toReplaceBadge));
+    if (moved) labelParts.push(t(translations.movedBadge));
     if (marked) labelParts.push(t(translations.toDeleteBadge));
 
     const restoreLabel = isFolder
@@ -242,20 +250,31 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
           <Typography
             className={`min-w-0 flex-initial ${nameWeight} ${
               marked ? 'text-neutral-400 line-through' : 'text-neutral-900'
-            } ${renamable && !disabled ? 'cursor-text' : ''}`}
+            } ${renamesOnClick ? 'cursor-text' : ''}`}
             component="span"
             noWrap
             // A name that can be renamed is renamed by clicking it, as by its rename button.
             onClick={
-              renamable && !disabled
+              renamesOnClick
                 ? (event: MouseEvent): void => {
                     event.stopPropagation();
                     props.onRename?.();
                   }
                 : undefined
             }
-            // Without the size column, the size is in the tooltip.
-            title={compact && meta ? `${node.path} · ${meta}` : node.path}
+            // Without the size column, the size is in the tooltip; a moved file's tooltip says
+            // what it was called.
+            title={[
+              moved && !isFolder && node.file.previousPath
+                ? t(translations.movedFrom, {
+                    path: node.path,
+                    previous: node.file.previousPath,
+                  })
+                : node.path,
+              compact && meta ? meta : '',
+            ]
+              .filter(Boolean)
+              .join(' · ')}
             variant="body2"
           >
             {prefix && <span className="text-neutral-500">{prefix}</span>}
@@ -267,7 +286,8 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
               <ActionButton
                 className="text-neutral-600"
                 disabled={disabled}
-                label={t(translations.renameFile, { name })}
+                // The row it is in names what it renames.
+                label={t(formTranslations.rename)}
                 onClick={(): void => props.onRename?.()}
               >
                 <Edit fontSize="small" />
@@ -280,6 +300,7 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
         {replaced && (
           <Badge tone="replaced">{t(translations.toReplaceBadge)}</Badge>
         )}
+        {moved && <Badge tone="moved">{t(translations.movedBadge)}</Badge>}
         {marked && <Badge tone="marked">{t(translations.toDeleteBadge)}</Badge>}
 
         <span className="flex-auto" />
@@ -301,7 +322,7 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
         <span
           className={`flex ${
             compact ? 'min-w-0' : 'min-w-20'
-          } flex-none items-center justify-end`}
+          } flex-none items-center justify-end gap-2`}
         >
           {props.canDownload && !isFolder && (
             <ActionButton
@@ -314,6 +335,20 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
             </ActionButton>
           )}
 
+          {/* Undoes a deletion, a replacement or a move, which go back to the saved file. It comes
+              before Delete, so Delete keeps its place at the end of the row. */}
+          {props.onRestore &&
+            (moved || (props.canDelete && (marked || replaced))) && (
+              <ActionButton
+                className="text-info"
+                disabled={disabled}
+                label={restoreLabel}
+                onClick={(): void => props.onRestore?.()}
+              >
+                <Undo fontSize="small" />
+              </ActionButton>
+            )}
+
           {props.canDelete && !marked && !replaced && (
             <ActionButton
               className="text-red-700"
@@ -323,18 +358,6 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
               onClick={(): void => props.onDelete?.()}
             >
               <Delete fontSize="small" />
-            </ActionButton>
-          )}
-
-          {/* Undoes a deletion, or a replacement, which goes back to the saved file. */}
-          {props.canDelete && (marked || replaced) && props.onRestore && (
-            <ActionButton
-              className="text-info"
-              disabled={disabled}
-              label={restoreLabel}
-              onClick={(): void => props.onRestore?.()}
-            >
-              <Undo fontSize="small" />
             </ActionButton>
           )}
         </span>
