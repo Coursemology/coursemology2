@@ -86,7 +86,11 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   # Creates the files without an id, and updates the saved ones by id: their content and their name, each
   # when given. A name alone moves a file; a name with content replaces it with an upload.
+  #
+  # A client version, when given, is the answer's as autosave sends it, so that an autosave of older
+  # editor content that arrives after this save is refused as stale rather than overwriting it.
   def create_and_update_files(params)
+    acting_as.client_version = params[:client_version] if params[:client_version].present?
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
       if file.present?

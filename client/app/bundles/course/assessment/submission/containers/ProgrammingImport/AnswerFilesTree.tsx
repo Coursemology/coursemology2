@@ -37,6 +37,8 @@ interface AnswerFilesTreeProps {
   displayFileName: string;
   setDisplayFileName: (path: string) => void;
   disabled?: boolean;
+  /** Autosaves the answer from the form, as an edit does. */
+  resaveAnswer?: () => void;
 }
 
 /**
@@ -109,6 +111,7 @@ const AnswerFilesTree = (props: AnswerFilesTreeProps): JSX.Element => {
         saved.concat(staged),
         props.language,
         resetField,
+        { currentFiles, onEditedWhileSaving: props.resaveAnswer },
       ),
     );
 

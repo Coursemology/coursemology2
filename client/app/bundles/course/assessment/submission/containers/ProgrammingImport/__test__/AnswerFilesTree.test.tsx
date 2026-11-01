@@ -18,6 +18,7 @@ import { SubmissionQuestionData } from 'types/course/assessment/submission/quest
 import ProgrammingAPI from 'api/course/Assessment/Submission/Answer/Programming';
 import toast from 'lib/hooks/toast';
 
+import { updateClientVersion } from '../../../actions/answers';
 import actionTypes from '../../../constants';
 import { convertAnswerDataToInitialValue } from '../../../utils/answers';
 import ProgrammingImportEditor from '../ProgrammingImportEditor';
@@ -73,6 +74,8 @@ const FILES = [
 
 let form: UseFormReturn<FieldValues>;
 let shown: string;
+// The editor's autosave: an edit in the editor calls it.
+let saveAnswerAndUpdateClientVersion: jest.Mock;
 
 const Harness = (props: {
   initiallyShown?: string;
@@ -100,7 +103,7 @@ const Harness = (props: {
         isSavingAnswer={false}
         question={QUESTION}
         readOnly={false}
-        saveAnswerAndUpdateClientVersion={(): void => {}}
+        saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         setDisplayFileName={setDisplayFileName}
       />
     </FormProvider>
@@ -164,6 +167,7 @@ const savedPaths = (): string[] =>
   );
 
 beforeEach(() => {
+  saveAnswerAndUpdateClientVersion = jest.fn();
   loadSubmission('attempting', true);
   // Watched, not replaced, so the toasts still render.
   jest.spyOn(toast, 'success');
@@ -282,6 +286,38 @@ describe('<AnswerFilesTree />', () => {
     await waitFor(() => expect(shown).toBe('App.py'));
     expect(await screen.findByTestId('editor')).toHaveValue('print("new")');
     expect(await screen.findByText('File uploaded successfully')).toBeVisible();
+  });
+
+  it('keeps an edit made while a replacement is saving, and autosaves the answer again', async () => {
+    // The student types into another file while the save is in flight, which, as autosave does,
+    // gives the answer a newer version than the save's.
+    jest
+      .spyOn(ProgrammingAPI.prototype, 'createProgrammingFiles')
+      .mockImplementation(async (answerId, payload) => {
+        form.setValue(
+          `${ANSWER_ID}.files_attributes.1.content`,
+          'typed during the save',
+        );
+        dispatch(updateClientVersion(ANSWER_ID, Date.now() + 60_000));
+        return saveWhatIsSent(answerId, payload);
+      });
+    const user = userEvent.setup();
+    await renderTree();
+
+    addFiles(new File(['print("new")'], 'app.py'));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(within(dialog).getByRole('button', { name: 'Replace' }));
+
+    await waitFor(() =>
+      expect(saveAnswerAndUpdateClientVersion).toHaveBeenCalledWith(ANSWER_ID),
+    );
+    const files = form.getValues()[ANSWER_ID]
+      .files_attributes as ProgrammingContent[];
+    expect(files.map((saved) => saved.content)).toEqual([
+      'print("new")',
+      'typed during the save',
+      'content of templates/base.html',
+    ]);
   });
 
   it('moves the shown file by its id alone, and keeps showing it', async () => {

@@ -149,6 +149,9 @@ const ProgrammingImportEditor = (
             disabled={disabled}
             displayFileName={displayFileName}
             language={question.editorMode}
+            resaveAnswer={(): void =>
+              saveAnswerAndUpdateClientVersion(answerId)
+            }
             setDisplayFileName={setDisplayFileName}
           />
         </div>

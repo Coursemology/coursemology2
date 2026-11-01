@@ -95,6 +95,35 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
         end
       end
 
+      context 'with a client version' do
+        before { answer.update_columns(last_session_id: 'session', client_version: 200) }
+
+        def replace_at(client_version)
+          file = answer.specific.files.first
+          post :create_programming_files, format: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: answer.id, client_version: client_version,
+              files_attributes: [id: file.id, filename: file.filename, content: 'replacement']
+            }
+          }
+        end
+
+        it "becomes the answer's version, so that older autosaves are refused" do
+          replace_at(300)
+
+          expect(response).to have_http_status(:ok)
+          expect(answer.reload.client_version).to eq(300)
+        end
+
+        it 'is refused when older than the last save' do
+          replace_at(100)
+
+          expect(response).to have_http_status(:bad_request)
+          expect(answer.specific.files.first.reload.content).not_to eq('replacement')
+        end
+      end
+
       context 'when the content is sent as a file part' do
         def upload(bytes)
           part = Rack::Test::UploadedFile.new(StringIO.new(bytes), 'text/plain', original_filename: 'part.py')

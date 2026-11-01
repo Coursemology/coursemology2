@@ -29,7 +29,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
   private
 
   def create_programming_files_params
-    params.require(:answer).permit([files_attributes: [:id, :filename, :content]])
+    params.require(:answer).permit([:client_version, files_attributes: [:id, :filename, :content]])
   end
 
   def delete_programming_file_params

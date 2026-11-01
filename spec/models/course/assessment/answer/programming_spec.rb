@@ -105,6 +105,36 @@ RSpec.describe Course::Assessment::Answer::Programming do
                       { id: main.id, filename: 'app.py', content: '' })).to be(false)
         expect([app.reload.filename, main.reload.filename]).to eq(['app.py', 'main.py'])
       end
+
+      context 'with a client version' do
+        before { answer.acting_as.update_columns(last_session_id: 'session', client_version: 200) }
+
+        def update_at(client_version, *files_attributes)
+          described_class.find(programming_answer.id).
+            create_and_update_files(client_version: client_version, files_attributes: files_attributes)
+        end
+
+        # An autosave sends the whole answer as it was when the student typed, by file id.
+        def autosave(client_version, content)
+          described_class.find(programming_answer.id).tap do |specific|
+            specific.assign_params(client_version: client_version, last_session_id: 'session',
+                                   files_attributes: [id: app.id, content: content])
+          end.save
+        end
+
+        it 'refuses an older autosave that arrives after a replacement' do
+          expect(update_at(300, { id: app.id, filename: 'app.py', content: 'replacement' })).to be(true)
+          expect(answer.acting_as.reload.client_version).to eq(300)
+
+          expect(autosave(250, 'typed before the replacement')).to be(false)
+          expect(app.reload.content).to eq('replacement')
+        end
+
+        it 'refuses a replacement older than the last save' do
+          expect(update_at(100, { id: app.id, filename: 'app.py', content: 'replacement' })).to be(false)
+          expect(app.reload.content).to eq('old app')
+        end
+      end
     end
 
     describe '#files' do
