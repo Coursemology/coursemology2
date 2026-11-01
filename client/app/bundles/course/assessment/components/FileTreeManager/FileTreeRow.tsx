@@ -1,4 +1,4 @@
-import { forwardRef, MouseEvent, ReactNode } from 'react';
+import { DragEvent, forwardRef, MouseEvent, ReactNode } from 'react';
 import {
   ChevronRight,
   Delete,
@@ -129,6 +129,10 @@ export interface FileTreeRowProps {
   onRestore?: () => void;
   onRename?: () => void;
   onDownload?: () => void;
+  /** Whether the row can be dragged into another folder. */
+  draggable?: boolean;
+  onDragStart?: (event: DragEvent<HTMLDivElement>) => void;
+  onDragEnd?: () => void;
 }
 
 const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
@@ -208,7 +212,10 @@ const FileTreeRow = forwardRef<HTMLDivElement, FileTreeRowProps>(
           props.dropTarget ? 'ring-2 ring-inset ring-primary' : ''
         } ${pending ? 'opacity-50' : ''}`}
         data-drop-folder={folderOfRow(node)}
+        draggable={props.draggable || undefined}
         onClick={props.onClick}
+        onDragEnd={props.draggable ? props.onDragEnd : undefined}
+        onDragStart={props.draggable ? props.onDragStart : undefined}
         onFocus={props.onFocus}
         role="treeitem"
         tabIndex={focused ? 0 : -1}

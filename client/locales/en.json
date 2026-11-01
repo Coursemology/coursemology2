@@ -1670,6 +1670,9 @@
   "course.assessment.FileTreeManager.noFiles": {
     "defaultMessage": "No files yet."
   },
+  "course.assessment.FileTreeManager.notMoved": {
+    "defaultMessage": "{name} was not moved:"
+  },
   "course.assessment.FileTreeManager.pathTooLong": {
     "defaultMessage": "File path too long."
   },

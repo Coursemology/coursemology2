@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import {
+  basename,
   dirname,
   foldersOf,
   joinPath,
@@ -108,6 +109,9 @@ export interface FileTree {
   startRenaming: (target: MoveTarget) => void;
   cancelRenaming: () => void;
   submitRename: (raw: string) => MoveResult;
+  /** Whether a row can be dropped into the folder: not the one it is in, and not itself. */
+  canMove: (target: MoveTarget, folder: string) => boolean;
+  move: (target: MoveTarget, folder: string) => MoveResult;
 }
 
 /**
@@ -224,22 +228,14 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     isInFolder(path, from) ? to + path.slice(from.length) : path;
 
   /**
-   * Checks the new name of the row being renamed, which stays in its folder, and ends the renaming
-   * when it is valid. The caller then moves the files to their new paths: the file, or every file
-   * in the folder. A name can't be the path of another file or folder, even one marked for deletion,
-   * nor one reserved for another moved file. A moved file can go back to its own.
+   * Checks the new path of a row, and moves the tree's own state with it when it is valid. The
+   * caller then moves the files to their new paths: the file, or every file in the folder. A path
+   * can't be that of another file or folder, even one marked for deletion, nor one reserved for
+   * another moved file. A moved file can go back to its own.
    */
-  const submitRename = (raw: string): MoveResult => {
-    if (!renaming) return { error: 'invalid' };
-    const { kind, path: from } = renaming;
-    const name = normalisePath(raw);
-    if (!name || name.includes('/')) return { error: 'invalid' };
-
-    const to = joinPath(dirname(from), name);
-    if (to === from) {
-      setRenaming(null);
-      return { moves: [] };
-    }
+  const relocate = (target: MoveTarget, to: string): MoveResult => {
+    const { kind, path: from } = target;
+    if (to === from) return { moves: [] };
 
     const moved = files.filter((file) => isInFolder(file.path, from));
     const unmoved = files.filter((file) => !isInFolder(file.path, from));
@@ -292,8 +288,35 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
       );
     }
     if (focusedKey === `${kind}:${from}`) setFocusedKeyState(`${kind}:${to}`);
-    setRenaming(null);
     return { moves };
+  };
+
+  /**
+   * Checks the new name of the row being renamed, which stays in its folder, and ends the renaming
+   * when it is valid.
+   */
+  const submitRename = (raw: string): MoveResult => {
+    if (!renaming) return { error: 'invalid' };
+    const name = normalisePath(raw);
+    if (!name || name.includes('/')) return { error: 'invalid' };
+
+    const result = relocate(renaming, joinPath(dirname(renaming.path), name));
+    if ('moves' in result) setRenaming(null);
+    return result;
+  };
+
+  // A row can't move into the folder it is already in, or into itself.
+  const canMove = (target: MoveTarget, folder: string): boolean =>
+    folder !== dirname(target.path) &&
+    !(target.kind === 'folder' && isInFolder(folder, target.path));
+
+  /** Moves a row into a folder, or to the top level, keeping its name; then opens the folder. */
+  const move = (target: MoveTarget, folder: string): MoveResult => {
+    if (!canMove(target, folder)) return { moves: [] };
+
+    const result = relocate(target, joinPath(folder, basename(target.path)));
+    if ('moves' in result && folder) expand(folder);
+    return result;
   };
 
   return {
@@ -320,6 +343,8 @@ const useFileTree = (files: FileTreeEntry[]): FileTree => {
     startRenaming,
     cancelRenaming,
     submitRename,
+    canMove,
+    move,
   };
 };
 

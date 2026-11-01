@@ -168,6 +168,28 @@ const upload = (input: HTMLElement, ...files: File[]): void => {
   fireEvent.change(input, { target: { files } });
 };
 
+// Drags a row over another element and drops it there. Returns whether the tree allowed the drop,
+// by the drop effect it set; a browser drops nothing where it is `none`, but it is dropped here
+// anyway, so the tree must ignore it too.
+const drag = (source: HTMLElement, target: HTMLElement): boolean => {
+  const dataTransfer = {
+    setData: jest.fn(),
+    types: [],
+    effectAllowed: 'all',
+    // As a browser starts a drag that may only move, so a target that can't take it must say so.
+    dropEffect: 'move',
+  };
+  fireEvent.dragStart(source, { dataTransfer });
+  fireEvent.dragOver(target, { dataTransfer });
+  const allowed = dataTransfer.dropEffect === 'move';
+  fireEvent.drop(target, { dataTransfer });
+  fireEvent.dragEnd(source, { dataTransfer });
+  return allowed;
+};
+
+// Off the rows, where a drop goes to the top level.
+const offTheRows = (): HTMLElement => screen.getByRole('tree').parentElement!;
+
 describe('FileTreeManager', () => {
   describe('the tree', () => {
     it('shows folders before files, nested by path, with tree semantics', async () => {
@@ -794,6 +816,111 @@ describe('FileTreeManager', () => {
     });
   });
 
+  describe('moving by dragging', () => {
+    it('moves a saved file into the folder of the row it is dropped on', async () => {
+      await renderDraft({ movable: true });
+
+      expect(drag(row('app.py'), row('nav.html'))).toBe(true);
+
+      expect(row('app.py, Moved')).toHaveAttribute('aria-level', '3');
+      expect(within(row('app.py, Moved')).getByText('app.py')).toHaveAttribute(
+        'title',
+        'templates/partials/app.py, moved from app.py',
+      );
+    });
+
+    it('moves a folder and every file in it to the top level, off the rows', async () => {
+      await renderDraft({ movable: true });
+
+      expect(drag(row('partials'), offTheRows())).toBe(true);
+
+      expect(row('partials')).toHaveAttribute('aria-level', '1');
+      expect(row('nav.html, Moved')).toHaveAttribute('aria-level', '2');
+    });
+
+    it('does not take a row into the folder it is in, or a folder into itself', async () => {
+      await renderDraft({ movable: true });
+
+      expect(drag(row('index.html'), row('templates'))).toBe(false);
+      expect(drag(row('templates'), row('nav.html'))).toBe(false);
+      expect(drag(row('app.py'), offTheRows())).toBe(false);
+      expect(rowNames()).toEqual([
+        'templates',
+        'partials',
+        'nav.html',
+        'index.html',
+        'app.py',
+      ]);
+    });
+
+    it('refuses to move onto the path of another file, even one to be deleted', async () => {
+      await renderDraft({
+        movable: true,
+        initial: [...SAVED, entry('templates/app.py', 'marked')],
+      });
+
+      drag(row('app.py'), row('templates'));
+
+      expect(await screen.findByText('app.py was not moved:')).toBeVisible();
+      expect(
+        screen.getByText(
+          'A file or folder with this name already exists here.',
+        ),
+      ).toBeVisible();
+      expect(row('app.py')).toHaveAttribute('aria-level', '1');
+    });
+
+    it('drags only rows that can be moved', async () => {
+      await renderDraft({
+        movable: true,
+        filesDeleteable: true,
+        initial: [
+          entry('a.py', 'marked'),
+          entry('b.py', 'replaced'),
+          entry('c.py'),
+        ],
+      });
+
+      expect(rowNamed('a.py')).not.toHaveAttribute('draggable');
+      expect(rowNamed('b.py')).not.toHaveAttribute('draggable');
+      expect(rowNamed('c.py')).toHaveAttribute('draggable', 'true');
+    });
+
+    it('refuses a row dragged from another tree', async () => {
+      const onMove = jest.fn();
+      render(
+        <>
+          <FileTreeManager
+            commit="draft"
+            files={[entry('a.py')]}
+            movable
+            onMove={onMove}
+          />
+          <FileTreeManager
+            commit="draft"
+            files={[entry('lib/b.py')]}
+            movable
+            onMove={onMove}
+            uploadable
+          />
+        </>,
+      );
+      const [, other] = await screen.findAllByRole('tree');
+
+      expect(
+        drag(row('a.py'), within(other).getByRole('treeitem', { name: 'lib' })),
+      ).toBe(false);
+      expect(onMove).not.toHaveBeenCalled();
+    });
+
+    it('drags nothing when rows cannot be moved', async () => {
+      await renderDraft();
+
+      expect(row('app.py')).not.toHaveAttribute('draggable');
+      expect(row('templates')).not.toHaveAttribute('draggable');
+    });
+  });
+
   describe('new folders', () => {
     const createFolder = async (name: string): Promise<void> => {
       const user = userEvent.setup();
@@ -917,6 +1044,18 @@ describe('FileTreeManager', () => {
       expect(onMove).toHaveBeenCalledWith([
         { from: 'templates/index.html', to: 'views/index.html' },
         { from: 'templates/partials/nav.html', to: 'views/partials/nav.html' },
+      ]);
+    });
+
+    it('moves a dragged folder in one call with every file in it', async () => {
+      const onMove = jest.fn(() => Promise.resolve());
+      await renderImmediate({ movable: true, onMove });
+
+      drag(row('partials'), offTheRows());
+
+      expect(onMove).toHaveBeenCalledTimes(1);
+      expect(onMove).toHaveBeenCalledWith([
+        { from: 'templates/partials/nav.html', to: 'partials/nav.html' },
       ]);
     });
 
