@@ -3,7 +3,10 @@ import { FieldValues, UseFormResetField } from 'react-hook-form';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { AxiosError } from 'axios';
 import { Operation } from 'store';
-import { ProgrammingFilePostData } from 'types/course/assessment/submission/answer/programming';
+import {
+  ProgrammingContent,
+  ProgrammingFilePostData,
+} from 'types/course/assessment/submission/answer/programming';
 
 import CourseAPI from 'api/course';
 import {
@@ -15,6 +18,7 @@ import { MAX_SAVING_SIZE, SAVING_STATUS } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 
 import actionTypes from '../../constants';
+import { getClientVersionForAnswerId } from '../../selectors/answers';
 import translations from '../../translations';
 import { convertAnswerDataToInitialValue } from '../../utils/answers';
 import { buildErrorMessage } from '../utils';
@@ -22,6 +26,7 @@ import { buildErrorMessage } from '../utils';
 import {
   dispatchUpdateAnswerFlagSavingSize,
   dispatchUpdateAnswerFlagSavingStatus,
+  updateClientVersion,
 } from '.';
 
 // These actions report through toasts, red for errors and green for success, as the rest of the
@@ -59,6 +64,32 @@ const pathsErrorMsg = (
   if (pathErrors.includes('invalid')) return fileTreeTranslations.invalidPath;
   if (validatePaths(added, saved)) return translations.similarFileNameExists;
   return null;
+};
+
+// The saved answer, with the form's current content for the files that were sent from the form:
+// every saved file except those an upload replaced.
+const keepEdits = <T>(
+  saved: T,
+  sent: (ProgrammingFilePostData & { staged?: boolean })[],
+  current: { id?: number; content: string }[],
+): T => {
+  const fromForm = new Set(
+    sent.filter((file) => file.id && !file.staged).map((file) => file.id),
+  );
+  const edited = new Map(
+    current
+      .filter((file) => file.id && fromForm.has(file.id))
+      .map((file) => [file.id, file.content]),
+  );
+  const answer = saved as T & { files_attributes?: ProgrammingContent[] };
+  return {
+    ...answer,
+    files_attributes: answer.files_attributes?.map((file) =>
+      edited.has(file.id)
+        ? { ...file, content: edited.get(file.id) as string }
+        : file,
+    ),
+  };
 };
 
 const validateFilesByLanguageMap: Record<
@@ -102,6 +133,13 @@ const validateProgrammingFilesErrorMsg = (
   return null;
 };
 
+interface ImportOptions {
+  /** The answer's files as the form has them now, for keeping edits made while the save was in flight. */
+  currentFiles?: () => { id?: number; content: string }[];
+  /** Autosaves the answer again from the form, after an edit made while the save was in flight. */
+  onEditedWhileSaving?: () => void;
+}
+
 /**
  * Saves an answer's files: its saved files, by `id`, and the new ones. The answer in the form is
  * replaced with the saved one, and failures are reported in a toast.
@@ -113,6 +151,7 @@ export function importProgrammingFiles(
   files: (ProgrammingFilePostData & { staged?: boolean })[],
   language: string,
   resetField: UseFormResetField<FieldValues>,
+  options: ImportOptions = {},
 ): Operation {
   const savingSize = files.reduce((acc, file) => {
     if (file.content === undefined) return acc;
@@ -142,14 +181,19 @@ export function importProgrammingFiles(
       content: file.content,
     }),
   );
+  // The save carries every file's content from the form, so it is newer than any autosave already
+  // queued or in flight. The server refuses an older autosave that arrives after it, and once it is
+  // saved, a queued one is not sent; otherwise either could put back the content a file replaced.
+  const clientVersion = Date.now();
   const payload = {
     answer: {
       id: answerId,
+      client_version: clientVersion,
       files_attributes: filesPayload,
     },
   };
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
     dispatch({
       type: actionTypes.UPLOAD_PROGRAMMING_FILES_REQUEST,
@@ -183,13 +227,26 @@ export function importProgrammingFiles(
       .createProgrammingFiles(answerId, payload)
       .then((response) => {
         const updatedAnswer = response.data;
+        // An edit made while the save was in flight gave the answer a newer version. Its autosave
+        // holds the whole answer as it was then, replaced files' old content included, and would
+        // put that back. So the form keeps the edits, in every file this save sent from the form,
+        // and the answer is autosaved again from it, which takes the place of the queued autosave.
+        const editedWhileSaving =
+          (getClientVersionForAnswerId(getState(), answerId) ?? 0) >
+          clientVersion;
+        if (!editedWhileSaving)
+          dispatch(updateClientVersion(answerId, clientVersion));
         dispatch({
           type: actionTypes.UPLOAD_PROGRAMMING_FILES_SUCCESS,
           payload: updatedAnswer,
         });
+        const saved = convertAnswerDataToInitialValue(updatedAnswer);
         resetField(`${answerId}`, {
-          defaultValue: convertAnswerDataToInitialValue(updatedAnswer),
+          defaultValue: editedWhileSaving
+            ? keepEdits(saved, files, options.currentFiles?.() ?? [])
+            : saved,
         });
+        if (editedWhileSaving) options.onEditedWhileSaving?.();
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
         );

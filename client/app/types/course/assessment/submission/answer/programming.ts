@@ -152,6 +152,8 @@ export interface ProgrammingFilePostData {
 export interface ProgrammingFilesPostData {
   answer: {
     id: number;
+    /** As autosave sends it: an autosave older than this save is refused if it arrives later. */
+    client_version?: number;
     files_attributes: ProgrammingFilePostData[];
   };
 }
