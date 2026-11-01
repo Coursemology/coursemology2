@@ -20,7 +20,7 @@ export interface FileTreeEntry {
   previousPath?: string;
 }
 
-/** A file moved to a new path: renamed, or in a folder that was renamed. */
+/** A file moved to a new path: renamed, dragged, or in a folder that was renamed or dragged. */
 export interface FileTreeMove {
   from: string;
   to: string;
@@ -80,7 +80,7 @@ interface FileTreeManagerBaseProps {
  */
 export interface DraftFileTreeManagerProps extends FileTreeManagerBaseProps {
   commit: 'draft';
-  /** Lets the user rename files and folders. A saved file shows as moved until the form is saved. */
+  /** Lets the user rename and drag files and folders. A saved file shows as moved until the form is saved. */
   movable?: boolean;
   onAdd?: (uploads: FileTreeUpload[]) => void;
   onDelete?: (paths: string[]) => void;
@@ -96,7 +96,7 @@ export interface DraftFileTreeManagerProps extends FileTreeManagerBaseProps {
 export interface ImmediateFileTreeManagerProps
   extends FileTreeManagerBaseProps {
   commit: 'immediate';
-  /** Lets the user rename files and folders. */
+  /** Lets the user rename and drag files and folders. */
   movable?: boolean;
   onAdd?: (uploads: FileTreeUpload[]) => Promise<void>;
   onDelete?: (paths: string[]) => Promise<void>;

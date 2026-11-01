@@ -1661,6 +1661,9 @@
   "course.assessment.FileTreeManager.noFiles": {
     "defaultMessage": "暂无文件。"
   },
+  "course.assessment.FileTreeManager.notMoved": {
+    "defaultMessage": "{name} 未能移动："
+  },
   "course.assessment.FileTreeManager.pathTooLong": {
     "defaultMessage": "文件路径过长。"
   },

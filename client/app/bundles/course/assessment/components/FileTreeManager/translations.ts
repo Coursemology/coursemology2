@@ -175,6 +175,10 @@ const translations = defineMessages({
     defaultMessage:
       '{count, plural, one {This file was} other {These files were}} not added:',
   },
+  notMoved: {
+    id: 'course.assessment.FileTreeManager.notMoved',
+    defaultMessage: '{name} was not moved:',
+  },
   saveFailed: {
     id: 'course.assessment.FileTreeManager.saveFailed',
     defaultMessage: 'Your change could not be saved. Please try again.',

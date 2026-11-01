@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { DropzoneRootProps, useDropzone } from 'react-dropzone';
 import {
   CreateNewFolder,
   NoteAdd,
@@ -63,6 +63,18 @@ interface PendingReplacement {
 }
 
 const TYPE_AHEAD_RESET_MS = 500;
+
+// What a dragged row carries, so that only this tree's rows move and other drop targets ignore them.
+const MOVE_DATA_TYPE = 'application/x-file-tree-path';
+
+const isDragWithFiles = (event: DragEvent<HTMLElement>): boolean =>
+  Array.from(event.dataTransfer?.types ?? []).includes('Files');
+
+// Anything else dragged over a tree, such as a row of another tree or some text, can't be dropped.
+const refuseDrag = (event: DragEvent<HTMLElement>): void => {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'none';
+};
 
 const isMarked = (entry: FileTreeEntry): boolean => entry.state === 'marked';
 
@@ -121,6 +133,7 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
   const [pendingReplacement, setPendingReplacement] =
     useState<PendingReplacement | null>(null);
   const [dropFolder, setDropFolder] = useState<string | null>(null);
+  const [dragging, setDragging] = useState<Node | null>(null);
 
   const rowRefs = useRef(new Map<string, HTMLDivElement>());
   const fileInput = useRef<HTMLInputElement>(null);
@@ -470,6 +483,74 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
     onDragLeave: () => setDropFolder(null),
   });
 
+  // Renaming and dragging both move a row, so a row that can be renamed can be dragged.
+  const canDragNode = (node: Node): boolean => canMoveNode(node) && !locked;
+
+  const startMoving = (node: Node, event: DragEvent<HTMLElement>): void => {
+    event.dataTransfer.effectAllowed = 'move';
+    // Firefox only starts a drag that carries data.
+    event.dataTransfer.setData(MOVE_DATA_TYPE, node.path);
+    setDragging(node);
+  };
+
+  const stopMoving = (): void => {
+    setDragging(null);
+    setDropFolder(null);
+  };
+
+  // The folder the dragged row would move into: that of the row under the pointer, or the top
+  // level off the rows. `null` where it can't be dropped.
+  const moveTargetAt = (target: EventTarget | null): string | null => {
+    if (!dragging) return null;
+    const folder = folderAtEvent(target) ?? '';
+    return tree.canMove({ kind: dragging.kind, path: dragging.path }, folder)
+      ? folder
+      : null;
+  };
+
+  // The dropzone lets anything drop anywhere on the page, so that a file dropped off it isn't opened
+  // by the browser; where the row can't go, the drop effect says so, and the browser won't drop it.
+  const handleMoveOver = (event: DragEvent<HTMLElement>): void => {
+    event.preventDefault();
+    const folder = moveTargetAt(event.target);
+    setDropFolder(folder);
+    event.dataTransfer.dropEffect = folder === null ? 'none' : 'move';
+  };
+
+  const handleMoveDrop = (event: DragEvent<HTMLElement>): void => {
+    event.preventDefault();
+    const node = dragging;
+    const folder = moveTargetAt(event.target);
+    stopMoving();
+    if (!node || folder === null) return;
+
+    const result = tree.move({ kind: node.kind, path: node.path }, folder);
+    if ('error' in result) {
+      toast.error(
+        <>
+          {t(translations.notMoved, { name: node.name })}
+          <span className="block">{t(NAME_ERROR_MESSAGES[result.error])}</span>
+        </>,
+      );
+      return;
+    }
+    commitMoves(result.moves);
+  };
+
+  // A row being dragged is this tree's own; the dropzone only takes files from elsewhere.
+  const rootProps: DropzoneRootProps = getRootProps({
+    // A click off the rows and the buttons makes the top level the target, as a drop there does.
+    onClick: (event: MouseEvent<HTMLElement>) => {
+      const element = event.target instanceof Element ? event.target : null;
+      if (!element?.closest('[data-drop-folder], button, input'))
+        tree.targetTopLevel();
+    },
+    onDragOver: (event: DragEvent<HTMLElement>) => {
+      if (isDragWithFiles(event))
+        setDropFolder(folderAtEvent(event.target) ?? '');
+    },
+  });
+
   const liveFiles = files.filter((file) => !isMarked(file));
   const draftCount = files.filter(
     (file) => file.state === 'draft' || file.state === 'replaced',
@@ -536,8 +617,11 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           canRename={canMoveNode(node)}
           compact={compact}
           disabled={locked}
+          draggable={canDragNode(node)}
           dropTarget={
-            canUpload && dropFolder === folderOfRow(node) && dropFolder !== ''
+            (canUpload || dragging !== null) &&
+            dropFolder === folderOfRow(node) &&
+            dropFolder !== ''
           }
           expanded={node.kind === 'folder' && !tree.isCollapsed(node.path)}
           focused={key === tabbableKey}
@@ -545,6 +629,8 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
           onClick={(): void => activate(node)}
           onDelete={(): void => deleteNode(node)}
           onDownload={(): void => props.onDownload?.(node.path)}
+          onDragEnd={stopMoving}
+          onDragStart={(event): void => startMoving(node, event)}
           onFocus={(): void => tree.setFocusedKey(key)}
           onRename={(): void => startRenaming(node)}
           onRestore={isDraft ? (): void => restoreNode(node) : undefined}
@@ -586,25 +672,37 @@ const FileTreeManager = (props: FileTreeManagerProps): JSX.Element => {
       }`}
     >
       <div
-        {...getRootProps({
-          // A click off the rows and the buttons makes the top level the target, as a drop there
-          // does.
-          onClick: (event: MouseEvent<HTMLElement>) => {
-            const element =
-              event.target instanceof Element ? event.target : null;
-            if (!element?.closest('[data-drop-folder], button, input'))
-              tree.targetTopLevel();
-          },
-          onDragOver: (event: DragEvent<HTMLElement>) =>
-            setDropFolder(folderAtEvent(event.target) ?? ''),
-        })}
+        {...rootProps}
         className={`overflow-hidden ${
           fillHeight ? 'flex min-h-0 flex-1 flex-col' : ''
         } ${frame} ${
-          isDragActive && canUpload && dropFolder === ''
+          ((isDragActive && canUpload) || dragging) && dropFolder === ''
             ? 'ring-2 ring-primary'
             : ''
         }`}
+        onDragEnter={(event: DragEvent<HTMLElement>): void => {
+          if (dragging) handleMoveOver(event);
+          else if (isDragWithFiles(event)) rootProps.onDragEnter?.(event);
+          else refuseDrag(event);
+        }}
+        onDragLeave={(event: DragEvent<HTMLElement>): void => {
+          if (!dragging) rootProps.onDragLeave?.(event);
+          else if (
+            !(event.relatedTarget instanceof Element) ||
+            !event.currentTarget.contains(event.relatedTarget)
+          )
+            setDropFolder(null);
+        }}
+        onDragOver={(event: DragEvent<HTMLElement>): void => {
+          if (dragging) handleMoveOver(event);
+          else if (isDragWithFiles(event)) rootProps.onDragOver?.(event);
+          else refuseDrag(event);
+        }}
+        onDrop={(event: DragEvent<HTMLElement>): void => {
+          if (dragging) handleMoveDrop(event);
+          else if (isDragWithFiles(event)) rootProps.onDrop?.(event);
+          else event.preventDefault();
+        }}
       >
         <div className="flex flex-none items-center gap-y-1 border-0 border-b border-solid border-neutral-200 bg-neutral-50 px-2 py-1">
           <div className="flex flex-wrap items-center">
