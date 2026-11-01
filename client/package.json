@@ -150,7 +150,7 @@
     "babel-plugin-react-remove-properties": "^0.3.0",
     "babel-plugin-transform-import-meta": "^2.2.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "ckeditor5": "^47.6.2",
+    "ckeditor5": "^47.7.4",
     "compression-webpack-plugin": "^12.0.0",
     "css-loader": "^7.1.4",
     "cssnano": "^7.1.3",
