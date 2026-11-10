@@ -50,6 +50,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     folderAttributes,
     initialValues,
     isKoditsuExamEnabled,
+    isKoditsuV1Linked,
     isQuestionsValidForKoditsu,
     modeSwitching,
     onSubmit,
@@ -88,6 +89,10 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const proctorWithKoditsuDisabledHint = (): string | undefined => {
     if (disabled) {
       return undefined;
+    }
+
+    if (isKoditsuV1Linked) {
+      return t(translations.koditsuV1Retired);
     }
 
     return !isKoditsuExamEnabled
@@ -732,6 +737,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               <FormCheckboxField
                 disabled={
                   !isKoditsuExamEnabled ||
+                  isKoditsuV1Linked ||
                   (editing && !isQuestionsValidForKoditsu) ||
                   disabled
                 }

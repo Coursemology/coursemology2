@@ -142,6 +142,22 @@ describe('<AssessmentForm />', () => {
     });
   });
 
+  it('freezes Koditsu proctoring with a retirement hint in a course linked to Koditsu v1', async () => {
+    props.isKoditsuExamEnabled = true;
+    props.isQuestionsValidForKoditsu = true;
+    props.isKoditsuV1Linked = true;
+    renderForm();
+
+    await waitFor(() => {
+      expect(form.getByLabelText('Proctor Exam using Koditsu')).toBeDisabled();
+      expect(
+        form.getByText(
+          'Koditsu proctoring can no longer be changed in this course: its Koditsu v1 integration has been retired.',
+        ),
+      ).toBeVisible();
+    });
+  });
+
   it('does not render gamified options when course is not gamified', async () => {
     renderForm();
 

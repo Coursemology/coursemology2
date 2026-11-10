@@ -45,6 +45,7 @@ const AssessmentsIndex = (): JSX.Element => {
                     categoryId={data.display.category.id}
                     gamified={data.display.isGamified}
                     isKoditsuExamEnabled={data.display.isKoditsuExamEnabled}
+                    isKoditsuV1Linked={data.display.isKoditsuV1Linked}
                     monitoringEnabled={data.display.isMonitoringEnabled}
                     randomizationAllowed={data.display.allowRandomization}
                     tabId={data.display.tabId}

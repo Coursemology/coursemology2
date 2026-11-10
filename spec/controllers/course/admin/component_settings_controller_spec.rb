@@ -50,6 +50,23 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
         end
       end
 
+      context 'when Koditsu is enabled in a course linked to Koditsu v1' do
+        let(:course) { create(:course, creator: user, koditsu_v1_workspace_id: '670040c49a72e414c8f04bd7') }
+        let(:ids_to_enable) { ['course_koditsu_platform_component'] }
+
+        # Instance.default is memoised, so the setting would outlive this example's rolled-back transaction.
+        before { instance.set_component_enabled_boolean!(:course_koditsu_platform_component, true) }
+        after { instance.set_component_enabled_boolean!(:course_koditsu_platform_component, false) }
+
+        it 'enables the component without creating a Koditsu workspace' do
+          expect(KoditsuAsyncApiService).not_to receive(:new)
+
+          subject
+          expect(settings.enabled_component_ids).to include('course_koditsu_platform_component')
+          expect(course.reload.koditsu_workspace_id).to be_nil
+        end
+      end
+
       context 'when parameters are invalid' do
         let(:components_params) do
           { enabled_component_ids: ids_to_enable << 'invalid-key' }

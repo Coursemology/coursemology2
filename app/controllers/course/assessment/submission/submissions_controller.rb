@@ -187,6 +187,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
       head :bad_request
       return
     elsif reload_answer_params[:reset_answer]
+      # Resetting overwrites the stored answer with the question's template, but :reload_answer, held on any of one's
+      # own submissions, only covers reading it back. Write access is checked for retired Koditsu attempts alone, so
+      # as not to change who may reset elsewhere (e.g. teaching assistants on students' attempts).
+      authorize!(:update, @answer) if @submission.koditsu_v1_attempt?
       @new_answer = @answer.reset_answer
     else
       @new_answer = @answer
@@ -226,6 +230,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def fetch_submissions_from_koditsu
     authorize!(:fetch_submissions_from_koditsu, @assessment)
+    return render_koditsu_v1_retired if current_course.koditsu_v1_linked?
 
     is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled

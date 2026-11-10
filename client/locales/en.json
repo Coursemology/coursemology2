@@ -1418,6 +1418,9 @@
   "course.assessment.AssessmentForm.intervalHint": {
     "defaultMessage": "Controls how frequent heartbeats are sent from the students' browsers. Intervals are randomised between these two ranges."
   },
+  "course.assessment.AssessmentForm.koditsuV1Retired": {
+    "defaultMessage": "Koditsu proctoring can no longer be changed in this course: its Koditsu v1 integration has been retired."
+  },
   "course.assessment.AssessmentForm.maxInterval": {
     "defaultMessage": "Max interval"
   },

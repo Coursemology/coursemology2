@@ -1418,6 +1418,9 @@
   "course.assessment.AssessmentForm.intervalHint": {
     "defaultMessage": "학생의 브라우저에서 하트비트가 전송되는 빈도를 제어합니다. 간격은 이 두 범위 사이에서 무작위화됩니다."
   },
+  "course.assessment.AssessmentForm.koditsuV1Retired": {
+    "defaultMessage": "이 코스에서는 더 이상 Koditsu 감독 설정을 변경할 수 없습니다. 이 코스의 Koditsu v1 연동이 종료되었습니다."
+  },
   "course.assessment.AssessmentForm.maxInterval": {
     "defaultMessage": "최대 간격"
   },

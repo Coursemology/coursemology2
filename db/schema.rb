@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -602,6 +602,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_000000) do
     t.boolean "is_low_priority", default: false
     t.boolean "is_synced_with_koditsu", default: false, null: false
     t.string "koditsu_question_id"
+    t.string "koditsu_v1_question_id"
     t.decimal "maximum_grade", precision: 4, scale: 1, null: false
     t.text "staff_only_comments"
     t.string "title", limit: 255
@@ -711,6 +712,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_000000) do
     t.boolean "is_late_submission_allowed", default: true, null: false
     t.boolean "is_synced_with_koditsu", default: false, null: false
     t.string "koditsu_assessment_id"
+    t.string "koditsu_v1_assessment_id"
     t.integer "linkable_tree_id", default: 0, null: false
     t.bigint "monitor_id"
     t.integer "randomization"
@@ -1749,6 +1751,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_000000) do
     t.integer "instance_id", null: false
     t.boolean "is_model_configuration_authorized", default: false, null: false
     t.boolean "is_suspended", default: false, null: false
+    t.string "koditsu_v1_workspace_id"
     t.string "koditsu_workspace_id"
     t.text "logo"
     t.boolean "preview", default: false, null: false

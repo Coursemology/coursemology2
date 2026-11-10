@@ -406,6 +406,7 @@ class Course::Assessment < ApplicationRecord
     # once the duplication succeeds, then Koditsu assessment will be created for the
     # duplication only if it's necessary
     self.koditsu_assessment_id = nil
+    self.koditsu_v1_assessment_id = nil
     self.is_synced_with_koditsu = false
 
     # ssid folder is not duplicated, as it is isolated to the assessment and created on-demand

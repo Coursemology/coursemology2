@@ -203,6 +203,7 @@ class Course::Assessment::Question < ApplicationRecord
     # duplication only if it's necessary, i.e. if the assessment related to it is
     # a Koditsu assessment
     self.koditsu_question_id = nil
+    self.koditsu_v1_question_id = nil
     self.is_synced_with_koditsu = false
   end
 

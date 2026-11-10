@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Controller < Course::ComponentController
+  include Course::Assessment::KoditsuV1RetirementConcern
+
   before_action :load_and_authorize_assessment
   before_action :load_category_and_tab
 

@@ -59,6 +59,7 @@ class AssessmentEditPage extends Component {
       gamified,
       initialValues,
       isKoditsuExamEnabled,
+      isKoditsuV1Linked,
       isQuestionsValidForKoditsu,
       modeSwitching,
       canManageMonitor,
@@ -95,6 +96,7 @@ class AssessmentEditPage extends Component {
           gamified={gamified}
           initialValues={initialValues}
           isKoditsuExamEnabled={isKoditsuExamEnabled}
+          isKoditsuV1Linked={isKoditsuV1Linked}
           isQuestionsValidForKoditsu={isQuestionsValidForKoditsu}
           modeSwitching={modeSwitching}
           monitoringEnabled={monitoringEnabled}
@@ -127,6 +129,7 @@ AssessmentEditPage.propTypes = {
   // A set of assessment attributes: {:id , :title, etc}.
   initialValues: PropTypes.shape({}),
   isKoditsuExamEnabled: PropTypes.bool,
+  isKoditsuV1Linked: PropTypes.bool,
   isQuestionsValidForKoditsu: PropTypes.bool,
 
   // Whether to disable the inner form.

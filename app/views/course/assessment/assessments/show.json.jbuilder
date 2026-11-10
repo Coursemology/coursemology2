@@ -19,7 +19,7 @@ json.hasTodo assessment.has_todo if can_manage
 json.timeLimit assessment.time_limit
 json.indexUrl course_assessments_path(current_course, category: assessment.tab.category_id, tab: assessment.tab)
 
-if current_course.component_enabled?(Course::KoditsuPlatformComponent)
+if current_course.component_enabled?(Course::KoditsuPlatformComponent) && !current_course.koditsu_v1_linked?
   json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled
 
   json.isSyncedWithKoditsu assessment.is_synced_with_koditsu &&

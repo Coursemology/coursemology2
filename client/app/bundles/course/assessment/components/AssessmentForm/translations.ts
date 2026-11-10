@@ -325,6 +325,11 @@ submissions are automatically finalised.',
       'Please contact the Course Administrator to enable Koditsu \
       Exam in Course Settings.',
   },
+  koditsuV1Retired: {
+    id: 'course.assessment.AssessmentForm.koditsuV1Retired',
+    defaultMessage:
+      'Koditsu proctoring can no longer be changed in this course: its Koditsu v1 integration has been retired.',
+  },
   questionsIncompatibleWithKoditsu: {
     id: 'course.assessment.AssessmentForm.questionsIncompatibleWithKoditsu',
     defaultMessage:

@@ -60,6 +60,7 @@ const AssessmentEdit = (): JSX.Element => {
                   : undefined),
             }}
             isKoditsuExamEnabled={data.isKoditsuExamEnabled}
+            isKoditsuV1Linked={data.isKoditsuV1Linked}
             isQuestionsValidForKoditsu={data.isQuestionsValidForKoditsu}
             modeSwitching={data.mode_switching}
             monitoringEnabled={data.monitoring_component_enabled}
