@@ -31,6 +31,9 @@ export interface AssessmentFormProps extends ConnectedProps<typeof connector> {
 
   initialValues?;
   isKoditsuExamEnabled: boolean;
+  // The course still holds Koditsu v1 links (Course#koditsu_v1_linked?). While v1 is retired, Koditsu mode can no
+  // longer be switched there.
+  isKoditsuV1Linked?: boolean;
   isQuestionsValidForKoditsu: boolean;
   disabled?: boolean;
   showPersonalizedTimelineFeatures?: boolean;

@@ -96,6 +96,7 @@ export interface AssessmentsListData {
     isStudent: boolean;
     isGamified: boolean;
     isKoditsuExamEnabled: boolean;
+    isKoditsuV1Linked: boolean;
     timelineAlgorithm: TimelineAlgorithm;
     allowRandomization: boolean;
     isAchievementsEnabled: boolean;

@@ -41,6 +41,7 @@ json.display do
   json.tabTitle "#{@category.title}: #{@tab.title}"
   json.tabUrl course_assessments_path(course_id: current_course, category: @category, tab: @tab)
   json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
+  json.isKoditsuV1Linked current_course.koditsu_v1_linked?
 end
 
 json.totalStudentCount @all_students.count if defined?(@all_students)

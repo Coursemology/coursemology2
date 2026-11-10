@@ -30,6 +30,18 @@ RSpec.describe Course::Assessment::Submission::ForceSubmitTimedSubmissionJob, ty
       end
     end
 
+    context 'when the attempt is at a Koditsu assessment in a course linked to Koditsu v1' do
+      let(:course) { create(:course, koditsu_v1_workspace_id: '670040c49a72e414c8f04bd7') }
+      let(:assessment) do
+        create(:assessment, :with_mcq_question, course: course, end_at: end_at, is_late_submission_allowed: false,
+                                                is_koditsu_enabled: true)
+      end
+
+      it 'leaves the placeholder attempting, so that its template answers are not graded' do
+        expect { run }.not_to(change { submission.reload.workflow_state })
+      end
+    end
+
     context 'when the submission is no longer attempting' do
       let!(:submission) do
         create(:submission, :submitted, assessment: assessment,

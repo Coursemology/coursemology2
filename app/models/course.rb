@@ -261,6 +261,13 @@ class Course < ApplicationRecord # rubocop:disable Metrics/ClassLength
     settings(:course_assessments_component).allow_mrq_options_randomization = option
   end
 
+  # Whether the course still holds a Koditsu v1 workspace. Koditsu is denied in such a course, since v2 cannot use
+  # its v1 IDs: no Koditsu object is created, and its Koditsu assessments can no longer be attempted. Data already
+  # recorded in Coursemology stays readable. See RetireKoditsuV1Links.
+  def koditsu_v1_linked?
+    koditsu_v1_workspace_id.present?
+  end
+
   # Setting to allow customization of max CPU time limit for programming question
   def programming_max_time_limit
     settings(:course_assessments_component).programming_max_time_limit || 30.seconds

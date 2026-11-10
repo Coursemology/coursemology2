@@ -280,14 +280,26 @@ class Course::Assessment::Submission < ApplicationRecord
   # passed — students cannot do this (creation is blocked), but staff can start a test run at any time,
   # and such a run should behave as if there were no end date rather than be finalised immediately.
   #
+  # Never applies to an attempt at a Koditsu assessment in a course linked to Koditsu v1: see
+  # #koditsu_v1_attempt?.
+  #
   # @return [Time, nil]
   def force_submit_at
-    return nil if unsubmitted_at.present?
+    return nil if unsubmitted_at.present? || koditsu_v1_attempt?
 
     deadline = assessment.submission_deadline_for(course_user)
     deadline = nil if deadline && created_at > deadline
     time_limit_at = assessment.time_limit && (created_at + assessment.time_limit.minutes)
     [deadline, time_limit_at].compact.min
+  end
+
+  # Whether this is an attempt at a Koditsu assessment in a course linked to Koditsu v1 (see
+  # Course#koditsu_v1_linked?): a placeholder whose work stayed in Koditsu. Such an attempt is never
+  # force-submitted, so that its template answers are never finalised and graded in place of that work.
+  def koditsu_v1_attempt?
+    return false unless assessment.is_koditsu_enabled
+
+    assessment.course.koditsu_v1_linked?
   end
 
   # When the force-submit job is meant to run: the force-submit time plus the grace period. Nil when

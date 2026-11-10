@@ -263,6 +263,26 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         end
       end
 
+      context 'when the course is linked to Koditsu v1' do
+        let(:assessment_traits) { [:with_mcq_question] }
+
+        before do
+          course.update_columns(koditsu_v1_workspace_id: '670040c49a72e414c8f04bd7')
+          assessment.update_columns(is_koditsu_enabled: true, koditsu_v1_assessment_id: '673723b9c0e624233e4f201f')
+          assessment.questions.first.update_columns(koditsu_v1_question_id: '66fb2e66cd0216558fde9998')
+        end
+
+        it 'leaves the v1 links behind, so the new course can use Koditsu' do
+          expect(new_course.koditsu_v1_workspace_id).to be_nil
+          expect(new_course).not_to be_koditsu_v1_linked
+
+          new_assessment = new_course.assessments.first
+          expect(new_assessment.is_koditsu_enabled).to be(true)
+          expect(new_assessment.koditsu_v1_assessment_id).to be_nil
+          expect(new_assessment.questions.first.koditsu_v1_question_id).to be_nil
+        end
+      end
+
       context 'when assessment has attachments' do
         let(:assessment_traits) { [:with_attachments] }
 

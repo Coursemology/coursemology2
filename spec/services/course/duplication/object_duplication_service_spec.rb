@@ -133,6 +133,22 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             expect(duplicate_assessment.folder.parent.owner).to be(duplicate_tab.category)
           end
         end
+
+        context 'when an assessment linked to Koditsu v1 is selected' do
+          let(:assessment) { create(:assessment, :with_mcq_question, course: source_course) }
+          let(:source_objects) { [assessment] }
+
+          before do
+            assessment.update_columns(koditsu_v1_assessment_id: '673723b9c0e624233e4f201f')
+            assessment.questions.first.update_columns(koditsu_v1_question_id: '66fb2e66cd0216558fde9998')
+          end
+
+          it 'leaves the v1 links behind' do
+            duplicate_assessment = duplicate_objects.first
+            expect(duplicate_assessment.koditsu_v1_assessment_id).to be_nil
+            expect(duplicate_assessment.questions.first.koditsu_v1_question_id).to be_nil
+          end
+        end
       end
 
       context 'when assessment skills and branches are present' do

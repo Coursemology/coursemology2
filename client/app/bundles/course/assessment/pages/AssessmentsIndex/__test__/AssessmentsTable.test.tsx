@@ -37,6 +37,7 @@ const listData = (
     isStudent: false,
     isGamified: false,
     isKoditsuExamEnabled: false,
+    isKoditsuV1Linked: false,
     timelineAlgorithm: 'fixed',
     allowRandomization: false,
     isAchievementsEnabled: false,

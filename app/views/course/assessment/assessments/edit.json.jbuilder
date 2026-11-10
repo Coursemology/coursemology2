@@ -32,6 +32,7 @@ json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
 json.isQuestionsValidForKoditsu is_all_questions_programming_type && @programming_qns_invalid_for_koditsu.empty?
 json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
+json.isKoditsuV1Linked current_course.koditsu_v1_linked?
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 json.randomization_allowed current_course.allow_randomization
 

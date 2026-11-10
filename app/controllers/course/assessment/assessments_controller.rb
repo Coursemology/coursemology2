@@ -58,6 +58,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def create
+    return render_koditsu_v1_retired if koditsu_v1_mode_change?
+
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
@@ -83,6 +85,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def update
+    return render_koditsu_v1_retired if koditsu_v1_mode_change?
+
     @assessment.update_mode(autograded_params)
 
     # Randomized Assessment is temporarily hidden (PR#5406)
@@ -113,6 +117,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def sync_with_koditsu
+    # A v1-linked course's IDs have been retired, so syncing would create its Koditsu objects afresh in v2.
+    return render_koditsu_v1_retired if current_course.koditsu_v1_linked?
+
     is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
     is_koditsu_enabled = is_course_koditsu_enabled && @assessment.is_koditsu_enabled
 
@@ -152,6 +159,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def invite_to_koditsu
+    return render_koditsu_v1_retired if current_course.koditsu_v1_linked?
+
     is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
     is_koditsu_enabled = is_course_koditsu_enabled && is_assessment_koditsu_enabled
@@ -440,6 +449,20 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @return [Boolean]
   def valid_ordering?(proposed_ordering)
     question_assessments_hash.keys.sort == proposed_ordering.sort
+  end
+
+  # Whether the request switches the assessment's Koditsu mode in a course linked to Koditsu v1, where it is frozen:
+  # switching it on would retire a working assessment along with the course's v1 ones, and switching it off would
+  # reopen a retired one as a plain Coursemology assessment. A request repeating the current mode is not a switch,
+  # and neither is one that leaves the field out; an explicit null counts as off, which is how it would be saved.
+  def koditsu_v1_mode_change?
+    return false unless current_course.koditsu_v1_linked?
+
+    assessment_fields = params[:assessment]
+    return false unless assessment_fields.respond_to?(:key?) && assessment_fields.key?(:is_koditsu_enabled)
+
+    ActiveModel::Type::Boolean.new.cast(assessment_fields[:is_koditsu_enabled]).present? !=
+      @assessment.attribute_in_database(:is_koditsu_enabled).present?
   end
 
   def create_koditsu_invitation_job

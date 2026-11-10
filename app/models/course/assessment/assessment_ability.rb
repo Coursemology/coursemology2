@@ -11,11 +11,20 @@ module Course::Assessment::AssessmentAbility
       define_manager_assessment_permissions if course_user.manager_or_owner?
     end
     allow_instance_admin_manage_assessments if user
+    disallow_force_submit_koditsu_v1_submissions if course&.koditsu_v1_linked?
 
     super
   end
 
   private
+
+  # Force-submitting a Koditsu assessment's leftover attempts in a course linked to Koditsu v1 would finalise
+  # placeholders that never received the student's work, and grade the template code in its place. Declared after
+  # every grant, so that it also holds for instance administrators (`can :manage` above) and system administrators
+  # (`can :manage, :all` in Ability#initialize), enrolled or not.
+  def disallow_force_submit_koditsu_v1_submissions
+    cannot :force_submit_assessment_submission, Course::Assessment, is_koditsu_enabled: true
+  end
 
   def assessment_course_hash
     { tab: { category: { course_id: course.id } } }
@@ -98,6 +107,7 @@ module Course::Assessment::AssessmentAbility
     allow_read_own_submission_question
     allow_manage_annotations_for_own_assessment_submissions
     disallow_late_assessment_submission
+    disallow_koditsu_v1_attempts
   end
 
   # Revokes editing an attempting submission once the deadline has passed on an assessment that
@@ -114,6 +124,20 @@ module Course::Assessment::AssessmentAbility
     cannot :destroy_attachment, Course::Assessment::Answer::TextResponse do |text_response|
       text_response.answer.submission.editing_deadline_passed_for?(course_user)
     end
+  end
+
+  # Revokes starting and continuing attempts at Koditsu assessments in a course still linked to Koditsu v1 (see
+  # Course#koditsu_v1_linked?). Their attempts belonged to Koditsu, which can no longer be reached, and would
+  # otherwise fall back to plain Coursemology attempts. This also holds while the course's Koditsu component is off.
+  # Students only, declared last like the rules above; reading a submission is unaffected.
+  def disallow_koditsu_v1_attempts
+    return unless course.koditsu_v1_linked?
+
+    koditsu_assessment = { is_koditsu_enabled: true }
+    cannot :create, Course::Assessment::Submission, assessment: koditsu_assessment
+    cannot :update, Course::Assessment::Submission, workflow_state: 'attempting', assessment: koditsu_assessment
+    cannot [:update, :submit_answer], Course::Assessment::Answer,
+           submission: { workflow_state: 'attempting', assessment: koditsu_assessment }
   end
 
   def allow_read_published_assessments

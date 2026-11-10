@@ -78,6 +78,7 @@ class NewAssessmentFormButton extends Component {
       gamified,
       intl,
       isKoditsuExamEnabled,
+      isKoditsuV1Linked,
       visible,
       randomizationAllowed,
       canManageMonitor,
@@ -171,6 +172,7 @@ class NewAssessmentFormButton extends Component {
               gamified={gamified}
               initialValues={initialValues}
               isKoditsuExamEnabled={isKoditsuExamEnabled}
+              isKoditsuV1Linked={isKoditsuV1Linked}
               modeSwitching
               monitoringEnabled={monitoringEnabled}
               onDirtyChange={(isDirty) => this.setState({ isDirty })}
@@ -203,6 +205,7 @@ NewAssessmentFormButton.propTypes = {
   tabId: PropTypes.number.isRequired,
   gamified: PropTypes.bool,
   isKoditsuExamEnabled: PropTypes.bool,
+  isKoditsuV1Linked: PropTypes.bool,
   randomizationAllowed: PropTypes.bool,
   canManageMonitor: PropTypes.bool,
   monitoringEnabled: PropTypes.bool,
