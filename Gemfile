@@ -200,7 +200,7 @@ gem 'mini_magick'
 # Library for reading and writing zip files
 gem 'rubyzip', '~> 3.3', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
-gem 'nokogiri', '>= 1.19.4'
+gem 'nokogiri', '>= 1.19.5'
 
 # Polyglot support
 gem 'coursemology-polyglot', git: 'https://github.com/Coursemology/polyglot'
@@ -213,8 +213,8 @@ gem 'rails-controller-testing'
 
 # WordNet corpus to obtain lemma form of words, for comprehension questions.
 gem 'rwordnet', git: 'https://github.com/Coursemology/rwordnet'
-gem 'loofah', '>= 2.25.2'
-gem 'rails-html-sanitizer', '>= 1.7.1'
+gem 'loofah', '>= 2.25.3'
+gem 'rails-html-sanitizer', '>= 1.7.2'
 
 gem 'ffi', '>= 1.14.2'
 
