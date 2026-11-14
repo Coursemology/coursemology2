@@ -106,11 +106,11 @@ module ApplicationFormattersHelper
   CLEAN_HTML_TEXT_LINE_BREAK_TAGS = /<br\s*\/?>|<\/(?:p|figure)>/i
 
   # Splits sanitized HTML into tags and the text between them, so that entities are only decoded in
-  # the latter. Matching up to the first '>' is not enough: the HTML5 serializer escapes '&', '"' and
-  # non-breaking spaces in attribute values but leaves '<' and '>' alone, so an image whose alt text
-  # reads 'a > b' would otherwise be cut in half and the attributes after the cut wrongly decoded.
-  # Quoted values are therefore skipped over, which is safe as the serializer always double-quotes
-  # attributes and escapes any '"' within them.
+  # the latter. The HTML5 serializer escapes '&', '"', '<', '>' and non-breaking spaces in attribute
+  # values, but Nokogiri before 1.19.5 wrote '<' and '>' literally, which would cut an image whose alt
+  # text reads 'a > b' in half and wrongly decode the attributes after the cut. Quoted values are
+  # therefore skipped over rather than matching up to the first '>', which is safe as the serializer
+  # always double-quotes attributes and escapes any '"' within them.
   CLEAN_HTML_TEXT_TAGS = /(<[^>"]*(?:"[^"]*"[^>"]*)*>)/
 
   # Formats rich text fields for CSV export by stripping HTML tags and decoding HTML entities.

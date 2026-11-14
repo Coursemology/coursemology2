@@ -43,8 +43,9 @@ class RagWise::RagWorkflowService
 
   private
 
+  # strip_tags returns HTML-escaped text, but the LLM reads it as plain text, so entities are decoded.
   def sanitised_text(text)
-    ActionController::Base.helpers.strip_tags(text)
+    ActionController::Base.helpers.strip_tags(text)&.then { |stripped| CGI.unescapeHTML(stripped) }
   end
 
   def topic_history(topic, query)

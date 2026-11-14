@@ -476,7 +476,7 @@ RSpec.describe ApplicationFormattersHelper do
       it 'does not decode entities in attributes following an angle bracket in an attribute' do
         html = '<img src="/attachments/1" alt="a &gt; b" title="Tom &amp; Jerry">'
         expect(helper.clean_html_text(html)).
-          to eq('<img src="/attachments/1" alt="a > b" title="Tom &amp; Jerry">')
+          to eq('<img src="/attachments/1" alt="a &gt; b" title="Tom &amp; Jerry">')
       end
     end
 
