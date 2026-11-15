@@ -97,6 +97,26 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
         end
       end
 
+      context 'when a programming answer has no files' do
+        let(:assessment3) { create(:assessment, course: course) }
+        let(:question) do
+          create(:course_assessment_question_programming, assessment: assessment3, template_file_count: 1)
+        end
+        let!(:answer) do
+          submission = create(:submission, assessment: assessment3, course: course, creator: student1.user)
+          create(:course_assessment_answer_programming, submission: submission, question: question.question,
+                                                        current_answer: true)
+        end
+        let(:service) { described_class.new(course_staff, assessment3, nil) }
+
+        it 'leaves the answer cell empty' do
+          csv_lines = CSV.open(subject, 'r').readlines
+
+          expect(csv_lines[3]).to include(student1.name)
+          expect(csv_lines[3].last).to be_nil
+        end
+      end
+
       context 'when assessment contains illegal characters in name' do
         let(:service) { described_class.new(course_staff, assessment2, nil) }
         let!(:filepath) { subject }
