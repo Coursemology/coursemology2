@@ -101,6 +101,35 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
           expect(subject.status).to eq(400)
         end
       end
+
+      # Rack reads a multipart body in chunks of rack.multipart.buffer_size (1 MiB by default), and
+      # carries data over from one chunk to the next whenever a part's headers or body is cut by
+      # the chunk's end. A buffer shorter than a part's headers cuts every part in both, so that
+      # path runs for each file here as it does in production for any upload larger than 1 MiB.
+      context 'when the files are cut across multipart read chunks' do
+        let(:paths) do
+          ['course/programming_question_template.zip', 'course/invitation_with_external_id.csv',
+           'files/two-page-document.pdf']
+        end
+        let(:files) { paths.map { |path| fixture_file_upload(path) } }
+        subject do
+          patch :upload_materials, as: :json,
+                                   params: { course_id: course,
+                                             id: folder_stub,
+                                             material_folder: { files_attributes: files } }
+        end
+
+        before { request.set_header('rack.multipart.buffer_size', 64) }
+
+        it 'saves every file byte for byte' do
+          expect(subject).to have_http_status(:ok)
+
+          saved = folder_stub.materials.to_h do |material|
+            [material.name, material.attachment.open(encoding: 'ASCII-8BIT', &:read)]
+          end
+          expect(saved).to eq(paths.to_h { |path| [File.basename(path), file_fixture(path).binread] })
+        end
+      end
     end
 
     describe '#download' do

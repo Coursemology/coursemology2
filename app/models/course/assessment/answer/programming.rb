@@ -71,8 +71,9 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     end
   end
 
+  # An answer can have no files, such as one to a question the student did not start in Koditsu.
   def csv_download
-    files.first.content
+    files.first&.content
   end
 
   def assign_params(params)

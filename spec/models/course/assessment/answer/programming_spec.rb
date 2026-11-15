@@ -60,6 +60,22 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#csv_download' do
+      it 'returns the content of the file' do
+        answer.specific.files.build(filename: 'main.py', content: 'print(1)')
+        answer.specific.save!
+
+        expect(answer.specific.csv_download).to eq('print(1)')
+      end
+
+      context 'when the answer has no files' do
+        it 'returns nil' do
+          expect(answer.specific.files).to be_empty
+          expect(answer.specific.csv_download).to be_nil
+        end
+      end
+    end
+
     describe '#create_and_update_files' do
       let(:programming_answer) do
         answer.specific.tap do |specific|
