@@ -118,6 +118,62 @@ RSpec.describe Course::Assessment::Submission::Koditsu::SubmissionsConcern do
         expect(submissions[0].submitted_at).to be_within(1.second).of parsed_submission_time
         expect(submissions[1].submitted_at).to be_within(1.second).of current_assessment.end_at
       end
+
+      context 'when a past answer is newer than the current answer' do
+        let!(:submission) do
+          create(:submission, :attempting, assessment: assessment, course: course, creator: student_one)
+        end
+        let!(:current_answer) { submission.answers.find_by(question: question_one.question) }
+        let!(:past_answer) do
+          create(:course_assessment_answer_programming, :submitted,
+                 submission: submission,
+                 question: question_one.question,
+                 file_name_contents: [['template.py', 'past code']],
+                 created_at: 1.minute.from_now).acting_as
+        end
+
+        it 'writes the Koditsu code to the current answer and leaves the past answer alone' do
+          response['data'][0]['user'] = { 'name' => student_one.name, 'email' => student_one.email }
+          response['data'][1]['user'] = { 'name' => student_two.name, 'email' => student_two.email }
+
+          dummy_controller.send(:process_fetch_submissions_response, response['data'])
+
+          koditsu_file = response['data'][0]['questions'][0]['files'][0]
+          current_files = current_answer.specific.files.reload
+          expect(current_files.map { |file| [file.filename, file.content] }).
+            to eq([[koditsu_file['path'], koditsu_file['content']]])
+          expect(past_answer.specific.files.reload.map(&:content)).to eq(['past code'])
+        end
+      end
+
+      context 'when a question has two current answers' do
+        let!(:submission) do
+          create(:submission, :attempting, assessment: assessment, course: course, creator: student_one)
+        end
+        let!(:shown_answer) do
+          submission.current_answers.find { |answer| answer.question_id == question_one.question.id }
+        end
+        let!(:duplicate_answer) do
+          create(:course_assessment_answer_programming,
+                 submission: submission,
+                 question: question_one.question,
+                 current_answer: true,
+                 created_at: 1.minute.from_now)
+        end
+
+        it 'writes the Koditsu code to the current answer shown on the submission page' do
+          response['data'][0]['user'] = { 'name' => student_one.name, 'email' => student_one.email }
+          response['data'][1]['user'] = { 'name' => student_two.name, 'email' => student_two.email }
+
+          dummy_controller.send(:process_fetch_submissions_response, response['data'])
+
+          koditsu_file = response['data'][0]['questions'][0]['files'][0]
+          expect(submission.reload.current_answers.find { |answer| answer.question_id == question_one.question.id }).
+            to eq(shown_answer)
+          expect(shown_answer.specific.files.reload.map { |file| [file.filename, file.content] }).
+            to eq([[koditsu_file['path'], koditsu_file['content']]])
+        end
+      end
     end
   end
 end
