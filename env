@@ -1,6 +1,3 @@
-KODITSU_WEB_URL                   = ""
-KODITSU_API_URL                   = ""
-KODITSU_API_KEY                   = ""
 RAILS_HOSTNAME                    = "localhost:3000"
 SCHOLAISTIC_BASE_URL              = "http://nus.localhost:3001"
 SCHOLAISTIC_API_BASE_URL          = "http://nus.localhost:8000/api/api/v1"
