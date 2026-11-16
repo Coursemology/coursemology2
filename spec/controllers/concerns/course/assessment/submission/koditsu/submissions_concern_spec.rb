@@ -118,6 +118,61 @@ RSpec.describe Course::Assessment::Submission::Koditsu::SubmissionsConcern do
         expect(submissions[0].submitted_at).to be_within(1.second).of parsed_submission_time
         expect(submissions[1].submitted_at).to be_within(1.second).of current_assessment.end_at
       end
+
+      context 'when the student pressed Submit on Coursemology before the fetch' do
+        let(:koditsu_code) { response['data'][0]['questions'][0]['files'][0]['content'] }
+        let(:coursemology_code) { 'print("submitted on Coursemology")' }
+        let!(:submission) { create(:submission, :attempting, assessment: assessment, creator: student_one) }
+        let!(:current_answer) do
+          answer = submission.answers.find_by!(question: question_one.acting_as, current_answer: true)
+          answer.actable.files.destroy_all
+          answer.actable.files.create!(filename: 'template.py', content: coursemology_code)
+          answer
+        end
+        # What Submit does: snapshot the current answer into a newer answer, which is finalised and graded.
+        let!(:past_answer) do
+          answer = question_one.attempt(submission, current_answer.actable)
+          answer.finalise!
+          answer.save!
+          Course::Assessment::Answer::ProgrammingAutoGrading.create!(answer: answer)
+          answer
+        end
+
+        before do
+          response['data'][0]['user'] = { 'name' => student_one.name, 'email' => student_one.email }
+          response['data'][1]['user'] = { 'name' => student_two.name, 'email' => student_two.email }
+        end
+
+        def expect_koditsu_result_in_current_answer
+          answer = current_answer.reload
+          expect(answer.actable.files.reload.map(&:content)).to eq([koditsu_code])
+          expect(answer).to be_submitted
+          expect(answer.correct).to be_truthy
+          auto_gradings = Course::Assessment::Answer::ProgrammingAutoGrading.where(answer: answer)
+          expect(auto_gradings.size).to eq(1)
+          expect(auto_gradings.first.test_results.size).to eq(5)
+        end
+
+        it 'writes the result into the current answer and leaves the past answer alone' do
+          expect(submission.answers.reload.last).to eq(past_answer)
+          past_auto_grading = past_answer.auto_grading
+
+          dummy_controller.send(:process_fetch_submissions_response, response['data'])
+
+          expect_koditsu_result_in_current_answer
+          past_answer.reload
+          expect(past_answer.actable.files.reload.map(&:content)).to eq([coursemology_code])
+          expect(past_answer.auto_grading).to eq(past_auto_grading)
+          expect(past_answer.auto_grading.actable.test_results).to be_empty
+        end
+
+        it 'replaces the result when fetched again' do
+          2.times { dummy_controller.send(:process_fetch_submissions_response, response['data']) }
+
+          expect_koditsu_result_in_current_answer
+          expect(past_answer.reload.actable.files.reload.map(&:content)).to eq([coursemology_code])
+        end
+      end
     end
   end
 end

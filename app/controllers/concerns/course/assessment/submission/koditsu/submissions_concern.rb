@@ -96,7 +96,8 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
   end
 
   def process_submission_answers(submission, cm_submission)
-    answers = Course::Assessment::Answer.includes(:question).where(submission_id: cm_submission.id)
+    answers = cm_submission.current_answers
+    ActiveRecord::Associations::Preloader.new(records: answers, associations: :question).call
 
     build_answer_hash(answers)
 
