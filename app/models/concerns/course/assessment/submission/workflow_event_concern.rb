@@ -30,6 +30,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
     #     It will recompute again when resubmission occurs. This also prevents the timings for
     #     the unsubmitted item from changing e.g. from other submissions that the student has done.
     enqueue_personalized_timeline_update
+
+    # Grade the finalised answers once the submission is saved as submitted. The save above is too early: the
+    # workflow state is only written after this event handler returns.
+    @auto_grade_when_saved = true
   end
 
   # Handles the marking of a submission.

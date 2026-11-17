@@ -690,6 +690,29 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
 
+      describe '#unsubmit' do
+        subject do
+          patch :unsubmit, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id, format: :json
+          }
+        end
+
+        # Unmarking it first queued its auto grading, which graded the drafts that the unsubmit created.
+        context 'when the submission is graded' do
+          let(:submission) { submissions_hash[:graded] }
+
+          with_active_job_queue_adapter(:test) do
+            it 'unsubmits it without queueing auto grading' do
+              submission
+              expect { subject }.not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
+
+              expect(submission.reload).to be_attempting
+              expect(submission.current_answers).to all(be_attempting)
+            end
+          end
+        end
+      end
+
       describe '#unsubmit_all' do
         subject do
           put :unsubmit_all, params: {

@@ -763,6 +763,59 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    # Auto grading is queued when a student's submission is finalised, not whenever a submission becomes submitted.
+    describe 'auto grading on a change of workflow state' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission) { submission1 }
+
+      with_active_job_queue_adapter(:test) do
+        context 'when an attempting submission is finalised' do
+          let(:submission1_traits) { :attempting }
+
+          it 'queues auto grading' do
+            submission
+            expect { submission.update!('finalise' => 'true') }.
+              to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).with(submission, true)
+          end
+        end
+
+        # As fetching submissions from Koditsu does, which sets Koditsu's status and results on the submission.
+        # Graders can still evaluate its answers from the submission page.
+        context 'when an attempting submission is set to submitted' do
+          let(:submission1_traits) { :attempting }
+
+          it 'does not queue auto grading' do
+            submission
+            expect { submission.update!(workflow_state: 'submitted', submitted_at: Time.zone.now) }.
+              not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
+          end
+        end
+
+        context 'when a graded submission is unmarked' do
+          let(:submission1_traits) { :graded }
+
+          it 'does not queue auto grading' do
+            submission
+            expect do
+              submission.unmark!
+              submission.save!
+            end.not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
+          end
+        end
+
+        # As fetching submissions from Koditsu does, which sets its own status on the submission.
+        context 'when a published submission is set back to submitted' do
+          let(:submission1_traits) { :published }
+
+          it 'does not queue auto grading' do
+            submission
+            expect { submission.update!(workflow_state: 'submitted') }.
+              not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
+          end
+        end
+      end
+    end
+
     describe '#auto_grade!' do
       let(:assessment_traits) { [:with_all_question_types] }
       let(:submission1_traits) { :submitted }
@@ -783,6 +836,9 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#unsubmit!' do
       let(:assessment_traits) { [:with_all_question_types] }
+      # Creating the submission queues its auto grading. The queue adapter for tests only records it, so it
+      # cannot change the answers while an example runs.
+      around(:each, &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method(:test))
       let!(:earlier_answer) do
         answer = create(:course_assessment_answer_multiple_response, :graded,
                         assessment: assessment,
@@ -790,9 +846,6 @@ RSpec.describe Course::Assessment::Submission do
                         submission: submission1, creator: user1).acting_as
         answer.update_column(:created_at, 1.day.ago)
         submission1.reload
-        # Submission creates a grading job which could make answers go to the graded state, need to
-        # wait for them to finish.
-        wait_for_job
         answer
       end
       def unsubmit_and_save_subject
@@ -814,13 +867,14 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'duplicates all submitted current answers in the submission to attempting' do
-          # In this state, there are 6 current answers and 1 non-current answer
-          expect(subject.answers.length).to eq(7)
+          question_count = subject.questions.count
+          # One current answer per question, and the earlier answer
+          expect(subject.answers.length).to eq(question_count + 1)
 
           unsubmit_and_save_subject
 
-          # In this state, there are 6 current answers and 7 non-current answer
-          expect(subject.answers.length).to eq(13)
+          # A new current answer per question, the previous current answers and the earlier answer
+          expect(subject.answers.length).to eq((question_count * 2) + 1)
           expect(subject.current_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
 
@@ -844,8 +898,9 @@ RSpec.describe Course::Assessment::Submission do
           subject.finalise!
           current_answer_ids_after = subject.current_answers.pluck(:id)
 
-          expect(subject.answers.length).to eq(7)
-          expect(subject.current_answers.length).to eq(6)
+          question_count = subject.questions.count
+          expect(subject.answers.length).to eq(question_count + 1)
+          expect(subject.current_answers.length).to eq(question_count)
 
           expect(current_answer_ids_before == current_answer_ids_after).to be_truthy
           expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
@@ -873,7 +928,7 @@ RSpec.describe Course::Assessment::Submission do
               answer.files.each do |file|
                 file.update(content: 'updated')
               end
-            when 'Course::Assessment::Answer::TextResponse'
+            when 'Course::Assessment::Answer::TextResponse', 'Course::Assessment::Answer::RubricBasedResponse'
               answer.update(answer_text: 'updated')
             when 'Course::Assessment::Answer::ForumPostResponse'
               answer.update(answer_text: '<div>yyy</div>')
@@ -883,12 +938,41 @@ RSpec.describe Course::Assessment::Submission do
           subject.finalise!
           current_answer_ids_after = subject.current_answers.pluck(:id)
 
-          expect(subject.answers.length).to eq(13)
-          expect(subject.current_answers.length).to eq(6)
+          question_count = subject.questions.count
+          expect(subject.answers.length).to eq((question_count * 2) + 1)
+          expect(subject.current_answers.length).to eq(question_count)
 
           expect(current_answer_ids_before == current_answer_ids_after).to be_falsey
           expect(current_answer_ids_before == current_answer_ids_intermediate).to be_falsey
           expect(current_answer_ids_after == current_answer_ids_intermediate).to be_falsey
+        end
+      end
+
+      # Graded submissions used to be unmarked before they were unsubmitted. The unmark queued the submission's
+      # auto grading, which graded the drafts the unsubmit created.
+      # The unsubmit actions unmark a graded submission before unsubmitting it.
+      context 'when the submission is graded and unmarked first' do
+        let(:submission1_traits) { :graded }
+
+        def unmark_and_unsubmit_subject
+          subject.unmark!
+          subject.save!
+          unsubmit_and_save_subject
+        end
+
+        it 'duplicates the current answers to attempting and keeps the previous ones evaluated' do
+          previous_answer_ids = subject.current_answers.map(&:id)
+          unmark_and_unsubmit_subject
+
+          expect(subject).to be_attempting
+          expect(subject.draft_points_awarded).to be_nil
+          expect(subject.current_answers).to all(be_attempting)
+          expect(Course::Assessment::Answer.find(previous_answer_ids)).to all(be_evaluated)
+        end
+
+        it 'does not queue auto grading' do
+          expect { unmark_and_unsubmit_subject }.
+            not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
         end
       end
 
@@ -921,6 +1005,9 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#resubmit_programming!' do
       let(:assessment_traits) { [:with_all_question_types, :autograded] }
+      # Creating the submission queues its auto grading. The queue adapter for tests only records it, so it
+      # cannot change the answers while an example runs.
+      around(:each, &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method(:test))
       let!(:earlier_answer) do
         answer = create(:course_assessment_answer_multiple_response, :graded,
                         assessment: assessment,
@@ -928,9 +1015,6 @@ RSpec.describe Course::Assessment::Submission do
                         submission: submission1, creator: user1).acting_as
         answer.update_column(:created_at, 1.day.ago)
         submission1.reload
-        # Submission creates a grading job which could make answers go to the graded state, need to
-        # wait for them to finish.
-        wait_for_job
         answer
       end
 

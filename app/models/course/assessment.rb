@@ -562,6 +562,8 @@ class Course::Assessment < ApplicationRecord
     submissions.select(&:published?).each do |submission|
       submission.resubmit_programming!
       submission.save!
+      # Grades the resubmitted answers, then publishes the submission again with the new grade.
+      submission.auto_grade!(only_ungraded: true)
       submission.mark!
       submission.publish!
     end
