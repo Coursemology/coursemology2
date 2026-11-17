@@ -52,6 +52,26 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
           expect(submission.reload.current_answers).to all(be_attempting)
         end
+
+        context 'when a grading run finished on a new draft anyway' do
+          before do
+            allow(subject).to receive(:wait_for_jobs).and_wrap_original do |original, jobs|
+              original.call(jobs)
+              unsubmitted = Course::Assessment::Submission.find(submission.id)
+              next if unsubmitted.attempting?
+
+              unsubmitted.update!('unsubmit' => 'true')
+              unsubmitted.reload.current_answers.first.
+                update_columns(workflow_state: 'evaluated', submitted_at: Time.zone.now)
+            end
+          end
+
+          it 'puts the draft back to attempting' do
+            subject.grade(submission)
+
+            expect(submission.reload.current_answers).to all(be_attempting)
+          end
+        end
       end
 
       # A draft created after the submission was finalised, e.g. by the student in another tab.

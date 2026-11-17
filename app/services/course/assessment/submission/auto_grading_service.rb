@@ -29,8 +29,9 @@ class Course::Assessment::Submission::AutoGradingService
     grade_answers(submission, only_ungraded: only_ungraded)
     submission.reload
 
-    # To address race condition where a submission is unsubmitted when answers are being graded
-    unsubmit_answers(submission) if submission.assessment.autograded? && submission.attempting?
+    # To address race condition where a submission is unsubmitted when answers are being graded. A grading run
+    # that finished on one of its new drafts would leave it graded, whatever the assessment's grading mode.
+    unsubmit_answers(submission) if submission.attempting?
     assign_exp_and_publish_grade(submission) if submission.assessment.autograded? && submission.submitted?
     submission.save!
   end
