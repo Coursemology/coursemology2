@@ -80,9 +80,11 @@ const PersonalTimesTable: FC<Props> = (props) => {
   const renderRow = (item: PersonalTimeMiniEntity): JSX.Element => {
     return (
       <TableRow key={item.id} hover>
-        <TableCell className="flex items-center space-x-1">
-          {getIcon(item)}
-          {getLink(item)}
+        <TableCell>
+          <div className="flex items-center space-x-1">
+            {getIcon(item)}
+            {getLink(item)}
+          </div>
         </TableCell>
         <TableCell>{formatLongDateTime(item.itemStartAt)}</TableCell>
         <TableCell>{formatLongDateTime(item.itemBonusEndAt)}</TableCell>
