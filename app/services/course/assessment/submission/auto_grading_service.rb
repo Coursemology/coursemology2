@@ -19,9 +19,13 @@ class Course::Assessment::Submission::AutoGradingService
   # @param [Course::Assessment::Submission] submission The object to store grading
   #   results in.
   # @param [Boolean] only_ungraded Whether grading should be done ONLY for
-  #   ungraded_answers, or for all answers regardless of workflow state
+  #   ungraded_answers_to_grade, or for all answers regardless of workflow state
   # @return [Boolean] True if the grading could be saved.
   def grade(submission, only_ungraded: false)
+    # Grading is queued when a submission is submitted, but it can run after the submission has been unsubmitted.
+    # Its current answers are then the student's new drafts, which are not to be graded.
+    return true if submission.reload.attempting?
+
     grade_answers(submission, only_ungraded: only_ungraded)
     submission.reload
 
@@ -41,12 +45,12 @@ class Course::Assessment::Submission::AutoGradingService
   def grade_answers(submission, only_ungraded: false)
     tries, jobs_by_qn = 0, {}
     # Force re-grade all current answers (even when they've been graded before).
-    answers_to_grade = only_ungraded ? ungraded_answers(submission) : submission.current_answers
+    answers_to_grade = only_ungraded ? ungraded_answers_to_grade(submission) : submission.current_answers
     while answers_to_grade.any? && tries <= MAX_TRIES
       new_jobs = build_answer_grading_jobs(answers_to_grade)
 
       jobs_by_qn.merge!(new_jobs)
-      answers_to_grade = ungraded_answers(submission)
+      answers_to_grade = ungraded_answers_to_grade(submission)
       tries += 1
     end
     aggregate_failures(jobs_by_qn.map { |_, job| job.job.reload })
@@ -69,8 +73,11 @@ class Course::Assessment::Submission::AutoGradingService
     answer.auto_grade!(reduce_priority: true)
     # Catch errors if answer is in attempting state, caused by a race condition where
     # a new attempting answer is created while the submission is finalised, but before the
-    # autograding job is executed.
+    # autograding job is executed. If the submission has since been unsubmitted, the answer is
+    # a draft and is left alone.
   rescue IllegalStateError
+    return if answer.submission.reload.attempting?
+
     answer.finalise!
     answer.save!
     answer.auto_grade!(reduce_priority: true)
@@ -108,8 +115,11 @@ class Course::Assessment::Submission::AutoGradingService
   end
 
   # Gets the ungraded answers for the given submission.
-  # When the submission is being graded, the `current_answers` are the ones to grade.
-  def ungraded_answers(submission)
-    submission.reload.current_answers.select { |a| a.attempting? || a.submitted? }
+  # When the submission is being graded, the `current_answers` are the ones to grade. None are if the
+  # submission was unsubmitted while its answers were being graded.
+  def ungraded_answers_to_grade(submission)
+    return [] if submission.reload.attempting?
+
+    submission.current_answers.select { |a| a.attempting? || a.submitted? }
   end
 end

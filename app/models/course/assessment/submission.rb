@@ -204,7 +204,7 @@ class Course::Assessment::Submission < ApplicationRecord
   # changes.
   #
   # @param [Boolean] only_ungraded Whether grading should be done ONLY for
-  #   ungraded_answers, or for all answers regardless of workflow state
+  #   ungraded_answers_to_grade, or for all answers regardless of workflow state
   #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
   def auto_grade!(only_ungraded: false)

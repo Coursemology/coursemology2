@@ -31,7 +31,7 @@ class Course::Assessment::Submission::AutoGradingJob < ApplicationJob
   # @param [Course::Assessment::Submission] submission The object to store the grading
   #   results into.
   # @param [Boolean] only_ungraded Whether grading should be done ONLY for
-  #   ungraded_answers, or for all answers regardless of workflow state
+  #   ungraded_answers_to_grade, or for all answers regardless of workflow state
   def perform_tracked(submission, only_ungraded = false) # rubocop:disable Style/OptionalBooleanParameter
     instance = Course.unscoped { submission.assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
