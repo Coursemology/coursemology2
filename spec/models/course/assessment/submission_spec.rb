@@ -503,6 +503,83 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
+      # The state left behind when a graded submission is unmarked and unsubmitted: the auto grading job queued
+      # by the unmark finalises and evaluates the new drafts, and the student then keeps saving into them.
+      context 'when a current answer was graded while the submission was attempting' do
+        let(:assessment_traits) { [:with_programming_question] }
+        let(:draft) { submission.current_answers.first }
+
+        def write_code(answer, content)
+          answer.specific.files.first.update!(content: content)
+        end
+
+        def grade_as_draft(answer)
+          answer.finalise!
+          answer.evaluate!
+          answer.save!
+        end
+
+        def attempt_from(answer)
+          answer.question.attempt(submission, answer).tap do |attempt|
+            attempt.finalise!
+            attempt.evaluate!
+            attempt.save!
+          end
+        end
+
+        def current_answer
+          submission.reload.current_answers.sole
+        end
+
+        context 'when the question has no past attempts' do
+          before do
+            grade_as_draft(draft)
+            write_code(draft, 'latest')
+          end
+
+          it 'finalises the draft so that it is graded again' do
+            submission.finalise!
+
+            expect(current_answer).to have_attributes(id: draft.id, workflow_state: 'submitted', grade: nil)
+            expect(current_answer.specific.files.first.content).to eq('latest')
+          end
+        end
+
+        context 'when its code differs from the latest past attempt' do
+          let!(:past_attempt) { attempt_from(draft) }
+
+          before do
+            grade_as_draft(draft)
+            write_code(draft, 'latest')
+          end
+
+          it 'finalises a copy of the draft and removes the draft' do
+            submission.finalise!
+
+            expect(current_answer).to be_submitted
+            expect(current_answer.id).not_to eq(past_attempt.id)
+            expect(current_answer.specific.files.first.content).to eq('latest')
+            expect(Course::Assessment::Answer.exists?(draft.id)).to be(false)
+          end
+        end
+
+        context 'when its code is the same as the latest past attempt' do
+          let!(:past_attempt) do
+            write_code(draft, 'latest')
+            attempt_from(draft)
+          end
+
+          before { grade_as_draft(draft) }
+
+          it 'makes the past attempt current and removes the draft' do
+            submission.finalise!
+
+            expect(current_answer).to have_attributes(id: past_attempt.id, workflow_state: 'evaluated')
+            expect(Course::Assessment::Answer.exists?(draft.id)).to be(false)
+          end
+        end
+      end
+
       context 'when there are no questions' do
         let(:assessment_traits) { [:published] }
 
