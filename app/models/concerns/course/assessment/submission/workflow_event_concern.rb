@@ -134,6 +134,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # For more details, please refer to the PDF page 2 and below here:
   # https://github.com/Coursemology/coursemology2/files/7606393/Submission.Past.Answers.Issues.pdf
   def finalise_current_answers
+    restore_drafts_graded_while_attempting
+
     questions.each do |question|
       qn_current_answers, qn_non_current_answers = get_answers_to_question(question)
       # There could be a race condition creating multiple current_answers
@@ -150,6 +152,20 @@ module Course::Assessment::Submission::WorkflowEventConcern
     # There could be a race condition creating multiple current_answers
     # for a given question in load_or_create_answers and only the first one is used.
     delete_attempting_current_answers
+  end
+
+  # While a submission is attempting, its current answers are the student's drafts and should be attempting.
+  # One that isn't was graded as a draft, e.g. by the auto grading job queued when a graded submission is
+  # unmarked and unsubmitted. The student kept saving into it, so it holds their latest work, but its grading
+  # results are older. Put it back to attempting so that it is finalised and graded like any other draft below.
+  #
+  # Validations are skipped because the submission is mid-transition to submitted, and an attempting answer
+  # would fail the check that its submission is attempting.
+  def restore_drafts_graded_while_attempting
+    current_answers.reject(&:attempting?).each do |answer|
+      answer.unsubmit!
+      answer.save(validate: false)
+    end
   end
 
   def get_answers_to_question(question)
