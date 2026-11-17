@@ -450,9 +450,15 @@ class Course::Assessment::Submission < ApplicationRecord
 
   private
 
-  # Queues the submission for auto grading, after the submission has changed to the submitted state.
+  # Queues the submission for auto grading, after the student's attempt has been finalised and saved as submitted.
+  #
+  # Nothing else that makes a submission submitted grades it: unmarking keeps the grading, a Koditsu fetch sets
+  # Koditsu's own results (graders can still evaluate the answers from the submission page), and
+  # resubmit_programming queues its own grading.
   def auto_grade_submission
-    return unless saved_change_to_workflow_state?
+    return unless @auto_grade_when_saved && saved_change_to_workflow_state == ['attempting', 'submitted']
+
+    @auto_grade_when_saved = false
 
     ActiveRecord.after_all_transactions_commit do
       # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
