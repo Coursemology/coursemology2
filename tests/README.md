@@ -28,3 +28,7 @@ Now you can run the playwright tests.
 ```bash
 yarn test
 ```
+
+## Scenarios on the development server
+
+`scenarios/` holds longer Playwright scenarios that drive the development server through the UI and check the database after each step, for investigating behaviour. They aren't part of `yarn test` or CI. See [scenarios/README.md](scenarios/README.md).

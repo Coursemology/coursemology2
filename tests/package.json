@@ -16,11 +16,15 @@
     "clean-install": "yarn install --force --frozen-lockfile",
     "prepare": "npx playwright install --with-deps",
     "test": "npx playwright test",
+    "scenarios": "npx playwright test -c playwright.scenarios.config.ts",
     "coverage": "npx nyc report --reporter=lcovonly --exclude-after-remap false"
   },
   "servers": {
     "clientURL": "http://localhost:3200",
     "serverURL": "http://localhost:7979"
+  },
+  "scenarioServers": {
+    "clientURL": "https://lvh.me:8080"
   },
   "coverage": {
     "outputDir": ".nyc_output",
