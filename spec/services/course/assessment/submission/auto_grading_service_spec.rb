@@ -22,19 +22,77 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         expect(submission.answers.map(&:reload).map(&:grade).all?(&:nil?)).to be(true)
       end
 
-      context 'when the submission has a current answer in the attempting state' do
-        it 'submits and grades the answer' do
-          current_answer = submission.answers.find do |ans|
-            ans.current_answer && ans.workflow_state == 'attempting'
-          end
+      # Grading is queued when the submission is submitted. When it runs after the submission was unsubmitted,
+      # the current answers are the student's new drafts.
+      context 'when the submission is attempting' do
+        it 'leaves its drafts ungraded' do
           expect(subject.grade(submission)).to eq(true)
 
-          expect(current_answer.reload.evaluated?).to be_truthy
-          expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
+          expect(submission.answers.map(&:reload)).to all(be_attempting)
+          expect(submission.answers.flat_map(&:auto_gradings)).to be_empty
+        end
+      end
+
+      context 'when the submission is unsubmitted while its answers are being graded' do
+        let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student_user) }
+
+        before do
+          unsubmitted = false
+          allow(subject).to receive(:wait_for_jobs).and_wrap_original do |original, jobs|
+            original.call(jobs)
+            next if unsubmitted
+
+            unsubmitted = true
+            Course::Assessment::Submission.find(submission.id).update!('unsubmit' => 'true')
+          end
+        end
+
+        it 'leaves the new drafts ungraded' do
+          subject.grade(submission)
+
+          expect(submission.reload.current_answers).to all(be_attempting)
+        end
+
+        context 'when a grading run finished on a new draft anyway' do
+          before do
+            allow(subject).to receive(:wait_for_jobs).and_wrap_original do |original, jobs|
+              original.call(jobs)
+              unsubmitted = Course::Assessment::Submission.find(submission.id)
+              next if unsubmitted.attempting?
+
+              unsubmitted.update!('unsubmit' => 'true')
+              unsubmitted.reload.current_answers.first.
+                update_columns(workflow_state: 'evaluated', submitted_at: Time.zone.now)
+            end
+          end
+
+          it 'puts the draft back to attempting' do
+            subject.grade(submission)
+
+            expect(submission.reload.current_answers).to all(be_attempting)
+          end
+        end
+      end
+
+      # A draft created after the submission was finalised, e.g. by the student in another tab.
+      context 'when the submission is submitted and has a current answer in the attempting state' do
+        let(:current_answer) { submission.current_answers.first }
+
+        before do
+          submission.finalise!
+          submission.save!
+          current_answer.update_columns(workflow_state: 'attempting', submitted_at: nil)
+        end
+
+        it 'submits and grades the answer' do
+          expect(subject.grade(submission)).to eq(true)
+
+          expect(current_answer.reload).to be_evaluated
         end
       end
 
       context 'when given a non-auto gradable answer' do
+        let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student_user) }
         let(:non_autograded_question) do
           create(:course_assessment_question_programming, assessment: assessment)
         end
@@ -131,6 +189,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
     end
 
     context 'when a sub job fails' do
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student_user) }
       let(:answer) do
         create(:course_assessment_answer_multiple_response, :submitted,
                question: question.acting_as, submission: submission).answer
@@ -149,7 +208,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
       it 'fails with a SubJobError' do
         answer
-        allow(subject).to receive(:ungraded_answers).and_return([answer])
+        allow(subject).to receive(:ungraded_answers_to_grade).and_return([answer])
         allow(answer).to receive(:grade_inline?).and_return(false)
 
         expect do

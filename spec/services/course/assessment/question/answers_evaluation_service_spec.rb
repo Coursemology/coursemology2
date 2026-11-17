@@ -14,13 +14,17 @@ RSpec.describe Course::Assessment::Question::AnswersEvaluationService do
     let!(:answers) { submission.answers }
     subject { Course::Assessment::Question::AnswersEvaluationService.new(question) }
 
+    # Creating a submitted submission queues its auto grading. The queue adapter for tests only records it, so
+    # every grading here is the service's.
+    around(:each, &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method(:test))
+
     describe '#call' do
-      before { subject.call }
+      subject { Course::Assessment::Question::AnswersEvaluationService.new(assessment.questions.first.specific) }
 
       it 'auto grades the associated answers' do
-        wait_for_job
-        answers.each(&:reload)
-        expect(answers.all?(&:evaluated?)).to be_truthy
+        expect(answers.map(&:reload)).to all(be_submitted)
+        subject.call
+        expect(answers.map(&:reload)).to all(be_evaluated)
       end
     end
 
