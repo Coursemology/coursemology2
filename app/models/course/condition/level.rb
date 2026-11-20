@@ -26,6 +26,18 @@ class Course::Condition::Level < ApplicationRecord
     course_user.level_number >= minimum_level
   end
 
+  # Returns a boolean array denoting whether each of the specified
+  # course users has satisfied the level condition.
+  #
+  # @param [Array<CourseUser>] course_users The specified course users.
+  # @return [Array<Boolean>] At each index, true if the corresponding course
+  #   user has reached the required level and false otherwise.
+  def compute_satisfaction_information(course_users)
+    course_users.map do |course_user|
+      satisfied_by?(course_user)
+    end
+  end
+
   def initialize_duplicate(duplicator, other)
     self.conditional = duplicator.duplicate(other.conditional)
     self.course = duplicator.options[:destination_course]
