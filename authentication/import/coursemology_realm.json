@@ -474,7 +474,8 @@
       ],
       "clientRoles": {
         "realm-management": [
-          "realm-admin"
+          "view-clients",
+          "manage-clients"
         ]
       },
       "notBefore": 0,
@@ -3020,6 +3021,12 @@
       "realmRoles": [
         "default-roles-coursemology_test"
       ],
+      "clientRoles": {
+        "realm-management": [
+          "view-clients",
+          "manage-clients"
+        ]
+      },
       "notBefore": 0,
       "groups": []
     }
