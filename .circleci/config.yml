@@ -6,7 +6,7 @@ orbs:
 executors:
   node:
     docker:
-      - image: cimg/node:22.22.0
+      - image: cimg/node:22.23.5
 
     working_directory: ~/repo
     resource_class: large
@@ -74,8 +74,8 @@ commands:
       - restore_cache:
           name: Restore client Yarn dependencies cache
           keys:
-            - v22.22.0-node-{{ checksum "client/yarn.lock" }}
-            - v22.22.0-node-
+            - v22.23.5-node-{{ checksum "client/yarn.lock" }}
+            - v22.23.5-node-
 
       - run:
           name: Install client Yarn dependencies
@@ -85,7 +85,7 @@ commands:
       - save_cache:
           paths:
             - ./client/node_modules
-          key: v22.22.0-node-{{ checksum "client/yarn.lock" }}
+          key: v22.23.5-node-{{ checksum "client/yarn.lock" }}
 
   restore_client_cache:
     steps:
@@ -286,13 +286,24 @@ jobs:
       - serve_rails_server
       - build_and_run_auth_server
 
-      # Replace both archive and security repositories 
+      # archive.ubuntu.com is sometimes unreachable from CircleCI, so apt falls back to other mirrors, lowest priority first
       # https://discuss.circleci.com/t/connection-issues-with-apt-get-from-archive-ubuntu-com/48094/16
+      # https://manpages.ubuntu.com/manpages/jammy/man1/apt-transport-mirror.1.html
+      # Plain HTTP like Ubuntu's defaults: apt verifies the signed Release files, and HTTPS mirrors fail
+      # whenever their certificate chains to a root newer than the image's CA store.
       - run:
-          name: Change Ubuntu archive mirrors
+          name: Set up Ubuntu archive mirror fallback
           command: |
-            sudo sed -i 's|http://archive.ubuntu.com|https://mirror.math.princeton.edu/pub|g' /etc/apt/sources.list
-            sudo sed -i 's|http://security.ubuntu.com|https://mirror.math.princeton.edu/pub|g' /etc/apt/sources.list
+            sudo mkdir -p /etc/apt/mirrors
+            for host in archive security; do
+              printf '%s\tpriority:%d\n' \
+                "http://${host}.ubuntu.com/ubuntu/" 1 \
+                http://mirror.math.princeton.edu/pub/ubuntu/ 2 \
+                http://mirrors.rit.edu/ubuntu/ 3 \
+                | sudo tee "/etc/apt/mirrors/${host}.txt"
+              sudo sed -i "s|http://${host}.ubuntu.com/ubuntu/\?|mirror+file:/etc/apt/mirrors/${host}.txt|g" /etc/apt/sources.list
+            done
+            grep '^deb mirror+file:' /etc/apt/sources.list
 
       - run:
           name: Install Playwright dependencies
@@ -367,7 +378,7 @@ jobs:
 
   process_test_results:
     docker:
-      - image: cimg/base:2025.06
+      - image: cimg/base:2026.11
     steps:
       # Need the source code to be present in the workspace for codecov to accept the report
       - checkout
