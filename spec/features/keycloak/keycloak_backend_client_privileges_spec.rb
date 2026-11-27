@@ -24,12 +24,24 @@ RSpec.describe 'Keycloak backend client privileges', :keycloak_integration do
   describe 'Keycloak backend service account' do
     subject(:service) { KeycloakAdminService.new }
 
+    # Every feature spec logs in through the frontend client, possibly from another process at the
+    # same time, so the pushes must not change it. Each write still reaches Keycloak with the backend
+    # token and needs manage-clients, but sends the client's current values for the fields it sets.
+    before do
+      allow(Keycloak::Admin).to receive(:generic_put).and_wrap_original do |original, path, params, payload, token|
+        current = JSON.parse(Keycloak::Admin.generic_get(path, nil, token))
+        original.call(path, params, current.slice(*payload.keys.map(&:to_s)), token)
+      end
+    end
+
     it 'pushes the base URL without error (view-clients + manage-clients)' do
       expect { service.push_base_url }.not_to raise_error
+      expect(Keycloak::Admin).to have_received(:generic_put).once
     end
 
     it 'pushes redirect URIs without error (view-clients + manage-clients)' do
       expect { service.push_redirect_uris }.not_to raise_error
+      expect(Keycloak::Admin).to have_received(:generic_put).once
     end
 
     it 'is forbidden from reading user-storage components (no realm-admin)' do
