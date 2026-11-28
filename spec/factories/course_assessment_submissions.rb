@@ -72,36 +72,24 @@ FactoryBot.define do
       end
     end
 
+    # An earlier, finalised answer to each question, as Check Answer leaves them. Added after the traits before it,
+    # so that finalising the submission doesn't take them for the latest attempts and make them current.
     trait :with_past_answers do
       after(:build) do |submission|
-        old_answers = submission.assessment.questions.attempt(submission)
-        old_answers.map do |answer|
+        # Question by question: attempting the whole collection would return the current answers instead.
+        past_answers = submission.assessment.questions.map { |question| question.attempt(submission) }
+        past_answers.map do |answer|
           answer.created_at = Time.zone.now - 1.day
           answer.finalise!
           answer.save!
         end
-        submission.answers << old_answers
-
-        new_answers = submission.assessment.questions.attempt(submission)
-        new_answers.map do |answer|
-          answer.current_answer = true
-          answer.finalise!
-          answer.save!
-        end
-        submission.answers << new_answers
+        submission.answers << past_answers
       end
     end
 
     trait :submitted_with_past_answers do
+      submitted
       with_past_answers
-      after(:build) do |submission, evaluator|
-        submission.finalise!
-        answer.send(:clear_attribute_changes, :workflow_state) unless evaluator.auto_grade
-
-        submission.awarder = nil
-        submission.awarded_at = nil
-        submission.submitted_at = evaluator.submitted_at if evaluator.submitted_at
-      end
     end
 
     # Ensure that creator of submission is the same as creator of experience_points_record

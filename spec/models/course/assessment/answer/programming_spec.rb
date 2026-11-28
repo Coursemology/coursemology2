@@ -234,31 +234,31 @@ RSpec.describe Course::Assessment::Answer::Programming do
       describe '#compare_answer' do
         let(:answer1) do
           create(:course_assessment_answer_programming,
-                 question: question,
+                 question: question.question,
                  file_name_contents: [['name1', '123'],
                                       ['name3', '456']])
         end
         let(:answer2) do
           create(:course_assessment_answer_programming,
-                 question: question,
+                 question: question.question,
                  file_name_contents: [['name1', '456']])
         end
         let(:answer3) do
           create(:course_assessment_answer_programming,
-                 question: question,
+                 question: question.question,
                  file_name_contents: [['name1', '123'],
                                       ['name2', '456']])
         end
         let(:answer4) do
           create(:course_assessment_answer_programming,
-                 question: question,
+                 question: question.question,
                  file_name_contents: [['name1', '123'],
                                       ['name2', '123'],
                                       ['name3', '456']])
         end
         let(:answer5) do
           create(:course_assessment_answer_programming,
-                 question: question,
+                 question: question.question,
                  file_name_contents: [['name3', '456'],
                                       ['name1', '123']])
         end
