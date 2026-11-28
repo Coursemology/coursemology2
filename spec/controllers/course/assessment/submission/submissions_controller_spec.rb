@@ -289,7 +289,12 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
       let(:assessment_traits) { [] }
 
-      before { question.acting_as.update_columns(grading_mode: 'rubric', active_rubric_id: rubric.id) }
+      before do
+        question.acting_as.update_columns(grading_mode: 'rubric', active_rubric_id: rubric.id)
+        # Creating the submitted submission queued its grading. Let it finish, so that the examples below set the
+        # answer's grading runs up themselves without the job changing them afterwards.
+        wait_for_enqueued_jobs
+      end
 
       it 'creates a blank grading evaluation so the grader can edit the breakdown' do
         get :edit, params: { course_id: course, assessment_id: assessment, id: submission, format: :json }
@@ -395,7 +400,6 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
         it 'returns the answer' do
           subject
-          wait_for_job
 
           is_expected.to have_http_status(:ok)
           json_result = JSON.parse(response.body)
@@ -587,6 +591,10 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         }
       end
 
+      # Creating the submissions queued their grading. Let it finish before the action under test, so that the
+      # two don't change the same submissions at once.
+      before { wait_for_enqueued_jobs }
+
       describe '#publish_all' do
         subject do
           put :publish_all, params: {
@@ -606,7 +614,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           render_views
           it 'publishes the submission' do
             subject
-            wait_for_job
+            wait_for_enqueued_jobs
 
             expect(submissions_hash[:graded].reload.published?).to be(true)
             json_result = JSON.parse(response.body)
@@ -690,6 +698,29 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
 
+      describe '#unsubmit' do
+        subject do
+          patch :unsubmit, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id, format: :json
+          }
+        end
+
+        # Unmarking it first queued its auto grading, which graded the drafts that the unsubmit created.
+        context 'when the submission is graded' do
+          let(:submission) { submissions_hash[:graded] }
+
+          with_active_job_queue_adapter(:test) do
+            it 'unsubmits it without queueing auto grading' do
+              submission
+              expect { subject }.not_to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob)
+
+              expect(submission.reload).to be_attempting
+              expect(submission.current_answers).to all(be_attempting)
+            end
+          end
+        end
+      end
+
       describe '#unsubmit_all' do
         subject do
           put :unsubmit_all, params: {
@@ -707,11 +738,23 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           render_views
           it 'unsubmits the submission' do
             subject
-            wait_for_job
+            wait_for_enqueued_jobs
 
             expect(submissions_hash[:submitted].reload.attempting?).to be(true)
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
+          end
+        end
+
+        # Unmarking it first queued its auto grading, which graded the drafts that the unsubmit created.
+        context 'when there is a graded submission' do
+          it 'unsubmits the submission and leaves its new drafts ungraded' do
+            subject
+            wait_for_enqueued_jobs
+
+            graded_submission = submissions_hash[:graded].reload
+            expect(graded_submission).to be_attempting
+            expect(graded_submission.current_answers).to all(be_attempting)
           end
         end
       end
@@ -735,7 +778,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           let(:course_users) { 'students' }
           it 'deletes all the submission' do
             subject
-            wait_for_job
+            wait_for_enqueued_jobs
 
             expect(assessment.submissions.empty?).to be(true)
             json_result = JSON.parse(response.body)

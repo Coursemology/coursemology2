@@ -396,6 +396,22 @@ RSpec.describe Course::Assessment do
       end
     end
 
+    # Changing which test cases count towards the grade of an autograded assessment regrades the programming
+    # answers of its published submissions.
+    describe 'changing the graded test cases' do
+      let(:assessment) do
+        create(:assessment, :autograded, :published_with_programming_question, course: course)
+      end
+      let!(:submission) { create(:submission, :published, assessment: assessment, creator: student_user) }
+
+      with_active_job_queue_adapter(:test) do
+        it 'queues auto grading for its published submissions' do
+          expect { assessment.update!(use_public: !assessment.use_public) }.
+            to have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).with(submission, true)
+        end
+      end
+    end
+
     describe '#update_mode' do
       let(:autograded_assessment) do
         build(:assessment, :autograded, skippable: true)
